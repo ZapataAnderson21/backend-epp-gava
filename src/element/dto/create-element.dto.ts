@@ -1,1 +1,4 @@
-export class CreateElementDto {}
+export class CreateElementDto {
+  name: string;
+  description: string;
+}
