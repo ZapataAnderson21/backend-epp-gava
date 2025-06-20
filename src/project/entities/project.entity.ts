@@ -1,1 +1,6 @@
-export class Project {}
+export class Project {
+  project_id: number;
+  name: string;
+  description: string;
+  status: string;
+}
