@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id     Int                 @id @default(autoincrement())
+  name        String
+  last_name   String
+  email       String
+  password    String
+
+  requests             Request[]
+  responses            RequestResponse[] @relation("ResponderRelation")
+  userUserTypes        UserUserType[]
+}
+
+model UserType {
+  user_type_id Int             @id @default(autoincrement())
+  name         String
+
+  userUserTypes UserUserType[]
+}
+
+model UserUserType {
+  user_user_type_id Int      @id @default(autoincrement())
+  user_id           Int
+  user_type_id      Int
+
+  user      User     @relation(fields: [user_id], references: [user_id])
+  userType  UserType @relation(fields: [user_type_id], references: [user_type_id])
+}
+
+model Project {
+  project_id Int      @id @default(autoincrement())
+  name       String
+  description String  @default("Sin descripción")
+  status     String   @default("active")
+
+  requests Request[]
+}
+
+model Element {
+  element_id Int      @id @default(autoincrement())
+  name       String
+  description String  @default("Sin descripción")
+
+  elementRequests ElementRequest[]
+}
+
+model Request {
+  request_id        Int                  @id @default(autoincrement())
+  registration_date DateTime
+  status            String               @default("pending")
+  description       String
+  project_id        Int
+  user_id           Int
+
+  project           Project  @relation(fields: [project_id], references: [project_id])
+  user              User     @relation(fields: [user_id], references: [user_id])
+  elementRequests   ElementRequest[]
+  responses         RequestResponse[]
+}
+
+model ElementRequest {
+  element_request_id Int     @id @default(autoincrement())
+  quantity_requested Int
+  unit               String
+  element_id         Int
+  request_id         Int
+
+  element Element @relation(fields: [element_id], references: [element_id])
+  request Request @relation(fields: [request_id], references: [request_id])
+
+  elementRequestResponses ElementRequestResponse[]
+}
+
+model RequestResponse {
+  request_response_id Int     @id @default(autoincrement())
+  request_id          Int
+  responder_user_id   Int
+  response_date       DateTime
+  status              String
+  description         String?
+
+  request   Request @relation(fields: [request_id], references: [request_id])
+  responder User    @relation(name: "ResponderRelation", fields: [responder_user_id], references: [user_id])
+
+  elementRequestResponses ElementRequestResponse[]
+}
+
+model ElementRequestResponse {
+  element_request_response_id Int     @id @default(autoincrement())
+  element_request_id          Int
+  request_response_id         Int
+  quantity_accepted           Int
+
+  elementRequest   ElementRequest @relation(fields: [element_request_id], references: [element_request_id])
+  requestResponse  RequestResponse @relation(fields: [request_response_id], references: [request_response_id])
+}
