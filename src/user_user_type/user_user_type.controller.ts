@@ -2,33 +2,37 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserUserTypeService } from './user_user_type.service';
 import { CreateUserUserTypeDto } from './dto/create-user_user_type.dto';
 import { UpdateUserUserTypeDto } from './dto/update-user_user_type.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Controller('user-user-type')
 export class UserUserTypeController {
-  constructor(private readonly userUserTypeService: UserUserTypeService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   @Post()
-  create(@Body() createUserUserTypeDto: CreateUserUserTypeDto) {
-    return this.userUserTypeService.create(createUserUserTypeDto);
+  async create(@Body() createUserUserTypeDto: CreateUserUserTypeDto) {
+    return this.prismaService.userUserType.create({ data: createUserUserTypeDto });
   }
 
   @Get()
-  findAll() {
-    return this.userUserTypeService.findAll();
+  async findAll() {
+    return this.prismaService.userUserType.findMany();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userUserTypeService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return this.prismaService.userUserType.findUnique({ where: { user_user_type_id: Number(id) } });
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserUserTypeDto: UpdateUserUserTypeDto) {
-    return this.userUserTypeService.update(+id, updateUserUserTypeDto);
+  async update(@Param('id') id: string, @Body() updateUserUserTypeDto: UpdateUserUserTypeDto) {
+    return this.prismaService.userUserType.update({
+      where: { user_user_type_id: Number(id) },
+      data: updateUserUserTypeDto,
+    });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userUserTypeService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return this.prismaService.userUserType.delete({ where: { user_user_type_id: Number(id) } });
   }
 }
