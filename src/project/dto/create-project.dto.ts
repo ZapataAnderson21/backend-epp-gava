@@ -5,8 +5,9 @@ export class CreateProjectDto {
   name: string;
 
   @ApiProperty()
-  description: string;
+  code: string;
 
   @ApiProperty()
-  status: string;
+  description: string;
+
 }

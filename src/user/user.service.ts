@@ -1,24 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from 'generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginResponse } from './entities/login-response';
 
+interface userCreate{
+  name: string;
+  last_name: string;
+  email: string;
+  password: string;
+}
+
 @Injectable()
 export class UserService {
 
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: userCreate): Promise<User | null> {
+
     const newUser = await this.prisma.user.create({
       data: createUserDto
     });
 
     if(!newUser) {
-      throw new Error('User creation failed');
+      return null;
     }
 
     return newUser;
@@ -65,13 +71,6 @@ export class UserService {
   async findOne(id: number): Promise<User | null> {
     const foundUser = await this.prisma.user.findUnique({
       where: { user_id: id },
-      include: {
-        userUserTypes: {
-          include: {
-            userType: true
-          }
-        }
-      }
     });
 
     if (!foundUser) {
@@ -96,20 +95,7 @@ export class UserService {
     return foundUser;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<User | null> {
-    const updatedUser = await this.prisma.user.update({
-      where: { user_id: id },
-      data: updateUserDto
-    });
-
-    if (!updatedUser) {
-      return null;
-    }
-
-    return updatedUser;
-  }
-
-  async updatePassword(user_id: number, newPassword: string): Promise<User | null> {
+  async updatePassword(user_id: number, newPassword: string, token: string): Promise<User | null> {
     const updatedUser = await this.prisma.user.update({
       where: { user_id },
       data: { password: newPassword }
@@ -117,6 +103,12 @@ export class UserService {
     if (!updatedUser) {
       return null;
     }
+
+    await this.prisma.passwordResetToken.update({
+      where: { token },
+      data: { used: true }
+    });
+
     return updatedUser;
   }
 
@@ -154,6 +146,7 @@ export class UserService {
       const user = await this.prisma.user.findUnique({
         where: { email: decoded.email }
       });
+
       return user;
     } catch (err) {
       return null;
@@ -183,4 +176,6 @@ export class UserService {
       }
     });
   }
+
+  
 }

@@ -12,6 +12,8 @@ import { LoginDto } from './dto/login.dto';
 import { LoginResponse } from './entities/login-response';
 import { Public } from './jwt/public.decorator';
 import { MailService } from 'src/mail/mail.service';
+import { CreateUserUserTypeDto } from 'src/user_user_type/dto/create-user_user_type.dto';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
 
 @Controller('user')
 export class UserController {
@@ -33,29 +35,52 @@ export class UserController {
 
       const { user_type_id } = createUserDto;
 
-      if (user_type_id) {
+      if (!user_type_id) {
+        throw new HttpException('User type ID is required', 400);
+      }
 
-        if (isNaN(user_type_id)) {
-          throw new HttpException('Invalid user type ID', 400);
-        }
+      if (isNaN(user_type_id)) {
+        throw new HttpException('Invalid user type ID', 400);
+      }
 
-        userType = await this.userType.findOne(user_type_id);
+      userType = await this.userType.findOne(user_type_id);
 
-        if (!userType) {
-          throw new HttpException('User type not found', 404);
-        }
+      if (!userType) {
+        throw new HttpException('User type not found', 404);
+      }
+
+      const existingUser = await this.userService.findByEmail(createUserDto.email);
+      
+      if (existingUser) {
+        throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
       }
 
       const { password } = createUserDto;
 
       const hashedPassword = await hash(password, 10);
 
-      const newUser = { ...createUserDto, password: hashedPassword };
+      const newUser = { 
+        name: createUserDto.name,
+        last_name: createUserDto.last_name,
+        email: createUserDto.email,
+        password: hashedPassword,
+      };
 
       const user = await this.userService.create(newUser);
 
-      if (userType) {
-        await this.userUserType.create({ user_id: user.user_id, user_type_id: userType.user_type_id });
+      if (!user) {
+        throw new HttpException('Failed to create user', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+
+      const payloadUserUserType: CreateUserUserTypeDto = {
+        user_id: user.user_id,
+        user_type_id: userType.user_type_id
+      }
+
+      const userUserType = await this.userUserType.create(payloadUserUserType);
+
+      if (!userUserType) {
+        throw new HttpException('Failed to assign user type', HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
       return {
@@ -126,6 +151,7 @@ export class UserController {
   async findAll() {
     try {
       const users = await this.userService.findAll();
+
       if (!users || users.length === 0) {
         return {
           statusCode: HttpStatus.OK,
@@ -133,11 +159,28 @@ export class UserController {
           data: []
         }
       }
+
+      const usersWithTypes = await Promise.all(
+        users.map(async (user) => {
+          const userUserType = await this.userUserType.findByUserId(user.user_id);
+          if (!userUserType) {
+            return { user, userUserType: null };
+          }
+
+          const userType = await this.userType.findOne(userUserType.user_type_id);
+          if (!userType) {
+            return { user, userUserType, userType: null };
+          }
+
+          return { user, userType };
+        })
+      );
       return {
         statusCode: HttpStatus.OK,
         message: 'Users retrieved successfully',
-        data: users
+        data: usersWithTypes
       };
+
     } catch (error) {
       throw new HttpException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -159,10 +202,15 @@ export class UserController {
       if (!user) {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       }
+
+      const userUserType = await this.userUserType.findByUserId(user.user_id);
+
+      const userType = userUserType ? await this.userType.findOne(userUserType.user_type_id) : null;      
+
       return {
         statusCode: HttpStatus.OK,
         message: 'User retrieved successfully',
-        data: user
+        data: { user, userType }
       };
     } catch (error) {
       throw new HttpException({
@@ -207,45 +255,36 @@ export class UserController {
     }
   }
 
-  @Patch(':id')
-  @ApiBody({ type: UpdateUserDto })
-  @ApiResponse({ status: 200, description: 'User updated successfully', type: User })
-  @ApiResponse({ status: 400, description: 'Invalid user type ID or user type not found' })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    try {
-      const updatedUser = await this.userService.update(+id, updateUserDto);
-      if (!updatedUser) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      }
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'User updated successfully',
-        data: updatedUser
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to update user',
-        error: error.message || 'Internal Server Error'
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  @Patch(':id/password')
-  @ApiResponse({ status: 200, description: 'Password updated successfully', type: User })
+  @Public()
+  @Patch('password-reset')
+  @ApiBody({ type: ResetPasswordDto })
+  @ApiResponse({ status: 200, description: 'Password updated successfully'})
   @ApiResponse({ status: 400, description: 'Invalid user ID or password' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  async updatePassword(@Param('user_id') user_id: string, @Body() newPassword: string) {
+  async updatePassword(@Body() resetPasswordDto: ResetPasswordDto) {
     try {
-      const updatedUser = await this.userService.updatePassword(+user_id, newPassword);
+      const { token, newPassword } = resetPasswordDto;
+
+      if (!token || !newPassword) {
+        throw new HttpException('Token and new password are required', HttpStatus.BAD_REQUEST);
+      }
+
+      const user = await this.userService.validateResetToken(token);
+
+      if (!user) {
+        throw new HttpException('Invalid or expired token', HttpStatus.NOT_FOUND);
+      }
+
+      const hashedPassword = await hash(newPassword, 10);
+      
+      const updatedUser = await this.userService.updatePassword(user.user_id, hashedPassword, token);
+      
       if (!updatedUser) {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       }
       return {
         statusCode: HttpStatus.OK,
         message: 'Password updated successfully',
-        data: updatedUser
       };
     } catch (error) {
       throw new HttpException({

@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserUserTypeDto } from './dto/create-user_user_type.dto';
 import { UpdateUserUserTypeDto } from './dto/update-user_user_type.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { UserUserType } from 'generated/prisma';
 
 @Injectable()
 export class UserUserTypeService {
-  create(createUserUserTypeDto: CreateUserUserTypeDto) {
-    return 'This action adds a new userUserType';
+
+  constructor ( private readonly prismaService: PrismaService) {}
+
+  async create(createUserUserTypeDto: CreateUserUserTypeDto) {
+    const userUserType = await this.prismaService.userUserType.create({
+      data: createUserUserTypeDto,
+    });
+    return userUserType;
   }
 
-  findAll() {
-    return `This action returns all userUserType`;
+  async findOne(id: number): Promise<UserUserType | null> {
+    const userUserType = await this.prismaService.userUserType.findUnique({
+      where: { user_user_type_id: id },
+    });
+
+    return userUserType;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} userUserType`;
-  }
+  async findByUserId(userId: number): Promise<UserUserType | null> {
+    const userUserType = await this.prismaService.userUserType.findUnique({
+      where: { user_id: userId },
+    });
 
-  update(id: number, updateUserUserTypeDto: UpdateUserUserTypeDto) {
-    return `This action updates a #${id} userUserType`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} userUserType`;
+    return userUserType;
   }
 }

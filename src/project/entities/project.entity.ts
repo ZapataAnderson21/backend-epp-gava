@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Request } from "generated/prisma";
 
 export class Project {
   @ApiProperty()
@@ -8,8 +9,14 @@ export class Project {
   name: string;
 
   @ApiProperty()
+  code: string;
+
+  @ApiProperty()
   description: string;
 
   @ApiProperty()
   status: string;
+
+  @ApiProperty()
+  requests: Request[];
 }
