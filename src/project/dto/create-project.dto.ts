@@ -9,5 +9,4 @@ export class CreateProjectDto {
 
   @ApiProperty()
   description: string;
-
 }

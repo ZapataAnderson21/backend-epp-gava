@@ -18,7 +18,7 @@ model User {
   requests             Request[]
   responses            RequestResponse[] @relation("ResponderRelation")
   userUserTypes        UserUserType[]
-  passwordResetTokens  PasswordResetToken[]   // <- agregado
+  passwordResetTokens  PasswordResetToken[]
 }
 
 model UserType {
@@ -51,6 +51,7 @@ model Element {
   element_id Int      @id @default(autoincrement())
   name       String
   description String  @default("Sin descripción")
+  type        String 
 
   elementRequests ElementRequest[]
 }
@@ -62,6 +63,7 @@ model Request {
   description       String
   project_id        Int
   user_id           Int
+  type              String
 
   project           Project  @relation(fields: [project_id], references: [project_id])
   user              User     @relation(fields: [user_id], references: [user_id])

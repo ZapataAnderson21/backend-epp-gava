@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { User } from "src/user/entities/user.entity";
 
 export class Request {
   @ApiProperty()
@@ -7,8 +8,8 @@ export class Request {
   @ApiProperty()
   registration_date: Date;
 
-  @ApiProperty()
-  status: string;
+  @ApiProperty({ enum: ['draft', 'pending', 'reviewed', 'accepted', 'rejected'] })
+  status: 'draft' | 'pending' | 'reviewed' | 'accepted' | 'rejected';
 
   @ApiProperty()
   description: string;
@@ -18,4 +19,10 @@ export class Request {
 
   @ApiProperty()
   user_id: number;
+
+  @ApiProperty({ enum: ["operative", "security", "operative and security"] })
+  type: "operative" | "security" | "operative and security";
+
+  @ApiProperty()
+  user: User;
 }

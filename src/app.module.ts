@@ -8,11 +8,12 @@ import { ElementRequestModule } from './element_request/element_request.module';
 import { RequestResponseModule } from './request_response/request_response.module';
 import { ElementRequestResponseModule } from './element_request_response/element_request_response.module';
 import { MailService } from './mail/mail.service';
+import { PdfService } from './pdf/pdf.service';
 
 @Module({
   imports: [UserModule, UserTypeModule, ProjectModule, ElementModule, RequestModule, 
             ElementRequestModule, RequestResponseModule, ElementRequestResponseModule],
   controllers: [],
-  providers: [MailService],
+  providers: [MailService, PdfService],
 })
 export class AppModule {}

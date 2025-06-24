@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { hash } from 'bcrypt';
 import { UserTypeService } from 'src/user_type/user_type.service';
 import { UserUserTypeService } from 'src/user_user_type/user_user_type.service';

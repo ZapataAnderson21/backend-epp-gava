@@ -29,7 +29,7 @@ export class ProjectController {
       const project = await this.projectService.create(createProjectDto);
 
       if (!project) {
-        throw new HttpException('Project creation failed', 500);
+        throw new HttpException('Project creation failed', HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
       return {
@@ -111,7 +111,6 @@ export class ProjectController {
   }
 
   @Public()
-  @ApiBody({ schema: { type: 'object', properties: { code: { type: 'string' } }, required: ['code'] } })
   @ApiResponse({ status: HttpStatus.OK, description: 'Project retrieved successfully', type: Project })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Project not found' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to retrieve project' })

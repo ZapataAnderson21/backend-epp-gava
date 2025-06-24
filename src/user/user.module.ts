@@ -8,12 +8,13 @@ import { jwtConstants } from './jwt/jwt.constants';
 import { UserTypeService } from 'src/user_type/user_type.service';
 import { UserUserTypeService } from 'src/user_user_type/user_user_type.service';
 import { MailService } from 'src/mail/mail.service';
+import { PdfService } from 'src/pdf/pdf.service';
 
 @Module({
   controllers: [UserController],
   providers: [UserService, UserTypeService, 
-              UserUserTypeService, MailService, 
-              JwtStrategy],
+              UserUserTypeService, MailService,
+              PdfService, JwtStrategy],
   imports: [
     PrismaModule,
     JwtModule.register({

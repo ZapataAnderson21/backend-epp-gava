@@ -5,8 +5,8 @@ export class CreateRequestDto {
   @ApiProperty()
   registration_date: Date;
   
-  @ApiProperty()
-  status: string = 'pending';
+  @ApiProperty({ enum: ['draft', 'pending'] })
+  status: 'draft' | 'pending';
 
   @ApiProperty()
   description: string;
@@ -16,4 +16,7 @@ export class CreateRequestDto {
 
   @ApiProperty()
   user_id: number;
+
+  @ApiProperty({ enum: ["operative", "security", "operative and security"] })
+  type: "operative" | "security" | "operative and security";
 }

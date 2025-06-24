@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Element } from "generated/prisma";
 
 export class ElementRequest {
   @ApiProperty()
@@ -15,4 +16,7 @@ export class ElementRequest {
 
   @ApiProperty()
   request_id: number;
+
+  @ApiProperty()
+  element: Element;
 }
