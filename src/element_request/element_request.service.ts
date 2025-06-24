@@ -27,8 +27,20 @@ export class ElementRequestService {
   }
 
   async findAll() {
-    return `This action returns all elementRequest`;
+    const elementRequests = await this.prismaService.elementRequest.findMany({
+      include: {
+        request: true,
+        element: true
+      }
+    });
+
+    if (!elementRequests || elementRequests.length === 0) {
+      return [];
+    }
+
+    return elementRequests;
   }
+
 
   async findAllByRequestId(request_id: number): Promise<ElementRequest[]> {
 
@@ -47,15 +59,70 @@ export class ElementRequestService {
     return foundElementRequests;
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} elementRequest`;
+
+  async update(element_request_id: number, updateElementRequestDto: UpdateElementRequestDto) {
+    const existingElementRequest = await this.prismaService.elementRequest.findUnique({
+      where: { element_request_id }
+    });
+
+    if (!existingElementRequest) {
+      throw new Error('Element Request not found');
+    }
+
+    const request = await this.prismaService.request.findUnique({
+      where: { request_id: existingElementRequest.request_id }
+    });
+
+    if (!request) {
+      throw new Error('Request not found for the Element Request');
+    }
+
+    const status = request.status;
+    
+    if (status !== 'draft') {
+      throw new Error('You cannot update the quantity or unit of the element because the request has already been sent');
+    }
+
+    const updatedRequest = await this.prismaService.elementRequest.update({
+      where: { element_request_id },
+      data: updateElementRequestDto
+    });
+
+    return updatedRequest;
   }
 
-  async update(id: number, updateElementRequestDto: UpdateElementRequestDto) {
-    return `This action updates a #${id} elementRequest`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} elementRequest`;
+  async remove(element_request_id: number) {
+    const existingElementRequest = await this.prismaService.elementRequest.findUnique({
+      where: { element_request_id }
+    });
+
+    if (!existingElementRequest) {
+      throw new Error('Element Request not found');
+    }
+
+    const request = await this.prismaService.request.findUnique({
+      where: { request_id: existingElementRequest.request_id }
+    });
+
+    if (!request) {
+      throw new Error('Request not found for the Element Request');
+    }
+
+    const status = request.status;
+    
+    if (status !== 'draft') {
+      throw new Error('You cannot delete the element because the request has already been sent');
+    }
+
+    const deletedElementRequest = await this.prismaService.elementRequest.delete({
+      where: { element_request_id }
+    });
+
+    if (!deletedElementRequest) {
+      throw new Error('Failed to delete Element Request');
+    }
+
+    return deletedElementRequest;
   }
 }

@@ -57,7 +57,11 @@ export class RequestController {
       const requests = await this.requestService.findAll();
 
       if (!requests || requests.length === 0) {
-        throw new HttpException('No requests found', HttpStatus.NOT_FOUND);
+        return {
+          statusCode: HttpStatus.OK,
+          message: 'No requests found',
+          data: [],
+        };
       }
 
       return {
