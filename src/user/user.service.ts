@@ -32,7 +32,14 @@ export class UserService {
 
   async login(email: string, password: string): Promise<LoginResponse | null> {
     let user = await this.prisma.user.findUnique({
-      where: { email: email }
+      where: { email: email },
+      include: {
+        userUserTypes: {
+          include: {
+            userType: true
+          }
+        }
+      }
     });
 
     if (!user) {
@@ -112,6 +119,18 @@ export class UserService {
     return updatedUser;
   }
 
+  async update(id: number, updateUserDto: Partial<User>): Promise<User | null> {
+    const updatedUser = await this.prisma.user.update({
+      where: { user_id: id },
+      data: updateUserDto
+    });
+
+    if (!updatedUser) {
+      return null;
+    }
+    return updatedUser;
+  }
+
   async emailExists(email: string): Promise<string | null> {
     const user = await this.prisma.user.findUnique({
       where: { email: email }
@@ -177,5 +196,11 @@ export class UserService {
     });
   }
 
-  
+  async isTokenBlacklisted(token: string): Promise<boolean> {
+    const blacklistedToken = await this.prisma.blacklisted_token.findUnique({
+      where: { token }
+    });
+
+    return !!blacklistedToken;
+  }
 }

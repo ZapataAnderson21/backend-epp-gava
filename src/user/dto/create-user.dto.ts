@@ -11,7 +11,7 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty()
-  password: string;
+  password?: string;
 
   @ApiProperty()
   user_type_id: number;

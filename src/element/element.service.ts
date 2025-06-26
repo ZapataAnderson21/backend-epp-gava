@@ -42,7 +42,7 @@ export class ElementService {
     return foundElement;
   }
 
-  async findByType(type: string): Promise<Element[] | null> {
+  async findAllByType(type: string): Promise<Element[] | null> {
     const foundElements = await this.prismaService.element.findMany({
       where: { type }
     })

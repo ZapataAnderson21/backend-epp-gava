@@ -13,6 +13,7 @@ import { Public } from './jwt/public.decorator';
 import { MailService } from 'src/mail/mail.service';
 import { CreateUserUserTypeDto } from 'src/user_user_type/dto/create-user_user_type.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -108,39 +109,97 @@ export class UserController {
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async login(@Body() loginDto: LoginDto) {
+    const { email, password } = loginDto;
+
+    if (!email || !password) {
+      throw new HttpException({
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'El correo electrónico y la contraseña son obligatorios.'
+      }, HttpStatus.BAD_REQUEST);
+    }
+
+    const user = await this.userService.findByEmail(email);
+
+    if (!user) {
+      throw new HttpException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No hemos encontrado un usuario con ese correo electrónico.'
+      }, HttpStatus.NOT_FOUND);
+    }
+
+    const loginUser = await this.userService.login(email, password);
+
+    if (!loginUser) {
+      throw new HttpException({
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: 'Credenciales incorrectas.'
+      }, HttpStatus.UNAUTHORIZED);
+    }
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Autenticación exitosa',
+      data: loginUser
+    };
+  }
+
+
+  @Public()
+  @ApiBody({ schema: { type: 'object', properties: { token: { type: 'string' } } } })
+  @ApiResponse({ status: 200, description: 'Logout successful' })
+  @ApiResponse({ status: 400, description: 'Token is required' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @Post('logout')
+  async logout(@Body('accessToken') token: string) {
     try {
-      const { email, password } = loginDto;
 
-      if (!email || !password) {
-        throw new HttpException('Email and password are required', HttpStatus.BAD_REQUEST);
+      if (!token) {
+        throw new HttpException('Token is required', HttpStatus.BAD_REQUEST);
       }
 
-      const user = await this.userService.findByEmail(email);
-
-      if (!user) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      }
-
-      const loginUser = await this.userService.login(email, password);
-
-      if (!loginUser) {
-        throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
-      }
-
+      await this.userService.logout(token);
       return {
         statusCode: HttpStatus.OK,
-        message: 'Login successful',
-        data: loginUser
+        message: 'Logout successful',
+        data: null
       };
-
     } catch (error) {
       throw new HttpException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Login failed',
+        message: 'Logout failed',
         error: error.message || 'Internal Server Error'
       }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  @Public()
+  @ApiBody({ schema: { type: 'object', properties: { token: { type: 'string' } } } })
+  @ApiResponse({ status: 200, description: 'Token check successful', type: Boolean })
+  @ApiResponse({ status: 400, description: 'Token is required' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  @Post('validateToken')
+  async isTokenBlacklisted(@Body('accessToken') token: string) {
+    try {
+      if (!token) {
+        throw new HttpException('Token is required', HttpStatus.BAD_REQUEST);
+      }
+
+      const isBlacklisted = await this.userService.isTokenBlacklisted(token);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Token check successful',
+        data: { isBlacklisted }
+      };
+    } catch (error) {
+      throw new HttpException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Failed to check token',
+        error: error.message || 'Internal Server Error'
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
 
   @Public()
   @Get()
@@ -222,6 +281,7 @@ export class UserController {
 
   @Public()
   @Post('forgot-password')
+  @ApiBody({ schema: { type: 'object', properties: { email: { type: 'string' } } } })
   @ApiResponse({ status: 200, description: 'Password reset link sent' })
   @ApiResponse({ status: 400, description: 'Email is required' })
   @ApiResponse({ status: 404, description: 'User not found' })
@@ -254,21 +314,61 @@ export class UserController {
     }
   }
 
-  @Public()
-  @Patch('password-reset')
+  @Patch(':id')
+  @ApiBody({ type: UpdateUserDto })
+  @ApiResponse({ status: 200, description: 'User updated successfully', type: User })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    try {
+
+      let hashedPassword: string;
+
+      const { password } = updateUserDto;
+
+      if (password) {
+        hashedPassword = await hash(password, 10);
+        updateUserDto.password = hashedPassword;
+      } else {
+        const existingUser = await this.userService.findOne(+id);
+        if (!existingUser) {
+          throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+        updateUserDto.password = existingUser.password;
+      }
+
+      const updatedUser = await this.userService.update(+id, updateUserDto);
+      if (!updatedUser) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'User updated successfully',
+        data: updatedUser
+      };
+    } catch (error) {
+      throw new HttpException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Failed to update user',
+        error: error.message || 'Internal Server Error'
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Post('reset-password')
   @ApiBody({ type: ResetPasswordDto })
   @ApiResponse({ status: 200, description: 'Password updated successfully'})
   @ApiResponse({ status: 400, description: 'Invalid user ID or password' })
   @ApiResponse({ status: 404, description: 'User not found' })
   async updatePassword(@Body() resetPasswordDto: ResetPasswordDto) {
     try {
-      const { token, newPassword } = resetPasswordDto;
+      const { accessToken, newPassword } = resetPasswordDto;
 
-      if (!token || !newPassword) {
+      if (!accessToken || !newPassword) {
         throw new HttpException('Token and new password are required', HttpStatus.BAD_REQUEST);
       }
 
-      const user = await this.userService.validateResetToken(token);
+      const user = await this.userService.validateResetToken(accessToken);
 
       if (!user) {
         throw new HttpException('Invalid or expired token', HttpStatus.NOT_FOUND);
@@ -276,7 +376,7 @@ export class UserController {
 
       const hashedPassword = await hash(newPassword, 10);
       
-      const updatedUser = await this.userService.updatePassword(user.user_id, hashedPassword, token);
+      const updatedUser = await this.userService.updatePassword(user.user_id, hashedPassword, accessToken);
       
       if (!updatedUser) {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
