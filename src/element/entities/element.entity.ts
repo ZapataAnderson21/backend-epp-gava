@@ -8,5 +8,8 @@ export class Element {
   name: string;
 
   @ApiProperty()
+  type: string;
+
+  @ApiProperty()
   description: string;
 }
