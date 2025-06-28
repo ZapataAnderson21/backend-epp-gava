@@ -9,8 +9,19 @@ export class RequestService {
   constructor(private readonly prismaService: PrismaService) {}
   
   async create(createRequestDto: CreateRequestDto) {
+
+    const registration_date = new Date();
+
+    const status = 'draft';
+
+    const requestData = {
+      ...createRequestDto,
+      registration_date,
+      status
+    };
+
     const request = await this.prismaService.request.create({
-      data: createRequestDto
+      data: requestData
     });
 
     if (!request) {

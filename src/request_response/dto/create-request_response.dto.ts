@@ -8,11 +8,5 @@ export class CreateRequestResponseDto {
   responder_user_id: number;
 
   @ApiProperty()
-  response_date: Date;
-
-  @ApiProperty()
-  status: string;
-
-  @ApiProperty()
   description: string;
 }

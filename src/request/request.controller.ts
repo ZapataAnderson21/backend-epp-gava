@@ -21,12 +21,6 @@ export class RequestController {
   @Post()
   async create(@Body() createRequestDto: CreateRequestDto) {
     try {
-      const { status } = createRequestDto;
-
-      if (status !== 'draft' && status !== 'pending') {
-        throw new HttpException('Invalid status. Must be "draft" or "pending".', HttpStatus.BAD_REQUEST);
-      }
-
       const request = await this.requestService.create(createRequestDto);
 
       if(!request) {

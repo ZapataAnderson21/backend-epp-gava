@@ -86,10 +86,9 @@ model ElementRequest {
 
 model RequestResponse {
   request_response_id Int     @id @default(autoincrement())
-  request_id          Int
+  request_id          Int     @unique
   responder_user_id   Int
   response_date       DateTime
-  status              String
   description         String?
 
   request   Request @relation(fields: [request_id], references: [request_id])

@@ -105,107 +105,157 @@ export class PdfService {
 
     const printer = new PdfPrinter(fonts);
 
-    const docDefinition = {
-    pageMargins: [60, 40, 60, 40],
-    content: [
+    let docContent: any[] = [
       {
-        columns: [
-          { width: '*', text: '' },
-          {
-            width: 100,
-            image: logoBase64,
-            fit: [100, 100],
-            alignment: 'right',
-          },
-        ],
+      columns: [
+        { width: '*', text: '' },
+        {
+        width: 100,
+        image: logoBase64,
+        fit: [100, 100],
+        alignment: 'right',
+        },
+      ],
       },
       { text: title, style: 'header', margin: [0, 10, 0, 20] },
       {
-        text: [
-          { text: 'De: ', bold: true },
-          { text: `Ing. ${sender}` },
-        ],
+      text: [
+        { text: 'De: ', bold: true },
+        { text: `Ing. ${sender}` },
+      ],
       },
       {
-        text: [
-          { text: `${jobTitle} – GAVA C&C`, bold: true },
-        ],
-        margin: [0, 0, 0, 10],
+      text: [
+        { text: `${jobTitle} – GAVA C&C`, bold: true },
+      ],
+      margin: [0, 0, 0, 10],
       },
       {
-        text: [
-          { text: 'Para: ', bold: true },
-          { text: 'Ing. Henrry Gayoso Valdera' },
-        ],
+      text: [
+        { text: 'Para: ', bold: true },
+        { text: 'Ing. Henrry Gayoso Valdera' },
+      ],
       },
       {
-        text: [
-          { text: 'Gerente General – GAVA C&C', bold: true },
-        ],
-        margin: [0, 0, 0, 10],
+      text: [
+        { text: 'Gerente General – GAVA C&C', bold: true },
+      ],
+      margin: [0, 0, 0, 10],
       },
       {
-        text: [
-          { text: 'Asunto: ', bold: true },
-          { text: `${subject}` },
-        ],
+      text: [
+        { text: 'Asunto: ', bold: true },
+        { text: `${subject}` },
+      ],
       },
       {
-        text: [
-          { text: 'Fecha: ', bold: true },
-          { text: `${date}` },
-        ],
-        margin: [0, 10, 0, 20],
+      text: [
+        { text: 'Fecha: ', bold: true },
+        { text: `${date}` },
+      ],
+      margin: [0, 10, 0, 20],
       },
       { text: `Estimado Ing. Gayoso:`, bold: true },
 
       ...paragraphs.map(p => ({
-        text: p,
-        margin: [0, 10],
-        alignment: 'justify',
+      text: p,
+      margin: [0, 10],
+      alignment: 'justify',
       })),
+    ];
 
-      { text: 'DETALLE DEL REQUERIMIENTO', style: 'subheader', margin: [0, 20, 0, 10] },
+    if (type === 'operative and security') {
+      // Separar los elementos por tipo
+      const operativeElements = elementRequests.filter(el => el.element.type === 'operative');
+      const securityElements = elementRequests.filter(el => el.element.type === 'security');
 
-      {
+      if (operativeElements.length > 0) {
+      docContent.push(
+        { text: 'DETALLE DEL REQUERIMIENTO OPERATIVO', style: 'subheader', margin: [0, 20, 0, 10] },
+        {
         table: {
           widths: ['auto', '*', 'auto', 'auto'],
           body: [
-            ['N° ITEM', 'Descripción', 'UNIDAD', 'CANTIDAD'],
-            ...elementRequests.map((el, index) => [
-              index + 1,
-              el.element.name,
-              el.unit,
-              el.quantity_requested.toString()
-            ]),
+          ['N° ITEM', 'Descripción', 'UNIDAD', 'CANTIDAD'],
+          ...operativeElements.map((el, index) => [
+            index + 1,
+            el.element.name,
+            el.unit,
+            el.quantity_requested.toString()
+          ]),
           ],
         },
-      },
+        }
+      );
+      }
 
+      if (securityElements.length > 0) {
+      docContent.push(
+        { text: 'DETALLE DEL REQUERIMIENTO EPP', style: 'subheader', margin: [0, 20, 0, 10] },
+        {
+        table: {
+          widths: ['auto', '*', 'auto', 'auto'],
+          body: [
+          ['N° ITEM', 'Descripción', 'UNIDAD', 'CANTIDAD'],
+          ...securityElements.map((el, index) => [
+            index + 1,
+            el.element.name,
+            el.unit,
+            el.quantity_requested.toString()
+          ]),
+          ],
+        },
+        }
+      );
+      }
+    } else {
+      docContent.push(
+      { text: 'DETALLE DEL REQUERIMIENTO', style: 'subheader', margin: [0, 20, 0, 10] },
       {
-        text: footer,
-        margin: [0, 20],
-        alignment: 'justify',
-      },
-
-      {
-        text: [
-          { text: 'Atentamente,\n\n', bold: true },
-          { text: `Ing. ${sender}` },
+        table: {
+        widths: ['auto', '*', 'auto', 'auto'],
+        body: [
+          ['N° ITEM', 'Descripción', 'UNIDAD', 'CANTIDAD'],
+          ...elementRequests.map((el, index) => [
+          index + 1,
+          el.element.name,
+          el.unit,
+          el.quantity_requested.toString()
+          ]),
         ],
-        alignment: 'left',
-        margin: [0, 40, 0, 0],
+        },
+      }
+      );
+    }
+
+    docContent.push(
+      {
+      text: footer,
+      margin: [0, 20],
+      alignment: 'justify',
       },
-    ],
-    styles: {
+      {
+      text: [
+        { text: 'Atentamente,\n\n', bold: true },
+        { text: `Ing. ${sender}` },
+      ],
+      alignment: 'left',
+      margin: [0, 40, 0, 0],
+      }
+    );
+
+    const docDefinition = {
+      pageMargins: [60, 40, 60, 40],
+      content: docContent,
+      styles: {
       header: { fontSize: 14, bold: true, alignment: 'center' },
       subheader: { fontSize: 12, bold: true },
-    },
-    defaultStyle: {
+      },
+      defaultStyle: {
       font: 'Roboto',
       fontSize: 10,
-    },
-  };
+      },
+    };
 
     try {
       const pdfDoc = printer.createPdfKitDocument(docDefinition);

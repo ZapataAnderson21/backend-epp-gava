@@ -138,8 +138,34 @@ export class ElementRequestController {
   }
 
   @Public()
+  @ApiResponse({ status: HttpStatus.OK, description: 'Element Request removed successfully' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid Element Request ID' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Element Request not found' })
+  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal Server Error' })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.elementRequestService.remove(+id);
+    try {
+      if (isNaN(+id)) {
+        throw new HttpException('Invalid Element Request ID', HttpStatus.BAD_REQUEST);
+      }
+
+      const deletedElementRequest = this.elementRequestService.remove(+id);
+
+      if (!deletedElementRequest) {
+        throw new HttpException('Element Request not found', HttpStatus.NOT_FOUND);
+      }
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Element Request removed successfully',
+        data: deletedElementRequest,
+      };
+    } catch (error) {
+      throw new HttpException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'An error occurred while removing the Element Request',
+        error: error.message || 'Internal Server Error',
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

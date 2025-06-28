@@ -1,26 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRequestResponseDto } from './dto/create-request_response.dto';
 import { UpdateRequestResponseDto } from './dto/update-request_response.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class RequestResponseService {
-  create(createRequestResponseDto: CreateRequestResponseDto) {
-    return 'This action adds a new requestResponse';
+
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async create(createRequestResponseDto: CreateRequestResponseDto) {
+
+    const response_date = new Date();
+
+    const requestResponse = await this.prismaService.requestResponse.create({
+      data: {
+        ...createRequestResponseDto,
+        response_date,
+      },
+    });
+
+    if (!requestResponse) {
+      return null;
+    }
+
+    return requestResponse;
+  }
+  
+  async findOne(id: number) {
+    const requestResponse = await this.prismaService.requestResponse.findUnique({
+      where: { request_response_id: id },
+    });
+
+    if (!requestResponse) {
+      return null;
+    }
+
+    return requestResponse;
   }
 
-  findAll() {
-    return `This action returns all requestResponse`;
-  }
+  async findByRequestId(requestId: number) {
+    const requestResponses = await this.prismaService.requestResponse.findUnique({
+      where: { request_id: requestId },
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} requestResponse`;
-  }
+    if (!requestResponses) {
+      return null;
+    }
 
-  update(id: number, updateRequestResponseDto: UpdateRequestResponseDto) {
-    return `This action updates a #${id} requestResponse`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} requestResponse`;
+    return requestResponses;
   }
 }

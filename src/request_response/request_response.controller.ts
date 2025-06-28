@@ -1,34 +1,96 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, HttpStatus } from '@nestjs/common';
 import { RequestResponseService } from './request_response.service';
 import { CreateRequestResponseDto } from './dto/create-request_response.dto';
-import { UpdateRequestResponseDto } from './dto/update-request_response.dto';
+import { ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @Controller('request-response')
 export class RequestResponseController {
   constructor(private readonly requestResponseService: RequestResponseService) {}
 
+  @ApiBody({ type: CreateRequestResponseDto })
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Request response created successfully.' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Failed to create request response.' })
+  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Request response not found.' })
   @Post()
-  create(@Body() createRequestResponseDto: CreateRequestResponseDto) {
-    return this.requestResponseService.create(createRequestResponseDto);
+  async create(@Body() createRequestResponseDto: CreateRequestResponseDto) {
+    try {
+      const requestResponse = await this.requestResponseService.create(createRequestResponseDto);
+      if (!requestResponse) {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Failed to create request response',
+          data: null,
+        };
+      }
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: 'Request response created successfully',
+        data: requestResponse,
+      };
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error',
+        data: null,
+      };
+    }
   }
 
-  @Get()
-  findAll() {
-    return this.requestResponseService.findAll();
-  }
-
+  @ApiResponse({ status: HttpStatus.OK, description: 'Request response retrieved successfully.' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Request response not found.' })
+  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.requestResponseService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    try {
+      const requestResponse = await this.requestResponseService.findOne(+id);
+      if (!requestResponse) {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Request response not found',
+          data: null,
+        };
+      }
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Request response retrieved successfully',
+        data: requestResponse,
+      };
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error',
+        data: null,
+      };
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRequestResponseDto: UpdateRequestResponseDto) {
-    return this.requestResponseService.update(+id, updateRequestResponseDto);
+  @ApiResponse({ status: HttpStatus.OK, description: 'Request responses retrieved successfully.' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No request responses found.' })
+  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
+  @Get('request/:requestId')
+  async findByRequestId(@Param('requestId') requestId: string) {
+    try {
+      const requestResponse = await this.requestResponseService.findByRequestId(+requestId);
+      if (!requestResponse) {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'No request responses found',
+          data: null,
+        };
+      }
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Request responses retrieved successfully',
+        data: requestResponse,
+      };
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error',
+        data: null,
+      };
+    }
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.requestResponseService.remove(+id);
-  }
 }

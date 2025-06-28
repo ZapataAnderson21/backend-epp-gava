@@ -1,13 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateRequestDto {
-  
-  @ApiProperty()
-  registration_date: Date;
-  
-  @ApiProperty({ enum: ['draft', 'pending'] })
-  status: 'draft' | 'pending';
-
   @ApiProperty()
   description: string;
 

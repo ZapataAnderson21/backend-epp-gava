@@ -14,8 +14,5 @@ export class RequestResponse {
   response_date: Date;
 
   @ApiProperty()
-  status: string;
-
-  @ApiProperty()
   description: string;
 }
