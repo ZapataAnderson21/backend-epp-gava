@@ -20,7 +20,7 @@ export class ElementRequestService {
     });
 
     if (!newElementRequest) {
-      throw new Error('Failed to create Element Request');
+      return null;
     }
 
     return newElementRequest;
@@ -66,7 +66,7 @@ export class ElementRequestService {
     });
 
     if (!existingElementRequest) {
-      throw new Error('Element Request not found');
+      return null;
     }
 
     const request = await this.prismaService.request.findUnique({
@@ -74,13 +74,13 @@ export class ElementRequestService {
     });
 
     if (!request) {
-      throw new Error('Request not found for the Element Request');
+      return null;
     }
 
     const status = request.status;
     
     if (status !== 'draft') {
-      throw new Error('You cannot update the quantity or unit of the element because the request has already been sent');
+      return null;
     }
 
     const updatedRequest = await this.prismaService.elementRequest.update({
@@ -98,7 +98,7 @@ export class ElementRequestService {
     });
 
     if (!existingElementRequest) {
-      throw new Error('Element Request not found');
+      return null;
     }
 
     const request = await this.prismaService.request.findUnique({
@@ -106,13 +106,13 @@ export class ElementRequestService {
     });
 
     if (!request) {
-      throw new Error('Request not found for the Element Request');
+      return null;
     }
 
     const status = request.status;
     
     if (status !== 'draft') {
-      throw new Error('You cannot delete the element because the request has already been sent');
+      return null;
     }
 
     const deletedElementRequest = await this.prismaService.elementRequest.delete({
@@ -120,7 +120,7 @@ export class ElementRequestService {
     });
 
     if (!deletedElementRequest) {
-      throw new Error('Failed to delete Element Request');
+      return null;
     }
 
     return deletedElementRequest;
