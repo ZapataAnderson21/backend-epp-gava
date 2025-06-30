@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException } from '@nestjs/common';
+import { Response } from 'express';
 import { RequestService } from './request.service';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
@@ -6,6 +7,8 @@ import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { Public } from 'src/user/jwt/public.decorator';
 import { MailService } from 'src/mail/mail.service';
 import { PdfService } from 'src/pdf/pdf.service';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Controller('request')
 export class RequestController {
@@ -350,6 +353,33 @@ export class RequestController {
         message: 'Failed to remove request',
         error: error.message || 'Internal Server Error',
       }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Public()
+  @Get('pdf/:id')
+  async getPdf(@Param('id') id: string, @Res() res: Response) {
+    const pdfPath = path.join(__dirname, `../../output/requerimiento-${id}.pdf`);
+
+    try {
+      if (!fs.existsSync(pdfPath)) {
+        throw new HttpException('PDF not found', HttpStatus.NOT_FOUND);
+      }
+
+      // Devuelve el PDF como attachment o inline
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'inline; filename=requerimiento-' + id + '.pdf');
+      const stream = fs.createReadStream(pdfPath);
+      stream.pipe(res);
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to fetch PDF',
+          error: error.message || 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }
