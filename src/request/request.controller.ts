@@ -24,6 +24,9 @@ export class RequestController {
   @Post()
   async create(@Body() createRequestDto: CreateRequestDto) {
     try {
+
+      console.log('CONTROLLER: Creating request with data:', createRequestDto);
+
       const request = await this.requestService.create(createRequestDto);
 
       if(!request) {

@@ -10,19 +10,21 @@ export class RequestService {
   
   async create(createRequestDto: CreateRequestDto) {
 
-    const registration_date = new Date();
+    console.log('SERVICE: Creating request with data:', createRequestDto);
 
     const status = 'draft';
 
     const requestData = {
       ...createRequestDto,
-      registration_date,
+      delivery_due_date: new Date(createRequestDto.delivery_due_date),
       status
     };
 
     const request = await this.prismaService.request.create({
       data: requestData
     });
+
+    console.log('SERVICE: Created request:', request);
 
     if (!request) {
       return null;
@@ -59,7 +61,12 @@ export class RequestService {
               }
             }
           }
-        }
+        },
+        elementRequests: {
+          include: {
+            element: true
+          }
+        },
       }
     });
 

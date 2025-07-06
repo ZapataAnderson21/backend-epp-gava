@@ -9,16 +9,14 @@ export class RequestResponseService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(createRequestResponseDto: CreateRequestResponseDto) {
-
-    const response_date = new Date();
+    console.log('SERVICE: Creating request response with data:', createRequestResponseDto);
 
     const requestResponse = await this.prismaService.requestResponse.create({
-      data: {
-        ...createRequestResponseDto,
-        response_date,
-      },
+      data: createRequestResponseDto
     });
-
+    
+    console.log('SERVICE: Created request response:', requestResponse);
+    
     if (!requestResponse) {
       return null;
     }
@@ -29,6 +27,31 @@ export class RequestResponseService {
   async findOne(id: number) {
     const requestResponse = await this.prismaService.requestResponse.findUnique({
       where: { request_response_id: id },
+      include: {
+        request: {
+          include: {
+            project: true,
+            user: {
+              include: {
+                userUserTypes: {
+                  include: {
+                    userType: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responder: {
+          include: {
+            userUserTypes: {
+              include: {
+                userType: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!requestResponse) {
@@ -41,10 +64,71 @@ export class RequestResponseService {
   async findByRequestId(requestId: number) {
     const requestResponses = await this.prismaService.requestResponse.findUnique({
       where: { request_id: requestId },
+      include: {
+        request: {
+          include: {
+            project: true,
+            user: {
+              include: {
+                userUserTypes: {
+                  include: {
+                    userType: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responder: {
+          include: {
+            userUserTypes: {
+              include: {
+                userType: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!requestResponses) {
       return null;
+    }
+
+    return requestResponses;
+  }
+
+  async findAll() {
+    const requestResponses = await this.prismaService.requestResponse.findMany({
+      include: {
+        request: {
+          include: {
+            project: true,
+            user: {
+              include: {
+                userUserTypes: {
+                  include: {
+                    userType: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responder: {
+          include: {
+            userUserTypes: {
+              include: {
+                userType: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!requestResponses || requestResponses.length === 0) {
+      return [];
     }
 
     return requestResponses;

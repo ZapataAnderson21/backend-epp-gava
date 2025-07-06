@@ -12,4 +12,7 @@ export class CreateRequestDto {
 
   @ApiProperty({ enum: ["operative", "security", "operative and security"] })
   type: "operative" | "security" | "operative and security";
+
+  @ApiProperty()
+  delivery_due_date: Date;
 }

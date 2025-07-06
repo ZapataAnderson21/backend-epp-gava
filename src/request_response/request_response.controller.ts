@@ -15,6 +15,7 @@ export class RequestResponseController {
   @Post()
   async create(@Body() createRequestResponseDto: CreateRequestResponseDto) {
     try {
+      console.log('Creating request response with data:', createRequestResponseDto);
       const requestResponse = await this.requestResponseService.create(createRequestResponseDto);
       if (!requestResponse) {
         return {
@@ -83,6 +84,34 @@ export class RequestResponseController {
         statusCode: HttpStatus.OK,
         message: 'Request responses retrieved successfully',
         data: requestResponse,
+      };
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error',
+        data: null,
+      };
+    }
+  }
+
+  @ApiResponse({ status: HttpStatus.OK, description: 'All request responses retrieved successfully.' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No request responses found.' })
+  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
+  @Get()
+  async findAll() {
+    try {
+      const requestResponses = await this.requestResponseService.findAll();
+      if (!requestResponses || requestResponses.length === 0) {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'No request responses found',
+          data: [],
+        };
+      }
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Request responses retrieved successfully',
+        data: requestResponses,
       };
     } catch (error) {
       return {
