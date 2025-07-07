@@ -75,15 +75,15 @@ export class MailService {
     let type = '';
     switch (request.type) {
       case 'operative':
-        subjectEmail = `Solicitud de Requerimiento de Elementos Operativos - ${request.project.name}`;
+        subjectEmail = `Solicitud de Requerimiento de Operativo - ${request.project.name}`;
         type = 'Requerimiento de Elementos Operativos';
         break;
       case 'security':
-        subjectEmail = `Solicitud de Requerimiento de Elementos de Seguridad - ${request.project.name}`;
+        subjectEmail = `Solicitud de Requerimiento de EPP's - ${request.project.name}`;
         type = 'Requerimiento de Elementos de Protección Personal (EPP)';
         break;
       case 'operative and security':
-        subjectEmail = `Solicitud de Requerimiento de Elementos Operativos y de Seguridad - ${request.project.name}`;
+        subjectEmail = `Solicitud de Requerimiento mixto - ${request.project.name}`;
         type = 'Requerimiento de Elementos Operativos y de Protección Personal (EPP)';
         break;
     }
@@ -106,6 +106,7 @@ export class MailService {
 
     const now = new Date();
     const formattedDate = now.toLocaleString('es-PE', { timeZone: 'America/Lima' });
+    const formattedDeliveryDueDate = new Date(request.delivery_due_date).toLocaleString('es-PE', { timeZone: 'America/Lima' });
 
     const mailOptions = {
       from: `"${request.user.name} ${request.user.last_name}" <${sender}>`,
@@ -113,15 +114,43 @@ export class MailService {
       cc: copyEmail.join(', '),
       subject: subjectEmail,
       html: `
-      <p>Estimado Ing. Henrry Gayoso y equipo de logística,</p>
-      <p>Por medio de la presente, se remite la solicitud de requerimiento de elementos para el proyecto <strong>${request.project.name}</strong>.</p>
-      <p>Detalles de la solicitud:</p>
-      <ul>
-        <li><strong>Descripción:</strong> ${request.description}</li>
-        <li><strong>Tipo:</strong> ${type}</li>
-        <li><strong>Fecha y hora de solicitud:</strong> ${formattedDate}</li>
-      </ul>
-      <p>Saludos cordiales,<br>${request.user.name} ${request.user.last_name}</p>
+      <div style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #353535; 
+            background-color: #f9f9f9; padding: 24px; border-radius: 8px; max-width: 600px; 
+            margin: auto;">
+      <h2 style="text-align: center; text-transform: uppercase; font-weight: bold; color: black;">${subjectEmail}</h2>
+      <p>
+        <strong>Tipo de Requerimiento:</strong> ${type}
+      </p>
+      <p>
+        <strong>Fecha y hora de solicitud:</strong> ${formattedDate}
+      </p>
+      <p>
+        <strong>Fecha y hora de entrega:</strong> ${formattedDeliveryDueDate}
+      </p>
+      <p>Estimada señora Gloria, adjunto el presente requerimiento. Agradeceré su pronta atención.</p>
+      <p>Saludos cordiales, ${request.user.name} ${request.user.last_name}</p>
+      <br>
+      <div style="width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
+        <a href="http://localhost:5173/admin/requests/${request_id}">
+          <button style="
+            background-color: #0047a3;
+            color: white;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+          "
+          onmouseover="this.style.backgroundColor='#003a80'"
+          onmouseout="this.style.backgroundColor='#0047a3'"
+          >Ver Requerimiento</button>
+        </a>
+      </div>
+    </div>
       `,
       attachments: [
       {

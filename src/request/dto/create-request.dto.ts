@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { RequestType } from '../entities/request.entity';
 
 export class CreateRequestDto {
   @ApiProperty()
@@ -10,8 +11,8 @@ export class CreateRequestDto {
   @ApiProperty()
   user_id: number;
 
-  @ApiProperty({ enum: ["operative", "security", "operative and security"] })
-  type: "operative" | "security" | "operative and security";
+  @ApiProperty({ enum: RequestType })
+  type: RequestType;
 
   @ApiProperty()
   delivery_due_date: Date;

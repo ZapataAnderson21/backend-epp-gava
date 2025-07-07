@@ -1,6 +1,22 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { User } from "src/user/entities/user.entity";
 
+export enum RequestStatus {
+  Draft = 'draft',
+  InProgress = 'in_progress',
+  UnderReview = 'under_review',
+  Approved = 'approved',
+  Rejected = 'rejected',
+  Attended = 'attended',
+  Completed = 'completed',
+}
+
+export enum RequestType {
+  Operative = 'operative',
+  Security = 'security',
+  OperativeAndSecurity = 'operative_and_security',
+}
+
 export class Request {
   @ApiProperty()
   request_id: number;
@@ -8,8 +24,8 @@ export class Request {
   @ApiProperty()
   registration_date: Date;
 
-  @ApiProperty({ enum: ['draft', 'pending', 'reviewed', 'accepted', 'rejected'] })
-  status: 'draft' | 'pending' | 'reviewed' | 'accepted' | 'rejected';
+  @ApiProperty({ enum: RequestStatus })
+  status: RequestStatus;
 
   @ApiProperty()
   description: string;
@@ -20,8 +36,8 @@ export class Request {
   @ApiProperty()
   user_id: number;
 
-  @ApiProperty({ enum: ["operative", "security", "operative and security"] })
-  type: "operative" | "security" | "operative and security";
+  @ApiProperty({ enum: RequestType })
+  type: RequestType;
 
   @ApiProperty()
   user: User;

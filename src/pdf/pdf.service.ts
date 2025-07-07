@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as PdfPrinter from 'pdfmake';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { logoBase64 } from './logoBase64';
+import { RequestType } from 'src/request/entities/request.entity';
 
 @Injectable()
 export class PdfService {
@@ -11,7 +12,7 @@ export class PdfService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async generateRequestPdf(request_id: number, type: 'operative' | 'security' | 'operative and security') {
+  async generateRequestPdf(request_id: number, type: RequestType) {
     const request = await this.prismaService.request.findUnique({
       where: { request_id },
       include: {
@@ -57,23 +58,24 @@ export class PdfService {
     const sender = `${request.user.name} ${request.user.last_name}`;
     const jobTitle = request.user.userUserTypes[0].userType.name;
     const dateObj = new Date(request.createdAt);
-    const date = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
+    const dateCreatedAt = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
+    const deliveryDueDate = new Date(request.delivery_due_date);
+    const formattedDeliveryDueDate = `${deliveryDueDate.getDate().toString().padStart(2, '0')}/${(deliveryDueDate.getMonth() + 1).toString().padStart(2, '0')}/${deliveryDueDate.getFullYear()}`;
     const description = request.description || 'No description provided';
-    const deliveryDueDate = request.delivery_due_date;
     const projectName = request.project.name;
 
     let title = '', footer = '';
 
     switch (type) {
-      case 'operative':
+      case RequestType.Operative:
         title = 'SOLICITUD DE REQUERIMIENTO DE ELEMENTOS OPERATIVOS';
         footer = `Agradecemos de antemano su atención a esta solicitud y quedamos atentos a su aprobación para proceder con las gestiones correspondientes.`;
         break;
-      case 'security':
+      case RequestType.Security:
         title = 'SOLICITUD DE REQUERIMIENTO DE ELEMENTOS DE PROTECCIÓN PERSONAL (EPP)';
         footer = `Agradecemos de antemano su atención a esta solicitud. Quedamos atentos a su aprobación y a la gestión correspondiente para la adquisición de los EPP requeridos.`;
         break;
-      case 'operative and security':
+      case RequestType.OperativeAndSecurity:
         title = 'SOLICITUD DE REQUERIMIENTO DE EPP Y ELEMENTOS OPERATIVOS';
         footer = `Agradecemos su atención a esta solicitud y quedamos atentos a su aprobación para proceder con las gestiones necesarias.`;
         break;
@@ -132,27 +134,27 @@ export class PdfService {
         { text: 'Proyecto: ', bold: true },
         { text: `${projectName}` },
       ],
+      margin: [0, 0, 0, 10],
       },
       {
       text: [
         { text: 'Fecha de Requerimiento: ', bold: true },
-        { text: `${date}` },
-      ],
-      margin: [0, 10, 0, 20],
+        { text: `${dateCreatedAt}` },
+      ]
       },
       {
       text: [
         { text: 'Fecha de entrega: ', bold: true },
-        { text: `${deliveryDueDate}` },
+        { text: `${formattedDeliveryDueDate}` },
       ],
-      margin: [0, 10, 0, 20],
+      margin: [0, 0, 0, 10],
       },
     ];
 
-    if (type === 'operative and security') {
+    if (type === RequestType.OperativeAndSecurity) {
       // Separar los elementos por tipo
-      const operativeElements = elementRequests.filter(el => el.element.type === 'operative');
-      const securityElements = elementRequests.filter(el => el.element.type === 'security');
+      const operativeElements = elementRequests.filter(el => el.element.type === RequestType.Operative);
+      const securityElements = elementRequests.filter(el => el.element.type === RequestType.Security);
 
       if (operativeElements.length > 0) {
       docContent.push(
@@ -231,7 +233,7 @@ export class PdfService {
         { text: `Ing. ${sender}` },
       ],
       alignment: 'left',
-      margin: [0, 40, 0, 0],
+      margin: [0, 10, 0, 0],
       }
     );
 

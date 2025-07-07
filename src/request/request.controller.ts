@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException, Req } from '@nestjs/common';
 import { Response } from 'express';
 import { RequestService } from './request.service';
 import { CreateRequestDto } from './dto/create-request.dto';
@@ -7,6 +7,7 @@ import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { Public } from 'src/user/jwt/public.decorator';
 import { MailService } from 'src/mail/mail.service';
 import { PdfService } from 'src/pdf/pdf.service';
+import { RequestStatus, RequestType } from 'src/request/entities/request.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -282,15 +283,15 @@ export class RequestController {
         throw new HttpException('Request not found', HttpStatus.NOT_FOUND);
       }
 
-      if (request.status !== 'draft') {
+      if (request.status !== RequestStatus.Draft) {
         throw new HttpException('Only requests with status "draft" can be sent', HttpStatus.BAD_REQUEST);
       }
 
-      if( request.type !== 'operative' && request.type !== 'security' && request.type !== 'operative and security') {
-        throw new HttpException('Request type must be "operative", "security", or "operative and security"', HttpStatus.BAD_REQUEST);
+      if(!request.type || !Object.values(RequestType).includes(request.type.toLowerCase() as RequestType)) {
+        throw new HttpException('Invalid request type', HttpStatus.BAD_REQUEST);
       }
 
-      const pdf = await this.pdfService.generateRequestPdf(request.request_id, request.type);
+      const pdf = await this.pdfService.generateRequestPdf(request.request_id, request.type.toLowerCase() as RequestType);
 
       if (!pdf) {
         throw new HttpException('Failed to generate PDF', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -302,7 +303,7 @@ export class RequestController {
         throw new HttpException('Failed to send email to logistics', HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
-      const updatedRequest = await this.requestService.updateStatus(+body.request_id, 'pending');
+      const updatedRequest = await this.requestService.updateStatus(+body.request_id, RequestStatus.InProgress);
 
       return {
         statusCode: HttpStatus.OK,
