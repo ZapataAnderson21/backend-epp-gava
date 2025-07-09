@@ -10,6 +10,10 @@ export class ElementRequestResponseService {
   async create(createElementRequestResponseDto: CreateElementRequestResponseDto) {
     const elementRequestResponse = await this.prismaService.elementRequestResponse.create({
       data: createElementRequestResponseDto,
+      include: {
+        elementRequest: true,
+        requestResponse: true,
+      },
     });
 
     if (!elementRequestResponse) {
@@ -22,6 +26,10 @@ export class ElementRequestResponseService {
   async findByRequestResponseId(requestResponseId: number) {
     const elementRequestResponses = await this.prismaService.elementRequestResponse.findMany({
       where: { request_response_id: requestResponseId },
+      include: {
+        elementRequest: true,
+        requestResponse: true,
+      },
     });
 
     if (!elementRequestResponses || elementRequestResponses.length === 0) {
@@ -34,6 +42,10 @@ export class ElementRequestResponseService {
   async findOne(id: number) {
     const elementRequestResponse = await this.prismaService.elementRequestResponse.findUnique({
       where: { element_request_response_id: id },
+      include: {
+        elementRequest: true,
+        requestResponse: true,
+      },
     });
 
     if (!elementRequestResponse) {
