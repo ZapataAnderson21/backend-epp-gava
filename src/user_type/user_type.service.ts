@@ -34,4 +34,15 @@ export class UserTypeService {
     return userType;
   }
 
+  async findAll(): Promise<UserType[]> {
+
+    const userTypes = await this.prismaService.userType.findMany();
+
+    if (!userTypes || userTypes.length === 0) {
+      return [];
+    }
+
+    return userTypes;
+  }
+
 }
