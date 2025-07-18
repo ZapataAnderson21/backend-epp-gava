@@ -90,4 +90,33 @@ export class ElementRequestResponseController {
     }
   }
 
+  @ApiBody({ type: UpdateElementRequestResponseDto })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Element request response updated successfully.' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Element request response not found.' })
+  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateElementRequestResponseDto: UpdateElementRequestResponseDto) {
+    try {
+      const updatedElementRequestResponse = await this.elementRequestResponseService.update(+id, updateElementRequestResponseDto);
+      if (!updatedElementRequestResponse) {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Element request response not found',
+          data: null,
+        };
+      }
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Element request response updated successfully',
+        data: updatedElementRequestResponse,
+      };
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error',
+        data: null,
+      };
+    }
+  }
+
 }

@@ -64,7 +64,12 @@ export class RequestService {
         },
         elementRequests: {
           include: {
-            element: true
+            element: true,
+            elementRequestResponses: {
+              include: {
+                requestResponse: true
+              }
+            }
           }
         },
       }

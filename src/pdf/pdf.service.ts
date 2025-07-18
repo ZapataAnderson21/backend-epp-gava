@@ -58,9 +58,9 @@ export class PdfService {
     const sender = `${request.user.name} ${request.user.last_name}`;
     const jobTitle = request.user.userUserTypes[0].userType.name;
     const dateObj = new Date(request.createdAt);
-    const dateCreatedAt = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
+    const dateCreatedAt = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()} ${dateObj.getHours().toString().padStart(2, '0')}:${dateObj.getMinutes().toString().padStart(2, '0')}`;
     const deliveryDueDate = new Date(request.delivery_due_date);
-    const formattedDeliveryDueDate = `${deliveryDueDate.getDate().toString().padStart(2, '0')}/${(deliveryDueDate.getMonth() + 1).toString().padStart(2, '0')}/${deliveryDueDate.getFullYear()}`;
+    const formattedDeliveryDueDate = `${deliveryDueDate.getDate().toString().padStart(2, '0')}/${(deliveryDueDate.getMonth() + 1).toString().padStart(2, '0')}/${deliveryDueDate.getFullYear()} ${deliveryDueDate.getHours().toString().padStart(2, '0')}:${deliveryDueDate.getMinutes().toString().padStart(2, '0')}`;
     const description = request.description || 'No description provided';
     const projectName = request.project.name;
 
@@ -120,14 +120,8 @@ export class PdfService {
       {
       text: [
         { text: 'Para: ', bold: true },
-        { text: 'Ing. Henrry Gayoso Valdera' },
+        { text: 'Equipo de Logística' },
       ],
-      },
-      {
-      text: [
-        { text: 'Gerente General – GAVA C&C', bold: true },
-      ],
-      margin: [0, 0, 0, 10],
       },
       {
       text: [
@@ -138,13 +132,13 @@ export class PdfService {
       },
       {
       text: [
-        { text: 'Fecha de Requerimiento: ', bold: true },
+        { text: 'Fecha y Hora de Solicitud: ', bold: true },
         { text: `${dateCreatedAt}` },
       ]
       },
       {
       text: [
-        { text: 'Fecha de entrega: ', bold: true },
+        { text: 'Fecha y Hora de Entrega: ', bold: true },
         { text: `${formattedDeliveryDueDate}` },
       ],
       margin: [0, 0, 0, 10],

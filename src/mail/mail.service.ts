@@ -68,8 +68,8 @@ export class MailService {
     }
 
     const sender = request.user.email;
-    const toEmail = 'az.sistema@gavacyc.com';
-    const copyEmail = ['zapataascencioanderson@gmail.com', 'moralove2002@gmail.com'];
+    const toEmail = 'logistica@gavacyc.com';
+    const copyEmail = ['admin@gavacyc.com', 'hgayoso@gavacyc.com'];
 
     let subjectEmail = '';
     let type = '';

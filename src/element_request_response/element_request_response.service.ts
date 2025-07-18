@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateElementRequestResponseDto } from './dto/create-element_request_response.dto';
+import { UpdateElementRequestResponseDto } from './dto/update-element_request_response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -53,5 +54,22 @@ export class ElementRequestResponseService {
     }
 
     return elementRequestResponse;
+  }
+
+  async update(id: number, updateElementRequestResponseDto: UpdateElementRequestResponseDto) {
+    const updatedElementRequestResponse = await this.prismaService.elementRequestResponse.update({
+      where: { element_request_response_id: id },
+      data: updateElementRequestResponseDto,
+      include: {
+        elementRequest: true,
+        requestResponse: true,
+      },
+    });
+
+    if (!updatedElementRequestResponse) {
+      return null;
+    }
+
+    return updatedElementRequestResponse;
   }
 }

@@ -133,4 +133,17 @@ export class RequestResponseService {
 
     return requestResponses;
   }
+
+  async update(id: number, updateRequestResponseDto: UpdateRequestResponseDto) {
+    const updatedRequestResponse = await this.prismaService.requestResponse.update({
+      where: { request_response_id: id },
+      data: updateRequestResponseDto,
+    });
+
+    if (!updatedRequestResponse) {
+      return null;
+    }
+
+    return updatedRequestResponse;
+  }
 }

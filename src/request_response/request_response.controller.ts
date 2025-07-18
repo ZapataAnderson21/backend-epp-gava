@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Param, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, HttpStatus, Patch } from '@nestjs/common';
 import { RequestResponseService } from './request_response.service';
 import { CreateRequestResponseDto } from './dto/create-request_response.dto';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { UpdateRequestResponseDto } from './dto/update-request_response.dto';
 
 @Controller('request-response')
 export class RequestResponseController {
@@ -112,6 +113,36 @@ export class RequestResponseController {
         statusCode: HttpStatus.OK,
         message: 'Request responses retrieved successfully',
         data: requestResponses,
+      };
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error',
+        data: null,
+      };
+    }
+  }
+
+
+  @ApiBody({ type: UpdateRequestResponseDto })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Request response updated successfully.' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Request response not found.' })
+  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateRequestResponseDto: UpdateRequestResponseDto) {
+    try {
+      const updatedRequestResponse = await this.requestResponseService.update(+id, updateRequestResponseDto);
+      if (!updatedRequestResponse) {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Request response not found',
+          data: null,
+        };
+      }
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Request response updated successfully',
+        data: updatedRequestResponse,
       };
     } catch (error) {
       return {
