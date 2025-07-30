@@ -246,7 +246,8 @@ export class PdfService {
 
     try {
       const pdfDoc = printer.createPdfKitDocument(docDefinition);
-      const outputPath = path.join(__dirname, `../../output/requerimiento-${request_id}.pdf`);
+      const outputDir = process.env.OUTPUT_DIR || path.join(__dirname);
+      const outputPath = path.join(outputDir, `requerimiento-${request_id}.pdf`);
       const stream = fs.createWriteStream(outputPath);
 
       pdfDoc.pipe(stream);
