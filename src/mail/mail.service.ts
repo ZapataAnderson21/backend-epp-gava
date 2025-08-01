@@ -25,7 +25,7 @@ export class MailService {
       }
     });
 
-    const resetLink = `http://localhost:5173/reset-password?token=${token}`;
+    const resetLink = `https://sir.gavacyc.com/reset-password?token=${token}`;
 
     const mailOptions = {
       from: `"Sistema GAVA" <${fromEmail}>`,
