@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { UserTypeModule } from './user_type/user_type.module';
 import { ProjectModule } from './project/project.module';
@@ -12,7 +13,9 @@ import { PdfService } from './pdf/pdf.service';
 
 @Module({
   imports: [UserModule, UserTypeModule, ProjectModule, ElementModule, RequestModule, 
-            ElementRequestModule, RequestResponseModule, ElementRequestResponseModule],
+            ElementRequestModule, RequestResponseModule, ElementRequestResponseModule,
+            ConfigModule.forRoot({ isGlobal: true})
+          ],
   controllers: [],
   providers: [MailService, PdfService],
 })

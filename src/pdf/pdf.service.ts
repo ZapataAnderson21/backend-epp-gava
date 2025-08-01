@@ -5,11 +5,13 @@ import * as PdfPrinter from 'pdfmake';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { logoBase64 } from './logoBase64';
 import { RequestType } from 'src/request/entities/request.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PdfService {
   constructor(
     private readonly prismaService: PrismaService,
+    private readonly configService: ConfigService,
   ) {}
 
   async generateRequestPdf(request_id: number, type: RequestType) {
@@ -245,9 +247,11 @@ export class PdfService {
     };
 
     try {
+      const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
+      const fileName = `requerimiento-${request_id}.pdf`;
+      const outputPath = path.resolve(outputDir, fileName);
+
       const pdfDoc = printer.createPdfKitDocument(docDefinition);
-      const outputDir = process.env.OUTPUT_DIR || path.join(__dirname);
-      const outputPath = path.join(outputDir, `requerimiento-${request_id}.pdf`);
       const stream = fs.createWriteStream(outputPath);
 
       pdfDoc.pipe(stream);

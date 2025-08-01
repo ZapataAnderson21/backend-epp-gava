@@ -3,11 +3,13 @@ import * as nodemailer from 'nodemailer';
 import * as path from 'path';
 import * as fs from 'fs';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MailService {
 
-  constructor(private readonly prismaService: PrismaService){}
+  constructor(private readonly prismaService: PrismaService,
+              private readonly configService: ConfigService){}
 
   async sendPasswordResetEmail( toEmail: string, token: string): Promise<void> {
     const fromEmail = 'az.sistema@gavacyc.com';
@@ -68,8 +70,8 @@ export class MailService {
     }
 
     const sender = request.user.email;
-    const toEmail = 'logistica@gavacyc.com';
-    const copyEmail = ['admin@gavacyc.com', 'hgayoso@gavacyc.com'];
+    const toEmail = 'az.sistema@gavacyc.com';
+    const copyEmail = ['zapataascencioanderson@gmail.com'];
 
     let subjectEmail = '';
     let type = '';
@@ -88,7 +90,9 @@ export class MailService {
         break;
     }
 
-    const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${request_id}.pdf`);
+    const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
+
+    const pdfPath = path.resolve(outputDir, `requerimiento-${request_id}.pdf`);
 
     if (!fs.existsSync(pdfPath)) {
       throw new Error(`El archivo PDF no fue encontrado en la ruta: ${pdfPath}`);
