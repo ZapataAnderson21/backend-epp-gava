@@ -360,30 +360,25 @@ export class RequestController {
     }
   }
 
-  @Public()
   @Get('pdf/:id')
   async getPdf(@Param('id') id: string, @Res() res: Response) {
-    const pdfPath = path.join(__dirname, `../../output/requerimiento-${id}.pdf`);
+    const pdfPath = path.resolve('/var/www/pdfs', `requerimiento-${id}.pdf`);
+
+    if (!fs.existsSync(pdfPath)) {
+      throw new HttpException('PDF no encontrado', HttpStatus.NOT_FOUND);
+    }
 
     try {
-      if (!fs.existsSync(pdfPath)) {
-        throw new HttpException('PDF not found', HttpStatus.NOT_FOUND);
-      }
-
-      // Devuelve el PDF como attachment o inline
       res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', 'inline; filename=requerimiento-' + id + '.pdf');
+      res.setHeader('Content-Disposition', `inline; filename=requerimiento-${id}.pdf`);
       const stream = fs.createReadStream(pdfPath);
       stream.pipe(res);
     } catch (error) {
-      throw new HttpException(
-        {
-          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: 'Failed to fetch PDF',
-          error: error.message || 'Internal Server Error',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error al obtener el PDF',
+        error: error.message,
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
