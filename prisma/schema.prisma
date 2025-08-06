@@ -19,6 +19,7 @@ model User {
   responses            RequestResponse[] @relation("ResponderRelation")
   userUserTypes        UserUserType[]
   passwordResetTokens  PasswordResetToken[]
+  emergencies          Emergency[]
 }
 
 model UserType {
@@ -45,6 +46,7 @@ model Project {
   status     String   @default("active")
 
   requests Request[]
+  emergencies Emergency[]
 }
 
 model Element {
@@ -118,6 +120,20 @@ model PasswordResetToken {
   user        User     @relation(fields: [user_id], references: [user_id])
 
   @@index([user_id])
+}
+
+model Emergency {
+  emergency_id          Int      @id @default(autoincrement())
+  image       String
+  title       String
+  description String
+  user_id     Int
+  project_id  Int
+  createdAt   DateTime @default(now())
+  status      String   @default("active")
+
+  user    User     @relation(fields: [user_id], references: [user_id])
+  project Project  @relation(fields: [project_id], references: [project_id])
 }
 
 model blacklisted_token {

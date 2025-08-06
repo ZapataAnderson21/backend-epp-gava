@@ -90,9 +90,11 @@ export class MailService {
         break;
     }
 
-    const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
+    //const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
 
-    const pdfPath = path.resolve(outputDir, `requerimiento-${request_id}.pdf`);
+    //const pdfPath = path.resolve(outputDir, `requerimiento-${request_id}.pdf`);
+
+    const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${request_id}.pdf`);
 
     if (!fs.existsSync(pdfPath)) {
       throw new Error(`El archivo PDF no fue encontrado en la ruta: ${pdfPath}`);
@@ -135,7 +137,7 @@ export class MailService {
       <p>Saludos cordiales, ${request.user.name} ${request.user.last_name}</p>
       <br>
       <div style="width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
-        <a href="http://localhost:5173/admin/requests/${request_id}">
+        <a href="https://sir.gavacyc.com/admin/requests/${request_id}">
           <button style="
             background-color: #0047a3;
             color: white;

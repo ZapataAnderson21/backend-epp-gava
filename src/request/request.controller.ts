@@ -59,7 +59,7 @@ export class RequestController {
 
       if (!requests || requests.length === 0) {
         return {
-          statusCode: HttpStatus.OK,
+          statusCode: HttpStatus.NOT_FOUND,
           message: 'No requests found',
           data: [],
         };
@@ -362,7 +362,8 @@ export class RequestController {
 
   @Get('pdf/:id')
   async getPdf(@Param('id') id: string, @Res() res: Response) {
-    const pdfPath = path.resolve('/var/www/pdfs', `requerimiento-${id}.pdf`);
+    const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${id}.pdf`);
+    //const pdfPath = path.resolve('/var/www/pdfs', `requerimiento-${id}.pdf`);
 
     if (!fs.existsSync(pdfPath)) {
       throw new HttpException('PDF no encontrado', HttpStatus.NOT_FOUND);

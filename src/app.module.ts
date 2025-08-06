@@ -10,11 +10,13 @@ import { RequestResponseModule } from './request_response/request_response.modul
 import { ElementRequestResponseModule } from './element_request_response/element_request_response.module';
 import { MailService } from './mail/mail.service';
 import { PdfService } from './pdf/pdf.service';
+import { EmergencyModule } from './emergency/emergency.module';
 
 @Module({
   imports: [UserModule, UserTypeModule, ProjectModule, ElementModule, RequestModule, 
             ElementRequestModule, RequestResponseModule, ElementRequestResponseModule,
-            ConfigModule.forRoot({ isGlobal: true})
+            ConfigModule.forRoot({ isGlobal: true}),
+            EmergencyModule
           ],
   controllers: [],
   providers: [MailService, PdfService],
