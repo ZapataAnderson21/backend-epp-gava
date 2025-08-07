@@ -90,11 +90,11 @@ export class MailService {
         break;
     }
 
-    //const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
+    const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
 
-    //const pdfPath = path.resolve(outputDir, `requerimiento-${request_id}.pdf`);
+    const pdfPath = path.resolve(outputDir, `requerimiento-${request_id}.pdf`);
 
-    const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${request_id}.pdf`);
+    //const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${request_id}.pdf`);
 
     if (!fs.existsSync(pdfPath)) {
       throw new Error(`El archivo PDF no fue encontrado en la ruta: ${pdfPath}`);

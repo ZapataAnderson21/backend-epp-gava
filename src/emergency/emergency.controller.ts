@@ -7,7 +7,6 @@ import { CreateEmergencyDto } from './dto/create-emergency.dto';
 import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 
-
 @Controller('emergency')
 export class EmergencyController {
   constructor(private readonly emergencyService: EmergencyService) {}
@@ -19,7 +18,7 @@ export class EmergencyController {
   @Post()
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
-      destination: 'output/emergencies',
+      destination: '/var/www/emergencies',
       filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
@@ -31,7 +30,7 @@ export class EmergencyController {
   }))
   async create(@UploadedFile() file: any, @Body() body: any) {
     try {
-      const imagePath = `output/emergencies/${file.filename}`;
+      const imagePath = `/var/www/emergencies/${file.filename}`;
 
       const emergency = await this.emergencyService.create({
         title: body.title,
