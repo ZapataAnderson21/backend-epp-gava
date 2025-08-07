@@ -19,7 +19,7 @@ export class EmergencyController {
   @Post()
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
-      destination: '../../../output/emergencies', // carpeta donde se guarda
+      destination: 'output/emergencies',
       filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
@@ -31,7 +31,7 @@ export class EmergencyController {
   }))
   async create(@UploadedFile() file: any, @Body() body: any) {
     try {
-      const imagePath = `uploads/emergencies/${file.filename}`;
+      const imagePath = `output/emergencies/${file.filename}`;
 
       const emergency = await this.emergencyService.create({
         title: body.title,
