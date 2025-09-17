@@ -71,7 +71,21 @@ model Request {
   project           Project  @relation(fields: [project_id], references: [project_id])
   user              User     @relation(fields: [user_id], references: [user_id])
   elementRequests   ElementRequest[]
+  requestWorkers    RequestWorker[]
   responses         RequestResponse[]
+}
+
+model RequestWorker {
+  request_worker_id Int       @id @default(autoincrement())
+  request_id        Int
+  full_name         String
+  shoe_size         String    // ej. "42", "US9", "27.5"
+  pants_size        String    // ej. "30", "32", "M", "L"
+  shirt_size        String    // ej. "S", "M", "L"
+
+  request           Request   @relation(fields: [request_id], references: [request_id])
+
+  @@index([request_id])
 }
 
 model ElementRequest {

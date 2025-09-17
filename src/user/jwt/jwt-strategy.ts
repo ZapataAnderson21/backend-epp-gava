@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
 
     if (blacklistedToken) {
-      throw new UnauthorizedException('Token ha sido revocado');
+      throw new UnauthorizedException('La sesión ha expirado. Por favor, inicie sesión de nuevo.');
     }
 
     return { userId: payload.id, email: payload.email };

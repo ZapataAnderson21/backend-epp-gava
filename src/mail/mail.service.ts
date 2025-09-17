@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -11,7 +11,7 @@ export class MailService {
   constructor(private readonly prismaService: PrismaService,
               private readonly configService: ConfigService){}
 
-  async sendPasswordResetEmail( toEmail: string, token: string): Promise<void> {
+  async sendPasswordResetEmail( toEmail: string, token: string) {
     const fromEmail = 'az.sistema@gavacyc.com';
     const fromPassword = 'sistema2025@';
 
@@ -42,6 +42,8 @@ export class MailService {
     };
 
     await transporter.sendMail(mailOptions);
+
+    return HttpStatus.OK;
   }
 
   

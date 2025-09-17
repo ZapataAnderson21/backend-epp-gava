@@ -35,38 +35,7 @@ export class ElementRequestController {
       }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
-  @Public()
-  @ApiResponse({ status: HttpStatus.OK, description: 'Element Requests retrieved successfully' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No Element Requests found' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal Server Error' })
-  @Get()
-  async findAll() {
-    try {
-      const elementRequests = await this.elementRequestService.findAll();
-      
-      if (!elementRequests || elementRequests.length === 0) {
-        return {
-          statusCode: HttpStatus.NOT_FOUND,
-          message: 'No Element Requests found',
-          data: [],
-        };
-      }
-      
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Element Requests retrieved successfully',
-        data: elementRequests,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'An error occurred while retrieving Element Requests',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
+  
 
   @Public()
   @ApiResponse({ status: HttpStatus.OK, description: 'Element Requests retrieved successfully for the specified request ID' })
