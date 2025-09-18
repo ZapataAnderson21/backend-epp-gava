@@ -1,20 +1,24 @@
-import { ConfigurableModuleBuilder, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as PdfPrinter from 'pdfmake';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { logoBase64 } from './logoBase64';
-import { RequestType } from 'src/request/entities/request.entity';
+import { RequestStatus, RequestType } from 'src/request/entities/request.entity';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PdfService {
+
+  private readonly logger = new Logger("PdfService");
+
   constructor(
     private readonly prismaService: PrismaService,
     private readonly configService: ConfigService,
   ) {}
 
-  async generateRequestPdf(request_id: number, type: RequestType) {
+  async generateRequestPdf(request_id: number) {
+
     const request = await this.prismaService.request.findUnique({
       where: { request_id },
       include: {
@@ -31,14 +35,24 @@ export class PdfService {
       }
     });
 
-    console.log("PDF-SERVICE:")
-    console.log("Request:" + request)
+    this.logger.log("Request:" + request);
 
     if (!request) {
-      throw new Error('Request not found');
+      this.logger.error('Request not found');
+      throw new NotFoundException('Request not found');
     }
 
-    console.log('Request found:', request);
+    this.logger.log('Request found:', request);
+
+    if (request.status !== RequestStatus.Draft) {
+      throw new BadRequestException('Only requests with status "draft" can be sent');
+    }
+
+    if(!request.type || !Object.values(RequestType).includes(request.type.toLowerCase() as RequestType)) {
+      throw new BadRequestException('Invalid request type');
+    }
+
+    const type = request.type;
 
     const elementRequests = await this.prismaService.elementRequest.findMany({
       where: { request_id },
@@ -52,7 +66,7 @@ export class PdfService {
     console.log("Element Requests: " + elementRequests)
 
     if (!elementRequests || elementRequests.length === 0) {
-      throw new Error('Element Requests not found');
+      throw new NotFoundException('Element Requests not found');
     }
 
     console.log('Element Requests found:', elementRequests);
@@ -263,8 +277,8 @@ export class PdfService {
         stream.on('error', err => reject(err));
       });
     } catch (error) {
-      console.error('Error generating PDF:', error);
-      throw new Error('Error generating PDF');
+      this.logger.error('Error generating PDF:', error);
+      throw new InternalServerErrorException('Error generating PDF');
     }
   }
 }

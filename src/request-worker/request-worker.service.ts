@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateRequestWorkerDto } from './dto/create-request-worker.dto';
 import { UpdateRequestWorkerDto } from './dto/update-request-worker.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -13,7 +13,6 @@ export class RequestWorkerService {
   async create(createRequestWorkerDto: CreateRequestWorkerDto) {
     
     this.logger.log('Creating request worker', JSON.stringify(createRequestWorkerDto));
-
     await this.requestExistsAndIsDraft(createRequestWorkerDto.request_id);
 
     const newRequestWorker = await this.prismaService.requestWorker.create({
@@ -22,16 +21,11 @@ export class RequestWorkerService {
 
     if (!newRequestWorker) {
       this.logger.error('Failed to create request worker', createRequestWorkerDto);
-      throw new HttpException('Failed to create request worker', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('Failed to create request worker');
     }
 
     this.logger.log('Request worker created successfully', JSON.stringify(newRequestWorker));
-
-    return {
-      statusCode: HttpStatus.CREATED,
-      message: 'Request Worker created successfully',
-      data: newRequestWorker
-    };
+    return newRequestWorker;
   }
 
   async findAllByRequestId(request_id: number) {
@@ -56,7 +50,6 @@ export class RequestWorkerService {
   async findOne(request_worker_id: number) {
 
     this.logger.log(`Finding request worker with ID: ${request_worker_id}`);
-
     const requestWorker = await this.prismaService.requestWorker.findUnique({
       where: { request_worker_id },
       include: { request: true }
@@ -64,7 +57,7 @@ export class RequestWorkerService {
 
     if (!requestWorker) {
       this.logger.error(`Request worker with ID ${request_worker_id} not found`);
-      throw new HttpException('Request worker not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Request worker not found');
     }
 
     this.logger.log(`Request worker with ID ${request_worker_id} found`, JSON.stringify(requestWorker));
@@ -72,11 +65,11 @@ export class RequestWorkerService {
   }
 
   async update(request_worker_id: number, updateRequestWorkerDto: UpdateRequestWorkerDto) {
-    
-    this.logger.log(`Updating request worker with ID: ${request_worker_id}`, JSON.stringify(updateRequestWorkerDto));
 
+    this.logger.log(`Updating request worker with ID: ${request_worker_id}`, JSON.stringify(updateRequestWorkerDto));
     const existingRequestWorker = await this.findOne(request_worker_id);
 
+    this.logger.log(`Verifying associated request with ID: ${existingRequestWorker.request_id} is in draft status`);
     await this.requestExistsAndIsDraft(existingRequestWorker.request_id);
 
     const updatedRequestWorker = await this.prismaService.requestWorker.update({
@@ -86,7 +79,7 @@ export class RequestWorkerService {
 
     if (!updatedRequestWorker) {
       this.logger.error(`Failed to update request worker with ID: ${request_worker_id}`, JSON.stringify(updateRequestWorkerDto));
-      throw new HttpException('Failed to update request worker', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('Failed to update request worker');
     }
 
     this.logger.log(`Request worker with ID ${request_worker_id} updated successfully`, JSON.stringify(updatedRequestWorker));
@@ -95,7 +88,6 @@ export class RequestWorkerService {
 
   async remove(request_worker_id: number) {
     this.logger.log(`Removing request worker with ID: ${request_worker_id}`);
-
     const existingRequestWorker = await this.findOne(request_worker_id);
 
     await this.requestExistsAndIsDraft(existingRequestWorker.request_id);
@@ -106,7 +98,7 @@ export class RequestWorkerService {
 
     if (!deletedRequestWorker) {
       this.logger.error(`Failed to delete request worker with ID: ${request_worker_id}`);
-      throw new HttpException('Failed to delete request worker', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('Failed to delete request worker');
     }
     
     this.logger.log(`Request worker with ID ${request_worker_id} deleted successfully`, JSON.stringify(deletedRequestWorker));
@@ -123,12 +115,12 @@ export class RequestWorkerService {
 
     if (!request) {
       this.logger.error(`Associated request with ID ${request_id} not found`);
-      throw new HttpException('Associated request not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Associated request not found');
     }
 
     if (request.status !== 'draft') {
       this.logger.error(`The operation cannot be performed because the request with ID ${request_id} is not in draft status`);
-      throw new HttpException('The operation cannot be performed because the request is not in draft status', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('The operation cannot be performed because the request is not in draft status');
     }
 
     this.logger.log(`Request with ID ${request_id} exists and is in draft status`);

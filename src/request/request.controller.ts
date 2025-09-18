@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException, Req, ParseIntPipe, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { Response } from 'express';
 import { RequestService } from './request.service';
 import { CreateRequestDto } from './dto/create-request.dto';
@@ -7,7 +7,7 @@ import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { Public } from 'src/user/jwt/public.decorator';
 import { MailService } from 'src/mail/mail.service';
 import { PdfService } from 'src/pdf/pdf.service';
-import { RequestStatus, RequestType } from 'src/request/entities/request.entity';
+import { RequestStatus } from 'src/request/entities/request.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -24,28 +24,7 @@ export class RequestController {
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to create request' })
   @Post()
   async create(@Body() createRequestDto: CreateRequestDto) {
-    try {
-
-      console.log('CONTROLLER: Creating request with data:', createRequestDto);
-
-      const request = await this.requestService.create(createRequestDto);
-
-      if(!request) {
-        throw new HttpException('Request creation failed', HttpStatus.INTERNAL_SERVER_ERROR);
-      }
-
-      return {
-        statusCode: HttpStatus.CREATED,
-        message: 'Request created successfully',
-        data: request,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to create request',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.requestService.create(createRequestDto);
   }
 
   @Public()
@@ -54,29 +33,7 @@ export class RequestController {
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to retrieve requests' })
   @Get()
   async findAll() {
-    try {
-      const requests = await this.requestService.findAll();
-
-      if (!requests || requests.length === 0) {
-        return {
-          statusCode: HttpStatus.NOT_FOUND,
-          message: 'No requests found',
-          data: [],
-        };
-      }
-
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Requests retrieved successfully',
-        data: requests,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to retrieve requests',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.requestService.findAll();
   }
 
   @Public()
@@ -84,30 +41,8 @@ export class RequestController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Request not found' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to retrieve request' })
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    try {
-      if (isNaN(+id)) {
-        throw new HttpException('Invalid request ID', HttpStatus.BAD_REQUEST);
-      }
-
-      const request = await this.requestService.findOne(+id);
-
-      if (!request) {
-        throw new HttpException('Request not found', HttpStatus.NOT_FOUND);
-      }
-
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Request retrieved successfully',
-        data: request,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to retrieve request',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.requestService.findOne(id);
   }
 
   @Public()
@@ -115,30 +50,8 @@ export class RequestController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No requests found for the project' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to retrieve requests for project' })
   @Get('project/:project_id')
-  async findByProject(@Param('project_id') project_id: string) {
-    try {
-      if (isNaN(+project_id)) {
-        throw new HttpException('Invalid project ID', HttpStatus.BAD_REQUEST);
-      }
-
-      const requests = await this.requestService.findAllByProjectId(+project_id);
-
-      if (!requests || requests.length === 0) {
-        throw new HttpException('No requests found for the project', HttpStatus.NOT_FOUND);
-      }
-
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Requests for project retrieved successfully',
-        data: requests,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to retrieve requests for project',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  async findByProject(@Param('project_id', ParseIntPipe) project_id: number) {
+    return await this.requestService.findAllByProjectId(project_id);
   }
 
   @Public()
@@ -146,30 +59,8 @@ export class RequestController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No requests found for the user' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to retrieve requests for user' })
   @Get('user/:user_id')
-  async findByUser(@Param('user_id') user_id: string) {
-    try {
-      if (isNaN(+user_id)) {
-        throw new HttpException('Invalid user ID', HttpStatus.BAD_REQUEST);
-      }
-
-      const requests = await this.requestService.findAllByUserId(+user_id);
-
-      if (!requests || requests.length === 0) {
-        throw new HttpException('No requests found for the user', HttpStatus.NOT_FOUND);
-      }
-
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Requests for user retrieved successfully',
-        data: requests,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to retrieve requests for user',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  async findByUser(@Param('user_id', ParseIntPipe) user_id: number) {
+    return await this.requestService.findAllByUserId(user_id);
   }
 
   @Public()
@@ -178,25 +69,7 @@ export class RequestController {
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to retrieve requests by status' })
   @Get('status/:status')
   async findByStatus(@Param('status') status: string) {
-    try {
-      const requests = await this.requestService.findAllByStatus(status);
-
-      if (!requests || requests.length === 0) {
-        throw new HttpException('No requests found with the specified status', HttpStatus.NOT_FOUND);
-      }
-
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Requests by status retrieved successfully',
-        data: requests,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to retrieve requests by status',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.requestService.findAllByStatus(status);
   }
 
   @Public()
@@ -205,30 +78,8 @@ export class RequestController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Request not found' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to update request' })
   @Patch(':id/status')
-  async updateStatus(@Param('id') id: string, @Body() status: { status: string }) {
-    try {
-      if (isNaN(+id)) {
-        throw new HttpException('Invalid request ID', HttpStatus.BAD_REQUEST);
-      }
-
-      const updatedRequest = await this.requestService.updateStatus(+id, status.status);
-
-      if (!updatedRequest) {
-        throw new HttpException('Request not found', HttpStatus.NOT_FOUND);
-      }
-
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Request updated successfully',
-        data: updatedRequest,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to update request',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  async updateStatus(@Param('id', ParseIntPipe) id: number, @Body() status: { status: string }) {
+    return await this.requestService.updateStatus(id, status.status);
   }
 
   @Public()
@@ -238,30 +89,8 @@ export class RequestController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Request not found' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to update request' })
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateRequestDto: UpdateRequestDto) {
-    try {
-      if (isNaN(+id)) {
-        throw new HttpException('Invalid request ID', HttpStatus.BAD_REQUEST);
-      }
-
-      const updatedRequest = await this.requestService.update(+id, updateRequestDto);
-
-      if (!updatedRequest) {
-        throw new HttpException('Request not found', HttpStatus.NOT_FOUND);
-      }
-
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Request updated successfully',
-        data: updatedRequest,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to update request',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateRequestDto: UpdateRequestDto) {
+      return await this.requestService.update(id, updateRequestDto);
   }
 
   @Public()
@@ -272,51 +101,11 @@ export class RequestController {
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to send request to logistics' })
   @Post('send-to-logistics')
   async sendToLogistics(@Body() body : { request_id: number, passwordCPanel: string }) {
-    try {
-      if (isNaN(+body.request_id)) {
-        throw new HttpException('Invalid request ID', HttpStatus.BAD_REQUEST);
-      }
+    await this.pdfService.generateRequestPdf(body.request_id);
 
-      const request = await this.requestService.findOne(+body.request_id);
+    await this.mailService.sendRequestToLogistics(body.request_id, body.passwordCPanel);
 
-      if (!request) {
-        throw new HttpException('Request not found', HttpStatus.NOT_FOUND);
-      }
-
-      if (request.status !== RequestStatus.Draft) {
-        throw new HttpException('Only requests with status "draft" can be sent', HttpStatus.BAD_REQUEST);
-      }
-
-      if(!request.type || !Object.values(RequestType).includes(request.type.toLowerCase() as RequestType)) {
-        throw new HttpException('Invalid request type', HttpStatus.BAD_REQUEST);
-      }
-
-      const pdf = await this.pdfService.generateRequestPdf(request.request_id, request.type.toLowerCase() as RequestType);
-
-      if (!pdf) {
-        throw new HttpException('Failed to generate PDF', HttpStatus.INTERNAL_SERVER_ERROR);
-      }
-
-      const emailSentToLogistics = await this.mailService.sendRequestToLogistics(request.request_id, body.passwordCPanel);
-
-      if (!emailSentToLogistics || !emailSentToLogistics.success) {
-        throw new HttpException('Failed to send email to logistics', HttpStatus.INTERNAL_SERVER_ERROR);
-      }
-
-      const updatedRequest = await this.requestService.updateStatus(+body.request_id, RequestStatus.InProgress);
-
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Request sent successfully',
-        data: updatedRequest,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to send request',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.requestService.updateStatus(+body.request_id, RequestStatus.InProgress);
   }
   
   @Public()
@@ -324,62 +113,27 @@ export class RequestController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Request not found' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to remove request' })
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    try {
-      if (isNaN(+id)) {
-        throw new HttpException('Invalid request ID', HttpStatus.BAD_REQUEST);
-      }
-
-      const existingRequest = await this.requestService.findOne(+id);
-
-      if (!existingRequest) {
-        throw new HttpException('Request not found', HttpStatus.NOT_FOUND);
-      }
-
-      if (existingRequest.status !== 'draft') {
-        throw new HttpException('Only requests with status "draft" can be removed', HttpStatus.BAD_REQUEST);
-      }
-
-      const removedRequest = await this.requestService.remove(+id);
-
-      if (!removedRequest) {
-        throw new HttpException('Request not found', HttpStatus.NOT_FOUND);
-      }
-
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Request removed successfully',
-        data: removedRequest,
-      };
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Failed to remove request',
-        error: error.message || 'Internal Server Error',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.requestService.remove(id);
   }
 
   @Get('pdf/:id')
-  async getPdf(@Param('id') id: string, @Res() res: Response) {
+  async getPdf(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     //const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${id}.pdf`);
     const pdfPath = path.resolve('/var/www/pdfs', `requerimiento-${id}.pdf`);
 
     if (!fs.existsSync(pdfPath)) {
-      throw new HttpException('PDF no encontrado', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('PDF no encontrado');
     }
 
-    try {
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `inline; filename=requerimiento-${id}.pdf`);
-      const stream = fs.createReadStream(pdfPath);
-      stream.pipe(res);
-    } catch (error) {
-      throw new HttpException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Error al obtener el PDF',
-        error: error.message,
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `inline; filename=requerimiento-${id}.pdf`);
+    const stream = fs.createReadStream(pdfPath);
+    
+    if(!stream) {
+      throw new InternalServerErrorException('Error al leer el PDF');
     }
+
+    stream.pipe(res);
   }
 }

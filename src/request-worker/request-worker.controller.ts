@@ -8,8 +8,7 @@ import { Public } from 'src/user/jwt/public.decorator';
 @Controller('request-worker')
 export class RequestWorkerController {
   constructor(private readonly requestWorkerService: RequestWorkerService) {}
-
-  @Public()
+  
   @ApiBody({ type: CreateRequestWorkerDto })
   @ApiResponse({ status: HttpStatus.CREATED, description: 'Request Worker created successfully' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal Server Error' })
@@ -17,6 +16,11 @@ export class RequestWorkerController {
   @Post()
   create(@Body() createRequestWorkerDto: CreateRequestWorkerDto) {
     return this.requestWorkerService.create(createRequestWorkerDto);
+  }
+
+  @Get('request/:request_id')
+  findAllByRequestId(@Param('request_id') request_id: string) {
+    return this.requestWorkerService.findAllByRequestId(+request_id);
   }
 
   @Get(':id')
