@@ -3,12 +3,11 @@ import { RequestWorkerService } from './request-worker.service';
 import { CreateRequestWorkerDto } from './dto/create-request-worker.dto';
 import { UpdateRequestWorkerDto } from './dto/update-request-worker.dto';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
-import { Public } from 'src/user/jwt/public.decorator';
 
 @Controller('request-worker')
 export class RequestWorkerController {
   constructor(private readonly requestWorkerService: RequestWorkerService) {}
-  
+
   @ApiBody({ type: CreateRequestWorkerDto })
   @ApiResponse({ status: HttpStatus.CREATED, description: 'Request Worker created successfully' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal Server Error' })
