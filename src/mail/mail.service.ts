@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -7,6 +7,8 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MailService {
+
+  private readonly logger = new Logger("MailService");
 
   constructor(private readonly prismaService: PrismaService,
               private readonly configService: ConfigService){}
@@ -46,8 +48,8 @@ export class MailService {
     return HttpStatus.OK;
   }
 
-  
-  async sendRequestToLogistics(request_id: number, passwordCPanel: string): Promise<{ success: boolean; messageId: string; response: string }> {
+  async findRequestById(request_id: number) {
+    this.logger.log(`Searching for request with ID: ${request_id}`);
     const request = await this.prismaService.request.findUnique({
       where: { request_id },
       include: {
@@ -64,12 +66,17 @@ export class MailService {
       }
     });
 
-    console.log("MAIL-SERVICE:")
-    console.log("Request:" + request)
-
     if (!request) {
-      throw new Error('Request not found');
+      this.logger.warn(`Request with ID: ${request_id} not found`);
+      throw new NotFoundException('Request not found');
     }
+
+    this.logger.log(`Request with ID: ${request_id} found successfully`);
+    return request;
+  }
+
+  async sendRequestToLogistics(request_id: number, passwordCPanel: string): Promise<{ success: boolean; messageId: string; response: string }> {
+    const request = await this.findRequestById(request_id);
 
     const sender = request.user.email;
     const toEmail = 'logistica@gavacyc.com';
@@ -99,7 +106,7 @@ export class MailService {
     //const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${request_id}.pdf`);
 
     if (!fs.existsSync(pdfPath)) {
-      throw new Error(`El archivo PDF no fue encontrado en la ruta: ${pdfPath}`);
+      throw new NotFoundException(`El archivo PDF no fue encontrado en la ruta: ${pdfPath}`);
     }
 
     const transporter = nodemailer.createTransport({
