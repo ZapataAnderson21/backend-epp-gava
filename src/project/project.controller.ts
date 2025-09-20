@@ -5,12 +5,13 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { Public } from 'src/user/jwt/public.decorator';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { Project } from './entities/project.entity';
+import { UserTypes } from 'src/decorators/user-types.decorator';
 
 @Controller('project')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
-
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
   @ApiBody({ type: CreateProjectDto })
   @ApiResponse({ status: HttpStatus.CREATED, description: 'Project created successfully', type: Project })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Project creation failed' })

@@ -9,7 +9,6 @@ import { CreateUserUserTypeDto } from 'src/user_user_type/dto/create-user_user_t
 import { LoginDto } from './dto/login.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 
-
 @Injectable()
 export class UserService {
 
@@ -74,10 +73,8 @@ export class UserService {
     }
     
     const userReturn = {
-      user_id: newUser.user_id,
-      name: newUser.name,
-      last_name: newUser.last_name,
-      email: newUser.email,
+      ...newUser,
+      password: '',
       userType: userType.name
     }
 
@@ -96,7 +93,7 @@ export class UserService {
 
     this.logger.log(`Attempting login for email: ${email}`);
     let user = await this.findByEmail(email);
-
+    
     if (!user) {
       this.logger.warn(`Login failed: User not found for email ${email}`);
       throw new UnauthorizedException('Invalid credentials. User with this email does not exist');
@@ -110,14 +107,16 @@ export class UserService {
       throw new UnauthorizedException('Invalid credentials. Password is incorrect');
     }
 
-    const payload = { userId: user.user_id, email: user.email };
+    const payload = await this.findOne(user.user_id); 
+
     const accessToken = this.jwtService.sign(payload);
 
-    user = { ...user, password: '' };
-
     this.logger.log(`Login successful for email: ${email}`);
+
+    this.logger.log(JSON.stringify({ payload, accessToken }));
+
     return {
-      user,
+      user: payload,
       accessToken
     };
   }
@@ -135,37 +134,8 @@ export class UserService {
     this.logger.log(`Found ${users.length} users`);
     const usersWithTypes = await Promise.all(
       users.map(async (user) => {
-        
-        this.logger.log(`Retrieving user type for user ID: ${user.user_id}`);
-        const userUserType = await this.prisma.userUserType.findUnique({
-          where: { user_id: user.user_id }
-        });
-
-        if (!userUserType) {
-          this.logger.warn(`User type association not found for user ID: ${user.user_id}`);
-          return { user, userUserType: null };
-        }
-
-        this.logger.log(`User type association found: ${JSON.stringify(userUserType)}`);
-        const userType = await this.prisma.userType.findUnique({
-          where: { user_type_id: userUserType.user_type_id }
-        });
-
-        if (!userType) {
-          this.logger.warn(`User type not found: ${userUserType.user_type_id}`);
-          return { user, userUserType, userType: null };
-        }
-
-        const dataReturn = {
-          id: user.user_id,
-          name: user.name,
-          last_name: user.last_name,
-          email: user.email,
-          userType: userType.name
-        } 
-
-        this.logger.log(`User type found: ${JSON.stringify(userType)}`);
-        return dataReturn;
+        const returnUser = await this.findOne(user.user_id);
+        return returnUser;
       })
     );
 
@@ -177,6 +147,13 @@ export class UserService {
     this.logger.log(`Finding user with id: ${id}`);
     const user = await this.prisma.user.findUnique({
       where: { user_id: id },
+      include: {
+        userUserTypes: {
+          include: {
+            userType: true
+          }
+        }
+      }
     });
 
     if (!user) {
@@ -184,31 +161,15 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    const userUserType = await this.prisma.userUserType.findUnique({
-      where: { user_id: user.user_id }
-    });
-    
-    if (!userUserType) {
-      this.logger.warn(`User type association not found for user ID: ${user.user_id}`);
-      return { ...user, userType: null };
-    }
-
-    const userType = await this.prisma.userType.findUnique({
-      where: { user_type_id: userUserType.user_type_id }
-    });
-
-    if (!userType) {
-      this.logger.warn(`User type not found: ${userUserType.user_type_id}`);
-      return { ...user, userType: null };
-    }
+    const userType = user.userUserTypes[0].userType.name ? user.userUserTypes[0].userType.name : null;
 
     const userWithType = {
       id: user.user_id,
       name: user.name,
       last_name: user.last_name,
       email: user.email,
-      userType: userType.name
-    }
+      userType: userType
+    };
 
     this.logger.log(`User found with id: ${id}`);
     return userWithType;
@@ -390,6 +351,7 @@ export class UserService {
       where: { token }
     });
 
+    this.logger.log(`Token is ${blacklistedToken ? '' : 'not '} blacklisted`);
     return !!blacklistedToken;
   }
 }

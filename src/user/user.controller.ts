@@ -6,11 +6,12 @@ import { UserUserTypeService } from 'src/user_user_type/user_user_type.service';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { LoginDto } from './dto/login.dto';
-import { LoginResponse } from './entities/login-response';
+import { LoginResponse } from './entities/login-response';  
 import { Public } from './jwt/public.decorator';
 import { MailService } from 'src/mail/mail.service';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserTypes } from 'src/decorators/user-types.decorator';
 
 @Controller('user')
 export class UserController {
@@ -23,6 +24,7 @@ export class UserController {
               private readonly mailService: MailService) {}
   
   @Public()
+  @UserTypes('Gerente', 'Administradora')
   @Post()
   @ApiBody({ type: CreateUserDto })
   @ApiResponse({ status: HttpStatus.CREATED, description: 'User created successfully', type: User })

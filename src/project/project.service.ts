@@ -81,12 +81,12 @@ export class ProjectService {
     });
 
     if (!foundProject) {
-      this.logger.warn('Project not found');
-      throw new NotFoundException('Project not found');
+      this.logger.log(`No project found with code: ${code}`);
+      return false;
     }
 
     this.logger.log('Found project with code', foundProject);
-    return foundProject;
+    return true;
   }
 
   async findByStatus(status: string): Promise<Project[]> {
