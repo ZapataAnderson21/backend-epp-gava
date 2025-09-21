@@ -355,7 +355,7 @@ export class UserService {
       where: { token }
     });
 
-    this.logger.log(`Token is ${blacklistedToken ? '' : 'not '} blacklisted`);
+    this.logger.log(`Token is ${blacklistedToken ? '' : 'not'} blacklisted`);
     return !!blacklistedToken;
   }
 }

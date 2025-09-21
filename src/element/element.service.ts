@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -13,12 +13,18 @@ export class ElementService {
 
   async create(createElementDto: CreateElementDto){
 
+    this.logger.log('Creating element', JSON.stringify(createElementDto));
+    if(createElementDto.type !== 'operative' && createElementDto.type !== 'security'){
+      this.logger.error(`Element creation failed: Invalid type specified: ${createElementDto.type}`);
+      throw new BadRequestException('Selecciona un tipo válido.');
+    }
+
     this.logger.log(`Checking for existing element with name: ${createElementDto.name}`);
     const existingProject = await this.findByName(createElementDto.name);
 
     if (existingProject && existingProject.length > 0){
       this.logger.error(`Element creation failed: Element with this name already exists: ${createElementDto.name}`);
-      throw new ConflictException('Element with this name already exists');
+      throw new ConflictException('Ya existe un elemento con este nombre.');
     }
 
     this.logger.log(`Creating element: ${JSON.stringify(createElementDto)}`);
@@ -30,7 +36,11 @@ export class ElementService {
     }
 
     this.logger.log(`Element created successfully: ${JSON.stringify(element)}`);
-    return element;
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'El elemento ha sido creado exitosamente.',
+      data: element
+    };
   }
 
   async findAll() {
@@ -38,12 +48,19 @@ export class ElementService {
     const foundElements = await this.prismaService.element.findMany();
 
     if (!foundElements || foundElements.length === 0){
-      this.logger.warn('No elements found');
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se han encontrado elementos.',
+        data: []
+      }
     }
 
     this.logger.log(`Found ${foundElements.length} elements`);
-    return foundElements;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Elementos encontrados exitosamente.',
+      data: foundElements
+    };
   }
 
   async findOne(element_id: number) {
@@ -81,11 +98,19 @@ export class ElementService {
 
     if (!foundElements || foundElements.length === 0){
       this.logger.warn(`No elements found of type: ${type}`);
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: `No se han encontrado elementos de este tipo.`,
+        data: []
+      };
     }
 
     this.logger.log(`Found ${foundElements.length} elements of type ${type}`);
-    return foundElements;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Elementos encontrados exitosamente.',
+      data: foundElements
+    };
   }
 
   async update(element_id: number, updateElementDto: UpdateElementDto) {
