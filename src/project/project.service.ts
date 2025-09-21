@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -36,20 +36,32 @@ export class ProjectService {
     }
 
     this.logger.log(`Project created successfully: ${JSON.stringify(project)}`);
-    return project;
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'El proyecto ha sido creado exitosamente.',
+      data: project
+    };
   }
 
-  async findAll(): Promise<Project[]> {
+  async findAll() {
     this.logger.log('Retrieving all projects');
     const foundProjects = await this.prismaService.project.findMany();
 
     if (!foundProjects || foundProjects.length === 0) {
       this.logger.warn('No projects found');
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se han encontrado proyectos.',
+        data: []
+      };
     }
 
     this.logger.log(`Found ${foundProjects.length} projects`);
-    return foundProjects;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Projects retrieved successfully',
+      data: foundProjects
+    };
   }
 
   async findOne(project_id: number) {
@@ -89,19 +101,27 @@ export class ProjectService {
     return true;
   }
 
-  async findByStatus(status: string): Promise<Project[]> {
+  async findByStatus(status: string) {
     this.logger.log(`Retrieving projects with status: ${status}`);
     const foundProjects = await this.prismaService.project.findMany({
       where: { status }
     });
 
     if (!foundProjects || foundProjects.length === 0) {
-      this.logger.warn(`No projects found with status: ${status}`);
-      return [];
+      this.logger.warn('No projects found');
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se han encontrado proyectos.',
+        data: []
+      };
     }
 
     this.logger.log(`Found ${foundProjects.length} projects with status: ${status}`);
-    return foundProjects;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Projects retrieved successfully',
+      data: foundProjects
+    };
   }
 
   async update(project_id: number, updateProjectDto: UpdateProjectDto): Promise<Project | null> {

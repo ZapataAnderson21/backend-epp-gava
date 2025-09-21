@@ -26,6 +26,7 @@ export class UserTypeService {
       throw new BadRequestException('Failed to create user type');
     }
 
+    this.logger.log(`User type created successfully: ${createUserTypeDto.name}`);  
     return newUserType;
   }
 

@@ -88,7 +88,7 @@ export class UserService {
 
     if(!email || !password) {
       this.logger.warn('Email and password must be provided for login');
-      throw new BadRequestException('Email and password must be provided');
+      throw new BadRequestException('El correo y la contraseña son obligatorios.');
     }
 
     this.logger.log(`Attempting login for email: ${email}`);
@@ -96,7 +96,7 @@ export class UserService {
     
     if (!user) {
       this.logger.warn(`Login failed: User not found for email ${email}`);
-      throw new UnauthorizedException('Invalid credentials. User with this email does not exist');
+      throw new NotFoundException('El usuario con este correo no existe.');
     }
 
     this.logger.log(`User found: ${email}`);
@@ -104,7 +104,7 @@ export class UserService {
 
     if (!isPasswordValid) {
       this.logger.warn(`Login failed: Invalid password for email ${email}`);
-      throw new UnauthorizedException('Invalid credentials. Password is incorrect');
+      throw new UnauthorizedException('La contraseña es incorrecta.');
     }
 
     const payload = await this.findOne(user.user_id); 
@@ -116,8 +116,12 @@ export class UserService {
     this.logger.log(JSON.stringify({ payload, accessToken }));
 
     return {
-      user: payload,
-      accessToken
+      statusCode: HttpStatus.OK,
+      message: 'Login successful',
+      data: {
+        user: payload,
+        accessToken
+      },
     };
   }
 
