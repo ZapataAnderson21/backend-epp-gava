@@ -76,11 +76,15 @@ export class ProjectService {
 
     this.logger.log(`Found project with ID ${project_id}`, foundProject);
     if (!foundProject) {
-      throw new NotFoundException('Project not found');
+      throw new NotFoundException('No se ha encontrado el proyecto.');
     }
 
-    this.logger.log(`Found project with ID ${project_id}`, foundProject);
-    return foundProject;
+    this.logger.log(`Found project with ID ${project_id}: ${JSON.stringify(foundProject)}`);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Proyecto encontrado exitosamente.',
+      data: foundProject
+    };
   }
 
   async findByCode(code: string) {
@@ -162,7 +166,7 @@ export class ProjectService {
     };
   }
 
-  async updateStatus(project_id: number, status: string): Promise<Project | null> {
+  async updateStatus(project_id: number, status: string) {
     this.logger.log(`Updating status for project with ID: ${project_id} to: ${status}`);
     const updatedProject = await this.prismaService.project.update({
       where: { project_id },
@@ -175,6 +179,11 @@ export class ProjectService {
     }
 
     this.logger.log(`Project with ID ${project_id} status updated successfully: ${JSON.stringify(updatedProject)}`);
-    return updatedProject;
+    
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'El estado del proyecto ha sido actualizado exitosamente.',
+      data: updatedProject
+    }
   }
 }

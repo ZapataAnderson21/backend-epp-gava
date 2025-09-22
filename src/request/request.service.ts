@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -32,7 +32,11 @@ export class RequestService {
     }
 
     this.logger.log(`Request created successfully: ${JSON.stringify(request)}`);
-    return request;
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'La solicitud ha sido creada exitosamente.',
+      data: request
+    };
   }
   
   async findAll() {
@@ -45,12 +49,19 @@ export class RequestService {
     });
 
     if (!foundRequests || foundRequests.length === 0) {
-      this.logger.warn('No requests found');
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se han encontrado solicitudes.',
+        data: []
+      };
     }
 
     this.logger.log(`Found ${foundRequests.length} requests`);
-    return foundRequests;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitudes encontradas exitosamente.',
+      data: foundRequests
+    };
   }
 
   async findOne(request_id: number) {
@@ -87,7 +98,11 @@ export class RequestService {
     }
 
     this.logger.log(`Request found: ${JSON.stringify(request)}`);
-    return request;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitud encontrada exitosamente.',
+      data: request
+    };
   }
 
   async findAllByProjectId(project_id: number) {
@@ -102,11 +117,19 @@ export class RequestService {
 
     if (!foundRequests || foundRequests.length === 0) {
       this.logger.warn(`No requests found for project ID: ${project_id}`);
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se han encontrado solicitudes para este proyecto.',
+        data: []
+      };
     }
 
     this.logger.log(`Found ${foundRequests.length} requests for project ID: ${project_id}`);
-    return foundRequests;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitudes encontradas exitosamente.',
+      data: foundRequests
+    };
   }
 
   async findAllByUserId(user_id: number) {
@@ -121,11 +144,19 @@ export class RequestService {
 
     if (!foundRequests || foundRequests.length === 0) {
       this.logger.warn(`No requests found for user ID: ${user_id}`);
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se han encontrado solicitudes para este usuario.',
+        data: []
+      };
     }
 
     this.logger.log(`Found ${foundRequests.length} requests for user ID: ${user_id}`);
-    return foundRequests;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitudes encontradas exitosamente.',
+      data: foundRequests
+    };
   }
 
   async findAllByStatus(status: string) {
@@ -140,11 +171,19 @@ export class RequestService {
 
     if (!foundRequests || foundRequests.length === 0) {
       this.logger.warn(`No requests found with status: ${status}`);
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se han encontrado solicitudes con este estado.',
+        data: []
+      };
     }
 
     this.logger.log(`Found ${foundRequests.length} requests with status: ${status}`);
-    return foundRequests;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitudes encontradas exitosamente.',
+      data: foundRequests
+    };
   }
 
   async updateStatus(request_id: number, status: string) {
@@ -166,13 +205,17 @@ export class RequestService {
     }
 
     this.logger.log(`Request ID ${request_id} status updated successfully to ${status}`);
-    return updatedRequest;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'El estado de la solicitud ha sido actualizado exitosamente.',
+      data: updatedRequest
+    };
   }
 
   async update(request_id: number, updateRequestDto: UpdateRequestDto) {
     
     this.logger.log(`Updating request ID ${request_id} with data: ${JSON.stringify(updateRequestDto)}`);
-    const existingRequest = await this.findOne(request_id);
+    const existingRequest = (await this.findOne(request_id)).data;
 
     const { status } = existingRequest;
     if (status !== 'draft') {
@@ -191,11 +234,15 @@ export class RequestService {
     }
 
     this.logger.log(`Request ID ${request_id} updated successfully: ${JSON.stringify(updatedRequest)}`);
-    return updatedRequest;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'La solicitud ha sido actualizada exitosamente.',
+      data: updatedRequest
+    };
   }
 
   async remove(request_id: number) {
-    const existingRequest = await this.findOne(request_id);
+    const existingRequest = (await this.findOne(request_id)).data;
 
     const { status } = existingRequest;
 
@@ -214,6 +261,10 @@ export class RequestService {
     }
 
     this.logger.log(`Request ID ${request_id} deleted successfully`);
-    return deletedRequest;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'La solicitud ha sido eliminada exitosamente.',
+      data: deletedRequest
+    };
   }
 }

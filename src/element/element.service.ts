@@ -2,7 +2,6 @@ import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger,
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Element } from 'generated/prisma';
 
 @Injectable()
 export class ElementService {
@@ -75,7 +74,11 @@ export class ElementService {
     }
 
     this.logger.log(`Element with ID ${element_id} retrieved successfully: ${JSON.stringify(foundElement)}`);
-    return foundElement;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Elemento encontrado exitosamente.',
+      data: foundElement
+    };
   }
 
   async findByName(name: string) {
@@ -115,6 +118,20 @@ export class ElementService {
 
   async update(element_id: number, updateElementDto: UpdateElementDto) {
     this.logger.log(`Updating element with ID: ${element_id}`);
+
+    if (updateElementDto.name) {
+      this.logger.log(`Checking for existing element with name: ${updateElementDto.name}`);
+      const existingElement = await this.findByName(updateElementDto.name);
+
+      if (existingElement && existingElement.length > 0) {
+        const hasConflict = existingElement.some(element => element.element_id !== element_id);
+        if (hasConflict) {
+          this.logger.error(`Element update failed: Element with name '${updateElementDto.name}' already exists with different ID`);
+          throw new ConflictException('Ya existe un elemento con este nombre.');
+        }
+      }
+    }
+
     const updatedElement = await this.prismaService.element.update({
       where: { element_id },
       data: updateElementDto
@@ -126,6 +143,10 @@ export class ElementService {
     }
 
     this.logger.log(`Element updated successfully: ${JSON.stringify(updatedElement)}`);
-    return updatedElement;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'El elemento ha sido actualizado exitosamente.',
+      data: updatedElement
+    };
   }
 }
