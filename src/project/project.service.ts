@@ -38,7 +38,7 @@ export class ProjectService {
     this.logger.log(`Project created successfully: ${JSON.stringify(project)}`);
     return {
       statusCode: HttpStatus.CREATED,
-      message: 'El proyecto ha sido creado exitosamente.',
+      message: 'El proyecto ha sido registrado exitosamente.',
       data: project
     };
   }

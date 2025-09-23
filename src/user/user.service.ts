@@ -79,7 +79,11 @@ export class UserService {
     }
 
     this.logger.log(`User created successfully: ${JSON.stringify(newUser.password ? { ...newUser, password: '****' } : newUser)}`);
-    return userReturn;
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'EL usuario ha sido registrado exitosamente.',
+      data: userReturn
+    };
   }
 
   async login(loginDto: LoginDto) {
@@ -119,7 +123,7 @@ export class UserService {
       statusCode: HttpStatus.OK,
       message: 'Login successful',
       data: {
-        user: payload,
+        user: payload.data,
         accessToken
       },
     };
@@ -132,18 +136,26 @@ export class UserService {
 
     if (!users || users.length === 0) {
       this.logger.warn('No users found');
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se han encontrado usuarios.',
+        data: []
+      };
     }
 
     this.logger.log(`Found ${users.length} users`);
     const usersWithTypes = await Promise.all(
       users.map(async (user) => {
         const returnUser = await this.findOne(user.user_id);
-        return returnUser;
+        return returnUser.data;
       })
     );
 
-    return usersWithTypes;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Los usuarios han sido encontrados exitosamente.',
+      data: usersWithTypes
+    };
   }
 
   async findOne(id: number) {
@@ -162,13 +174,13 @@ export class UserService {
 
     if (!user) {
       this.logger.warn(`User not found with id: ${id}`);
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('El usuario no ha sido encontrado.');
     }
 
     const userType = user.userUserTypes[0].userType.name ? user.userUserTypes[0].userType.name : null;
 
     const userWithType = {
-      id: user.user_id,
+      user_id: user.user_id,
       name: user.name,
       last_name: user.last_name,
       email: user.email,
@@ -176,7 +188,11 @@ export class UserService {
     };
 
     this.logger.log(`User found with id: ${id}`);
-    return userWithType;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'El usuario ha sido encontrado exitosamente.',
+      data:userWithType
+    };
   }
 
   async findByEmail(email: string) {
