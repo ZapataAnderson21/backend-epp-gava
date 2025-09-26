@@ -24,7 +24,7 @@ export class UserController {
               private readonly mailService: MailService) {}
   
   @Public()
-  @UserTypes('Gerente', 'Administradora')
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
   @Post()
   @ApiBody({ type: CreateUserDto })
   @ApiResponse({ status: HttpStatus.CREATED, description: 'User created successfully', type: User })

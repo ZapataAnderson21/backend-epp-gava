@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Put, ParseIntPipe } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -29,7 +29,6 @@ export class ProjectController {
     return await this.projectService.findAll();
   }
 
-  @Public()
   @ApiResponse({ status: HttpStatus.OK, description: 'Project retrieved successfully', type: Project })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Project not found' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to retrieve project' })
@@ -47,7 +46,6 @@ export class ProjectController {
     return await this.projectService.findByCode(code);
   }
 
-  @Public()
   @ApiBody({ schema: { type: 'object', properties: { status: { type: 'string' } }, required: ['status'] } })
   @ApiResponse({ status: HttpStatus.OK, description: 'Projects retrieved successfully', type: [Project] })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No projects found with the given status' })
@@ -58,7 +56,6 @@ export class ProjectController {
     return await this.projectService.findByStatus(status);
   }
 
-  @Public()
   @ApiBody({ type: UpdateProjectDto })
   @ApiResponse({ status: HttpStatus.OK, description: 'Project updated successfully', type: Project })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Project not found' })
@@ -68,13 +65,12 @@ export class ProjectController {
     return await this.projectService.update(id, updateProjectDto);
   }
 
-  @Public()
   @ApiBody({ schema: { type: 'object', properties: { status: { type: 'string' } }, required: ['status'] } })
   @ApiResponse({ status: HttpStatus.OK, description: 'Project status updated successfully', type: Project })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Project not found' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Failed to update project status' })
   @Patch(':id/status')
-  async updateStatus(@Param('id') id: number, @Body('status') status: string) {
+  async updateStatus(@Param('id', ParseIntPipe) id: number, @Body('status') status: string) {
     return await this.projectService.updateStatus(id, status);
   }
 }
