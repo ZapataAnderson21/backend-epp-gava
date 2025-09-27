@@ -1,11 +1,10 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateEmergencyDto } from './dto/create-emergency.dto';
 import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class EmergencyService {
-
   private readonly logger = new Logger("EmergencyService");
 
   constructor(private readonly prismaService: PrismaService) {}
@@ -22,7 +21,11 @@ export class EmergencyService {
     }
 
     this.logger.log(`Emergency created successfully: ${JSON.stringify(emergency)}`);
-    return await this.findOne(emergency.emergency_id);
+    return {
+      statusCode: HttpStatus.CREATED,
+      data: emergency,
+      message: 'Emergency created successfully.'
+    };
   }
 
   async findAll() {
@@ -44,7 +47,11 @@ export class EmergencyService {
 
     if (!emergencies || emergencies.length === 0) {
       this.logger.warn('No emergencies found');
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        data: [],
+        message: 'No emergencies found.'
+      };
     }
 
     const returnEmergencies = emergencies.map(emergency => {
@@ -59,7 +66,11 @@ export class EmergencyService {
     });
 
     this.logger.log(`Found ${emergencies.length} emergencies`);
-    return returnEmergencies;
+    return {
+      statusCode: HttpStatus.OK,
+      data: returnEmergencies,
+      message: 'Emergencies retrieved successfully.'
+    };
   }
 
   async findOne(id: number) {
@@ -90,13 +101,17 @@ export class EmergencyService {
       name: emergency.user.name,
       last_name: emergency.user.last_name,
       email: emergency.user.email,
-      userType: emergency.user.userUserTypes[0].userType.name,
-    }
+      userType: emergency.user.userUserTypes[0]?.userType?.name || null,
+    };
 
     const returnEmergency = { ...emergency, user: returnUser };
 
     this.logger.log(`Emergency found: ${JSON.stringify(returnEmergency)}`);
-    return returnEmergency;
+    return {
+      statusCode: HttpStatus.OK,
+      data: returnEmergency,
+      message: 'Emergency retrieved successfully.'
+    };
   }
 
   async update(id: number, updateEmergencyDto: UpdateEmergencyDto) {
@@ -112,7 +127,11 @@ export class EmergencyService {
     }
 
     this.logger.log(`Emergency updated successfully: ${JSON.stringify(emergency)}`);
-    return await this.findOne(id);
+    return {
+      statusCode: HttpStatus.OK,
+      data: emergency,
+      message: 'Emergency updated successfully.'
+    };
   }
 
   async getAllByProjectId(project_id: number) {
@@ -134,7 +153,11 @@ export class EmergencyService {
 
     if (!emergencies || emergencies.length === 0) {
       this.logger.warn(`No emergencies found for project ID ${project_id}`);
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        data: [],
+        message: `No emergencies found for project ID ${project_id}.`
+      };
     }
 
     const returnEmergencies = emergencies.map(emergency => {
@@ -149,7 +172,11 @@ export class EmergencyService {
     });
 
     this.logger.log(`Found ${emergencies.length} emergencies for project ID ${project_id}`);
-    return returnEmergencies;
+    return {
+      statusCode: HttpStatus.OK,
+      data: returnEmergencies,
+      message: `Emergencies for project ID ${project_id} retrieved successfully.`
+    };
   }
 
   async getAllByUserId(user_id: number) {
@@ -172,7 +199,11 @@ export class EmergencyService {
 
     if (!emergencies || emergencies.length === 0) {
       this.logger.warn(`No emergencies found for user ID ${user_id}`);
-      return [];
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        data: [],
+        message: `No emergencies found for user ID ${user_id}.`
+      };
     }
 
     const returnEmergencies = emergencies.map(emergency => {
@@ -187,6 +218,10 @@ export class EmergencyService {
     });
 
     this.logger.log(`Found ${emergencies.length} emergencies for user ID ${user_id}`);
-    return returnEmergencies;
+    return {
+      statusCode: HttpStatus.OK,
+      data: returnEmergencies,
+      message: `Emergencies for user ID ${user_id} retrieved successfully.`
+    };
   }
 }
