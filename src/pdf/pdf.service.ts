@@ -263,8 +263,8 @@ export class PdfService {
     try {
       const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
       const fileName = `requerimiento-${request_id}.pdf`;
-      const outputPath = path.resolve(outputDir, fileName);
-      //const outputPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${request_id}.pdf`);
+      // const outputPath = path.resolve(outputDir, fileName);
+      const outputPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${request_id}.pdf`);
 
       const pdfDoc = printer.createPdfKitDocument(docDefinition);
       const stream = fs.createWriteStream(outputPath);
