@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpException, UploadedFile, UseInterceptors, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, HttpStatus, UploadedFile, UseInterceptors, ParseIntPipe, NotFoundException, Res } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, join } from 'path';
 import { EmergencyService } from './emergency.service';
 import { CreateEmergencyDto } from './dto/create-emergency.dto';
 import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { Response } from 'express';
+import * as fs from 'fs';
+import { Public } from 'src/user/jwt/public.decorator';
 
 @Controller('emergency')
 export class EmergencyController {
@@ -18,7 +21,8 @@ export class EmergencyController {
   @Post()
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
-      destination: '/var/www/emergencies',
+      // destination: '/var/www/emergencies',
+      destination: './uploads/emergencies',
       filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
@@ -29,14 +33,13 @@ export class EmergencyController {
     },
   }))
   async create(@UploadedFile() file: any, @Body() body: any) {
-    const imagePath = `/var/www/emergencies/${file.filename}`;
 
     return await this.emergencyService.create({
       title: body.title,
       description: body.description,
       user_id: Number(body.user_id),
       project_id: Number(body.project_id),
-      image: imagePath
+      image: file.filename
     });
   }
 
@@ -84,5 +87,16 @@ export class EmergencyController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized access.' })
   async getAllByUserId(@Param('user_id') user_id: string) {
     return await this.emergencyService.getAllByUserId(+user_id);
+  }
+  
+  @Get('image/:filename')
+  async getImage(@Param('filename') filename: string, @Res() res: Response) {
+    const filePath = join(process.cwd(), 'uploads', 'emergencies', filename);
+
+    if (!fs.existsSync(filePath)) {
+      throw new NotFoundException('Image not found');
+    }
+
+    return res.sendFile(filePath);
   }
 }

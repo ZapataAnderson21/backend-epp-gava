@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RequestType } from '../entities/request.entity';
-import { IsDate, IsEnum, IsString } from 'class-validator';
+import { IsDate, IsDateString, IsEnum, IsNumber, IsString } from 'class-validator';
 
 export class CreateRequestDto {
   @ApiProperty()
@@ -8,11 +8,11 @@ export class CreateRequestDto {
   description: string;
 
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   project_id: number;
 
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   user_id: number;
 
   @ApiProperty({ enum: RequestType })
@@ -20,6 +20,6 @@ export class CreateRequestDto {
   type: RequestType;
 
   @ApiProperty()
-  @IsDate()
+  @IsDateString()
   delivery_due_date: Date;
 }

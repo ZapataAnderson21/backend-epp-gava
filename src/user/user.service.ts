@@ -360,18 +360,15 @@ export class UserService {
   }
 
   async isTokenBlacklisted(token: string) {
-
-    this.logger.log('Checking if token is blacklisted');
+    
     if (!token) {
       throw new BadRequestException('Token is required');
     }
 
-    this.logger.log(`Checking if token is blacklisted: ${token}`);
     const blacklistedToken = await this.prisma.blacklisted_token.findUnique({
       where: { token }
     });
 
-    this.logger.log(`Token is ${blacklistedToken ? '' : 'not'} blacklisted`);
     return !!blacklistedToken;
   }
 }

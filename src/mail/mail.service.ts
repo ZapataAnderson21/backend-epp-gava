@@ -79,8 +79,8 @@ export class MailService {
     const request = await this.findRequestById(request_id);
 
     const sender = request.user.email;
-    const toEmail = 'logistica@gavacyc.com';
-    const copyEmail = ['admin@gavacyc.com', 'hgayoso@gavacyc.com'];
+    const toEmail = 'zapataascencioanderson@gmail.com';
+    const copyEmail = ['loco.21libra@gmail.com'];
 
     let subjectEmail = `Solicitud de Requerimiento - ${request.project.name}`;
     let type = '';
