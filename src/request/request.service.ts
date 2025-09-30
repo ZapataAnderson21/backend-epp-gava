@@ -41,12 +41,12 @@ export class RequestService {
   
   async findAll() {
     this.logger.log('Retrieving all requests');
-    const foundRequests = await this.prismaService.request.findMany({
+    const foundRequests = (await this.prismaService.request.findMany({
       include: {
         project: true,
         user: true
       }
-    });
+    })).sort((a, b) => b.request_id - a.request_id);
 
     if (!foundRequests || foundRequests.length === 0) {
       return {
@@ -134,13 +134,13 @@ export class RequestService {
 
   async findAllByUserId(user_id: number) {
     this.logger.log(`Finding all requests for user ID: ${user_id}`);
-    const foundRequests = await this.prismaService.request.findMany({
+    const foundRequests = (await this.prismaService.request.findMany({
       where: { user_id },
       include: {
         project: true,
         user: true
       }
-    });
+    })).sort((a, b) => a.request_id - b.request_id);
 
     if (!foundRequests || foundRequests.length === 0) {
       this.logger.warn(`No requests found for user ID: ${user_id}`);
@@ -161,13 +161,13 @@ export class RequestService {
 
   async findAllByStatus(status: string) {
     this.logger.log(`Finding all requests with status: ${status}`);
-    const foundRequests = await this.prismaService.request.findMany({
+    const foundRequests = (await this.prismaService.request.findMany({
       where: { status },
       include: {
         project: true,
         user: true
       }
-    });
+    })).sort((a, b) => b.request_id - a.request_id);
 
     if (!foundRequests || foundRequests.length === 0) {
       this.logger.warn(`No requests found with status: ${status}`);

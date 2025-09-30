@@ -44,6 +44,7 @@ model Project {
   code        String  @unique
   description String  @default("Sin descripción")
   status     String   @default("active")
+  createdAt  DateTime @default(now())
 
   requests Request[]
   emergencies Emergency[]

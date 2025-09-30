@@ -45,7 +45,7 @@ export class ProjectService {
 
   async findAll() {
     this.logger.log('Retrieving all projects');
-    const foundProjects = await this.prismaService.project.findMany();
+    const foundProjects = (await this.prismaService.project.findMany()).sort((a, b) => b.project_id - a.project_id);
 
     if (!foundProjects || foundProjects.length === 0) {
       this.logger.warn('No projects found');

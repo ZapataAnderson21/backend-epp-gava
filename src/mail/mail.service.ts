@@ -45,7 +45,10 @@ export class MailService {
 
     await transporter.sendMail(mailOptions);
 
-    return HttpStatus.OK;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Correo de recuperación de contraseña enviado.'
+    };
   }
 
   async findRequestById(request_id: number) {
