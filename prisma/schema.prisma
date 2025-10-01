@@ -43,7 +43,7 @@ model Project {
   name       String
   code        String  @unique
   description String  @default("Sin descripción")
-  status     String   @default("active")
+  status     String   @default("Activo")
   createdAt  DateTime @default(now())
 
   requests Request[]
@@ -63,7 +63,7 @@ model Request {
   request_id        Int                  @id @default(autoincrement())
   createdAt         DateTime             @default(now())
   delivery_due_date DateTime
-  status            String               @default("pending")
+  status            String               @default("Pendiente")
   description       String
   project_id        Int
   user_id           Int
@@ -145,7 +145,7 @@ model Emergency {
   user_id     Int
   project_id  Int
   createdAt   DateTime @default(now())
-  status      String   @default("active")
+  status      String   @default("Activo")
 
   user    User     @relation(fields: [user_id], references: [user_id])
   project Project  @relation(fields: [project_id], references: [project_id])
