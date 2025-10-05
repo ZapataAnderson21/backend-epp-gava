@@ -14,6 +14,9 @@ model User {
   last_name   String
   email       String              @unique
   password    String
+  phone       String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
 
   requests             Request[]
   responses            RequestResponse[] @relation("ResponderRelation")
@@ -38,16 +41,30 @@ model UserUserType {
   userType  UserType @relation(fields: [user_type_id], references: [user_type_id])
 }
 
+enum ProjectStatus {
+  active
+  inactive
+  completed
+}
+
 model Project {
   project_id Int      @id @default(autoincrement())
   name       String
   code        String  @unique
   description String  @default("Sin descripción")
-  status     String   @default("active")
+  status     ProjectStatus @default(active)
+  location  String
+  startDate DateTime
+  endDate   DateTime
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   requests Request[]
   emergencies Emergency[]
+  
+  purchaseOrders PurchaseOrder[]
+  pettyCashes PettyCash[]
+  serviceSales ServiceSale[]
 }
 
 model Element {
@@ -55,19 +72,32 @@ model Element {
   name       String
   description String  @default("Sin descripción")
   type        String 
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   elementRequests ElementRequest[]
 }
 
+enum RequestStatus {
+  draft
+  in_progress
+  reviewed
+  approved
+  rejected
+  addressed
+  completed
+}
+
 model Request {
   request_id        Int                  @id @default(autoincrement())
-  createdAt         DateTime             @default(now())
   delivery_due_date DateTime
-  status            String               @default("pending")
+  status            RequestStatus        @default(draft)
   description       String
   project_id        Int
   user_id           Int
   type              String
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
 
   project           Project  @relation(fields: [project_id], references: [project_id])
   user              User     @relation(fields: [user_id], references: [user_id])
@@ -83,8 +113,12 @@ model RequestWorker {
   shoe_size         String    // ej. "42", "US9", "27.5"
   pants_size        String    // ej. "30", "32", "M", "L"
   shirt_size        String    // ej. "S", "M", "L"
+  worker_id        Int?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   request           Request   @relation(fields: [request_id], references: [request_id])
+  worker            Worker?   @relation(fields: [worker_id], references: [worker_id])
 
   @@index([request_id])
 }
@@ -96,6 +130,9 @@ model ElementRequest {
   element_id         Int
   request_id         Int
 
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
   element Element @relation(fields: [element_id], references: [element_id])
   request Request @relation(fields: [request_id], references: [request_id])
 
@@ -106,8 +143,9 @@ model RequestResponse {
   request_response_id Int     @id @default(autoincrement())
   request_id          Int     @unique
   responder_user_id   Int
-  createdAt           DateTime @default(now())
   description         String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   request   Request @relation(fields: [request_id], references: [request_id])
   responder User    @relation(name: "ResponderRelation", fields: [responder_user_id], references: [user_id])
@@ -131,10 +169,17 @@ model PasswordResetToken {
   token       String   @unique
   expires_at  DateTime
   used        Boolean  @default(false)
+  createdAt   DateTime @default(now())
 
   user        User     @relation(fields: [user_id], references: [user_id])
 
   @@index([user_id])
+}
+
+enum EmergencyStatus {
+  pending
+  addressed
+  rejected
 }
 
 model Emergency {
@@ -145,13 +190,189 @@ model Emergency {
   user_id     Int
   project_id  Int
   createdAt   DateTime @default(now())
-  status      String   @default("active")
+  updatedAt   DateTime @updatedAt
+  status      EmergencyStatus @default(pending)
 
   user    User     @relation(fields: [user_id], references: [user_id])
   project Project  @relation(fields: [project_id], references: [project_id])
 }
 
-model blacklisted_token {
+model Worker {
+  worker_id   Int      @id @default(autoincrement())
+  full_name   String
+  dni        String   @unique
+  phone       String
+  address     String @default("No especificada")
+  worker_group_id Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workerGroup WorkerGroup @relation(fields: [worker_group_id], references: [worker_group_id])
+  requestWorkers RequestWorker[]
+}
+
+model WorkerGroup {
+  worker_group_id Int      @id @default(autoincrement())
+  name            String
+  description     String?
+  createdAt       DateTime @default(now()) 
+  updatedAt       DateTime @updatedAt
+  parent_group_id Int?
+
+  parentGroup WorkerGroup? @relation("WorkerGroupToWorkerGroup", fields: [parent_group_id], references: [worker_group_id])
+  subGroups   WorkerGroup[] @relation("WorkerGroupToWorkerGroup")
+  workers     Worker[]
+}
+
+model Supplier {
+  supplier_id Int      @id @default(autoincrement())
+  name        String
+  contact_name String
+  phone       String
+  email       String   @unique
+  address     String
+  ruc        String   @unique
+  account_number String
+  bank        String
+  currency    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  purchaseOrders PurchaseOrder[]
+
+}
+
+model CategoryResource {
+  category_resource_id Int      @id @default(autoincrement())
+  name                 String   @unique
+  description          String?
+  parent_category_id Int?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  parentCategory CategoryResource? @relation("CategoryResourceToCategoryResource", fields: [parent_category_id], references: [category_resource_id])
+  subCategories  CategoryResource[] @relation("CategoryResourceToCategoryResource")
+  resources      Resource[]
+}
+
+model Resource {
+  resource_id        Int      @id @default(autoincrement())
+  name               String
+  description        String?
+  category_resource_id Int
+  unit               String
+  stock              Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  categoryResource CategoryResource @relation(fields: [category_resource_id], references: [category_resource_id])
+  
+  resourcePurchaseOrders ResourcePurchaseOrder[]
+}
+
+enum PurchaseOrderType {
+  materials
+  services
+}
+
+enum Currency {
+  USD
+  EUR
+  PEN
+}
+
+enum PaymentType {
+  credit
+  cash
+  transfer
+}
+
+enum PaymentMethod {
+  cheque
+  bank_transfer
+  cash
+}
+
+enum PurchaseOrderStatus {
+  pending
+  authorized
+  delivered
+  cancelled
+}
+
+model PurchaseOrder {
+  purchase_order_id Int    @id @default(autoincrement())
+  code             String
+  issue_DateTime       DateTime
+  delivery_location String
+  destination      String
+  payment_conditions String @default("No payment conditions specified")
+  general_conditions String @default("No general conditions specified")
+  quality_conditions String @default("No quality conditions specified")
+  payment_type     String?
+  payment_method   String?
+  sale_amount      Decimal
+  purchase_amount  Decimal
+  status           String
+  care_person      String
+  dni_care_person  String
+  observations     String
+  project_id       Int
+  supplier_id      Int
+  logistics_manager String
+  authorizer   String
+  administrative_manager String
+  quotation String @default("No quotation")
+  purchase_order_type PurchaseOrderType @default(materials)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  project         Project @relation(fields: [project_id], references: [project_id])
+  supplier        Supplier @relation(fields: [supplier_id], references: [supplier_id])
+  resources       ResourcePurchaseOrder[]
+}
+
+model ResourcePurchaseOrder {
+  resource_purchase_order_id Int    @id @default(autoincrement())
+  resource_id               Int
+  purchase_order_id         Int
+  quantity                  Decimal
+  unit_sales_price          Decimal
+  unit_purchases_price      Decimal
+
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  resource                 Resource @relation(fields: [resource_id], references: [resource_id])
+  purchase_order            PurchaseOrder @relation(fields: [purchase_order_id], references: [purchase_order_id])
+}
+
+model PettyCash {
+  petty_cash_id Int      @id @default(autoincrement())
+  project_id    Int
+  resource_name String
+  amount        Decimal
+  description   String   @default("No description provided")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  project       Project  @relation(fields: [project_id], references: [project_id])
+}
+
+model ServiceSale {
+  service_sale_id Int      @id @default(autoincrement())
+  project_id      Int
+  service_name    String
+  amount          Decimal
+  description     String   @default("No description provided")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  project         Project  @relation(fields: [project_id], references: [project_id])
+}
+
+
+model BlacklistedToken {
   id         Int      @id @default(autoincrement())
   token      String   @unique
   expires_at DateTime
