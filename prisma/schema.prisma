@@ -9,36 +9,43 @@ datasource db {
 }
 
 model User {
-  user_id     Int                 @id @default(autoincrement())
+  userId      Int      @id @default(autoincrement())
   name        String
-  last_name   String
-  email       String              @unique
+  lastName    String
+  email       String    @db.Citext @unique
   password    String
-  phone       String?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
+  phone       String?   @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  requests             Request[]
-  responses            RequestResponse[] @relation("ResponderRelation")
-  userUserTypes        UserUserType[]
-  passwordResetTokens  PasswordResetToken[]
-  emergencies          Emergency[]
+  blacklistedTokens     BlacklistedToken[]
+  responses             RequestResponse[] @relation("UserResponses")
+  requests              Request[]
+  userUserTypes         UserUserType[]
+  passwordResetTokens   PasswordResetToken[]
+  emergencies           Emergency[]
+
+  @@index([name])
+  @@index([lastName])
 }
 
 model UserType {
-  user_type_id Int             @id @default(autoincrement())
-  name         String          @unique
+  userTypeId   Int      @id @default(autoincrement())
+  name         String   @unique
 
   userUserTypes UserUserType[]
 }
 
 model UserUserType {
-  user_user_type_id Int      @id @default(autoincrement())
-  user_id           Int      @unique
-  user_type_id      Int
+  userUserTypeId Int      @id @default(autoincrement())
+  userId         Int
+  userTypeId     Int
 
-  user      User     @relation(fields: [user_id], references: [user_id])
-  userType  UserType @relation(fields: [user_type_id], references: [user_type_id])
+  user     User     @relation(fields: [userId], references: [userId])
+  userType UserType @relation(fields: [userTypeId], references: [userTypeId])
+
+  @@unique([userId, userTypeId])
+  @@index([userTypeId])
 }
 
 enum ProjectStatus {
@@ -48,39 +55,49 @@ enum ProjectStatus {
 }
 
 model Project {
-  project_id Int      @id @default(autoincrement())
-  name       String
-  code        String  @unique
-  description String  @default("Sin descripción")
-  status     ProjectStatus @default(active)
-  location  String
-  startDate DateTime
-  endDate   DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  projectId   Int      @id @default(autoincrement())
+  name        String
+  code        String   @unique
+  description String   @db.Text @default("No description provided.")
+  status      ProjectStatus @default(active)
+  location    String
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  requests Request[]
-  emergencies Emergency[]
-  
-  purchaseOrders PurchaseOrder[]
-  pettyCashes PettyCash[]
-  serviceSales ServiceSale[]
+  requests        Request[]
+  emergencies     Emergency[]
+  purchaseOrders  PurchaseOrder[]
+  pettyCashes     PettyCash[]
+  serviceSales    ServiceSale[]
+
+  @@index([status])
+  @@index([name])
+  @@index([createdAt])
+}
+
+enum ElementType {
+  epp
+  operative
 }
 
 model Element {
-  element_id Int      @id @default(autoincrement())
-  name       String
-  description String  @default("Sin descripción")
-  type        String 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  elementId    Int      @id @default(autoincrement())
+  name         String
+  description  String   @db.Text @default("No description provided.")
+  type         ElementType
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   elementRequests ElementRequest[]
+
+  @@index([type])
 }
 
 enum RequestStatus {
   draft
-  in_progress
+  inProgress
   reviewed
   approved
   rejected
@@ -88,92 +105,116 @@ enum RequestStatus {
   completed
 }
 
-model Request {
-  request_id        Int                  @id @default(autoincrement())
-  delivery_due_date DateTime
-  status            RequestStatus        @default(draft)
-  description       String
-  project_id        Int
-  user_id           Int
-  type              String
-  createdAt         DateTime             @default(now())
-  updatedAt         DateTime             @updatedAt
+enum RequestType {
+  epp
+  operative
+  eppAndOperative
+}
 
-  project           Project  @relation(fields: [project_id], references: [project_id])
-  user              User     @relation(fields: [user_id], references: [user_id])
-  elementRequests   ElementRequest[]
-  requestWorkers    RequestWorker[]
-  responses         RequestResponse[]
+model Request {
+  requestId        Int            @id @default(autoincrement())
+  deliveryDueDate  DateTime
+  status           RequestStatus  @default(draft)
+  description      String         @db.Text @default("No description provided.")
+  userId           Int
+  projectId        Int
+  type             RequestType
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  project          Project @relation(fields: [projectId], references: [projectId])
+  user             User    @relation(fields: [userId], references: [userId])
+  elementRequests  ElementRequest[]
+  requestWorkers   RequestWorker[]
+  responses        RequestResponse[]
+
+  @@index([status])
+  @@index([type])
+  @@index([projectId])
+  @@index([userId])
+  @@index([deliveryDueDate])
+  @@index([createdAt])
 }
 
 model RequestWorker {
-  request_worker_id Int       @id @default(autoincrement())
-  request_id        Int
-  full_name         String
-  shoe_size         String    // ej. "42", "US9", "27.5"
-  pants_size        String    // ej. "30", "32", "M", "L"
-  shirt_size        String    // ej. "S", "M", "L"
-  worker_id        Int?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  requestWorkerId Int       @id @default(autoincrement())
+  requestId       Int
+  fullName        String
+  shoeSize        String
+  pantsSize       String
+  shirtSize       String
+  workerId        Int?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  request           Request   @relation(fields: [request_id], references: [request_id])
-  worker            Worker?   @relation(fields: [worker_id], references: [worker_id])
+  request Request @relation(fields: [requestId], references: [requestId])
+  worker  Worker? @relation(fields: [workerId], references: [workerId])
 
-  @@index([request_id])
+  @@unique([requestId, workerId])
+  @@index([requestId])
+  @@index([workerId])
 }
 
 model ElementRequest {
-  element_request_id Int     @id @default(autoincrement())
-  quantity_requested Int
+  elementRequestId   Int     @id @default(autoincrement())
+  quantityRequested  Int
   unit               String
-  element_id         Int
-  request_id         Int
+  elementId          Int
+  requestId          Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  element Element @relation(fields: [element_id], references: [element_id])
-  request Request @relation(fields: [request_id], references: [request_id])
-
+  element  Element  @relation(fields: [elementId], references: [elementId])
+  request  Request  @relation(fields: [requestId], references: [requestId])
   elementRequestResponses ElementRequestResponse[]
+
+  @@unique([requestId, elementId])
+  @@index([elementId])
+  @@index([requestId])
 }
 
 model RequestResponse {
-  request_response_id Int     @id @default(autoincrement())
-  request_id          Int     @unique
-  responder_user_id   Int
-  description         String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  requestResponseId Int      @id @default(autoincrement())
+  responderUserId   Int
+  requestId         Int
+  description       String?  @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  request   Request @relation(fields: [request_id], references: [request_id])
-  responder User    @relation(name: "ResponderRelation", fields: [responder_user_id], references: [user_id])
-
+  request   Request @relation(fields: [requestId], references: [requestId])
+  responder User    @relation("UserResponses", fields: [responderUserId], references: [userId])
   elementRequestResponses ElementRequestResponse[]
+
+  @@index([responderUserId])
+  @@index([requestId])
 }
 
 model ElementRequestResponse {
-  element_request_response_id Int     @id @default(autoincrement())
-  element_request_id          Int
-  request_response_id         Int
-  quantity_accepted           Int
+  elementRequestResponseId Int     @id @default(autoincrement())
+  elementRequestId         Int
+  requestResponseId        Int
+  quantityAccepted          Int
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
 
-  elementRequest   ElementRequest @relation(fields: [element_request_id], references: [element_request_id])
-  requestResponse  RequestResponse @relation(fields: [request_response_id], references: [request_response_id])
+  elementRequest  ElementRequest @relation(fields: [elementRequestId], references: [elementRequestId])
+  requestResponse RequestResponse @relation(fields: [requestResponseId], references: [requestResponseId])
+
+  @@index([elementRequestId])
+  @@index([requestResponseId])
 }
 
 model PasswordResetToken {
-  id          Int      @id @default(autoincrement())
-  user_id     Int
-  token       String   @unique
-  expires_at  DateTime
-  used        Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  token      String   @unique
+  expiresAt  DateTime
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now())
 
-  user        User     @relation(fields: [user_id], references: [user_id])
+  user User @relation(fields: [userId], references: [userId])
 
-  @@index([user_id])
+  @@index([userId])
 }
 
 enum EmergencyStatus {
@@ -183,91 +224,111 @@ enum EmergencyStatus {
 }
 
 model Emergency {
-  emergency_id          Int      @id @default(autoincrement())
+  emergencyId Int      @id @default(autoincrement())
   image       String
   title       String
-  description String
-  user_id     Int
-  project_id  Int
+  description String  @db.Text
+  userId      Int
+  projectId   Int
+  status      EmergencyStatus @default(pending)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  status      EmergencyStatus @default(pending)
 
-  user    User     @relation(fields: [user_id], references: [user_id])
-  project Project  @relation(fields: [project_id], references: [project_id])
+  user    User    @relation(fields: [userId], references: [userId])
+  project Project @relation(fields: [projectId], references: [projectId])
+
+  @@index([status])
+  @@index([userId])
+  @@index([projectId])
+  @@index([createdAt])
 }
 
 model Worker {
-  worker_id   Int      @id @default(autoincrement())
-  full_name   String
-  dni        String   @unique
-  phone       String
-  address     String @default("No especificada")
-  worker_group_id Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  workerId      Int      @id @default(autoincrement())
+  fullName      String
+  dni           String   @db.VarChar(8) @unique
+  phone         String
+  address       String   @default("No address provided.")
+  workerGroupId Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  workerGroup WorkerGroup @relation(fields: [worker_group_id], references: [worker_group_id])
+  workerGroup    WorkerGroup @relation(fields: [workerGroupId], references: [workerGroupId])
   requestWorkers RequestWorker[]
+
+  @@index([dni])
+  @@index([workerGroupId])
 }
 
 model WorkerGroup {
-  worker_group_id Int      @id @default(autoincrement())
-  name            String
-  description     String?
-  createdAt       DateTime @default(now()) 
-  updatedAt       DateTime @updatedAt
-  parent_group_id Int?
+  workerGroupId  Int      @id @default(autoincrement())
+  name           String
+  description    String?  @db.Text
+  parentGroupId  Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  parentGroup WorkerGroup? @relation("WorkerGroupToWorkerGroup", fields: [parent_group_id], references: [worker_group_id])
+  parentGroup WorkerGroup? @relation("WorkerGroupToWorkerGroup", fields: [parentGroupId], references: [workerGroupId])
   subGroups   WorkerGroup[] @relation("WorkerGroupToWorkerGroup")
   workers     Worker[]
+
+  @@unique([parentGroupId, name])
+  @@index([parentGroupId])
+  @@index([name])
 }
 
 model Supplier {
-  supplier_id Int      @id @default(autoincrement())
-  name        String
-  contact_name String
-  phone       String
-  email       String   @unique
-  address     String
-  ruc        String   @unique
-  account_number String
-  bank        String
-  currency    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  supplierId     Int      @id @default(autoincrement())
+  name           String
+  contactName    String
+  phone          String
+  email          String   @db.Citext @unique
+  address        String
+  ruc            String   @unique
+  accountNumber  String
+  bank           String
+  currency       Currency @default(PEN)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   purchaseOrders PurchaseOrder[]
 
+  @@index([name])
+  @@index([createdAt])
 }
 
 model CategoryResource {
-  category_resource_id Int      @id @default(autoincrement())
-  name                 String   @unique
-  description          String?
-  parent_category_id Int?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-
-  parentCategory CategoryResource? @relation("CategoryResourceToCategoryResource", fields: [parent_category_id], references: [category_resource_id])
-  subCategories  CategoryResource[] @relation("CategoryResourceToCategoryResource")
-  resources      Resource[]
-}
-
-model Resource {
-  resource_id        Int      @id @default(autoincrement())
+  categoryResourceId Int      @id @default(autoincrement())
   name               String
-  description        String?
-  category_resource_id Int
-  unit               String
-  stock              Int      @default(0)
+  description        String?  @db.Text
+  parentCategoryId   Int?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  categoryResource CategoryResource @relation(fields: [category_resource_id], references: [category_resource_id])
-  
+  parentCategory CategoryResource? @relation("CategoryResourceToCategoryResource", fields: [parentCategoryId], references: [categoryResourceId])
+  subCategories  CategoryResource[] @relation("CategoryResourceToCategoryResource")
+  resources      Resource[]
+
+  @@unique([parentCategoryId, name])
+  @@index([parentCategoryId])
+  @@index([name])
+}
+
+model Resource {
+  resourceId         Int      @id @default(autoincrement())
+  name               String
+  description        String?  @db.Text
+  categoryResourceId Int
+  unit               String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  categoryResource CategoryResource @relation(fields: [categoryResourceId], references: [categoryResourceId])
   resourcePurchaseOrders ResourcePurchaseOrder[]
+
+  @@unique([categoryResourceId, name])
+  @@index([categoryResourceId])
+  @@index([name])
 }
 
 enum PurchaseOrderType {
@@ -281,16 +342,9 @@ enum Currency {
   PEN
 }
 
-enum PaymentType {
-  credit
-  cash
-  transfer
-}
-
 enum PaymentMethod {
-  cheque
-  bank_transfer
-  cash
+  deposit
+  transfer
 }
 
 enum PurchaseOrderStatus {
@@ -301,79 +355,94 @@ enum PurchaseOrderStatus {
 }
 
 model PurchaseOrder {
-  purchase_order_id Int    @id @default(autoincrement())
-  code             String
-  issue_DateTime       DateTime
-  delivery_location String
-  destination      String
-  payment_conditions String @default("No payment conditions specified")
-  general_conditions String @default("No general conditions specified")
-  quality_conditions String @default("No quality conditions specified")
-  payment_type     String?
-  payment_method   String?
-  sale_amount      Decimal
-  purchase_amount  Decimal
-  status           String
-  care_person      String
-  dni_care_person  String
-  observations     String
-  project_id       Int
-  supplier_id      Int
-  logistics_manager String
-  authorizer   String
-  administrative_manager String
-  quotation String @default("No quotation")
-  purchase_order_type PurchaseOrderType @default(materials)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  purchaseOrderId         Int                 @id @default(autoincrement())
+  code                    String              @unique
+  issuedAt                DateTime
+  deliveryLocation        String
+  destination             String
+  paymentConditions       String
+  generalConditions       String              @db.Text @default("No general conditions specified.")
+  qualityConditions       String              @db.Text @default("No quality conditions specified.")
+  paymentMethod           PaymentMethod
+  saleAmount              Decimal             @db.Decimal(18,2)
+  purchaseAmount          Decimal             @db.Decimal(18,2)
+  status                  PurchaseOrderStatus @default(pending)
+  carePerson              String
+  dniCarePerson           String              @db.VarChar(8)
+  observations            String              @db.Text @default("No observations provided.")
+  projectId               Int
+  supplierId              Int
+  logisticsManager        String              @default("Morayma Lloja Fernandez")
+  authorizer              String              @default("Henrry Gayoso Valdera")
+  administrativeManager   String              @default("Angi Gonzales Cotrina")
+  quotation               String              @default("No quotation provided.")
+  purchaseOrderType       PurchaseOrderType   @default(materials)
+  createdAt               DateTime            @default(now())
+  updatedAt               DateTime            @updatedAt
 
-  project         Project @relation(fields: [project_id], references: [project_id])
-  supplier        Supplier @relation(fields: [supplier_id], references: [supplier_id])
-  resources       ResourcePurchaseOrder[]
+  project   Project   @relation(fields: [projectId], references: [projectId])
+  supplier  Supplier  @relation(fields: [supplierId], references: [supplierId])
+  resources ResourcePurchaseOrder[]
+
+  @@index([status])
+  @@index([projectId])
+  @@index([supplierId])
+  @@index([createdAt])
 }
 
 model ResourcePurchaseOrder {
-  resource_purchase_order_id Int    @id @default(autoincrement())
-  resource_id               Int
-  purchase_order_id         Int
-  quantity                  Decimal
-  unit_sales_price          Decimal
-  unit_purchases_price      Decimal
+  resourcePurchaseOrderId Int     @id @default(autoincrement())
+  purchaseOrderId         Int
+  resourceId              Int
+  quantity                Decimal @db.Decimal(18,2)
+  unitSalesPrice          Decimal @db.Decimal(18,2)
+  unitPurchasePrice       Decimal @db.Decimal(18,2)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
-  createdAt                 DateTime @default(now())
-  updatedAt                 DateTime @updatedAt
+  resource       Resource       @relation(fields: [resourceId], references: [resourceId])
+  purchaseOrder  PurchaseOrder  @relation(fields: [purchaseOrderId], references: [purchaseOrderId])
 
-  resource                 Resource @relation(fields: [resource_id], references: [resource_id])
-  purchase_order            PurchaseOrder @relation(fields: [purchase_order_id], references: [purchase_order_id])
+  @@unique([purchaseOrderId, resourceId])
+  @@index([resourceId])
+  @@index([purchaseOrderId])
 }
 
 model PettyCash {
-  petty_cash_id Int      @id @default(autoincrement())
-  project_id    Int
-  resource_name String
-  amount        Decimal
-  description   String   @default("No description provided")
+  pettyCashId   Int      @id @default(autoincrement())
+  projectId     Int
+  resourceName  String
+  amount        Decimal  @db.Decimal(18,2)
+  description   String   @db.Text @default("No description provided")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  project       Project  @relation(fields: [project_id], references: [project_id])
+  project Project @relation(fields: [projectId], references: [projectId])
+
+  @@index([projectId])
+  @@index([createdAt])
 }
 
 model ServiceSale {
-  service_sale_id Int      @id @default(autoincrement())
-  project_id      Int
-  service_name    String
-  amount          Decimal
-  description     String   @default("No description provided")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  serviceSaleId Int      @id @default(autoincrement())
+  projectId     Int
+  serviceName   String
+  amount        Decimal  @db.Decimal(18,2)
+  description   String   @db.Text @default("No description provided")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  project         Project  @relation(fields: [project_id], references: [project_id])
+  project Project @relation(fields: [projectId], references: [projectId])
+
+  @@index([projectId])
+  @@index([createdAt])
 }
-
 
 model BlacklistedToken {
   id         Int      @id @default(autoincrement())
   token      String   @unique
-  expires_at DateTime
+  expiresAt  DateTime
+  userId     Int?
+
+  user User? @relation(fields: [userId], references: [userId])
 }
