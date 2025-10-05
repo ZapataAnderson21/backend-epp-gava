@@ -1,19 +1,32 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsOptional, IsPositive, IsString } from 'class-validator';
 
 export class CreateRequestWorkerDto {
+  @ApiProperty({ example: 100 })
+  @Type(() => Number)
   @IsInt()
-  request_id: number;
+  @IsPositive()
+  requestId!: number;
 
+  @ApiProperty({ example: '42' })
   @IsString()
-  @IsNotEmpty()
-  full_name: string;
+  @IsOptional()
+  shoeSize: string;
 
+  @ApiProperty({ example: 'M' }) 
   @IsString()
-  shoe_size: string;
+  @IsOptional()
+  pantsSize: string;
 
+  @ApiProperty({ example: 'L' }) 
   @IsString()
-  pants_size: string;
+  @IsOptional()
+  shirtSize: string;
 
-  @IsString()
-  shirt_size: string;
+  @ApiProperty({ example: 55 })  
+  @Type(() => Number) 
+  @IsInt()
+  @IsPositive()
+  workerId!: number;
 }

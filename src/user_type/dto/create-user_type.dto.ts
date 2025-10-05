@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserTypeDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Admin' })
   @IsString()
-  name: string;
+  @IsNotEmpty({ message: "\nEl nombre del tipo de usuario es requerido." })
+  name!: string;
 }

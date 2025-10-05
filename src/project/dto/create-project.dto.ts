@@ -1,16 +1,40 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ProjectStatus } from '../enum/project-status.enum';
 
 export class CreateProjectDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Proyecto A' })
   @IsString()
-  name: string;
+  @IsNotEmpty({ message: "\nEl nombre del proyecto es requerido." })
+  name!: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'PROY-A' })
   @IsString()
-  code: string;
+  @IsNotEmpty({ message: "\nEl código del proyecto es requerido." })
+  code!: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional({ example: 'Descripción del proyecto A' })
   @IsString()
-  description: string;
+  @IsOptional()
+  description?: string;
+
+  
+  @ApiProperty({ enum: ProjectStatus, enumName: 'ProjectStatus', example: ProjectStatus.Active })
+  @IsOptional()
+  @IsEnum(ProjectStatus)
+  status?: ProjectStatus;
+
+  @ApiProperty({ example: 'Lima, Perú' })
+  @IsString()
+  location!: string;
+
+  @ApiPropertyOptional({ example: '2025-10-05T00:00:00.000Z' })
+  @IsOptional()
+  @IsDateString()
+  startDate?: string;
+  
+  @ApiPropertyOptional({ example: '2025-12-31T00:00:00.000Z' })
+  @IsOptional()
+  @IsDateString()
+  endDate?: string;
 }

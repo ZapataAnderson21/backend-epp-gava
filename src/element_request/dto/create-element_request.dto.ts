@@ -1,23 +1,28 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsPositive, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Min } from "class-validator";
 
 export class CreateElementRequestDto {
-  @ApiProperty()
-  @IsNumber()
-  @IsPositive()
-  quantity_requested: number;
+  @ApiProperty({ example: 3, minimum: 0 })
+  @Type(() => Number)
+  @IsInt({ message: 'La cantidad solicitada debe ser un número entero.' })
+  @Min(0, { message: 'La cantidad solicitada no puede ser negativa.' })
+  quantityRequested!: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'unidad' })
   @IsString()
-  unit: string;
+  @IsNotEmpty({ message: 'La unidad es requerida.' })
+  unit!: string;
 
   @ApiProperty()
-  @IsNumber()
+  @Type(() => Number)
+  @IsInt()
   @IsPositive()
-  element_id: number;
+  element_id!: number;
 
   @ApiProperty()
-  @IsNumber()
+  @Type(() => Number)
+  @IsInt()
   @IsPositive()
-  request_id: number;
+  request_id!: number;
 }

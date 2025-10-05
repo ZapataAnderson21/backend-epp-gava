@@ -1,12 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsInt } from 'class-validator';
 
 export class CreateUserUserTypeDto {
-  @ApiProperty()
+  @ApiProperty({ example: 1 })
+  @Type(() => Number)
   @IsInt()
-  user_id: number;
+  userId: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 2 })
+  @Type(() => Number)
   @IsInt()
-  user_type_id: number;
+  userTypeId: number;
 }

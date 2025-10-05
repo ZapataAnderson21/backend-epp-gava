@@ -596,3 +596,87 @@ ALTER TABLE "ServiceSale" ADD CONSTRAINT "ServiceSale_projectId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "BlacklistedToken" ADD CONSTRAINT "BlacklistedToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
+
+
+/* ===== Cantidades y montos no negativos (idempotente) ===== */
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_elementrequest_quantityRequested_nonneg') THEN
+    ALTER TABLE "ElementRequest"
+      ADD CONSTRAINT "chk_elementrequest_quantityRequested_nonneg"
+      CHECK ("quantityRequested" >= 0);
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_elreqresp_quantityAccepted_nonneg') THEN
+    ALTER TABLE "ElementRequestResponse"
+      ADD CONSTRAINT "chk_elreqresp_quantityAccepted_nonneg"
+      CHECK ("quantityAccepted" >= 0);
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_rpo_quantity_nonneg') THEN
+    ALTER TABLE "ResourcePurchaseOrder"
+      ADD CONSTRAINT "chk_rpo_quantity_nonneg"
+      CHECK ("quantity" >= 0);
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_rpo_unitSalesPrice_nonneg') THEN
+    ALTER TABLE "ResourcePurchaseOrder"
+      ADD CONSTRAINT "chk_rpo_unitSalesPrice_nonneg"
+      CHECK ("unitSalesPrice" >= 0);
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_rpo_unitPurchasePrice_nonneg') THEN
+    ALTER TABLE "ResourcePurchaseOrder"
+      ADD CONSTRAINT "chk_rpo_unitPurchasePrice_nonneg"
+      CHECK ("unitPurchasePrice" >= 0);
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_purchaseorder_saleAmount_nonneg') THEN
+    ALTER TABLE "PurchaseOrder"
+      ADD CONSTRAINT "chk_purchaseorder_saleAmount_nonneg"
+      CHECK ("saleAmount" >= 0);
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_purchaseorder_purchaseAmount_nonneg') THEN
+    ALTER TABLE "PurchaseOrder"
+      ADD CONSTRAINT "chk_purchaseorder_purchaseAmount_nonneg"
+      CHECK ("purchaseAmount" >= 0);
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_pettycash_amount_nonneg') THEN
+    ALTER TABLE "PettyCash"
+      ADD CONSTRAINT "chk_pettycash_amount_nonneg"
+      CHECK ("amount" >= 0);
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_servicesale_amount_nonneg') THEN
+    ALTER TABLE "ServiceSale"
+      ADD CONSTRAINT "chk_servicesale_amount_nonneg"
+      CHECK ("amount" >= 0);
+  END IF;
+END$$;

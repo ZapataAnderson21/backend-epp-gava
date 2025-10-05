@@ -1,33 +1,40 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsInt, IsNotEmpty, IsString, Matches, } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Length, Matches, Min, MinLength, } from "class-validator";
 
 export class CreateUserDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Juan' })
   @IsString()
   @IsNotEmpty({ message: "\nEl nombre es requerido." })
-  name: string;
+  name!: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Pérez' })
   @IsString()
   @IsNotEmpty({ message: "\nEl apellido es requerido." })
-  last_name: string;
+  lastName!: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'juan@example.com' })
   @IsEmail({}, { message: "\nEl correo electrónico no es válido." })
   @IsNotEmpty({ message: "\nEl email es requerido." })
-  email: string;
+  email!: string;
 
-  @ApiProperty()
+  @ApiProperty({ minLength: 8, example: 'Secreta#123' })
   @IsString()
   @IsNotEmpty({ message: "\nLa contraseña es requerida." })
+  @MinLength(8, { message: "\nLa contraseña debe tener al menos 8 caracteres." })
   @Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).+$/, {
     message:
       "\nLa contraseña debe contener al menos una mayúscula, un número y un caracter especial.",
   })
-  password?: string;
+  password!: string;
+
+  @ApiPropertyOptional({ example: '987654321' })
+  @Length(9, 9, { message: "\nEl teléfono debe tener exactamente 9 caracteres." })
+  @IsOptional()
+  @IsString()
+  phone?: string;
 
   @ApiProperty()
   @IsInt()
   @IsNotEmpty({ message: "\nEl tipo de usuario (rol) es requerido." })
-  user_type_id: number;
+  userTypeId!: number;
 }

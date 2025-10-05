@@ -9,24 +9,26 @@ datasource db {
 }
 
 model User {
-  userId      Int      @id @default(autoincrement())
-  name        String
-  lastName    String
-  email       String    @db.Citext @unique
-  password    String
-  phone       String?   @unique
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  blacklistedTokens     BlacklistedToken[]
-  responses             RequestResponse[] @relation("UserResponses")
-  requests              Request[]
-  userUserTypes         UserUserType[]
-  passwordResetTokens   PasswordResetToken[]
-  emergencies           Emergency[]
+  userId              Int                 @id @default(autoincrement())
+  name                String
+  lastName            String
+  email               String              @db.Citext @unique
+  password            String
+  phone               String?             @unique
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  deletedAt           DateTime?
+  
+  blacklistedTokens   BlacklistedToken[]
+  responses           RequestResponse[]   @relation("UserResponses")
+  requests            Request[]
+  userUserTypes       UserUserType[]
+  passwordResetTokens PasswordResetToken[]
+  emergencies         Emergency[]
 
   @@index([name])
   @@index([lastName])
+  @@index([deletedAt])
 }
 
 model UserType {
@@ -37,12 +39,12 @@ model UserType {
 }
 
 model UserUserType {
-  userUserTypeId Int      @id @default(autoincrement())
+  userUserTypeId Int  @id @default(autoincrement())
   userId         Int
   userTypeId     Int
 
-  user     User     @relation(fields: [userId], references: [userId])
-  userType UserType @relation(fields: [userTypeId], references: [userTypeId])
+  user     User     @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  userType UserType @relation(fields: [userTypeId], references: [userTypeId], onDelete: Restrict, onUpdate: Cascade)
 
   @@unique([userId, userTypeId])
   @@index([userTypeId])
@@ -55,16 +57,17 @@ enum ProjectStatus {
 }
 
 model Project {
-  projectId   Int      @id @default(autoincrement())
-  name        String
-  code        String   @unique
-  description String   @db.Text @default("No description provided.")
-  status      ProjectStatus @default(active)
-  location    String
-  startDate   DateTime?
-  endDate     DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  projectId       Int           @id @default(autoincrement())
+  name            String
+  code            String        @unique
+  description     String        @db.Text @default("No description provided.")
+  status          ProjectStatus @default(active)
+  location        String
+  startDate       DateTime?
+  endDate         DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  deletedAt       DateTime?
 
   requests        Request[]
   emergencies     Emergency[]
@@ -75,6 +78,7 @@ model Project {
   @@index([status])
   @@index([name])
   @@index([createdAt])
+  @@index([deletedAt])
 }
 
 enum ElementType {
@@ -83,16 +87,18 @@ enum ElementType {
 }
 
 model Element {
-  elementId    Int      @id @default(autoincrement())
-  name         String
-  description  String   @db.Text @default("No description provided.")
-  type         ElementType
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  elementId       Int                  @id @default(autoincrement())
+  name            String
+  description     String               @db.Text @default("No description provided.")
+  type            ElementType
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  deletedAt       DateTime?
 
   elementRequests ElementRequest[]
 
   @@index([type])
+  @@index([deletedAt])
 }
 
 enum RequestStatus {
@@ -112,18 +118,18 @@ enum RequestType {
 }
 
 model Request {
-  requestId        Int            @id @default(autoincrement())
+  requestId        Int                @id @default(autoincrement())
   deliveryDueDate  DateTime
-  status           RequestStatus  @default(draft)
-  description      String         @db.Text @default("No description provided.")
+  status           RequestStatus      @default(draft)
+  description      String             @db.Text @default("No description provided.")
   userId           Int
   projectId        Int
   type             RequestType
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
 
-  project          Project @relation(fields: [projectId], references: [projectId])
-  user             User    @relation(fields: [userId], references: [userId])
+  project          Project            @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  user             User               @relation(fields: [userId], references: [userId],     onDelete: Restrict, onUpdate: Cascade)
   elementRequests  ElementRequest[]
   requestWorkers   RequestWorker[]
   responses        RequestResponse[]
@@ -137,18 +143,17 @@ model Request {
 }
 
 model RequestWorker {
-  requestWorkerId Int       @id @default(autoincrement())
+  requestWorkerId Int      @id @default(autoincrement())
   requestId       Int
-  fullName        String
-  shoeSize        String
-  pantsSize       String
-  shirtSize       String
-  workerId        Int?
+  shoeSize        String?
+  pantsSize       String?
+  shirtSize       String?
+  workerId        Int
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  request Request @relation(fields: [requestId], references: [requestId])
-  worker  Worker? @relation(fields: [workerId], references: [workerId])
+  request Request @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
+  worker  Worker  @relation(fields: [workerId],  references: [workerId],  onDelete: Restrict, onUpdate: Cascade)
 
   @@unique([requestId, workerId])
   @@index([requestId])
@@ -156,16 +161,16 @@ model RequestWorker {
 }
 
 model ElementRequest {
-  elementRequestId   Int     @id @default(autoincrement())
-  quantityRequested  Int
-  unit               String
-  elementId          Int
-  requestId          Int
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  elementRequestId        Int                       @id @default(autoincrement())
+  quantityRequested       Int
+  unit                    String
+  elementId               Int
+  requestId               Int
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
 
-  element  Element  @relation(fields: [elementId], references: [elementId])
-  request  Request  @relation(fields: [requestId], references: [requestId])
+  element                 Element                   @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  request                 Request                   @relation(fields: [requestId], references: [requestId], onDelete: Cascade,  onUpdate: Cascade)
   elementRequestResponses ElementRequestResponse[]
 
   @@unique([requestId, elementId])
@@ -181,8 +186,8 @@ model RequestResponse {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  request   Request @relation(fields: [requestId], references: [requestId])
-  responder User    @relation("UserResponses", fields: [responderUserId], references: [userId])
+  request   Request @relation(fields: [requestId], references: [requestId], onDelete: Cascade,  onUpdate: Cascade)
+  responder User    @relation("UserResponses", fields: [responderUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
   elementRequestResponses ElementRequestResponse[]
 
   @@index([responderUserId])
@@ -190,30 +195,32 @@ model RequestResponse {
 }
 
 model ElementRequestResponse {
-  elementRequestResponseId Int     @id @default(autoincrement())
+  elementRequestResponseId Int               @id @default(autoincrement())
   elementRequestId         Int
   requestResponseId        Int
-  quantityAccepted          Int
-  createdAt                DateTime @default(now())
-  updatedAt                DateTime @updatedAt
+  quantityAccepted         Int
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
 
-  elementRequest  ElementRequest @relation(fields: [elementRequestId], references: [elementRequestId])
-  requestResponse RequestResponse @relation(fields: [requestResponseId], references: [requestResponseId])
+  elementRequest  ElementRequest  @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Cascade, onUpdate: Cascade)
+  requestResponse RequestResponse @relation(fields: [requestResponseId], references: [requestResponseId], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([elementRequestId])
   @@index([requestResponseId])
 }
 
 model PasswordResetToken {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   userId     Int
-  token      String   @unique
+  token      String    @unique
   expiresAt  DateTime
-  used       Boolean  @default(false)
-  createdAt  DateTime @default(now())
+  used       Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  usedAt     DateTime?
 
-  user User @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
 
+  @@index([expiresAt])
   @@index([userId])
 }
 
@@ -224,18 +231,18 @@ enum EmergencyStatus {
 }
 
 model Emergency {
-  emergencyId Int      @id @default(autoincrement())
+  emergencyId Int              @id @default(autoincrement())
   image       String
   title       String
-  description String  @db.Text
+  description String           @db.Text
   userId      Int
   projectId   Int
-  status      EmergencyStatus @default(pending)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  status      EmergencyStatus  @default(pending)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 
-  user    User    @relation(fields: [userId], references: [userId])
-  project Project @relation(fields: [projectId], references: [projectId])
+  user    User    @relation(fields: [userId],    references: [userId],    onDelete: Restrict, onUpdate: Cascade)
+  project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([status])
   @@index([userId])
@@ -252,23 +259,25 @@ model Worker {
   workerGroupId Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  deletedAt     DateTime?
 
-  workerGroup    WorkerGroup @relation(fields: [workerGroupId], references: [workerGroupId])
-  requestWorkers RequestWorker[]
+  workerGroup    WorkerGroup    @relation(fields: [workerGroupId], references: [workerGroupId], onDelete: Restrict, onUpdate: Cascade)
+  requestWorkers RequestWorker[]   // <— lado inverso para navegar
 
   @@index([dni])
   @@index([workerGroupId])
+  @@index([deletedAt])
 }
 
 model WorkerGroup {
-  workerGroupId  Int      @id @default(autoincrement())
+  workerGroupId  Int        @id @default(autoincrement())
   name           String
-  description    String?  @db.Text
+  description    String?    @db.Text
   parentGroupId  Int?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 
-  parentGroup WorkerGroup? @relation("WorkerGroupToWorkerGroup", fields: [parentGroupId], references: [workerGroupId])
+  parentGroup WorkerGroup?  @relation("WorkerGroupToWorkerGroup", fields: [parentGroupId], references: [workerGroupId], onDelete: Restrict, onUpdate: Cascade)
   subGroups   WorkerGroup[] @relation("WorkerGroupToWorkerGroup")
   workers     Worker[]
 
@@ -278,18 +287,18 @@ model WorkerGroup {
 }
 
 model Supplier {
-  supplierId     Int      @id @default(autoincrement())
+  supplierId     Int              @id @default(autoincrement())
   name           String
   contactName    String
   phone          String
-  email          String   @db.Citext @unique
+  email          String           @db.Citext @unique
   address        String
-  ruc            String   @unique
+  ruc            String           @unique
   accountNumber  String
   bank           String
-  currency       Currency @default(PEN)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  currency       Currency         @default(PEN)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 
   purchaseOrders PurchaseOrder[]
 
@@ -298,14 +307,14 @@ model Supplier {
 }
 
 model CategoryResource {
-  categoryResourceId Int      @id @default(autoincrement())
+  categoryResourceId Int                @id @default(autoincrement())
   name               String
-  description        String?  @db.Text
+  description        String?            @db.Text
   parentCategoryId   Int?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
 
-  parentCategory CategoryResource? @relation("CategoryResourceToCategoryResource", fields: [parentCategoryId], references: [categoryResourceId])
+  parentCategory CategoryResource?  @relation("CategoryResourceToCategoryResource", fields: [parentCategoryId], references: [categoryResourceId], onDelete: Restrict, onUpdate: Cascade)
   subCategories  CategoryResource[] @relation("CategoryResourceToCategoryResource")
   resources      Resource[]
 
@@ -315,15 +324,15 @@ model CategoryResource {
 }
 
 model Resource {
-  resourceId         Int      @id @default(autoincrement())
-  name               String
-  description        String?  @db.Text
-  categoryResourceId Int
-  unit               String
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  resourceId            Int                       @id @default(autoincrement())
+  name                  String
+  description           String?                   @db.Text
+  categoryResourceId    Int
+  unit                  String
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
 
-  categoryResource CategoryResource @relation(fields: [categoryResourceId], references: [categoryResourceId])
+  categoryResource       CategoryResource         @relation(fields: [categoryResourceId], references: [categoryResourceId], onDelete: Restrict, onUpdate: Cascade)
   resourcePurchaseOrders ResourcePurchaseOrder[]
 
   @@unique([categoryResourceId, name])
@@ -380,8 +389,8 @@ model PurchaseOrder {
   createdAt               DateTime            @default(now())
   updatedAt               DateTime            @updatedAt
 
-  project   Project   @relation(fields: [projectId], references: [projectId])
-  supplier  Supplier  @relation(fields: [supplierId], references: [supplierId])
+  project   Project  @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  supplier  Supplier @relation(fields: [supplierId], references: [supplierId], onDelete: Restrict, onUpdate: Cascade)
   resources ResourcePurchaseOrder[]
 
   @@index([status])
@@ -391,17 +400,17 @@ model PurchaseOrder {
 }
 
 model ResourcePurchaseOrder {
-  resourcePurchaseOrderId Int     @id @default(autoincrement())
+  resourcePurchaseOrderId Int           @id @default(autoincrement())
   purchaseOrderId         Int
   resourceId              Int
-  quantity                Decimal @db.Decimal(18,2)
-  unitSalesPrice          Decimal @db.Decimal(18,2)
-  unitPurchasePrice       Decimal @db.Decimal(18,2)
-  createdAt               DateTime @default(now())
-  updatedAt               DateTime @updatedAt
+  quantity                Decimal       @db.Decimal(18,2)
+  unitSalesPrice          Decimal       @db.Decimal(18,2)
+  unitPurchasePrice       Decimal       @db.Decimal(18,2)
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
 
-  resource       Resource       @relation(fields: [resourceId], references: [resourceId])
-  purchaseOrder  PurchaseOrder  @relation(fields: [purchaseOrderId], references: [purchaseOrderId])
+  resource       Resource      @relation(fields: [resourceId], references: [resourceId],           onDelete: Restrict, onUpdate: Cascade)
+  purchaseOrder  PurchaseOrder @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: Cascade,  onUpdate: Cascade)
 
   @@unique([purchaseOrderId, resourceId])
   @@index([resourceId])
@@ -417,7 +426,7 @@ model PettyCash {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  project Project @relation(fields: [projectId], references: [projectId])
+  project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([projectId])
   @@index([createdAt])
@@ -432,17 +441,20 @@ model ServiceSale {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  project Project @relation(fields: [projectId], references: [projectId])
+  project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([projectId])
   @@index([createdAt])
 }
 
 model BlacklistedToken {
-  id         Int      @id @default(autoincrement())
-  token      String   @unique
-  expiresAt  DateTime
-  userId     Int?
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  expiresAt DateTime
+  userId    Int?
+  createdAt DateTime @default(now())
 
-  user User? @relation(fields: [userId], references: [userId])
+  user User? @relation(fields: [userId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([expiresAt])
 }
