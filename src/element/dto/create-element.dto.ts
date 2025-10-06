@@ -14,7 +14,7 @@ export class CreateElementDto {
   description?: string;
 
   @ApiProperty({ enum: ElementType, enumName: 'ElementType', example: ElementType.Epp })
-  @IsEnum(ElementType)
+  @IsEnum(ElementType, { message: `Tipo de elemento inválido. Los valores permitidos son: ${Object.values(ElementType).join(', ')}.` })
   @IsNotEmpty({ message: 'El tipo de elemento es requerido.' })
   type!: ElementType;
 }

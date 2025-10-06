@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger,
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ElementType } from './enum/element-type.enum';
 
 @Injectable()
 export class ElementService {
@@ -13,7 +14,7 @@ export class ElementService {
   async create(createElementDto: CreateElementDto){
 
     this.logger.log('Creating element', JSON.stringify(createElementDto));
-    if(createElementDto.type !== 'operative' && createElementDto.type !== 'security'){
+    if(!Object.values(ElementType).includes(createElementDto.type)){
       this.logger.error(`Element creation failed: Invalid type specified: ${createElementDto.type}`);
       throw new BadRequestException('Selecciona un tipo válido.');
     }
@@ -44,7 +45,10 @@ export class ElementService {
 
   async findAll() {
     this.logger.log('Retrieving all elements');
-    const foundElements = await this.prismaService.element.findMany();
+    const foundElements = await this.prismaService.element.findMany({
+      where: { deletedAt: null },
+      orderBy: { name: 'asc' }
+    });
 
     if (!foundElements || foundElements.length === 0){
       return {
@@ -62,18 +66,21 @@ export class ElementService {
     };
   }
 
-  async findOne(element_id: number) {
-    this.logger.log(`Retrieving element with ID: ${element_id}`);
+  async findOne(elementId: number) {
+    this.logger.log(`Retrieving element with ID: ${elementId}`);
     const foundElement = await this.prismaService.element.findUnique({
-      where: {element_id}
+      where: {
+        elementId,
+        deletedAt: null
+      }
     })
 
     if (!foundElement){
-      this.logger.warn(`Element with ID ${element_id} not found`);
+      this.logger.warn(`Element with ID ${elementId} not found`);
       throw new NotFoundException('Element not found');
     }
 
-    this.logger.log(`Element with ID ${element_id} retrieved successfully: ${JSON.stringify(foundElement)}`);
+    this.logger.log(`Element with ID ${elementId} retrieved successfully: ${JSON.stringify(foundElement)}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Elemento encontrado exitosamente.',
@@ -83,20 +90,26 @@ export class ElementService {
 
   async findByName(name: string) {
     return await this.prismaService.element.findMany({
-      where: { name }
+      where: { 
+        name, 
+        deletedAt: null 
+      }
     });
   }
 
-  async findAllByType(type: string) {
+  async findAllByType(type: ElementType) {
 
     this.logger.log(`Retrieving elements with type: ${type}`);
-    if (type !== 'operative' && type !== 'security') {
+    if (!Object.values(ElementType).includes(type)){
       throw new BadRequestException('Invalid type specified');
     }
 
     this.logger.log(`Finding elements of type: ${type}`);
     const foundElements = await this.prismaService.element.findMany({
-      where: { type }
+      where: { 
+        type,
+        deletedAt: null
+      } 
     })
 
     if (!foundElements || foundElements.length === 0){
@@ -116,15 +129,15 @@ export class ElementService {
     };
   }
 
-  async update(element_id: number, updateElementDto: UpdateElementDto) {
-    this.logger.log(`Updating element with ID: ${element_id}`);
+  async update(elementId: number, updateElementDto: UpdateElementDto) {
+    this.logger.log(`Updating element with ID: ${elementId}`);
 
     if (updateElementDto.name) {
       this.logger.log(`Checking for existing element with name: ${updateElementDto.name}`);
       const existingElement = await this.findByName(updateElementDto.name);
 
       if (existingElement && existingElement.length > 0) {
-        const hasConflict = existingElement.some(element => element.element_id !== element_id);
+        const hasConflict = existingElement.some(element => element.elementId !== elementId);
         if (hasConflict) {
           this.logger.error(`Element update failed: Element with name '${updateElementDto.name}' already exists with different ID`);
           throw new ConflictException('Ya existe un elemento con este nombre.');
@@ -133,7 +146,7 @@ export class ElementService {
     }
 
     const updatedElement = await this.prismaService.element.update({
-      where: { element_id },
+      where: { elementId },
       data: updateElementDto
     })
     

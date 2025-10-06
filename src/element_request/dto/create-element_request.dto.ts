@@ -18,11 +18,11 @@ export class CreateElementRequestDto {
   @Type(() => Number)
   @IsInt()
   @IsPositive()
-  element_id!: number;
+  elementId!: number;
 
   @ApiProperty()
   @Type(() => Number)
   @IsInt()
   @IsPositive()
-  request_id!: number;
+  requestId!: number;
 }

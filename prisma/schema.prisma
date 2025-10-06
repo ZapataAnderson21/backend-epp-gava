@@ -209,21 +209,6 @@ model ElementRequestResponse {
   @@index([requestResponseId])
 }
 
-model PasswordResetToken {
-  id         Int       @id @default(autoincrement())
-  userId     Int
-  token      String    @unique
-  expiresAt  DateTime
-  used       Boolean   @default(false)
-  createdAt  DateTime  @default(now())
-  usedAt     DateTime?
-
-  user User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-
-  @@index([expiresAt])
-  @@index([userId])
-}
-
 enum EmergencyStatus {
   pending
   addressed
@@ -254,8 +239,8 @@ model Worker {
   workerId      Int               @id @default(autoincrement())
   fullName      String
   dni           String            @db.VarChar(8) @unique
-  phone         String
-  address       String            @default("No address provided.")
+  phone         String?           @unique
+  address       String?           @default("No address provided.")
   workerGroupId Int
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
@@ -444,6 +429,21 @@ model ServiceSale {
 
   @@index([projectId])
   @@index([createdAt])
+}
+
+model PasswordResetToken {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  token      String    @unique
+  expiresAt  DateTime
+  used       Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  usedAt     DateTime?
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([expiresAt])
+  @@index([userId])
 }
 
 model BlacklistedToken {

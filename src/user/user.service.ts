@@ -36,6 +36,15 @@ export class UserService {
       throw new ConflictException('El correo ya está en uso.');
     }
 
+    if(createUserDto.phone) {
+      const existingUserByPhone = await this.findByPhone(createUserDto.phone);
+
+      if (existingUserByPhone) {
+        this.logger.warn(`Phone already exists: ${createUserDto.phone}`);
+        throw new ConflictException('El teléfono ya está en uso.');
+      }
+    }
+
     const hashedPassword = await hash(createUserDto.password, 10);
 
 
@@ -224,6 +233,31 @@ export class UserService {
     }
 
     this.logger.log(`User found with email: ${email}`);
+    return foundUser;
+  }
+
+  async findByPhone(phone: string) {
+    this.logger.log(`Finding user by phone: ${phone}`);
+    const foundUser = await this.prisma.user.findUnique({
+      where: {
+        phone: phone,
+        deletedAt: null
+      },
+      include: {
+        userUserTypes: {
+          include: {
+            userType: true
+          }
+        }
+      }
+    });
+
+    if (!foundUser) {
+      this.logger.warn(`User not found with phone: ${phone}`);
+      return null;
+    }
+
+    this.logger.log(`User found with phone: ${phone}`);
     return foundUser;
   }
 

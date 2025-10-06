@@ -1,8 +1,7 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateElementRequestDto } from './dto/create-element_request.dto';
 import { UpdateElementRequestDto } from './dto/update-element_request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ElementRequest } from 'src/element_request/entities/element_request.entity';
 
 @Injectable()
 export class ElementRequestService {
@@ -14,7 +13,7 @@ export class ElementRequestService {
   
   async create(createElementRequestDto: CreateElementRequestDto) {
    
-    await this.requestExistsAndIsDraft(createElementRequestDto.request_id);
+    await this.requestExistsAndIsDraft(createElementRequestDto.requestId);
 
     this.logger.log(`Creating Element Request with data: ${JSON.stringify(createElementRequestDto)}`);
     const newElementRequest = await this.prismaService.elementRequest.create({
@@ -31,15 +30,19 @@ export class ElementRequestService {
     }
 
     this.logger.log(`Element Request created successfully: ${JSON.stringify(newElementRequest)}`);
-    return newElementRequest;
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'La solicitud de elemento ha sido creada exitosamente.',
+      data: newElementRequest
+    };
   }
 
 
-  async findAllByRequestId(request_id: number): Promise<ElementRequest[]> {
+  async findAllByRequestId(requestId: number) {
 
-    this.logger.log(`Fetching Element Requests for request_id: ${request_id}`);
+    this.logger.log(`Fetching Element Requests for requestId: ${requestId}`);
     const foundElementRequests = await this.prismaService.elementRequest.findMany({
-      where: { request_id },
+      where: { requestId },
       include: {
         request: true,
         element: true 
@@ -47,19 +50,22 @@ export class ElementRequestService {
     });
 
     if (!foundElementRequests || foundElementRequests.length === 0) {
-      this.logger.warn(`No Element Requests found for request_id: ${request_id}`);
-      return [];
+      this.logger.warn(`No Element Requests found for requestId: ${requestId}`);
     }
 
-    this.logger.log(`Found ${foundElementRequests.length} Element Requests for request_id: ${request_id}`);
-    return foundElementRequests;
+    this.logger.log(`Found ${foundElementRequests.length} Element Requests for requestId: ${requestId}`);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitudes de elementos encontradas exitosamente.',
+      data: foundElementRequests
+    };
   }
 
 
-  async findOne(element_request_id: number) {
-    this.logger.log(`Fetching Element Request with ID: ${element_request_id}`);
+  async findOne(elementRequestId: number) {
+    this.logger.log(`Fetching Element Request with ID: ${elementRequestId}`);
     const elementRequest = await this.prismaService.elementRequest.findUnique({
-      where: { element_request_id },
+      where: { elementRequestId },
       include: {
         request: true,
         element: true
@@ -67,68 +73,84 @@ export class ElementRequestService {
     });
 
     if (!elementRequest) {
-      this.logger.warn(`Element Request with ID ${element_request_id} not found`);
+      this.logger.warn(`Element Request with ID ${elementRequestId} not found`);
       throw new NotFoundException('Element request not found');
     }
 
     this.logger.log(`Element Request found: ${JSON.stringify(elementRequest)}`);
-    return elementRequest;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitud de elemento encontrada exitosamente.',
+      data: elementRequest
+    };
   }
 
 
-  async update(element_request_id: number, updateElementRequestDto: UpdateElementRequestDto) {
+  async update(elementRequestId: number, updateElementRequestDto: UpdateElementRequestDto) {
 
-    const existingElementRequest = await this.findOne(element_request_id);
+    const existingElementRequest = await this.findOne(elementRequestId);
 
-    await this.requestExistsAndIsDraft(existingElementRequest.request_id);
+    await this.requestExistsAndIsDraft(existingElementRequest.data.requestId);
 
-    this.logger.log(`Updating Element Request with ID: ${element_request_id}`);
+    this.logger.log(`Updating Element Request with ID: ${elementRequestId}`);
     const updatedRequest = await this.prismaService.elementRequest.update({
-      where: { element_request_id },
+      where: { elementRequestId },
       data: updateElementRequestDto
     });
 
-    return updatedRequest;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'La solicitud de elemento ha sido actualizada exitosamente.',
+      data: updatedRequest
+    };
   }
 
 
-  async remove(element_request_id: number) {
+  async remove(elementRequestId: number) {
 
     
-    const existingElementRequest = await this.findOne(element_request_id);
+    const existingElementRequest = await this.findOne(elementRequestId);
 
-    await this.requestExistsAndIsDraft(existingElementRequest.request_id);
+    await this.requestExistsAndIsDraft(existingElementRequest.data.requestId);
 
-    this.logger.log(`Deleting Element Request with ID: ${element_request_id}`);
+    this.logger.log(`Deleting Element Request with ID: ${elementRequestId}`);
     const deletedElementRequest = await this.prismaService.elementRequest.delete({
-      where: { element_request_id }
+      where: { elementRequestId }
     });
 
     if (!deletedElementRequest) {
-      this.logger.error(`Failed to delete Element Request with ID: ${element_request_id}`);
+      this.logger.error(`Failed to delete Element Request with ID: ${elementRequestId}`);
       throw new BadRequestException('Failed to delete Element Request');
     }
 
-    this.logger.log(`Element Request with ID: ${element_request_id} deleted successfully`);
-    return deletedElementRequest;
+    this.logger.log(`Element Request with ID: ${elementRequestId} deleted successfully`);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'La solicitud de elemento ha sido eliminada exitosamente.',
+      data: deletedElementRequest
+    };
   }
 
-  async requestExistsAndIsDraft(request_id: number) {
+  async requestExistsAndIsDraft(requestId: number) {
     const request = await this.prismaService.request.findUnique({
-      where: { request_id },
+      where: { requestId },
     });
 
     if (!request) {
-      this.logger.error(`Associated request with ID ${request_id} not found`);
+      this.logger.error(`Associated request with ID ${requestId} not found`);
       throw new NotFoundException('Associated request not found');
     }
 
     if (request.status !== 'draft') {
-      this.logger.error(`Request with ID ${request_id} is not in draft status`);
+      this.logger.error(`Request with ID ${requestId} is not in draft status`);
       throw new BadRequestException('The operation cannot be performed because the request is not in draft status');
     }
 
-    this.logger.log(`Request with ID ${request_id} is in draft status`);
-    return request;
+    this.logger.log(`Request with ID ${requestId} is in draft status`);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'La solicitud asociada fue encontrada y está en estado de borrador.',
+      data: request
+    };
   }
 }

@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger,
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Project } from 'generated/prisma';
+import { ProjectStatus } from './enum/project-status.enum';
 
 @Injectable()
 export class ProjectService {
@@ -45,7 +45,11 @@ export class ProjectService {
 
   async findAll() {
     this.logger.log('Retrieving all projects');
-    const foundProjects = (await this.prismaService.project.findMany()).sort((a, b) => b.project_id - a.project_id);
+    const foundProjects = (await this.prismaService.project.findMany({
+      where: { 
+        deletedAt: null
+      },
+    })).sort((a, b) => b.projectId - a.projectId);
 
     if (!foundProjects || foundProjects.length === 0) {
       this.logger.warn('No projects found');
@@ -64,22 +68,25 @@ export class ProjectService {
     };
   }
 
-  async findOne(project_id: number) {
+  async findOne(projectId: number) {
     
-    this.logger.log('Retrieving project with ID', project_id);
+    this.logger.log('Retrieving project with ID', projectId);
     const foundProject = await this.prismaService.project.findUnique({
-      where: { project_id },
+      where: { 
+        projectId,
+        deletedAt: null
+      },
       include: {
         requests: true
       }
     });
 
-    this.logger.log(`Found project with ID ${project_id}`, foundProject);
+    this.logger.log(`Found project with ID ${projectId}`, foundProject);
     if (!foundProject) {
       throw new NotFoundException('No se ha encontrado el proyecto.');
     }
 
-    this.logger.log(`Found project with ID ${project_id}: ${JSON.stringify(foundProject)}`);
+    this.logger.log(`Found project with ID ${projectId}: ${JSON.stringify(foundProject)}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Proyecto encontrado exitosamente.',
@@ -90,7 +97,10 @@ export class ProjectService {
   async findByCode(code: string) {
     this.logger.log(`Retrieving project with code: ${code}`);
     const foundProject = await this.prismaService.project.findUnique({
-      where: { code },
+      where: { 
+        code,
+        deletedAt: null
+      },
       include: {
         requests: true
       }
@@ -105,10 +115,13 @@ export class ProjectService {
     return true;
   }
 
-  async findByStatus(status: string) {
+  async findByStatus(status: ProjectStatus) {
     this.logger.log(`Retrieving projects with status: ${status}`);
     const foundProjects = await this.prismaService.project.findMany({
-      where: { status }
+      where: { 
+        status,
+        deletedAt: null
+      }
     });
 
     if (!foundProjects || foundProjects.length === 0) {
@@ -128,20 +141,23 @@ export class ProjectService {
     };
   }
 
-  async update(project_id: number, updateProjectDto: UpdateProjectDto) {
+  async update(projectId: number, updateProjectDto: UpdateProjectDto) {
 
-    this.logger.log(`Updating project with ID: ${project_id}`);
+    this.logger.log(`Updating project with ID: ${projectId}`);
 
-    this.logger.log(`Verifying existence of project with ID: ${project_id}`);
-    this.findOne(project_id);
+    this.logger.log(`Verifying existence of project with ID: ${projectId}`);
+    this.findOne(projectId);
 
     if (updateProjectDto.code) {
       this.logger.log(`Checking for existing project with code: ${updateProjectDto.code}`);
       const existingProject = await this.prismaService.project.findUnique({
-        where: { code: updateProjectDto.code }
+        where: { 
+          code: updateProjectDto.code,
+          deletedAt: null
+        }
       });
 
-      if (existingProject && existingProject.project_id !== project_id) {
+      if (existingProject && existingProject.projectId !== projectId) {
         this.logger.error(`Update failed: Project with code ${updateProjectDto.code} already exists`);
         throw new ConflictException('Ya existe un proyecto con este código.');
       }
@@ -149,16 +165,16 @@ export class ProjectService {
 
     this.logger.log(`Updating project in db. Data: ${JSON.stringify(updateProjectDto)}`);
     const updatedProject = await this.prismaService.project.update({
-      where: { project_id },
+      where: { projectId },
       data: updateProjectDto
     });
 
     if (!updatedProject) {
-      this.logger.warn(`Project with ID ${project_id} cannot be updated.`);
+      this.logger.warn(`Project with ID ${projectId} cannot be updated.`);
       throw new BadRequestException('El proyecto no pudo ser actualizado.');
     }
 
-    this.logger.log(`Project with ID ${project_id} updated successfully: ${JSON.stringify(updatedProject)}`);
+    this.logger.log(`Project with ID ${projectId} updated successfully: ${JSON.stringify(updatedProject)}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'El proyecto ha sido actualizado exitosamente.',
@@ -166,19 +182,19 @@ export class ProjectService {
     };
   }
 
-  async updateStatus(project_id: number, status: string) {
-    this.logger.log(`Updating status for project with ID: ${project_id} to: ${status}`);
+  async updateStatus(projectId: number, status: ProjectStatus) {
+    this.logger.log(`Updating status for project with ID: ${projectId} to: ${status}`);
     const updatedProject = await this.prismaService.project.update({
-      where: { project_id },
+      where: { projectId },
       data: { status }
     });
 
     if (!updatedProject) {
-      this.logger.warn(`Project with ID ${project_id} not found`);
+      this.logger.warn(`Project with ID ${projectId} not found`);
       throw new NotFoundException('Project not found');
     }
 
-    this.logger.log(`Project with ID ${project_id} status updated successfully: ${JSON.stringify(updatedProject)}`);
+    this.logger.log(`Project with ID ${projectId} status updated successfully: ${JSON.stringify(updatedProject)}`);
     
     return {
       statusCode: HttpStatus.OK,

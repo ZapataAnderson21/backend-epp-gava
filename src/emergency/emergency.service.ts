@@ -58,9 +58,9 @@ export class EmergencyService {
 
     const returnEmergencies = emergencies.map(emergency => {
       const returnUser = {
-        user_id: emergency.user.user_id,
+        userId: emergency.user.userId,
         name: emergency.user.name,
-        last_name: emergency.user.last_name,
+        lastName: emergency.user.lastName,
         email: emergency.user.email,
         userType: emergency.user.userUserTypes[0]?.userType?.name || null,
       };
@@ -78,7 +78,7 @@ export class EmergencyService {
   async findOne(id: number) {
     this.logger.log(`Fetching emergency with ID: ${id}`);
     const emergency = await this.prismaService.emergency.findUnique({
-      where: { emergency_id: id },
+      where: { emergencyId: id },
       include: {
         project: true,
         user: {
@@ -99,9 +99,9 @@ export class EmergencyService {
     }
 
     const returnUser = {
-      user_id: emergency.user.user_id,
+      userId: emergency.user.userId,
       name: emergency.user.name,
-      last_name: emergency.user.last_name,
+      lastName: emergency.user.lastName,
       email: emergency.user.email,
       userType: emergency.user.userUserTypes[0]?.userType?.name || null,
     };
@@ -119,7 +119,7 @@ export class EmergencyService {
   async update(id: number, updateEmergencyDto: UpdateEmergencyDto) {
     this.logger.log(`Updating emergency with ID: ${id}`);
     const emergency = await this.prismaService.emergency.update({
-      where: { emergency_id: id },
+      where: { emergencyId: id },
       data: updateEmergencyDto,
     });
 
@@ -136,10 +136,10 @@ export class EmergencyService {
     };
   }
 
-  async getAllByProjectId(project_id: number) {
-    this.logger.log(`Fetching all emergencies for project ID: ${project_id}`);
+  async getAllByProjectId(projectId: number) {
+    this.logger.log(`Fetching all emergencies for project ID: ${projectId}`);
     const emergencies = await this.prismaService.emergency.findMany({
-      where: { project_id },
+      where: { projectId },
       include: {
         user: {
           include: {
@@ -154,37 +154,37 @@ export class EmergencyService {
     });
 
     if (!emergencies || emergencies.length === 0) {
-      this.logger.warn(`No emergencies found for project ID ${project_id}`);
+      this.logger.warn(`No emergencies found for project ID ${projectId}`);
       return {
         statusCode: HttpStatus.NOT_FOUND,
         data: [],
-        message: `No emergencies found for project ID ${project_id}.`
+        message: `No emergencies found for project ID ${projectId}.`
       };
     }
 
     const returnEmergencies = emergencies.map(emergency => {
       const returnUser = {
-        user_id: emergency.user.user_id,
+        userId: emergency.user.userId,
         name: emergency.user.name,
-        last_name: emergency.user.last_name,
+        lastName: emergency.user.lastName,
         email: emergency.user.email,
         userType: emergency.user.userUserTypes[0]?.userType?.name || null,
       };
       return { ...emergency, user: returnUser };
     });
 
-    this.logger.log(`Found ${emergencies.length} emergencies for project ID ${project_id}`);
+    this.logger.log(`Found ${emergencies.length} emergencies for project ID ${projectId}`);
     return {
       statusCode: HttpStatus.OK,
       data: returnEmergencies,
-      message: `Emergencies for project ID ${project_id} retrieved successfully.`
+      message: `Emergencies for project ID ${projectId} retrieved successfully.`
     };
   }
 
-  async getAllByUserId(user_id: number) {
-    this.logger.log(`Fetching all emergencies for user ID: ${user_id}`);
+  async getAllByUserId(userId: number) {
+    this.logger.log(`Fetching all emergencies for user ID: ${userId}`);
     const emergencies = await this.prismaService.emergency.findMany({
-      where: { user_id },
+      where: { userId },
       include: {
         project: true,
         user: {
@@ -200,30 +200,30 @@ export class EmergencyService {
     });
 
     if (!emergencies || emergencies.length === 0) {
-      this.logger.warn(`No emergencies found for user ID ${user_id}`);
+      this.logger.warn(`No emergencies found for user ID ${userId}`);
       return {
         statusCode: HttpStatus.NOT_FOUND,
         data: [],
-        message: `No emergencies found for user ID ${user_id}.`
+        message: `No emergencies found for user ID ${userId}.`
       };
     }
 
     const returnEmergencies = emergencies.map(emergency => {
       const returnUser = {
-        user_id: emergency.user.user_id,
+        userId: emergency.user.userId,
         name: emergency.user.name,
-        last_name: emergency.user.last_name,
+        lastName: emergency.user.lastName,
         email: emergency.user.email,
         userType: emergency.user.userUserTypes[0]?.userType?.name || null,
       };
       return { ...emergency, user: returnUser };
     });
 
-    this.logger.log(`Found ${emergencies.length} emergencies for user ID ${user_id}`);
+    this.logger.log(`Found ${emergencies.length} emergencies for user ID ${userId}`);
     return {
       statusCode: HttpStatus.OK,
       data: returnEmergencies,
-      message: `Emergencies for user ID ${user_id} retrieved successfully.`
+      message: `Emergencies for user ID ${userId} retrieved successfully.`
     };
   }
 }

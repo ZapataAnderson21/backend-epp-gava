@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateRequestResponseDto } from './dto/create-request_response.dto';
 import { UpdateRequestResponseDto } from './dto/update-request_response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -24,13 +24,17 @@ export class RequestResponseService {
       throw new BadRequestException('Failed to create request response');
     }
 
-    return requestResponse;
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'La respuesta a la solicitud ha sido creada exitosamente.',
+      data: requestResponse
+    };
   }
   
-  async findOne(id: number) {
-    this.logger.log(`Finding request response with ID: ${id}`);
+  async findOne(requestResponseId: number) {
+    this.logger.log(`Finding request response with ID: ${requestResponseId}`);
     const requestResponse = await this.prismaService.requestResponse.findUnique({
-      where: { request_response_id: id },
+      where: { requestResponseId },
       include: {
         request: {
           include: {
@@ -59,24 +63,24 @@ export class RequestResponseService {
     });
 
     if (!requestResponse) {
-      this.logger.warn(`Request response not found with ID: ${id}`);
+      this.logger.warn(`Request response not found with ID: ${requestResponseId}`);
       throw new BadRequestException('Request response not found');
     }
 
     const returnResponder = {
-      user_id: requestResponse.responder ? requestResponse.responder.user_id : null,
+      userId: requestResponse.responder ? requestResponse.responder.userId : null,
       name: requestResponse.responder ? requestResponse.responder.name : null,
       userType: requestResponse.responder ? requestResponse.responder.userUserTypes[0].userType.name : null,
     };
 
     const returnProjectUser = {
-      user_id: requestResponse.request.user ? requestResponse.request.user.user_id : null,
+      userId: requestResponse.request.user ? requestResponse.request.user.userId : null,
       name: requestResponse.request.user ? requestResponse.request.user.name : null,
       userType: requestResponse.request.user ? requestResponse.request.user.userUserTypes[0].userType.name : null,
     };
 
     const returnProject = {
-      project_id: requestResponse.request.project ? requestResponse.request.project.project_id : null,
+      projectId: requestResponse.request.project ? requestResponse.request.project.projectId : null,
       name: requestResponse.request.project ? requestResponse.request.project.name : null,
       code: requestResponse.request.project ? requestResponse.request.project.code : null,
       description: requestResponse.request.project ? requestResponse.request.project.description : null,
@@ -85,7 +89,7 @@ export class RequestResponseService {
     };
 
     const returnData = {
-      request_response_id: requestResponse.request_response_id,
+      requestResponseId: requestResponse.requestResponseId,
       request: requestResponse.request,
       responder: returnResponder,
       project: returnProject,
@@ -94,12 +98,16 @@ export class RequestResponseService {
     };
 
     this.logger.log(`Found request response: ${JSON.stringify(requestResponse)}`);
-    return returnData;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitud de respuesta encontrada exitosamente.',
+      data: returnData
+    };
   }
 
-  async findByRequestId(requestId: number) {
-    const requestResponse = await this.prismaService.requestResponse.findUnique({
-      where: { request_id: requestId },
+  async findAllByRequestId(requestId: number) {
+    const requestResponses = await this.prismaService.requestResponse.findMany({
+      where: { requestId },
       include: {
         request: {
           include: {
@@ -127,12 +135,16 @@ export class RequestResponseService {
       },
     });
     
-    if (!requestResponse) {
+    if (!requestResponses) {
       this.logger.warn(`No request responses found for request ID: ${requestId}`);
       throw new NotFoundException('No request responses found for the specified request ID');
     }
 
-    return await this.findOne(requestResponse.request_response_id);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitudes de respuesta encontradas exitosamente.',
+      data: requestResponses
+    };
   }
 
   async findAll() {
@@ -171,19 +183,19 @@ export class RequestResponseService {
 
     const formattedResponses = requestResponses.map((requestResponse) => {
       const returnResponder = {
-        user_id: requestResponse.responder ? requestResponse.responder.user_id : null,
+        userId: requestResponse.responder ? requestResponse.responder.userId : null,
         name: requestResponse.responder ? requestResponse.responder.name : null,
         userType: requestResponse.responder ? requestResponse.responder.userUserTypes[0].userType.name : null,
       };
 
       const returnProjectUser = {
-        user_id: requestResponse.request.user ? requestResponse.request.user.user_id : null,
+        userId: requestResponse.request.user ? requestResponse.request.user.userId : null,
         name: requestResponse.request.user ? requestResponse.request.user.name : null,
         userType: requestResponse.request.user ? requestResponse.request.user.userUserTypes[0].userType.name : null,
       };
 
       const returnProject = {
-        project_id: requestResponse.request.project ? requestResponse.request.project.project_id : null,
+        projectId: requestResponse.request.project ? requestResponse.request.project.projectId : null,
         name: requestResponse.request.project ? requestResponse.request.project.name : null,
         code: requestResponse.request.project ? requestResponse.request.project.code : null,
         description: requestResponse.request.project ? requestResponse.request.project.description : null,
@@ -192,7 +204,7 @@ export class RequestResponseService {
       };
 
       const returnData = {
-        request_response_id: requestResponse.request_response_id,
+        requestResponseId: requestResponse.requestResponseId,
         request: requestResponse.request,
         responder: returnResponder,
         project: returnProject,
@@ -204,12 +216,16 @@ export class RequestResponseService {
     });
 
     this.logger.log(`Found ${requestResponses.length} request responses`);
-    return formattedResponses;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitudes de respuesta encontradas exitosamente.',
+      data: formattedResponses
+    };
   }
 
   async update(id: number, updateRequestResponseDto: UpdateRequestResponseDto) {
     const updatedRequestResponse = await this.prismaService.requestResponse.update({
-      where: { request_response_id: id },
+      where: { requestResponseId: id },
       data: updateRequestResponseDto,
     });
 
@@ -219,6 +235,10 @@ export class RequestResponseService {
     }
 
     this.logger.log(`Updated request response: ${JSON.stringify(updatedRequestResponse)}`);
-    return await this.findOne(id);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'La respuesta a la solicitud ha sido actualizada exitosamente.',
+      data: updatedRequestResponse
+    };
   }
 }

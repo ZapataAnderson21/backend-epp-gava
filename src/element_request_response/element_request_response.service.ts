@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateElementRequestResponseDto } from './dto/create-element_request_response.dto';
 import { UpdateElementRequestResponseDto } from './dto/update-element_request_response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -27,14 +27,18 @@ export class ElementRequestResponseService {
     }
 
     this.logger.log(`ElementRequestResponse created successfully: ${JSON.stringify(elementRequestResponse)}`);
-    return elementRequestResponse;
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'La respuesta a la solicitud de elemento ha sido creada exitosamente.',
+      data: elementRequestResponse
+    };
   }
 
   async findByRequestResponseId(requestResponseId: number) {
 
     this.logger.log(`Finding ElementRequestResponses by requestResponseId: ${requestResponseId}`);
     const elementRequestResponses = await this.prismaService.elementRequestResponse.findMany({
-      where: { request_response_id: requestResponseId },
+      where: { requestResponseId: requestResponseId },
       include: {
         elementRequest: true,
         requestResponse: true,
@@ -43,17 +47,20 @@ export class ElementRequestResponseService {
 
     if (!elementRequestResponses || elementRequestResponses.length === 0) {
       this.logger.warn(`No ElementRequestResponses found for requestResponseId: ${requestResponseId}`);
-      return [];
     }
 
     this.logger.log(`Found ${elementRequestResponses.length} ElementRequestResponses for requestResponseId: ${requestResponseId}`);
-    return elementRequestResponses;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitudes de respuesta a elementos encontradas exitosamente.',
+      data: elementRequestResponses
+    };
   }
 
-  async findOne(id: number) {
-    this.logger.log(`Finding ElementRequestResponse by id: ${id}`);
+  async findOne(elementRequestResponseId: number) {
+    this.logger.log(`Finding ElementRequestResponse by id: ${elementRequestResponseId}`);
     const elementRequestResponse = await this.prismaService.elementRequestResponse.findUnique({
-      where: { element_request_response_id: id },
+      where: { elementRequestResponseId },
       include: {
         elementRequest: true,
         requestResponse: true,
@@ -61,18 +68,22 @@ export class ElementRequestResponseService {
     });
 
     if (!elementRequestResponse) {
-      this.logger.warn(`ElementRequestResponse not found for id: ${id}`);
-      throw new NotFoundException(`ElementRequestResponse with id ${id} not found`);
+      this.logger.warn(`ElementRequestResponse not found for id: ${elementRequestResponseId}`);
+      throw new NotFoundException(`ElementRequestResponse with id ${elementRequestResponseId} not found`);
     }
 
     this.logger.log(`ElementRequestResponse found: ${JSON.stringify(elementRequestResponse)}`);
-    return elementRequestResponse;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitud de respuesta a elemento encontrada exitosamente.',
+      data: elementRequestResponse
+    };
   }
 
   async update(id: number, updateElementRequestResponseDto: UpdateElementRequestResponseDto) {
     this.logger.log(`Updating ElementRequestResponse with id: ${id}`);
     const updatedElementRequestResponse = await this.prismaService.elementRequestResponse.update({
-      where: { element_request_response_id: id },
+      where: { elementRequestResponseId: id },
       data: updateElementRequestResponseDto,
       include: {
         elementRequest: true,
@@ -86,6 +97,10 @@ export class ElementRequestResponseService {
     }
 
     this.logger.log(`ElementRequestResponse updated successfully: ${JSON.stringify(updatedElementRequestResponse)}`);
-    return updatedElementRequestResponse;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitud de respuesta a elemento actualizada exitosamente.',
+      data: updatedElementRequestResponse
+    };
   }
 }

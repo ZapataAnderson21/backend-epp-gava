@@ -20,7 +20,7 @@ export class CreateProjectDto {
   
   @ApiProperty({ enum: ProjectStatus, enumName: 'ProjectStatus', example: ProjectStatus.Active })
   @IsOptional()
-  @IsEnum(ProjectStatus)
+  @IsEnum(ProjectStatus, { message: `Estado de proyecto inválido. Los valores permitidos son: ${Object.values(ProjectStatus).join(', ')}.` })
   status?: ProjectStatus;
 
   @ApiProperty({ example: 'Lima, Perú' })

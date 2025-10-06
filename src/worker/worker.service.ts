@@ -1,26 +1,191 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateWorkerDto } from './dto/create-worker.dto';
 import { UpdateWorkerDto } from './dto/update-worker.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class WorkerService {
-  create(createWorkerDto: CreateWorkerDto) {
-    return 'This action adds a new worker';
+
+  private readonly logger = new Logger("WorkerService");
+
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async create(createWorkerDto: CreateWorkerDto) {
+    this.logger.log(`Creating worker with data: ${JSON.stringify(createWorkerDto)}`);
+
+    this.logger.log(`Checking for existing worker with phone: ${createWorkerDto.phone}`);
+    const existsWorker = await this.findByDni(createWorkerDto.dni);
+
+    if (existsWorker) {
+      this.logger.error(`Worker with DNI: ${createWorkerDto.dni} already exists`);
+      throw new ConflictException(`El trabajador con DNI ${createWorkerDto.dni} ya existe.`);
+    }
+
+    if(createWorkerDto.phone){
+      this.logger.log(`Checking for existing worker with phone: ${createWorkerDto.phone}`);
+      const existsPhone = await this.findByPhone(createWorkerDto.phone);
+
+      if (existsPhone) {
+        this.logger.error(`Worker with phone: ${createWorkerDto.phone} already exists`);
+        throw new ConflictException(`El trabajador con teléfono ${createWorkerDto.phone} ya existe.`);
+      }
+    }
+
+    this.logger.log(`Verifying worker group with ID: ${createWorkerDto.workerGroupId} exists`);
+    await this.verifyWorkerGroupExists(createWorkerDto.workerGroupId);
+
+    const worker = await this.prismaService.worker.create({
+      data: createWorkerDto
+    });
+
+    if (!worker) {
+      this.logger.error('Failed to create worker');
+      throw new BadRequestException('Failed to create worker');
+    }
+
+    this.logger.log(`Worker created successfully: ${JSON.stringify(worker)}`);
+    return {
+      statusCode: HttpStatus.CREATED,
+      data: worker,
+      message: 'Worker registered successfully.'
+    };
   }
 
-  findAll() {
-    return `This action returns all worker`;
+  async findAll() {
+    this.logger.log('Retrieving all workers');
+    const workers = await this.prismaService.worker.findMany({
+      where: { 
+        deletedAt: null 
+      },
+    });
+    this.logger.log(`Workers retrieved successfully: ${JSON.stringify(workers)}`);
+    return {
+      statusCode: HttpStatus.OK,
+      data: workers,
+      message: 'Workers retrieved successfully.'
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} worker`;
+  async findAllByWorkerGroupId(workerGroupId: number) {
+    this.logger.log(`Finding workers for worker group ID: ${workerGroupId}`);
+    await this.verifyWorkerGroupExists(workerGroupId);
+
+    const workers = await this.prismaService.worker.findMany({
+      where: { 
+        workerGroupId,
+        deletedAt: null 
+      },
+    });
+
+    this.logger.log(`Workers retrieved successfully for worker group ID ${workerGroupId}: ${JSON.stringify(workers)}`);
+    return {
+      statusCode: HttpStatus.OK,
+      data: workers,
+      message: 'Workers retrieved successfully for the specified worker group.'
+    };
   }
 
-  update(id: number, updateWorkerDto: UpdateWorkerDto) {
-    return `This action updates a #${id} worker`;
+  async findOne(workerId: number) {
+    this.logger.log(`Retrieving worker with ID: ${workerId}`);
+    const worker = await this.prismaService.worker.findUnique({
+      where: { workerId, deletedAt: null }
+    });
+
+    if (!worker) {
+      this.logger.error(`Worker with ID: ${workerId} not found`);
+      throw new BadRequestException(`El trabajador con ID ${workerId} no existe.`);
+    }
+
+    this.logger.log(`Worker retrieved successfully: ${JSON.stringify(worker)}`);
+    return {
+      statusCode: HttpStatus.OK,
+      data: worker,
+      message: 'Worker retrieved successfully.'
+    };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} worker`;
+  async update(workerId: number, updateWorkerDto: UpdateWorkerDto) {
+    this.logger.log(`Updating worker with ID: ${workerId}`);
+    await this.findOne(workerId);
+
+    const updatedWorker = await this.prismaService.worker.update({
+      where: { workerId },
+      data: updateWorkerDto
+    });
+
+    if (!updatedWorker) {
+      this.logger.error(`Failed to update worker with ID: ${workerId}`);
+      throw new BadRequestException('Failed to update worker');
+    }
+
+    this.logger.log(`Worker updated successfully: ${JSON.stringify(updatedWorker)}`);
+    return {
+      statusCode: HttpStatus.OK,
+      data: updatedWorker,
+      message: 'Worker updated successfully.'
+    };
+  }
+
+  async remove(workerId: number) {
+    this.logger.log(`Removing worker with ID: ${workerId}`);
+    await this.findOne(workerId);
+
+    const deletedWorker = await this.prismaService.worker.update({
+      where: { workerId },
+      data: { deletedAt: new Date() }
+    });
+
+    if (!deletedWorker) {
+      this.logger.error(`Failed to remove worker with ID: ${workerId}`);
+      throw new BadRequestException('Failed to remove worker');
+    }
+
+    this.logger.log(`Worker removed successfully: ${workerId}`);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Worker removed successfully.',
+      data: deletedWorker
+    };
+  }
+
+  async verifyWorkerGroupExists(workerGroupId: number) {
+    this.logger.log(`Verifying existence of worker group with ID: ${workerGroupId}`);
+    const workerGroup = await this.prismaService.workerGroup.findUnique({
+      where: { workerGroupId }
+    });
+
+    if (!workerGroup) {
+      this.logger.error(`Worker group with ID: ${workerGroupId} does not exist`);
+      throw new BadRequestException(`El grupo de trabajadores con ID ${workerGroupId} no existe.`);
+    }
+
+    this.logger.log(`Worker group with ID: ${workerGroupId} exists`);
+    return workerGroup;
+  }
+
+  async findByPhone(phone: string) {
+    this.logger.log(`Finding worker with phone number: ${phone}`);
+    
+    const workers = await this.prismaService.worker.findMany({
+      where: { 
+        phone,
+        deletedAt: null
+      }
+    });
+
+    return workers;
+  }
+
+  async findByDni(dni: string) {
+    this.logger.log(`Finding worker with DNI: ${dni}`);
+
+    const worker = await this.prismaService.worker.findUnique({
+      where: { 
+        dni,
+        deletedAt: null
+      }
+    });
+
+    return worker;
   }
 }
