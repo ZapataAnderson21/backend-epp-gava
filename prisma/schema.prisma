@@ -57,16 +57,16 @@ enum ProjectStatus {
 }
 
 model Project {
-  projectId       Int           @id @default(autoincrement())
+  projectId       Int            @id @default(autoincrement())
   name            String
-  code            String        @unique
-  description     String        @db.Text @default("No description provided.")
-  status          ProjectStatus @default(active)
+  code            String         @unique
+  description     String         @db.Text @default("No description provided.")
+  status          ProjectStatus  @default(active)
   location        String
   startDate       DateTime?
   endDate         DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   deletedAt       DateTime?
 
   requests        Request[]

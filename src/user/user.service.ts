@@ -18,28 +18,28 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
 
-    this.logger.log(`Validating associated user type: ${createUserDto.user_type_id.toString()}`);
+    this.logger.log(`Validating associated user type: ${createUserDto.userTypeId.toString()}`);
     
     const userType = await this.prisma.userType.findUnique({
-      where: { user_type_id: createUserDto.user_type_id }
+      where: { userTypeId: createUserDto.userTypeId }
     });
 
     if (!userType) {
-      this.logger.warn(`User type not found: ${createUserDto.user_type_id.toString()}`);
-      throw new BadRequestException('User type not found');
+      this.logger.warn(`User type not found: ${createUserDto.userTypeId.toString()}`);
+      throw new BadRequestException('El tipo de usuario proporcionado no es válido.');
     }
 
     const existingUser = await this.findByEmail(createUserDto.email);
 
     if (existingUser) {
       this.logger.warn(`Email already exists: ${createUserDto.email}`);
-      throw new ConflictException('User with this email already exists.');
+      throw new ConflictException('El correo ya está en uso.');
     }
 
     const hashedPassword = await hash(createUserDto.password, 10);
 
 
-    const createUserDtoWithoutUserTypeId = (({ user_type_id, ...o }) => o)(createUserDto);
+    const createUserDtoWithoutUserTypeId = (({ userTypeId, ...o }) => o)(createUserDto);
 
     const data = {
       ...createUserDtoWithoutUserTypeId,
@@ -56,10 +56,10 @@ export class UserService {
       throw new BadRequestException('Failed to create user');
     }
 
-    this.logger.log('Assigning user type to new user', `User ID: ${newUser.user_id}, User Type ID: ${userType.user_type_id}`);
+    this.logger.log('Assigning user type to new user', `User ID: ${newUser.userId}, User Type ID: ${userType.userTypeId}`);
     const payloadUserUserType: CreateUserUserTypeDto = {
-      user_id: newUser.user_id,
-      user_type_id: userType.user_type_id
+      userId: newUser.userId,
+      userTypeId: userType.userTypeId
     }
 
     this.logger.log('Creating user - userType association', JSON.stringify(payloadUserUserType));
@@ -111,7 +111,7 @@ export class UserService {
       throw new UnauthorizedException('La contraseña es incorrecta.');
     }
 
-    const payload = await this.findOne(user.user_id); 
+    const payload = await this.findOne(user.userId); 
 
     const accessToken = this.jwtService.sign(payload);
 
@@ -132,7 +132,11 @@ export class UserService {
   async findAll() {
 
     this.logger.log('Finding all users');
-    const users = await this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany({
+      where: { 
+        deletedAt: null 
+      }
+    });
 
     if (!users || users.length === 0) {
       this.logger.warn('No users found');
@@ -146,7 +150,7 @@ export class UserService {
     this.logger.log(`Found ${users.length} users`);
     const usersWithTypes = await Promise.all(
       users.map(async (user) => {
-        const returnUser = await this.findOne(user.user_id);
+        const returnUser = await this.findOne(user.userId);
         return returnUser.data;
       })
     );
@@ -162,7 +166,10 @@ export class UserService {
     
     this.logger.log(`Finding user with id: ${id}`);
     const user = await this.prisma.user.findUnique({
-      where: { user_id: id },
+      where: { 
+        userId: id,
+        deletedAt: null
+      },
       include: {
         userUserTypes: {
           include: {
@@ -180,9 +187,9 @@ export class UserService {
     const userType = user.userUserTypes[0].userType.name ? user.userUserTypes[0].userType.name : null;
 
     const userWithType = {
-      user_id: user.user_id,
+      userId: user.userId,
       name: user.name,
-      last_name: user.last_name,
+      lastName: user.lastName,
       email: user.email,
       userType: userType
     };
@@ -198,7 +205,10 @@ export class UserService {
   async findByEmail(email: string) {
     this.logger.log(`Finding user by email: ${email}`);
     const foundUser = await this.prisma.user.findUnique({
-      where: { email: email },
+      where: { 
+        email: email,
+        deletedAt: null
+      },
       include: {
         userUserTypes: {
           include: {
@@ -219,7 +229,7 @@ export class UserService {
 
   async updatePassword(resetPasswordDto: ResetPasswordDto) {
 
-    const { accessToken, newPassword } = resetPasswordDto;
+    const { accessToken, password } = resetPasswordDto;
 
     const user = await this.validateResetToken(accessToken);
 
@@ -228,16 +238,16 @@ export class UserService {
       throw new UnauthorizedException('Invalid or expired token');
     }
 
-    const hashedPassword = await hash(newPassword, 10);
+    const hashedPassword = await hash(password, 10);
 
-    this.logger.log(`Updating password for user_id: ${user.user_id}`);
+    this.logger.log(`Updating password for userId: ${user.userId}`);
     const updatedUser = await this.prisma.user.update({
-      where: { user_id: user.user_id },
+      where: { userId: user.userId },
       data: { password: hashedPassword }
     });
 
     if (!updatedUser) {
-      this.logger.error(`Failed to update password for user_id: ${user.user_id}`);
+      this.logger.error(`Failed to update password for userId: ${user.userId}`);
       throw new BadRequestException('Failed to update password');
     }
 
@@ -246,7 +256,7 @@ export class UserService {
       data: { used: true }
     });
 
-    this.logger.log(`Password updated successfully for user_id: ${user.user_id}`);
+    this.logger.log(`Password updated successfully for userId: ${user.userId}`);
 
     return HttpStatus.OK;
   }
@@ -257,7 +267,7 @@ export class UserService {
 
     this.logger.log(`Updating user with id: ${id}`);
     const updatedUser = await this.prisma.user.update({
-      where: { user_id: id },
+      where: { userId: id },
       data: updateUserDto
     });
 
@@ -273,7 +283,10 @@ export class UserService {
   async emailExists(email: string): Promise<string | null> {
     this.logger.log(`Checking if email exists: ${email}`);
     const user = await this.prisma.user.findUnique({
-      where: { email: email }
+      where: { 
+        email: email,
+        deletedAt: null
+      }
     });
     
     if (!user) {
@@ -283,9 +296,9 @@ export class UserService {
 
     const createdToken = await this.prisma.passwordResetToken.create({
       data: {
-        user_id: user.user_id,
+        userId: user.userId,
         token: this.jwtService.sign({ email: user.email }),
-        expires_at: new Date(Date.now() + 3600000)
+        expiresAt: new Date(Date.now() + 3600000)
       }
     });
 
@@ -303,20 +316,14 @@ export class UserService {
       where: { token }
     });
 
-    if (!foundToken || foundToken.used || foundToken.expires_at < new Date()) {
+    if (!foundToken || foundToken.used || foundToken.expiresAt < new Date()) {
       this.logger.warn('Invalid or expired reset token');
       throw new UnauthorizedException('Invalid or expired reset token');
     }
 
     const decoded = this.jwtService.verify(token);
-    const user = await this.prisma.user.findUnique({
-      where: { email: decoded.email }
-    });
-
-    if (!user) {
-      this.logger.warn('User not found for the provided token');
-      throw new UnauthorizedException('User not found for the provided token');
-    }
+    
+    const user = await this.findByEmail(decoded.email);
 
     this.logger.log('User found for the provided token');
     return user;
@@ -326,8 +333,12 @@ export class UserService {
     await this.findOne(id);
 
     this.logger.log(`Removing user with id: ${id}`);
-    const deletedUser = await this.prisma.user.delete({
-      where: { user_id: id }
+
+    const deletedAt = new Date(); 
+
+    const deletedUser = await this.prisma.user.update({
+      where: { userId: id },
+      data: { deletedAt }
     });
 
     if (!deletedUser) {
@@ -348,10 +359,10 @@ export class UserService {
     const decodedToken = this.jwtService.decode(token) as any;
     const expiresAt = new Date(decodedToken.exp * 1000);
 
-    await this.prisma.blacklisted_token.create({
+    await this.prisma.blacklistedToken.create({
       data: {
         token,
-        expires_at: expiresAt
+        expiresAt
       }
     });
 
@@ -365,7 +376,7 @@ export class UserService {
       throw new BadRequestException('Token is required');
     }
 
-    const blacklistedToken = await this.prisma.blacklisted_token.findUnique({
+    const blacklistedToken = await this.prisma.blacklistedToken.findUnique({
       where: { token }
     });
 
