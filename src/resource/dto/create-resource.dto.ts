@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsInt, IsNotEmpty, IsOptional, IsPositive, IsString } from "class-validator";
 
 export class CreateResourceDto {
   @ApiProperty({ example: 'Guantes de nitrilo' }) 
@@ -16,9 +16,12 @@ export class CreateResourceDto {
   @ApiProperty({ example: 1 }) 
   @Type(() => Number) 
   @IsInt()
+  @IsPositive()
+  @IsNotEmpty({ message: 'La categoría es obligatoria.' })
   categoryResourceId!: number;
 
   @ApiProperty({ example: 'par' }) 
-  @IsString() 
+  @IsString()
+  @IsNotEmpty({ message: 'La unidad de medida es obligatoria.' })
   unit!: string;
 }

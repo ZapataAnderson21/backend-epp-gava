@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Length, Min } from "class-validator";
+import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Length, Min } from "class-validator";
 import { PaymentMethod, PurchaseOrderStatus, PurchaseOrderType } from "../enum";
 import { Type } from "class-transformer";
 
@@ -8,11 +8,6 @@ export class CreatePurchaseOrderDto {
   @IsString()
   @IsNotEmpty({ message: 'El código es requerido.' })
   code!: string;
-
-  @ApiProperty({ example: '2025-10-05T15:30:00.000Z' }) 
-  @IsDateString()
-  @IsNotEmpty({ message: 'La fecha de emisión es requerida.' })
-  issuedAt!: string;
 
   @ApiProperty({ example: 'Almacén Central' }) 
   @IsString()
@@ -78,36 +73,25 @@ export class CreatePurchaseOrderDto {
 
   @ApiProperty({ example: 10 }) 
   @Type(() => Number) 
-  @IsInt() 
+  @IsInt()
+  @IsPositive()
+  @IsNotEmpty({ message: 'El ID de proyecto es obligatorio. ' })
   projectId!: number;
 
-  @ApiProperty({ example: 4 })  
-  @Type(() => Number) 
-  @IsInt() 
+  @ApiProperty({ example: 4 })
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  @IsNotEmpty({ message: 'El ID de proveedor es obligatorio. ' })
   supplierId!: number;
 
-  @ApiPropertyOptional({ example: 'Morayma Lloja Fernandez' }) 
-  @IsOptional() 
-  @IsString() 
-  logisticsManager?: string;
-
-  @ApiPropertyOptional({ example: 'Henrry Gayoso Valdera' }) 
-  @IsOptional() 
-  @IsString() 
-  authorizer?: string;
-
-  @ApiPropertyOptional({ example: 'Angi Gonzales Cotrina' }) 
-  @IsOptional() 
-  @IsString() 
-  administrativeManager?: string;
-
   @ApiPropertyOptional({ example: 'Cotización 123' }) 
-  @IsNotEmpty({ message: 'La cotización es requerida.' })
   @IsString()
-  quotation: string;
+  @IsOptional()
+  quotation?: string;
 
-  @ApiPropertyOptional({ enum: PurchaseOrderType, enumName: 'PurchaseOrderType', example: PurchaseOrderType.Materials })
-  @IsOptional() 
-  @IsEnum(PurchaseOrderType) 
-  purchaseOrderType?: PurchaseOrderType;
+  @ApiProperty({ enum: PurchaseOrderType, enumName: 'PurchaseOrderType', example: PurchaseOrderType.Materials })
+  @IsEnum(PurchaseOrderType)
+  @IsNotEmpty({ message: 'El tipo de orden de compra es obligatorio.' })
+  purchaseOrderType!: PurchaseOrderType;
 }

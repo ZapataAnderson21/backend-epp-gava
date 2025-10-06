@@ -5,19 +5,18 @@ import { ProjectStatus } from '../enum/project-status.enum';
 export class CreateProjectDto {
   @ApiProperty({ example: 'Proyecto A' })
   @IsString()
-  @IsNotEmpty({ message: "\nEl nombre del proyecto es requerido." })
+  @IsNotEmpty({ message: "El nombre del proyecto es requerido." })
   name!: string;
 
   @ApiProperty({ example: 'PROY-A' })
   @IsString()
-  @IsNotEmpty({ message: "\nEl código del proyecto es requerido." })
+  @IsNotEmpty({ message: "El código del proyecto es requerido." })
   code!: string;
 
   @ApiPropertyOptional({ example: 'Descripción del proyecto A' })
   @IsString()
   @IsOptional()
   description?: string;
-
   
   @ApiProperty({ enum: ProjectStatus, enumName: 'ProjectStatus', example: ProjectStatus.Active })
   @IsOptional()

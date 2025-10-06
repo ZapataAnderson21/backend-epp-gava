@@ -9,7 +9,7 @@ export class CreateWorkerDto {
   fullName!: string;
 
   @ApiProperty({ example: '12345678' }) 
-  @Length(8, 8)
+  @Length(8, 8, { message: "El DNI debe tener exactamente 8 caracteres." })
   @IsString()
   @IsNotEmpty({ message: 'El DNI es requerido.' })
   dni!: string;

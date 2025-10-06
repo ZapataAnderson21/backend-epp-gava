@@ -19,11 +19,6 @@ export class CreateRequestDto {
   @IsString()
   description?: string;
 
-  @ApiProperty({ enum: RequestType, enumName: 'RequestType', example: RequestType.Epp })
-  @IsEnum(RequestType)
-  @IsNotEmpty({ message: 'El tipo de solicitud es requerido.' })
-  type!: RequestType;
-
   @ApiProperty({ example: 1 })
   @Type(() => Number)
   @IsInt()
@@ -35,4 +30,9 @@ export class CreateRequestDto {
   @IsInt()
   @IsPositive()
   projectId!: number;
+  
+  @ApiProperty({ enum: RequestType, enumName: 'RequestType', example: RequestType.Epp })
+  @IsEnum(RequestType)
+  @IsNotEmpty({ message: 'El tipo de solicitud es requerido.' })
+  type!: RequestType;
 }

@@ -251,18 +251,18 @@ model Emergency {
 }
 
 model Worker {
-  workerId      Int      @id @default(autoincrement())
+  workerId      Int               @id @default(autoincrement())
   fullName      String
-  dni           String   @db.VarChar(8) @unique
+  dni           String            @db.VarChar(8) @unique
   phone         String
-  address       String   @default("No address provided.")
+  address       String            @default("No address provided.")
   workerGroupId Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
   deletedAt     DateTime?
 
-  workerGroup    WorkerGroup    @relation(fields: [workerGroupId], references: [workerGroupId], onDelete: Restrict, onUpdate: Cascade)
-  requestWorkers RequestWorker[]   // <— lado inverso para navegar
+  workerGroup    WorkerGroup      @relation(fields: [workerGroupId], references: [workerGroupId], onDelete: Restrict, onUpdate: Cascade)
+  requestWorkers RequestWorker[]
 
   @@index([dni])
   @@index([workerGroupId])
@@ -292,7 +292,7 @@ model Supplier {
   contactName    String
   phone          String
   email          String           @db.Citext @unique
-  address        String
+  address        String?
   ruc            String           @unique
   accountNumber  String
   bank           String
@@ -366,12 +366,11 @@ enum PurchaseOrderStatus {
 model PurchaseOrder {
   purchaseOrderId         Int                 @id @default(autoincrement())
   code                    String              @unique
-  issuedAt                DateTime
   deliveryLocation        String
   destination             String
   paymentConditions       String
-  generalConditions       String              @db.Text @default("No general conditions specified.")
-  qualityConditions       String              @db.Text @default("No quality conditions specified.")
+  generalConditions       String?              @db.Text @default("No general conditions specified.")
+  qualityConditions       String?              @db.Text @default("No quality conditions specified.")
   paymentMethod           PaymentMethod
   saleAmount              Decimal             @db.Decimal(18,2)
   purchaseAmount          Decimal             @db.Decimal(18,2)

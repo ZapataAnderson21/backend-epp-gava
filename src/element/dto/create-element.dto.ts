@@ -8,13 +8,13 @@ export class CreateElementDto {
   @IsNotEmpty({ message: 'El nombre no puede estar vacío. ' })
   name: string;
 
-  @ApiProperty({ enum: ElementType, enumName: 'ElementType', example: ElementType.Epp })
-  @IsEnum(ElementType)
-  @IsNotEmpty({ message: 'El tipo de elemento es requerido.' })
-  type!: ElementType;
-
   @ApiPropertyOptional({ example: 'No description provided.' })
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiProperty({ enum: ElementType, enumName: 'ElementType', example: ElementType.Epp })
+  @IsEnum(ElementType)
+  @IsNotEmpty({ message: 'El tipo de elemento es requerido.' })
+  type!: ElementType;
 }

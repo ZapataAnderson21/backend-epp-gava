@@ -12,17 +12,17 @@ export class CreateRequestWorkerDto {
   @ApiProperty({ example: '42' })
   @IsString()
   @IsOptional()
-  shoeSize: string;
+  shoeSize?: string;
 
   @ApiProperty({ example: 'M' }) 
   @IsString()
   @IsOptional()
-  pantsSize: string;
+  pantsSize?: string;
 
   @ApiProperty({ example: 'L' }) 
   @IsString()
   @IsOptional()
-  shirtSize: string;
+  shirtSize?: string;
 
   @ApiProperty({ example: 55 })  
   @Type(() => Number) 

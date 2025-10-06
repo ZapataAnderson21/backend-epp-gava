@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsInt, IsNotEmpty, IsOptional, IsPositive, IsString } from "class-validator";
 
 export class CreateWorkerGroupDto {
   @ApiProperty({ example: 'Operarios' }) 
@@ -17,5 +17,6 @@ export class CreateWorkerGroupDto {
   @IsOptional() 
   @Type(() => Number) 
   @IsInt() 
+  @IsPositive()
   parentGroupId?: number;
 }

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Length, Matches, Min, MinLength, } from "class-validator";
+import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Length, Matches, Min, MinLength, } from "class-validator";
 
 export class CreateUserDto {
   @ApiProperty({ example: 'Juan' })
@@ -35,6 +35,7 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsInt()
+  @IsPositive()
   @IsNotEmpty({ message: "\nEl tipo de usuario (rol) es requerido." })
   userTypeId!: number;
 }
