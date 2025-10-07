@@ -9,18 +9,18 @@ datasource db {
 }
 
 model User {
-  userId              Int                 @id @default(autoincrement())
+  userId              Int                  @id @default(autoincrement())
   name                String
   lastName            String
-  email               String              @db.Citext @unique
+  email               String               @db.Citext @unique
   password            String
-  phone               String?             @unique
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
+  phone               String?              @unique
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
   deletedAt           DateTime?
   
   blacklistedTokens   BlacklistedToken[]
-  responses           RequestResponse[]   @relation("UserResponses")
+  responses           RequestResponse[]     @relation("UserResponses")
   requests            Request[]
   userUserTypes       UserUserType[]
   passwordResetTokens PasswordResetToken[]
@@ -32,19 +32,19 @@ model User {
 }
 
 model UserType {
-  userTypeId   Int      @id @default(autoincrement())
-  name         String   @unique
+  userTypeId    Int      @id @default(autoincrement())
+  name          String   @unique
 
   userUserTypes UserUserType[]
 }
 
 model UserUserType {
-  userUserTypeId Int  @id @default(autoincrement())
+  userUserTypeId Int     @id @default(autoincrement())
   userId         Int
   userTypeId     Int
 
-  user     User     @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  userType UserType @relation(fields: [userTypeId], references: [userTypeId], onDelete: Restrict, onUpdate: Cascade)
+  user          User     @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  userType      UserType @relation(fields: [userTypeId], references: [userTypeId], onDelete: Restrict, onUpdate: Cascade)
 
   @@unique([userId, userTypeId])
   @@index([userTypeId])
@@ -57,16 +57,16 @@ enum ProjectStatus {
 }
 
 model Project {
-  projectId       Int            @id @default(autoincrement())
+  projectId       Int             @id @default(autoincrement())
   name            String
-  code            String         @unique
-  description     String         @db.Text @default("No description provided.")
-  status          ProjectStatus  @default(active)
+  code            String          @unique
+  description     String          @db.Text @default("No description provided.")
+  status          ProjectStatus   @default(active)
   location        String
   startDate       DateTime?
   endDate         DateTime?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
   deletedAt       DateTime?
 
   requests        Request[]
@@ -87,12 +87,12 @@ enum ElementType {
 }
 
 model Element {
-  elementId       Int                  @id @default(autoincrement())
+  elementId       Int               @id @default(autoincrement())
   name            String
-  description     String               @db.Text @default("No description provided.")
+  description     String            @db.Text @default("No description provided.")
   type            ElementType
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
   deletedAt       DateTime?
 
   elementRequests ElementRequest[]
@@ -143,17 +143,17 @@ model Request {
 }
 
 model RequestWorker {
-  requestWorkerId Int      @id @default(autoincrement())
+  requestWorkerId Int       @id @default(autoincrement())
   requestId       Int
   shoeSize        String?
   pantsSize       String?
   shirtSize       String?
   workerId        Int
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  request Request @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
-  worker  Worker  @relation(fields: [workerId],  references: [workerId],  onDelete: Restrict, onUpdate: Cascade)
+  request         Request   @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
+  worker          Worker    @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
 
   @@unique([requestId, workerId])
   @@index([requestId])
@@ -179,15 +179,15 @@ model ElementRequest {
 }
 
 model RequestResponse {
-  requestResponseId Int      @id @default(autoincrement())
-  responderUserId   Int
-  requestId         Int
-  description       String?  @db.Text
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  requestResponseId       Int                        @id @default(autoincrement())
+  responderUserId         Int
+  requestId               Int
+  description             String?                    @db.Text
+  createdAt               DateTime                   @default(now())
+  updatedAt               DateTime                   @updatedAt
 
-  request   Request @relation(fields: [requestId], references: [requestId], onDelete: Cascade,  onUpdate: Cascade)
-  responder User    @relation("UserResponses", fields: [responderUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  request                 Request                    @relation(fields: [requestId], references: [requestId], onDelete: Cascade,  onUpdate: Cascade)
+  responder               User                       @relation("UserResponses", fields: [responderUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
   elementRequestResponses ElementRequestResponse[]
 
   @@index([responderUserId])
@@ -202,8 +202,8 @@ model ElementRequestResponse {
   createdAt                DateTime          @default(now())
   updatedAt                DateTime          @updatedAt
 
-  elementRequest  ElementRequest  @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Cascade, onUpdate: Cascade)
-  requestResponse RequestResponse @relation(fields: [requestResponseId], references: [requestResponseId], onDelete: Cascade, onUpdate: Cascade)
+  elementRequest           ElementRequest    @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Cascade, onUpdate: Cascade)
+  requestResponse          RequestResponse   @relation(fields: [requestResponseId], references: [requestResponseId], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([elementRequestId])
   @@index([requestResponseId])
@@ -226,8 +226,8 @@ model Emergency {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
-  user    User    @relation(fields: [userId],    references: [userId],    onDelete: Restrict, onUpdate: Cascade)
-  project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  user        User             @relation(fields: [userId],    references: [userId],    onDelete: Restrict, onUpdate: Cascade)
+  project     Project          @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([status])
   @@index([userId])
@@ -236,15 +236,15 @@ model Emergency {
 }
 
 model Worker {
-  workerId      Int               @id @default(autoincrement())
-  fullName      String
-  dni           String            @db.VarChar(8) @unique
-  phone         String?           @unique
-  address       String?           @default("No address provided.")
-  workerGroupId Int
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-  deletedAt     DateTime?
+  workerId       Int              @id @default(autoincrement())
+  fullName       String
+  dni            String           @db.VarChar(8) @unique
+  phone          String?          @unique
+  address        String?          @default("No address provided.")
+  workerGroupId  Int
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  deletedAt      DateTime?
 
   workerGroup    WorkerGroup      @relation(fields: [workerGroupId], references: [workerGroupId], onDelete: Restrict, onUpdate: Cascade)
   requestWorkers RequestWorker[]
@@ -255,16 +255,16 @@ model Worker {
 }
 
 model WorkerGroup {
-  workerGroupId  Int        @id @default(autoincrement())
+  workerGroupId  Int           @id @default(autoincrement())
   name           String
-  description    String?    @db.Text
+  description    String?       @db.Text
   parentGroupId  Int?
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 
-  parentGroup WorkerGroup?  @relation("WorkerGroupToWorkerGroup", fields: [parentGroupId], references: [workerGroupId], onDelete: Restrict, onUpdate: Cascade)
-  subGroups   WorkerGroup[] @relation("WorkerGroupToWorkerGroup")
-  workers     Worker[]
+  parentGroup    WorkerGroup?  @relation("WorkerGroupToWorkerGroup", fields: [parentGroupId], references: [workerGroupId], onDelete: Restrict, onUpdate: Cascade)
+  subGroups      WorkerGroup[] @relation("WorkerGroupToWorkerGroup")
+  workers        Worker[]
 
   @@unique([parentGroupId, name])
   @@index([parentGroupId])
@@ -273,7 +273,7 @@ model WorkerGroup {
 
 model Supplier {
   supplierId     Int              @id @default(autoincrement())
-  name           String
+  name           String           @unique
   contactName    String
   phone          String
   email          String           @db.Citext @unique
@@ -284,11 +284,13 @@ model Supplier {
   currency       Currency         @default(PEN)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
+  deletedAt      DateTime?
 
   purchaseOrders PurchaseOrder[]
 
   @@index([name])
   @@index([createdAt])
+  @@index([deletedAt])
 }
 
 model CategoryResource {
@@ -299,9 +301,9 @@ model CategoryResource {
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
 
-  parentCategory CategoryResource?  @relation("CategoryResourceToCategoryResource", fields: [parentCategoryId], references: [categoryResourceId], onDelete: Restrict, onUpdate: Cascade)
-  subCategories  CategoryResource[] @relation("CategoryResourceToCategoryResource")
-  resources      Resource[]
+  parentCategory     CategoryResource?  @relation("CategoryResourceToCategoryResource", fields: [parentCategoryId], references: [categoryResourceId], onDelete: Restrict, onUpdate: Cascade)
+  subCategories      CategoryResource[] @relation("CategoryResourceToCategoryResource")
+  resources          Resource[]
 
   @@unique([parentCategoryId, name])
   @@index([parentCategoryId])
@@ -309,13 +311,14 @@ model CategoryResource {
 }
 
 model Resource {
-  resourceId            Int                       @id @default(autoincrement())
-  name                  String
-  description           String?                   @db.Text
-  categoryResourceId    Int
-  unit                  String
-  createdAt             DateTime                  @default(now())
-  updatedAt             DateTime                  @updatedAt
+  resourceId             Int                      @id @default(autoincrement())
+  name                   String
+  description            String?                  @db.Text
+  categoryResourceId     Int
+  unit                   String
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  deletedAt              DateTime?
 
   categoryResource       CategoryResource         @relation(fields: [categoryResourceId], references: [categoryResourceId], onDelete: Restrict, onUpdate: Cascade)
   resourcePurchaseOrders ResourcePurchaseOrder[]
@@ -323,6 +326,7 @@ model Resource {
   @@unique([categoryResourceId, name])
   @@index([categoryResourceId])
   @@index([name])
+  @@index([deletedAt])
 }
 
 enum PurchaseOrderType {
@@ -349,33 +353,33 @@ enum PurchaseOrderStatus {
 }
 
 model PurchaseOrder {
-  purchaseOrderId         Int                 @id @default(autoincrement())
-  code                    String              @unique
+  purchaseOrderId         Int                     @id @default(autoincrement())
+  code                    String                  @unique
   deliveryLocation        String
   destination             String
   paymentConditions       String
-  generalConditions       String?              @db.Text @default("No general conditions specified.")
-  qualityConditions       String?              @db.Text @default("No quality conditions specified.")
+  generalConditions       String?                 @db.Text @default("No general conditions specified.")
+  qualityConditions       String?                 @db.Text @default("No quality conditions specified.")
   paymentMethod           PaymentMethod
-  saleAmount              Decimal             @db.Decimal(18,2)
-  purchaseAmount          Decimal             @db.Decimal(18,2)
-  status                  PurchaseOrderStatus @default(pending)
+  saleAmount              Decimal                 @db.Decimal(18,2)
+  purchaseAmount          Decimal                 @db.Decimal(18,2)
+  status                  PurchaseOrderStatus     @default(pending)
   carePerson              String
-  dniCarePerson           String              @db.VarChar(8)
-  observations            String              @db.Text @default("No observations provided.")
+  dniCarePerson           String                  @db.VarChar(8)
+  observations            String                  @db.Text @default("No observations provided.")
   projectId               Int
   supplierId              Int
-  logisticsManager        String              @default("Morayma Lloja Fernandez")
-  authorizer              String              @default("Henrry Gayoso Valdera")
-  administrativeManager   String              @default("Angi Gonzales Cotrina")
-  quotation               String              @default("No quotation provided.")
-  purchaseOrderType       PurchaseOrderType   @default(materials)
-  createdAt               DateTime            @default(now())
-  updatedAt               DateTime            @updatedAt
+  logisticsManager        String?                 @default("Morayma Lloja Fernandez")
+  authorizer              String?                 @default("Henrry Gayoso Valdera")
+  administrativeManager   String?                 @default("Angi Gonzales Cotrina")
+  quotation               String                  @default("No quotation provided.")
+  purchaseOrderType       PurchaseOrderType       @default(materials)
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt
 
-  project   Project  @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  supplier  Supplier @relation(fields: [supplierId], references: [supplierId], onDelete: Restrict, onUpdate: Cascade)
-  resources ResourcePurchaseOrder[]
+  project                 Project                 @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  supplier                Supplier                @relation(fields: [supplierId], references: [supplierId], onDelete: Restrict, onUpdate: Cascade)
+  resources               ResourcePurchaseOrder[]
 
   @@index([status])
   @@index([projectId])
@@ -393,8 +397,8 @@ model ResourcePurchaseOrder {
   createdAt               DateTime      @default(now())
   updatedAt               DateTime      @updatedAt
 
-  resource       Resource      @relation(fields: [resourceId], references: [resourceId],           onDelete: Restrict, onUpdate: Cascade)
-  purchaseOrder  PurchaseOrder @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: Cascade,  onUpdate: Cascade)
+  resource                Resource      @relation(fields: [resourceId], references: [resourceId],           onDelete: Restrict, onUpdate: Cascade)
+  purchaseOrder           PurchaseOrder @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: Cascade,  onUpdate: Cascade)
 
   @@unique([purchaseOrderId, resourceId])
   @@index([resourceId])
@@ -410,7 +414,7 @@ model PettyCash {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  project       Project  @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([projectId])
   @@index([createdAt])
@@ -432,28 +436,28 @@ model ServiceSale {
 }
 
 model PasswordResetToken {
-  id         Int       @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   userId     Int
-  token      String    @unique
+  token      String     @unique
   expiresAt  DateTime
-  used       Boolean   @default(false)
-  createdAt  DateTime  @default(now())
+  used       Boolean    @default(false)
+  createdAt  DateTime   @default(now())
   usedAt     DateTime?
 
-  user User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  user       User       @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([expiresAt])
   @@index([userId])
 }
 
 model BlacklistedToken {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
   expiresAt DateTime
   userId    Int?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 
-  user User? @relation(fields: [userId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  user      User?     @relation(fields: [userId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
 
   @@index([expiresAt])
 }
