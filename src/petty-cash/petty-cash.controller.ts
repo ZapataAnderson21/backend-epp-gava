@@ -1,34 +1,42 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe } from '@nestjs/common';
 import { PettyCashService } from './petty-cash.service';
 import { CreatePettyCashDto } from './dto/create-petty-cash.dto';
 import { UpdatePettyCashDto } from './dto/update-petty-cash.dto';
 
 @Controller('petty-cash')
 export class PettyCashController {
+
+  private readonly logger = new Logger('PettyCashController');
+
   constructor(private readonly pettyCashService: PettyCashService) {}
 
   @Post()
   create(@Body() createPettyCashDto: CreatePettyCashDto) {
+    this.logger.log(`Creating petty cash: ${JSON.stringify(createPettyCashDto)}`);
     return this.pettyCashService.create(createPettyCashDto);
   }
 
   @Get()
   findAll() {
+    this.logger.log('Fetching all petty cash entries');
     return this.pettyCashService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pettyCashService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    this.logger.log(`Finding petty cash with ID: ${id}`);
+    return this.pettyCashService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePettyCashDto: UpdatePettyCashDto) {
-    return this.pettyCashService.update(+id, updatePettyCashDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updatePettyCashDto: UpdatePettyCashDto) {
+    this.logger.log(`Updating petty cash with ID: ${id}`);
+    return this.pettyCashService.update(id, updatePettyCashDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pettyCashService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    this.logger.log(`Removing petty cash with ID: ${id}`);
+    return this.pettyCashService.remove(id);
   }
 }

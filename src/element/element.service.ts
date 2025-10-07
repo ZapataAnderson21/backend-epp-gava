@@ -162,4 +162,24 @@ export class ElementService {
       data: updatedElement
     };
   }
+
+  async remove(elementId: number) {
+    this.logger.log(`Deleting element with ID: ${elementId}`);
+    const deletedElement = await this.prismaService.element.update({
+      where: { elementId },
+      data: { deletedAt: new Date() }
+    });
+
+    if (!deletedElement) {
+      this.logger.error(`Element deletion failed: ${elementId}`);
+      throw new BadRequestException('Element deletion failed');
+    }
+
+    this.logger.log(`Element deleted successfully: ${JSON.stringify(deletedElement)}`);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'El elemento ha sido eliminado exitosamente.',
+      data: deletedElement
+    };
+  }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Logger, ParseIntPipe } from '@nestjs/common';
 import { UserTypeService } from './user_type.service';
 import { CreateUserTypeDto } from './dto/create-user_type.dto';
 import { Public } from 'src/user/jwt/public.decorator';
@@ -6,30 +6,27 @@ import { ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @Controller('user-type')
 export class UserTypeController {
+
+  private readonly logger = new Logger('UserTypeController');
+
   constructor(private readonly userTypeService: UserTypeService) {}
 
   @Public()
   @Post()
-  @ApiBody({ type: CreateUserTypeDto })
-  @ApiResponse({ status: 201, description: 'User type created successfully' })
-  @ApiResponse({ status: 400, description: 'User type already exists' })
-  @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async create(@Body() createUserTypeDto: CreateUserTypeDto) {
+    this.logger.log(`Creating user type: ${JSON.stringify(createUserTypeDto)}`);
     return await this.userTypeService.create(createUserTypeDto);
   }
 
   @Get()
-  @ApiResponse({ status: 200, description: 'User types retrieved successfully' })
-  @ApiResponse({ status: 404, description: 'No user types found' })
-  @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async findAll() {
+    this.logger.log('Fetching all user types');
     return await this.userTypeService.findAll();
   }
 
   @Get(':id')
-  @ApiResponse({ status: 200, description: 'User type found' })
-  @ApiResponse({ status: 404, description: 'User type not found' })
-  async findOne(@Param('id') id: string) {
-    return await this.userTypeService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    this.logger.log(`Fetching user type with ID: ${id}`);
+    return await this.userTypeService.findOne(id);
   }
 }

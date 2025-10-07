@@ -16,7 +16,7 @@ export class CategoryResourceService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
-  /* ---------------- CREATE ---------------- */
+  
   async create(createDto: CreateCategoryResourceDto) {
     this.logger.log(
       `Creating categoryResource with: ${JSON.stringify(createDto)}`
@@ -62,8 +62,8 @@ export class CategoryResourceService {
       data: category,
     };
   }
+  
 
-  /* ---------------- FIND ALL ---------------- */
   async findAll() {
     this.logger.log('Fetching all categoryResources');
     const list = await this.prismaService.categoryResource.findMany({
@@ -76,8 +76,8 @@ export class CategoryResourceService {
       data: list,
     };
   }
+  
 
-  /* ---------------- FIND ONE ---------------- */
   async findOne(categoryResourceId: number) {
     this.logger.log(`Fetching categoryResource id=${categoryResourceId}`);
 
@@ -101,7 +101,7 @@ export class CategoryResourceService {
     };
   }
 
-  /* ---------------- UPDATE ---------------- */
+
   async update(
     categoryResourceId: number,
     updateDto: UpdateCategoryResourceDto,

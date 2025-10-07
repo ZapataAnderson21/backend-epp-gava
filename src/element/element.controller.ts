@@ -1,59 +1,49 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Logger, Delete } from '@nestjs/common';
 import { ElementService } from './element.service';
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
-import { Public } from 'src/user/jwt/public.decorator';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ElementType } from './enum/element-type.enum';
 
 @Controller('element')
 export class ElementController {
+
+  private readonly logger = new Logger('ElementController');
+
   constructor(private readonly elementService: ElementService) {}
 
-  @Public()
-  @ApiBody({ type: CreateElementDto })
-  @ApiResponse({ status: HttpStatus.CREATED, description: 'Element created successfully' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal Server Error' })
   @Post()
   async create(@Body() createElementDto: CreateElementDto) {
+    this.logger.log(`Creating element: ${JSON.stringify(createElementDto)}`);
     return await this.elementService.create(createElementDto);
-      
   }
 
-  @Public()
-  @ApiResponse({ status: HttpStatus.OK, description: 'Elements retrieved successfully' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No elements found' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal Server Error' })
   @Get()
   async findAll() {
+    this.logger.log('Fetching all elements');
     return await this.elementService.findAll();
   }
 
-  @Public()
-  @ApiResponse({ status: HttpStatus.OK, description: 'Element retrieved successfully' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Element not found' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal Server Error' })
   @Get(':id')
   async findOne(@Param('id') id: number) {
+    this.logger.log(`Fetching element with ID: ${id}`);
     return await this.elementService.findOne(id);
   }
 
-  @Public()
-  @ApiResponse({ status: HttpStatus.OK, description: 'Elements by type retrieved successfully' })
-  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid type specified' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No elements found for the specified type' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal Server Error' })
   @Get('type/:type')
-  async findAllByType(@Param('type') type: string) {
+  async findAllByType(@Param('type') type: ElementType) {
+    this.logger.log(`Fetching elements with type: ${type}`);
     return await this.elementService.findAllByType(type);
   }
-
-  @Public()
-  @ApiBody({ type: UpdateElementDto })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Element updated successfully' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Element not found' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal Server Error' })
+  
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateElementDto: UpdateElementDto) {
+    this.logger.log(`Updating element with ID: ${id}`);
     return await this.elementService.update(+id, updateElementDto);
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    this.logger.log(`Deleting element with ID: ${id}`);
+    return await this.elementService.remove(+id);
   }
 }

@@ -29,7 +29,7 @@ export class ServiceSaleService {
     }
   }
 
-  /* ---------- CREATE ---------- */
+  
   async create(dto: CreateServiceSaleDto) {
     this.logger.log(`Creating service sale: ${JSON.stringify(dto)}`);
 
@@ -53,7 +53,7 @@ export class ServiceSaleService {
     };
   }
 
-  /* ---------- FIND ALL ---------- */
+  
   async findAll() {
     this.logger.log('Fetching service sales list');
     const list = await this.prisma.serviceSale.findMany({
@@ -66,7 +66,7 @@ export class ServiceSaleService {
     };
   }
 
-  /* ---------- FIND ONE ---------- */
+  
   async findOne(serviceSaleId: number) {
     this.logger.log(`Fetching service sale id=${serviceSaleId}`);
     const row = await this.prisma.serviceSale.findUnique({
@@ -87,7 +87,7 @@ export class ServiceSaleService {
     };
   }
 
-  /* ---------- UPDATE ---------- */
+  
   async update(serviceSaleId: number, dto: UpdateServiceSaleDto) {
     this.logger.log(
       `Updating service sale id=${serviceSaleId} payload=${JSON.stringify(dto)}`
@@ -111,7 +111,7 @@ export class ServiceSaleService {
     };
   }
 
-  /* ---------- DELETE (hard) ---------- */
+
   async remove(serviceSaleId: number) {
     this.logger.log(`Deleting service sale id=${serviceSaleId}`);
 

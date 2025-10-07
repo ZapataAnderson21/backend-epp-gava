@@ -8,16 +8,11 @@ import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 import * as fs from 'fs';
-import { Public } from 'src/user/jwt/public.decorator';
 
 @Controller('emergency')
 export class EmergencyController {
   constructor(private readonly emergencyService: EmergencyService) {}
 
-  @ApiBody({ type: CreateEmergencyDto })
-  @ApiResponse({ status: HttpStatus.CREATED, description: 'Emergency created successfully.' })
-  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid input data.' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
   @Post()
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
@@ -37,54 +32,33 @@ export class EmergencyController {
     return await this.emergencyService.create({
       title: body.title,
       description: body.description,
-      user_id: Number(body.user_id),
-      project_id: Number(body.project_id),
+      userId: Number(body.userId),
+      projectId: Number(body.projectId),
       image: file.filename
     });
   }
 
   @Get()
-  @ApiResponse({ status: HttpStatus.OK, description: 'List of all emergencies.' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No emergencies found.' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized access.' })
   async findAll() {
     return await this.emergencyService.findAll();
   }
 
   @Get(':id')
-  @ApiResponse({ status: HttpStatus.OK, description: 'Emergency found.' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Emergency not found.' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized access.' })
   async findOne(@Param('id') id: string) {
     return await this.emergencyService.findOne(+id);
   }
 
   @Patch(':id')
-  @ApiBody({ type: UpdateEmergencyDto })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Emergency updated successfully.' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Emergency not found.' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized access.' })
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateEmergencyDto: UpdateEmergencyDto) {
     return await this.emergencyService.update(id, updateEmergencyDto);
   }
 
   @Get('project/:project_id')
-  @ApiResponse({ status: HttpStatus.OK, description: 'List of emergencies for the project.' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No emergencies found for the project.' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized access.' })
   async getAllByProjectId(@Param('project_id', ParseIntPipe) project_id: number) {
     return await this.emergencyService.getAllByProjectId(project_id);
   }
   
   @Get('user/:user_id')
-  @ApiResponse({ status: HttpStatus.OK, description: 'List of emergencies for the user.' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'No emergencies found for the user.' })
-  @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Internal server error.' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized access.' })
   async getAllByUserId(@Param('user_id') user_id: string) {
     return await this.emergencyService.getAllByUserId(+user_id);
   }

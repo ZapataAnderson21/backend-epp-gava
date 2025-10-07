@@ -80,10 +80,10 @@ export class ElementRequestResponseService {
     };
   }
 
-  async update(id: number, updateElementRequestResponseDto: UpdateElementRequestResponseDto) {
-    this.logger.log(`Updating ElementRequestResponse with id: ${id}`);
+  async update(elementRequestResponseId: number, updateElementRequestResponseDto: UpdateElementRequestResponseDto) {
+    this.logger.log(`Updating ElementRequestResponse with id: ${elementRequestResponseId}`);
     const updatedElementRequestResponse = await this.prismaService.elementRequestResponse.update({
-      where: { elementRequestResponseId: id },
+      where: { elementRequestResponseId },
       data: updateElementRequestResponseDto,
       include: {
         elementRequest: true,
@@ -92,8 +92,8 @@ export class ElementRequestResponseService {
     });
 
     if (!updatedElementRequestResponse) {
-      this.logger.error(`Failed to update ElementRequestResponse with id: ${id}`);
-      throw new BadRequestException(`Failed to update ElementRequestResponse with id: ${id}`);
+      this.logger.error(`Failed to update ElementRequestResponse with id: ${elementRequestResponseId}`);
+      throw new BadRequestException(`Failed to update ElementRequestResponse with id: ${elementRequestResponseId}`);
     }
 
     this.logger.log(`ElementRequestResponse updated successfully: ${JSON.stringify(updatedElementRequestResponse)}`);

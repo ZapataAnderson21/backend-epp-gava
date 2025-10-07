@@ -202,4 +202,24 @@ export class ProjectService {
       data: updatedProject
     }
   }
+
+  async remove(projectId: number) {
+    this.logger.log(`Deleting project with ID: ${projectId}`);
+    const deletedProject = await this.prismaService.project.update({
+      where: { projectId },
+      data: { deletedAt: new Date() }
+    });
+
+    if (!deletedProject) {
+      this.logger.warn(`Project with ID ${projectId} not found`);
+      throw new NotFoundException('No se ha encontrado el proyecto.');
+    }
+
+    this.logger.log(`Project with ID ${projectId} deleted successfully: ${JSON.stringify(deletedProject)}`);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'El proyecto ha sido eliminado exitosamente.',
+      data: deletedProject
+    };
+  }
 }

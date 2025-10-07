@@ -130,6 +130,7 @@ export class ElementRequestService {
       data: deletedElementRequest
     };
   }
+  
 
   async requestExistsAndIsDraft(requestId: number) {
     const request = await this.prismaService.request.findUnique({
