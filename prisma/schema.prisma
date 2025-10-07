@@ -406,30 +406,30 @@ model ResourcePurchaseOrder {
 }
 
 model PettyCash {
-  pettyCashId   Int      @id @default(autoincrement())
+  pettyCashId   Int       @id @default(autoincrement())
   projectId     Int
   resourceName  String
-  amount        Decimal  @db.Decimal(18,2)
-  description   String   @db.Text @default("No description provided")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  amount        Decimal   @db.Decimal(18,2)
+  description   String    @db.Text @default("No description provided")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  project       Project  @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  project       Project   @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([projectId])
   @@index([createdAt])
 }
 
 model ServiceSale {
-  serviceSaleId Int      @id @default(autoincrement())
+  serviceSaleId Int       @id @default(autoincrement())
   projectId     Int
   serviceName   String
-  amount        Decimal  @db.Decimal(18,2)
-  description   String   @db.Text @default("No description provided")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  amount        Decimal   @db.Decimal(18,2)
+  description   String    @db.Text @default("No description provided")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  project       Project   @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([projectId])
   @@index([createdAt])
