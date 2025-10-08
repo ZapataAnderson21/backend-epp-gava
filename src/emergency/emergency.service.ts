@@ -52,7 +52,7 @@ export class EmergencyService {
       return {
         statusCode: HttpStatus.NOT_FOUND,
         data: [],
-        message: 'No emergencies found.'
+        message: 'No se encontraron emergencias.'
       };
     }
 

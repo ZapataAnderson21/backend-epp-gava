@@ -36,8 +36,8 @@ export class CreateSupplierDto {
 
   @ApiProperty({ example: '123-456-7890' }) 
   @IsString()
-  @MinLength(13)
-  @MaxLength(20)
+  @MinLength(13, { message: 'El número de cuenta debe tener al menos 13 dígitos.' })
+  @MaxLength(20, { message: 'El número de cuenta debe tener como máximo 20 dígitos.' })
   @IsNumberString({ no_symbols: true }, { message: 'El número de cuenta debe contener solo dígitos.' })
   accountNumber!: string;
 

@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger 
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Currency, CurrencyLabelEs } from './enum/currency.enum';
 
 @Injectable()
 export class SupplierService {
@@ -40,16 +41,21 @@ export class SupplierService {
       },
     });
 
-    if(!suppliers) {
+    if(!suppliers || suppliers.length === 0) {
       this.logger.error('Failed to fetch suppliers');
       throw new BadRequestException('No se pudieron obtener los proveedores.');
     }
+
+    const processedSuppliers = suppliers.map(supplier => ({
+      ...supplier,
+      currency: CurrencyLabelEs[supplier.currency] || supplier.currency,
+    }));
 
     this.logger.log(`Fetched ${suppliers.length} suppliers`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Proveedores obtenidos exitosamente.',
-      data: suppliers,
+      data: processedSuppliers,
     };
   }
 

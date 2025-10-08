@@ -65,8 +65,17 @@ export class ResourceService {
     this.logger.log('Fetching resources (active only)');
     const list = await this.prisma.resource.findMany({
       where: { deletedAt: null },
+      include: { categoryResource: true },
       orderBy: [{ categoryResourceId: 'asc' }, { name: 'asc' }],
     });
+
+    if(!list || list.length === 0){
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se han encontrado recursos.',
+        data: [],
+      };
+    }
 
     return {
       statusCode: HttpStatus.OK,
@@ -79,7 +88,13 @@ export class ResourceService {
   async findOne(resourceId: number) {
     this.logger.log(`Fetching resource id=${resourceId}`);
     const resource = await this.prisma.resource.findFirst({
-      where: { resourceId, deletedAt: null }, // usar findFirst para filtrar por deletedAt
+      where: { 
+        resourceId, 
+        deletedAt: null
+      },
+      include: { 
+        categoryResource: true
+      },
     });
     if (!resource) {
       this.logger.warn(`Resource id=${resourceId} not found`);

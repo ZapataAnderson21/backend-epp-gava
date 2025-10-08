@@ -70,6 +70,14 @@ export class CategoryResourceService {
       orderBy: [{ parentCategoryId: 'asc' }, { name: 'asc' }],
     });
 
+    if(!list || list.length === 0){
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se han encontrado categorías.',
+        data: [],
+      };
+    }
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Categorías obtenidas exitosamente.',

@@ -101,7 +101,7 @@ export class ElementService {
 
     this.logger.log(`Retrieving elements with type: ${type}`);
     if (!Object.values(ElementType).includes(type)){
-      throw new BadRequestException('Invalid type specified');
+      throw new BadRequestException('Selecciona un tipo válido.');
     }
 
     this.logger.log(`Finding elements of type: ${type}`);
