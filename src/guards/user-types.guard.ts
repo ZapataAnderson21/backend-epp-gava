@@ -32,7 +32,7 @@ export class UserTypesGuard implements CanActivate {
     // 3. Consultar la base de datos para obtener los tipos del usuario
     const userId = user.userId;
     const userTypeLinks = await this.prisma.userUserType.findMany({
-      where: { user_id: userId },
+      where: { userId },
       include: { userType: true }  // incluir el objeto UserType relacionado
     });
     if (!userTypeLinks || userTypeLinks.length === 0) {

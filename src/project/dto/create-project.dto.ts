@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ProjectStatus } from '../enum/project-status.enum';
+import { Type } from 'class-transformer';
 
 export class CreateProjectDto {
   @ApiProperty({ example: 'Proyecto A' })
@@ -29,11 +30,13 @@ export class CreateProjectDto {
 
   @ApiPropertyOptional({ example: '2025-10-05T00:00:00.000Z' })
   @IsOptional()
-  @IsDateString()
+  @IsDate()
+  @Type(() => Date) 
   startDate?: string;
   
   @ApiPropertyOptional({ example: '2025-12-31T00:00:00.000Z' })
   @IsOptional()
-  @IsDateString()
+  @IsDate()
+  @Type(() => Date) 
   endDate?: string;
 }

@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
+import { RequestType } from 'src/request/enum/request-type.enum';
 
 @Injectable()
 export class MailService {
@@ -51,10 +52,10 @@ export class MailService {
     };
   }
 
-  async findRequestById(request_id: number) {
-    this.logger.log(`Searching for request with ID: ${request_id}`);
+  async findRequestById(requestId: number) {
+    this.logger.log(`Searching for request with ID: ${requestId}`);
     const request = await this.prismaService.request.findUnique({
-      where: { request_id },
+      where: { requestId },
       include: {
         project: true,
         user: {
@@ -70,16 +71,16 @@ export class MailService {
     });
 
     if (!request) {
-      this.logger.warn(`Request with ID: ${request_id} not found`);
+      this.logger.warn(`Request with ID: ${requestId} not found`);
       throw new NotFoundException('Request not found');
     }
 
-    this.logger.log(`Request with ID: ${request_id} found successfully`);
+    this.logger.log(`Request with ID: ${requestId} found successfully`);
     return request;
   }
 
-  async sendRequestToLogistics(request_id: number, passwordCPanel: string): Promise<{ success: boolean; messageId: string; response: string }> {
-    const request = await this.findRequestById(request_id);
+  async sendRequestToLogistics(requestId: number, passwordCPanel: string): Promise<{ success: boolean; messageId: string; response: string }> {
+    const request = await this.findRequestById(requestId);
 
     const sender = request.user.email;
     const toEmail = 'zapataascencioanderson@gmail.com';
@@ -92,11 +93,11 @@ export class MailService {
         subjectEmail = `Solicitud de Requerimiento de Operativo - ${request.project.name}`;
         type = 'Requerimiento de Elementos Operativos';
         break;
-      case 'security':
+      case RequestType.Epp:
         subjectEmail = `Solicitud de Requerimiento de EPP's - ${request.project.name}`;
         type = 'Requerimiento de Elementos de Protección Personal (EPP)';
         break;
-      case 'operative and security':
+      case RequestType.EppAndOperative:
         subjectEmail = `Solicitud de Requerimiento mixto - ${request.project.name}`;
         type = 'Requerimiento de Elementos Operativos y de Protección Personal (EPP)';
         break;
@@ -104,9 +105,9 @@ export class MailService {
 
     const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
 
-    const pdfPath = path.resolve(outputDir, `requerimiento-${request_id}.pdf`);
+    const pdfPath = path.resolve(outputDir, `requerimiento-${requestId}.pdf`);
 
-    //const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${request_id}.pdf`);
+    //const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${requestId}.pdf`);
 
     if (!fs.existsSync(pdfPath)) {
       throw new NotFoundException(`El archivo PDF no fue encontrado en la ruta: ${pdfPath}`);
@@ -124,10 +125,10 @@ export class MailService {
 
     const now = new Date();
     const formattedDate = now.toLocaleString('es-PE', { timeZone: 'America/Lima' });
-    const formattedDeliveryDueDate = new Date(request.delivery_due_date).toLocaleString('es-PE', { timeZone: 'America/Lima' });
+    const formattedDeliveryDueDate = new Date(request.deliveryDueDate).toLocaleString('es-PE', { timeZone: 'America/Lima' });
 
     const mailOptions = {
-      from: `"${request.user.name} ${request.user.last_name}" <${sender}>`,
+      from: `"${request.user.name} ${request.user.lastName}" <${sender}>`,
       to: toEmail,
       cc: copyEmail.join(', '),
       subject: subjectEmail,
@@ -146,10 +147,10 @@ export class MailService {
         <strong>Fecha y hora de entrega:</strong> ${formattedDeliveryDueDate}
       </p>
       <p>Estimada señora Gloria, adjunto el presente requerimiento. Agradeceré su pronta atención.</p>
-      <p>Saludos cordiales, ${request.user.name} ${request.user.last_name}</p>
+      <p>Saludos cordiales, ${request.user.name} ${request.user.lastName}</p>
       <br>
       <div style="width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
-        <a href="https://sir.gavacyc.com/admin/requests/${request_id}">
+        <a href="https://sir.gavacyc.com/admin/requests/${requestId}">
           <button style="
             background-color: #0047a3;
             color: white;
@@ -172,7 +173,7 @@ export class MailService {
       `,
       attachments: [
       {
-        filename: `requerimiento-${request_id}.pdf`,
+        filename: `requerimiento-${requestId}.pdf`,
         path: pdfPath,
         contentType: 'application/pdf',
       },

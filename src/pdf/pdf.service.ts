@@ -4,8 +4,8 @@ import * as path from 'path';
 import * as PdfPrinter from 'pdfmake';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { logoBase64 } from './logoBase64';
-import { RequestStatus, RequestType } from 'src/request/entities/request.entity';
 import { ConfigService } from '@nestjs/config';
+import { RequestStatus, RequestType } from 'src/request/enum';
 
 @Injectable()
 export class PdfService {
@@ -17,10 +17,10 @@ export class PdfService {
     private readonly configService: ConfigService,
   ) {}
 
-  async generateRequestPdf(request_id: number) {
+  async generateRequestPdf(requestId: number) {
 
     const request = await this.prismaService.request.findUnique({
-      where: { request_id },
+      where: { requestId },
       include: {
         project: true,
         user: {
@@ -44,7 +44,7 @@ export class PdfService {
 
     this.logger.log('Request found:', request);
 
-    if (request.status !== RequestStatus.Draft) {
+    if (request.status !== RequestStatus.draft) {
       throw new BadRequestException('Only requests with status "draft" can be sent');
     }
 
@@ -55,7 +55,7 @@ export class PdfService {
     const type = request.type;
 
     const elementRequests = await this.prismaService.elementRequest.findMany({
-      where: { request_id },
+      where: { requestId },
       include: {
         request: true,
         element: true 
@@ -71,11 +71,11 @@ export class PdfService {
 
     console.log('Element Requests found:', elementRequests);
 
-    const sender = `${request.user.name} ${request.user.last_name}`;
+    const sender = `${request.user.name} ${request.user.lastName}`;
     const jobTitle = request.user.userUserTypes[0].userType.name;
     const dateObj = new Date(request.createdAt);
     const dateCreatedAt = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()} ${dateObj.getHours().toString().padStart(2, '0')}:${dateObj.getMinutes().toString().padStart(2, '0')}`;
-    const deliveryDueDate = new Date(request.delivery_due_date);
+    const deliveryDueDate = new Date(request.deliveryDueDate);
     const formattedDeliveryDueDate = `${deliveryDueDate.getDate().toString().padStart(2, '0')}/${(deliveryDueDate.getMonth() + 1).toString().padStart(2, '0')}/${deliveryDueDate.getFullYear()} ${deliveryDueDate.getHours().toString().padStart(2, '0')}:${deliveryDueDate.getMinutes().toString().padStart(2, '0')}`;
     const description = request.description || 'No description provided';
     const projectName = request.project.name;
@@ -87,11 +87,11 @@ export class PdfService {
         title = 'SOLICITUD DE REQUERIMIENTO DE ELEMENTOS OPERATIVOS';
         footer = `Agradecemos de antemano su atención a esta solicitud y quedamos atentos a su aprobación para proceder con las gestiones correspondientes.`;
         break;
-      case RequestType.Security:
+      case RequestType.Epp:
         title = 'SOLICITUD DE REQUERIMIENTO DE ELEMENTOS DE PROTECCIÓN PERSONAL (EPP)';
         footer = `Agradecemos de antemano su atención a esta solicitud. Quedamos atentos a su aprobación y a la gestión correspondiente para la adquisición de los EPP requeridos.`;
         break;
-      case RequestType.OperativeAndSecurity:
+      case RequestType.EppAndOperative:
         title = 'SOLICITUD DE REQUERIMIENTO DE EPP Y ELEMENTOS OPERATIVOS';
         footer = `Agradecemos su atención a esta solicitud y quedamos atentos a su aprobación para proceder con las gestiones necesarias.`;
         break;
@@ -161,10 +161,10 @@ export class PdfService {
       },
     ];
 
-    if (type === RequestType.OperativeAndSecurity) {
+    if (type === RequestType.EppAndOperative) {
       // Separar los elementos por tipo
       const operativeElements = elementRequests.filter(el => el.element.type === RequestType.Operative);
-      const securityElements = elementRequests.filter(el => el.element.type === RequestType.Security);
+      const securityElements = elementRequests.filter(el => el.element.type === RequestType.Epp);
 
       if (operativeElements.length > 0) {
       docContent.push(
@@ -178,7 +178,7 @@ export class PdfService {
             index + 1,
             el.element.name,
             el.unit,
-            el.quantity_requested.toString()
+            el.quantityRequested.toString()
           ]),
           ],
         },
@@ -198,7 +198,7 @@ export class PdfService {
             index + 1,
             el.element.name,
             el.unit,
-            el.quantity_requested.toString()
+            el.quantityRequested.toString()
           ]),
           ],
         },
@@ -217,7 +217,7 @@ export class PdfService {
           index + 1,
           el.element.name,
           el.unit,
-          el.quantity_requested.toString()
+          el.quantityRequested.toString()
           ]),
         ],
         },
@@ -262,9 +262,9 @@ export class PdfService {
 
     try {
       const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
-      const fileName = `requerimiento-${request_id}.pdf`;
+      const fileName = `requerimiento-${requestId}.pdf`;
       // const outputPath = path.resolve(outputDir, fileName);
-      const outputPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${request_id}.pdf`);
+      const outputPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${requestId}.pdf`);
 
       const pdfDoc = printer.createPdfKitDocument(docDefinition);
       const stream = fs.createWriteStream(outputPath);

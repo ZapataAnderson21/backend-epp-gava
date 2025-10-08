@@ -9,7 +9,7 @@ export class CreateRequestDto {
   @IsDateString()
   deliveryDueDate!: string;
 
-  @ApiPropertyOptional({ enum: RequestStatus, enumName: 'RequestStatus', example: RequestStatus.Draft })
+  @ApiPropertyOptional({ enum: RequestStatus, enumName: 'RequestStatus', example: RequestStatus.draft })
   @IsEnum(RequestStatus)
   @IsOptional()
   status?: RequestStatus;

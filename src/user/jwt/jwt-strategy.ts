@@ -19,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(req: Request, payload: any) {
     const token = req.headers.authorization?.replace('Bearer ', '');
     
-    const blacklistedToken = await this.prisma.blacklisted_token.findFirst({
+    const blacklistedToken = await this.prisma.blacklistedToken.findFirst({
       where: { token },
     });
 

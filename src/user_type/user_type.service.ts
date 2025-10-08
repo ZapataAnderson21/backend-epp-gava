@@ -45,15 +45,15 @@ export class UserTypeService {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(userTypeId: number) {
 
-    this.logger.log(`Finding user type by ID: ${id}`);
+    this.logger.log(`Finding user type by ID: ${userTypeId}`);
     const userType = await this.prismaService.userType.findUnique({
-      where: { user_type_id: id }
+      where: { userTypeId }
     });
 
     if (!userType) {
-      this.logger.warn(`User type not found: ${id}`);
+      this.logger.warn(`User type not found: ${userTypeId}`);
       throw new NotFoundException('User type not found');
     }
 

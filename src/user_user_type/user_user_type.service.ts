@@ -26,14 +26,14 @@ export class UserUserTypeService {
     return userUserType;
   }
 
-  async findOne(id: number): Promise<UserUserType | null> {
-    this.logger.log(`Finding user_user_type by ID: ${id}`);
+  async findOne(userUserTypeId: number) {
+    this.logger.log(`Finding user_user_type by ID: ${userUserTypeId}`);
     const userUserType = await this.prismaService.userUserType.findUnique({
-      where: { user_user_type_id: id },
+      where: { userUserTypeId },
     });
 
     if (!userUserType) {
-      this.logger.warn(`user_user_type not found: ${id}`);
+      this.logger.warn(`user_user_type not found: ${userUserTypeId}`);
       throw new NotFoundException('user_user_type not found');
     }
 
@@ -41,10 +41,10 @@ export class UserUserTypeService {
     return userUserType;
   }
 
-  async findByUserId(userId: number): Promise<UserUserType | null> {
+  async findByUserId(userId: number) {
     this.logger.log(`Finding user_user_type by user ID: ${userId}`);
-    const userUserType = await this.prismaService.userUserType.findUnique({
-      where: { user_id: userId },
+    const userUserType = await this.prismaService.userUserType.findFirst({
+      where: { userId },
     });
 
     if (!userUserType) {
