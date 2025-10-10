@@ -27,7 +27,7 @@ export class UserTypeService {
 
     this.logger.log(`User type created successfully: ${createUserTypeDto.name}`);  
     return {
-      HttpStatus: HttpStatus.CREATED,
+      statusCode: HttpStatus.CREATED,
       message: 'El tipo de usuario ha sido registrado exitosamente.',
       data: newUserType
     };
