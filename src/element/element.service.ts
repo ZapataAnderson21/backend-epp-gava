@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger,
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ElementType } from './enum/element-type.enum';
+import { ElementType, ElementTypeLabelEs } from './enum/element-type.enum';
 
 @Injectable()
 export class ElementService {
@@ -50,7 +50,7 @@ export class ElementService {
       orderBy: { name: 'asc' }
     });
 
-    if (!foundElements || foundElements.length === 0){
+    if (!foundElements || foundElements.length === 0){  
       return {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'No se han encontrado elementos.',
@@ -58,11 +58,16 @@ export class ElementService {
       }
     }
 
+    const processedElements = foundElements.map(element => ({
+      ...element,
+      type: ElementTypeLabelEs[element.type as keyof typeof ElementTypeLabelEs] || element.type
+    }));
+
     this.logger.log(`Found ${foundElements.length} elements`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Elementos encontrados exitosamente.',
-      data: foundElements
+      data: processedElements
     };
   }
 
@@ -80,11 +85,16 @@ export class ElementService {
       throw new NotFoundException('Element not found');
     }
 
-    this.logger.log(`Element with ID ${elementId} retrieved successfully: ${JSON.stringify(foundElement)}`);
+    const processedElement = {
+      ...foundElement,
+      type: ElementType[foundElement.type as keyof typeof ElementType] || foundElement.type
+    };
+
+    this.logger.log(`Element with ID ${elementId} retrieved successfully: ${JSON.stringify(processedElement)}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Elemento encontrado exitosamente.',
-      data: foundElement
+      data: processedElement
     };
   }
 
@@ -121,11 +131,16 @@ export class ElementService {
       };
     }
 
+    const processedElements = foundElements.map(element => ({
+      ...element,
+      type: ElementTypeLabelEs[element.type as keyof typeof ElementTypeLabelEs] || element.type
+    }));
+
     this.logger.log(`Found ${foundElements.length} elements of type ${type}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Elementos encontrados exitosamente.',
-      data: foundElements
+      data: processedElements
     };
   }
 

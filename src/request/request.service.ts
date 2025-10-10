@@ -2,7 +2,7 @@ import { BadRequestException, HttpStatus, Injectable, Logger } from '@nestjs/com
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RequestStatus } from './enum';
+import { RequestStatus, RequestStatusLabelEs } from './enum';
 
 @Injectable()
 export class RequestService {
@@ -54,11 +54,19 @@ export class RequestService {
       };
     }
 
+    const processedRequests = foundRequests.map(request => {
+      const requestObj = { 
+        ...request,
+        status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
+      };
+      return requestObj;
+    });
+
     this.logger.log(`Found ${foundRequests.length} requests`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Solicitudes encontradas exitosamente.',
-      data: foundRequests
+      data: processedRequests
     };
   }
 
@@ -95,11 +103,16 @@ export class RequestService {
       throw new BadRequestException('Request not found');
     }
 
-    this.logger.log(`Request found: ${JSON.stringify(request)}`);
+    const processedRequest = { 
+      ...request,
+      status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
+    };
+
+    this.logger.log(`Request found: ${JSON.stringify(processedRequest)}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Solicitud encontrada exitosamente.',
-      data: request
+      data: processedRequest
     };
   }
 
@@ -122,11 +135,19 @@ export class RequestService {
       };
     }
 
+    const processedRequests = foundRequests.map(request => {
+      const requestObj = { 
+        ...request,
+        status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
+      };
+      return requestObj;
+    });
+
     this.logger.log(`Found ${foundRequests.length} requests for project ID: ${projectId}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Solicitudes encontradas exitosamente.',
-      data: foundRequests
+      data: processedRequests
     };
   }
 
@@ -149,11 +170,19 @@ export class RequestService {
       };
     }
 
+    const processedRequests = foundRequests.map(request => {
+      const requestObj = {
+        ...request,
+        status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
+      };
+      return requestObj;
+    });
+
     this.logger.log(`Found ${foundRequests.length} requests for user ID: ${userId}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Solicitudes encontradas exitosamente.',
-      data: foundRequests
+      data: processedRequests
     };
   }
 
@@ -176,11 +205,19 @@ export class RequestService {
       };
     }
 
+    const processedRequests = foundRequests.map(request => {
+      const requestObj = { 
+        ...request,
+        status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
+      };
+      return requestObj;
+    });
+
     this.logger.log(`Found ${foundRequests.length} requests with status: ${status}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Solicitudes encontradas exitosamente.',
-      data: foundRequests
+      data: processedRequests
     };
   }
 

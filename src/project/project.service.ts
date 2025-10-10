@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger,
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ProjectStatus } from './enum/project-status.enum';
+import { ProjectStatus, ProjectStatusLabelEs } from './enum/project-status.enum';
 
 @Injectable()
 export class ProjectService {
@@ -60,11 +60,19 @@ export class ProjectService {
       };
     }
 
+    const processedProjects = foundProjects.map(project => {
+      const projectObj = { 
+        ...project,
+        status: ProjectStatusLabelEs[project.status as keyof typeof ProjectStatusLabelEs] || project.status
+      };
+      return projectObj;
+    });
+
     this.logger.log(`Found ${foundProjects.length} projects`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Projects retrieved successfully',
-      data: foundProjects
+      data: processedProjects
     };
   }
 
@@ -86,11 +94,16 @@ export class ProjectService {
       throw new NotFoundException('No se ha encontrado el proyecto.');
     }
 
-    this.logger.log(`Found project with ID ${projectId}: ${JSON.stringify(foundProject)}`);
+    const processedProject = { 
+      ...foundProject,
+      status: ProjectStatusLabelEs[foundProject.status as keyof typeof ProjectStatusLabelEs] || foundProject.status
+    };
+
+    this.logger.log(`Found project with ID ${projectId}: ${JSON.stringify(processedProject)}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Proyecto encontrado exitosamente.',
-      data: foundProject
+      data: processedProject
     };
   }
 
@@ -133,11 +146,19 @@ export class ProjectService {
       };
     }
 
+    const processedProjects = foundProjects.map(project => {
+      const projectObj = { 
+        ...project,
+        status: ProjectStatusLabelEs[project.status as keyof typeof ProjectStatusLabelEs] || project.status
+      };
+      return projectObj;
+    });
+
     this.logger.log(`Found ${foundProjects.length} projects with status: ${status}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Projects retrieved successfully',
-      data: foundProjects
+      data: processedProjects
     };
   }
 
