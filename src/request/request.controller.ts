@@ -55,13 +55,13 @@ export class RequestController {
       return await this.requestService.update(id, updateRequestDto);
   }
 
-  @Post('send-to-logistics')
-  async sendToLogistics(@Body() body : { request_id: number, passwordCPanel: string }) {
-    await this.pdfService.generateRequestPdf(body.request_id);
+  @Post('sendLogistics')
+  async sendToLogistics(@Body() body : { requestId: number, passwordCPanel: string }) {
+    await this.pdfService.generateRequestPdf(body.requestId);
 
-    await this.mailService.sendRequestToLogistics(body.request_id, body.passwordCPanel);
-
-    return await this.requestService.updateStatus(+body.request_id, RequestStatus.inProgress);
+    await this.mailService.sendRequestToLogistics(body.requestId, body.passwordCPanel);
+    
+    return await this.requestService.updateStatus(+body.requestId, RequestStatus.inProgress);
   }
   
   @Delete(':id')
@@ -71,8 +71,8 @@ export class RequestController {
 
   @Get('pdf/:id')
   async getPdf(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
-    //const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${id}.pdf`);
-    const pdfPath = path.resolve('/var/www/pdfs', `requerimiento-${id}.pdf`);
+    const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${id}.pdf`);
+    //const pdfPath = path.resolve('/var/www/pdfs', `requerimiento-${id}.pdf`);
 
     if (!fs.existsSync(pdfPath)) {
       throw new NotFoundException('PDF no encontrado');
