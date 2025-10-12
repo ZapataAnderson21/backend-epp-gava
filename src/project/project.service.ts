@@ -85,7 +85,11 @@ export class ProjectService {
         deletedAt: null
       },
       include: {
-        requests: true
+        requests: true,
+        purchaseOrders: true,
+        emergencies: true,
+        serviceSales: true,
+        pettyCashes: true
       }
     });
 
