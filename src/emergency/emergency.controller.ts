@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, HttpStatus, UploadedFile, UseInterceptors, ParseIntPipe, NotFoundException, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, HttpStatus, UploadedFile, UseInterceptors, ParseIntPipe, NotFoundException, Res, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
@@ -39,8 +39,9 @@ export class EmergencyController {
   }
 
   @Get()
-  async findAll() {
-    return await this.emergencyService.findAll();
+  async findAll(@Query('projectId', new ParseIntPipe({ optional: true })) projectId?: number,
+                @Query('userId', new ParseIntPipe({ optional: true })) userId?: number) {
+    return await this.emergencyService.findAll(projectId, userId);
   }
 
   @Get(':id')
@@ -51,16 +52,6 @@ export class EmergencyController {
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateEmergencyDto: UpdateEmergencyDto) {
     return await this.emergencyService.update(id, updateEmergencyDto);
-  }
-
-  @Get('project/:project_id')
-  async getAllByProjectId(@Param('project_id', ParseIntPipe) project_id: number) {
-    return await this.emergencyService.getAllByProjectId(project_id);
-  }
-  
-  @Get('user/:user_id')
-  async getAllByUserId(@Param('user_id') user_id: string) {
-    return await this.emergencyService.getAllByUserId(+user_id);
   }
   
   @Get('image/:filename')

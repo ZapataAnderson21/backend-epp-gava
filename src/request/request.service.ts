@@ -37,15 +37,16 @@ export class RequestService {
     };
   }
   
-  async findAll() {
+  async findAll(projectId?: number, userId?: number, status?: RequestStatus) {
     this.logger.log('Retrieving all requests');
     const foundRequests = (await this.prismaService.request.findMany({
       include: {
         project: true,
         user: true
-      }
+      },
+      where: { projectId, userId, status }
     })).sort((a, b) => b.requestId - a.requestId);
-
+    
     if (!foundRequests || foundRequests.length === 0) {
       return {
         statusCode: HttpStatus.NOT_FOUND,

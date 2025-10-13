@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, ParseIntPipe, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, ParseIntPipe, NotFoundException, InternalServerErrorException, Query } from '@nestjs/common';
 import { Response } from 'express';
 import { RequestService } from './request.service';
 import { CreateRequestDto } from './dto/create-request.dto';
@@ -21,28 +21,15 @@ export class RequestController {
   }
 
   @Get()
-  async findAll() {
-    return await this.requestService.findAll();
+  async findAll(@Query('projectId', new ParseIntPipe({ optional: true })) projectId?: number,
+                @Query('userId', new ParseIntPipe({ optional: true })) userId?: number,
+                @Query('status') status?: RequestStatus) {
+    return await this.requestService.findAll(projectId, userId, status);
   }
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.requestService.findOne(id);
-  }
-
-  @Get('project/:project_id')
-  async findByProject(@Param('project_id', ParseIntPipe) project_id: number) {
-    return await this.requestService.findAllByProjectId(project_id);
-  }
-
-  @Get('user/:user_id')
-  async findByUser(@Param('user_id', ParseIntPipe) user_id: number) {
-    return await this.requestService.findAllByUserId(user_id);
-  }
-  
-  @Get('status/:status')
-  async findByStatus(@Param('status') status: RequestStatus) {
-    return await this.requestService.findAllByStatus(status);
   }
 
   @Patch(':id/status')

@@ -30,7 +30,7 @@ export class EmergencyService {
     };
   }
 
-  async findAll() {
+  async findAll(projectId?: number, userId?: number) {
     this.logger.log('Fetching all emergencies');
     const emergencies = await this.prismaService.emergency.findMany({
       include: {
@@ -45,6 +45,7 @@ export class EmergencyService {
           }
         },
       },
+      where: { projectId, userId },
     });
 
     if (!emergencies || emergencies.length === 0) {

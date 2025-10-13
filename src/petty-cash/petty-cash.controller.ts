@@ -16,10 +16,10 @@ export class PettyCashController {
     return this.pettyCashService.create(createPettyCashDto);
   }
 
-  @Get()
-  findAll() {
-    this.logger.log('Fetching all petty cash entries');
-    return this.pettyCashService.findAll();
+  @Get('project/:projectId')
+  findAllByProject(@Param('projectId', ParseIntPipe) projectId: number) {
+    this.logger.log(`Fetching all petty cash entries for project ID: ${projectId}`);
+    return this.pettyCashService.findAllByProject(projectId);
   }
 
   @Get(':id')

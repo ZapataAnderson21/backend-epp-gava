@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -35,7 +35,11 @@ export class PurchaseOrderService {
     }
 
     this.logger.log(`Purchase order created successfully with id: ${newPurchaseOrder.purchaseOrderId}`);
-    return newPurchaseOrder;
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Orden de compra creada exitosamente.',
+      data: updatedPurchaseOrder,
+    };
   }
 
   
@@ -50,12 +54,17 @@ export class PurchaseOrderService {
       },
     });
 
-    if (!purchaseOrders) {
+    if (!purchaseOrders || purchaseOrders.length === 0) {
       this.logger.error('Failed to fetch purchase orders');
+      throw new NotFoundException('No se encontraron órdenes de compra para este proyecto.');
     }
 
     this.logger.log(`Fetched ${purchaseOrders.length} purchase orders`);
-    return purchaseOrders;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Órdenes de compra obtenidas exitosamente.',
+      data: purchaseOrders
+    };
   }
 
 
@@ -75,7 +84,11 @@ export class PurchaseOrderService {
     }
 
     this.logger.log(`Purchase order with id: ${id} found`);
-    return purchaseOrder;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Orden de compra obtenida exitosamente.',
+      data: purchaseOrder
+    };
   }
 
 

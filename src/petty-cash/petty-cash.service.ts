@@ -54,11 +54,22 @@ export class PettyCashService {
   }
 
   /* ---------- FIND ALL ---------- */
-  async findAll() {
-    this.logger.log('Fetching petty cash list');
+  async findAllByProject(projectId: number) {
+    this.logger.log(`Fetching petty cash list for project ID: ${projectId}`);
     const list = await this.prisma.pettyCash.findMany({
+      where: { projectId },
       orderBy: [{ createdAt: 'desc' }],
     });
+
+    if (!list || list.length === 0) {
+      this.logger.warn(`No petty cash entries found for project ID: ${projectId}`);
+      throw new NotFoundException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se encontraron salidas de caja chica.',
+        data: null,
+      });
+    }
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Cajas chicas obtenidas exitosamente.',

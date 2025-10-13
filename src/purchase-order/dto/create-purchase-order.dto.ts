@@ -41,13 +41,13 @@ export class CreatePurchaseOrderDto {
 
   @ApiProperty({ example: 1000.00, minimum: 0 }) 
   @Type(() => Number) 
-  @IsNumber({ maxDecimalPlaces: 2 }) 
+  @IsNumber() 
   @Min(0, { message: 'El monto de venta debe ser al menos 0.' })
   saleAmount!: number;
 
   @ApiProperty({ example: 800.00, minimum: 0 })  
   @Type(() => Number) 
-  @IsNumber({ maxDecimalPlaces: 2 }) 
+  @IsNumber() 
   @Min(0, { message: 'El monto de compra debe ser al menos 0.' }) 
   purchaseAmount!: number;
 

@@ -16,7 +16,7 @@ export class PurchaseOrderController {
     return this.purchaseOrderService.create(createPurchaseOrderDto);
   }
 
-  @Get()
+  @Get('project/:projectId')
   findAllByProjectId(@Param('projectId', ParseIntPipe) projectId: number) {
     this.logger.log(`Finding all purchase orders for Project ID: ${projectId}`);
     return this.purchaseOrderService.findAllByProjectId(projectId);
