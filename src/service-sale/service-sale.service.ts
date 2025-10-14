@@ -53,15 +53,26 @@ export class ServiceSaleService {
     };
   }
 
-  
-  async findAll() {
-    this.logger.log('Fetching service sales list');
+
+  async findAllByProject(projectId: number) {
+    this.logger.log(`Fetching service sales for project ID: ${projectId}`);
     const list = await this.prisma.serviceSale.findMany({
+      where: { projectId },
       orderBy: [{ createdAt: 'desc' }],
     });
+
+    if (!list || list.length === 0) {
+      this.logger.warn(`No service sales found for project ID: ${projectId}`);
+      throw new NotFoundException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'No se encontraron servicios contratados.',
+        data: null,
+      });
+    }
+
     return {
       statusCode: HttpStatus.OK,
-      message: 'Ventas de servicio obtenidas exitosamente.',
+      message: 'Servicios contratados obtenidos exitosamente.',
       data: list,
     };
   }
@@ -87,7 +98,22 @@ export class ServiceSaleService {
     };
   }
 
-  
+  async sumAllAmountsByProject(projectId: number) {
+    this.logger.log(`Calculating total amount of all service sales for project ID: ${projectId}`);
+    const result = await this.prisma.serviceSale.aggregate({
+      where: { projectId },
+      _sum: { amount: true },
+    });
+    
+    const total = result._sum.amount || 0;
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Total de ventas de servicio calculado exitosamente.',
+      data: total
+    };
+  }
+
   async update(serviceSaleId: number, dto: UpdateServiceSaleDto) {
     this.logger.log(
       `Updating service sale id=${serviceSaleId} payload=${JSON.stringify(dto)}`

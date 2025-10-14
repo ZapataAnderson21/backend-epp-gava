@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe, Query } from '@nestjs/common';
 import { PurchaseOrderService } from './purchase-order.service';
 import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
+import { Currency } from 'src/supplier/enum/currency.enum';
 
 @Controller('purchase-order')
 export class PurchaseOrderController {
@@ -26,6 +27,18 @@ export class PurchaseOrderController {
   findOne(@Param('id', ParseIntPipe) id: number) {
     this.logger.log(`Finding purchase order with ID: ${id}`);
     return this.purchaseOrderService.findOne(id);
+  }
+
+  @Get('saleAmounts/:projectId')
+  sumAllSaleAmounts(@Param('projectId', ParseIntPipe) projectId: number) {
+    this.logger.log(`Summing all sale amounts for Project ID: ${projectId}`);
+    return this.purchaseOrderService.sumAllSalesAmountsByProject(projectId);
+  }
+
+  @Get('purchaseAmounts/:projectId')
+  sumAllPurchaseAmounts(@Param('projectId', ParseIntPipe) projectId: number) {
+    this.logger.log(`Summing all purchase amounts for Project ID: ${projectId}`);
+    return this.purchaseOrderService.sumAllPurchaseAmountsByProject(projectId);
   }
 
   @Patch(':id')

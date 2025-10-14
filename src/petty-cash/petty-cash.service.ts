@@ -98,6 +98,23 @@ export class PettyCashService {
     };
   }
 
+  /* ---------- SUM ---------- */
+  async sumAllAmountsByProject(projectId: number) {
+    this.logger.log(`Calculating total amount of all petty cash entries for project ID: ${projectId}`);
+    const result = await this.prisma.pettyCash.aggregate({
+      where: { projectId },
+      _sum: { amount: true },
+    });
+
+    const total = result._sum.amount || 0;
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Total de salidas de caja chica calculado exitosamente.',
+      data: total
+    };
+  }
+  
   /* ---------- UPDATE ---------- */
   async update(pettyCashId: number, dto: UpdatePettyCashDto) {
     this.logger.log(

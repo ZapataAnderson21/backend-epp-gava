@@ -16,16 +16,22 @@ export class ServiceSaleController {
     return this.serviceSaleService.create(createServiceSaleDto);
   }
 
-  @Get()
-  findAll() {
-    this.logger.log('Fetching all service sales');
-    return this.serviceSaleService.findAll();
+  @Get('project/:projectId')
+  findAll(@Param('projectId', ParseIntPipe) projectId: number) {
+    this.logger.log(`Fetching all service sales for project ID: ${projectId}`);
+    return this.serviceSaleService.findAllByProject(projectId);
   }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     this.logger.log(`Finding service sale with ID: ${id}`);
     return this.serviceSaleService.findOne(id);
+  }
+
+  @Get('sum/:projectId')
+  sumAllAmounts(@Param('projectId', ParseIntPipe) projectId: number) {
+    this.logger.log(`Calculating total amount of all service sales for project ID: ${projectId}`);
+    return this.serviceSaleService.sumAllAmountsByProject(projectId);
   }
 
   @Patch(':id')

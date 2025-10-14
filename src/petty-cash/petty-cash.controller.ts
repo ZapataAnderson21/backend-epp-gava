@@ -28,6 +28,12 @@ export class PettyCashController {
     return this.pettyCashService.findOne(id);
   }
 
+  @Get('sum/:projectId')
+  sumAllAmounts(@Param('projectId', ParseIntPipe) projectId: number) {
+    this.logger.log(`Calculating total amount of all petty cash entries for project ID: ${projectId}`);
+    return this.pettyCashService.sumAllAmountsByProject(projectId);
+  }
+
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() updatePettyCashDto: UpdatePettyCashDto) {
     this.logger.log(`Updating petty cash with ID: ${id}`);
