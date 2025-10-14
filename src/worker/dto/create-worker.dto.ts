@@ -15,7 +15,6 @@ export class CreateWorkerDto {
   dni!: string;
 
   @ApiPropertyOptional({ example: '987654321' })
-  @Length(9, 9, { message: "El teléfono debe tener exactamente 9 caracteres." })
   @IsOptional()
   @IsString()
   phone?: string;

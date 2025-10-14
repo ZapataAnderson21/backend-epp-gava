@@ -47,7 +47,7 @@ export class WorkerService {
     return {
       statusCode: HttpStatus.CREATED,
       data: worker,
-      message: 'Worker registered successfully.'
+      message: 'Trabajador creado con éxito.'
     };
   }
 
@@ -57,12 +57,32 @@ export class WorkerService {
       where: { 
         deletedAt: null 
       },
+      include : {
+        workerGroup: {
+          include: {
+            parentGroup: true
+          }
+        }
+      },
+      orderBy: {
+        fullName: 'asc'
+      }
     });
+
+    if(!workers || workers.length === 0){
+      this.logger.warn(`No workers found`);
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        data: [],
+        message: 'No se encontraron trabajadores.'
+      };
+    }
+
     this.logger.log(`Workers retrieved successfully: ${JSON.stringify(workers)}`);
     return {
       statusCode: HttpStatus.OK,
       data: workers,
-      message: 'Workers retrieved successfully.'
+      message: 'Trabajadores recuperados con éxito.'
     };
   }
 
@@ -75,20 +95,46 @@ export class WorkerService {
         workerGroupId,
         deletedAt: null 
       },
+      include : {
+        workerGroup: {
+          include: {
+            parentGroup: true
+          }
+        }
+      },
+      orderBy: {
+        fullName: 'asc'
+      }
     });
+
+    if(!workers || workers.length === 0){
+      this.logger.warn(`No workers found for worker group ID: ${workerGroupId}`);
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        data: [],
+        message: 'No se encontraron trabajadores para el grupo especificado.'
+      };
+    }
 
     this.logger.log(`Workers retrieved successfully for worker group ID ${workerGroupId}: ${JSON.stringify(workers)}`);
     return {
       statusCode: HttpStatus.OK,
       data: workers,
-      message: 'Workers retrieved successfully for the specified worker group.'
+      message: 'Trabajadores recuperados con éxito.'
     };
   }
 
   async findOne(workerId: number) {
     this.logger.log(`Retrieving worker with ID: ${workerId}`);
     const worker = await this.prismaService.worker.findUnique({
-      where: { workerId, deletedAt: null }
+      where: { workerId, deletedAt: null },
+      include : {
+        workerGroup: {
+          include: {
+            parentGroup: true
+          }
+        }
+      },
     });
 
     if (!worker) {
@@ -173,6 +219,12 @@ export class WorkerService {
       }
     });
 
+    if (!workers || workers.length === 0) {
+      this.logger.warn(`No worker found with phone number: ${phone}`);
+      return null;
+    }
+
+    this.logger.log(`Worker(s) found with phone number: ${JSON.stringify(workers)}`);
     return workers;
   }
 
@@ -186,6 +238,12 @@ export class WorkerService {
       }
     });
 
-    return worker;
+    if (!worker) {
+      this.logger.warn(`No worker found with DNI: ${dni}`);
+      return null;
+    }
+
+    this.logger.log(`Worker found successfully: ${JSON.stringify(worker)}`);
+    return worker
   }
 }
