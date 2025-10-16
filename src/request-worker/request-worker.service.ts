@@ -29,7 +29,11 @@ export class RequestWorkerService {
     }
 
     this.logger.log('Request worker created successfully', JSON.stringify(newRequestWorker));
-    return newRequestWorker;
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'La solicitud para un trabajador específico ha sido creada exitosamente.',
+      data: newRequestWorker
+    };
   }
 
   async findAllByRequestId(requestId: number) {
