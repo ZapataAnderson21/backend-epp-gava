@@ -41,7 +41,7 @@ export class UserController {
   @Public()
   @Post('validateToken')
   async isTokenBlacklisted(@Body('accessToken') token: string) {
-    this.logger.log(`Validating token: ${token}`);
+    this.logger.log(`Validating token...`);
     return await this.userService.isTokenBlacklisted(token);
   }
   
