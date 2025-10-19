@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, NotFoundException, Logger, ParseIntPipe, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, NotFoundException, Logger, ParseIntPipe, Delete, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto'; 
@@ -7,6 +7,8 @@ import { MailService } from 'src/mail/mail.service';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserTypes } from 'src/decorators/user-types.decorator';
+import { JwtAuthGuard } from './jwt/jwt.auth.guard';
+import { Request } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -51,6 +53,16 @@ export class UserController {
     return await this.userService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  async me(@Req() req: Request) {
+    // JwtStrategy.validate devuelve { userId, email }
+    const { userId } = req.user as any;
+    const res = await this.userService.findOne(Number(userId));
+    // Mantén la firma de respuesta que ya usas:
+    // { statusCode, message, data: userWithType }
+    return res;
+  }
   
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: string) {

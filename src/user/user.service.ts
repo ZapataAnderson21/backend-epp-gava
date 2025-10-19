@@ -120,7 +120,7 @@ export class UserService {
       throw new UnauthorizedException('La contraseña es incorrecta.');
     }
 
-    const payload = await this.findOne(user.userId); 
+    const payload = { userId: user.userId, email: user.email };
 
     const accessToken = this.jwtService.sign(payload);
 
@@ -128,11 +128,13 @@ export class UserService {
 
     this.logger.log(JSON.stringify({ payload, accessToken }));
 
+    const returnUser = await this.findOne(user.userId);
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Login successful',
       data: {
-        user: payload.data,
+        user: returnUser.data,
         accessToken
       },
     };
