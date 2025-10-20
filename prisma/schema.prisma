@@ -240,7 +240,9 @@ model Worker {
   fullName       String
   dni            String           @db.VarChar(8) @unique
   phone          String?          @unique
+  personalEmail  String?          @db.Citext @unique
   address        String?          @default("No address provided.")
+  birthDate      DateTime?
   workerGroupId  Int
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt

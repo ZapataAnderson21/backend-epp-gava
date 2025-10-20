@@ -17,8 +17,6 @@ async function bootstrap() {
     origin: ['http://localhost:5173', 'http://sir.gavacyc.com', 'https://sir.gavacyc.com'],
     credentials: true,
   });
-  
-  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   app.useGlobalPipes(
     new ValidationPipe({

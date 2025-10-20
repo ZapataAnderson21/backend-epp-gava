@@ -59,8 +59,6 @@ export class UserController {
     // JwtStrategy.validate devuelve { userId, email }
     const { userId } = req.user as any;
     const res = await this.userService.findOne(Number(userId));
-    // Mantén la firma de respuesta que ya usas:
-    // { statusCode, message, data: userWithType }
     return res;
   }
   

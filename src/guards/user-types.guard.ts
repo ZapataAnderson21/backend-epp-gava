@@ -1,10 +1,11 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { USER_TYPES_KEY } from '../decorators/user-types.decorator';
 
 @Injectable()
 export class UserTypesGuard implements CanActivate {
+
   constructor(
     private reflector: Reflector,
     private prisma: PrismaService,   // PrismaService global para consultas a DB
@@ -24,10 +25,8 @@ export class UserTypesGuard implements CanActivate {
     // 2. Obtener usuario desde la request (añadido por JwtAuthGuard/JwtStrategy)
     const request = context.switchToHttp().getRequest();
     const user = request.user;
-    if (!user) {
-      // Si no hay usuario en la request, se deniega el acceso
-      return false;
-    }
+
+    if (!user) throw new ForbiddenException('No autenticado.');
 
     // 3. Consultar la base de datos para obtener los tipos del usuario
     const userId = user.userId;
@@ -36,16 +35,16 @@ export class UserTypesGuard implements CanActivate {
       include: { userType: true }  // incluir el objeto UserType relacionado
     });
     if (!userTypeLinks || userTypeLinks.length === 0) {
-      return false; // el usuario no tiene ningún tipo asignado
+      throw new ForbiddenException('No tienes permisos para acceder a este recurso.');
     }
 
     // 4. Extraer los nombres de tipo de usuario que posee el usuario
     const userTypeNames = userTypeLinks.map(link => link.userType.name);
+
     // 5. Verificar si hay intersección entre los tipos requeridos y los tipos del usuario
     const hasPermission = requiredTypes.some(type => userTypeNames.includes(type));
-    if (!hasPermission) {
-      return false;  // El tipo de usuario no está en la lista permitida
-    }
+
+    if (!hasPermission) throw new ForbiddenException('No tienes permisos para acceder a este recurso.');
 
     return true; // El usuario tiene al menos uno de los tipos requeridos
   }

@@ -78,7 +78,7 @@ export class WorkerService {
       };
     }
 
-    this.logger.log(`Workers retrieved successfully: ${JSON.stringify(workers)}`);
+    this.logger.log(`Workers retrieved successfully. Found ${workers.length} workers.`);
     return {
       statusCode: HttpStatus.OK,
       data: workers,
@@ -142,7 +142,7 @@ export class WorkerService {
       throw new BadRequestException(`El trabajador con ID ${workerId} no existe.`);
     }
 
-    this.logger.log(`Worker retrieved successfully: ${JSON.stringify(worker)}`);
+    this.logger.log(`Worker retrieved successfully`);
     return {
       statusCode: HttpStatus.OK,
       data: worker,
@@ -150,27 +150,48 @@ export class WorkerService {
     };
   }
 
-  async update(workerId: number, updateWorkerDto: UpdateWorkerDto) {
+  async update(workerId: number, dto: UpdateWorkerDto) {
     this.logger.log(`Updating worker with ID: ${workerId}`);
     await this.findOne(workerId);
 
-    const updatedWorker = await this.prismaService.worker.update({
-      where: { workerId },
-      data: updateWorkerDto
-    });
+    const data: any = { ...dto };
 
-    if (!updatedWorker) {
-      this.logger.error(`Failed to update worker with ID: ${workerId}`);
-      throw new BadRequestException('Failed to update worker');
+    if ('birthDate' in dto) {
+      const v = dto.birthDate as any;
+
+      if (v === undefined) {
+        delete data.birthDate;
+      } else if (v === null) {
+        data.birthDate = null;
+      } else if (typeof v === 'string') {
+        const iso = v.length === 10 ? `${v}T00:00:00.000Z` : v;
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) {
+          throw new BadRequestException('birthDate inválida. Use formato YYYY-MM-DD o ISO-8601.');
+        }
+        data.birthDate = d;
+      } else if (v instanceof Date) {
+        if (isNaN(v.getTime())) {
+          throw new BadRequestException('birthDate inválida.');
+        }
+        data.birthDate = v;
+      } else {
+        throw new BadRequestException('birthDate con tipo no soportado.');
+      }
     }
 
-    this.logger.log(`Worker updated successfully: ${JSON.stringify(updatedWorker)}`);
+    const updatedWorker = await this.prismaService.worker.update({
+      where: { workerId },
+      data
+    });
+
     return {
       statusCode: HttpStatus.OK,
       data: updatedWorker,
       message: 'Worker updated successfully.'
     };
   }
+
 
   async remove(workerId: number) {
     this.logger.log(`Removing worker with ID: ${workerId}`);

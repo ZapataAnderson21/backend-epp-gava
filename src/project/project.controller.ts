@@ -1,10 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Put, ParseIntPipe, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Logger } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { Public } from 'src/user/jwt/public.decorator';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
-import { Project } from './entities/project.entity';
 import { UserTypes } from 'src/decorators/user-types.decorator';
 import { ProjectStatus } from './enum/project-status.enum';
 
@@ -15,8 +12,8 @@ export class ProjectController {
 
   constructor(private readonly projectService: ProjectService) {}
 
-  @UserTypes('GERENTE', 'ADMINISTRADORA')
   @Post()
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
   async create(@Body() createProjectDto: CreateProjectDto) {
     this.logger.log(`Creating project: ${JSON.stringify(createProjectDto)}`);
     return await this.projectService.create(createProjectDto);
@@ -34,7 +31,6 @@ export class ProjectController {
     return await this.projectService.findOne(+id);
   }
 
-  @Public()
   @Get('code/:code')
   async findByCode(@Param('code') code: string) {
     this.logger.log(`Fetching project with code: ${code}`);

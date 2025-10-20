@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsInt, IsNotEmpty, IsOptional, IsString, Length, MinLength } from "class-validator";
+import { Transform, Type } from "class-transformer";
+import { IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, Length, MinLength } from "class-validator";
 
 export class CreateWorkerDto {
   @ApiProperty({ example: 'Luis Ramos' }) 
@@ -19,10 +19,21 @@ export class CreateWorkerDto {
   @IsString()
   phone?: string;
 
+  @ApiPropertyOptional({ example: 'luis.ramos@example.com' })
+  @IsOptional()
+  @IsString()
+  personalEmail?: string;
+
   @ApiPropertyOptional({ example: 'Av. Siempre Viva 123' }) 
   @IsOptional() 
   @IsString() 
   address?: string;
+
+  @ApiPropertyOptional({ example: '1990-01-01' })
+  @IsOptional()
+  @Transform(({ value }) => (value === '' ? undefined : value)) // evita "" -> Invalid Date
+  @IsDateString({}, { message: 'birthDate debe tener formato ISO: YYYY-MM-DD' })
+  birthDate?: string;
 
   @ApiProperty({ example: 3 }) 
   @Type(() => Number) 

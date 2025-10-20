@@ -21,6 +21,9 @@ import { ResourceModule } from './resource/resource.module';
 import { ResourcePurchaseOrderModule } from './resource-purchase-order/resource-purchase-order.module';
 import { PettyCashModule } from './petty-cash/petty-cash.module';
 import { ServiceSaleModule } from './service-sale/service-sale.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './user/jwt/jwt.auth.guard';
+import { UserTypesGuard } from './guards/user-types.guard';
 
 @Module({
   imports: [UserModule, UserTypeModule, ProjectModule, ElementModule, RequestModule, 
@@ -39,6 +42,10 @@ import { ServiceSaleModule } from './service-sale/service-sale.module';
             ServiceSaleModule
           ],
   controllers: [],
-  providers: [MailService, PdfService],
+  providers: [MailService, 
+              PdfService,
+              { provide: APP_GUARD, useClass: JwtAuthGuard },
+              { provide: APP_GUARD, useClass: UserTypesGuard },
+            ],
 })
 export class AppModule {}
