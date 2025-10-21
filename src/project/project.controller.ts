@@ -44,18 +44,21 @@ export class ProjectController {
   }
 
   @Patch(':id')
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
   async update(@Param('id') id: number, @Body() updateProjectDto: UpdateProjectDto) {
     this.logger.log(`Updating project with ID: ${id}`);
     return await this.projectService.update(id, updateProjectDto);
   }
 
   @Patch(':id/status')
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
   async updateStatus(@Param('id', ParseIntPipe) id: number, @Body('status') status: ProjectStatus) {
     this.logger.log(`Updating status of project with ID: ${id} to ${status}`);
     return await this.projectService.updateStatus(id, status);
   }
 
   @Delete(':id')
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
   async remove(@Param('id', ParseIntPipe) id: number) {
     this.logger.log(`Deleting project with ID: ${id}`);
     return await this.projectService.remove(id);

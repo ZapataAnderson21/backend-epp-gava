@@ -3,6 +3,8 @@ import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Currency } from 'src/supplier/enum/currency.enum';
+import { PurchaseOrderStatus } from 'generated/prisma';
+import { PurchaseOrderStatusLabelEs } from './enum';
 
 @Injectable()
 export class PurchaseOrderService {
@@ -60,11 +62,16 @@ export class PurchaseOrderService {
       throw new NotFoundException('No se encontraron órdenes de compra para este proyecto.');
     }
 
+    const processedPurchaseOrder = purchaseOrders.map(po => {
+      const status = PurchaseOrderStatusLabelEs[po.status as keyof typeof PurchaseOrderStatusLabelEs] || 'Desconocido';
+      return { ...po, status };
+    });
+
     this.logger.log(`Fetched ${purchaseOrders.length} purchase orders`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Órdenes de compra obtenidas exitosamente.',
-      data: purchaseOrders
+      data: processedPurchaseOrder
     };
   }
 
@@ -84,11 +91,16 @@ export class PurchaseOrderService {
       throw new BadRequestException(`Purchase order with id: ${id} not found`);
     }
 
+    const processedPurchaseOrder = {
+      ...purchaseOrder,
+      status: PurchaseOrderStatusLabelEs[purchaseOrder.status as keyof typeof PurchaseOrderStatusLabelEs] || 'Desconocido'
+    };
+
     this.logger.log(`Purchase order with id: ${id} found`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Orden de compra obtenida exitosamente.',
-      data: purchaseOrder
+      data: processedPurchaseOrder
     };
   }
 
