@@ -166,7 +166,7 @@ export class RequestWorkerService {
       throw new NotFoundException(`El usuario con ID ${workerId} no fue encontrado.`);
     }
 
-    this.logger.log(`Worker with ID ${workerId} found`, JSON.stringify(worker));
+    this.logger.log(`Worker with ID ${workerId} found`);
     return {
       statusCode: HttpStatus.OK,
       message: 'El usuario fue encontrado exitosamente.',
