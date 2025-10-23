@@ -17,8 +17,7 @@ export class UserController {
 
   constructor(private readonly userService: UserService,
               private readonly mailService: MailService) {}
-  
-  @Public()
+
   @UserTypes('GERENTE', 'ADMINISTRADORA')
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
