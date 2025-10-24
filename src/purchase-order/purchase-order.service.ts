@@ -3,7 +3,6 @@ import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Currency } from 'src/supplier/enum/currency.enum';
-import { PurchaseOrderStatus } from 'generated/prisma';
 import { PurchaseOrderStatusLabelEs } from './enum';
 
 @Injectable()
@@ -24,10 +23,7 @@ export class PurchaseOrderService {
       throw new BadRequestException('No se pudo crear la orden de compra. ');
     }
 
-    const year = new Date().getFullYear();
-
-    const formattedId = newPurchaseOrder.purchaseOrderId.toString().padStart(3, '0');
-    const code = `No ${formattedId}-${year}/${createPurchaseOrderDto.code}/GAVA`;
+    const code = await this.formatedCode(newPurchaseOrder.purchaseOrderId, newPurchaseOrder.code);
   
     this.logger.log(`Generated code for purchase order: ${code}`);
     const updatedPurchaseOrder = await this.update(newPurchaseOrder.purchaseOrderId, { code });
@@ -43,6 +39,14 @@ export class PurchaseOrderService {
       message: 'Orden de compra creada exitosamente.',
       data: updatedPurchaseOrder,
     };
+  }
+
+  async formatedCode(purchaseOrderId: number, code: string) {
+
+    const formattedId = purchaseOrderId.toString().padStart(3, '0');
+    const year = new Date().getFullYear();
+    const formattedCode = `No ${formattedId}-${year}/${code}/GAVA`;
+    return formattedCode;
   }
 
   
@@ -96,8 +100,11 @@ export class PurchaseOrderService {
       throw new BadRequestException(`Purchase order with id: ${id} not found`);
     }
 
+    const arrayCode = purchaseOrder.code.split('/');
+
     const processedPurchaseOrder = {
       ...purchaseOrder,
+      code: arrayCode[1],
       status: PurchaseOrderStatusLabelEs[purchaseOrder.status as keyof typeof PurchaseOrderStatusLabelEs] || 'Desconocido'
     };
 
@@ -189,6 +196,13 @@ export class PurchaseOrderService {
 
   async update(purchaseOrderId: number, updatePurchaseOrderDto: UpdatePurchaseOrderDto) {
     this.logger.log(`Updating purchase order with id: ${purchaseOrderId}`);
+
+    if(updatePurchaseOrderDto.code){
+      const code = await this.formatedCode(purchaseOrderId, updatePurchaseOrderDto.code);
+      updatePurchaseOrderDto.code = code;
+      this.logger.log(`Formatted code for purchase order: ${code}`);
+    }
+
     const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
       where: { purchaseOrderId },
       data: updatePurchaseOrderDto,
@@ -200,7 +214,11 @@ export class PurchaseOrderService {
     }
 
     this.logger.log(`Purchase order with id: ${purchaseOrderId} updated successfully`);
-    return updatedPurchaseOrder;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Orden de compra actualizada exitosamente.',
+      data: updatedPurchaseOrder,
+    };
   }
 
 
