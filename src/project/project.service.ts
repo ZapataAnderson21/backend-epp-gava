@@ -77,6 +77,11 @@ export class ProjectService {
   }
 
   async findOne(projectId: number) {
+
+    if (!projectId) {
+      this.logger.error('Project ID is required');
+      throw new BadRequestException('No hemos encontrado el ID del proyecto.');
+    }
     
     this.logger.log('Retrieving project with ID', projectId);
     const foundProject = await this.prismaService.project.findUnique({
@@ -93,7 +98,7 @@ export class ProjectService {
       }
     });
 
-    this.logger.log(`Found project with ID ${projectId}`, foundProject);
+    this.logger.log(`Found project with ID ${projectId}`);
     if (!foundProject) {
       throw new NotFoundException('No se ha encontrado el proyecto.');
     }
@@ -102,8 +107,7 @@ export class ProjectService {
       ...foundProject,
       status: ProjectStatusLabelEs[foundProject.status as keyof typeof ProjectStatusLabelEs] || foundProject.status
     };
-
-    this.logger.log(`Found project with ID ${projectId}: ${JSON.stringify(processedProject)}`);
+    
     return {
       statusCode: HttpStatus.OK,
       message: 'Proyecto encontrado exitosamente.',

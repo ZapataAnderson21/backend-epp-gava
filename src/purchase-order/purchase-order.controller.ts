@@ -1,16 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe, Query, Res } from '@nestjs/common';
 import { PurchaseOrderService } from './purchase-order.service';
 import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
-import { Currency } from 'src/supplier/enum/currency.enum';
+import { Response } from 'express';
 import { UserTypes } from 'src/decorators/user-types.decorator';
+import { PdfService } from 'src/pdf/pdf.service';
+import { createReadStream } from 'fs';
 
 @Controller('purchase-order')
 export class PurchaseOrderController {
   
   private readonly logger = new Logger('PurchaseOrderController');
   
-  constructor(private readonly purchaseOrderService: PurchaseOrderService) {}
+  constructor(private readonly purchaseOrderService: PurchaseOrderService, 
+              private readonly pdfService: PdfService) {}
 
   @Post()
   @UserTypes('GERENTE', 'ADMINISTRADORA')
@@ -45,6 +48,20 @@ export class PurchaseOrderController {
   sumAllPurchaseAmounts(@Param('projectId', ParseIntPipe) projectId: number) {
     this.logger.log(`Summing all purchase amounts for Project ID: ${projectId}`);
     return this.purchaseOrderService.sumAllPurchaseAmountsByProject(projectId);
+  }
+
+  @Get('pdf/:id')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
+  async generatePdf(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response
+  ) {
+    this.logger.log(`Generating PDF for purchase order with ID: ${id}`);
+    const { outputPath, fileName } = await this.pdfService.generatePurchaseOrderPdf(id);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName || `orden-compra-${id}.pdf`}"`);
+    return createReadStream(outputPath).pipe(res);
   }
 
   @Patch(':id')

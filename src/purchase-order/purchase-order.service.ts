@@ -83,6 +83,11 @@ export class PurchaseOrderService {
       include: {
         project: true,
         supplier: true,
+        resources: {
+          include: {
+            resource: true,
+          },
+        },
       },
     });
 
