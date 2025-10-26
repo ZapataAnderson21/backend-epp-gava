@@ -1,4 +1,4 @@
-import { BadRequestException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -109,7 +109,7 @@ export class RequestService {
       status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
     };
 
-    this.logger.log(`Request found: ${JSON.stringify(processedRequest)}`);
+    this.logger.log(`Request with ID ${requestId} found`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Solicitud encontrada exitosamente.',
@@ -223,7 +223,6 @@ export class RequestService {
   }
 
   async updateStatus(requestId: number, status: RequestStatus) {
-
     this.logger.log(`Updating status of request ID ${requestId} to ${status}`);
 
     this.logger.log(`Verifying existence of request ID: ${requestId}`);
@@ -249,12 +248,9 @@ export class RequestService {
   }
 
   async update(requestId: number, updateRequestDto: UpdateRequestDto) {
-    
     this.logger.log(`Updating request ID ${requestId} with data: ${JSON.stringify(updateRequestDto)}`);
-    const existingRequest = (await this.findOne(requestId)).data;
-
-    const { status } = existingRequest;
-    if (status !== 'draft') {
+    
+    if (!this.requestIsDraft(requestId)) {
       this.logger.error(`Cannot update request ID ${requestId} because its status is not 'draft'`);
       throw new BadRequestException('Only requests with status "draft" can be updated');
     }
@@ -302,5 +298,25 @@ export class RequestService {
       message: 'La solicitud ha sido eliminada exitosamente.',
       data: deletedRequest
     };
+  }
+
+  async requestIsDraft(requestId: number) {
+    this.logger.log(`Verifying existence of request ID: ${requestId} and checking if its status is 'draft'`);
+    const request = await this.prismaService.request.findUnique({
+      where: { requestId }
+    });
+
+    if (!request) {
+      this.logger.error(`Request ID ${requestId} not found`);
+      throw new NotFoundException('La solicitud no fue encontrada');
+    }
+
+    if (request.status !== 'draft') {
+      this.logger.error(`Request ID ${requestId} is not in 'draft' status`);
+      return false;
+    }
+
+    this.logger.log(`Request ID ${requestId} exists and is in 'draft' status`);
+    return true;
   }
 }

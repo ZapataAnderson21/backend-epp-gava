@@ -42,7 +42,7 @@ export class RequestWorkerService {
     const requestWorkers = await this.prismaService.requestWorker.findMany({
       where: { requestId },
       include: {
-        request: true
+        request: true, worker: true
       }
     });
     
@@ -63,7 +63,7 @@ export class RequestWorkerService {
     this.logger.log(`Finding request worker with ID: ${requestWorkerId}`);
     const requestWorker = await this.prismaService.requestWorker.findUnique({
       where: { requestWorkerId },
-      include: { request: true }
+      include: { request: true, worker: true }
     });
 
     if (!requestWorker) {
@@ -113,6 +113,7 @@ export class RequestWorkerService {
 
     const deletedRequestWorker = await this.prismaService.requestWorker.delete({
       where: { requestWorkerId },
+      include: { request: true, worker: true }
     });
 
     if (!deletedRequestWorker) {
