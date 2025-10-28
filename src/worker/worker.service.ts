@@ -146,7 +146,7 @@ export class WorkerService {
     return {
       statusCode: HttpStatus.OK,
       data: worker,
-      message: 'Worker retrieved successfully.'
+      message: 'Trabajador recuperado con éxito.'
     };
   }
 
@@ -188,7 +188,7 @@ export class WorkerService {
     return {
       statusCode: HttpStatus.OK,
       data: updatedWorker,
-      message: 'Worker updated successfully.'
+      message: 'Usuario actualizado con éxito.'
     };
   }
 
@@ -210,7 +210,7 @@ export class WorkerService {
     this.logger.log(`Worker removed successfully: ${workerId}`);
     return {
       statusCode: HttpStatus.OK,
-      message: 'Worker removed successfully.',
+      message: 'Usuario eliminado con éxito.',
       data: deletedWorker
     };
   }

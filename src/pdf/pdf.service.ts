@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as PdfPrinter from 'pdfmake';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { logoBase64 } from './logoBase64';
+import { logo, logoPO, sgs, iso9001, hodelpe } from './images';
 import { ConfigService } from '@nestjs/config';
 import { RequestStatus, RequestType } from 'src/request/enum';
 import { PurchaseOrderTypeLabelEs } from 'src/purchase-order/enum';
@@ -81,82 +81,68 @@ export class PdfService {
     };
     const printer = new PdfPrinter(fonts);
 
-    // Si tienes estos logos en base64, impórtalos como hiciste con logoBase64.
-    // Alternativa: leer archivo: { image: path.resolve('src/pdf/img/Logo-ISO9001.jpg') }
-    const iso9001Base64 = '';   // TODO: pega tu base64 si lo tienes
-    const sgsBase64 = '';       // TODO: pega tu base64 si lo tienes
-    const hodelpeBase64 = '';   // TODO: pega tu base64 si lo tienes
-
     // === 4) Construcción del contenido ===
     const headingBlue = '#14519d';
 
-    // Bloque: Encabezado con logos
+    const HEADER_HEIGHT = 110;
+    const CERT_SIZE    = 50;
+    const CERT_GAP     = 6;
+    const CERT_MARGIN_TOP = Math.max(0, (HEADER_HEIGHT - CERT_SIZE) / 2);
+
     const headerBlock = [
       {
-        columns: [
-          // Logo principal
-          {
-            width: 'auto',
-            image: logoBase64,
-            fit: [260, 120], // similar a tu img grande
-            alignment: 'left',
-            margin: [0, 0, 10, 0],
-          },
-          // Certificaciones
-          {
-            width: '*',
-            alignment: 'right',
-            margin: [0, 0, 0, 0],
-            columns: [
-              {
-                width: 'auto',
-                stack: [
-                  iso9001Base64
-                    ? { image: iso9001Base64, fit: [80, 60], margin: [5, 0, 5, 5] }
-                    : {},
-                  sgsBase64
-                    ? { image: sgsBase64, fit: [80, 60], margin: [5, 0, 5, 5] }
-                    : {},
-                  hodelpeBase64
-                    ? { image: hodelpeBase64, fit: [80, 60], margin: [5, 0, 5, 5] }
-                    : {},
-                ].filter(Boolean),
+        table: {
+          widths: [300, '*'],
+          body: [[
+            // celda izquierda: logo principal
+            {
+              image: logoPO,
+              fit: [300, HEADER_HEIGHT],
+              alignment: 'left',
+              margin: [0, 0, 10, 0],
+            },
+
+            // celda derecha: certificaciones centradas verticalmente
+            {
+              alignment: 'right',
+              margin: [0, CERT_MARGIN_TOP, 0, 0], // << centra verticalmente
+              table: {
+                widths: ['auto', 'auto', 'auto'],
+                body: [[
+                  { image: iso9001, fit: [CERT_SIZE, CERT_SIZE], margin: [0, 0, CERT_GAP, 0] },
+                  { image: sgs,     fit: [CERT_SIZE, CERT_SIZE], margin: [0, 0, CERT_GAP, 0] },
+                  { image: hodelpe, fit: [CERT_SIZE, CERT_SIZE] },
+                ]],
+                heights: CERT_SIZE, // alto uniforme de la fila de logos
               },
-            ],
-          },
-        ],
+              layout: {
+                defaultBorder: false,
+                paddingLeft:  () => 0,
+                paddingRight: () => 0,
+                paddingTop:   () => 0,
+                paddingBottom:() => 0,
+              },
+            },
+          ]],
+        },
+        layout: { defaultBorder: false },
       },
       { text: (purchaseOrder.project?.name || '').toUpperCase(), style: 'titleProject', margin: [0, 10, 0, 0] },
       {
         table: {
           widths: ['*'],
-          body: [
-            [
-              {
-                text: `ORDEN DE COMPRA ${purchaseOrder.code?.toUpperCase() || ''}`,
-                style: 'ocTitle',
-                color: 'white',
-                alignment: 'center',
-                margin: [6, 8, 6, 8],
-              },
-            ],
-          ],
+          body: [[{ text: `ORDEN DE COMPRA ${purchaseOrder.code?.toUpperCase() || ''}`, style: 'ocTitle', color: 'white', alignment: 'center', margin: [6, 8, 6, 8] }]],
         },
         layout: {
-          fillColor: () => headingBlue,
-          hLineWidth: () => 0,
-          vLineWidth: () => 0,
-          paddingLeft: () => 0,
-          paddingRight: () => 0,
+          fillColor: () => '#14519d',
+          hLineWidth: () => 0, vLineWidth: () => 0,
+          paddingLeft: () => 0, paddingRight: () => 0,
         },
         margin: [0, 10, 0, 0],
       },
-      {
-        text: [{ text: 'Fecha: ', bold: true }, nowStr],
-        alignment: 'right',
-        margin: [0, 6, 0, 0],
-      },
+      { text: [{ text: 'Fecha: ', bold: true }, nowStr], alignment: 'right', margin: [0, 6, 0, 0] },
     ];
+
 
     // Bloque: Datos del proveedor
     const proveedorBlock = [
@@ -299,7 +285,7 @@ export class PdfService {
           vLineColor: () => borderColor,
           paddingLeft: () => 6,
           paddingRight: () => 6,
-          paddingTop: () => 0,
+          paddingTop: () => 6,
           paddingBottom: () => 0,
         },
       },
@@ -308,8 +294,8 @@ export class PdfService {
         table: {
           widths: ['*', '*'],
           body: [[
-            { text: [{ text: 'Método de pago: ', bold: true }, purchaseOrder.paymentMethod || '' ], margin: [6, 6, 6, 6], lineHeight: 1.35 },
-            { text: [{ text: 'Cta. cte: ', bold: true }, `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}` ], margin: [6, 6, 6, 6], lineHeight: 1.35 },
+            { text: [{ text: 'Método de pago: ', bold: true }, purchaseOrder.paymentMethod || '' ], margin: [6, 6, 6, 6], lineHeight: 1.4 },
+            { text: [{ text: 'Cta. cte: ', bold: true }, `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}` ], margin: [6, 6, 6, 6], lineHeight: 1.4 },
           ]],
         },
         layout: {
@@ -320,7 +306,7 @@ export class PdfService {
           vLineColor: () => borderColor,
           paddingLeft: () => 6,
           paddingRight: () => 6,
-          paddingTop: () => 0,
+          paddingTop: () => 6,
           paddingBottom: () => 0,
         },
       },
@@ -650,7 +636,7 @@ export class PdfService {
     {
       columns: [
         { width: '*', text: '' },
-        { width: 100, image: logoBase64, fit: [100, 100], alignment: 'right' },
+        { width: 100, image: logo, fit: [100, 100], alignment: 'right' },
       ],
     },
     { text: title, style: 'header', margin: [0, 10, 0, 20] },

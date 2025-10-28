@@ -33,11 +33,11 @@ export class PurchaseOrderService {
       throw new BadRequestException('No se pudo actualizar la orden de compra con el código generado.');
     }
 
-    this.logger.log(`Purchase order created successfully with id: ${newPurchaseOrder.purchaseOrderId}`);
+    this.logger.log(`Purchase order created successfully with id: ${updatedPurchaseOrder.data.purchaseOrderId}`);
     return {
       statusCode: HttpStatus.CREATED,
       message: 'Orden de compra creada exitosamente.',
-      data: updatedPurchaseOrder,
+      data: updatedPurchaseOrder.data,
     };
   }
 
@@ -205,7 +205,7 @@ export class PurchaseOrderService {
 
     const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
       where: { purchaseOrderId },
-      data: updatePurchaseOrderDto,
+      data: updatePurchaseOrderDto
     });
 
     if (!updatedPurchaseOrder) {
