@@ -21,11 +21,15 @@ export class RequestController {
   }
 
   @Get()
-  async findAll(@Query('projectId', new ParseIntPipe({ optional: true })) projectId?: number,
-                @Query('userId', new ParseIntPipe({ optional: true })) userId?: number,
-                @Query('status') status?: RequestStatus) {
-    return await this.requestService.findAll(projectId, userId, status);
-  }
+async findAll(
+  @Query('projectId', new ParseIntPipe({ optional: true })) projectId?: number,
+  @Query('userId', new ParseIntPipe({ optional: true })) userId?: number,
+  @Query('status') status?: RequestStatus,
+  @Query('viewerId', new ParseIntPipe({ optional: true })) viewerId?: number, // <-- NUEVO
+) {
+  return await this.requestService.findAll(projectId, userId, status, viewerId);
+}
+
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {

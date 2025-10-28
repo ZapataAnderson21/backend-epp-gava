@@ -37,37 +37,86 @@ export class RequestService {
     };
   }
   
-  async findAll(projectId?: number, userId?: number, status?: RequestStatus) {
+  async findAll(
+    projectId?: number,
+    userId?: number,                 // filtro “duro” (para usuarios normales)
+    status?: RequestStatus,
+    viewerId?: number                // quién está mirando (siempre)
+  ) {
     this.logger.log('Retrieving all requests');
-    const foundRequests = (await this.prismaService.request.findMany({
-      include: {
-        project: true,
-        user: true
-      },
-      where: { projectId, userId, status }
-    })).sort((a, b) => b.requestId - a.requestId);
-    
-    if (!foundRequests || foundRequests.length === 0) {
+
+    // Caso 1: si me piden explícitamente solo “draft”, forzamos mis borradores.
+    if (status === RequestStatus.draft) {
+      const found = await this.prismaService.request.findMany({
+        where: {
+          projectId,
+          status: RequestStatus.draft,
+          ...(userId ? { userId } : viewerId ? { userId: viewerId } : {}), // si no hay userId, usamos viewerId
+        },
+        include: { project: true, user: true },
+        orderBy: { requestId: 'desc' },
+      });
+
+      const processed = found.map(req => ({
+        ...req,
+        status: RequestStatusLabelEs[req.status as keyof typeof RequestStatusLabelEs] || req.status,
+      }));
+
       return {
-        statusCode: HttpStatus.NOT_FOUND,
-        message: 'No se han encontrado solicitudes.',
-        data: []
+        statusCode: processed.length ? HttpStatus.OK : HttpStatus.NOT_FOUND,
+        message: processed.length ? 'Solicitudes encontradas exitosamente.' : 'No se han encontrado solicitudes.',
+        data: processed,
       };
     }
 
-    const processedRequests = foundRequests.map(request => {
-      const requestObj = { 
-        ...request,
-        status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
+    // Caso 2: si me pasan userId (usuario normal), mantenemos comportamiento actual
+    if (userId) {
+      const found = await this.prismaService.request.findMany({
+        where: { projectId, userId, ...(status ? { status } : {}) },
+        include: { project: true, user: true },
+        orderBy: { requestId: 'desc' },
+      });
+
+      const processed = found.map(req => ({
+        ...req,
+        status: RequestStatusLabelEs[req.status as keyof typeof RequestStatusLabelEs] || req.status,
+      }));
+
+      return {
+        statusCode: processed.length ? HttpStatus.OK : HttpStatus.NOT_FOUND,
+        message: processed.length ? 'Solicitudes encontradas exitosamente.' : 'No se han encontrado solicitudes.',
+        data: processed,
       };
-      return requestObj;
+    }
+
+    // Caso 3 (GERENTE/ADMINISTRADORA):
+    // - incluir TODO lo NO-draft
+    // - y SOLO mis borradores (viewerId)
+    const found = await this.prismaService.request.findMany({
+      where: {
+        projectId,
+        ...(status
+          ? { status } // si filtran por un estado distinto a draft, respetamos el filtro
+          : {
+              OR: [
+                { status: { not: RequestStatus.draft } },
+                ...(viewerId ? [{ AND: [{ status: RequestStatus.draft }, { userId: viewerId }] }] : []),
+              ],
+            }),
+      },
+      include: { project: true, user: true },
+      orderBy: { requestId: 'desc' },
     });
 
-    this.logger.log(`Found ${foundRequests.length} requests`);
+    const processed = found.map(req => ({
+      ...req,
+      status: RequestStatusLabelEs[req.status as keyof typeof RequestStatusLabelEs] || req.status,
+    }));
+
     return {
-      statusCode: HttpStatus.OK,
-      message: 'Solicitudes encontradas exitosamente.',
-      data: processedRequests
+      statusCode: processed.length ? HttpStatus.OK : HttpStatus.NOT_FOUND,
+      message: processed.length ? 'Solicitudes encontradas exitosamente.' : 'No se han encontrado solicitudes.',
+      data: processed,
     };
   }
 
