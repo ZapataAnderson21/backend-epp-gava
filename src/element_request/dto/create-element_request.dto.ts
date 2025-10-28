@@ -11,7 +11,6 @@ export class CreateElementRequestDto {
 
   @ApiProperty({ example: 'unidad' })
   @IsString()
-  @IsNotEmpty({ message: 'La unidad es requerida.' })
   unit!: string;
 
   @ApiProperty()

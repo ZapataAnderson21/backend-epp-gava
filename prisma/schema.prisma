@@ -60,7 +60,7 @@ model Project {
   projectId       Int             @id @default(autoincrement())
   name            String
   code            String          @unique
-  description     String          @db.Text @default("No description provided.")
+  description     String          @db.Text @default("Sin descripción.")
   status          ProjectStatus   @default(active)
   location        String
   startDate       DateTime?
@@ -89,7 +89,7 @@ enum ElementType {
 model Element {
   elementId       Int               @id @default(autoincrement())
   name            String
-  description     String            @db.Text @default("No description provided.")
+  description     String            @db.Text @default("Sin descripción.")
   type            ElementType
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
@@ -121,7 +121,7 @@ model Request {
   requestId        Int                @id @default(autoincrement())
   deliveryDueDate  DateTime
   status           RequestStatus      @default(draft)
-  description      String             @db.Text @default("No description provided.")
+  description      String             @db.Text @default("Sin descripción.")
   userId           Int
   projectId        Int
   type             RequestType
@@ -412,7 +412,7 @@ model PettyCash {
   projectId     Int
   resourceName  String
   amount        Decimal   @db.Decimal(18,2)
-  description   String    @db.Text @default("No description provided")
+  description   String    @db.Text @default("Sin descripción")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -427,7 +427,7 @@ model ServiceSale {
   projectId     Int
   serviceName   String
   amount        Decimal   @db.Decimal(18,2)
-  description   String    @db.Text @default("No description provided")
+  description   String    @db.Text @default("Sin descripción")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
