@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger 
 import { CreateWorkerDto } from './dto/create-worker.dto';
 import { UpdateWorkerDto } from './dto/update-worker.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { emptyToNull } from 'src/common/util/strings.util';
 
 @Injectable()
 export class WorkerService {
@@ -34,8 +35,14 @@ export class WorkerService {
     this.logger.log(`Verifying worker group with ID: ${createWorkerDto.workerGroupId} exists`);
     await this.verifyWorkerGroupExists(createWorkerDto.workerGroupId);
 
+    const data = { 
+      ...createWorkerDto,
+      phone: emptyToNull(createWorkerDto.phone),
+      personalEmail: emptyToNull(createWorkerDto.personalEmail),
+     };
+
     const worker = await this.prismaService.worker.create({
-      data: createWorkerDto
+      data
     });
 
     if (!worker) {
@@ -179,6 +186,9 @@ export class WorkerService {
         throw new BadRequestException('birthDate con tipo no soportado.');
       }
     }
+
+    if (dto.phone !== undefined) data.phone = emptyToNull(dto.phone);
+    if (dto.personalEmail !== undefined) data.personalEmail = emptyToNull(dto.personalEmail);
 
     const updatedWorker = await this.prismaService.worker.update({
       where: { workerId },
