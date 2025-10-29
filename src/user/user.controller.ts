@@ -18,7 +18,7 @@ export class UserController {
   constructor(private readonly userService: UserService,
               private readonly mailService: MailService) {}
 
-  @UserTypes('GERENTE', 'ADMINISTRADORA')
+  @Public()
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     this.logger.log(`Creating user: ${createUserDto.name}`);

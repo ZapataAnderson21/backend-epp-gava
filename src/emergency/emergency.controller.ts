@@ -1,11 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, HttpStatus, UploadedFile, UseInterceptors, ParseIntPipe, NotFoundException, Res, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UploadedFile, UseInterceptors, ParseIntPipe, NotFoundException, Res, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { EmergencyService } from './emergency.service';
-import { CreateEmergencyDto } from './dto/create-emergency.dto';
 import { UpdateEmergencyDto } from './dto/update-emergency.dto';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 import * as fs from 'fs';
 
@@ -16,8 +14,8 @@ export class EmergencyController {
   @Post()
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
-      // destination: '/var/www/emergencies',
-      destination: './uploads/emergencies',
+      destination: '/var/www/emergencies',
+      //destination: './uploads/emergencies',
       filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, `${uniqueSuffix}${extname(file.originalname)}`);

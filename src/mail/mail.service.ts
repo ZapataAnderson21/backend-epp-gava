@@ -104,11 +104,11 @@ export class MailService {
           break;
       }
 
-      //const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
+      const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
 
-      //const pdfPath = path.resolve(outputDir, `requerimiento-${requestId}.pdf`);
+      const pdfPath = path.resolve(outputDir, `requerimiento-${requestId}.pdf`);
 
-      const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${requestId}.pdf`);
+      //const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${requestId}.pdf`);
 
       if (!fs.existsSync(pdfPath)) {
         return {
