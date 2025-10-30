@@ -8,7 +8,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePettyCashDto } from './dto/create-petty-cash.dto';
 import { UpdatePettyCashDto } from './dto/update-petty-cash.dto';
-import { PettyCashType } from './enum';
+import { PettyCashLabelEs, PettyCashType } from './enum';
 
 @Injectable()
 export class PettyCashService {
@@ -64,7 +64,7 @@ export class PettyCashService {
     this.logger.log(`Fetching petty cash list for project ID: ${projectId}`);
     const list = await this.prisma.pettyCash.findMany({
       where: { projectId },
-      orderBy: [{ createdAt: 'desc' }],
+      orderBy: [{ expenseDate: 'desc' }],
     });
 
     if (!list || list.length === 0) {
@@ -76,10 +76,16 @@ export class PettyCashService {
       });
     }
 
+    const proccessedList = list.map(item => ({
+      ...item,
+      expenseDate: new Date(item.expenseDate).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+      expenseType: PettyCashLabelEs[item.expenseType], // Convertir enum a string
+    }));
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Cajas chicas obtenidas exitosamente.',
-      data: list,
+      data: proccessedList,
     };
   }
 
@@ -97,10 +103,16 @@ export class PettyCashService {
         data: null,
       });
     }
+
+    const proccessedRow = {
+      ...row,
+      expenseType: PettyCashLabelEs[row.expenseType], // Convertir enum a string
+    }
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Caja chica obtenida exitosamente.',
-      data: row,
+      data: proccessedRow,
     };
   }
 
