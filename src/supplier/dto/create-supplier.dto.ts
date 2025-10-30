@@ -1,6 +1,20 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, Length, MaxLength, MinLength } from "class-validator";
 import { Currency } from "../enum/currency.enum";
+import { Transform } from "class-transformer";
+
+/** Helpers de transformación */
+const trim = (v: any) => (typeof v === 'string' ? v.trim() : v);
+const toNullIfEmpty = (v: any) => {
+  if (v === undefined || v === null) return null;
+  const t = String(v).trim();
+  return t === '' ? null : t;
+};
+const toUndefIfEmpty = (v: any) => {
+  if (v === undefined || v === null) return undefined;
+  const t = String(v).trim();
+  return t === '' ? undefined : t;
+};
 
 export class CreateSupplierDto {
   @ApiProperty({ example: 'Proveedor SAC' }) 
@@ -18,10 +32,10 @@ export class CreateSupplierDto {
   phone!: string;
 
   @ApiPropertyOptional({ example: 'ventas@proveedor.com' }) 
-  @IsEmail()
+  @Transform(({ value }) => toNullIfEmpty(value))
   @IsOptional()
-  @IsNotEmpty({ message: 'El email es obligatorio.' })
-  email!: string;
+  @IsEmail({}, { message: 'El email no tiene formato válido.' })
+  email?: string;
 
   @ApiPropertyOptional({ example: 'Av. Siempre Viva 123' }) 
   @IsString() 

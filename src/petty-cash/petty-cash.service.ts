@@ -8,6 +8,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePettyCashDto } from './dto/create-petty-cash.dto';
 import { UpdatePettyCashDto } from './dto/update-petty-cash.dto';
+import { PettyCashType } from './enum';
 
 @Injectable()
 export class PettyCashService {
@@ -35,7 +36,12 @@ export class PettyCashService {
 
     this.ensureNonNegative(dto.amount, 'El monto');
 
-    const pettyCash = await this.prisma.pettyCash.create({ data: dto });
+    const pettyCashData = {
+      ...dto,
+      expenseDate: new Date(dto.expenseDate)
+    }
+
+    const pettyCash = await this.prisma.pettyCash.create({ data: pettyCashData });
     if (!pettyCash) {
       this.logger.error('Failed to create petty cash');
       throw new BadRequestException({
@@ -114,7 +120,23 @@ export class PettyCashService {
       data: total
     };
   }
-  
+
+  async sumAmountsByTypeAndProject( projectId: number, pettyCashType: PettyCashType) {
+    this.logger.log(`Calculating total amount of petty cash entries for project ID: ${projectId} and type: ${pettyCashType}`);
+    const result = await this.prisma.pettyCash.aggregate({
+      where: { projectId, expenseType: pettyCashType },
+      _sum: { amount: true },
+    });
+
+    const total = result._sum.amount || 0;
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Total de salidas de caja chica calculado exitosamente.',
+      data: total
+    };
+  }
+
   /* ---------- UPDATE ---------- */
   async update(pettyCashId: number, dto: UpdatePettyCashDto) {
     this.logger.log(

@@ -108,7 +108,7 @@ export class SupplierService {
     // Si cambia el email, validar conflicto (CITEXT => case-insensitive)
     if (
       updateSupplierDto.email &&
-      updateSupplierDto.email.trim().toLowerCase() !== current.email.trim().toLowerCase()
+      updateSupplierDto.email.trim().toLowerCase() !== (current.email ?? '').trim().toLowerCase()
     ) {
       const byEmail = await this.findByEmail(updateSupplierDto.email);
       if (byEmail && byEmail.supplierId !== supplierId) {

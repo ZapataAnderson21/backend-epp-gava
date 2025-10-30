@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Min } from "class-validator";
+import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Min } from "class-validator";
+import { PettyCashType } from "../enum";
 
 export class CreatePettyCashDto {
   @ApiProperty({ example: 10 })
@@ -26,4 +27,18 @@ export class CreatePettyCashDto {
   @IsOptional() 
   @IsString() 
   description?: string;
+
+  @ApiProperty({ example: '2025-10-20T00:00:00.000Z' })
+  @IsDateString()
+  expenseDate!: string;
+
+  @ApiProperty({ enum: PettyCashType, enumName: 'PettyCashType', example: PettyCashType.Supplies })
+  @IsEnum(PettyCashType)
+  @IsNotEmpty({ message: 'El tipo de gasto es obligatorio' })
+  expenseType!: PettyCashType;
+
+  @ApiPropertyOptional({ example: 'INV-12345' })
+  @IsOptional()
+  @IsString()
+  invoiceNumber?: string;
 }
