@@ -104,15 +104,10 @@ export class PettyCashService {
       });
     }
 
-    const proccessedRow = {
-      ...row,
-      expenseType: PettyCashLabelEs[row.expenseType], // Convertir enum a string
-    }
-
     return {
       statusCode: HttpStatus.OK,
       message: 'Caja chica obtenida exitosamente.',
-      data: proccessedRow,
+      data: row,
     };
   }
 
