@@ -11,11 +11,6 @@ export class CreatePettyCashDto {
   @IsNotEmpty({ message: 'El ID de proyecto es obligatorio. ' })
   projectId!: number;
 
-  @ApiProperty({ example: 'Útiles menores' }) 
-  @IsString() 
-  @IsNotEmpty({ message: 'El nombre del recurso es obligatorio' })
-  resourceName!: string;
-
   @ApiProperty({ example: 120.00, minimum: 0 }) 
   @Type(() => Number) 
   @IsNumber({ maxDecimalPlaces: 2 }) 

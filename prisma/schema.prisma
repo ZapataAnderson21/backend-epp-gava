@@ -420,7 +420,6 @@ enum PettyCashType {
 model PettyCash {
   pettyCashId     Int             @id @default(autoincrement())
   projectId       Int
-  resourceName    String
   amount          Decimal         @db.Decimal(18,2)
   description     String          @db.Text @default("Sin descripción")
   expenseDate     DateTime        @default(now())
