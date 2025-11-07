@@ -243,34 +243,24 @@ model Worker {
   personalEmail  String?          @db.Citext @unique
   address        String?          @default("No address provided.")
   birthDate      DateTime?
-  workerGroupId  Int
+  workerType     WorkerType       @default(unspecified)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   deletedAt      DateTime?
 
-  workerGroup    WorkerGroup      @relation(fields: [workerGroupId], references: [workerGroupId], onDelete: Restrict, onUpdate: Cascade)
   requestWorkers RequestWorker[]
 
   @@index([dni])
-  @@index([workerGroupId])
   @@index([deletedAt])
 }
 
-model WorkerGroup {
-  workerGroupId  Int           @id @default(autoincrement())
-  name           String
-  description    String?       @db.Text
-  parentGroupId  Int?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-
-  parentGroup    WorkerGroup?  @relation("WorkerGroupToWorkerGroup", fields: [parentGroupId], references: [workerGroupId], onDelete: Restrict, onUpdate: Cascade)
-  subGroups      WorkerGroup[] @relation("WorkerGroupToWorkerGroup")
-  workers        Worker[]
-
-  @@unique([parentGroupId, name])
-  @@index([parentGroupId])
-  @@index([name])
+enum WorkerType {
+  laborer
+  technician
+  engineer
+  administrator
+  manager
+  unspecified
 }
 
 model Supplier {

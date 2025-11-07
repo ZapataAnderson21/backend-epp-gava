@@ -15,7 +15,6 @@ import { RequestWorkerModule } from './request-worker/request-worker.module';
 import { PurchaseOrderModule } from './purchase-order/purchase-order.module';
 import { SupplierModule } from './supplier/supplier.module';
 import { WorkerModule } from './worker/worker.module';
-import { WorkerGroupModule } from './worker-group/worker-group.module';
 import { CategoryResourceModule } from './category-resource/category-resource.module';
 import { ResourceModule } from './resource/resource.module';
 import { ResourcePurchaseOrderModule } from './resource-purchase-order/resource-purchase-order.module';
@@ -34,7 +33,6 @@ import { UserTypesGuard } from './guards/user-types.guard';
             PurchaseOrderModule,
             SupplierModule,
             WorkerModule,
-            WorkerGroupModule,
             CategoryResourceModule,
             ResourceModule,
             ResourcePurchaseOrderModule,

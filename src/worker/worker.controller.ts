@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe
 import { WorkerService } from './worker.service';
 import { CreateWorkerDto } from './dto/create-worker.dto';
 import { UpdateWorkerDto } from './dto/update-worker.dto';
+import { WorkerType } from './enum/worker-type.enum';
 
 @Controller('worker')
 export class WorkerController {
@@ -22,10 +23,10 @@ export class WorkerController {
     return this.workerService.findAll();
   }
 
-  @Get('group/:workerGroupId')
-  findAllByWorkerGroupId(@Param('workerGroupId', ParseIntPipe) workerGroupId: number) {
-    this.logger.log(`Finding workers with Group ID: ${workerGroupId}`);
-    return this.workerService.findAllByWorkerGroupId(workerGroupId);
+  @Get('type/:workerType')
+  findAllByWorkerType(@Param('workerType') workerType: WorkerType) {
+    this.logger.log(`Finding workers with Type: ${workerType}`);
+    return this.workerService.findAllByWorkerType(workerType);
   }
 
   @Get(':id')

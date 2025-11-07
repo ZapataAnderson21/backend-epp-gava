@@ -1,8 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
 import {
-  IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, Length, IsEmail
+  IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, Length, IsEmail,
+  IsEnum
 } from "class-validator";
+import { WorkerType } from "../enum/worker-type.enum";
 
 /** Helpers de transformación */
 const trim = (v: any) => (typeof v === 'string' ? v.trim() : v);
@@ -55,10 +57,9 @@ export class CreateWorkerDto {
   @IsDateString({}, { message: 'birthDate debe tener formato ISO: YYYY-MM-DD' })
   birthDate?: string;
 
-  @ApiProperty({ example: 3 })
-  @Type(() => Number)
-  @IsInt()
-  workerGroupId!: number;
+  @ApiProperty({ example: WorkerType.Laborer })
+  @IsEnum(WorkerType, { message: 'workerType debe ser un tipo válido.' })
+  workerType!: WorkerType;
 }
 
 /** Update DTO: todos opcionales y con mismas transforms */
@@ -100,9 +101,7 @@ export class UpdateWorkerDto {
   @IsDateString()
   birthDate?: string;
 
-  @ApiPropertyOptional({ example: 3 })
-  @Type(() => Number)
-  @IsOptional()
-  @IsInt()
-  workerGroupId?: number;
+  @ApiProperty({ example: WorkerType.Laborer })
+  @IsEnum(WorkerType, { message: 'workerType debe ser un tipo válido.' })
+  workerType!: WorkerType;
 }

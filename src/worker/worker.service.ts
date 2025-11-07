@@ -3,6 +3,7 @@ import { CreateWorkerDto } from './dto/create-worker.dto';
 import { UpdateWorkerDto } from './dto/update-worker.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { emptyToNull } from 'src/common/util/strings.util';
+import {WorkerTypeLabelEs, type WorkerType} from './enum/worker-type.enum';
 
 @Injectable()
 export class WorkerService {
@@ -31,9 +32,6 @@ export class WorkerService {
         throw new ConflictException(`El trabajador con teléfono ${createWorkerDto.phone} ya existe.`);
       }
     }
-
-    this.logger.log(`Verifying worker group with ID: ${createWorkerDto.workerGroupId} exists`);
-    await this.verifyWorkerGroupExists(createWorkerDto.workerGroupId);
 
     const data = { 
       ...createWorkerDto,
@@ -64,13 +62,6 @@ export class WorkerService {
       where: { 
         deletedAt: null 
       },
-      include : {
-        workerGroup: {
-          include: {
-            parentGroup: true
-          }
-        }
-      },
       orderBy: {
         fullName: 'asc'
       }
@@ -85,29 +76,26 @@ export class WorkerService {
       };
     }
 
+    const proccessedList = workers.map(worker => ({
+      ...worker,
+      workerType: WorkerTypeLabelEs[worker.workerType as keyof typeof WorkerTypeLabelEs] || worker.workerType
+    }));
+
     this.logger.log(`Workers retrieved successfully. Found ${workers.length} workers.`);
     return {
       statusCode: HttpStatus.OK,
-      data: workers,
+      data: proccessedList,
       message: 'Trabajadores recuperados con éxito.'
     };
   }
 
-  async findAllByWorkerGroupId(workerGroupId: number) {
-    this.logger.log(`Finding workers for worker group ID: ${workerGroupId}`);
-    await this.verifyWorkerGroupExists(workerGroupId);
-
+  async findAllByWorkerType(workerType: WorkerType) {
+    this.logger.log(`Finding workers for worker type: ${workerType}`);
+    
     const workers = await this.prismaService.worker.findMany({
       where: { 
-        workerGroupId,
+        workerType,
         deletedAt: null 
-      },
-      include : {
-        workerGroup: {
-          include: {
-            parentGroup: true
-          }
-        }
       },
       orderBy: {
         fullName: 'asc'
@@ -115,15 +103,15 @@ export class WorkerService {
     });
 
     if(!workers || workers.length === 0){
-      this.logger.warn(`No workers found for worker group ID: ${workerGroupId}`);
+      this.logger.warn(`No workers found for worker type: ${workerType}`);
       return {
         statusCode: HttpStatus.NOT_FOUND,
         data: [],
-        message: 'No se encontraron trabajadores para el grupo especificado.'
+        message: 'No se encontraron trabajadores para el tipo especificado.'
       };
     }
 
-    this.logger.log(`Workers retrieved successfully for worker group ID ${workerGroupId}: ${JSON.stringify(workers)}`);
+    this.logger.log(`Workers retrieved successfully for worker type ${workerType}: ${JSON.stringify(workers)}`);
     return {
       statusCode: HttpStatus.OK,
       data: workers,
@@ -134,14 +122,7 @@ export class WorkerService {
   async findOne(workerId: number) {
     this.logger.log(`Retrieving worker with ID: ${workerId}`);
     const worker = await this.prismaService.worker.findUnique({
-      where: { workerId, deletedAt: null },
-      include : {
-        workerGroup: {
-          include: {
-            parentGroup: true
-          }
-        }
-      },
+      where: { workerId, deletedAt: null }
     });
 
     if (!worker) {
@@ -223,21 +204,6 @@ export class WorkerService {
       message: 'Usuario eliminado con éxito.',
       data: deletedWorker
     };
-  }
-
-  async verifyWorkerGroupExists(workerGroupId: number) {
-    this.logger.log(`Verifying existence of worker group with ID: ${workerGroupId}`);
-    const workerGroup = await this.prismaService.workerGroup.findUnique({
-      where: { workerGroupId }
-    });
-
-    if (!workerGroup) {
-      this.logger.error(`Worker group with ID: ${workerGroupId} does not exist`);
-      throw new BadRequestException(`El grupo de trabajadores con ID ${workerGroupId} no existe.`);
-    }
-
-    this.logger.log(`Worker group with ID: ${workerGroupId} exists`);
-    return workerGroup;
   }
 
   async findByPhone(phone: string) {
