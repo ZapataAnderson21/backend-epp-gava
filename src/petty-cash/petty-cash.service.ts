@@ -78,7 +78,15 @@ export class PettyCashService {
 
     const proccessedList = list.map(item => ({
       ...item,
-      expenseDate: new Date(item.expenseDate).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+      expenseDate: new Date(item.expenseDate).toLocaleDateString(
+        'es-PE',
+        {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          timeZone: 'America/Lima',
+        }
+      ),
       expenseType: PettyCashLabelEs[item.expenseType], // Convertir enum a string
     }));
 
