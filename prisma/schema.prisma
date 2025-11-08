@@ -74,6 +74,7 @@ model Project {
   purchaseOrders  PurchaseOrder[]
   pettyCashes     PettyCash[]
   serviceSales    ServiceSale[]
+  attendances     Attendance[]
 
   @@index([status])
   @@index([name])
@@ -249,6 +250,9 @@ model Worker {
   deletedAt      DateTime?
 
   requestWorkers RequestWorker[]
+  weeklyWages    WeeklyWage[]
+  attendances    Attendance[]
+  dailyWages     DailyWage[]
 
   @@index([dni])
   @@index([deletedAt])
@@ -465,3 +469,57 @@ model BlacklistedToken {
 
   @@index([expiresAt])
 }
+
+model Week {
+  weekId     Int      @id @default(autoincrement())
+  startDate  DateTime @db.Date @unique
+  endDate    DateTime @db.Date
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  weeklyWages WeeklyWage[]
+
+  @@index([startDate])
+  @@index([endDate])
+}
+
+model DailyWage {
+  dailyWageId Int      @id @default(autoincrement())
+  workerId    Int
+  amount      Decimal  @db.Decimal(18,2)
+  validFrom   DateTime @db.Date @default(now())
+  createdAt   DateTime @default(now())
+
+  worker      Worker   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([workerId, validFrom])
+  @@index([workerId])
+}
+
+model WeeklyWage {
+  weeklyWageId Int      @id @default(autoincrement())
+  workerId     Int
+  weekId       Int
+  totalAmount  Decimal  @db.Decimal(18,2)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  worker       Worker   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  week         Week     @relation(fields: [weekId], references: [weekId], onDelete: Cascade, onUpdate: Cascade)
+}
+
+ model Attendance {
+  attendanceId Int      @id @default(autoincrement())
+  workerId     Int
+  projectId    Int
+  date         DateTime @db.Date
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  worker       Worker   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  project      Project  @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([workerId, date])
+  @@index([workerId])
+  @@index([projectId])
+ }
