@@ -478,6 +478,7 @@ model Week {
   updatedAt  DateTime @updatedAt
 
   weeklyWages WeeklyWage[]
+  attendances  Attendance[]
 
   @@index([startDate])
   @@index([endDate])
@@ -513,11 +514,12 @@ model WeeklyWage {
   workerId     Int
   projectId    Int
   date         DateTime @db.Date
+  weekId      Int
   createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
 
   worker       Worker   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
   project      Project  @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  week         Week     @relation(fields: [weekId], references: [weekId], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([workerId, date])
   @@index([workerId])

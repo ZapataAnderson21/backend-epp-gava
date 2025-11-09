@@ -23,6 +23,10 @@ import { ServiceSaleModule } from './service-sale/service-sale.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './user/jwt/jwt.auth.guard';
 import { UserTypesGuard } from './guards/user-types.guard';
+import { AttendanceModule } from './attendance/attendance.module';
+import { WeekModule } from './week/week.module';
+import { ScheduleModule } from '@nestjs/schedule';
+
 
 @Module({
   imports: [UserModule, UserTypeModule, ProjectModule, ElementModule, RequestModule, 
@@ -37,7 +41,10 @@ import { UserTypesGuard } from './guards/user-types.guard';
             ResourceModule,
             ResourcePurchaseOrderModule,
             PettyCashModule,
-            ServiceSaleModule
+            ServiceSaleModule,
+            AttendanceModule,
+            ScheduleModule.forRoot(),
+            WeekModule,
           ],
   controllers: [],
   providers: [MailService, 
