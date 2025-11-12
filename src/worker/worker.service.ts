@@ -64,6 +64,9 @@ export class WorkerService {
       },
       orderBy: {
         fullName: 'asc'
+      },
+      include: {
+        attendances: true
       }
     });
 
@@ -99,6 +102,9 @@ export class WorkerService {
       },
       orderBy: {
         fullName: 'asc'
+      },
+      include: {
+        attendances: true
       }
     });
 

@@ -18,10 +18,4 @@ export class CreateAttendanceDto {
     @ApiProperty({ example: '2025-10-20' })
     @IsDateString()
     date!: string;
-
-    @ApiProperty({ example: 3 })
-    @Type(() => Number)
-    @IsInt()
-    @IsPositive()
-    weekId!: number;
 }

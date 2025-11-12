@@ -20,7 +20,6 @@ export class AttendanceController {
   constructor(private readonly attendanceService: AttendanceService) {}
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
   create(@Body() createAttendanceDto: CreateAttendanceDto) {
     this.logger.log(`Creating attendance with data: ${JSON.stringify(createAttendanceDto)}`);
     return this.attendanceService.create(createAttendanceDto);

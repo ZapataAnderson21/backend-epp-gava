@@ -26,6 +26,7 @@ import { UserTypesGuard } from './guards/user-types.guard';
 import { AttendanceModule } from './attendance/attendance.module';
 import { WeekModule } from './week/week.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { PayrollModule } from './payroll/payroll.module';
 
 
 @Module({
@@ -45,6 +46,7 @@ import { ScheduleModule } from '@nestjs/schedule';
             AttendanceModule,
             ScheduleModule.forRoot(),
             WeekModule,
+            PayrollModule,
           ],
   controllers: [],
   providers: [MailService, 
