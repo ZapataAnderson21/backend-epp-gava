@@ -6,10 +6,6 @@ function formatWeekLabel(start: Date, end: Date, locale = 'es-PE') {
   const fmt = new Intl.DateTimeFormat(locale, { day: '2-digit', month: 'long' });
   return `${fmt.format(start)} - ${fmt.format(end)}`;
 }
-function sol(amount: number) {
-  return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
-}
-
 @Controller('projects/:projectId/payroll')
 export class ProjectPayrollController {
   constructor(private readonly attendanceService: AttendanceService) {}
@@ -19,20 +15,18 @@ export class ProjectPayrollController {
   async summaryByProject(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Query('asOfDate') asOfDate?: string,
-    @Query('formatCurrency') formatCurrencyFlag?: string,
   ) {
     const rows = await this.attendanceService.getWeeklyPayrollSummaryByProject(
       projectId,
       asOfDate ? new Date(asOfDate) : new Date(),
     );
-    const money = String(formatCurrencyFlag) === 'true';
 
     return rows.map((r) => ({
       weekId: r.weekId,
       label: formatWeekLabel(r.startDate, r.endDate),
-      laborer: money ? sol(r.laborerTotal) : r.laborerTotal,
-      technician: money ? sol(r.technicianTotal) : r.technicianTotal,
-      total: money ? sol(r.grandTotal) : r.grandTotal,
+      laborer: r.laborerTotal,
+      technician: r.technicianTotal,
+      total: r.grandTotal,
     }));
   }
 
@@ -61,19 +55,19 @@ export class ProjectPayrollController {
       weekId,
       label: week ? formatWeekLabel(week.startDate, week.endDate) : `Semana #${weekId}`,
       totals: {
-        laborer: money ? sol(detail.totals.laborer) : detail.totals.laborer,
-        technician: money ? sol(detail.totals.technician) : detail.totals.technician,
-        total: money ? sol(detail.totals.total) : detail.totals.total,
+        laborer: detail.totals.laborer,
+        technician: detail.totals.technician,
+        total: detail.totals.total,
       },
       breakdown: detail.breakdown.map((b) => ({
         workerId: b.workerId,
         fullName: b.fullName,
         workerType: b.workerType,
         days: b.days,
-        dailyWage: money ? sol(b.dailyWage) : b.dailyWage,
-        total: money ? sol(b.total) : b.total,
-        discounts: money ? sol(b.discounts) : b.discounts,
-        net: money ? sol(b.net) : b.net,
+        dailyWage: b.dailyWage,
+        total: b.total,
+        discounts: b.discounts,
+        net: b.net,
       })),
     };
   }

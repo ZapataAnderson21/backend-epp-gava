@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe, Query } from '@nestjs/common';
 import { WorkerService } from './worker.service';
 import { CreateWorkerDto } from './dto/create-worker.dto';
 import { UpdateWorkerDto } from './dto/update-worker.dto';
@@ -33,6 +33,11 @@ export class WorkerController {
   findOne(@Param('id', ParseIntPipe) id: number) {
     this.logger.log(`Finding worker with ID: ${id}`);
     return this.workerService.findOne(id);
+  }
+
+  @Get('totals/:projectId')
+  getTotals(@Param('projectId', ParseIntPipe) projectId: number) {
+    return this.workerService.getProjectPayrollTotals(projectId);
   }
 
   @Patch(':id')
