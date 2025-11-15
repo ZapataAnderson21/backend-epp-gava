@@ -286,9 +286,8 @@ export class WorkerService {
         workerId: true,
         workerType: true,
         dailyWages: {
-          where: { validFrom: { lte: today } },
-          orderBy: { validFrom: 'desc' },
-          take: 1,
+          orderBy: { validFromWeekId: 'desc' }, // ✅ usamos validFromWeekId
+          take: 1,                               // solo el más reciente
           select: { amount: true },
         },
       },

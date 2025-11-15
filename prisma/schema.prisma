@@ -479,22 +479,28 @@ model Week {
 
   weeklyWages WeeklyWage[]
   attendances  Attendance[]
+  dailyWagesFrom DailyWage[]
 
   @@index([startDate])
   @@index([endDate])
 }
 
 model DailyWage {
-  dailyWageId Int      @id @default(autoincrement())
-  workerId    Int
-  amount      Decimal  @db.Decimal(18,2)
-  validFrom   DateTime @db.Date @default(now())
-  createdAt   DateTime @default(now())
+  dailyWageId       Int      @id @default(autoincrement())
+  workerId          Int
+  amount            Decimal  @db.Decimal(18,2)
 
-  worker      Worker   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  // NUEVO: vigencia desde una semana
+  validFromWeekId   Int
 
-  @@unique([workerId, validFrom])
+  createdAt         DateTime @default(now())
+
+  worker            Worker   @relation(fields: [workerId],        references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  validFromWeek     Week     @relation(fields: [validFromWeekId], references: [weekId],   onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([workerId, validFromWeekId])
   @@index([workerId])
+  @@index([validFromWeekId])
 }
 
 model WeeklyWage {

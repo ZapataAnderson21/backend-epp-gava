@@ -42,7 +42,7 @@ export class WeekService {
     });
   }
 
-    async getWeeklyPayrollByProject(projectId: number): Promise<{
+  async getWeeklyPayrollByProject(projectId: number): Promise<{
       message: string;
       statusCode: number;
       data: WeeklyProjectPayroll[];
@@ -103,12 +103,12 @@ export class WeekService {
         const dailyWage = await this.prismaService.dailyWage.findFirst({
           where: {
             workerId,
-            validFrom: {
-              lte: week.endDate, // vigente en la semana
+            validFromWeekId: {
+              lte: week.weekId,   // vigente hasta esta semana
             },
           },
           orderBy: {
-            validFrom: 'desc',
+            validFromWeekId: 'desc',
           },
         });
 
