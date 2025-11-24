@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString } from "class-validator";
-import { EmergencyStatus } from "../enum/emergency-status.enum";
+import { EmergencyStatus } from '../enum/emergency-status.enum';
 import { Type } from "class-transformer";
 
 export class CreateEmergencyDto {

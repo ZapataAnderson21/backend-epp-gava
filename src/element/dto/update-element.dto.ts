@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateElementDto } from './create-element.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { ProjectStatus } from 'generated/prisma';
+import { ProjectStatus } from '../../generated/prisma';
 import { IsEnum, IsOptional } from 'class-validator';
 
 export class UpdateElementDto extends PartialType(CreateElementDto) {

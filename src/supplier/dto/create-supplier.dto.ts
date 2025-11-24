@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, Length, MaxLength, MinLength } from "class-validator";
-import { Currency } from "../enum/currency.enum";
+import { Currency } from '../enum/currency.enum';
 import { Transform } from "class-transformer";
 
 /** Helpers de transformación */

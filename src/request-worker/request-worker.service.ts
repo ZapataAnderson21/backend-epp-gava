@@ -2,7 +2,7 @@ import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException 
 import { CreateRequestWorkerDto } from './dto/create-request-worker.dto';
 import { UpdateRequestWorkerDto } from './dto/update-request-worker.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RequestStatus } from 'generated/prisma';
+import { RequestStatus } from '../generated/prisma';
 
 @Injectable()
 export class RequestWorkerService {

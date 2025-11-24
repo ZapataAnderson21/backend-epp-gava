@@ -143,9 +143,9 @@ export class PurchaseOrderService {
     });
 
     const data = {
-      totalPEN: totalPEN._sum.purchaseAmount,
-      totalUSD: totalUSD._sum.purchaseAmount,
-      totalEUR: totalEUR._sum.purchaseAmount
+      totalPEN: Number(totalPEN._sum.purchaseAmount),
+      totalUSD: Number(totalUSD._sum.purchaseAmount),
+      totalEUR: Number(totalEUR._sum.purchaseAmount)
     };
 
     return {
@@ -182,9 +182,9 @@ export class PurchaseOrderService {
     });
 
     const data = {
-      totalPEN : totalPEN._sum.saleAmount,
-      totalUSD : totalUSD._sum.saleAmount,
-      totalEUR : totalEUR._sum.saleAmount
+      totalPEN : Number(totalPEN._sum.saleAmount),
+      totalUSD : Number(totalUSD._sum.saleAmount),
+      totalEUR : Number(totalEUR._sum.saleAmount)
     };
 
     return {
@@ -221,6 +221,75 @@ export class PurchaseOrderService {
     };
   }
 
+
+  async duplicate(purchaseOrderId: number, projectId: number) {
+    this.logger.log(`Duplicating purchase order with id: ${purchaseOrderId}`);
+    
+    // Obtener la orden de compra original con sus recursos
+    const originalPurchaseOrder = await this.prisma.purchaseOrder.findUnique({
+      where: { purchaseOrderId },
+      include: {
+        resources: true,
+      },
+    });
+
+    if (!originalPurchaseOrder) {
+      this.logger.error(`Purchase order with id: ${purchaseOrderId} not found`);
+      throw new NotFoundException(`No se encontró la orden de compra con id: ${purchaseOrderId}`);
+    }
+
+    // Verificar que el proyecto existe
+    await this.findProject(projectId);
+
+    // Extraer el código original (sin el formato)
+    const arrayCode = originalPurchaseOrder.code.split('/');
+    const originalCode = arrayCode[1] || originalPurchaseOrder.code;
+
+    // Crear nueva orden de compra con los mismos datos pero nuevo projectId, código y estado pending
+    const { purchaseOrderId: _, resources, createdAt, updatedAt, ...purchaseOrderData } = originalPurchaseOrder;
+
+    const newPurchaseOrder = await this.prisma.purchaseOrder.create({
+      data: {
+        ...purchaseOrderData,
+        projectId,
+        code: `COPY-${originalCode}`,
+        status: 'pending',
+      },
+    });
+
+    if (!newPurchaseOrder) {
+      this.logger.error('Failed to duplicate purchase order');
+      throw new BadRequestException('No se pudo duplicar la orden de compra.');
+    }
+
+    // Generar el código formateado
+    const formattedCode = await this.formatedCode(newPurchaseOrder.purchaseOrderId, newPurchaseOrder.code);
+    
+    // Actualizar con el código formateado
+    const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
+      where: { purchaseOrderId: newPurchaseOrder.purchaseOrderId },
+      data: { code: formattedCode },
+    });
+
+    // Duplicar los recursos asociados
+    if (resources && resources.length > 0) {
+      const resourcesData = resources.map(({ resourcePurchaseOrderId, purchaseOrderId: _, ...resource }) => ({
+        ...resource,
+        purchaseOrderId: newPurchaseOrder.purchaseOrderId,
+      }));
+
+      await this.prisma.resourcePurchaseOrder.createMany({
+        data: resourcesData,
+      });
+    }
+
+    this.logger.log(`Purchase order duplicated successfully with id: ${newPurchaseOrder.purchaseOrderId}`);
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Orden de compra duplicada exitosamente.',
+      data: updatedPurchaseOrder,
+    };
+  }
 
   async remove(purchaseOrderId: number) {
     this.logger.log(`Removing purchase order with id: ${purchaseOrderId}`);

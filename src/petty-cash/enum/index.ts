@@ -1,1 +1,1 @@
-export * from "./petty-cash-type.enum";
+export * from './petty-cash-type.enum';

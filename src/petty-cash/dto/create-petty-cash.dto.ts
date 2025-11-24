@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Min } from "class-validator";
-import { PettyCashType } from "../enum";
+import { PettyCashType } from '../enum';
 
 export class CreatePettyCashDto {
   @ApiProperty({ example: 10 })

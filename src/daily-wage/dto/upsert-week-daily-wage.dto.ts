@@ -4,16 +4,16 @@ import { Type } from 'class-transformer';
 export class UpsertWeekDailyWageItemDto {
   @IsInt()
   @IsNotEmpty()
-  workerId: number;
+  workerId!: number;
 
   @IsNumber()
   @IsNotEmpty()
-  amount: number;
+  amount!: number;
 }
 
 export class UpsertWeekDailyWageDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => UpsertWeekDailyWageItemDto)
-  items: UpsertWeekDailyWageItemDto[];
+  items!: UpsertWeekDailyWageItemDto[];
 }

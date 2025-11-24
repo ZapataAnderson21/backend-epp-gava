@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as PdfPrinter from 'pdfmake';
+import PdfPrinter = require('pdfmake');
 import { PrismaService } from 'src/prisma/prisma.service';
 import { logo, logoPO, sgs, iso9001, hodelpe } from './images';
 import { ConfigService } from '@nestjs/config';
 import { RequestStatus, RequestType } from 'src/request/enum';
-import { PurchaseOrderTypeLabelEs } from 'src/purchase-order/enum';
+import { PaymentMethodLabelEs, PurchaseOrderTypeLabelEs } from 'src/purchase-order/enum';
 import { CurrencyLabelEs } from 'src/supplier/enum/currency.enum';
 
 @Injectable()
@@ -84,9 +84,9 @@ export class PdfService {
     // === 4) Construcción del contenido ===
     const headingBlue = '#14519d';
 
-    const HEADER_HEIGHT = 110;
+    const HEADER_HEIGHT = 80;
     const CERT_SIZE    = 50;
-    const CERT_GAP     = 6;
+    const CERT_GAP     = 10;
     const CERT_MARGIN_TOP = Math.max(0, (HEADER_HEIGHT - CERT_SIZE) / 2);
 
     const headerBlock = [
@@ -104,43 +104,33 @@ export class PdfService {
 
             // celda derecha: certificaciones centradas verticalmente
             {
-              alignment: 'right',
-              margin: [0, CERT_MARGIN_TOP, 0, 0], // << centra verticalmente
-              table: {
-                widths: ['auto', 'auto', 'auto'],
-                body: [[
-                  { image: iso9001, fit: [CERT_SIZE, CERT_SIZE], margin: [0, 0, CERT_GAP, 0] },
-                  { image: sgs,     fit: [CERT_SIZE, CERT_SIZE], margin: [0, 0, CERT_GAP, 0] },
-                  { image: hodelpe, fit: [CERT_SIZE, CERT_SIZE] },
-                ]],
-                heights: CERT_SIZE, // alto uniforme de la fila de logos
-              },
-              layout: {
-                defaultBorder: false,
-                paddingLeft:  () => 0,
-                paddingRight: () => 0,
-                paddingTop:   () => 0,
-                paddingBottom:() => 0,
-              },
+              margin: [0, CERT_MARGIN_TOP, 0, 0],
+              columns: [
+                { width: '*', text: '' },
+                { image: iso9001, fit: [CERT_SIZE, CERT_SIZE], width: 'auto' },
+                { image: sgs, fit: [CERT_SIZE, CERT_SIZE], width: 'auto', margin: [CERT_GAP, 0, 0, 0] },
+                { image: hodelpe, fit: [CERT_SIZE, CERT_SIZE], width: 'auto', margin: [CERT_GAP, 0, 0, 0] },
+              ],
+              columnGap: 0,
             },
           ]],
         },
         layout: { defaultBorder: false },
       },
-      { text: (purchaseOrder.project?.name || '').toUpperCase(), style: 'titleProject', margin: [0, 10, 0, 0] },
+      { text: (purchaseOrder.project?.name || '').toUpperCase(), style: 'titleProject', margin: [0, 6, 0, 0] },
       {
         table: {
           widths: ['*'],
-          body: [[{ text: `ORDEN DE COMPRA ${purchaseOrder.code?.toUpperCase() || ''}`, style: 'ocTitle', color: 'white', alignment: 'center', margin: [6, 8, 6, 8] }]],
+          body: [[{ text: `ORDEN DE COMPRA ${purchaseOrder.code?.toUpperCase() || ''}`, style: 'ocTitle', color: 'white', alignment: 'center', margin: [4, 5, 4, 5] }]],
         },
         layout: {
           fillColor: () => '#14519d',
           hLineWidth: () => 0, vLineWidth: () => 0,
           paddingLeft: () => 0, paddingRight: () => 0,
         },
-        margin: [0, 10, 0, 0],
+        margin: [0, 6, 0, 0],
       },
-      { text: [{ text: 'Fecha: ', bold: true }, nowStr], alignment: 'right', margin: [0, 6, 0, 0] },
+      { text: [{ text: 'Fecha: ', bold: true }, nowStr], alignment: 'right', margin: [0, 4, 0, 0] },
     ];
 
 
@@ -160,7 +150,7 @@ export class PdfService {
           paddingTop: () => 8,
           paddingBottom: () => 8,
         },
-        margin: [0, 14, 0, 0],
+        margin: [0, 0, 0, 0],
       },
       // ⬇️ CONTENIDO CON BORDE
       {
@@ -170,14 +160,14 @@ export class PdfService {
             [
               {
                 stack: [
-                  { text: [{ text: 'Proveedor: ', bold: true }, purchaseOrder.supplier?.name || '' ], lineHeight: 1.8 },
-                  { text: [{ text: 'RUC: ', bold: true }, purchaseOrder.supplier?.ruc || '' ], lineHeight: 1.8 },
-                  { text: [{ text: 'Contacto: ', bold: true }, purchaseOrder.supplier?.contactName || '' ], lineHeight: 1.8 },
-                  { text: [{ text: 'Correo: ', bold: true }, purchaseOrder.supplier?.email || '' ], lineHeight: 1.8 },
-                  { text: [{ text: 'Teléfono: ', bold: true }, purchaseOrder.supplier?.phone || '' ], lineHeight: 1.8 },
-                  { text: [{ text: 'Cotización: ', bold: true }, purchaseOrder.quotation || '' ], lineHeight: 1.8 },
+                  { text: [{ text: 'Proveedor: ', bold: true }, purchaseOrder.supplier?.name || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'RUC: ', bold: true }, purchaseOrder.supplier?.ruc || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'Contacto: ', bold: true }, purchaseOrder.supplier?.contactName || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'Correo: ', bold: true }, purchaseOrder.supplier?.email || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'Teléfono: ', bold: true }, purchaseOrder.supplier?.phone || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'Cotización: ', bold: true }, purchaseOrder.quotation || '' ], lineHeight: 1.75 },
                 ],
-                margin: [6, 8, 6, 8],
+                margin: [4, 4, 4, 4],
               },
             ],
           ],
@@ -191,7 +181,7 @@ export class PdfService {
           paddingLeft: () => 8,
           paddingRight: () => 8,
           paddingTop: () => 6,
-          paddingBottom: () => 0,
+          paddingBottom: () => 6,
         },
       },
     ];
@@ -212,7 +202,7 @@ export class PdfService {
           paddingTop: () => 8,
           paddingBottom: () => 8,
         },
-        margin: [0, 14, 0, 0],
+        margin: [0, 0, 0, 0],
       },
       // ⬇️ CONTENIDO CON BORDE
       {
@@ -222,13 +212,14 @@ export class PdfService {
             [
               {
                 stack: [
-                  { text: [{ text: 'Lugar de entrega: ', bold: true }, purchaseOrder.deliveryLocation || '' ], lineHeight: 1.8 },
-                  { text: [{ text: 'Destino: ', bold: true }, purchaseOrder.destination || '' ], lineHeight: 1.8 },
-                  { text: [{ text: 'Atención: ', bold: true }, purchaseOrder.carePerson || '' ], lineHeight: 1.8 },
-                  { text: [{ text: 'DNI: ', bold: true }, purchaseOrder.dniCarePerson || '' ], lineHeight: 1.8 },
-                  { text: [{ text: 'Observación: ', bold: true }, purchaseOrder.observations || '' ], lineHeight: 1.8 },
+                  { text: [{ text: 'Lugar de entrega: ', bold: true }, purchaseOrder.deliveryLocation || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'Destino: ', bold: true }, purchaseOrder.destination || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'Atención: ', bold: true }, purchaseOrder.carePerson || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'DNI: ', bold: true }, purchaseOrder.dniCarePerson || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'Observación: ', bold: true }, purchaseOrder.observations || '' ], lineHeight: 1.75 },
+                  { text: ' ', lineHeight: 1.75 },
                 ],
-                margin: [6, 8, 6, 22],
+                margin: [4, 4, 4, 4],
               },
             ],
           ],
@@ -263,51 +254,37 @@ export class PdfService {
           paddingTop: () => 8,
           paddingBottom: () => 8,
         },
-        margin: [0, 14, 0, 0],
+        margin: [0, 0, 0, 0],
       },
-      // Condiciones (línea gruesa exterior)
+      // Contenido en columna
       {
         table: {
           widths: ['*'],
-          body: [[{ text: purchaseOrder.paymentConditions || '', bold: true, margin: [6, 6, 6, 6], lineHeight: 1.4 }]],
+          body: [
+            [
+              {
+                stack: [
+                  { text: [{ text: 'Crédito: ', bold: true }, purchaseOrder.paymentConditions || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'Método de pago: ', bold: true }, PaymentMethodLabelEs[purchaseOrder.paymentMethod] || '' ], lineHeight: 1.75 },
+                  { text: [{ text: 'Cta. cte: ', bold: true }, `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}` ], lineHeight: 1.75 },
+                  { text: ' ', lineHeight: 1.75 },
+                  { text: ' ', lineHeight: 1.75 },
+                  { text: ' ', lineHeight: 1.75 },
+                ],
+                margin: [4, 4, 4, 4],
+              },
+            ],
+          ],
         },
         layout: {
-          // borde caja EXCEPTO el borde inferior
-          hLineWidth: (i, node) => {
-            const isTop = i === 0;
-            const isBottom = i === node.table.body.length;
-            if (isTop) return 1;
-            if (isBottom) return 0; // <- quitamos borde inferior
-            return 0;
-          },
-          vLineWidth: (i, node) => (i === 0 || i === node.table.widths.length ? 1 : 0),
-          hLineColor: () => borderColor,
-          vLineColor: () => borderColor,
-          paddingLeft: () => 6,
-          paddingRight: () => 6,
-          paddingTop: () => 6,
-          paddingBottom: () => 0,
-        },
-      },
-      // Método de pago + cta cte (mantener borde superior, quitar doblez)
-      {
-        table: {
-          widths: ['*', '*'],
-          body: [[
-            { text: [{ text: 'Método de pago: ', bold: true }, purchaseOrder.paymentMethod || '' ], margin: [6, 6, 6, 6], lineHeight: 1.4 },
-            { text: [{ text: 'Cta. cte: ', bold: true }, `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}` ], margin: [6, 6, 6, 6], lineHeight: 1.4 },
-          ]],
-        },
-        layout: {
-          // borde caja completo; como arriba no pinta línea inferior, aquí el superior actúa como línea única
           hLineWidth: (i, node) => (i === 0 || i === node.table.body.length ? 1 : 0),
           vLineWidth: (i, node) => (i === 0 || i === node.table.widths.length ? 1 : 0),
           hLineColor: () => borderColor,
           vLineColor: () => borderColor,
-          paddingLeft: () => 6,
-          paddingRight: () => 6,
+          paddingLeft: () => 8,
+          paddingRight: () => 8,
           paddingTop: () => 6,
-          paddingBottom: () => 0,
+          paddingBottom: () => 6,
         },
       },
     ];
@@ -320,11 +297,11 @@ export class PdfService {
           { text: 'Señores: ', bold: true },
           purchaseOrder.supplier?.name || '',
         ],
-        margin: [0, 12, 0, 4],
+        margin: [0, 6, 0, 2],
       },
       {
         text: `Sírvase a suministrarnos los ${PurchaseOrderTypeLabelEs[purchaseOrder.purchaseOrderType].toLowerCase() || ''} solicitados siguientes:`,
-        margin: [0, 0, 0, 8],
+        margin: [0, 0, 0, 4],
       },
     ];
 
@@ -427,7 +404,7 @@ export class PdfService {
           hLineWidth: () => 0,
           vLineWidth: () => 0,
         },
-        margin: [0, 6, 0, 0],
+        margin: [0, 4, 0, 0],
       },
     ];
 
@@ -443,9 +420,9 @@ export class PdfService {
               { text: 'Seguimiento y Control', alignment: 'center', bold: true, color: 'white' },
             ],
             [
-              { text: 'Angi Gonzales Cotrina', alignment: 'center', margin: [0, 6, 0, 6] },
-              { text: 'Henrry Gayoso Valdera', alignment: 'center', margin: [0, 6, 0, 6] },
-              { text: 'Morayma Lloja Fernandez', alignment: 'center', margin: [0, 6, 0, 6] },
+              { text: 'Angi Gonzales Cotrina', alignment: 'center', margin: [0, 4, 0, 4] },
+              { text: 'Henrry Gayoso Valdera', alignment: 'center', margin: [0, 4, 0, 4] },
+              { text: 'Morayma Lloja Fernandez', alignment: 'center', margin: [0, 4, 0, 4] },
             ],
           ],
         },
@@ -454,7 +431,7 @@ export class PdfService {
           hLineColor: () => '#9ca3af',
           vLineColor: () => '#9ca3af',
         },
-        margin: [0, 14, 0, 0],
+        margin: [0, 8, 0, 0],
       },
     ];
 
@@ -469,32 +446,56 @@ export class PdfService {
       .filter(Boolean);
 
     const condicionesBlock = [
-      { text: 'CONDICIONES COMERCIALES', style: 'listTitle', margin: [0, 14, 0, 6] },
+      { text: 'CONDICIONES COMERCIALES', style: 'listTitle', margin: [0, 8, 0, 3], fontSize: 8 },
       {
         ol: generalConditions.length ? generalConditions : [{ text: '—', opacity: 0.6 }],
-        margin: [0, 0, 0, 8],
+        margin: [0, 0, 0, 4],
+        fontSize: 7,
       },
-      { text: 'CONDICIONES DE CALIDAD', style: 'listTitle', margin: [0, 8, 0, 6] },
+      { text: 'CONDICIONES DE CALIDAD', style: 'listTitle', margin: [0, 4, 0, 3], fontSize: 8 },
       {
         ol: qualityConditions.length ? qualityConditions : [{ text: '—', opacity: 0.6 }],
+        fontSize: 7,
       },
     ];
 
     // === 5) Definición del documento ===
+    
+    // Calcular factor de escala dinámico basado en cantidad de recursos
+    const itemCount = purchaseOrder.resources?.length || 0;
+    let scaleFactor = 1;
+    
+    // Si hay muchos recursos, reducir el tamaño proporcionalmente
+    if (itemCount > 10) {
+      scaleFactor = 0.85;
+    } else if (itemCount > 15) {
+      scaleFactor = 0.75;
+    } else if (itemCount > 20) {
+      scaleFactor = 0.65;
+    }
+
+    const baseFontSize = 8 * scaleFactor;
+    const titleProjectSize = 11 * scaleFactor;
+    const ocTitleSize = 14 * scaleFactor;
+    const sectionHeaderSize = 10 * scaleFactor;
+    const listTitleSize = 9 * scaleFactor;
+
     const docDefinition: any = {
-      pageMargins: [40, 40, 40, 40],
+      pageSize: 'LETTER',
+      pageMargins: [30, 30, 30, 30],
+      compress: true,
       content: [
         ...headerBlock,
-        // Dos columnas para “Datos del proveedor” y “Datos de entrega”
+        // Tres columnas para "Datos del proveedor", "Datos de entrega" y "Condiciones de pago"
         {
           columns: [
-            { width: '50%', stack: proveedorBlock },
-            { width: '50%', stack: envioBlock },
+            { width: '33.33%', stack: proveedorBlock },
+            { width: '33.33%', stack: envioBlock },
+            { width: '33.33%', stack: pagoBlock },
           ],
-          columnGap: 14,
+          columnGap: 8,
           margin: [0, 10, 0, 0],
         },
-        ...pagoBlock,
         ...introRecursos,
         ...recursosTable,
         ...totalesTable,
@@ -502,14 +503,14 @@ export class PdfService {
         ...condicionesBlock,
       ],
       styles: {
-        titleProject: { fontSize: 14, bold: true, alignment: 'center' },
-        ocTitle: { fontSize: 18, bold: true },
-        sectionHeader: { fontSize: 14, bold: true },
-        listTitle: { fontSize: 12, bold: true },
+        titleProject: { fontSize: titleProjectSize, bold: true, alignment: 'center' },
+        ocTitle: { fontSize: ocTitleSize, bold: true },
+        sectionHeader: { fontSize: sectionHeaderSize, bold: true },
+        listTitle: { fontSize: listTitleSize, bold: true },
       },
       defaultStyle: {
         font: 'Roboto',
-        fontSize: 10,
+        fontSize: baseFontSize,
       },
     };
 

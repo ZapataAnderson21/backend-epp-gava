@@ -1,12 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { ElementType } from "../enum/element-type.enum";
+import { ElementType } from '../enum/element-type.enum';
 
 export class CreateElementDto {
   @ApiProperty({ example: 'Casco de Seguridad' })
   @IsString({ message: 'El nombre es requerido y debe ser un texto válido' })
   @IsNotEmpty({ message: 'El nombre no puede estar vacío. ' })
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ example: 'No description provided.' })
   @IsOptional()

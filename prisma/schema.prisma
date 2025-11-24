@@ -1,11 +1,10 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -362,7 +361,7 @@ model PurchaseOrder {
   status                  PurchaseOrderStatus     @default(pending)
   carePerson              String
   dniCarePerson           String                  @db.VarChar(8)
-  observations            String                  @db.Text @default("No observations provided.")
+  observations            String                  @db.Text @default("Sin observaciones.")
   projectId               Int
   supplierId              Int
   logisticsManager        String?                 @default("Morayma Lloja Fernandez")
@@ -494,6 +493,7 @@ model DailyWage {
   validFromWeekId   Int
 
   createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
 
   worker            Worker   @relation(fields: [workerId],        references: [workerId], onDelete: Restrict, onUpdate: Cascade)
   validFromWeek     Week     @relation(fields: [validFromWeekId], references: [weekId],   onDelete: Restrict, onUpdate: Cascade)

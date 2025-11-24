@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe
 import { PurchaseOrderService } from './purchase-order.service';
 import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
+import { DuplicatePurchaseOrderDto } from './dto/duplicate-purchase-order.dto';
 import { Response } from 'express';
 import { UserTypes } from 'src/decorators/user-types.decorator';
 import { PdfService } from 'src/pdf/pdf.service';
@@ -69,6 +70,16 @@ export class PurchaseOrderController {
   update(@Param('id', ParseIntPipe) id: number, @Body() updatePurchaseOrderDto: UpdatePurchaseOrderDto) {
     this.logger.log(`Updating purchase order with ID: ${id}`);
     return this.purchaseOrderService.update(id, updatePurchaseOrderDto);
+  }
+
+  @Post(':id/duplicate')
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
+  duplicate(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() duplicatePurchaseOrderDto: DuplicatePurchaseOrderDto
+  ) {
+    this.logger.log(`Duplicating purchase order with ID: ${id} to project: ${duplicatePurchaseOrderDto.projectId}`);
+    return this.purchaseOrderService.duplicate(id, duplicatePurchaseOrderDto.projectId);
   }
 
   @Delete(':id')

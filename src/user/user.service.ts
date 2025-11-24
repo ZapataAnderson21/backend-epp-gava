@@ -1,5 +1,5 @@
 import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { User } from 'generated/prisma';
+import { User } from '../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';

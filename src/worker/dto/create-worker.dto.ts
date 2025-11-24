@@ -4,7 +4,7 @@ import {
   IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, Length, IsEmail,
   IsEnum
 } from "class-validator";
-import { WorkerType } from "../enum/worker-type.enum";
+import { WorkerType } from '../enum/worker-type.enum';
 
 /** Helpers de transformación */
 const trim = (v: any) => (typeof v === 'string' ? v.trim() : v);

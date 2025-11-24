@@ -19,26 +19,26 @@ export enum RequestType {
 
 export class Request {
   @ApiProperty()
-  request_id: number;
+  request_id!: number;
 
   @ApiProperty()
-  registration_date: Date;
+  registration_date!: Date;
 
   @ApiProperty({ enum: RequestStatus })
-  status: RequestStatus;
+  status!: RequestStatus;
 
   @ApiProperty()
-  description: string;
+  description!: string;
 
   @ApiProperty()
-  project_id: number;
+  project_id!: number;
 
   @ApiProperty()
-  user_id: number;
+  user_id!: number;
 
   @ApiProperty({ enum: RequestType })
-  type: RequestType;
+  type!: RequestType;
 
   @ApiProperty()
-  user: User;
+  user!: User;
 }

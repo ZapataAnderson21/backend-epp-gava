@@ -7,11 +7,11 @@ export class CreateUserUserTypeDto {
   @Type(() => Number)
   @IsInt()
   @IsPositive()
-  userId: number;
+  userId!: number;
 
   @ApiProperty({ example: 2 })
   @Type(() => Number)
   @IsInt()
   @IsPositive()
-  userTypeId: number;
+  userTypeId!: number;
 }

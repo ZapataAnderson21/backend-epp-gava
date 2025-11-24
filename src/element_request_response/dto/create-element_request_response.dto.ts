@@ -7,17 +7,17 @@ export class CreateElementRequestResponseDto {
   @Type (() => Number)
   @IsInt()
   @IsPositive()
-  elementRequestId: number;
+  elementRequestId!: number;
 
   @ApiProperty({example: 100})
   @Type (() => Number)
   @IsInt()
   @IsPositive()
-  requestResponseId: number;
+  requestResponseId!: number;
 
   @ApiProperty({example: 10})
   @Type (() => Number)
   @IsInt()
   @Min(0, { message: 'La cantidad aceptada no puede ser negativa.' })
-  quantityAccepted: number;
+  quantityAccepted!: number;
 }
