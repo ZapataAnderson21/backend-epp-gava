@@ -361,7 +361,7 @@ model PurchaseOrder {
   status                PurchaseOrderStatus @default(pending)
   carePerson            String
   dniCarePerson         String              @db.VarChar(8)
-  observations          String              @default("No observations provided.") @db.Text
+  observations          String              @default("Sin observaciones.") @db.Text
   projectId             Int
   supplierId            Int
   logisticsManager      String?             @default("Morayma Lloja Fernandez")
