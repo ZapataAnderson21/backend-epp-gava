@@ -227,7 +227,7 @@ export class ProjectService {
     
     return {
       statusCode: HttpStatus.OK,
-      message: 'Estado del proyecto actualizado exitosamente.',
+      message: 'Estado actualizado exitosamente.',
       data: updatedProject
     }
   }

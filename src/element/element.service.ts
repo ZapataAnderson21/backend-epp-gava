@@ -38,7 +38,7 @@ export class ElementService {
     this.logger.log(`Element created successfully: ${JSON.stringify(element)}`);
     return {
       statusCode: HttpStatus.CREATED,
-      message: 'El elemento ha sido creado exitosamente.',
+      message: 'Elemento registrado exitosamente.',
       data: element
     };
   }
@@ -173,7 +173,7 @@ export class ElementService {
     this.logger.log(`Element updated successfully: ${JSON.stringify(updatedElement)}`);
     return {
       statusCode: HttpStatus.OK,
-      message: 'El elemento ha sido actualizado exitosamente.',
+      message: 'Elemento actualizado exitosamente.',
       data: updatedElement
     };
   }
@@ -193,7 +193,7 @@ export class ElementService {
     this.logger.log(`Element deleted successfully: ${JSON.stringify(deletedElement)}`);
     return {
       statusCode: HttpStatus.OK,
-      message: 'El elemento ha sido eliminado exitosamente.',
+      message: 'Elemento eliminado exitosamente.',
       data: deletedElement
     };
   }
