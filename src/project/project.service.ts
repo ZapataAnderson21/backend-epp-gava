@@ -38,7 +38,7 @@ export class ProjectService {
     this.logger.log(`Project created successfully: ${JSON.stringify(project)}`);
     return {
       statusCode: HttpStatus.CREATED,
-      message: 'El proyecto ha sido registrado exitosamente.',
+      message: 'Proyecto registrado exitosamente.',
       data: project
     };
   }
@@ -206,7 +206,7 @@ export class ProjectService {
     this.logger.log(`Project with ID ${projectId} updated successfully: ${JSON.stringify(updatedProject)}`);
     return {
       statusCode: HttpStatus.OK,
-      message: 'El proyecto ha sido actualizado exitosamente.',
+      message: 'Proyecto actualizado exitosamente.',
       data: updatedProject
     };
   }
@@ -227,7 +227,7 @@ export class ProjectService {
     
     return {
       statusCode: HttpStatus.OK,
-      message: 'El estado del proyecto ha sido actualizado exitosamente.',
+      message: 'Estado del proyecto actualizado exitosamente.',
       data: updatedProject
     }
   }
