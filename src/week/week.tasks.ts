@@ -8,10 +8,10 @@ export class WeekTasks {
 
   constructor(private readonly weekService: WeekService) {}
   
-  @Cron('38 1 * * *', {
+  @Cron('0 0 * * *', {
   })
   async handleCreateWeek() {
-    this.logger.log('Verificando y creando semanas faltantes (ejecución diaria a la 1:18 AM)...');
+    this.logger.log('Verificando y creando semanas faltantes (ejecución diaria a la 12:00 AM)...');
     await this.weekService.ensureWeeksUpToCurrentWeek();
   }
 }
