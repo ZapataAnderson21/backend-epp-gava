@@ -11,7 +11,7 @@ export class DailyWageService {
 
   /**
    * weekId + workerId:
-   * - si existe registro para esa semana, hace UPDATE del amount
+   * - si existe registro para esa semana (validFromDate), hace UPDATE del amount
    * - si no existe, crea uno nuevo con esa semana
    */
   async upsertForWeek(
@@ -22,18 +22,31 @@ export class DailyWageService {
       `Upserting daily wages for weekId=${weekId}, items=${JSON.stringify(dto.items)}`,
     );
 
+    // Obtener la fecha de inicio de la semana
+    const week = await this.prismaService.week.findUnique({
+      where: { weekId },
+      select: { startDate: true },
+    });
+
+    if (!week) {
+      throw new Error(`Week with id ${weekId} not found`);
+    }
+
+    const validFromDate = new Date(week.startDate);
+    validFromDate.setHours(0, 0, 0, 0);
+
     const tx = dto.items.map((item) =>
       this.prismaService.dailyWage.upsert({
         where: {
-          // generado por @@unique([workerId, validFromWeekId])
-          workerId_validFromWeekId: {
+          // generado por @@unique([workerId, validFromDate])
+          workerId_validFromDate: {
             workerId: item.workerId,
-            validFromWeekId: weekId,
+            validFromDate: validFromDate,
           },
         },
         create: {
           workerId: item.workerId,
-          validFromWeekId: weekId,
+          validFromDate: validFromDate,
           amount: item.amount,
         },
         update: {
@@ -44,8 +57,12 @@ export class DailyWageService {
 
     const result = await this.prismaService.$transaction(tx);
 
+    this.logger.log(
+      result
+    );
+
     return {
-      message: 'Daily wages actualizados correctamente.',
+      message: 'Pagos diarios actualizados.',
       statusCode: HttpStatus.OK,
       data: result,
     };

@@ -203,12 +203,12 @@ export class WeekService {
         const dailyWage = await this.prismaService.dailyWage.findFirst({
           where: {
             workerId,
-            validFromWeekId: {
-              lte: week.weekId,   // vigente hasta esta semana
+            validFromDate: {
+              lte: week.startDate,   // vigente hasta el inicio de esta semana
             },
           },
           orderBy: {
-            validFromWeekId: 'desc',
+            validFromDate: 'desc',
           },
         });
 

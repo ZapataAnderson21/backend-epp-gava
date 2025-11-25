@@ -3705,13 +3705,11 @@ export namespace Prisma {
   export type WeekCountOutputType = {
     weeklyWages: number
     attendances: number
-    dailyWagesFrom: number
   }
 
   export type WeekCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     weeklyWages?: boolean | WeekCountOutputTypeCountWeeklyWagesArgs
     attendances?: boolean | WeekCountOutputTypeCountAttendancesArgs
-    dailyWagesFrom?: boolean | WeekCountOutputTypeCountDailyWagesFromArgs
   }
 
   // Custom InputTypes
@@ -3737,13 +3735,6 @@ export namespace Prisma {
    */
   export type WeekCountOutputTypeCountAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AttendanceWhereInput
-  }
-
-  /**
-   * WeekCountOutputType without action
-   */
-  export type WeekCountOutputTypeCountDailyWagesFromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DailyWageWhereInput
   }
 
 
@@ -28722,7 +28713,6 @@ export namespace Prisma {
     updatedAt?: boolean
     weeklyWages?: boolean | Week$weeklyWagesArgs<ExtArgs>
     attendances?: boolean | Week$attendancesArgs<ExtArgs>
-    dailyWagesFrom?: boolean | Week$dailyWagesFromArgs<ExtArgs>
     _count?: boolean | WeekCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["week"]>
 
@@ -28754,7 +28744,6 @@ export namespace Prisma {
   export type WeekInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     weeklyWages?: boolean | Week$weeklyWagesArgs<ExtArgs>
     attendances?: boolean | Week$attendancesArgs<ExtArgs>
-    dailyWagesFrom?: boolean | Week$dailyWagesFromArgs<ExtArgs>
     _count?: boolean | WeekCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WeekIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -28765,7 +28754,6 @@ export namespace Prisma {
     objects: {
       weeklyWages: Prisma.$WeeklyWagePayload<ExtArgs>[]
       attendances: Prisma.$AttendancePayload<ExtArgs>[]
-      dailyWagesFrom: Prisma.$DailyWagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       weekId: number
@@ -29169,7 +29157,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     weeklyWages<T extends Week$weeklyWagesArgs<ExtArgs> = {}>(args?: Subset<T, Week$weeklyWagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendances<T extends Week$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, Week$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    dailyWagesFrom<T extends Week$dailyWagesFromArgs<ExtArgs> = {}>(args?: Subset<T, Week$dailyWagesFromArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyWagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -29640,30 +29627,6 @@ export namespace Prisma {
   }
 
   /**
-   * Week.dailyWagesFrom
-   */
-  export type Week$dailyWagesFromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DailyWage
-     */
-    select?: DailyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DailyWage
-     */
-    omit?: DailyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DailyWageInclude<ExtArgs> | null
-    where?: DailyWageWhereInput
-    orderBy?: DailyWageOrderByWithRelationInput | DailyWageOrderByWithRelationInput[]
-    cursor?: DailyWageWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DailyWageScalarFieldEnum | DailyWageScalarFieldEnum[]
-  }
-
-  /**
    * Week without action
    */
   export type WeekDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29698,21 +29661,19 @@ export namespace Prisma {
     dailyWageId: number | null
     workerId: number | null
     amount: Decimal | null
-    validFromWeekId: number | null
   }
 
   export type DailyWageSumAggregateOutputType = {
     dailyWageId: number | null
     workerId: number | null
     amount: Decimal | null
-    validFromWeekId: number | null
   }
 
   export type DailyWageMinAggregateOutputType = {
     dailyWageId: number | null
     workerId: number | null
     amount: Decimal | null
-    validFromWeekId: number | null
+    validFromDate: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -29721,7 +29682,7 @@ export namespace Prisma {
     dailyWageId: number | null
     workerId: number | null
     amount: Decimal | null
-    validFromWeekId: number | null
+    validFromDate: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -29730,7 +29691,7 @@ export namespace Prisma {
     dailyWageId: number
     workerId: number
     amount: number
-    validFromWeekId: number
+    validFromDate: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -29741,21 +29702,19 @@ export namespace Prisma {
     dailyWageId?: true
     workerId?: true
     amount?: true
-    validFromWeekId?: true
   }
 
   export type DailyWageSumAggregateInputType = {
     dailyWageId?: true
     workerId?: true
     amount?: true
-    validFromWeekId?: true
   }
 
   export type DailyWageMinAggregateInputType = {
     dailyWageId?: true
     workerId?: true
     amount?: true
-    validFromWeekId?: true
+    validFromDate?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -29764,7 +29723,7 @@ export namespace Prisma {
     dailyWageId?: true
     workerId?: true
     amount?: true
-    validFromWeekId?: true
+    validFromDate?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -29773,7 +29732,7 @@ export namespace Prisma {
     dailyWageId?: true
     workerId?: true
     amount?: true
-    validFromWeekId?: true
+    validFromDate?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -29869,7 +29828,7 @@ export namespace Prisma {
     dailyWageId: number
     workerId: number
     amount: Decimal
-    validFromWeekId: number
+    validFromDate: Date
     createdAt: Date
     updatedAt: Date
     _count: DailyWageCountAggregateOutputType | null
@@ -29897,69 +29856,62 @@ export namespace Prisma {
     dailyWageId?: boolean
     workerId?: boolean
     amount?: boolean
-    validFromWeekId?: boolean
+    validFromDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    validFromWeek?: boolean | WeekDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dailyWage"]>
 
   export type DailyWageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     dailyWageId?: boolean
     workerId?: boolean
     amount?: boolean
-    validFromWeekId?: boolean
+    validFromDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    validFromWeek?: boolean | WeekDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dailyWage"]>
 
   export type DailyWageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     dailyWageId?: boolean
     workerId?: boolean
     amount?: boolean
-    validFromWeekId?: boolean
+    validFromDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    validFromWeek?: boolean | WeekDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dailyWage"]>
 
   export type DailyWageSelectScalar = {
     dailyWageId?: boolean
     workerId?: boolean
     amount?: boolean
-    validFromWeekId?: boolean
+    validFromDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DailyWageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"dailyWageId" | "workerId" | "amount" | "validFromWeekId" | "createdAt" | "updatedAt", ExtArgs["result"]["dailyWage"]>
+  export type DailyWageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"dailyWageId" | "workerId" | "amount" | "validFromDate" | "createdAt" | "updatedAt", ExtArgs["result"]["dailyWage"]>
   export type DailyWageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    validFromWeek?: boolean | WeekDefaultArgs<ExtArgs>
   }
   export type DailyWageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    validFromWeek?: boolean | WeekDefaultArgs<ExtArgs>
   }
   export type DailyWageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    validFromWeek?: boolean | WeekDefaultArgs<ExtArgs>
   }
 
   export type $DailyWagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "DailyWage"
     objects: {
       worker: Prisma.$WorkerPayload<ExtArgs>
-      validFromWeek: Prisma.$WeekPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       dailyWageId: number
       workerId: number
       amount: Prisma.Decimal
-      validFromWeekId: number
+      validFromDate: Date
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["dailyWage"]>
@@ -30357,7 +30309,6 @@ export namespace Prisma {
   export interface Prisma__DailyWageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     worker<T extends WorkerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkerDefaultArgs<ExtArgs>>): Prisma__WorkerClient<$Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    validFromWeek<T extends WeekDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WeekDefaultArgs<ExtArgs>>): Prisma__WeekClient<$Result.GetResult<Prisma.$WeekPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -30390,7 +30341,7 @@ export namespace Prisma {
     readonly dailyWageId: FieldRef<"DailyWage", 'Int'>
     readonly workerId: FieldRef<"DailyWage", 'Int'>
     readonly amount: FieldRef<"DailyWage", 'Decimal'>
-    readonly validFromWeekId: FieldRef<"DailyWage", 'Int'>
+    readonly validFromDate: FieldRef<"DailyWage", 'DateTime'>
     readonly createdAt: FieldRef<"DailyWage", 'DateTime'>
     readonly updatedAt: FieldRef<"DailyWage", 'DateTime'>
   }
@@ -33394,7 +33345,7 @@ export namespace Prisma {
     dailyWageId: 'dailyWageId',
     workerId: 'workerId',
     amount: 'amount',
-    validFromWeekId: 'validFromWeekId',
+    validFromDate: 'validFromDate',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -35341,7 +35292,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Week"> | Date | string
     weeklyWages?: WeeklyWageListRelationFilter
     attendances?: AttendanceListRelationFilter
-    dailyWagesFrom?: DailyWageListRelationFilter
   }
 
   export type WeekOrderByWithRelationInput = {
@@ -35352,7 +35302,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     weeklyWages?: WeeklyWageOrderByRelationAggregateInput
     attendances?: AttendanceOrderByRelationAggregateInput
-    dailyWagesFrom?: DailyWageOrderByRelationAggregateInput
   }
 
   export type WeekWhereUniqueInput = Prisma.AtLeast<{
@@ -35366,7 +35315,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Week"> | Date | string
     weeklyWages?: WeeklyWageListRelationFilter
     attendances?: AttendanceListRelationFilter
-    dailyWagesFrom?: DailyWageListRelationFilter
   }, "weekId" | "startDate">
 
   export type WeekOrderByWithAggregationInput = {
@@ -35400,44 +35348,41 @@ export namespace Prisma {
     dailyWageId?: IntFilter<"DailyWage"> | number
     workerId?: IntFilter<"DailyWage"> | number
     amount?: DecimalFilter<"DailyWage"> | Decimal | DecimalJsLike | number | string
-    validFromWeekId?: IntFilter<"DailyWage"> | number
+    validFromDate?: DateTimeFilter<"DailyWage"> | Date | string
     createdAt?: DateTimeFilter<"DailyWage"> | Date | string
     updatedAt?: DateTimeFilter<"DailyWage"> | Date | string
     worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
-    validFromWeek?: XOR<WeekScalarRelationFilter, WeekWhereInput>
   }
 
   export type DailyWageOrderByWithRelationInput = {
     dailyWageId?: SortOrder
     workerId?: SortOrder
     amount?: SortOrder
-    validFromWeekId?: SortOrder
+    validFromDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     worker?: WorkerOrderByWithRelationInput
-    validFromWeek?: WeekOrderByWithRelationInput
   }
 
   export type DailyWageWhereUniqueInput = Prisma.AtLeast<{
     dailyWageId?: number
-    workerId_validFromWeekId?: DailyWageWorkerIdValidFromWeekIdCompoundUniqueInput
+    workerId_validFromDate?: DailyWageWorkerIdValidFromDateCompoundUniqueInput
     AND?: DailyWageWhereInput | DailyWageWhereInput[]
     OR?: DailyWageWhereInput[]
     NOT?: DailyWageWhereInput | DailyWageWhereInput[]
     workerId?: IntFilter<"DailyWage"> | number
     amount?: DecimalFilter<"DailyWage"> | Decimal | DecimalJsLike | number | string
-    validFromWeekId?: IntFilter<"DailyWage"> | number
+    validFromDate?: DateTimeFilter<"DailyWage"> | Date | string
     createdAt?: DateTimeFilter<"DailyWage"> | Date | string
     updatedAt?: DateTimeFilter<"DailyWage"> | Date | string
     worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
-    validFromWeek?: XOR<WeekScalarRelationFilter, WeekWhereInput>
-  }, "dailyWageId" | "workerId_validFromWeekId">
+  }, "dailyWageId" | "workerId_validFromDate">
 
   export type DailyWageOrderByWithAggregationInput = {
     dailyWageId?: SortOrder
     workerId?: SortOrder
     amount?: SortOrder
-    validFromWeekId?: SortOrder
+    validFromDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DailyWageCountOrderByAggregateInput
@@ -35454,7 +35399,7 @@ export namespace Prisma {
     dailyWageId?: IntWithAggregatesFilter<"DailyWage"> | number
     workerId?: IntWithAggregatesFilter<"DailyWage"> | number
     amount?: DecimalWithAggregatesFilter<"DailyWage"> | Decimal | DecimalJsLike | number | string
-    validFromWeekId?: IntWithAggregatesFilter<"DailyWage"> | number
+    validFromDate?: DateTimeWithAggregatesFilter<"DailyWage"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"DailyWage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DailyWage"> | Date | string
   }
@@ -37285,7 +37230,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     weeklyWages?: WeeklyWageCreateNestedManyWithoutWeekInput
     attendances?: AttendanceCreateNestedManyWithoutWeekInput
-    dailyWagesFrom?: DailyWageCreateNestedManyWithoutValidFromWeekInput
   }
 
   export type WeekUncheckedCreateInput = {
@@ -37296,7 +37240,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWeekInput
     attendances?: AttendanceUncheckedCreateNestedManyWithoutWeekInput
-    dailyWagesFrom?: DailyWageUncheckedCreateNestedManyWithoutValidFromWeekInput
   }
 
   export type WeekUpdateInput = {
@@ -37306,7 +37249,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     weeklyWages?: WeeklyWageUpdateManyWithoutWeekNestedInput
     attendances?: AttendanceUpdateManyWithoutWeekNestedInput
-    dailyWagesFrom?: DailyWageUpdateManyWithoutValidFromWeekNestedInput
   }
 
   export type WeekUncheckedUpdateInput = {
@@ -37317,7 +37259,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWeekNestedInput
     attendances?: AttendanceUncheckedUpdateManyWithoutWeekNestedInput
-    dailyWagesFrom?: DailyWageUncheckedUpdateManyWithoutValidFromWeekNestedInput
   }
 
   export type WeekCreateManyInput = {
@@ -37345,34 +37286,34 @@ export namespace Prisma {
 
   export type DailyWageCreateInput = {
     amount: Decimal | DecimalJsLike | number | string
+    validFromDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
     worker: WorkerCreateNestedOneWithoutDailyWagesInput
-    validFromWeek: WeekCreateNestedOneWithoutDailyWagesFromInput
   }
 
   export type DailyWageUncheckedCreateInput = {
     dailyWageId?: number
     workerId: number
     amount: Decimal | DecimalJsLike | number | string
-    validFromWeekId: number
+    validFromDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type DailyWageUpdateInput = {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     worker?: WorkerUpdateOneRequiredWithoutDailyWagesNestedInput
-    validFromWeek?: WeekUpdateOneRequiredWithoutDailyWagesFromNestedInput
   }
 
   export type DailyWageUncheckedUpdateInput = {
     dailyWageId?: IntFieldUpdateOperationsInput | number
     workerId?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    validFromWeekId?: IntFieldUpdateOperationsInput | number
+    validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -37381,13 +37322,14 @@ export namespace Prisma {
     dailyWageId?: number
     workerId: number
     amount: Decimal | DecimalJsLike | number | string
-    validFromWeekId: number
+    validFromDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type DailyWageUpdateManyMutationInput = {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -37396,7 +37338,7 @@ export namespace Prisma {
     dailyWageId?: IntFieldUpdateOperationsInput | number
     workerId?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    validFromWeekId?: IntFieldUpdateOperationsInput | number
+    validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39175,21 +39117,16 @@ export namespace Prisma {
     weekId?: SortOrder
   }
 
-  export type WeekScalarRelationFilter = {
-    is?: WeekWhereInput
-    isNot?: WeekWhereInput
-  }
-
-  export type DailyWageWorkerIdValidFromWeekIdCompoundUniqueInput = {
+  export type DailyWageWorkerIdValidFromDateCompoundUniqueInput = {
     workerId: number
-    validFromWeekId: number
+    validFromDate: Date | string
   }
 
   export type DailyWageCountOrderByAggregateInput = {
     dailyWageId?: SortOrder
     workerId?: SortOrder
     amount?: SortOrder
-    validFromWeekId?: SortOrder
+    validFromDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -39198,14 +39135,13 @@ export namespace Prisma {
     dailyWageId?: SortOrder
     workerId?: SortOrder
     amount?: SortOrder
-    validFromWeekId?: SortOrder
   }
 
   export type DailyWageMaxOrderByAggregateInput = {
     dailyWageId?: SortOrder
     workerId?: SortOrder
     amount?: SortOrder
-    validFromWeekId?: SortOrder
+    validFromDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -39214,7 +39150,7 @@ export namespace Prisma {
     dailyWageId?: SortOrder
     workerId?: SortOrder
     amount?: SortOrder
-    validFromWeekId?: SortOrder
+    validFromDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -39223,7 +39159,11 @@ export namespace Prisma {
     dailyWageId?: SortOrder
     workerId?: SortOrder
     amount?: SortOrder
-    validFromWeekId?: SortOrder
+  }
+
+  export type WeekScalarRelationFilter = {
+    is?: WeekWhereInput
+    isNot?: WeekWhereInput
   }
 
   export type WeeklyWageCountOrderByAggregateInput = {
@@ -40931,13 +40871,6 @@ export namespace Prisma {
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
   }
 
-  export type DailyWageCreateNestedManyWithoutValidFromWeekInput = {
-    create?: XOR<DailyWageCreateWithoutValidFromWeekInput, DailyWageUncheckedCreateWithoutValidFromWeekInput> | DailyWageCreateWithoutValidFromWeekInput[] | DailyWageUncheckedCreateWithoutValidFromWeekInput[]
-    connectOrCreate?: DailyWageCreateOrConnectWithoutValidFromWeekInput | DailyWageCreateOrConnectWithoutValidFromWeekInput[]
-    createMany?: DailyWageCreateManyValidFromWeekInputEnvelope
-    connect?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
-  }
-
   export type WeeklyWageUncheckedCreateNestedManyWithoutWeekInput = {
     create?: XOR<WeeklyWageCreateWithoutWeekInput, WeeklyWageUncheckedCreateWithoutWeekInput> | WeeklyWageCreateWithoutWeekInput[] | WeeklyWageUncheckedCreateWithoutWeekInput[]
     connectOrCreate?: WeeklyWageCreateOrConnectWithoutWeekInput | WeeklyWageCreateOrConnectWithoutWeekInput[]
@@ -40950,13 +40883,6 @@ export namespace Prisma {
     connectOrCreate?: AttendanceCreateOrConnectWithoutWeekInput | AttendanceCreateOrConnectWithoutWeekInput[]
     createMany?: AttendanceCreateManyWeekInputEnvelope
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-  }
-
-  export type DailyWageUncheckedCreateNestedManyWithoutValidFromWeekInput = {
-    create?: XOR<DailyWageCreateWithoutValidFromWeekInput, DailyWageUncheckedCreateWithoutValidFromWeekInput> | DailyWageCreateWithoutValidFromWeekInput[] | DailyWageUncheckedCreateWithoutValidFromWeekInput[]
-    connectOrCreate?: DailyWageCreateOrConnectWithoutValidFromWeekInput | DailyWageCreateOrConnectWithoutValidFromWeekInput[]
-    createMany?: DailyWageCreateManyValidFromWeekInputEnvelope
-    connect?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
   }
 
   export type WeeklyWageUpdateManyWithoutWeekNestedInput = {
@@ -40987,20 +40913,6 @@ export namespace Prisma {
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
-  export type DailyWageUpdateManyWithoutValidFromWeekNestedInput = {
-    create?: XOR<DailyWageCreateWithoutValidFromWeekInput, DailyWageUncheckedCreateWithoutValidFromWeekInput> | DailyWageCreateWithoutValidFromWeekInput[] | DailyWageUncheckedCreateWithoutValidFromWeekInput[]
-    connectOrCreate?: DailyWageCreateOrConnectWithoutValidFromWeekInput | DailyWageCreateOrConnectWithoutValidFromWeekInput[]
-    upsert?: DailyWageUpsertWithWhereUniqueWithoutValidFromWeekInput | DailyWageUpsertWithWhereUniqueWithoutValidFromWeekInput[]
-    createMany?: DailyWageCreateManyValidFromWeekInputEnvelope
-    set?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
-    disconnect?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
-    delete?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
-    connect?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
-    update?: DailyWageUpdateWithWhereUniqueWithoutValidFromWeekInput | DailyWageUpdateWithWhereUniqueWithoutValidFromWeekInput[]
-    updateMany?: DailyWageUpdateManyWithWhereWithoutValidFromWeekInput | DailyWageUpdateManyWithWhereWithoutValidFromWeekInput[]
-    deleteMany?: DailyWageScalarWhereInput | DailyWageScalarWhereInput[]
-  }
-
   export type WeeklyWageUncheckedUpdateManyWithoutWeekNestedInput = {
     create?: XOR<WeeklyWageCreateWithoutWeekInput, WeeklyWageUncheckedCreateWithoutWeekInput> | WeeklyWageCreateWithoutWeekInput[] | WeeklyWageUncheckedCreateWithoutWeekInput[]
     connectOrCreate?: WeeklyWageCreateOrConnectWithoutWeekInput | WeeklyWageCreateOrConnectWithoutWeekInput[]
@@ -41029,30 +40941,10 @@ export namespace Prisma {
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
-  export type DailyWageUncheckedUpdateManyWithoutValidFromWeekNestedInput = {
-    create?: XOR<DailyWageCreateWithoutValidFromWeekInput, DailyWageUncheckedCreateWithoutValidFromWeekInput> | DailyWageCreateWithoutValidFromWeekInput[] | DailyWageUncheckedCreateWithoutValidFromWeekInput[]
-    connectOrCreate?: DailyWageCreateOrConnectWithoutValidFromWeekInput | DailyWageCreateOrConnectWithoutValidFromWeekInput[]
-    upsert?: DailyWageUpsertWithWhereUniqueWithoutValidFromWeekInput | DailyWageUpsertWithWhereUniqueWithoutValidFromWeekInput[]
-    createMany?: DailyWageCreateManyValidFromWeekInputEnvelope
-    set?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
-    disconnect?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
-    delete?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
-    connect?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
-    update?: DailyWageUpdateWithWhereUniqueWithoutValidFromWeekInput | DailyWageUpdateWithWhereUniqueWithoutValidFromWeekInput[]
-    updateMany?: DailyWageUpdateManyWithWhereWithoutValidFromWeekInput | DailyWageUpdateManyWithWhereWithoutValidFromWeekInput[]
-    deleteMany?: DailyWageScalarWhereInput | DailyWageScalarWhereInput[]
-  }
-
   export type WorkerCreateNestedOneWithoutDailyWagesInput = {
     create?: XOR<WorkerCreateWithoutDailyWagesInput, WorkerUncheckedCreateWithoutDailyWagesInput>
     connectOrCreate?: WorkerCreateOrConnectWithoutDailyWagesInput
     connect?: WorkerWhereUniqueInput
-  }
-
-  export type WeekCreateNestedOneWithoutDailyWagesFromInput = {
-    create?: XOR<WeekCreateWithoutDailyWagesFromInput, WeekUncheckedCreateWithoutDailyWagesFromInput>
-    connectOrCreate?: WeekCreateOrConnectWithoutDailyWagesFromInput
-    connect?: WeekWhereUniqueInput
   }
 
   export type WorkerUpdateOneRequiredWithoutDailyWagesNestedInput = {
@@ -41061,14 +40953,6 @@ export namespace Prisma {
     upsert?: WorkerUpsertWithoutDailyWagesInput
     connect?: WorkerWhereUniqueInput
     update?: XOR<XOR<WorkerUpdateToOneWithWhereWithoutDailyWagesInput, WorkerUpdateWithoutDailyWagesInput>, WorkerUncheckedUpdateWithoutDailyWagesInput>
-  }
-
-  export type WeekUpdateOneRequiredWithoutDailyWagesFromNestedInput = {
-    create?: XOR<WeekCreateWithoutDailyWagesFromInput, WeekUncheckedCreateWithoutDailyWagesFromInput>
-    connectOrCreate?: WeekCreateOrConnectWithoutDailyWagesFromInput
-    upsert?: WeekUpsertWithoutDailyWagesFromInput
-    connect?: WeekWhereUniqueInput
-    update?: XOR<XOR<WeekUpdateToOneWithWhereWithoutDailyWagesFromInput, WeekUpdateWithoutDailyWagesFromInput>, WeekUncheckedUpdateWithoutDailyWagesFromInput>
   }
 
   export type WorkerCreateNestedOneWithoutWeeklyWagesInput = {
@@ -43675,15 +43559,15 @@ export namespace Prisma {
 
   export type DailyWageCreateWithoutWorkerInput = {
     amount: Decimal | DecimalJsLike | number | string
+    validFromDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    validFromWeek: WeekCreateNestedOneWithoutDailyWagesFromInput
   }
 
   export type DailyWageUncheckedCreateWithoutWorkerInput = {
     dailyWageId?: number
     amount: Decimal | DecimalJsLike | number | string
-    validFromWeekId: number
+    validFromDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43781,7 +43665,7 @@ export namespace Prisma {
     dailyWageId?: IntFilter<"DailyWage"> | number
     workerId?: IntFilter<"DailyWage"> | number
     amount?: DecimalFilter<"DailyWage"> | Decimal | DecimalJsLike | number | string
-    validFromWeekId?: IntFilter<"DailyWage"> | number
+    validFromDate?: DateTimeFilter<"DailyWage"> | Date | string
     createdAt?: DateTimeFilter<"DailyWage"> | Date | string
     updatedAt?: DateTimeFilter<"DailyWage"> | Date | string
   }
@@ -44931,31 +44815,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type DailyWageCreateWithoutValidFromWeekInput = {
-    amount: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    worker: WorkerCreateNestedOneWithoutDailyWagesInput
-  }
-
-  export type DailyWageUncheckedCreateWithoutValidFromWeekInput = {
-    dailyWageId?: number
-    workerId: number
-    amount: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DailyWageCreateOrConnectWithoutValidFromWeekInput = {
-    where: DailyWageWhereUniqueInput
-    create: XOR<DailyWageCreateWithoutValidFromWeekInput, DailyWageUncheckedCreateWithoutValidFromWeekInput>
-  }
-
-  export type DailyWageCreateManyValidFromWeekInputEnvelope = {
-    data: DailyWageCreateManyValidFromWeekInput | DailyWageCreateManyValidFromWeekInput[]
-    skipDuplicates?: boolean
-  }
-
   export type WeeklyWageUpsertWithWhereUniqueWithoutWeekInput = {
     where: WeeklyWageWhereUniqueInput
     update: XOR<WeeklyWageUpdateWithoutWeekInput, WeeklyWageUncheckedUpdateWithoutWeekInput>
@@ -44986,22 +44845,6 @@ export namespace Prisma {
   export type AttendanceUpdateManyWithWhereWithoutWeekInput = {
     where: AttendanceScalarWhereInput
     data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutWeekInput>
-  }
-
-  export type DailyWageUpsertWithWhereUniqueWithoutValidFromWeekInput = {
-    where: DailyWageWhereUniqueInput
-    update: XOR<DailyWageUpdateWithoutValidFromWeekInput, DailyWageUncheckedUpdateWithoutValidFromWeekInput>
-    create: XOR<DailyWageCreateWithoutValidFromWeekInput, DailyWageUncheckedCreateWithoutValidFromWeekInput>
-  }
-
-  export type DailyWageUpdateWithWhereUniqueWithoutValidFromWeekInput = {
-    where: DailyWageWhereUniqueInput
-    data: XOR<DailyWageUpdateWithoutValidFromWeekInput, DailyWageUncheckedUpdateWithoutValidFromWeekInput>
-  }
-
-  export type DailyWageUpdateManyWithWhereWithoutValidFromWeekInput = {
-    where: DailyWageScalarWhereInput
-    data: XOR<DailyWageUpdateManyMutationInput, DailyWageUncheckedUpdateManyWithoutValidFromWeekInput>
   }
 
   export type WorkerCreateWithoutDailyWagesInput = {
@@ -45040,30 +44883,6 @@ export namespace Prisma {
   export type WorkerCreateOrConnectWithoutDailyWagesInput = {
     where: WorkerWhereUniqueInput
     create: XOR<WorkerCreateWithoutDailyWagesInput, WorkerUncheckedCreateWithoutDailyWagesInput>
-  }
-
-  export type WeekCreateWithoutDailyWagesFromInput = {
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWeekInput
-    attendances?: AttendanceCreateNestedManyWithoutWeekInput
-  }
-
-  export type WeekUncheckedCreateWithoutDailyWagesFromInput = {
-    weekId?: number
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWeekInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWeekInput
-  }
-
-  export type WeekCreateOrConnectWithoutDailyWagesFromInput = {
-    where: WeekWhereUniqueInput
-    create: XOR<WeekCreateWithoutDailyWagesFromInput, WeekUncheckedCreateWithoutDailyWagesFromInput>
   }
 
   export type WorkerUpsertWithoutDailyWagesInput = {
@@ -45110,36 +44929,6 @@ export namespace Prisma {
     attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
   }
 
-  export type WeekUpsertWithoutDailyWagesFromInput = {
-    update: XOR<WeekUpdateWithoutDailyWagesFromInput, WeekUncheckedUpdateWithoutDailyWagesFromInput>
-    create: XOR<WeekCreateWithoutDailyWagesFromInput, WeekUncheckedCreateWithoutDailyWagesFromInput>
-    where?: WeekWhereInput
-  }
-
-  export type WeekUpdateToOneWithWhereWithoutDailyWagesFromInput = {
-    where?: WeekWhereInput
-    data: XOR<WeekUpdateWithoutDailyWagesFromInput, WeekUncheckedUpdateWithoutDailyWagesFromInput>
-  }
-
-  export type WeekUpdateWithoutDailyWagesFromInput = {
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    weeklyWages?: WeeklyWageUpdateManyWithoutWeekNestedInput
-    attendances?: AttendanceUpdateManyWithoutWeekNestedInput
-  }
-
-  export type WeekUncheckedUpdateWithoutDailyWagesFromInput = {
-    weekId?: IntFieldUpdateOperationsInput | number
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWeekNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWeekNestedInput
-  }
-
   export type WorkerCreateWithoutWeeklyWagesInput = {
     fullName: string
     dni: string
@@ -45184,7 +44973,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceCreateNestedManyWithoutWeekInput
-    dailyWagesFrom?: DailyWageCreateNestedManyWithoutValidFromWeekInput
   }
 
   export type WeekUncheckedCreateWithoutWeeklyWagesInput = {
@@ -45194,7 +44982,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutWeekInput
-    dailyWagesFrom?: DailyWageUncheckedCreateNestedManyWithoutValidFromWeekInput
   }
 
   export type WeekCreateOrConnectWithoutWeeklyWagesInput = {
@@ -45263,7 +45050,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUpdateManyWithoutWeekNestedInput
-    dailyWagesFrom?: DailyWageUpdateManyWithoutValidFromWeekNestedInput
   }
 
   export type WeekUncheckedUpdateWithoutWeeklyWagesInput = {
@@ -45273,7 +45059,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutWeekNestedInput
-    dailyWagesFrom?: DailyWageUncheckedUpdateManyWithoutValidFromWeekNestedInput
   }
 
   export type WorkerCreateWithoutAttendancesInput = {
@@ -45362,7 +45147,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     weeklyWages?: WeeklyWageCreateNestedManyWithoutWeekInput
-    dailyWagesFrom?: DailyWageCreateNestedManyWithoutValidFromWeekInput
   }
 
   export type WeekUncheckedCreateWithoutAttendancesInput = {
@@ -45372,7 +45156,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWeekInput
-    dailyWagesFrom?: DailyWageUncheckedCreateNestedManyWithoutValidFromWeekInput
   }
 
   export type WeekCreateOrConnectWithoutAttendancesInput = {
@@ -45489,7 +45272,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     weeklyWages?: WeeklyWageUpdateManyWithoutWeekNestedInput
-    dailyWagesFrom?: DailyWageUpdateManyWithoutValidFromWeekNestedInput
   }
 
   export type WeekUncheckedUpdateWithoutAttendancesInput = {
@@ -45499,7 +45281,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWeekNestedInput
-    dailyWagesFrom?: DailyWageUncheckedUpdateManyWithoutValidFromWeekNestedInput
   }
 
   export type BlacklistedTokenCreateManyUserInput = {
@@ -46266,7 +46047,7 @@ export namespace Prisma {
   export type DailyWageCreateManyWorkerInput = {
     dailyWageId?: number
     amount: Decimal | DecimalJsLike | number | string
-    validFromWeekId: number
+    validFromDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -46348,15 +46129,15 @@ export namespace Prisma {
 
   export type DailyWageUpdateWithoutWorkerInput = {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    validFromWeek?: WeekUpdateOneRequiredWithoutDailyWagesFromNestedInput
   }
 
   export type DailyWageUncheckedUpdateWithoutWorkerInput = {
     dailyWageId?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    validFromWeekId?: IntFieldUpdateOperationsInput | number
+    validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -46364,7 +46145,7 @@ export namespace Prisma {
   export type DailyWageUncheckedUpdateManyWithoutWorkerInput = {
     dailyWageId?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    validFromWeekId?: IntFieldUpdateOperationsInput | number
+    validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -46640,14 +46421,6 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type DailyWageCreateManyValidFromWeekInput = {
-    dailyWageId?: number
-    workerId: number
-    amount: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type WeeklyWageUpdateWithoutWeekInput = {
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46692,29 +46465,6 @@ export namespace Prisma {
     projectId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DailyWageUpdateWithoutValidFromWeekInput = {
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    worker?: WorkerUpdateOneRequiredWithoutDailyWagesNestedInput
-  }
-
-  export type DailyWageUncheckedUpdateWithoutValidFromWeekInput = {
-    dailyWageId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DailyWageUncheckedUpdateManyWithoutValidFromWeekInput = {
-    dailyWageId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

@@ -15,12 +15,22 @@ export class MailService {
               private readonly configService: ConfigService){}
 
   async sendPasswordResetEmail( toEmail: string, token: string) {
-    const fromEmail = 'az.sistema@gavacyc.com';
-    const fromPassword = 'sistema2025@';
+    const fromEmail = this.configService.get<string>('MAIL_FROM');
+    const fromPassword = this.configService.get<string>('MAIL_PASSWORD');
+    const mailHost = this.configService.get<string>('MAIL_HOST');
+    const mailPort = this.configService.get<number>('MAIL_PORT') || 465;
+    const resetPasswordUrl = this.configService.get<string>('RESET_PASSWORD_URL');
+
+    if (!fromEmail || !fromPassword || !mailHost) {
+      throw new HttpException(
+        'Configuración de correo incompleta. Verifique las variables de entorno.',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
 
     const transporter = nodemailer.createTransport({
-      host: 'mail.gavacyc.com',
-      port: 465,
+      host: mailHost,
+      port: mailPort,
       secure: true,
       auth: {
         user: fromEmail,
@@ -28,7 +38,7 @@ export class MailService {
       }
     });
 
-    const resetLink = `https://sir.gavacyc.com/reset-password?token=${token}`;
+    const resetLink = `${resetPasswordUrl}?token=${token}`;
 
     const mailOptions = {
       from: `"Sistema GAVA" <${fromEmail}>`,
@@ -80,12 +90,22 @@ export class MailService {
   }
 
   async sendRequestToLogistics(requestId: number, passwordCPanel: string) {
+    this.logger.log(`Preparing to send request ID: ${requestId} to logistics via email`);
     try {
       const request = await this.findRequestById(requestId);
 
       const sender = request.user.email;
-      const toEmail = 'zapataascencioanderson@gmail.com';
-      const copyEmail = ['loco.21libra@gmail.com'];
+      const toEmail = this.configService.get<string>('MAIL_LOGISTICS_TO');
+      const copyEmails = this.configService.get<string>('MAIL_LOGISTICS_CC')?.split(',') || [];
+      const mailHost = this.configService.get<string>('MAIL_HOST');
+      const mailPort = this.configService.get<number>('MAIL_PORT') || 465;
+
+      if (!mailHost || !toEmail) {
+        throw new HttpException(
+          'Configuración de correo incompleta. Verifique las variables de entorno.',
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      }
 
       let subjectEmail = `Solicitud de Requerimiento - ${request.project.name}`;
       let type = '';
@@ -105,10 +125,7 @@ export class MailService {
       }
 
       const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
-
       const pdfPath = path.resolve(outputDir, `requerimiento-${requestId}.pdf`);
-
-      //const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${requestId}.pdf`);
 
       if (!fs.existsSync(pdfPath)) {
         return {
@@ -119,8 +136,8 @@ export class MailService {
       }
 
       const transporter = nodemailer.createTransport({
-        host: 'mail.gavacyc.com',
-        port: 465,
+        host: mailHost,
+        port: mailPort,
         secure: true,
         auth: {
           user: sender,
@@ -134,11 +151,14 @@ export class MailService {
       const now = new Date();
       const formattedDate = now.toLocaleString('es-PE', { timeZone: 'America/Lima' });
       const formattedDeliveryDueDate = new Date(request.deliveryDueDate).toLocaleString('es-PE', { timeZone: 'America/Lima' });
+      
+      const appUrl = this.configService.get<string>('APP_URL') || 'https://sir.gavacyc.com';
 
       const mailOptions = {
         from: `"${request.user.name} ${request.user.lastName}" <${sender}>`,
-        to: 'zapataascencioanderson@gmail.com',
-        subject: `Solicitud de Requerimiento - ${request.project.name}`,
+        to: toEmail,
+        cc: copyEmails.length > 0 ? copyEmails : undefined,
+        subject: subjectEmail,
         html: `
           <div style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #353535; 
                 background-color: #f9f9f9; padding: 24px; border-radius: 8px; max-width: 600px; 
@@ -157,7 +177,7 @@ export class MailService {
           <p>Saludos cordiales, ${request.user.name} ${request.user.lastName}</p>
           <br>
           <div style="width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
-            <a href="https://sir.gavacyc.com/admin/requests/${requestId}">
+            <a href="${appUrl}/admin/requests/${requestId}">
               <button style="
                 background-color: #0047a3;
                 color: white;

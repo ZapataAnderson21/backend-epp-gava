@@ -369,7 +369,7 @@ exports.Prisma.DailyWageScalarFieldEnum = {
   dailyWageId: 'dailyWageId',
   workerId: 'workerId',
   amount: 'amount',
-  validFromWeekId: 'validFromWeekId',
+  validFromDate: 'validFromDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

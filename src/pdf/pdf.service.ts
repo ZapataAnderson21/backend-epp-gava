@@ -563,14 +563,19 @@ export class PdfService {
 
   // Solo impedir envío si NO está en draft (la generación del PDF sí la permitimos aquí)
   if (request.status !== RequestStatus.draft) {
+    this.logger.error('Request status is not draft');
     throw new BadRequestException('Only requests with status "draft" can be sent');
   }
 
-  if (!request.type || !Object.values(RequestType).includes(request.type.toLowerCase() as RequestType)) {
+  if (!request.type) {
+    this.logger.error('Invalid request type');
+    this.logger.error(`Request type provided: ${request.type}`);
     throw new BadRequestException('Invalid request type');
   }
 
   const type = request.type;
+
+  this.logger.log(`Request type: ${type}`);
 
   // 2) Traer elementos y trabajadores seleccionados
   const elementRequests = await this.prismaService.elementRequest.findMany({
@@ -584,6 +589,9 @@ export class PdfService {
     include: { worker: true },
     orderBy: { requestWorkerId: 'asc' }
   });
+
+  this.logger.log('Element Requests:', elementRequests);
+  this.logger.log('Request Workers:', requestWorkers);
 
   // Permitir cualquiera de los dos; solo rechazar si no hay ninguno
   if ((elementRequests?.length ?? 0) === 0 && (requestWorkers?.length ?? 0) === 0) {
@@ -761,10 +769,15 @@ export class PdfService {
 
   // 10) Generar y guardar
   try {
-    const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
+    const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || path.resolve(__dirname, '..', '..', 'output');
+    
+    // Crear el directorio si no existe
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+    
     const fileName = `requerimiento-${requestId}.pdf`;
-    // const outputPath = path.resolve(outputDir, fileName);
-    const outputPath = path.resolve(__dirname, '..', '..', 'output', fileName);
+    const outputPath = path.resolve(outputDir, fileName);
 
     const pdfDoc = printer.createPdfKitDocument(docDefinition);
     const stream = fs.createWriteStream(outputPath);

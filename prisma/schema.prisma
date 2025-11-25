@@ -241,7 +241,7 @@ model Worker {
   dni            String           @db.VarChar(8) @unique
   phone          String?          @unique
   personalEmail  String?          @db.Citext @unique
-  address        String?          @default("No address provided.")
+  address        String?          @default("Sin dirección especificada.")
   birthDate      DateTime?
   workerType     WorkerType       @default(unspecified)
   createdAt      DateTime         @default(now())
@@ -353,8 +353,8 @@ model PurchaseOrder {
   deliveryLocation        String
   destination             String
   paymentConditions       String
-  generalConditions       String?                 @db.Text @default("No general conditions specified.")
-  qualityConditions       String?                 @db.Text @default("No quality conditions specified.")
+  generalConditions       String?                 @db.Text @default("No se especifican condiciones generales.")
+  qualityConditions       String?                 @db.Text @default("No se especifican condiciones de calidad.")
   paymentMethod           PaymentMethod
   saleAmount              Decimal                 @db.Decimal(18,2)
   purchaseAmount          Decimal                 @db.Decimal(18,2)
@@ -367,7 +367,7 @@ model PurchaseOrder {
   logisticsManager        String?                 @default("Morayma Lloja Fernandez")
   authorizer              String?                 @default("Henrry Gayoso Valdera")
   administrativeManager   String?                 @default("Angi Gonzales Cotrina")
-  quotation               String                  @default("No quotation provided.")
+  quotation               String                  @default("No se especifica cotización.")
   purchaseOrderType       PurchaseOrderType       @default(materials)
   createdAt               DateTime                @default(now())
   updatedAt               DateTime                @updatedAt
@@ -478,7 +478,6 @@ model Week {
 
   weeklyWages WeeklyWage[]
   attendances  Attendance[]
-  dailyWagesFrom DailyWage[]
 
   @@index([startDate])
   @@index([endDate])
@@ -489,18 +488,17 @@ model DailyWage {
   workerId          Int
   amount            Decimal  @db.Decimal(18,2)
 
-  // NUEVO: vigencia desde una semana
-  validFromWeekId   Int
+  // Vigencia desde una fecha específica (startDate de la semana)
+  validFromDate     DateTime @db.Date
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now()) @updatedAt
 
-  worker            Worker   @relation(fields: [workerId],        references: [workerId], onDelete: Restrict, onUpdate: Cascade)
-  validFromWeek     Week     @relation(fields: [validFromWeekId], references: [weekId],   onDelete: Restrict, onUpdate: Cascade)
+  worker            Worker   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
 
-  @@unique([workerId, validFromWeekId])
+  @@unique([workerId, validFromDate])
   @@index([workerId])
-  @@index([validFromWeekId])
+  @@index([validFromDate])
 }
 
 model WeeklyWage {

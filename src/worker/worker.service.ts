@@ -275,8 +275,10 @@ export class WorkerService {
 
     const workerIds = attendanceByWorker.map(a => a.workerId);
 
-    // 2) Traer tipo de trabajador y su dailyWage vigente (último validFrom <= hoy)
+    // 2) Traer tipo de trabajador y su dailyWage vigente (último validFromDate <= hoy)
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
     const workers = await this.prismaService.worker.findMany({
       where: {
         workerId: { in: workerIds },
@@ -286,8 +288,11 @@ export class WorkerService {
         workerId: true,
         workerType: true,
         dailyWages: {
-          orderBy: { validFromWeekId: 'desc' }, // ✅ usamos validFromWeekId
-          take: 1,                               // solo el más reciente
+          where: {
+            validFromDate: { lte: today },
+          },
+          orderBy: { validFromDate: 'desc' },
+          take: 1,
           select: { amount: true },
         },
       },

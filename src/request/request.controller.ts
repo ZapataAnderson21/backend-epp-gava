@@ -5,6 +5,7 @@ import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import { MailService } from 'src/mail/mail.service';
 import { PdfService } from 'src/pdf/pdf.service';
+import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { RequestStatus } from './enum';
@@ -13,7 +14,8 @@ import { RequestStatus } from './enum';
 export class RequestController {
   constructor(private readonly requestService: RequestService,
               private readonly pdfService: PdfService, 
-              private readonly mailService: MailService) {}
+              private readonly mailService: MailService,
+              private readonly configService: ConfigService) {}
 
   @Post()
   async create(@Body() createRequestDto: CreateRequestDto) {
@@ -62,8 +64,8 @@ async findAll(
 
   @Get('pdf/:id')
   async getPdf(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
-    const pdfPath = path.resolve(__dirname, '..', '..', 'output', `requerimiento-${id}.pdf`);
-    //const pdfPath = path.resolve('/var/www/pdfs', `requerimiento-${id}.pdf`);
+    const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || path.resolve(__dirname, '..', '..', 'output');
+    const pdfPath = path.resolve(outputDir, `requerimiento-${id}.pdf`);
 
     if (!fs.existsSync(pdfPath)) {
       throw new NotFoundException('PDF no encontrado');
