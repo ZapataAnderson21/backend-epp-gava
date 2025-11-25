@@ -90,7 +90,7 @@ export class UserService {
     this.logger.log(`User created successfully: ${JSON.stringify(newUser.password ? { ...newUser, password: '****' } : newUser)}`);
     return {
       statusCode: HttpStatus.CREATED,
-      message: 'El usuario ha sido registrado exitosamente.',
+      message: 'Usuario registrado exitosamente.',
       data: userReturn
     };
   }

@@ -28,9 +28,9 @@ export class CreateUserDto {
   password!: string;
 
   @ApiPropertyOptional({ example: '987654321' })
-  @Length(9, 9, { message: "\nEl teléfono debe tener exactamente 9 caracteres." })
   @IsOptional()
   @IsString()
+  @Length(9, 9, { message: "\nEl teléfono debe tener exactamente 9 caracteres." })
   phone?: string;
 
   @ApiProperty()
