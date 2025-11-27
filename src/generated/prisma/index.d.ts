@@ -30774,6 +30774,9 @@ export namespace Prisma {
     weeklyWageId: number | null
     workerId: number | null
     weekId: number | null
+    grossAmount: Decimal | null
+    afpDiscount: Decimal | null
+    advanceDiscount: Decimal | null
     totalAmount: Decimal | null
   }
 
@@ -30781,6 +30784,9 @@ export namespace Prisma {
     weeklyWageId: number | null
     workerId: number | null
     weekId: number | null
+    grossAmount: Decimal | null
+    afpDiscount: Decimal | null
+    advanceDiscount: Decimal | null
     totalAmount: Decimal | null
   }
 
@@ -30788,6 +30794,9 @@ export namespace Prisma {
     weeklyWageId: number | null
     workerId: number | null
     weekId: number | null
+    grossAmount: Decimal | null
+    afpDiscount: Decimal | null
+    advanceDiscount: Decimal | null
     totalAmount: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -30797,6 +30806,9 @@ export namespace Prisma {
     weeklyWageId: number | null
     workerId: number | null
     weekId: number | null
+    grossAmount: Decimal | null
+    afpDiscount: Decimal | null
+    advanceDiscount: Decimal | null
     totalAmount: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -30806,6 +30818,9 @@ export namespace Prisma {
     weeklyWageId: number
     workerId: number
     weekId: number
+    grossAmount: number
+    afpDiscount: number
+    advanceDiscount: number
     totalAmount: number
     createdAt: number
     updatedAt: number
@@ -30817,6 +30832,9 @@ export namespace Prisma {
     weeklyWageId?: true
     workerId?: true
     weekId?: true
+    grossAmount?: true
+    afpDiscount?: true
+    advanceDiscount?: true
     totalAmount?: true
   }
 
@@ -30824,6 +30842,9 @@ export namespace Prisma {
     weeklyWageId?: true
     workerId?: true
     weekId?: true
+    grossAmount?: true
+    afpDiscount?: true
+    advanceDiscount?: true
     totalAmount?: true
   }
 
@@ -30831,6 +30852,9 @@ export namespace Prisma {
     weeklyWageId?: true
     workerId?: true
     weekId?: true
+    grossAmount?: true
+    afpDiscount?: true
+    advanceDiscount?: true
     totalAmount?: true
     createdAt?: true
     updatedAt?: true
@@ -30840,6 +30864,9 @@ export namespace Prisma {
     weeklyWageId?: true
     workerId?: true
     weekId?: true
+    grossAmount?: true
+    afpDiscount?: true
+    advanceDiscount?: true
     totalAmount?: true
     createdAt?: true
     updatedAt?: true
@@ -30849,6 +30876,9 @@ export namespace Prisma {
     weeklyWageId?: true
     workerId?: true
     weekId?: true
+    grossAmount?: true
+    afpDiscount?: true
+    advanceDiscount?: true
     totalAmount?: true
     createdAt?: true
     updatedAt?: true
@@ -30945,6 +30975,9 @@ export namespace Prisma {
     weeklyWageId: number
     workerId: number
     weekId: number
+    grossAmount: Decimal
+    afpDiscount: Decimal
+    advanceDiscount: Decimal
     totalAmount: Decimal
     createdAt: Date
     updatedAt: Date
@@ -30973,6 +31006,9 @@ export namespace Prisma {
     weeklyWageId?: boolean
     workerId?: boolean
     weekId?: boolean
+    grossAmount?: boolean
+    afpDiscount?: boolean
+    advanceDiscount?: boolean
     totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -30984,6 +31020,9 @@ export namespace Prisma {
     weeklyWageId?: boolean
     workerId?: boolean
     weekId?: boolean
+    grossAmount?: boolean
+    afpDiscount?: boolean
+    advanceDiscount?: boolean
     totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -30995,6 +31034,9 @@ export namespace Prisma {
     weeklyWageId?: boolean
     workerId?: boolean
     weekId?: boolean
+    grossAmount?: boolean
+    afpDiscount?: boolean
+    advanceDiscount?: boolean
     totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -31006,12 +31048,15 @@ export namespace Prisma {
     weeklyWageId?: boolean
     workerId?: boolean
     weekId?: boolean
+    grossAmount?: boolean
+    afpDiscount?: boolean
+    advanceDiscount?: boolean
     totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type WeeklyWageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"weeklyWageId" | "workerId" | "weekId" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["weeklyWage"]>
+  export type WeeklyWageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"weeklyWageId" | "workerId" | "weekId" | "grossAmount" | "afpDiscount" | "advanceDiscount" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["weeklyWage"]>
   export type WeeklyWageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     worker?: boolean | WorkerDefaultArgs<ExtArgs>
     week?: boolean | WeekDefaultArgs<ExtArgs>
@@ -31035,6 +31080,9 @@ export namespace Prisma {
       weeklyWageId: number
       workerId: number
       weekId: number
+      grossAmount: Prisma.Decimal
+      afpDiscount: Prisma.Decimal
+      advanceDiscount: Prisma.Decimal
       totalAmount: Prisma.Decimal
       createdAt: Date
       updatedAt: Date
@@ -31466,6 +31514,9 @@ export namespace Prisma {
     readonly weeklyWageId: FieldRef<"WeeklyWage", 'Int'>
     readonly workerId: FieldRef<"WeeklyWage", 'Int'>
     readonly weekId: FieldRef<"WeeklyWage", 'Int'>
+    readonly grossAmount: FieldRef<"WeeklyWage", 'Decimal'>
+    readonly afpDiscount: FieldRef<"WeeklyWage", 'Decimal'>
+    readonly advanceDiscount: FieldRef<"WeeklyWage", 'Decimal'>
     readonly totalAmount: FieldRef<"WeeklyWage", 'Decimal'>
     readonly createdAt: FieldRef<"WeeklyWage", 'DateTime'>
     readonly updatedAt: FieldRef<"WeeklyWage", 'DateTime'>
@@ -33357,6 +33408,9 @@ export namespace Prisma {
     weeklyWageId: 'weeklyWageId',
     workerId: 'workerId',
     weekId: 'weekId',
+    grossAmount: 'grossAmount',
+    afpDiscount: 'afpDiscount',
+    advanceDiscount: 'advanceDiscount',
     totalAmount: 'totalAmount',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -35411,6 +35465,9 @@ export namespace Prisma {
     weeklyWageId?: IntFilter<"WeeklyWage"> | number
     workerId?: IntFilter<"WeeklyWage"> | number
     weekId?: IntFilter<"WeeklyWage"> | number
+    grossAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"WeeklyWage"> | Date | string
     updatedAt?: DateTimeFilter<"WeeklyWage"> | Date | string
@@ -35422,6 +35479,9 @@ export namespace Prisma {
     weeklyWageId?: SortOrder
     workerId?: SortOrder
     weekId?: SortOrder
+    grossAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -35431,22 +35491,29 @@ export namespace Prisma {
 
   export type WeeklyWageWhereUniqueInput = Prisma.AtLeast<{
     weeklyWageId?: number
+    workerId_weekId?: WeeklyWageWorkerIdWeekIdCompoundUniqueInput
     AND?: WeeklyWageWhereInput | WeeklyWageWhereInput[]
     OR?: WeeklyWageWhereInput[]
     NOT?: WeeklyWageWhereInput | WeeklyWageWhereInput[]
     workerId?: IntFilter<"WeeklyWage"> | number
     weekId?: IntFilter<"WeeklyWage"> | number
+    grossAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"WeeklyWage"> | Date | string
     updatedAt?: DateTimeFilter<"WeeklyWage"> | Date | string
     worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
     week?: XOR<WeekScalarRelationFilter, WeekWhereInput>
-  }, "weeklyWageId">
+  }, "weeklyWageId" | "workerId_weekId">
 
   export type WeeklyWageOrderByWithAggregationInput = {
     weeklyWageId?: SortOrder
     workerId?: SortOrder
     weekId?: SortOrder
+    grossAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -35464,6 +35531,9 @@ export namespace Prisma {
     weeklyWageId?: IntWithAggregatesFilter<"WeeklyWage"> | number
     workerId?: IntWithAggregatesFilter<"WeeklyWage"> | number
     weekId?: IntWithAggregatesFilter<"WeeklyWage"> | number
+    grossAmount?: DecimalWithAggregatesFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalWithAggregatesFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalWithAggregatesFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalWithAggregatesFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeWithAggregatesFilter<"WeeklyWage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WeeklyWage"> | Date | string
@@ -37344,6 +37414,9 @@ export namespace Prisma {
   }
 
   export type WeeklyWageCreateInput = {
+    grossAmount: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -37355,12 +37428,18 @@ export namespace Prisma {
     weeklyWageId?: number
     workerId: number
     weekId: number
+    grossAmount: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type WeeklyWageUpdateInput = {
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37372,6 +37451,9 @@ export namespace Prisma {
     weeklyWageId?: IntFieldUpdateOperationsInput | number
     workerId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37381,12 +37463,18 @@ export namespace Prisma {
     weeklyWageId?: number
     workerId: number
     weekId: number
+    grossAmount: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type WeeklyWageUpdateManyMutationInput = {
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37396,6 +37484,9 @@ export namespace Prisma {
     weeklyWageId?: IntFieldUpdateOperationsInput | number
     workerId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39166,10 +39257,18 @@ export namespace Prisma {
     isNot?: WeekWhereInput
   }
 
+  export type WeeklyWageWorkerIdWeekIdCompoundUniqueInput = {
+    workerId: number
+    weekId: number
+  }
+
   export type WeeklyWageCountOrderByAggregateInput = {
     weeklyWageId?: SortOrder
     workerId?: SortOrder
     weekId?: SortOrder
+    grossAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -39179,6 +39278,9 @@ export namespace Prisma {
     weeklyWageId?: SortOrder
     workerId?: SortOrder
     weekId?: SortOrder
+    grossAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
   }
 
@@ -39186,6 +39288,9 @@ export namespace Prisma {
     weeklyWageId?: SortOrder
     workerId?: SortOrder
     weekId?: SortOrder
+    grossAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -39195,6 +39300,9 @@ export namespace Prisma {
     weeklyWageId?: SortOrder
     workerId?: SortOrder
     weekId?: SortOrder
+    grossAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -39204,6 +39312,9 @@ export namespace Prisma {
     weeklyWageId?: SortOrder
     workerId?: SortOrder
     weekId?: SortOrder
+    grossAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
   }
 
@@ -43508,6 +43619,9 @@ export namespace Prisma {
   }
 
   export type WeeklyWageCreateWithoutWorkerInput = {
+    grossAmount: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -43517,6 +43631,9 @@ export namespace Prisma {
   export type WeeklyWageUncheckedCreateWithoutWorkerInput = {
     weeklyWageId?: number
     weekId: number
+    grossAmount: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -43621,6 +43738,9 @@ export namespace Prisma {
     weeklyWageId?: IntFilter<"WeeklyWage"> | number
     workerId?: IntFilter<"WeeklyWage"> | number
     weekId?: IntFilter<"WeeklyWage"> | number
+    grossAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"WeeklyWage"> | Date | string
     updatedAt?: DateTimeFilter<"WeeklyWage"> | Date | string
@@ -44766,6 +44886,9 @@ export namespace Prisma {
   }
 
   export type WeeklyWageCreateWithoutWeekInput = {
+    grossAmount: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -44775,6 +44898,9 @@ export namespace Prisma {
   export type WeeklyWageUncheckedCreateWithoutWeekInput = {
     weeklyWageId?: number
     workerId: number
+    grossAmount: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46031,6 +46157,9 @@ export namespace Prisma {
   export type WeeklyWageCreateManyWorkerInput = {
     weeklyWageId?: number
     weekId: number
+    grossAmount: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46082,6 +46211,9 @@ export namespace Prisma {
   }
 
   export type WeeklyWageUpdateWithoutWorkerInput = {
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46091,6 +46223,9 @@ export namespace Prisma {
   export type WeeklyWageUncheckedUpdateWithoutWorkerInput = {
     weeklyWageId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46099,6 +46234,9 @@ export namespace Prisma {
   export type WeeklyWageUncheckedUpdateManyWithoutWorkerInput = {
     weeklyWageId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46408,6 +46546,9 @@ export namespace Prisma {
   export type WeeklyWageCreateManyWeekInput = {
     weeklyWageId?: number
     workerId: number
+    grossAmount: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46422,6 +46563,9 @@ export namespace Prisma {
   }
 
   export type WeeklyWageUpdateWithoutWeekInput = {
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46431,6 +46575,9 @@ export namespace Prisma {
   export type WeeklyWageUncheckedUpdateWithoutWeekInput = {
     weeklyWageId?: IntFieldUpdateOperationsInput | number
     workerId?: IntFieldUpdateOperationsInput | number
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46439,6 +46586,9 @@ export namespace Prisma {
   export type WeeklyWageUncheckedUpdateManyWithoutWeekInput = {
     weeklyWageId?: IntFieldUpdateOperationsInput | number
     workerId?: IntFieldUpdateOperationsInput | number
+    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

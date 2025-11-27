@@ -27,6 +27,7 @@ import { AttendanceModule } from './attendance/attendance.module';
 import { WeekModule } from './week/week.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DailyWageModule } from './daily-wage/daily-wage.module';
+import { WeeklyWageModule } from './weekly-wage/weekly-wage.module';
 
 
 @Module({
@@ -47,6 +48,7 @@ import { DailyWageModule } from './daily-wage/daily-wage.module';
             ScheduleModule.forRoot(),
             WeekModule,
             DailyWageModule,
+            WeeklyWageModule,
           ],
   controllers: [],
   providers: [MailService, 

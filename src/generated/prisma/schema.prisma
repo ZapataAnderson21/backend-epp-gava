@@ -502,15 +502,22 @@ model DailyWage {
 }
 
 model WeeklyWage {
-  weeklyWageId Int      @id @default(autoincrement())
-  workerId     Int
-  weekId       Int
-  totalAmount  Decimal  @db.Decimal(18, 2)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  weeklyWageId    Int      @id @default(autoincrement())
+  workerId        Int
+  weekId          Int
+  grossAmount     Decimal  @db.Decimal(18, 2)
+  afpDiscount     Decimal  @default(0) @db.Decimal(18, 2)
+  advanceDiscount Decimal  @default(0) @db.Decimal(18, 2)
+  totalAmount     Decimal  @db.Decimal(18, 2)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   worker Worker @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
   week   Week   @relation(fields: [weekId], references: [weekId], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([workerId, weekId])
+  @@index([weekId])
+  @@index([workerId])
 }
 
 model Attendance {
