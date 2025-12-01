@@ -395,6 +395,28 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.TaskScalarFieldEnum = {
+  taskId: 'taskId',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  priority: 'priority',
+  projectId: 'projectId',
+  parentTaskId: 'parentTaskId',
+  startDate: 'startDate',
+  dueDate: 'dueDate',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TaskAssignmentScalarFieldEnum = {
+  taskAssignmentId: 'taskAssignmentId',
+  taskId: 'taskId',
+  userId: 'userId',
+  assignedAt: 'assignedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -484,6 +506,20 @@ exports.PettyCashType = exports.$Enums.PettyCashType = {
   other: 'other'
 };
 
+exports.TaskStatus = exports.$Enums.TaskStatus = {
+  pending: 'pending',
+  in_progress: 'in_progress',
+  completed: 'completed',
+  cancelled: 'cancelled'
+};
+
+exports.TaskPriority = exports.$Enums.TaskPriority = {
+  low: 'low',
+  medium: 'medium',
+  high: 'high',
+  urgent: 'urgent'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   UserType: 'UserType',
@@ -509,7 +545,9 @@ exports.Prisma.ModelName = {
   Week: 'Week',
   DailyWage: 'DailyWage',
   WeeklyWage: 'WeeklyWage',
-  Attendance: 'Attendance'
+  Attendance: 'Attendance',
+  Task: 'Task',
+  TaskAssignment: 'TaskAssignment'
 };
 
 /**

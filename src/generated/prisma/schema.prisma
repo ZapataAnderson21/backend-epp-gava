@@ -24,6 +24,7 @@ model User {
   userUserTypes       UserUserType[]
   passwordResetTokens PasswordResetToken[]
   emergencies         Emergency[]
+  taskAssignments     TaskAssignment[]
 
   @@index([name])
   @@index([lastName])
@@ -74,6 +75,7 @@ model Project {
   pettyCashes    PettyCash[]
   serviceSales   ServiceSale[]
   attendances    Attendance[]
+  tasks          Task[]
 
   @@index([status])
   @@index([name])
@@ -535,4 +537,61 @@ model Attendance {
   @@unique([workerId, date])
   @@index([workerId])
   @@index([projectId])
+}
+
+// ==================== GESTIÓN DE TAREAS ====================
+
+enum TaskStatus {
+  pending
+  in_progress
+  completed
+  cancelled
+}
+
+enum TaskPriority {
+  low
+  medium
+  high
+  urgent
+}
+
+model Task {
+  taskId       Int          @id @default(autoincrement())
+  title        String
+  description  String?      @db.Text
+  status       TaskStatus   @default(pending)
+  priority     TaskPriority @default(medium)
+  projectId    Int
+  parentTaskId Int? // Para subtareas
+  startDate    DateTime? // Fecha de inicio planificada (para Gantt)
+  dueDate      DateTime? // Fecha de fin planificada
+  completedAt  DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  project     Project          @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  parentTask  Task?            @relation("TaskSubtasks", fields: [parentTaskId], references: [taskId], onDelete: Cascade, onUpdate: Cascade)
+  subtasks    Task[]           @relation("TaskSubtasks")
+  assignments TaskAssignment[]
+
+  @@index([projectId])
+  @@index([parentTaskId])
+  @@index([status])
+  @@index([priority])
+  @@index([startDate])
+  @@index([dueDate])
+}
+
+model TaskAssignment {
+  taskAssignmentId Int      @id @default(autoincrement())
+  taskId           Int
+  userId           Int
+  assignedAt       DateTime @default(now())
+
+  task Task @relation(fields: [taskId], references: [taskId], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([taskId, userId])
+  @@index([taskId])
+  @@index([userId])
 }
