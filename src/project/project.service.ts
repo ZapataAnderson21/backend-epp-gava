@@ -3,13 +3,17 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProjectStatus, ProjectStatusLabelEs } from './enum/project-status.enum';
+import { TaskService } from 'src/task/task.service';
 
 @Injectable()
 export class ProjectService {
 
   private readonly logger = new Logger("ProjectService");
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly taskService: TaskService,
+  ) {}
 
   async create(createProjectDto: CreateProjectDto) {
 
@@ -213,6 +217,27 @@ export class ProjectService {
 
   async updateStatus(projectId: number, status: ProjectStatus) {
     this.logger.log(`Updating status for project with ID: ${projectId} to: ${status}`);
+
+    // REGLA: Solo permitir cambiar el estado a completed si todas las tareas están completadas/canceladas
+    if (status === ProjectStatus.Completed) {
+      const taskStatus = await this.taskService.areAllTasksCompletedOrCancelled(projectId);
+      
+      if (!taskStatus.allCompleted) {
+        const messages: string[] = [];
+        if (taskStatus.pendingCount > 0) {
+          messages.push(`${taskStatus.pendingCount} tarea(s) pendiente(s)`);
+        }
+        if (taskStatus.inProgressCount > 0) {
+          messages.push(`${taskStatus.inProgressCount} tarea(s) en progreso`);
+        }
+        
+        throw new BadRequestException(
+          `No se puede completar el proyecto porque tiene ${messages.join(' y ')}. ` +
+          'Todas las tareas deben estar completadas o canceladas.',
+        );
+      }
+    }
+
     const updatedProject = await this.prismaService.project.update({
       where: { projectId },
       data: { status }

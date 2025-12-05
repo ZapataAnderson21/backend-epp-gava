@@ -8,9 +8,12 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto, UpdateTaskDto, UpdateTaskStatusDto, AssignUserDto } from './dto';
+import { TaskPermissionGuard, TaskOperation, TASK_OPERATION_KEY } from './guards';
+import { UserTypes } from 'src/decorators/user-types.decorator';
 
 @Controller('task')
 export class TaskController {
@@ -64,8 +67,11 @@ export class TaskController {
   /**
    * PUT /task/:taskId
    * Actualizar una tarea completa
+   * Solo GERENTE, ADMINISTRADORA o usuarios asignados pueden actualizar
    */
   @Put(':taskId')
+  @UseGuards(TaskPermissionGuard)
+  @TaskOperation('update')
   update(
     @Param('taskId', ParseIntPipe) taskId: number,
     @Body() updateTaskDto: UpdateTaskDto,
@@ -76,8 +82,11 @@ export class TaskController {
   /**
    * PATCH /task/:taskId/status
    * Cambiar el estado de una tarea (endpoint rápido)
+   * Solo GERENTE, ADMINISTRADORA o usuarios asignados pueden cambiar el estado
    */
   @Patch(':taskId/status')
+  @UseGuards(TaskPermissionGuard)
+  @TaskOperation('update-status')
   updateStatus(
     @Param('taskId', ParseIntPipe) taskId: number,
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,
@@ -88,8 +97,10 @@ export class TaskController {
   /**
    * POST /task/:taskId/assign
    * Asignar un usuario a una tarea
+   * Solo GERENTE o ADMINISTRADORA pueden asignar usuarios
    */
   @Post(':taskId/assign')
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
   assignUser(
     @Param('taskId', ParseIntPipe) taskId: number,
     @Body() assignUserDto: AssignUserDto,
@@ -100,8 +111,10 @@ export class TaskController {
   /**
    * DELETE /task/:taskId/assign/:userId
    * Desasignar un usuario de una tarea
+   * Solo GERENTE o ADMINISTRADORA pueden desasignar usuarios
    */
   @Delete(':taskId/assign/:userId')
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
   unassignUser(
     @Param('taskId', ParseIntPipe) taskId: number,
     @Param('userId', ParseIntPipe) userId: number,
@@ -112,8 +125,10 @@ export class TaskController {
   /**
    * DELETE /task/:taskId
    * Eliminar una tarea
+   * Solo GERENTE o ADMINISTRADORA pueden eliminar tareas
    */
   @Delete(':taskId')
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
   remove(@Param('taskId', ParseIntPipe) taskId: number) {
     return this.taskService.remove(taskId);
   }
