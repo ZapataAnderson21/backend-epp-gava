@@ -417,6 +417,22 @@ exports.Prisma.TaskAssignmentScalarFieldEnum = {
   assignedAt: 'assignedAt'
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  notificationId: 'notificationId',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  isRead: 'isRead',
+  readAt: 'readAt',
+  taskId: 'taskId',
+  requestId: 'requestId',
+  emergencyId: 'emergencyId',
+  purchaseOrderId: 'purchaseOrderId',
+  projectId: 'projectId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -520,6 +536,32 @@ exports.TaskPriority = exports.$Enums.TaskPriority = {
   urgent: 'urgent'
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  task_assigned: 'task_assigned',
+  task_unassigned: 'task_unassigned',
+  task_due_soon: 'task_due_soon',
+  task_overdue: 'task_overdue',
+  task_status_changed: 'task_status_changed',
+  task_completed: 'task_completed',
+  subtask_completed: 'subtask_completed',
+  request_created: 'request_created',
+  request_approved: 'request_approved',
+  request_rejected: 'request_rejected',
+  request_responded: 'request_responded',
+  request_due_soon: 'request_due_soon',
+  emergency_created: 'emergency_created',
+  emergency_addressed: 'emergency_addressed',
+  emergency_rejected: 'emergency_rejected',
+  purchase_order_pending: 'purchase_order_pending',
+  purchase_order_authorized: 'purchase_order_authorized',
+  purchase_order_delivered: 'purchase_order_delivered',
+  purchase_order_cancelled: 'purchase_order_cancelled',
+  project_created: 'project_created',
+  project_completed: 'project_completed',
+  project_inactivated: 'project_inactivated',
+  system_reminder: 'system_reminder'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   UserType: 'UserType',
@@ -547,7 +589,8 @@ exports.Prisma.ModelName = {
   WeeklyWage: 'WeeklyWage',
   Attendance: 'Attendance',
   Task: 'Task',
-  TaskAssignment: 'TaskAssignment'
+  TaskAssignment: 'TaskAssignment',
+  Notification: 'Notification'
 };
 
 /**

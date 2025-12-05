@@ -29,6 +29,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { DailyWageModule } from './daily-wage/daily-wage.module';
 import { WeeklyWageModule } from './weekly-wage/weekly-wage.module';
 import { TaskModule } from './task/task.module';
+import { NotificationModule } from './notification/notification.module';
 
 
 @Module({
@@ -51,6 +52,7 @@ import { TaskModule } from './task/task.module';
             DailyWageModule,
             WeeklyWageModule,
             TaskModule,
+            NotificationModule,
           ],
   controllers: [],
   providers: [MailService, 

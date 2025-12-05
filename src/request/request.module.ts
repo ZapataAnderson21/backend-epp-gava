@@ -4,8 +4,10 @@ import { RequestController } from './request.controller';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PdfService } from 'src/pdf/pdf.service';
 import { MailService } from 'src/mail/mail.service';
+import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
+  imports: [NotificationModule],
   controllers: [RequestController],
   providers: [RequestService, PrismaService, PdfService, MailService],
 })

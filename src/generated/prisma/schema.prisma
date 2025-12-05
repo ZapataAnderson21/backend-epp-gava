@@ -25,6 +25,7 @@ model User {
   passwordResetTokens PasswordResetToken[]
   emergencies         Emergency[]
   taskAssignments     TaskAssignment[]
+  notifications       Notification[]
 
   @@index([name])
   @@index([lastName])
@@ -76,6 +77,7 @@ model Project {
   serviceSales   ServiceSale[]
   attendances    Attendance[]
   tasks          Task[]
+  notifications  Notification[]
 
   @@index([status])
   @@index([name])
@@ -135,6 +137,7 @@ model Request {
   elementRequests ElementRequest[]
   requestWorkers  RequestWorker[]
   responses       RequestResponse[]
+  notifications   Notification[]
 
   @@index([status])
   @@index([type])
@@ -228,8 +231,9 @@ model Emergency {
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
-  user    User    @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  user          User           @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  project       Project        @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  notifications Notification[]
 
   @@index([status])
   @@index([userId])
@@ -374,9 +378,10 @@ model PurchaseOrder {
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
 
-  project   Project                 @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  supplier  Supplier                @relation(fields: [supplierId], references: [supplierId], onDelete: Restrict, onUpdate: Cascade)
-  resources ResourcePurchaseOrder[]
+  project       Project                 @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  supplier      Supplier                @relation(fields: [supplierId], references: [supplierId], onDelete: Restrict, onUpdate: Cascade)
+  resources     ResourcePurchaseOrder[]
+  notifications Notification[]
 
   @@index([status])
   @@index([projectId])
@@ -569,10 +574,11 @@ model Task {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  project     Project          @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  parentTask  Task?            @relation("TaskSubtasks", fields: [parentTaskId], references: [taskId], onDelete: Cascade, onUpdate: Cascade)
-  subtasks    Task[]           @relation("TaskSubtasks")
-  assignments TaskAssignment[]
+  project       Project          @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  parentTask    Task?            @relation("TaskSubtasks", fields: [parentTaskId], references: [taskId], onDelete: Cascade, onUpdate: Cascade)
+  subtasks      Task[]           @relation("TaskSubtasks")
+  assignments   TaskAssignment[]
+  notifications Notification[]
 
   @@index([projectId])
   @@index([parentTaskId])
@@ -594,4 +600,74 @@ model TaskAssignment {
   @@unique([taskId, userId])
   @@index([taskId])
   @@index([userId])
+}
+
+// ==================== SISTEMA DE NOTIFICACIONES ====================
+
+enum NotificationType {
+  // Tareas
+  task_assigned
+  task_unassigned
+  task_due_soon
+  task_overdue
+  task_status_changed
+  task_completed
+  subtask_completed
+
+  // Solicitudes
+  request_created
+  request_approved
+  request_rejected
+  request_responded
+  request_due_soon
+
+  // Emergencias
+  emergency_created
+  emergency_addressed
+  emergency_rejected
+
+  // Órdenes de Compra
+  purchase_order_pending
+  purchase_order_authorized
+  purchase_order_delivered
+  purchase_order_cancelled
+
+  // Proyectos
+  project_created
+  project_completed
+  project_inactivated
+
+  // Sistema
+  system_reminder
+}
+
+model Notification {
+  notificationId Int              @id @default(autoincrement())
+  userId         Int
+  type           NotificationType
+  title          String
+  message        String           @db.Text
+  isRead         Boolean          @default(false)
+  readAt         DateTime?
+
+  // Referencias opcionales para navegación
+  taskId          Int?
+  requestId       Int?
+  emergencyId     Int?
+  purchaseOrderId Int?
+  projectId       Int?
+
+  createdAt DateTime @default(now())
+
+  user          User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  task          Task?          @relation(fields: [taskId], references: [taskId], onDelete: SetNull)
+  request       Request?       @relation(fields: [requestId], references: [requestId], onDelete: SetNull)
+  emergency     Emergency?     @relation(fields: [emergencyId], references: [emergencyId], onDelete: SetNull)
+  purchaseOrder PurchaseOrder? @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: SetNull)
+  project       Project?       @relation(fields: [projectId], references: [projectId], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@index([type])
 }

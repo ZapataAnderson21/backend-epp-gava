@@ -3,13 +3,17 @@ import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RequestStatus, RequestStatusLabelEs } from './enum';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class RequestService {
   
   private readonly logger = new Logger('RequestService');
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly notificationService: NotificationService,
+  ) {}
   
   async create(createRequestDto: CreateRequestDto) {
 
@@ -21,12 +25,26 @@ export class RequestService {
     };
 
     const request = await this.prismaService.request.create({
-      data: requestData
+      data: requestData,
+      include: {
+        project: { select: { projectId: true, name: true } },
+      },
     });
 
     if (!request) {
       this.logger.error('Failed to create request', createRequestDto);
       throw new BadRequestException('Failed to create request');
+    }
+
+    // Notificar a ADMINISTRADORA y LOGISTICA sobre la nueva solicitud
+    // Solo notificar si el estado no es draft
+    if (request.status !== 'draft') {
+      await this.notificationService.notifyRequestCreated(
+        request.requestId,
+        request.projectId,
+        request.project.name,
+        request.type,
+      );
     }
 
     this.logger.log(`Request created successfully: ${JSON.stringify(request)}`);
@@ -275,17 +293,45 @@ export class RequestService {
     this.logger.log(`Updating status of request ID ${requestId} to ${status}`);
 
     this.logger.log(`Verifying existence of request ID: ${requestId}`);
-    await this.findOne(requestId)
+    const existingRequest = await this.findOne(requestId);
+    const previousStatus = existingRequest.data.status;
 
     this.logger.log(`Request ID ${requestId} exists. Proceeding to update status.`);
     const updatedRequest = await this.prismaService.request.update({
       where: { requestId },
-      data: { status }
+      data: { status },
+      include: {
+        project: { select: { projectId: true, name: true } },
+      },
     });
 
     if (!updatedRequest) {
       this.logger.error(`Failed to update status for request ID: ${requestId}`);
       throw new BadRequestException('Failed to update request status');
+    }
+
+    // Notificar al creador de la solicitud según el cambio de estado
+    const creatorUserId = existingRequest.data.userId;
+
+    // Si pasó de draft a otro estado, notificar a ADMINISTRADORA/LOGISTICA
+    if (previousStatus === 'draft' && status !== 'draft') {
+      await this.notificationService.notifyRequestCreated(
+        requestId,
+        updatedRequest.projectId,
+        updatedRequest.project.name,
+        updatedRequest.type,
+      );
+    }
+
+    // Notificar aprobación o rechazo al creador
+    if (status === RequestStatus.approved) {
+      await this.notificationService.notifyRequestApproved(
+        requestId,
+        creatorUserId,
+        updatedRequest.description,
+      );
+    } else if (status === RequestStatus.rejected) {
+      await this.notificationService.notifyRequestRejected(requestId, creatorUserId);
     }
 
     this.logger.log(`Request ID ${requestId} status updated successfully to ${status}`);

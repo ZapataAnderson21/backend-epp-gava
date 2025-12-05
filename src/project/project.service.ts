@@ -4,6 +4,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProjectStatus, ProjectStatusLabelEs } from './enum/project-status.enum';
 import { TaskService } from 'src/task/task.service';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class ProjectService {
@@ -13,6 +14,7 @@ export class ProjectService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly taskService: TaskService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async create(createProjectDto: CreateProjectDto) {
@@ -38,6 +40,13 @@ export class ProjectService {
       this.logger.error(`Project creation failed: ${JSON.stringify(createProjectDto)}`);
       throw new BadRequestException('No se pudo crear el proyecto.');
     }
+
+    // Notificar a todos los roles sobre nuevo proyecto
+    await this.notificationService.notifyProjectCreated(
+      project.projectId,
+      project.name,
+      project.code,
+    );
 
     this.logger.log(`Project created successfully: ${JSON.stringify(project)}`);
     return {
@@ -246,6 +255,19 @@ export class ProjectService {
     if (!updatedProject) {
       this.logger.warn(`Project with ID ${projectId} not found`);
       throw new NotFoundException('Project not found');
+    }
+
+    // Notificar cambio de estado del proyecto
+    if (status === ProjectStatus.Completed) {
+      await this.notificationService.notifyProjectCompleted(
+        projectId,
+        updatedProject.name,
+      );
+    } else if (status === ProjectStatus.Inactive) {
+      await this.notificationService.notifyProjectInactivated(
+        projectId,
+        updatedProject.name,
+      );
     }
 
     this.logger.log(`Project with ID ${projectId} status updated successfully: ${JSON.stringify(updatedProject)}`);

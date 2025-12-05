@@ -2,6 +2,7 @@ import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException 
 import { CreateEmergencyDto } from './dto/create-emergency.dto';
 import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { NotificationService } from 'src/notification/notification.service';
 const fs = require('fs');
 const path = require('path');
 
@@ -9,18 +10,32 @@ const path = require('path');
 export class EmergencyService {
   private readonly logger = new Logger("EmergencyService");
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   async create(createEmergencyDto: CreateEmergencyDto) {
     this.logger.log(`Creating emergency with data: ${JSON.stringify(createEmergencyDto)}`);
     const emergency = await this.prismaService.emergency.create({
-      data: createEmergencyDto
+      data: createEmergencyDto,
+      include: {
+        project: { select: { projectId: true, name: true } },
+      },
     });
 
     if (!emergency) {
       this.logger.error('Failed to create emergency');
       throw new BadRequestException('Failed to create emergency');
     }
+
+    // Notificar a GERENTE y ADMINISTRADORA sobre la nueva emergencia
+    await this.notificationService.notifyEmergencyCreated(
+      emergency.emergencyId,
+      emergency.projectId,
+      emergency.project.name,
+      emergency.title,
+    );
 
     this.logger.log(`Emergency created successfully: ${JSON.stringify(emergency)}`);
     return {
@@ -119,14 +134,39 @@ export class EmergencyService {
 
   async update(id: number, updateEmergencyDto: UpdateEmergencyDto) {
     this.logger.log(`Updating emergency with ID: ${id}`);
+    
+    // Obtener la emergencia antes de actualizar para comparar el estado
+    const existingEmergency = await this.prismaService.emergency.findUnique({
+      where: { emergencyId: id },
+    });
+
+    if (!existingEmergency) {
+      this.logger.warn(`Emergency with ID ${id} not found`);
+      throw new NotFoundException(`Emergency with ID ${id} not found`);
+    }
+
+    const previousStatus = existingEmergency.status;
+
     const emergency = await this.prismaService.emergency.update({
       where: { emergencyId: id },
       data: updateEmergencyDto,
     });
 
-    if (!emergency) {
-      this.logger.warn(`Emergency with ID ${id} not found`);
-      throw new NotFoundException(`Emergency with ID ${id} not found`);
+    // Notificar al creador si el estado cambió
+    if (updateEmergencyDto.status && updateEmergencyDto.status !== previousStatus) {
+      if (updateEmergencyDto.status === 'addressed') {
+        await this.notificationService.notifyEmergencyAddressed(
+          id,
+          existingEmergency.userId,
+          existingEmergency.title,
+        );
+      } else if (updateEmergencyDto.status === 'rejected') {
+        await this.notificationService.notifyEmergencyRejected(
+          id,
+          existingEmergency.userId,
+          existingEmergency.title,
+        );
+      }
     }
 
     this.logger.log(`Emergency updated successfully: ${JSON.stringify(emergency)}`);

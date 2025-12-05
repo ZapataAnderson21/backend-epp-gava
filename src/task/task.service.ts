@@ -1,10 +1,14 @@
 import { Injectable, NotFoundException, BadRequestException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTaskDto, UpdateTaskDto, TaskStatus } from './dto';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class TaskService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   /**
    * Crear una nueva tarea o subtarea
@@ -106,6 +110,18 @@ export class TaskService {
         subtasks: true,
       },
     });
+
+    // Notificar a los usuarios asignados
+    if (assignedUserIds && assignedUserIds.length > 0) {
+      for (const userId of assignedUserIds) {
+        await this.notificationService.notifyTaskAssigned(
+          task.taskId,
+          userId,
+          task.title,
+          task.project.name,
+        );
+      }
+    }
 
     return {
       statusCode: HttpStatus.CREATED,
@@ -528,6 +544,7 @@ export class TaskService {
       },
       include: {
         project: { select: { projectId: true, name: true, code: true } },
+        parentTask: { select: { taskId: true, title: true } },
         assignments: {
           include: {
             user: { select: { userId: true, name: true, lastName: true, email: true } },
@@ -535,6 +552,18 @@ export class TaskService {
         },
       },
     });
+
+    // Notificar cambio de estado a usuarios asignados
+    await this.notificationService.notifyTaskStatusChanged(taskId, task.title, status);
+
+    // Si se completó una subtarea, notificar a los asignados de la tarea padre
+    if (status === TaskStatus.completed && task.parentTask) {
+      await this.notificationService.notifySubtaskCompleted(
+        task.parentTask.taskId,
+        task.title,
+        task.parentTask.title,
+      );
+    }
 
     return {
       statusCode: HttpStatus.OK,
@@ -583,8 +612,22 @@ export class TaskService {
       data: { taskId, userId },
       include: {
         user: { select: { userId: true, name: true, lastName: true, email: true } },
+        task: { 
+          select: { 
+            title: true,
+            project: { select: { name: true } },
+          },
+        },
       },
     });
+
+    // Notificar al usuario asignado
+    await this.notificationService.notifyTaskAssigned(
+      taskId,
+      userId,
+      assignment.task.title,
+      assignment.task.project.name,
+    );
 
     return {
       statusCode: HttpStatus.CREATED,
@@ -602,6 +645,9 @@ export class TaskService {
       where: {
         taskId_userId: { taskId, userId },
       },
+      include: {
+        task: { select: { title: true } },
+      },
     });
 
     if (!assignment) {
@@ -613,6 +659,9 @@ export class TaskService {
         taskId_userId: { taskId, userId },
       },
     });
+
+    // Notificar al usuario desasignado
+    await this.notificationService.notifyTaskUnassigned(taskId, userId, assignment.task.title);
 
     return {
       statusCode: HttpStatus.OK,

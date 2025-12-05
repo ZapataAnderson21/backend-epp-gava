@@ -3,19 +3,26 @@ import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Currency } from 'src/supplier/enum/currency.enum';
-import { PurchaseOrderStatusLabelEs } from './enum';
+import { PurchaseOrderStatusLabelEs, PurchaseOrderStatus } from './enum';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class PurchaseOrderService {
 
   private readonly logger = new Logger("PurchaseOrderService");
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   async create(createPurchaseOrderDto: CreatePurchaseOrderDto) {
     this.logger.log('Creating a new purchase order');
     const newPurchaseOrder = await this.prisma.purchaseOrder.create({
       data: createPurchaseOrderDto,
+      include: {
+        project: true,
+      },
     });
 
     if (!newPurchaseOrder) {
@@ -32,6 +39,13 @@ export class PurchaseOrderService {
       this.logger.error(`Failed to update purchase order with id: ${newPurchaseOrder.purchaseOrderId}`);
       throw new BadRequestException('No se pudo actualizar la orden de compra con el código generado.');
     }
+
+    // Notificar a GERENTE sobre nueva orden de compra pendiente
+    await this.notificationService.notifyPurchaseOrderPending(
+      newPurchaseOrder.purchaseOrderId,
+      newPurchaseOrder.project?.name || 'Proyecto',
+      code,
+    );
 
     this.logger.log(`Purchase order created successfully with id: ${updatedPurchaseOrder.data.purchaseOrderId}`);
     return {
@@ -197,6 +211,16 @@ export class PurchaseOrderService {
   async update(purchaseOrderId: number, updatePurchaseOrderDto: UpdatePurchaseOrderDto) {
     this.logger.log(`Updating purchase order with id: ${purchaseOrderId}`);
 
+    // Obtener el estado anterior si hay cambio de estado
+    let previousStatus: string | null = null;
+    if (updatePurchaseOrderDto.status) {
+      const currentPO = await this.prisma.purchaseOrder.findUnique({
+        where: { purchaseOrderId },
+        select: { status: true },
+      });
+      previousStatus = currentPO?.status || null;
+    }
+
     if(updatePurchaseOrderDto.code){
       const code = await this.formatedCode(purchaseOrderId, updatePurchaseOrderDto.code);
       updatePurchaseOrderDto.code = code;
@@ -205,12 +229,43 @@ export class PurchaseOrderService {
 
     const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
       where: { purchaseOrderId },
-      data: updatePurchaseOrderDto
+      data: updatePurchaseOrderDto,
+      include: {
+        project: true,
+      },
     });
 
     if (!updatedPurchaseOrder) {
       this.logger.error(`Failed to update purchase order with id: ${purchaseOrderId}`);
       throw new BadRequestException('No se pudo actualizar la orden de compra.');
+    }
+
+    // Notificar si hubo cambio de estado
+    if (updatePurchaseOrderDto.status && previousStatus !== updatePurchaseOrderDto.status) {
+      const code = updatedPurchaseOrder.code;
+
+      switch (updatePurchaseOrderDto.status) {
+        case PurchaseOrderStatus.Authorized:
+          await this.notificationService.notifyPurchaseOrderAuthorized(
+            purchaseOrderId,
+            code,
+          );
+          break;
+        case PurchaseOrderStatus.Delivered:
+          // TODO: Pasar el userId del creador de la orden si está disponible
+          await this.notificationService.notifyPurchaseOrderDelivered(
+            purchaseOrderId,
+            code,
+            0, // creatorUserId - ajustar si se tiene acceso
+          );
+          break;
+        case PurchaseOrderStatus.Cancelled:
+          await this.notificationService.notifyPurchaseOrderCancelled(
+            purchaseOrderId,
+            code,
+          );
+          break;
+      }
     }
 
     this.logger.log(`Purchase order with id: ${purchaseOrderId} updated successfully`);
