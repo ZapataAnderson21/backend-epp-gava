@@ -13,7 +13,11 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://sir.gavacyc.com', 'https://sir.gavacyc.com'],
+    origin: [
+      'http://localhost:5173',
+      'http://sir.gavacyc.com',
+      'https://sir.gavacyc.com',
+    ],
     credentials: true,
   });
 

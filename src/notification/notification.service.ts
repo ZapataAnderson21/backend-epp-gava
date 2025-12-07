@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, HttpStatus, Logger, forwardRef, Inject } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateNotificationDto, NotificationType } from './dto';
 import { NotificationGateway } from './notification.gateway';
@@ -6,12 +7,23 @@ import { NotificationGateway } from './notification.gateway';
 @Injectable()
 export class NotificationService {
   private readonly logger = new Logger('NotificationService');
+  private readonly appUrl: string;
 
   constructor(
     private readonly prismaService: PrismaService,
+    private readonly configService: ConfigService,
     @Inject(forwardRef(() => NotificationGateway))
     private readonly notificationGateway: NotificationGateway,
-  ) {}
+  ) {
+    this.appUrl = this.configService.get<string>('APP_URL') || 'http://localhost:5173';
+  }
+
+  /**
+   * Construir URL completa para la notificación
+   */
+  private buildUrl(path: string): string {
+    return `${this.appUrl}${path}`;
+  }
 
   /**
    * Crear una notificación y emitirla por WebSocket
@@ -311,23 +323,27 @@ export class NotificationService {
 
   // ----- TAREAS -----
 
-  async notifyTaskAssigned(taskId: number, userId: number, taskTitle: string, projectName: string) {
+  async notifyTaskAssigned(taskId: number, userId: number, taskTitle: string, projectId: number, projectName: string) {
     return this.create({
       userId,
       type: NotificationType.task_assigned,
       title: 'Nueva tarea asignada',
       message: `Te han asignado la tarea "${taskTitle}" en el proyecto ${projectName}`,
       taskId,
+      projectId,
+      url: this.buildUrl(`/admin/projects/${projectId}/progress`),
     });
   }
 
-  async notifyTaskUnassigned(taskId: number, userId: number, taskTitle: string) {
+  async notifyTaskUnassigned(taskId: number, userId: number, taskTitle: string, projectId: number) {
     return this.create({
       userId,
       type: NotificationType.task_unassigned,
       title: 'Tarea desasignada',
       message: `Has sido removido de la tarea "${taskTitle}"`,
       taskId,
+      projectId,
+      url: this.buildUrl(`/admin/projects/${projectId}/progress`),
     });
   }
 
@@ -335,6 +351,7 @@ export class NotificationService {
     taskId: number,
     taskTitle: string,
     newStatus: string,
+    projectId: number,
     excludeUserId?: number,
   ) {
     const statusLabels: Record<string, string> = {
@@ -350,24 +367,30 @@ export class NotificationService {
         type: NotificationType.task_status_changed,
         title: 'Estado de tarea actualizado',
         message: `La tarea "${taskTitle}" cambió a "${statusLabels[newStatus] || newStatus}"`,
+        projectId,
+        url: this.buildUrl(`/admin/projects/${projectId}/progress`),
       },
       excludeUserId,
     );
   }
 
-  async notifyTaskDueSoon(taskId: number, taskTitle: string, daysRemaining: number) {
+  async notifyTaskDueSoon(taskId: number, taskTitle: string, daysRemaining: number, projectId: number) {
     return this.notifyTaskAssignees(taskId, {
       type: NotificationType.task_due_soon,
       title: 'Tarea próxima a vencer',
       message: `La tarea "${taskTitle}" vence en ${daysRemaining} día(s)`,
+      projectId,
+      url: this.buildUrl(`/admin/projects/${projectId}/progress`),
     });
   }
 
-  async notifyTaskOverdue(taskId: number, taskTitle: string) {
+  async notifyTaskOverdue(taskId: number, taskTitle: string, projectId: number) {
     return this.notifyTaskAssignees(taskId, {
       type: NotificationType.task_overdue,
       title: '⚠️ Tarea vencida',
       message: `La tarea "${taskTitle}" ha vencido`,
+      projectId,
+      url: this.buildUrl(`/admin/projects/${projectId}/progress`),
     });
   }
 
@@ -375,11 +398,14 @@ export class NotificationService {
     parentTaskId: number,
     subtaskTitle: string,
     parentTaskTitle: string,
+    projectId: number,
   ) {
     return this.notifyTaskAssignees(parentTaskId, {
       type: NotificationType.subtask_completed,
       title: 'Subtarea completada',
       message: `La subtarea "${subtaskTitle}" de "${parentTaskTitle}" fue completada`,
+      projectId,
+      url: this.buildUrl(`/admin/projects/${projectId}/progress`),
     });
   }
 
@@ -403,6 +429,7 @@ export class NotificationService {
       message: `Nueva solicitud de ${typeLabels[requestType] || requestType} en proyecto ${projectName}`,
       requestId,
       projectId,
+      url: this.buildUrl(`/admin/requests/${requestId}`),
     });
   }
 
@@ -413,6 +440,7 @@ export class NotificationService {
       title: 'Solicitud aprobada',
       message: `Tu solicitud #${requestId} fue aprobada`,
       requestId,
+      url: this.buildUrl(`/admin/requests/${requestId}`),
     });
   }
 
@@ -423,6 +451,7 @@ export class NotificationService {
       title: 'Solicitud rechazada',
       message: `Tu solicitud #${requestId} fue rechazada${reason ? `: ${reason}` : ''}`,
       requestId,
+      url: this.buildUrl(`/admin/requests/${requestId}`),
     });
   }
 
@@ -433,6 +462,7 @@ export class NotificationService {
       title: 'Respuesta a solicitud',
       message: `Tu solicitud #${requestId} tiene una nueva respuesta`,
       requestId,
+      url: this.buildUrl(`/admin/requests/${requestId}`),
     });
   }
 
@@ -450,6 +480,7 @@ export class NotificationService {
       message: `Emergencia reportada en ${projectName}: "${emergencyTitle}"`,
       emergencyId,
       projectId,
+      url: this.buildUrl(`/admin/emergencies/${emergencyId}`),
     });
   }
 
@@ -460,6 +491,7 @@ export class NotificationService {
       title: 'Emergencia atendida',
       message: `Tu emergencia "${emergencyTitle}" fue atendida`,
       emergencyId,
+      url: this.buildUrl(`/admin/emergencies/${emergencyId}`),
     });
   }
 
@@ -470,6 +502,7 @@ export class NotificationService {
       title: 'Emergencia rechazada',
       message: `Tu emergencia "${emergencyTitle}" fue rechazada`,
       emergencyId,
+      url: this.buildUrl(`/admin/emergencies/${emergencyId}`),
     });
   }
 
@@ -481,6 +514,7 @@ export class NotificationService {
       title: 'OC pendiente de autorización',
       message: `La orden de compra ${code} del proyecto ${projectName} requiere autorización`,
       purchaseOrderId,
+      url: this.buildUrl(`/admin/purchase-orders/${purchaseOrderId}`),
     });
   }
 
@@ -490,6 +524,7 @@ export class NotificationService {
       title: 'OC autorizada',
       message: `La orden de compra ${code} fue autorizada`,
       purchaseOrderId,
+      url: this.buildUrl(`/admin/purchase-orders/${purchaseOrderId}`),
     });
   }
 
@@ -500,6 +535,7 @@ export class NotificationService {
       title: 'OC entregada',
       message: `La orden de compra ${code} fue entregada`,
       purchaseOrderId,
+      url: this.buildUrl(`/admin/purchase-orders/${purchaseOrderId}`),
     });
   }
 
@@ -509,6 +545,7 @@ export class NotificationService {
       title: 'OC cancelada',
       message: `La orden de compra ${code} fue cancelada`,
       purchaseOrderId,
+      url: this.buildUrl(`/admin/purchase-orders/${purchaseOrderId}`),
     });
   }
 
@@ -534,6 +571,7 @@ export class NotificationService {
       message: `Se ha creado el proyecto "${projectName}" (${projectCode})`,
       projectId,
       userId: user.userId,
+      url: this.buildUrl(`/admin/projects/${projectId}`),
     }));
 
     return this.createMany(notifications);
@@ -545,6 +583,7 @@ export class NotificationService {
       title: 'Proyecto completado',
       message: `El proyecto "${projectName}" ha sido completado`,
       projectId,
+      url: this.buildUrl(`/admin/projects/${projectId}`),
     });
   }
 
@@ -554,6 +593,7 @@ export class NotificationService {
       title: 'Proyecto inactivado',
       message: `El proyecto "${projectName}" ha sido inactivado`,
       projectId,
+      url: this.buildUrl(`/admin/projects/${projectId}`),
     });
   }
 }

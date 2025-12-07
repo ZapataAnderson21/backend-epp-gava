@@ -51,6 +51,10 @@ export class CreateNotificationDto {
   message: string;
 
   @IsOptional()
+  @IsString()
+  url?: string;
+
+  @IsOptional()
   @IsInt()
   taskId?: number;
 

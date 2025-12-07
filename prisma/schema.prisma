@@ -647,6 +647,7 @@ model Notification {
   type            NotificationType
   title           String
   message         String           @db.Text
+  url             String?          // URL para navegación directa
   isRead          Boolean          @default(false)
   readAt          DateTime?
   

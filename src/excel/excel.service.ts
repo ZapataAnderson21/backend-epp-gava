@@ -246,6 +246,9 @@ export class ExcelService {
   ): void {
     const sheet = workbook.addWorksheet(sheetName);
 
+    // Configurar altura predeterminada de filas (28px ≈ 21 puntos)
+    sheet.properties.defaultRowHeight = 21;
+
     // Configurar anchos de columnas
     sheet.columns = [
       { key: 'item', width: 5 },
@@ -264,7 +267,7 @@ export class ExcelService {
       { key: 'afp', width: 10 },
       { key: 'advance', width: 18 },
       { key: 'net', width: 18 },
-      { key: 'signature', width: 12 },
+      { key: 'signature', width: 36 },
     ];
 
     let currentRow = 1;
@@ -393,18 +396,33 @@ export class ExcelService {
         worker.attendancesByDay['V'] || 0,
         worker.attendancesByDay['S'] || 0,
         worker.dominpicolDays > 0 ? (worker.dominpicolDays / 6).toFixed(2) : '',
-        worker.totalAttendances,
+        null, // Total - será fórmula
         worker.dailyWage,
-        worker.grossAmount,
+        null, // Pago semana - será fórmula (Total * Jornal/dia)
         worker.afpDiscount,
         worker.advanceDiscount,
-        worker.netAmount,
+        null, // Neto a depositar - será fórmula (Pago semana - AFP - Dscts)
         '', // Firma
       ];
 
       rowData.forEach((value, colIndex) => {
         const cell = sheet.getCell(currentRow, colIndex + 1);
-        cell.value = value;
+        
+        // Columna K (índice 10) = Total, usar fórmula SUM de días L a S (columnas D a I)
+        if (colIndex === 10) {
+          cell.value = { formula: `SUM(D${currentRow}:I${currentRow})` };
+        } 
+        // Columna M (índice 12) = Pago semana, usar fórmula Total * Jornal/dia (K * L)
+        else if (colIndex === 12) {
+          cell.value = { formula: `K${currentRow}*L${currentRow}` };
+        }
+        // Columna P (índice 15) = Neto a depositar, usar fórmula Pago semana - AFP - Dscts (M - N - O)
+        else if (colIndex === 15) {
+          cell.value = { formula: `M${currentRow}-N${currentRow}-O${currentRow}` };
+        } else {
+          cell.value = value;
+        }
+        
         cell.alignment = { horizontal: 'center', vertical: 'middle' };
         cell.border = {
           top: { style: 'thin' },
@@ -422,18 +440,68 @@ export class ExcelService {
       currentRow++;
     });
 
-    // Fila de totales
+    // Fila de totales con fórmulas
     const totalRow = currentRow;
-    sheet.mergeCells(`A${totalRow}:L${totalRow}`);
+    sheet.mergeCells(`A${totalRow}:C${totalRow}`);
     const totalLabelCell = sheet.getCell(`A${totalRow}`);
     totalLabelCell.value = 'TOTAL S/.';
     totalLabelCell.font = { bold: true };
     totalLabelCell.alignment = { horizontal: 'right' };
 
-    const totalsValues = [totals.totalGross, totals.totalAfp, totals.totalAdvance, totals.totalNet];
-    [13, 14, 15, 16].forEach((col, idx) => {
-      const cell = sheet.getCell(totalRow, col);
-      cell.value = totalsValues[idx];
+    // Calcular rango de datos para las fórmulas
+    const dataStartRow = startRow + 2; // Fila donde empiezan los datos (después del título y encabezados)
+    const dataEndRow = currentRow - 1; // Última fila de datos
+
+    // Columnas de días: D=4 (L), E=5 (M), F=6 (MI), G=7 (J), H=8 (V), I=9 (S)
+    const dayColumns = ['D', 'E', 'F', 'G', 'H', 'I'];
+    dayColumns.forEach((colLetter, idx) => {
+      const cell = sheet.getCell(totalRow, 4 + idx);
+      cell.value = { formula: `SUM(${colLetter}${dataStartRow}:${colLetter}${dataEndRow})` };
+      cell.font = { bold: true };
+      cell.alignment = { horizontal: 'center', vertical: 'middle' };
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+    });
+
+    // Columna J (Dominical) - dejar vacía o con borde
+    const dominicalCell = sheet.getCell(totalRow, 10);
+    dominicalCell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    // Columna K (Total) = SUM de totales de asistencias
+    const totalAttendanceCell = sheet.getCell(totalRow, 11);
+    totalAttendanceCell.value = { formula: `SUM(K${dataStartRow}:K${dataEndRow})` };
+    totalAttendanceCell.font = { bold: true };
+    totalAttendanceCell.alignment = { horizontal: 'center', vertical: 'middle' };
+    totalAttendanceCell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    // Columna L (Jornal/dia) - dejar vacía o con borde
+    const dailyWageCell = sheet.getCell(totalRow, 12);
+    dailyWageCell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    // Columnas de montos: M=13 (grossAmount), N=14 (AFP), O=15 (advance), P=16 (net)
+    const moneyColumns = ['M', 'N', 'O', 'P'];
+    moneyColumns.forEach((colLetter, idx) => {
+      const cell = sheet.getCell(totalRow, 13 + idx);
+      cell.value = { formula: `SUM(${colLetter}${dataStartRow}:${colLetter}${dataEndRow})` };
       cell.numFmt = '#,##0.00';
       cell.font = { bold: true };
       cell.border = {
@@ -443,6 +511,15 @@ export class ExcelService {
         right: { style: 'thin' },
       };
     });
+
+    // Columna Q (Firma) - dejar vacía con borde
+    const signatureCell = sheet.getCell(totalRow, 17);
+    signatureCell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
 
     return currentRow + 1;
   }

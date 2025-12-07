@@ -118,6 +118,7 @@ export class TaskService {
           task.taskId,
           userId,
           task.title,
+          task.project.projectId,
           task.project.name,
         );
       }
@@ -554,7 +555,7 @@ export class TaskService {
     });
 
     // Notificar cambio de estado a usuarios asignados
-    await this.notificationService.notifyTaskStatusChanged(taskId, task.title, status);
+    await this.notificationService.notifyTaskStatusChanged(taskId, task.title, status, task.project.projectId);
 
     // Si se completó una subtarea, notificar a los asignados de la tarea padre
     if (status === TaskStatus.completed && task.parentTask) {
@@ -562,6 +563,7 @@ export class TaskService {
         task.parentTask.taskId,
         task.title,
         task.parentTask.title,
+        task.project.projectId,
       );
     }
 
@@ -615,7 +617,7 @@ export class TaskService {
         task: { 
           select: { 
             title: true,
-            project: { select: { name: true } },
+            project: { select: { projectId: true, name: true } },
           },
         },
       },
@@ -626,6 +628,7 @@ export class TaskService {
       taskId,
       userId,
       assignment.task.title,
+      assignment.task.project.projectId,
       assignment.task.project.name,
     );
 
@@ -646,7 +649,12 @@ export class TaskService {
         taskId_userId: { taskId, userId },
       },
       include: {
-        task: { select: { title: true } },
+        task: { 
+          select: { 
+            title: true,
+            projectId: true,
+          } 
+        },
       },
     });
 
@@ -661,7 +669,7 @@ export class TaskService {
     });
 
     // Notificar al usuario desasignado
-    await this.notificationService.notifyTaskUnassigned(taskId, userId, assignment.task.title);
+    await this.notificationService.notifyTaskUnassigned(taskId, userId, assignment.task.title, assignment.task.projectId);
 
     return {
       statusCode: HttpStatus.OK,
