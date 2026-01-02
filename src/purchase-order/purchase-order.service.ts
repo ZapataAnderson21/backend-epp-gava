@@ -33,7 +33,15 @@ export class PurchaseOrderService {
     const code = await this.formatedCode(newPurchaseOrder.purchaseOrderId, newPurchaseOrder.code);
   
     this.logger.log(`Generated code for purchase order: ${code}`);
-    const updatedPurchaseOrder = await this.update(newPurchaseOrder.purchaseOrderId, { code });
+    
+    // Actualizar directamente con Prisma para evitar doble formateo en this.update()
+    const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
+      where: { purchaseOrderId: newPurchaseOrder.purchaseOrderId },
+      data: { code },
+      include: {
+        project: true,
+      },
+    });
 
     if (!updatedPurchaseOrder) {
       this.logger.error(`Failed to update purchase order with id: ${newPurchaseOrder.purchaseOrderId}`);
@@ -43,15 +51,16 @@ export class PurchaseOrderService {
     // Notificar a GERENTE sobre nueva orden de compra pendiente
     await this.notificationService.notifyPurchaseOrderPending(
       newPurchaseOrder.purchaseOrderId,
-      newPurchaseOrder.project?.name || 'Proyecto',
       code,
+      newPurchaseOrder.project?.name || 'Proyecto',
+      newPurchaseOrder.projectId,
     );
 
-    this.logger.log(`Purchase order created successfully with id: ${updatedPurchaseOrder.data.purchaseOrderId}`);
+    this.logger.log(`Purchase order created successfully with id: ${updatedPurchaseOrder.purchaseOrderId}`);
     return {
       statusCode: HttpStatus.CREATED,
       message: 'Orden de compra creada exitosamente.',
-      data: updatedPurchaseOrder.data,
+      data: updatedPurchaseOrder,
     };
   }
 
@@ -249,6 +258,7 @@ export class PurchaseOrderService {
           await this.notificationService.notifyPurchaseOrderAuthorized(
             purchaseOrderId,
             code,
+            updatedPurchaseOrder.projectId,
           );
           break;
         case PurchaseOrderStatus.Delivered:
@@ -257,12 +267,14 @@ export class PurchaseOrderService {
             purchaseOrderId,
             code,
             0, // creatorUserId - ajustar si se tiene acceso
+            updatedPurchaseOrder.projectId,
           );
           break;
         case PurchaseOrderStatus.Cancelled:
           await this.notificationService.notifyPurchaseOrderCancelled(
             purchaseOrderId,
             code,
+            updatedPurchaseOrder.projectId,
           );
           break;
       }

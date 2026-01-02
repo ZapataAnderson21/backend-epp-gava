@@ -508,38 +508,38 @@ export class NotificationService {
 
   // ----- ÓRDENES DE COMPRA -----
 
-  async notifyPurchaseOrderPending(purchaseOrderId: number, code: string, projectName: string) {
+  async notifyPurchaseOrderPending(purchaseOrderId: number, code: string, projectName: string, projectId: number) {
     return this.notifyByUserType(['GERENTE'], {
       type: NotificationType.purchase_order_pending,
       title: 'OC pendiente de autorización',
       message: `La orden de compra ${code} del proyecto ${projectName} requiere autorización`,
       purchaseOrderId,
-      url: this.buildUrl(`/admin/purchase-orders/${purchaseOrderId}`),
+      url: this.buildUrl(`/admin/projects/${projectId}/purchase-orders/edit/${purchaseOrderId}`),
     });
   }
 
-  async notifyPurchaseOrderAuthorized(purchaseOrderId: number, code: string) {
+  async notifyPurchaseOrderAuthorized(purchaseOrderId: number, code: string, projectId: number) {
     return this.notifyByUserType(['LOGISTICA', 'ADMINISTRADORA'], {
       type: NotificationType.purchase_order_authorized,
       title: 'OC autorizada',
       message: `La orden de compra ${code} fue autorizada`,
       purchaseOrderId,
-      url: this.buildUrl(`/admin/purchase-orders/${purchaseOrderId}`),
+      url: this.buildUrl(`/admin/projects/${projectId}/purchase-orders/${purchaseOrderId}`),
     });
   }
 
-  async notifyPurchaseOrderDelivered(purchaseOrderId: number, code: string, creatorUserId: number) {
+  async notifyPurchaseOrderDelivered(purchaseOrderId: number, code: string, creatorUserId: number, projectId: number) {
     return this.create({
       userId: creatorUserId,
       type: NotificationType.purchase_order_delivered,
       title: 'OC entregada',
       message: `La orden de compra ${code} fue entregada`,
       purchaseOrderId,
-      url: this.buildUrl(`/admin/purchase-orders/${purchaseOrderId}`),
+      url: this.buildUrl(`/admin/projects/${projectId}/purchase-orders/${purchaseOrderId}`),
     });
   }
 
-  async notifyPurchaseOrderCancelled(purchaseOrderId: number, code: string) {
+  async notifyPurchaseOrderCancelled(purchaseOrderId: number, code: string, projectId: number) {
     return this.notifyByUserType(['GERENTE', 'ADMINISTRADORA', 'LOGISTICA'], {
       type: NotificationType.purchase_order_cancelled,
       title: 'OC cancelada',

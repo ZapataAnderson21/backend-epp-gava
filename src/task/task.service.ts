@@ -64,27 +64,9 @@ export class TaskService {
     const now = new Date();
     now.setHours(0, 0, 0, 0); // Normalizar a inicio del día
 
-    // startDate no puede ser anterior a la fecha actual
-    if (parsedStartDate) {
-      const normalizedStartDate = new Date(parsedStartDate);
-      normalizedStartDate.setHours(0, 0, 0, 0);
-      if (normalizedStartDate < now) {
-        throw new BadRequestException('La fecha de inicio no puede ser anterior a la fecha actual');
-      }
-    }
-
     // dueDate no puede ser anterior a startDate
     if (parsedStartDate && parsedDueDate && parsedDueDate < parsedStartDate) {
       throw new BadRequestException('La fecha de vencimiento no puede ser anterior a la fecha de inicio');
-    }
-
-    // No permitir crear tareas con dueDate en el pasado
-    if (parsedDueDate) {
-      const normalizedDueDate = new Date(parsedDueDate);
-      normalizedDueDate.setHours(0, 0, 0, 0);
-      if (normalizedDueDate < now) {
-        throw new BadRequestException('La fecha de vencimiento no puede estar en el pasado');
-      }
     }
 
     // Crear la tarea con sus asignaciones
