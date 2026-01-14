@@ -6,6 +6,9 @@ import { EmergencyService } from './emergency.service';
 import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { Response } from 'express';
 import * as fs from 'fs';
+import 'dotenv/config';
+
+const EMERGENCIES_UPLOAD_DIR = process.env.EMERGENCIES_UPLOAD_DIR || './uploads/emergencies';
 
 @Controller('emergency')
 export class EmergencyController {
@@ -14,8 +17,7 @@ export class EmergencyController {
   @Post()
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
-      destination: '/var/www/emergencies',
-      //destination: './uploads/emergencies',
+      destination: EMERGENCIES_UPLOAD_DIR,
       filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
@@ -54,7 +56,7 @@ export class EmergencyController {
   
   @Get('image/:filename')
   async getImage(@Param('filename') filename: string, @Res() res: Response) {
-    const filePath = join(process.cwd(), 'uploads', 'emergencies', filename);
+    const filePath = join(EMERGENCIES_UPLOAD_DIR, filename);
 
     if (!fs.existsSync(filePath)) {
       throw new NotFoundException('Image not found');

@@ -3,8 +3,6 @@ import { CreateEmergencyDto } from './dto/create-emergency.dto';
 import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { NotificationService } from 'src/notification/notification.service';
-const fs = require('fs');
-const path = require('path');
 
 @Injectable()
 export class EmergencyService {
