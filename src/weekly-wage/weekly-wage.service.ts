@@ -138,17 +138,6 @@ export class WeeklyWageService {
 
         const grossAmount = count * dailyWageAmount;
 
-        // Obtener descuentos guardados previamente
-        const existingWage = weeklyWageMap.get(worker.workerId);
-        const afpDiscount = existingWage
-          ? Number(existingWage.afpDiscount)
-          : 0;
-        const advanceDiscount = existingWage
-          ? Number(existingWage.advanceDiscount)
-          : 0;
-
-        const weeklyWage = grossAmount - afpDiscount - advanceDiscount;
-
         return {
           workerId: worker.workerId,
           workerName: worker.fullName,
@@ -156,9 +145,7 @@ export class WeeklyWageService {
           attendances: count,
           dailyWage: dailyWageAmount,
           grossAmount,
-          afpDiscount,
-          advanceDiscount,
-          weeklyWage,
+          weeklyWage: grossAmount,
         };
       },
     );
@@ -167,11 +154,9 @@ export class WeeklyWageService {
     const summary = workers.reduce(
       (acc, w) => ({
         totalGross: acc.totalGross + w.grossAmount,
-        totalAfp: acc.totalAfp + w.afpDiscount,
-        totalAdvance: acc.totalAdvance + w.advanceDiscount,
         totalNet: acc.totalNet + w.weeklyWage,
       }),
-      { totalGross: 0, totalAfp: 0, totalAdvance: 0, totalNet: 0 },
+      { totalGross: 0, totalNet: 0 },
     );
 
     return {
@@ -250,8 +235,6 @@ export class WeeklyWageService {
       const attendanceCount = attendanceCountMap.get(item.workerId) || 0;
       const dailyWage = dailyWageMap.get(item.workerId) || 0;
       const grossAmount = attendanceCount * dailyWage;
-      const totalAmount =
-        grossAmount - item.afpDiscount - item.advanceDiscount;
 
       return this.prismaService.weeklyWage.upsert({
         where: {
@@ -264,15 +247,11 @@ export class WeeklyWageService {
           workerId: item.workerId,
           weekId: weekId,
           grossAmount: grossAmount,
-          afpDiscount: item.afpDiscount,
-          advanceDiscount: item.advanceDiscount,
-          totalAmount: totalAmount,
+          totalAmount: grossAmount,
         },
         update: {
           grossAmount: grossAmount,
-          afpDiscount: item.afpDiscount,
-          advanceDiscount: item.advanceDiscount,
-          totalAmount: totalAmount,
+          totalAmount: grossAmount,
         },
       });
     });

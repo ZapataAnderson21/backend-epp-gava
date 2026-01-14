@@ -52,7 +52,12 @@ async findAll(
   async sendToLogistics(@Body() body : { requestId: number, passwordCPanel: string }) {
     await this.pdfService.generateRequestPdf(body.requestId);
 
-    await this.mailService.sendRequestToLogistics(body.requestId, body.passwordCPanel);
+    const mailResult = await this.mailService.sendRequestToLogistics(body.requestId, body.passwordCPanel);
+    
+    // Verificar si el envío del correo fue exitoso antes de actualizar el estado
+    if (mailResult.statusCode !== 200) {
+      return mailResult; // Retornar el error del servicio de correo
+    }
     
     return await this.requestService.updateStatus(+body.requestId, RequestStatus.inProgress);
   }

@@ -12,8 +12,6 @@ interface WorkerData {
   totalAttendances: number;
   dailyWage: number;
   grossAmount: number;
-  afpDiscount: number;
-  advanceDiscount: number;
   netAmount: number;
 }
 
@@ -24,14 +22,10 @@ interface ProjectSheetData {
   technicians: WorkerData[];
   laborersTotals: {
     totalGross: number;
-    totalAfp: number;
-    totalAdvance: number;
     totalNet: number;
   };
   techniciansTotals: {
     totalGross: number;
-    totalAfp: number;
-    totalAdvance: number;
     totalNet: number;
   };
 }
@@ -91,12 +85,6 @@ export class ExcelService {
         },
       },
     });
-
-    // Obtener WeeklyWages existentes
-    const weeklyWages = await this.prismaService.weeklyWage.findMany({
-      where: { weekId },
-    });
-    const weeklyWageMap = new Map(weeklyWages.map((ww) => [ww.workerId, ww]));
 
     // Agrupar por proyecto
     const projectsMap = new Map<
@@ -158,15 +146,7 @@ export class ExcelService {
             : 0;
 
         const grossAmount = totalAttendances * dailyWage;
-
-        const existingWage = weeklyWageMap.get(workerId);
-        const afpDiscount = existingWage
-          ? Number(existingWage.afpDiscount)
-          : 0;
-        const advanceDiscount = existingWage
-          ? Number(existingWage.advanceDiscount)
-          : 0;
-        const netAmount = grossAmount - afpDiscount - advanceDiscount;
+        const netAmount = grossAmount;
 
         const workerRow: WorkerData = {
           workerId,
@@ -178,8 +158,6 @@ export class ExcelService {
           totalAttendances,
           dailyWage,
           grossAmount,
-          afpDiscount,
-          advanceDiscount,
           netAmount,
         };
 
@@ -212,12 +190,12 @@ export class ExcelService {
     // Crear el Excel
     const workbook = new ExcelJS.Workbook();
 
-    // Crear hojas por proyecto (SIN descuentos - descuentos en 0)
+    // Crear hojas por proyecto
     for (const project of projectsData) {
       const sheetName = this.sanitizeSheetName(project.projectName);
-      // Crear copia con descuentos en 0 para hojas de proyecto
-      const projectDataWithoutDiscounts = this.removeDiscountsFromProjectData(project);
-      this.createProjectSheet(workbook, sheetName, projectDataWithoutDiscounts);
+      // Ordenar trabajadores alfabéticamente
+      const sortedProjectData = this.sortWorkersAlphabetically(project);
+      this.createProjectSheet(workbook, sheetName, sortedProjectData);
     }
 
     // Crear hoja GENERAL (CON descuentos reales)
@@ -326,7 +304,7 @@ export class ExcelService {
     startRow: number,
     sectionTitle: string,
     workers: WorkerData[],
-    totals: { totalGross: number; totalAfp: number; totalAdvance: number; totalNet: number },
+    totals: { totalGross: number; totalNet: number },
   ): number {
     let currentRow = startRow;
 
@@ -399,8 +377,8 @@ export class ExcelService {
         null, // Total - será fórmula
         worker.dailyWage,
         null, // Pago semana - será fórmula (Total * Jornal/dia)
-        worker.afpDiscount,
-        worker.advanceDiscount,
+        '', // AFP - columna vacía
+        '', // Dscts. por adelanto - columna vacía
         null, // Neto a depositar - será fórmula (Pago semana - AFP - Dscts)
         '', // Firma
       ];
@@ -558,18 +536,14 @@ export class ExcelService {
    */
   private calculateTotals(workers: WorkerData[]): {
     totalGross: number;
-    totalAfp: number;
-    totalAdvance: number;
     totalNet: number;
   } {
     return workers.reduce(
       (acc, w) => ({
         totalGross: acc.totalGross + w.grossAmount,
-        totalAfp: acc.totalAfp + w.afpDiscount,
-        totalAdvance: acc.totalAdvance + w.advanceDiscount,
         totalNet: acc.totalNet + w.netAmount,
       }),
-      { totalGross: 0, totalAfp: 0, totalAdvance: 0, totalNet: 0 },
+      { totalGross: 0, totalNet: 0 },
     );
   }
 
@@ -594,9 +568,7 @@ export class ExcelService {
         existing.totalAttendances = Object.values(existing.attendancesByDay).reduce((a, b) => a + b, 0);
         existing.dominpicolDays = existing.attendancesByDay['D'] || 0;
         existing.grossAmount = existing.totalAttendances * existing.dailyWage;
-        existing.afpDiscount = worker.afpDiscount; // Mantener el último
-        existing.advanceDiscount = worker.advanceDiscount;
-        existing.netAmount = existing.grossAmount - existing.afpDiscount - existing.advanceDiscount;
+        existing.netAmount = existing.grossAmount;
       } else {
         workerMap.set(worker.workerId, { 
           ...worker,
@@ -612,22 +584,14 @@ export class ExcelService {
   }
 
   /**
-   * Elimina los descuentos de los datos de un proyecto (para hojas individuales)
-   * También ordena los trabajadores alfabéticamente
+   * Ordena los trabajadores alfabéticamente para hojas individuales
    */
-  private removeDiscountsFromProjectData(project: ProjectSheetData): ProjectSheetData {
-    const removeDiscountsFromWorkers = (workers: WorkerData[]): WorkerData[] =>
-      workers
-        .map((w) => ({
-          ...w,
-          afpDiscount: 0,
-          advanceDiscount: 0,
-          netAmount: w.grossAmount, // Sin descuentos, neto = bruto
-        }))
-        .sort((a, b) => a.workerName.localeCompare(b.workerName, 'es', { sensitivity: 'base' }));
+  private sortWorkersAlphabetically(project: ProjectSheetData): ProjectSheetData {
+    const sortWorkers = (workers: WorkerData[]): WorkerData[] =>
+      [...workers].sort((a, b) => a.workerName.localeCompare(b.workerName, 'es', { sensitivity: 'base' }));
 
-    const laborers = removeDiscountsFromWorkers(project.laborers);
-    const technicians = removeDiscountsFromWorkers(project.technicians);
+    const laborers = sortWorkers(project.laborers);
+    const technicians = sortWorkers(project.technicians);
 
     return {
       ...project,

@@ -151,6 +151,7 @@ export class TaskService {
         },
       },
       orderBy: [
+        { displayOrder: 'asc' },
         { priority: 'desc' },
         { dueDate: 'asc' },
         { createdAt: 'desc' },
@@ -553,6 +554,52 @@ export class TaskService {
       statusCode: HttpStatus.OK,
       message: 'Estado de la tarea actualizado correctamente',
       data: task,
+    };
+  }
+
+  /**
+   * Cambiar el orden visual de múltiples tareas
+   */
+  async reOrder(updates: { taskId: number; displayOrder: number }[]) {
+    // Verificar que todas las tareas existen
+    const taskIds = updates.map((u) => u.taskId);
+    const existingTasks = await this.prismaService.task.findMany({
+      where: { taskId: { in: taskIds } },
+      select: { taskId: true },
+    });
+
+    const foundIds = existingTasks.map((t) => t.taskId);
+    const missingIds = taskIds.filter((id) => !foundIds.includes(id));
+
+    if (missingIds.length > 0) {
+      throw new NotFoundException(
+        `Tareas no encontradas: ${missingIds.join(', ')}`,
+      );
+    }
+
+    // Actualizar todas las tareas en una transacción
+    const updatedTasks = await this.prismaService.$transaction(
+      updates.map((update) =>
+        this.prismaService.task.update({
+          where: { taskId: update.taskId },
+          data: { displayOrder: update.displayOrder },
+          include: {
+            project: { select: { projectId: true, name: true, code: true } },
+            parentTask: { select: { taskId: true, title: true } },
+            assignments: {
+              include: {
+                user: { select: { userId: true, name: true, lastName: true, email: true } },
+              },
+            },
+          },
+        }),
+      ),
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Orden de las tareas actualizado correctamente',
+      data: updatedTasks,
     };
   }
 

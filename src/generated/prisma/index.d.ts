@@ -31441,8 +31441,6 @@ export namespace Prisma {
     workerId: number | null
     weekId: number | null
     grossAmount: Decimal | null
-    afpDiscount: Decimal | null
-    advanceDiscount: Decimal | null
     totalAmount: Decimal | null
   }
 
@@ -31451,8 +31449,6 @@ export namespace Prisma {
     workerId: number | null
     weekId: number | null
     grossAmount: Decimal | null
-    afpDiscount: Decimal | null
-    advanceDiscount: Decimal | null
     totalAmount: Decimal | null
   }
 
@@ -31461,8 +31457,6 @@ export namespace Prisma {
     workerId: number | null
     weekId: number | null
     grossAmount: Decimal | null
-    afpDiscount: Decimal | null
-    advanceDiscount: Decimal | null
     totalAmount: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -31473,8 +31467,6 @@ export namespace Prisma {
     workerId: number | null
     weekId: number | null
     grossAmount: Decimal | null
-    afpDiscount: Decimal | null
-    advanceDiscount: Decimal | null
     totalAmount: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -31485,8 +31477,6 @@ export namespace Prisma {
     workerId: number
     weekId: number
     grossAmount: number
-    afpDiscount: number
-    advanceDiscount: number
     totalAmount: number
     createdAt: number
     updatedAt: number
@@ -31499,8 +31489,6 @@ export namespace Prisma {
     workerId?: true
     weekId?: true
     grossAmount?: true
-    afpDiscount?: true
-    advanceDiscount?: true
     totalAmount?: true
   }
 
@@ -31509,8 +31497,6 @@ export namespace Prisma {
     workerId?: true
     weekId?: true
     grossAmount?: true
-    afpDiscount?: true
-    advanceDiscount?: true
     totalAmount?: true
   }
 
@@ -31519,8 +31505,6 @@ export namespace Prisma {
     workerId?: true
     weekId?: true
     grossAmount?: true
-    afpDiscount?: true
-    advanceDiscount?: true
     totalAmount?: true
     createdAt?: true
     updatedAt?: true
@@ -31531,8 +31515,6 @@ export namespace Prisma {
     workerId?: true
     weekId?: true
     grossAmount?: true
-    afpDiscount?: true
-    advanceDiscount?: true
     totalAmount?: true
     createdAt?: true
     updatedAt?: true
@@ -31543,8 +31525,6 @@ export namespace Prisma {
     workerId?: true
     weekId?: true
     grossAmount?: true
-    afpDiscount?: true
-    advanceDiscount?: true
     totalAmount?: true
     createdAt?: true
     updatedAt?: true
@@ -31642,8 +31622,6 @@ export namespace Prisma {
     workerId: number
     weekId: number
     grossAmount: Decimal
-    afpDiscount: Decimal
-    advanceDiscount: Decimal
     totalAmount: Decimal
     createdAt: Date
     updatedAt: Date
@@ -31673,8 +31651,6 @@ export namespace Prisma {
     workerId?: boolean
     weekId?: boolean
     grossAmount?: boolean
-    afpDiscount?: boolean
-    advanceDiscount?: boolean
     totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -31687,8 +31663,6 @@ export namespace Prisma {
     workerId?: boolean
     weekId?: boolean
     grossAmount?: boolean
-    afpDiscount?: boolean
-    advanceDiscount?: boolean
     totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -31701,8 +31675,6 @@ export namespace Prisma {
     workerId?: boolean
     weekId?: boolean
     grossAmount?: boolean
-    afpDiscount?: boolean
-    advanceDiscount?: boolean
     totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -31715,14 +31687,12 @@ export namespace Prisma {
     workerId?: boolean
     weekId?: boolean
     grossAmount?: boolean
-    afpDiscount?: boolean
-    advanceDiscount?: boolean
     totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type WeeklyWageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"weeklyWageId" | "workerId" | "weekId" | "grossAmount" | "afpDiscount" | "advanceDiscount" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["weeklyWage"]>
+  export type WeeklyWageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"weeklyWageId" | "workerId" | "weekId" | "grossAmount" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["weeklyWage"]>
   export type WeeklyWageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     worker?: boolean | WorkerDefaultArgs<ExtArgs>
     week?: boolean | WeekDefaultArgs<ExtArgs>
@@ -31747,8 +31717,6 @@ export namespace Prisma {
       workerId: number
       weekId: number
       grossAmount: Prisma.Decimal
-      afpDiscount: Prisma.Decimal
-      advanceDiscount: Prisma.Decimal
       totalAmount: Prisma.Decimal
       createdAt: Date
       updatedAt: Date
@@ -32181,8 +32149,6 @@ export namespace Prisma {
     readonly workerId: FieldRef<"WeeklyWage", 'Int'>
     readonly weekId: FieldRef<"WeeklyWage", 'Int'>
     readonly grossAmount: FieldRef<"WeeklyWage", 'Decimal'>
-    readonly afpDiscount: FieldRef<"WeeklyWage", 'Decimal'>
-    readonly advanceDiscount: FieldRef<"WeeklyWage", 'Decimal'>
     readonly totalAmount: FieldRef<"WeeklyWage", 'Decimal'>
     readonly createdAt: FieldRef<"WeeklyWage", 'DateTime'>
     readonly updatedAt: FieldRef<"WeeklyWage", 'DateTime'>
@@ -33749,12 +33715,14 @@ export namespace Prisma {
     taskId: number | null
     projectId: number | null
     parentTaskId: number | null
+    displayOrder: number | null
   }
 
   export type TaskSumAggregateOutputType = {
     taskId: number | null
     projectId: number | null
     parentTaskId: number | null
+    displayOrder: number | null
   }
 
   export type TaskMinAggregateOutputType = {
@@ -33765,6 +33733,7 @@ export namespace Prisma {
     priority: $Enums.TaskPriority | null
     projectId: number | null
     parentTaskId: number | null
+    displayOrder: number | null
     startDate: Date | null
     dueDate: Date | null
     completedAt: Date | null
@@ -33780,6 +33749,7 @@ export namespace Prisma {
     priority: $Enums.TaskPriority | null
     projectId: number | null
     parentTaskId: number | null
+    displayOrder: number | null
     startDate: Date | null
     dueDate: Date | null
     completedAt: Date | null
@@ -33795,6 +33765,7 @@ export namespace Prisma {
     priority: number
     projectId: number
     parentTaskId: number
+    displayOrder: number
     startDate: number
     dueDate: number
     completedAt: number
@@ -33808,12 +33779,14 @@ export namespace Prisma {
     taskId?: true
     projectId?: true
     parentTaskId?: true
+    displayOrder?: true
   }
 
   export type TaskSumAggregateInputType = {
     taskId?: true
     projectId?: true
     parentTaskId?: true
+    displayOrder?: true
   }
 
   export type TaskMinAggregateInputType = {
@@ -33824,6 +33797,7 @@ export namespace Prisma {
     priority?: true
     projectId?: true
     parentTaskId?: true
+    displayOrder?: true
     startDate?: true
     dueDate?: true
     completedAt?: true
@@ -33839,6 +33813,7 @@ export namespace Prisma {
     priority?: true
     projectId?: true
     parentTaskId?: true
+    displayOrder?: true
     startDate?: true
     dueDate?: true
     completedAt?: true
@@ -33854,6 +33829,7 @@ export namespace Prisma {
     priority?: true
     projectId?: true
     parentTaskId?: true
+    displayOrder?: true
     startDate?: true
     dueDate?: true
     completedAt?: true
@@ -33956,6 +33932,7 @@ export namespace Prisma {
     priority: $Enums.TaskPriority
     projectId: number
     parentTaskId: number | null
+    displayOrder: number
     startDate: Date | null
     dueDate: Date | null
     completedAt: Date | null
@@ -33990,6 +33967,7 @@ export namespace Prisma {
     priority?: boolean
     projectId?: boolean
     parentTaskId?: boolean
+    displayOrder?: boolean
     startDate?: boolean
     dueDate?: boolean
     completedAt?: boolean
@@ -34011,6 +33989,7 @@ export namespace Prisma {
     priority?: boolean
     projectId?: boolean
     parentTaskId?: boolean
+    displayOrder?: boolean
     startDate?: boolean
     dueDate?: boolean
     completedAt?: boolean
@@ -34028,6 +34007,7 @@ export namespace Prisma {
     priority?: boolean
     projectId?: boolean
     parentTaskId?: boolean
+    displayOrder?: boolean
     startDate?: boolean
     dueDate?: boolean
     completedAt?: boolean
@@ -34045,6 +34025,7 @@ export namespace Prisma {
     priority?: boolean
     projectId?: boolean
     parentTaskId?: boolean
+    displayOrder?: boolean
     startDate?: boolean
     dueDate?: boolean
     completedAt?: boolean
@@ -34052,7 +34033,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"taskId" | "title" | "description" | "status" | "priority" | "projectId" | "parentTaskId" | "startDate" | "dueDate" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"taskId" | "title" | "description" | "status" | "priority" | "projectId" | "parentTaskId" | "displayOrder" | "startDate" | "dueDate" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     parentTask?: boolean | Task$parentTaskArgs<ExtArgs>
@@ -34087,6 +34068,7 @@ export namespace Prisma {
       priority: $Enums.TaskPriority
       projectId: number
       parentTaskId: number | null
+      displayOrder: number
       startDate: Date | null
       dueDate: Date | null
       completedAt: Date | null
@@ -34527,6 +34509,7 @@ export namespace Prisma {
     readonly priority: FieldRef<"Task", 'TaskPriority'>
     readonly projectId: FieldRef<"Task", 'Int'>
     readonly parentTaskId: FieldRef<"Task", 'Int'>
+    readonly displayOrder: FieldRef<"Task", 'Int'>
     readonly startDate: FieldRef<"Task", 'DateTime'>
     readonly dueDate: FieldRef<"Task", 'DateTime'>
     readonly completedAt: FieldRef<"Task", 'DateTime'>
@@ -37842,8 +37825,6 @@ export namespace Prisma {
     workerId: 'workerId',
     weekId: 'weekId',
     grossAmount: 'grossAmount',
-    afpDiscount: 'afpDiscount',
-    advanceDiscount: 'advanceDiscount',
     totalAmount: 'totalAmount',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -37872,6 +37853,7 @@ export namespace Prisma {
     priority: 'priority',
     projectId: 'projectId',
     parentTaskId: 'parentTaskId',
+    displayOrder: 'displayOrder',
     startDate: 'startDate',
     dueDate: 'dueDate',
     completedAt: 'completedAt',
@@ -40010,8 +39992,6 @@ export namespace Prisma {
     workerId?: IntFilter<"WeeklyWage"> | number
     weekId?: IntFilter<"WeeklyWage"> | number
     grossAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"WeeklyWage"> | Date | string
     updatedAt?: DateTimeFilter<"WeeklyWage"> | Date | string
@@ -40024,8 +40004,6 @@ export namespace Prisma {
     workerId?: SortOrder
     weekId?: SortOrder
     grossAmount?: SortOrder
-    afpDiscount?: SortOrder
-    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -40042,8 +40020,6 @@ export namespace Prisma {
     workerId?: IntFilter<"WeeklyWage"> | number
     weekId?: IntFilter<"WeeklyWage"> | number
     grossAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"WeeklyWage"> | Date | string
     updatedAt?: DateTimeFilter<"WeeklyWage"> | Date | string
@@ -40056,8 +40032,6 @@ export namespace Prisma {
     workerId?: SortOrder
     weekId?: SortOrder
     grossAmount?: SortOrder
-    afpDiscount?: SortOrder
-    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -40076,8 +40050,6 @@ export namespace Prisma {
     workerId?: IntWithAggregatesFilter<"WeeklyWage"> | number
     weekId?: IntWithAggregatesFilter<"WeeklyWage"> | number
     grossAmount?: DecimalWithAggregatesFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalWithAggregatesFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalWithAggregatesFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalWithAggregatesFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeWithAggregatesFilter<"WeeklyWage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WeeklyWage"> | Date | string
@@ -40163,6 +40135,7 @@ export namespace Prisma {
     priority?: EnumTaskPriorityFilter<"Task"> | $Enums.TaskPriority
     projectId?: IntFilter<"Task"> | number
     parentTaskId?: IntNullableFilter<"Task"> | number | null
+    displayOrder?: IntFilter<"Task"> | number
     startDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
@@ -40183,6 +40156,7 @@ export namespace Prisma {
     priority?: SortOrder
     projectId?: SortOrder
     parentTaskId?: SortOrderInput | SortOrder
+    displayOrder?: SortOrder
     startDate?: SortOrderInput | SortOrder
     dueDate?: SortOrderInput | SortOrder
     completedAt?: SortOrderInput | SortOrder
@@ -40206,6 +40180,7 @@ export namespace Prisma {
     priority?: EnumTaskPriorityFilter<"Task"> | $Enums.TaskPriority
     projectId?: IntFilter<"Task"> | number
     parentTaskId?: IntNullableFilter<"Task"> | number | null
+    displayOrder?: IntFilter<"Task"> | number
     startDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
@@ -40226,6 +40201,7 @@ export namespace Prisma {
     priority?: SortOrder
     projectId?: SortOrder
     parentTaskId?: SortOrderInput | SortOrder
+    displayOrder?: SortOrder
     startDate?: SortOrderInput | SortOrder
     dueDate?: SortOrderInput | SortOrder
     completedAt?: SortOrderInput | SortOrder
@@ -40249,6 +40225,7 @@ export namespace Prisma {
     priority?: EnumTaskPriorityWithAggregatesFilter<"Task"> | $Enums.TaskPriority
     projectId?: IntWithAggregatesFilter<"Task"> | number
     parentTaskId?: IntNullableWithAggregatesFilter<"Task"> | number | null
+    displayOrder?: IntWithAggregatesFilter<"Task"> | number
     startDate?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
     dueDate?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
     completedAt?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
@@ -42264,8 +42241,6 @@ export namespace Prisma {
 
   export type WeeklyWageCreateInput = {
     grossAmount: Decimal | DecimalJsLike | number | string
-    afpDiscount?: Decimal | DecimalJsLike | number | string
-    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -42278,8 +42253,6 @@ export namespace Prisma {
     workerId: number
     weekId: number
     grossAmount: Decimal | DecimalJsLike | number | string
-    afpDiscount?: Decimal | DecimalJsLike | number | string
-    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -42287,8 +42260,6 @@ export namespace Prisma {
 
   export type WeeklyWageUpdateInput = {
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42301,8 +42272,6 @@ export namespace Prisma {
     workerId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42313,8 +42282,6 @@ export namespace Prisma {
     workerId: number
     weekId: number
     grossAmount: Decimal | DecimalJsLike | number | string
-    afpDiscount?: Decimal | DecimalJsLike | number | string
-    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -42322,8 +42289,6 @@ export namespace Prisma {
 
   export type WeeklyWageUpdateManyMutationInput = {
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42334,8 +42299,6 @@ export namespace Prisma {
     workerId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42403,6 +42366,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -42423,6 +42387,7 @@ export namespace Prisma {
     priority?: $Enums.TaskPriority
     projectId: number
     parentTaskId?: number | null
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -42438,6 +42403,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -42458,6 +42424,7 @@ export namespace Prisma {
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     projectId?: IntFieldUpdateOperationsInput | number
     parentTaskId?: NullableIntFieldUpdateOperationsInput | number | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -42476,6 +42443,7 @@ export namespace Prisma {
     priority?: $Enums.TaskPriority
     projectId: number
     parentTaskId?: number | null
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -42488,6 +42456,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -42503,6 +42472,7 @@ export namespace Prisma {
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     projectId?: IntFieldUpdateOperationsInput | number
     parentTaskId?: NullableIntFieldUpdateOperationsInput | number | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -44412,8 +44382,6 @@ export namespace Prisma {
     workerId?: SortOrder
     weekId?: SortOrder
     grossAmount?: SortOrder
-    afpDiscount?: SortOrder
-    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -44424,8 +44392,6 @@ export namespace Prisma {
     workerId?: SortOrder
     weekId?: SortOrder
     grossAmount?: SortOrder
-    afpDiscount?: SortOrder
-    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
   }
 
@@ -44434,8 +44400,6 @@ export namespace Prisma {
     workerId?: SortOrder
     weekId?: SortOrder
     grossAmount?: SortOrder
-    afpDiscount?: SortOrder
-    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -44446,8 +44410,6 @@ export namespace Prisma {
     workerId?: SortOrder
     weekId?: SortOrder
     grossAmount?: SortOrder
-    afpDiscount?: SortOrder
-    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -44458,8 +44420,6 @@ export namespace Prisma {
     workerId?: SortOrder
     weekId?: SortOrder
     grossAmount?: SortOrder
-    afpDiscount?: SortOrder
-    advanceDiscount?: SortOrder
     totalAmount?: SortOrder
   }
 
@@ -44536,6 +44496,7 @@ export namespace Prisma {
     priority?: SortOrder
     projectId?: SortOrder
     parentTaskId?: SortOrder
+    displayOrder?: SortOrder
     startDate?: SortOrder
     dueDate?: SortOrder
     completedAt?: SortOrder
@@ -44547,6 +44508,7 @@ export namespace Prisma {
     taskId?: SortOrder
     projectId?: SortOrder
     parentTaskId?: SortOrder
+    displayOrder?: SortOrder
   }
 
   export type TaskMaxOrderByAggregateInput = {
@@ -44557,6 +44519,7 @@ export namespace Prisma {
     priority?: SortOrder
     projectId?: SortOrder
     parentTaskId?: SortOrder
+    displayOrder?: SortOrder
     startDate?: SortOrder
     dueDate?: SortOrder
     completedAt?: SortOrder
@@ -44572,6 +44535,7 @@ export namespace Prisma {
     priority?: SortOrder
     projectId?: SortOrder
     parentTaskId?: SortOrder
+    displayOrder?: SortOrder
     startDate?: SortOrder
     dueDate?: SortOrder
     completedAt?: SortOrder
@@ -44583,6 +44547,7 @@ export namespace Prisma {
     taskId?: SortOrder
     projectId?: SortOrder
     parentTaskId?: SortOrder
+    displayOrder?: SortOrder
   }
 
   export type EnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -48423,6 +48388,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -48441,6 +48407,7 @@ export namespace Prisma {
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     parentTaskId?: number | null
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -48694,6 +48661,7 @@ export namespace Prisma {
     priority?: EnumTaskPriorityFilter<"Task"> | $Enums.TaskPriority
     projectId?: IntFilter<"Task"> | number
     parentTaskId?: IntNullableFilter<"Task"> | number | null
+    displayOrder?: IntFilter<"Task"> | number
     startDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
@@ -50089,8 +50057,6 @@ export namespace Prisma {
 
   export type WeeklyWageCreateWithoutWorkerInput = {
     grossAmount: Decimal | DecimalJsLike | number | string
-    afpDiscount?: Decimal | DecimalJsLike | number | string
-    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -50101,8 +50067,6 @@ export namespace Prisma {
     weeklyWageId?: number
     weekId: number
     grossAmount: Decimal | DecimalJsLike | number | string
-    afpDiscount?: Decimal | DecimalJsLike | number | string
-    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -50208,8 +50172,6 @@ export namespace Prisma {
     workerId?: IntFilter<"WeeklyWage"> | number
     weekId?: IntFilter<"WeeklyWage"> | number
     grossAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"WeeklyWage"> | Date | string
     updatedAt?: DateTimeFilter<"WeeklyWage"> | Date | string
@@ -51459,8 +51421,6 @@ export namespace Prisma {
 
   export type WeeklyWageCreateWithoutWeekInput = {
     grossAmount: Decimal | DecimalJsLike | number | string
-    afpDiscount?: Decimal | DecimalJsLike | number | string
-    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51471,8 +51431,6 @@ export namespace Prisma {
     weeklyWageId?: number
     workerId: number
     grossAmount: Decimal | DecimalJsLike | number | string
-    afpDiscount?: Decimal | DecimalJsLike | number | string
-    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -52040,6 +51998,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -52059,6 +52018,7 @@ export namespace Prisma {
     priority?: $Enums.TaskPriority
     projectId: number
     parentTaskId?: number | null
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -52078,6 +52038,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -52096,6 +52057,7 @@ export namespace Prisma {
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     projectId: number
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -52246,6 +52208,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -52265,6 +52228,7 @@ export namespace Prisma {
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     projectId?: IntFieldUpdateOperationsInput | number
     parentTaskId?: NullableIntFieldUpdateOperationsInput | number | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -52327,6 +52291,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -52346,6 +52311,7 @@ export namespace Prisma {
     priority?: $Enums.TaskPriority
     projectId: number
     parentTaskId?: number | null
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -52418,6 +52384,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -52437,6 +52404,7 @@ export namespace Prisma {
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     projectId?: IntFieldUpdateOperationsInput | number
     parentTaskId?: NullableIntFieldUpdateOperationsInput | number | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -52541,6 +52509,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -52560,6 +52529,7 @@ export namespace Prisma {
     priority?: $Enums.TaskPriority
     projectId: number
     parentTaskId?: number | null
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -52804,6 +52774,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -52823,6 +52794,7 @@ export namespace Prisma {
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     projectId?: IntFieldUpdateOperationsInput | number
     parentTaskId?: NullableIntFieldUpdateOperationsInput | number | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53419,6 +53391,7 @@ export namespace Prisma {
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     parentTaskId?: number | null
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -53680,6 +53653,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53698,6 +53672,7 @@ export namespace Prisma {
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     parentTaskId?: NullableIntFieldUpdateOperationsInput | number | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53715,6 +53690,7 @@ export namespace Prisma {
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     parentTaskId?: NullableIntFieldUpdateOperationsInput | number | null
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -54117,8 +54093,6 @@ export namespace Prisma {
     weeklyWageId?: number
     weekId: number
     grossAmount: Decimal | DecimalJsLike | number | string
-    afpDiscount?: Decimal | DecimalJsLike | number | string
-    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -54171,8 +54145,6 @@ export namespace Prisma {
 
   export type WeeklyWageUpdateWithoutWorkerInput = {
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54183,8 +54155,6 @@ export namespace Prisma {
     weeklyWageId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54194,8 +54164,6 @@ export namespace Prisma {
     weeklyWageId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54571,8 +54539,6 @@ export namespace Prisma {
     weeklyWageId?: number
     workerId: number
     grossAmount: Decimal | DecimalJsLike | number | string
-    afpDiscount?: Decimal | DecimalJsLike | number | string
-    advanceDiscount?: Decimal | DecimalJsLike | number | string
     totalAmount: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -54588,8 +54554,6 @@ export namespace Prisma {
 
   export type WeeklyWageUpdateWithoutWeekInput = {
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54600,8 +54564,6 @@ export namespace Prisma {
     weeklyWageId?: IntFieldUpdateOperationsInput | number
     workerId?: IntFieldUpdateOperationsInput | number
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54611,8 +54573,6 @@ export namespace Prisma {
     weeklyWageId?: IntFieldUpdateOperationsInput | number
     workerId?: IntFieldUpdateOperationsInput | number
     grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54648,6 +54608,7 @@ export namespace Prisma {
     status?: $Enums.TaskStatus
     priority?: $Enums.TaskPriority
     projectId: number
+    displayOrder?: number
     startDate?: Date | string | null
     dueDate?: Date | string | null
     completedAt?: Date | string | null
@@ -54682,6 +54643,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -54700,6 +54662,7 @@ export namespace Prisma {
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     projectId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -54717,6 +54680,7 @@ export namespace Prisma {
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
     projectId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

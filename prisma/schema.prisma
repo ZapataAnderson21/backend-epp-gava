@@ -513,8 +513,6 @@ model WeeklyWage {
   workerId        Int
   weekId          Int
   grossAmount     Decimal  @db.Decimal(18,2)
-  afpDiscount     Decimal  @db.Decimal(18,2) @default(0)
-  advanceDiscount Decimal  @db.Decimal(18,2) @default(0)
   totalAmount     Decimal  @db.Decimal(18,2)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -568,6 +566,7 @@ model Task {
   priority      TaskPriority   @default(medium)
   projectId     Int
   parentTaskId  Int?           // Para subtareas
+  displayOrder  Int            @default(0) // Orden visual en el Gantt
   startDate     DateTime?      // Fecha de inicio planificada (para Gantt)
   dueDate       DateTime?      // Fecha de fin planificada
   completedAt   DateTime?

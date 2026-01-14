@@ -379,8 +379,6 @@ exports.Prisma.WeeklyWageScalarFieldEnum = {
   workerId: 'workerId',
   weekId: 'weekId',
   grossAmount: 'grossAmount',
-  afpDiscount: 'afpDiscount',
-  advanceDiscount: 'advanceDiscount',
   totalAmount: 'totalAmount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -403,6 +401,7 @@ exports.Prisma.TaskScalarFieldEnum = {
   priority: 'priority',
   projectId: 'projectId',
   parentTaskId: 'parentTaskId',
+  displayOrder: 'displayOrder',
   startDate: 'startDate',
   dueDate: 'dueDate',
   completedAt: 'completedAt',

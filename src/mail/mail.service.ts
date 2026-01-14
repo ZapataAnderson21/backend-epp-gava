@@ -93,6 +93,7 @@ export class MailService {
     this.logger.log(`Preparing to send request ID: ${requestId} to logistics via email`);
     try {
       const request = await this.findRequestById(requestId);
+      this.logger.log(`Request ID: ${requestId} found. Project: ${request.project.name}, User: ${request.user.email}`);
 
       const sender = request.user.email;
       const toEmail = this.configService.get<string>('MAIL_LOGISTICS_TO');
@@ -100,7 +101,10 @@ export class MailService {
       const mailHost = this.configService.get<string>('MAIL_HOST');
       const mailPort = this.configService.get<number>('MAIL_PORT') || 465;
 
+      this.logger.debug(`Mail config - Host: ${mailHost}, Port: ${mailPort}, To: ${toEmail}, CC: ${copyEmails.join(', ') || 'none'}`);
+
       if (!mailHost || !toEmail) {
+        this.logger.error('Incomplete mail configuration. MAIL_HOST or MAIL_LOGISTICS_TO is missing.');
         throw new HttpException(
           'Configuración de correo incompleta. Verifique las variables de entorno.',
           HttpStatus.INTERNAL_SERVER_ERROR
@@ -123,18 +127,23 @@ export class MailService {
           type = 'Requerimiento de Elementos Operativos y de Protección Personal (EPP)';
           break;
       }
+      this.logger.log(`Request type: ${request.type} - Subject: ${subjectEmail}`);
 
       const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
       const pdfPath = path.resolve(outputDir, `requerimiento-${requestId}.pdf`);
+      this.logger.debug(`PDF path: ${pdfPath}`);
 
       if (!fs.existsSync(pdfPath)) {
+        this.logger.warn(`PDF file not found at path: ${pdfPath}`);
         return {
           statusCode: 404,
           message: `El archivo PDF no fue encontrado en la ruta: ${pdfPath}`,
           data: null,
         };
       }
+      this.logger.log(`PDF file found at: ${pdfPath}`);
 
+      this.logger.log(`Creating SMTP transporter for sender: ${sender}`);
       const transporter = nodemailer.createTransport({
         host: mailHost,
         port: mailPort,
@@ -145,8 +154,9 @@ export class MailService {
         },
       });
 
-      // 💥 Verifica autenticación antes de enviar
+      this.logger.log('Verifying SMTP authentication...');
       await transporter.verify();
+      this.logger.log('SMTP authentication successful');
 
       const now = new Date();
       const formattedDate = now.toLocaleString('es-PE', { timeZone: 'America/Lima' });
@@ -201,7 +211,9 @@ export class MailService {
         attachments: [{ filename: `requerimiento-${requestId}.pdf`, path: pdfPath }],
       };
 
+      this.logger.log(`Sending email from ${sender} to ${toEmail}...`);
       const result = await transporter.sendMail(mailOptions);
+      this.logger.log(`Email sent successfully. MessageId: ${result.messageId}`);
 
       return {
         statusCode: 200,
@@ -215,24 +227,27 @@ export class MailService {
     } catch (error: any) {
       // 💥 Captura errores de login SMTP u otros
       if (error.code === 'EAUTH') {
+        this.logger.error(`SMTP authentication error for request ID: ${requestId}. Response: ${error.response}`);
         return {
-          statusCode: 401,
-          message: 'Error de autenticación SMTP: credenciales inválidas.',
+          statusCode: error.code,
+          message: 'Contraseña incorrecta.',
           data: error.response || null,
         };
       }
 
       if (error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED') {
+        this.logger.error(`SMTP connection error for request ID: ${requestId}. Code: ${error.code}, Message: ${error.message}`);
         return {
-          statusCode: 503,
-          message: 'No se pudo conectar con el servidor SMTP.',
+          statusCode: error.code,
+          message: 'No se pudo conectar con el servidor de correos SMTP.',
           data: error.message,
         };
       }
 
       // Error general
+      this.logger.error(`Unexpected error sending email for request ID: ${requestId}. Error: ${error.message}`, error.stack);
       return {
-        statusCode: 500,
+        statusCode: error.code,
         message: error.message || 'Error desconocido al enviar el correo.',
         data: error.stack || null,
       };

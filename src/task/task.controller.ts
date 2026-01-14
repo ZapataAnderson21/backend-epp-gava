@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
-import { CreateTaskDto, UpdateTaskDto, UpdateTaskStatusDto, AssignUserDto } from './dto';
+import { CreateTaskDto, UpdateTaskDto, UpdateTaskStatusDto, AssignUserDto, ReorderTaskDto } from './dto';
 import { TaskPermissionGuard, TaskOperation, TASK_OPERATION_KEY } from './guards';
 import { UserTypes } from 'src/decorators/user-types.decorator';
 
@@ -92,6 +92,17 @@ export class TaskController {
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,
   ) {
     return this.taskService.updateStatus(taskId, updateTaskStatusDto.status);
+  }
+
+  /**
+   * PATCH /task/reorder
+   * Cambiar el orden de múltiples tareas
+   * Solo GERENTE o ADMINISTRADORA pueden reordenar tareas
+   */
+  @Patch('reorder')
+  @UserTypes('GERENTE', 'ADMINISTRADORA')
+  reOrder(@Body() reorderTaskDto: ReorderTaskDto) {
+    return this.taskService.reOrder(reorderTaskDto.updates);
   }
 
   /**
