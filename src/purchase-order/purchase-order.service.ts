@@ -262,11 +262,9 @@ export class PurchaseOrderService {
           );
           break;
         case PurchaseOrderStatus.Delivered:
-          // TODO: Pasar el userId del creador de la orden si está disponible
           await this.notificationService.notifyPurchaseOrderDelivered(
             purchaseOrderId,
             code,
-            0, // creatorUserId - ajustar si se tiene acceso
             updatedPurchaseOrder.projectId,
           );
           break;

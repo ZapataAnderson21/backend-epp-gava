@@ -377,8 +377,8 @@ export class ExcelService {
         null, // Total - será fórmula
         worker.dailyWage,
         null, // Pago semana - será fórmula (Total * Jornal/dia)
-        '', // AFP - columna vacía
-        '', // Dscts. por adelanto - columna vacía
+        0, // AFP - valor numérico para que la fórmula funcione
+        0, // Dscts. por adelanto - valor numérico para que la fórmula funcione
         null, // Neto a depositar - será fórmula (Pago semana - AFP - Dscts)
         '', // Firma
       ];

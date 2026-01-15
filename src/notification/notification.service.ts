@@ -528,9 +528,8 @@ export class NotificationService {
     });
   }
 
-  async notifyPurchaseOrderDelivered(purchaseOrderId: number, code: string, creatorUserId: number, projectId: number) {
-    return this.create({
-      userId: creatorUserId,
+  async notifyPurchaseOrderDelivered(purchaseOrderId: number, code: string, projectId: number) {
+    return this.notifyByUserType(['LOGISTICA', 'ADMINISTRADORA'], {
       type: NotificationType.purchase_order_delivered,
       title: 'OC entregada',
       message: `La orden de compra ${code} fue entregada`,
