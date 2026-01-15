@@ -79,6 +79,7 @@ export class UserController {
     return await this.userService.remove(id);
   }
 
+  @Public()
   @Post('reset-password')
   async updatePassword(@Body() resetPasswordDto: ResetPasswordDto) {
     this.logger.log('Processing password reset');

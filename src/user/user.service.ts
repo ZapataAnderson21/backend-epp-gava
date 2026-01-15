@@ -294,7 +294,14 @@ export class UserService {
 
     this.logger.log(`Password updated successfully for userId: ${user.userId}`);
 
-    return HttpStatus.OK;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Contraseña actualizada con éxito.',
+      data: { 
+        userId: updatedUser.userId, 
+        email: updatedUser.email 
+      }
+    };
   }
 
   async update(id: number, updateUserDto: Partial<User>): Promise<User | null> {
