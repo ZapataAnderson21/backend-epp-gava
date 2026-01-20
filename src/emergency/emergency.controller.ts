@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, UploadedFile, UseInterceptors, ParseIntPipe, NotFoundException, Res, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname, join } from 'path';
+import { extname, join, resolve } from 'path';
 import { EmergencyService } from './emergency.service';
 import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { Response } from 'express';
@@ -56,7 +56,7 @@ export class EmergencyController {
   
   @Get('image/:filename')
   async getImage(@Param('filename') filename: string, @Res() res: Response) {
-    const filePath = join(EMERGENCIES_UPLOAD_DIR, filename);
+    const filePath = resolve(join(EMERGENCIES_UPLOAD_DIR, filename));
 
     if (!fs.existsSync(filePath)) {
       throw new NotFoundException('Image not found');
