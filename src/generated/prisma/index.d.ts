@@ -13834,7 +13834,9 @@ export namespace Prisma {
     requestResponseId: number | null
     responderUserId: number | null
     requestId: number | null
-    description: string | null
+    managementDescription: string | null
+    logisticsDescription: string | null
+    adminDescription: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13843,7 +13845,9 @@ export namespace Prisma {
     requestResponseId: number | null
     responderUserId: number | null
     requestId: number | null
-    description: string | null
+    managementDescription: string | null
+    logisticsDescription: string | null
+    adminDescription: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13852,7 +13856,9 @@ export namespace Prisma {
     requestResponseId: number
     responderUserId: number
     requestId: number
-    description: number
+    managementDescription: number
+    logisticsDescription: number
+    adminDescription: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -13875,7 +13881,9 @@ export namespace Prisma {
     requestResponseId?: true
     responderUserId?: true
     requestId?: true
-    description?: true
+    managementDescription?: true
+    logisticsDescription?: true
+    adminDescription?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13884,7 +13892,9 @@ export namespace Prisma {
     requestResponseId?: true
     responderUserId?: true
     requestId?: true
-    description?: true
+    managementDescription?: true
+    logisticsDescription?: true
+    adminDescription?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13893,7 +13903,9 @@ export namespace Prisma {
     requestResponseId?: true
     responderUserId?: true
     requestId?: true
-    description?: true
+    managementDescription?: true
+    logisticsDescription?: true
+    adminDescription?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13989,7 +14001,9 @@ export namespace Prisma {
     requestResponseId: number
     responderUserId: number
     requestId: number
-    description: string | null
+    managementDescription: string | null
+    logisticsDescription: string | null
+    adminDescription: string | null
     createdAt: Date
     updatedAt: Date
     _count: RequestResponseCountAggregateOutputType | null
@@ -14017,7 +14031,9 @@ export namespace Prisma {
     requestResponseId?: boolean
     responderUserId?: boolean
     requestId?: boolean
-    description?: boolean
+    managementDescription?: boolean
+    logisticsDescription?: boolean
+    adminDescription?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     request?: boolean | RequestDefaultArgs<ExtArgs>
@@ -14030,7 +14046,9 @@ export namespace Prisma {
     requestResponseId?: boolean
     responderUserId?: boolean
     requestId?: boolean
-    description?: boolean
+    managementDescription?: boolean
+    logisticsDescription?: boolean
+    adminDescription?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     request?: boolean | RequestDefaultArgs<ExtArgs>
@@ -14041,7 +14059,9 @@ export namespace Prisma {
     requestResponseId?: boolean
     responderUserId?: boolean
     requestId?: boolean
-    description?: boolean
+    managementDescription?: boolean
+    logisticsDescription?: boolean
+    adminDescription?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     request?: boolean | RequestDefaultArgs<ExtArgs>
@@ -14052,12 +14072,14 @@ export namespace Prisma {
     requestResponseId?: boolean
     responderUserId?: boolean
     requestId?: boolean
-    description?: boolean
+    managementDescription?: boolean
+    logisticsDescription?: boolean
+    adminDescription?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type RequestResponseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"requestResponseId" | "responderUserId" | "requestId" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["requestResponse"]>
+  export type RequestResponseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"requestResponseId" | "responderUserId" | "requestId" | "managementDescription" | "logisticsDescription" | "adminDescription" | "createdAt" | "updatedAt", ExtArgs["result"]["requestResponse"]>
   export type RequestResponseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     request?: boolean | RequestDefaultArgs<ExtArgs>
     responder?: boolean | UserDefaultArgs<ExtArgs>
@@ -14084,7 +14106,9 @@ export namespace Prisma {
       requestResponseId: number
       responderUserId: number
       requestId: number
-      description: string | null
+      managementDescription: string | null
+      logisticsDescription: string | null
+      adminDescription: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["requestResponse"]>
@@ -14516,7 +14540,9 @@ export namespace Prisma {
     readonly requestResponseId: FieldRef<"RequestResponse", 'Int'>
     readonly responderUserId: FieldRef<"RequestResponse", 'Int'>
     readonly requestId: FieldRef<"RequestResponse", 'Int'>
-    readonly description: FieldRef<"RequestResponse", 'String'>
+    readonly managementDescription: FieldRef<"RequestResponse", 'String'>
+    readonly logisticsDescription: FieldRef<"RequestResponse", 'String'>
+    readonly adminDescription: FieldRef<"RequestResponse", 'String'>
     readonly createdAt: FieldRef<"RequestResponse", 'DateTime'>
     readonly updatedAt: FieldRef<"RequestResponse", 'DateTime'>
   }
@@ -37605,7 +37631,9 @@ export namespace Prisma {
     requestResponseId: 'requestResponseId',
     responderUserId: 'responderUserId',
     requestId: 'requestId',
-    description: 'description',
+    managementDescription: 'managementDescription',
+    logisticsDescription: 'logisticsDescription',
+    adminDescription: 'adminDescription',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -38814,7 +38842,9 @@ export namespace Prisma {
     requestResponseId?: IntFilter<"RequestResponse"> | number
     responderUserId?: IntFilter<"RequestResponse"> | number
     requestId?: IntFilter<"RequestResponse"> | number
-    description?: StringNullableFilter<"RequestResponse"> | string | null
+    managementDescription?: StringNullableFilter<"RequestResponse"> | string | null
+    logisticsDescription?: StringNullableFilter<"RequestResponse"> | string | null
+    adminDescription?: StringNullableFilter<"RequestResponse"> | string | null
     createdAt?: DateTimeFilter<"RequestResponse"> | Date | string
     updatedAt?: DateTimeFilter<"RequestResponse"> | Date | string
     request?: XOR<RequestScalarRelationFilter, RequestWhereInput>
@@ -38826,7 +38856,9 @@ export namespace Prisma {
     requestResponseId?: SortOrder
     responderUserId?: SortOrder
     requestId?: SortOrder
-    description?: SortOrderInput | SortOrder
+    managementDescription?: SortOrderInput | SortOrder
+    logisticsDescription?: SortOrderInput | SortOrder
+    adminDescription?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     request?: RequestOrderByWithRelationInput
@@ -38836,24 +38868,28 @@ export namespace Prisma {
 
   export type RequestResponseWhereUniqueInput = Prisma.AtLeast<{
     requestResponseId?: number
+    requestId?: number
     AND?: RequestResponseWhereInput | RequestResponseWhereInput[]
     OR?: RequestResponseWhereInput[]
     NOT?: RequestResponseWhereInput | RequestResponseWhereInput[]
     responderUserId?: IntFilter<"RequestResponse"> | number
-    requestId?: IntFilter<"RequestResponse"> | number
-    description?: StringNullableFilter<"RequestResponse"> | string | null
+    managementDescription?: StringNullableFilter<"RequestResponse"> | string | null
+    logisticsDescription?: StringNullableFilter<"RequestResponse"> | string | null
+    adminDescription?: StringNullableFilter<"RequestResponse"> | string | null
     createdAt?: DateTimeFilter<"RequestResponse"> | Date | string
     updatedAt?: DateTimeFilter<"RequestResponse"> | Date | string
     request?: XOR<RequestScalarRelationFilter, RequestWhereInput>
     responder?: XOR<UserScalarRelationFilter, UserWhereInput>
     elementRequestResponses?: ElementRequestResponseListRelationFilter
-  }, "requestResponseId">
+  }, "requestResponseId" | "requestId">
 
   export type RequestResponseOrderByWithAggregationInput = {
     requestResponseId?: SortOrder
     responderUserId?: SortOrder
     requestId?: SortOrder
-    description?: SortOrderInput | SortOrder
+    managementDescription?: SortOrderInput | SortOrder
+    logisticsDescription?: SortOrderInput | SortOrder
+    adminDescription?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: RequestResponseCountOrderByAggregateInput
@@ -38870,7 +38906,9 @@ export namespace Prisma {
     requestResponseId?: IntWithAggregatesFilter<"RequestResponse"> | number
     responderUserId?: IntWithAggregatesFilter<"RequestResponse"> | number
     requestId?: IntWithAggregatesFilter<"RequestResponse"> | number
-    description?: StringNullableWithAggregatesFilter<"RequestResponse"> | string | null
+    managementDescription?: StringNullableWithAggregatesFilter<"RequestResponse"> | string | null
+    logisticsDescription?: StringNullableWithAggregatesFilter<"RequestResponse"> | string | null
+    adminDescription?: StringNullableWithAggregatesFilter<"RequestResponse"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"RequestResponse"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"RequestResponse"> | Date | string
   }
@@ -41028,7 +41066,9 @@ export namespace Prisma {
   }
 
   export type RequestResponseCreateInput = {
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     request: RequestCreateNestedOneWithoutResponsesInput
@@ -41040,14 +41080,18 @@ export namespace Prisma {
     requestResponseId?: number
     responderUserId: number
     requestId: number
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     elementRequestResponses?: ElementRequestResponseUncheckedCreateNestedManyWithoutRequestResponseInput
   }
 
   export type RequestResponseUpdateInput = {
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     request?: RequestUpdateOneRequiredWithoutResponsesNestedInput
@@ -41059,7 +41103,9 @@ export namespace Prisma {
     requestResponseId?: IntFieldUpdateOperationsInput | number
     responderUserId?: IntFieldUpdateOperationsInput | number
     requestId?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     elementRequestResponses?: ElementRequestResponseUncheckedUpdateManyWithoutRequestResponseNestedInput
@@ -41069,13 +41115,17 @@ export namespace Prisma {
     requestResponseId?: number
     responderUserId: number
     requestId: number
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type RequestResponseUpdateManyMutationInput = {
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41084,7 +41134,9 @@ export namespace Prisma {
     requestResponseId?: IntFieldUpdateOperationsInput | number
     responderUserId?: IntFieldUpdateOperationsInput | number
     requestId?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43381,7 +43433,9 @@ export namespace Prisma {
     requestResponseId?: SortOrder
     responderUserId?: SortOrder
     requestId?: SortOrder
-    description?: SortOrder
+    managementDescription?: SortOrder
+    logisticsDescription?: SortOrder
+    adminDescription?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43396,7 +43450,9 @@ export namespace Prisma {
     requestResponseId?: SortOrder
     responderUserId?: SortOrder
     requestId?: SortOrder
-    description?: SortOrder
+    managementDescription?: SortOrder
+    logisticsDescription?: SortOrder
+    adminDescription?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43405,7 +43461,9 @@ export namespace Prisma {
     requestResponseId?: SortOrder
     responderUserId?: SortOrder
     requestId?: SortOrder
-    description?: SortOrder
+    managementDescription?: SortOrder
+    logisticsDescription?: SortOrder
+    adminDescription?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -47567,7 +47625,9 @@ export namespace Prisma {
   }
 
   export type RequestResponseCreateWithoutResponderInput = {
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     request: RequestCreateNestedOneWithoutResponsesInput
@@ -47577,7 +47637,9 @@ export namespace Prisma {
   export type RequestResponseUncheckedCreateWithoutResponderInput = {
     requestResponseId?: number
     requestId: number
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     elementRequestResponses?: ElementRequestResponseUncheckedCreateNestedManyWithoutRequestResponseInput
@@ -47823,7 +47885,9 @@ export namespace Prisma {
     requestResponseId?: IntFilter<"RequestResponse"> | number
     responderUserId?: IntFilter<"RequestResponse"> | number
     requestId?: IntFilter<"RequestResponse"> | number
-    description?: StringNullableFilter<"RequestResponse"> | string | null
+    managementDescription?: StringNullableFilter<"RequestResponse"> | string | null
+    logisticsDescription?: StringNullableFilter<"RequestResponse"> | string | null
+    adminDescription?: StringNullableFilter<"RequestResponse"> | string | null
     createdAt?: DateTimeFilter<"RequestResponse"> | Date | string
     updatedAt?: DateTimeFilter<"RequestResponse"> | Date | string
   }
@@ -48890,7 +48954,9 @@ export namespace Prisma {
   }
 
   export type RequestResponseCreateWithoutRequestInput = {
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     responder: UserCreateNestedOneWithoutResponsesInput
@@ -48900,7 +48966,9 @@ export namespace Prisma {
   export type RequestResponseUncheckedCreateWithoutRequestInput = {
     requestResponseId?: number
     responderUserId: number
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     elementRequestResponses?: ElementRequestResponseUncheckedCreateNestedManyWithoutRequestResponseInput
@@ -49702,7 +49770,9 @@ export namespace Prisma {
   }
 
   export type RequestResponseCreateWithoutElementRequestResponsesInput = {
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     request: RequestCreateNestedOneWithoutResponsesInput
@@ -49713,7 +49783,9 @@ export namespace Prisma {
     requestResponseId?: number
     responderUserId: number
     requestId: number
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -49765,7 +49837,9 @@ export namespace Prisma {
   }
 
   export type RequestResponseUpdateWithoutElementRequestResponsesInput = {
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     request?: RequestUpdateOneRequiredWithoutResponsesNestedInput
@@ -49776,7 +49850,9 @@ export namespace Prisma {
     requestResponseId?: IntFieldUpdateOperationsInput | number
     responderUserId?: IntFieldUpdateOperationsInput | number
     requestId?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53004,7 +53080,9 @@ export namespace Prisma {
   export type RequestResponseCreateManyResponderInput = {
     requestResponseId?: number
     requestId: number
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -53088,7 +53166,9 @@ export namespace Prisma {
   }
 
   export type RequestResponseUpdateWithoutResponderInput = {
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     request?: RequestUpdateOneRequiredWithoutResponsesNestedInput
@@ -53098,7 +53178,9 @@ export namespace Prisma {
   export type RequestResponseUncheckedUpdateWithoutResponderInput = {
     requestResponseId?: IntFieldUpdateOperationsInput | number
     requestId?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     elementRequestResponses?: ElementRequestResponseUncheckedUpdateManyWithoutRequestResponseNestedInput
@@ -53107,7 +53189,9 @@ export namespace Prisma {
   export type RequestResponseUncheckedUpdateManyWithoutResponderInput = {
     requestResponseId?: IntFieldUpdateOperationsInput | number
     requestId?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53804,7 +53888,9 @@ export namespace Prisma {
   export type RequestResponseCreateManyRequestInput = {
     requestResponseId?: number
     responderUserId: number
-    description?: string | null
+    managementDescription?: string | null
+    logisticsDescription?: string | null
+    adminDescription?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -53883,7 +53969,9 @@ export namespace Prisma {
   }
 
   export type RequestResponseUpdateWithoutRequestInput = {
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     responder?: UserUpdateOneRequiredWithoutResponsesNestedInput
@@ -53893,7 +53981,9 @@ export namespace Prisma {
   export type RequestResponseUncheckedUpdateWithoutRequestInput = {
     requestResponseId?: IntFieldUpdateOperationsInput | number
     responderUserId?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     elementRequestResponses?: ElementRequestResponseUncheckedUpdateManyWithoutRequestResponseNestedInput
@@ -53902,7 +53992,9 @@ export namespace Prisma {
   export type RequestResponseUncheckedUpdateManyWithoutRequestInput = {
     requestResponseId?: IntFieldUpdateOperationsInput | number
     responderUserId?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    managementDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logisticsDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    adminDescription?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

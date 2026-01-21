@@ -19,7 +19,7 @@ export class RequestResponseController {
 
   @Get('request/:requestId')
   async findByRequestId(@Param('requestId', ParseIntPipe) requestId: number) {
-    return await this.requestResponseService.findAllByRequestId(requestId);
+    return await this.requestResponseService.findByRequestId(requestId);
   }
 
   @Patch(':id')

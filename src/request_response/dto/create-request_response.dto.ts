@@ -15,8 +15,18 @@ export class CreateRequestResponseDto {
   @IsPositive()
   requestId!: number;
 
-  @ApiPropertyOptional({ example: 'Aprobada parcialmente' })
+  @ApiPropertyOptional({ example: 'Descripción de gerencia' })
   @IsOptional()
   @IsString()
-  description?: string;
+  managementDescription?: string;
+
+  @ApiPropertyOptional({ example: 'Descripción de logística' })
+  @IsOptional()
+  @IsString()
+  logisticsDescription?: string;
+
+  @ApiPropertyOptional({ example: 'Descripción de administración' })
+  @IsOptional()
+  @IsString()
+  adminDescription?: string;
 }

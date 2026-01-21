@@ -204,7 +204,9 @@ exports.Prisma.RequestResponseScalarFieldEnum = {
   requestResponseId: 'requestResponseId',
   responderUserId: 'responderUserId',
   requestId: 'requestId',
-  description: 'description',
+  managementDescription: 'managementDescription',
+  logisticsDescription: 'logisticsDescription',
+  adminDescription: 'adminDescription',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

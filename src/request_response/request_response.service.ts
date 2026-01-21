@@ -94,7 +94,9 @@ export class RequestResponseService {
       responder: returnResponder,
       project: returnProject,
       createdAt: requestResponse.createdAt,
-      description: requestResponse.description,
+      managementDescription: requestResponse.managementDescription,
+      logisticsDescription: requestResponse.logisticsDescription,
+      adminDescription: requestResponse.adminDescription,
     };
 
     this.logger.log(`Found request response: ${JSON.stringify(requestResponse)}`);
@@ -105,8 +107,9 @@ export class RequestResponseService {
     };
   }
 
-  async findAllByRequestId(requestId: number) {
-    const requestResponses = await this.prismaService.requestResponse.findMany({
+  async findByRequestId(requestId: number) {
+    this.logger.log(`Finding request response with Request ID: ${requestId}`);
+    const requestResponse = await this.prismaService.requestResponse.findUnique({
       where: { requestId },
       include: {
         request: {
@@ -132,18 +135,24 @@ export class RequestResponseService {
             },
           },
         },
+        elementRequestResponses: true,
       },
     });
     
-    if (!requestResponses) {
-      this.logger.warn(`No request responses found for request ID: ${requestId}`);
-      throw new NotFoundException('No request responses found for the specified request ID');
+    if (!requestResponse) {
+      this.logger.warn(`No request response found for Request ID: ${requestId}`);
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'No existe respuesta para esta solicitud.',
+        data: null
+      };
     }
 
+    this.logger.log(`Found request response: ${JSON.stringify(requestResponse)}`);
     return {
       statusCode: HttpStatus.OK,
-      message: 'Solicitudes de respuesta encontradas exitosamente.',
-      data: requestResponses
+      message: 'Respuesta de solicitud encontrada exitosamente.',
+      data: requestResponse
     };
   }
   

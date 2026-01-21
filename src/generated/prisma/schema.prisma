@@ -184,19 +184,20 @@ model ElementRequest {
 }
 
 model RequestResponse {
-  requestResponseId Int      @id @default(autoincrement())
-  responderUserId   Int
-  requestId         Int
-  description       String?  @db.Text
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  requestResponseId     Int      @id @default(autoincrement())
+  responderUserId       Int
+  requestId             Int      @unique
+  managementDescription String?  @db.Text
+  logisticsDescription  String?  @db.Text
+  adminDescription      String?  @db.Text
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   request                 Request                  @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
   responder               User                     @relation("UserResponses", fields: [responderUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
   elementRequestResponses ElementRequestResponse[]
 
   @@index([responderUserId])
-  @@index([requestId])
 }
 
 model ElementRequestResponse {

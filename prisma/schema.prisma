@@ -186,8 +186,10 @@ model ElementRequest {
 model RequestResponse {
   requestResponseId       Int                        @id @default(autoincrement())
   responderUserId         Int
-  requestId               Int
-  description             String?                    @db.Text
+  requestId               Int                        @unique
+  managementDescription   String?                    @db.Text
+  logisticsDescription    String?                    @db.Text
+  adminDescription        String?                    @db.Text
   createdAt               DateTime                   @default(now())
   updatedAt               DateTime                   @updatedAt
 
@@ -196,7 +198,6 @@ model RequestResponse {
   elementRequestResponses ElementRequestResponse[]
 
   @@index([responderUserId])
-  @@index([requestId])
 }
 
 model ElementRequestResponse {
