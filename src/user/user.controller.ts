@@ -6,7 +6,6 @@ import { Public } from './jwt/public.decorator';
 import { MailService } from 'src/mail/mail.service';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserTypes } from 'src/decorators/user-types.decorator';
 import { JwtAuthGuard } from './jwt/jwt.auth.guard';
 import { Request } from 'express';
 
@@ -59,6 +58,14 @@ export class UserController {
     const { userId } = req.user as any;
     const res = await this.userService.findOne(Number(userId));
     return res;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('me')
+  async updateMe(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
+    const { userId } = req.user as any;
+    this.logger.log(`Updating self user with ID: ${userId}`);
+    return await this.userService.updateMe(Number(userId), updateUserDto);
   }
   
   @Get(':id')

@@ -8,6 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { CreateUserUserTypeDto } from 'src/user_user_type/dto/create-user_user_type.dto';
 import { LoginDto } from './dto/login.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -301,6 +302,39 @@ export class UserService {
         userId: updatedUser.userId, 
         email: updatedUser.email 
       }
+    };
+  }
+
+  async updateMe(userId: number, updateUserDto: UpdateUserDto) {
+    await this.findOne(userId);
+
+    const { userTypeId, ...rest } = updateUserDto as any;
+    const data = { ...rest } as Partial<User>;
+
+    if (typeof data.password === 'string' && data.password.trim().length > 0) {
+      data.password = await hash(data.password, 10);
+    } else {
+      delete data.password;
+    }
+
+    this.logger.log(`Updating self user with id: ${userId}`);
+    const updatedUser = await this.prisma.user.update({
+      where: { userId },
+      data
+    });
+
+    if (!updatedUser) {
+      this.logger.error(`Failed to update self user with id: ${userId}`);
+      throw new BadRequestException('Failed to update user');
+    }
+
+    const returnUser = await this.findOne(userId);
+
+    this.logger.log(`Self user with id: ${userId} updated successfully`);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Usuario actualizado exitosamente.',
+      data: returnUser.data
     };
   }
 
