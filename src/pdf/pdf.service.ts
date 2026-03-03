@@ -422,7 +422,7 @@ export class PdfService {
             [
               { text: 'Angi Gonzales Cotrina', alignment: 'center', margin: [0, 4, 0, 4] },
               { text: 'Henrry Gayoso Valdera', alignment: 'center', margin: [0, 4, 0, 4] },
-              { text: 'Morayma Lloja Fernandez', alignment: 'center', margin: [0, 4, 0, 4] },
+              { text: 'Angi Gonzales Cotrina', alignment: 'center', margin: [0, 4, 0, 4] },
             ],
           ],
         },
