@@ -58,14 +58,16 @@ export class PdfService {
     const currencySym = getCurrencySymbol(purchaseOrder.supplier?.currency);
     const nowStr = formatDate(new Date());
 
-    // Cálculos SOLO con precios de venta
+    const igvRate = 0.18;
+
+    // Cálculos base (sin IGV)
     const subtotalVenta = purchaseOrder.resources?.reduce((acc, it) => {
       const unit = Number(it.unitSalesPrice || 0);
       const qty = Number(it.quantity || 0);
       return acc + unit * qty;
     }, 0) || 0;
 
-    const igv = subtotalVenta * 0.18;
+    const igv = subtotalVenta * igvRate;
     const total = subtotalVenta + igv;
 
     const borderColor = '#cbd5e1';
@@ -305,28 +307,29 @@ export class PdfService {
       },
     ];
 
-    // Tabla de recursos (SOLO precios de venta)
+    // Tabla de recursos (V UNIT y V PARC con IGV incluido)
     const recursosHeader = [
       { text: 'ID', bold: true, color: 'white' },
       { text: 'DESCRIPCIÓN', bold: true, color: 'white' },
       { text: 'UND', bold: true, color: 'white' },
       { text: 'CANT', bold: true, color: 'white' },
-      { text: 'PR UNIT', bold: true, color: 'white' },
-      { text: 'PR PARC', bold: true, color: 'white' },
+      { text: 'V UNIT', bold: true, color: 'white' },
+      { text: 'V PARC', bold: true, color: 'white' },
     ];
 
     const recursosRows = (purchaseOrder.resources || []).map((item, idx) => {
       const unit = Number(item.unitSalesPrice || 0);
       const qty = Number(item.quantity || 0);
-      const parc = unit * qty;
+      const unitWithIgv = unit * (1 + igvRate);
+      const parcWithIgv = unitWithIgv * qty;
 
       return [
         { text: String(idx + 1) },
         { text: item.resource?.description || '' },
         { text: item.resource?.unit || '' },
         { text: String(qty) },
-        { text: `${currencySym} ${fmt(unit)}` },
-        { text: `${currencySym} ${fmt(parc)}`, fillColor: '#f3f4f6' },
+        { text: `${currencySym} ${fmt(unitWithIgv)}` },
+        { text: `${currencySym} ${fmt(parcWithIgv)}`, fillColor: '#f3f4f6' },
       ];
     });
 
