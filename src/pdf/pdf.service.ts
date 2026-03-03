@@ -62,7 +62,7 @@ export class PdfService {
 
     // Cálculos base (sin IGV)
     const subtotalVenta = purchaseOrder.resources?.reduce((acc, it) => {
-      const unit = Number(it.unitSalesPrice || 0);
+      const unit = Number(it.unitPurchasePrice || 0);
       const qty = Number(it.quantity || 0);
       return acc + unit * qty;
     }, 0) || 0;
@@ -318,7 +318,7 @@ export class PdfService {
     ];
 
     const recursosRows = (purchaseOrder.resources || []).map((item, idx) => {
-      const unit = Number(item.unitSalesPrice || 0);
+      const unit = Number(item.unitPurchasePrice || 0);
       const qty = Number(item.quantity || 0);
       const parc = unit * qty;
 
