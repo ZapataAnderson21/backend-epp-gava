@@ -307,7 +307,7 @@ export class PdfService {
       },
     ];
 
-    // Tabla de recursos (V UNIT y V PARC con IGV incluido)
+    // Tabla de recursos (V UNIT y V PARC sin IGV)
     const recursosHeader = [
       { text: 'ID', bold: true, color: 'white' },
       { text: 'DESCRIPCIÓN', bold: true, color: 'white' },
@@ -320,16 +320,15 @@ export class PdfService {
     const recursosRows = (purchaseOrder.resources || []).map((item, idx) => {
       const unit = Number(item.unitSalesPrice || 0);
       const qty = Number(item.quantity || 0);
-      const unitWithIgv = unit * (1 + igvRate);
-      const parcWithIgv = unitWithIgv * qty;
+      const parc = unit * qty;
 
       return [
         { text: String(idx + 1) },
         { text: item.resource?.description || '' },
         { text: item.resource?.unit || '' },
         { text: String(qty) },
-        { text: `${currencySym} ${fmt(unitWithIgv)}` },
-        { text: `${currencySym} ${fmt(parcWithIgv)}`, fillColor: '#f3f4f6' },
+        { text: `${currencySym} ${fmt(unit)}` },
+        { text: `${currencySym} ${fmt(parc)}`, fillColor: '#f3f4f6' },
       ];
     });
 
@@ -448,19 +447,19 @@ export class PdfService {
       .map((s) => s?.trim())
       .filter(Boolean);
 
-    const condicionesBlock = [
-      { text: 'CONDICIONES COMERCIALES', style: 'listTitle', margin: [0, 8, 0, 3], fontSize: 8 },
-      {
-        ol: generalConditions.length ? generalConditions : [{ text: '—', opacity: 0.6 }],
-        margin: [0, 0, 0, 4],
-        fontSize: 7,
-      },
-      { text: 'CONDICIONES DE CALIDAD', style: 'listTitle', margin: [0, 4, 0, 3], fontSize: 8 },
-      {
-        ol: qualityConditions.length ? qualityConditions : [{ text: '—', opacity: 0.6 }],
-        fontSize: 7,
-      },
-    ];
+    const condicionesBlock: any[] = [];
+    if (generalConditions.length > 0) {
+      condicionesBlock.push(
+        { text: 'CONDICIONES COMERCIALES', style: 'listTitle', margin: [0, 8, 0, 3], fontSize: 8 },
+        { ol: generalConditions, margin: [0, 0, 0, 4], fontSize: 7 }
+      );
+    }
+    if (qualityConditions.length > 0) {
+      condicionesBlock.push(
+        { text: 'CONDICIONES DE CALIDAD', style: 'listTitle', margin: [0, 4, 0, 3], fontSize: 8 },
+        { ol: qualityConditions, fontSize: 7 }
+      );
+    }
 
     // === 5) Definición del documento ===
     
