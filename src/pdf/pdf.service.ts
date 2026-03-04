@@ -47,6 +47,8 @@ export class PdfService {
     };
     const fmt = (n: number) =>
       new Intl.NumberFormat('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+    const fmtUnit = (n: number) =>
+      new Intl.NumberFormat('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
     const formatDate = (d: Date | string | number) => {
       const date = new Date(d);
       const dd = date.getDate().toString().padStart(2, '0');
@@ -327,7 +329,7 @@ export class PdfService {
         { text: item.resource?.description || '' },
         { text: item.resource?.unit || '' },
         { text: String(qty) },
-        { text: `${currencySym} ${fmt(unit)}` },
+        { text: `${currencySym} ${fmtUnit(unit)}` },
         { text: `${currencySym} ${fmt(parc)}`, fillColor: '#f3f4f6' },
       ];
     });
