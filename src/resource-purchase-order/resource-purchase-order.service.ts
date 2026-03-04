@@ -45,7 +45,10 @@ export class ResourcePurchaseOrderService {
 
     const resourcePurchaseOrders = await this.prisma.resourcePurchaseOrder.findMany({
       where: { purchaseOrderId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: [
+        { orderNumber: 'asc' },
+        { createdAt: 'desc' },
+      ],
       include: {
         resource: true,
       },

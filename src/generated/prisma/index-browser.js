@@ -312,6 +312,7 @@ exports.Prisma.ResourcePurchaseOrderScalarFieldEnum = {
   resourcePurchaseOrderId: 'resourcePurchaseOrderId',
   purchaseOrderId: 'purchaseOrderId',
   resourceId: 'resourceId',
+  orderNumber: 'orderNumber',
   quantity: 'quantity',
   unitSalesPrice: 'unitSalesPrice',
   unitPurchasePrice: 'unitPurchasePrice',

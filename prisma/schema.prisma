@@ -394,6 +394,7 @@ model ResourcePurchaseOrder {
   resourcePurchaseOrderId Int           @id @default(autoincrement())
   purchaseOrderId         Int
   resourceId              Int
+  orderNumber             Int           @default(0)
   quantity                Decimal       @db.Decimal(18,4)
   unitSalesPrice          Decimal       @db.Decimal(18,4)
   unitPurchasePrice       Decimal       @db.Decimal(18,4)

@@ -23547,6 +23547,7 @@ export namespace Prisma {
     resourcePurchaseOrderId: number | null
     purchaseOrderId: number | null
     resourceId: number | null
+    orderNumber: number | null
     quantity: Decimal | null
     unitSalesPrice: Decimal | null
     unitPurchasePrice: Decimal | null
@@ -23556,6 +23557,7 @@ export namespace Prisma {
     resourcePurchaseOrderId: number | null
     purchaseOrderId: number | null
     resourceId: number | null
+    orderNumber: number | null
     quantity: Decimal | null
     unitSalesPrice: Decimal | null
     unitPurchasePrice: Decimal | null
@@ -23565,6 +23567,7 @@ export namespace Prisma {
     resourcePurchaseOrderId: number | null
     purchaseOrderId: number | null
     resourceId: number | null
+    orderNumber: number | null
     quantity: Decimal | null
     unitSalesPrice: Decimal | null
     unitPurchasePrice: Decimal | null
@@ -23576,6 +23579,7 @@ export namespace Prisma {
     resourcePurchaseOrderId: number | null
     purchaseOrderId: number | null
     resourceId: number | null
+    orderNumber: number | null
     quantity: Decimal | null
     unitSalesPrice: Decimal | null
     unitPurchasePrice: Decimal | null
@@ -23587,6 +23591,7 @@ export namespace Prisma {
     resourcePurchaseOrderId: number
     purchaseOrderId: number
     resourceId: number
+    orderNumber: number
     quantity: number
     unitSalesPrice: number
     unitPurchasePrice: number
@@ -23600,6 +23605,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: true
     purchaseOrderId?: true
     resourceId?: true
+    orderNumber?: true
     quantity?: true
     unitSalesPrice?: true
     unitPurchasePrice?: true
@@ -23609,6 +23615,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: true
     purchaseOrderId?: true
     resourceId?: true
+    orderNumber?: true
     quantity?: true
     unitSalesPrice?: true
     unitPurchasePrice?: true
@@ -23618,6 +23625,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: true
     purchaseOrderId?: true
     resourceId?: true
+    orderNumber?: true
     quantity?: true
     unitSalesPrice?: true
     unitPurchasePrice?: true
@@ -23629,6 +23637,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: true
     purchaseOrderId?: true
     resourceId?: true
+    orderNumber?: true
     quantity?: true
     unitSalesPrice?: true
     unitPurchasePrice?: true
@@ -23640,6 +23649,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: true
     purchaseOrderId?: true
     resourceId?: true
+    orderNumber?: true
     quantity?: true
     unitSalesPrice?: true
     unitPurchasePrice?: true
@@ -23738,6 +23748,7 @@ export namespace Prisma {
     resourcePurchaseOrderId: number
     purchaseOrderId: number
     resourceId: number
+    orderNumber: number
     quantity: Decimal
     unitSalesPrice: Decimal
     unitPurchasePrice: Decimal
@@ -23768,6 +23779,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: boolean
     purchaseOrderId?: boolean
     resourceId?: boolean
+    orderNumber?: boolean
     quantity?: boolean
     unitSalesPrice?: boolean
     unitPurchasePrice?: boolean
@@ -23781,6 +23793,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: boolean
     purchaseOrderId?: boolean
     resourceId?: boolean
+    orderNumber?: boolean
     quantity?: boolean
     unitSalesPrice?: boolean
     unitPurchasePrice?: boolean
@@ -23794,6 +23807,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: boolean
     purchaseOrderId?: boolean
     resourceId?: boolean
+    orderNumber?: boolean
     quantity?: boolean
     unitSalesPrice?: boolean
     unitPurchasePrice?: boolean
@@ -23807,6 +23821,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: boolean
     purchaseOrderId?: boolean
     resourceId?: boolean
+    orderNumber?: boolean
     quantity?: boolean
     unitSalesPrice?: boolean
     unitPurchasePrice?: boolean
@@ -23814,7 +23829,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ResourcePurchaseOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"resourcePurchaseOrderId" | "purchaseOrderId" | "resourceId" | "quantity" | "unitSalesPrice" | "unitPurchasePrice" | "createdAt" | "updatedAt", ExtArgs["result"]["resourcePurchaseOrder"]>
+  export type ResourcePurchaseOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"resourcePurchaseOrderId" | "purchaseOrderId" | "resourceId" | "orderNumber" | "quantity" | "unitSalesPrice" | "unitPurchasePrice" | "createdAt" | "updatedAt", ExtArgs["result"]["resourcePurchaseOrder"]>
   export type ResourcePurchaseOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     resource?: boolean | ResourceDefaultArgs<ExtArgs>
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
@@ -23838,6 +23853,7 @@ export namespace Prisma {
       resourcePurchaseOrderId: number
       purchaseOrderId: number
       resourceId: number
+      orderNumber: number
       quantity: Prisma.Decimal
       unitSalesPrice: Prisma.Decimal
       unitPurchasePrice: Prisma.Decimal
@@ -24271,6 +24287,7 @@ export namespace Prisma {
     readonly resourcePurchaseOrderId: FieldRef<"ResourcePurchaseOrder", 'Int'>
     readonly purchaseOrderId: FieldRef<"ResourcePurchaseOrder", 'Int'>
     readonly resourceId: FieldRef<"ResourcePurchaseOrder", 'Int'>
+    readonly orderNumber: FieldRef<"ResourcePurchaseOrder", 'Int'>
     readonly quantity: FieldRef<"ResourcePurchaseOrder", 'Decimal'>
     readonly unitSalesPrice: FieldRef<"ResourcePurchaseOrder", 'Decimal'>
     readonly unitPurchasePrice: FieldRef<"ResourcePurchaseOrder", 'Decimal'>
@@ -37763,6 +37780,7 @@ export namespace Prisma {
     resourcePurchaseOrderId: 'resourcePurchaseOrderId',
     purchaseOrderId: 'purchaseOrderId',
     resourceId: 'resourceId',
+    orderNumber: 'orderNumber',
     quantity: 'quantity',
     unitSalesPrice: 'unitSalesPrice',
     unitPurchasePrice: 'unitPurchasePrice',
@@ -39562,6 +39580,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: IntFilter<"ResourcePurchaseOrder"> | number
     purchaseOrderId?: IntFilter<"ResourcePurchaseOrder"> | number
     resourceId?: IntFilter<"ResourcePurchaseOrder"> | number
+    orderNumber?: IntFilter<"ResourcePurchaseOrder"> | number
     quantity?: DecimalFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
@@ -39575,6 +39594,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: SortOrder
     purchaseOrderId?: SortOrder
     resourceId?: SortOrder
+    orderNumber?: SortOrder
     quantity?: SortOrder
     unitSalesPrice?: SortOrder
     unitPurchasePrice?: SortOrder
@@ -39592,6 +39612,7 @@ export namespace Prisma {
     NOT?: ResourcePurchaseOrderWhereInput | ResourcePurchaseOrderWhereInput[]
     purchaseOrderId?: IntFilter<"ResourcePurchaseOrder"> | number
     resourceId?: IntFilter<"ResourcePurchaseOrder"> | number
+    orderNumber?: IntFilter<"ResourcePurchaseOrder"> | number
     quantity?: DecimalFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
@@ -39605,6 +39626,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: SortOrder
     purchaseOrderId?: SortOrder
     resourceId?: SortOrder
+    orderNumber?: SortOrder
     quantity?: SortOrder
     unitSalesPrice?: SortOrder
     unitPurchasePrice?: SortOrder
@@ -39624,6 +39646,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: IntWithAggregatesFilter<"ResourcePurchaseOrder"> | number
     purchaseOrderId?: IntWithAggregatesFilter<"ResourcePurchaseOrder"> | number
     resourceId?: IntWithAggregatesFilter<"ResourcePurchaseOrder"> | number
+    orderNumber?: IntWithAggregatesFilter<"ResourcePurchaseOrder"> | number
     quantity?: DecimalWithAggregatesFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalWithAggregatesFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalWithAggregatesFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
@@ -41836,6 +41859,7 @@ export namespace Prisma {
   }
 
   export type ResourcePurchaseOrderCreateInput = {
+    orderNumber?: number
     quantity: Decimal | DecimalJsLike | number | string
     unitSalesPrice: Decimal | DecimalJsLike | number | string
     unitPurchasePrice: Decimal | DecimalJsLike | number | string
@@ -41849,6 +41873,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: number
     purchaseOrderId: number
     resourceId: number
+    orderNumber?: number
     quantity: Decimal | DecimalJsLike | number | string
     unitSalesPrice: Decimal | DecimalJsLike | number | string
     unitPurchasePrice: Decimal | DecimalJsLike | number | string
@@ -41857,6 +41882,7 @@ export namespace Prisma {
   }
 
   export type ResourcePurchaseOrderUpdateInput = {
+    orderNumber?: IntFieldUpdateOperationsInput | number
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -41870,6 +41896,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: IntFieldUpdateOperationsInput | number
     purchaseOrderId?: IntFieldUpdateOperationsInput | number
     resourceId?: IntFieldUpdateOperationsInput | number
+    orderNumber?: IntFieldUpdateOperationsInput | number
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -41881,6 +41908,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: number
     purchaseOrderId: number
     resourceId: number
+    orderNumber?: number
     quantity: Decimal | DecimalJsLike | number | string
     unitSalesPrice: Decimal | DecimalJsLike | number | string
     unitPurchasePrice: Decimal | DecimalJsLike | number | string
@@ -41889,6 +41917,7 @@ export namespace Prisma {
   }
 
   export type ResourcePurchaseOrderUpdateManyMutationInput = {
+    orderNumber?: IntFieldUpdateOperationsInput | number
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -41900,6 +41929,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: IntFieldUpdateOperationsInput | number
     purchaseOrderId?: IntFieldUpdateOperationsInput | number
     resourceId?: IntFieldUpdateOperationsInput | number
+    orderNumber?: IntFieldUpdateOperationsInput | number
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -44103,6 +44133,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: SortOrder
     purchaseOrderId?: SortOrder
     resourceId?: SortOrder
+    orderNumber?: SortOrder
     quantity?: SortOrder
     unitSalesPrice?: SortOrder
     unitPurchasePrice?: SortOrder
@@ -44114,6 +44145,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: SortOrder
     purchaseOrderId?: SortOrder
     resourceId?: SortOrder
+    orderNumber?: SortOrder
     quantity?: SortOrder
     unitSalesPrice?: SortOrder
     unitPurchasePrice?: SortOrder
@@ -44123,6 +44155,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: SortOrder
     purchaseOrderId?: SortOrder
     resourceId?: SortOrder
+    orderNumber?: SortOrder
     quantity?: SortOrder
     unitSalesPrice?: SortOrder
     unitPurchasePrice?: SortOrder
@@ -44134,6 +44167,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: SortOrder
     purchaseOrderId?: SortOrder
     resourceId?: SortOrder
+    orderNumber?: SortOrder
     quantity?: SortOrder
     unitSalesPrice?: SortOrder
     unitPurchasePrice?: SortOrder
@@ -44145,6 +44179,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: SortOrder
     purchaseOrderId?: SortOrder
     resourceId?: SortOrder
+    orderNumber?: SortOrder
     quantity?: SortOrder
     unitSalesPrice?: SortOrder
     unitPurchasePrice?: SortOrder
@@ -50573,6 +50608,7 @@ export namespace Prisma {
   }
 
   export type ResourcePurchaseOrderCreateWithoutResourceInput = {
+    orderNumber?: number
     quantity: Decimal | DecimalJsLike | number | string
     unitSalesPrice: Decimal | DecimalJsLike | number | string
     unitPurchasePrice: Decimal | DecimalJsLike | number | string
@@ -50584,6 +50620,7 @@ export namespace Prisma {
   export type ResourcePurchaseOrderUncheckedCreateWithoutResourceInput = {
     resourcePurchaseOrderId?: number
     purchaseOrderId: number
+    orderNumber?: number
     quantity: Decimal | DecimalJsLike | number | string
     unitSalesPrice: Decimal | DecimalJsLike | number | string
     unitPurchasePrice: Decimal | DecimalJsLike | number | string
@@ -50654,6 +50691,7 @@ export namespace Prisma {
     resourcePurchaseOrderId?: IntFilter<"ResourcePurchaseOrder"> | number
     purchaseOrderId?: IntFilter<"ResourcePurchaseOrder"> | number
     resourceId?: IntFilter<"ResourcePurchaseOrder"> | number
+    orderNumber?: IntFilter<"ResourcePurchaseOrder"> | number
     quantity?: DecimalFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFilter<"ResourcePurchaseOrder"> | Decimal | DecimalJsLike | number | string
@@ -50744,6 +50782,7 @@ export namespace Prisma {
   }
 
   export type ResourcePurchaseOrderCreateWithoutPurchaseOrderInput = {
+    orderNumber?: number
     quantity: Decimal | DecimalJsLike | number | string
     unitSalesPrice: Decimal | DecimalJsLike | number | string
     unitPurchasePrice: Decimal | DecimalJsLike | number | string
@@ -50755,6 +50794,7 @@ export namespace Prisma {
   export type ResourcePurchaseOrderUncheckedCreateWithoutPurchaseOrderInput = {
     resourcePurchaseOrderId?: number
     resourceId: number
+    orderNumber?: number
     quantity: Decimal | DecimalJsLike | number | string
     unitSalesPrice: Decimal | DecimalJsLike | number | string
     unitPurchasePrice: Decimal | DecimalJsLike | number | string
@@ -54489,6 +54529,7 @@ export namespace Prisma {
   export type ResourcePurchaseOrderCreateManyResourceInput = {
     resourcePurchaseOrderId?: number
     purchaseOrderId: number
+    orderNumber?: number
     quantity: Decimal | DecimalJsLike | number | string
     unitSalesPrice: Decimal | DecimalJsLike | number | string
     unitPurchasePrice: Decimal | DecimalJsLike | number | string
@@ -54497,6 +54538,7 @@ export namespace Prisma {
   }
 
   export type ResourcePurchaseOrderUpdateWithoutResourceInput = {
+    orderNumber?: IntFieldUpdateOperationsInput | number
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -54508,6 +54550,7 @@ export namespace Prisma {
   export type ResourcePurchaseOrderUncheckedUpdateWithoutResourceInput = {
     resourcePurchaseOrderId?: IntFieldUpdateOperationsInput | number
     purchaseOrderId?: IntFieldUpdateOperationsInput | number
+    orderNumber?: IntFieldUpdateOperationsInput | number
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -54518,6 +54561,7 @@ export namespace Prisma {
   export type ResourcePurchaseOrderUncheckedUpdateManyWithoutResourceInput = {
     resourcePurchaseOrderId?: IntFieldUpdateOperationsInput | number
     purchaseOrderId?: IntFieldUpdateOperationsInput | number
+    orderNumber?: IntFieldUpdateOperationsInput | number
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -54528,6 +54572,7 @@ export namespace Prisma {
   export type ResourcePurchaseOrderCreateManyPurchaseOrderInput = {
     resourcePurchaseOrderId?: number
     resourceId: number
+    orderNumber?: number
     quantity: Decimal | DecimalJsLike | number | string
     unitSalesPrice: Decimal | DecimalJsLike | number | string
     unitPurchasePrice: Decimal | DecimalJsLike | number | string
@@ -54552,6 +54597,7 @@ export namespace Prisma {
   }
 
   export type ResourcePurchaseOrderUpdateWithoutPurchaseOrderInput = {
+    orderNumber?: IntFieldUpdateOperationsInput | number
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -54563,6 +54609,7 @@ export namespace Prisma {
   export type ResourcePurchaseOrderUncheckedUpdateWithoutPurchaseOrderInput = {
     resourcePurchaseOrderId?: IntFieldUpdateOperationsInput | number
     resourceId?: IntFieldUpdateOperationsInput | number
+    orderNumber?: IntFieldUpdateOperationsInput | number
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -54573,6 +54620,7 @@ export namespace Prisma {
   export type ResourcePurchaseOrderUncheckedUpdateManyWithoutPurchaseOrderInput = {
     resourcePurchaseOrderId?: IntFieldUpdateOperationsInput | number
     resourceId?: IntFieldUpdateOperationsInput | number
+    orderNumber?: IntFieldUpdateOperationsInput | number
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitSalesPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     unitPurchasePrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string

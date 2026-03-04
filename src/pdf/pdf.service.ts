@@ -45,6 +45,13 @@ export class PdfService {
       const c = currency.toUpperCase();
       return c === 'SOLES' || c === 'PEN' ? 'S/.' : '$';
     };
+    const sanitizeFileName = (value: string) => {
+      // Replace reserved characters and collapse whitespace
+      return value
+        .replace(/[\\/:*?"<>|]/g, '-')
+        .replace(/\s+/g, ' ')
+        .trim();
+    };
     const fmt = (n: number) =>
       new Intl.NumberFormat('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
     const fmtUnit = (n: number) =>
@@ -523,7 +530,9 @@ export class PdfService {
       const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || path.resolve(__dirname, '..', '..', 'output');
       if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
-      const fileName = `orden-compra-${purchaseOrderId}.pdf`;
+      const rawCode = purchaseOrder.code || '';
+      const safeCode = sanitizeFileName(rawCode) || 'SIN-CODIGO';
+      const fileName = `OC-${safeCode}.pdf`;
       const outputPath = path.resolve(outputDir, fileName);
 
       const pdfDoc = printer.createPdfKitDocument(docDefinition);

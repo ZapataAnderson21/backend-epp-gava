@@ -111,6 +111,10 @@ export class PurchaseOrderService {
         project: true,
         supplier: true,
         resources: {
+          orderBy: [
+            { orderNumber: 'asc' },
+            { createdAt: 'desc' },
+          ],
           include: {
             resource: true,
           },
@@ -128,6 +132,7 @@ export class PurchaseOrderService {
     const processedPurchaseOrder = {
       ...purchaseOrder,
       code: arrayCode[1],
+      codeComplete: purchaseOrder.code,
       status: PurchaseOrderStatusLabelEs[purchaseOrder.status as keyof typeof PurchaseOrderStatusLabelEs] || 'Desconocido'
     };
 

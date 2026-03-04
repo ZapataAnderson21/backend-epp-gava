@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsInt, IsNotEmpty, IsNumber, IsPositive, Min } from "class-validator";
+import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, Min } from "class-validator";
 
 export class CreateResourcePurchaseOrderDto {
   @ApiProperty({ example: 1 }) 
@@ -16,6 +16,13 @@ export class CreateResourcePurchaseOrderDto {
   @IsPositive()
   @IsNotEmpty({ message: 'El ID del recurso es obligatorio.' })
   resourceId!: number;
+
+  @ApiPropertyOptional({ example: 1, minimum: 0, description: 'Numero de orden del recurso en la OC.' })
+  @Type(() => Number)
+  @IsInt()
+  @Min(0, { message: 'El numero de orden no puede ser negativo.' })
+  @IsOptional()
+  orderNumber?: number;
 
   @ApiProperty({ example: 10.5, minimum: 0 }) 
   @Type(() => Number) 
