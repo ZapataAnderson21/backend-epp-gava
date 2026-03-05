@@ -342,10 +342,18 @@ export class UserService {
 
     await this.findOne(id);
 
+    const data = { ...updateUserDto } as Partial<User>;
+
+    if (typeof data.password === 'string' && data.password.trim().length > 0) {
+      data.password = await hash(data.password, 10);
+    } else {
+      delete data.password;
+    }
+
     this.logger.log(`Updating user with id: ${id}`);
     const updatedUser = await this.prisma.user.update({
       where: { userId: id },
-      data: updateUserDto
+      data
     });
 
     if (!updatedUser) {
