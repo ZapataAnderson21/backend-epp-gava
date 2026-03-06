@@ -3,6 +3,7 @@ import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Currency, CurrencyLabelEs } from './enum/currency.enum';
+import { SupplierDocumentType } from './enum/document-type.enum';
 
 @Injectable()
 export class SupplierService {
@@ -11,10 +12,67 @@ export class SupplierService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
+  private resolveDocumentType(
+    inputType?: SupplierDocumentType,
+    currentType?: SupplierDocumentType | string,
+  ): SupplierDocumentType {
+    if (inputType) {
+      return inputType;
+    }
+
+    return currentType === SupplierDocumentType.dni
+      ? SupplierDocumentType.dni
+      : SupplierDocumentType.ruc;
+  }
+
   async create(createSupplierDto: CreateSupplierDto) {
     this.logger.log('Creating a new supplier');
+    const documentType = this.resolveDocumentType(createSupplierDto.documentType);
+    const data: Omit<CreateSupplierDto, 'documentType' | 'dni' | 'ruc'> & {
+      documentType: SupplierDocumentType;
+      dni?: string;
+      ruc?: string;
+    } = {
+      ...createSupplierDto,
+      documentType,
+    };
+
+    if (documentType === SupplierDocumentType.ruc) {
+      if (!createSupplierDto.ruc) {
+        throw new BadRequestException('El RUC es obligatorio.');
+      }
+
+      const byRuc = await this.findByRuc(createSupplierDto.ruc);
+      if (byRuc) {
+        throw new ConflictException({
+          statusCode: HttpStatus.CONFLICT,
+          message: 'Ya existe un proveedor con ese RUC.',
+          data: null,
+        });
+      }
+
+      data.ruc = createSupplierDto.ruc;
+      data.dni = undefined;
+    } else {
+      if (!createSupplierDto.dni) {
+        throw new BadRequestException('El DNI es obligatorio.');
+      }
+
+      const byDni = await this.findByDni(createSupplierDto.dni);
+      if (byDni) {
+        throw new ConflictException({
+          statusCode: HttpStatus.CONFLICT,
+          message: 'Ya existe un proveedor con ese DNI.',
+          data: null,
+        });
+      }
+
+      data.dni = createSupplierDto.dni;
+      data.ruc = undefined;
+    }
+
     const supplier = await this.prismaService.supplier.create({
-      data: createSupplierDto,
+      data,
     });
 
     if(!supplier) {
@@ -120,24 +178,69 @@ export class SupplierService {
       }
     }
 
-    // Si cambia el RUC, validar conflicto (normaliza espacios)
-    if (
-      updateSupplierDto.ruc &&
-      updateSupplierDto.ruc.trim() !== (current.ruc ?? '').trim()
-    ) {
-      const byRuc = await this.findByRuc(updateSupplierDto.ruc);
-      if (byRuc && byRuc.supplierId !== supplierId) {
-        throw new ConflictException({
-          statusCode: HttpStatus.CONFLICT,
-          message: 'Ya existe un proveedor con ese RUC.',
-          data: null,
-        });
+    const updateData: Omit<UpdateSupplierDto, 'documentType' | 'dni' | 'ruc'> & {
+      documentType?: SupplierDocumentType;
+      dni?: string | null;
+      ruc?: string | null;
+    } = { ...updateSupplierDto };
+
+    const shouldProcessDocument =
+      updateSupplierDto.documentType !== undefined ||
+      updateSupplierDto.ruc !== undefined ||
+      updateSupplierDto.dni !== undefined;
+
+    if (shouldProcessDocument) {
+      const nextDocumentType = this.resolveDocumentType(
+        updateSupplierDto.documentType,
+        current.documentType,
+      );
+
+      if (nextDocumentType === SupplierDocumentType.ruc) {
+        const nextRuc = updateSupplierDto.ruc ?? current.ruc;
+        if (!nextRuc) {
+          throw new BadRequestException('El RUC es obligatorio.');
+        }
+
+        if (nextRuc.trim() !== (current.ruc ?? '').trim()) {
+          const byRuc = await this.findByRuc(nextRuc);
+          if (byRuc && byRuc.supplierId !== supplierId) {
+            throw new ConflictException({
+              statusCode: HttpStatus.CONFLICT,
+              message: 'Ya existe un proveedor con ese RUC.',
+              data: null,
+            });
+          }
+        }
+
+        updateData.documentType = nextDocumentType;
+        updateData.ruc = nextRuc;
+        updateData.dni = null;
+      } else {
+        const nextDni = updateSupplierDto.dni ?? current.dni;
+        if (!nextDni) {
+          throw new BadRequestException('El DNI es obligatorio.');
+        }
+
+        if (nextDni.trim() !== (current.dni ?? '').trim()) {
+          const byDni = await this.findByDni(nextDni);
+          if (byDni && byDni.supplierId !== supplierId) {
+            throw new ConflictException({
+              statusCode: HttpStatus.CONFLICT,
+              message: 'Ya existe un proveedor con ese DNI.',
+              data: null,
+            });
+          }
+        }
+
+        updateData.documentType = nextDocumentType;
+        updateData.dni = nextDni;
+        updateData.ruc = null;
       }
     }
 
     const supplier = await this.prismaService.supplier.update({
       where: { supplierId },
-      data: updateSupplierDto,
+      data: updateData,
     });
 
     if (!supplier) {
@@ -209,6 +312,24 @@ export class SupplierService {
     }
 
     this.logger.log(`Supplier with RUC: ${ruc} found`);
+    return supplier;
+  }
+
+  async findByDni(dni: string) {
+    this.logger.log(`Searching supplier by DNI: ${dni}`);
+    const supplier = await this.prismaService.supplier.findUnique({
+      where: {
+        dni,
+        deletedAt: null,
+      },
+    });
+
+    if (!supplier) {
+      this.logger.warn(`Supplier with DNI: ${dni} not found`);
+      return null;
+    }
+
+    this.logger.log(`Supplier with DNI: ${dni} found`);
     return supplier;
   }
 

@@ -253,7 +253,9 @@ exports.Prisma.SupplierScalarFieldEnum = {
   phone: 'phone',
   email: 'email',
   address: 'address',
+  documentType: 'documentType',
   ruc: 'ruc',
+  dni: 'dni',
   accountNumber: 'accountNumber',
   bank: 'bank',
   currency: 'currency',
@@ -490,6 +492,11 @@ exports.WorkerType = exports.$Enums.WorkerType = {
   administrator: 'administrator',
   manager: 'manager',
   unspecified: 'unspecified'
+};
+
+exports.SupplierDocumentType = exports.$Enums.SupplierDocumentType = {
+  ruc: 'ruc',
+  dni: 'dni'
 };
 
 exports.Currency = exports.$Enums.Currency = {

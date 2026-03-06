@@ -218,6 +218,14 @@ export const WorkerType: {
 export type WorkerType = (typeof WorkerType)[keyof typeof WorkerType]
 
 
+export const SupplierDocumentType: {
+  ruc: 'ruc',
+  dni: 'dni'
+};
+
+export type SupplierDocumentType = (typeof SupplierDocumentType)[keyof typeof SupplierDocumentType]
+
+
 export const PurchaseOrderType: {
   materials: 'materials',
   services: 'services'
@@ -339,6 +347,10 @@ export const EmergencyStatus: typeof $Enums.EmergencyStatus
 export type WorkerType = $Enums.WorkerType
 
 export const WorkerType: typeof $Enums.WorkerType
+
+export type SupplierDocumentType = $Enums.SupplierDocumentType
+
+export const SupplierDocumentType: typeof $Enums.SupplierDocumentType
 
 export type PurchaseOrderType = $Enums.PurchaseOrderType
 
@@ -18591,7 +18603,9 @@ export namespace Prisma {
     phone: string | null
     email: string | null
     address: string | null
+    documentType: $Enums.SupplierDocumentType | null
     ruc: string | null
+    dni: string | null
     accountNumber: string | null
     bank: string | null
     currency: $Enums.Currency | null
@@ -18607,7 +18621,9 @@ export namespace Prisma {
     phone: string | null
     email: string | null
     address: string | null
+    documentType: $Enums.SupplierDocumentType | null
     ruc: string | null
+    dni: string | null
     accountNumber: string | null
     bank: string | null
     currency: $Enums.Currency | null
@@ -18623,7 +18639,9 @@ export namespace Prisma {
     phone: number
     email: number
     address: number
+    documentType: number
     ruc: number
+    dni: number
     accountNumber: number
     bank: number
     currency: number
@@ -18649,7 +18667,9 @@ export namespace Prisma {
     phone?: true
     email?: true
     address?: true
+    documentType?: true
     ruc?: true
+    dni?: true
     accountNumber?: true
     bank?: true
     currency?: true
@@ -18665,7 +18685,9 @@ export namespace Prisma {
     phone?: true
     email?: true
     address?: true
+    documentType?: true
     ruc?: true
+    dni?: true
     accountNumber?: true
     bank?: true
     currency?: true
@@ -18681,7 +18703,9 @@ export namespace Prisma {
     phone?: true
     email?: true
     address?: true
+    documentType?: true
     ruc?: true
+    dni?: true
     accountNumber?: true
     bank?: true
     currency?: true
@@ -18784,7 +18808,9 @@ export namespace Prisma {
     phone: string
     email: string | null
     address: string | null
-    ruc: string
+    documentType: $Enums.SupplierDocumentType
+    ruc: string | null
+    dni: string | null
     accountNumber: string
     bank: string
     currency: $Enums.Currency
@@ -18819,7 +18845,9 @@ export namespace Prisma {
     phone?: boolean
     email?: boolean
     address?: boolean
+    documentType?: boolean
     ruc?: boolean
+    dni?: boolean
     accountNumber?: boolean
     bank?: boolean
     currency?: boolean
@@ -18837,7 +18865,9 @@ export namespace Prisma {
     phone?: boolean
     email?: boolean
     address?: boolean
+    documentType?: boolean
     ruc?: boolean
+    dni?: boolean
     accountNumber?: boolean
     bank?: boolean
     currency?: boolean
@@ -18853,7 +18883,9 @@ export namespace Prisma {
     phone?: boolean
     email?: boolean
     address?: boolean
+    documentType?: boolean
     ruc?: boolean
+    dni?: boolean
     accountNumber?: boolean
     bank?: boolean
     currency?: boolean
@@ -18869,7 +18901,9 @@ export namespace Prisma {
     phone?: boolean
     email?: boolean
     address?: boolean
+    documentType?: boolean
     ruc?: boolean
+    dni?: boolean
     accountNumber?: boolean
     bank?: boolean
     currency?: boolean
@@ -18878,7 +18912,7 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type SupplierOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"supplierId" | "name" | "contactName" | "phone" | "email" | "address" | "ruc" | "accountNumber" | "bank" | "currency" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["supplier"]>
+  export type SupplierOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"supplierId" | "name" | "contactName" | "phone" | "email" | "address" | "documentType" | "ruc" | "dni" | "accountNumber" | "bank" | "currency" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["supplier"]>
   export type SupplierInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     purchaseOrders?: boolean | Supplier$purchaseOrdersArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
@@ -18898,7 +18932,9 @@ export namespace Prisma {
       phone: string
       email: string | null
       address: string | null
-      ruc: string
+      documentType: $Enums.SupplierDocumentType
+      ruc: string | null
+      dni: string | null
       accountNumber: string
       bank: string
       currency: $Enums.Currency
@@ -19335,7 +19371,9 @@ export namespace Prisma {
     readonly phone: FieldRef<"Supplier", 'String'>
     readonly email: FieldRef<"Supplier", 'String'>
     readonly address: FieldRef<"Supplier", 'String'>
+    readonly documentType: FieldRef<"Supplier", 'SupplierDocumentType'>
     readonly ruc: FieldRef<"Supplier", 'String'>
+    readonly dni: FieldRef<"Supplier", 'String'>
     readonly accountNumber: FieldRef<"Supplier", 'String'>
     readonly bank: FieldRef<"Supplier", 'String'>
     readonly currency: FieldRef<"Supplier", 'Currency'>
@@ -37709,7 +37747,9 @@ export namespace Prisma {
     phone: 'phone',
     email: 'email',
     address: 'address',
+    documentType: 'documentType',
     ruc: 'ruc',
+    dni: 'dni',
     accountNumber: 'accountNumber',
     bank: 'bank',
     currency: 'currency',
@@ -38092,6 +38132,20 @@ export namespace Prisma {
    * Reference to a field of type 'WorkerType[]'
    */
   export type ListEnumWorkerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkerType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupplierDocumentType'
+   */
+  export type EnumSupplierDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupplierDocumentType'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupplierDocumentType[]'
+   */
+  export type ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupplierDocumentType[]'>
     
 
 
@@ -39185,7 +39239,9 @@ export namespace Prisma {
     phone?: StringFilter<"Supplier"> | string
     email?: StringNullableFilter<"Supplier"> | string | null
     address?: StringNullableFilter<"Supplier"> | string | null
-    ruc?: StringFilter<"Supplier"> | string
+    documentType?: EnumSupplierDocumentTypeFilter<"Supplier"> | $Enums.SupplierDocumentType
+    ruc?: StringNullableFilter<"Supplier"> | string | null
+    dni?: StringNullableFilter<"Supplier"> | string | null
     accountNumber?: StringFilter<"Supplier"> | string
     bank?: StringFilter<"Supplier"> | string
     currency?: EnumCurrencyFilter<"Supplier"> | $Enums.Currency
@@ -39202,7 +39258,9 @@ export namespace Prisma {
     phone?: SortOrder
     email?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
-    ruc?: SortOrder
+    documentType?: SortOrder
+    ruc?: SortOrderInput | SortOrder
+    dni?: SortOrderInput | SortOrder
     accountNumber?: SortOrder
     bank?: SortOrder
     currency?: SortOrder
@@ -39217,12 +39275,14 @@ export namespace Prisma {
     name?: string
     email?: string
     ruc?: string
+    dni?: string
     AND?: SupplierWhereInput | SupplierWhereInput[]
     OR?: SupplierWhereInput[]
     NOT?: SupplierWhereInput | SupplierWhereInput[]
     contactName?: StringFilter<"Supplier"> | string
     phone?: StringFilter<"Supplier"> | string
     address?: StringNullableFilter<"Supplier"> | string | null
+    documentType?: EnumSupplierDocumentTypeFilter<"Supplier"> | $Enums.SupplierDocumentType
     accountNumber?: StringFilter<"Supplier"> | string
     bank?: StringFilter<"Supplier"> | string
     currency?: EnumCurrencyFilter<"Supplier"> | $Enums.Currency
@@ -39230,7 +39290,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Supplier"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Supplier"> | Date | string | null
     purchaseOrders?: PurchaseOrderListRelationFilter
-  }, "supplierId" | "name" | "email" | "ruc">
+  }, "supplierId" | "name" | "email" | "ruc" | "dni">
 
   export type SupplierOrderByWithAggregationInput = {
     supplierId?: SortOrder
@@ -39239,7 +39299,9 @@ export namespace Prisma {
     phone?: SortOrder
     email?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
-    ruc?: SortOrder
+    documentType?: SortOrder
+    ruc?: SortOrderInput | SortOrder
+    dni?: SortOrderInput | SortOrder
     accountNumber?: SortOrder
     bank?: SortOrder
     currency?: SortOrder
@@ -39263,7 +39325,9 @@ export namespace Prisma {
     phone?: StringWithAggregatesFilter<"Supplier"> | string
     email?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
     address?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
-    ruc?: StringWithAggregatesFilter<"Supplier"> | string
+    documentType?: EnumSupplierDocumentTypeWithAggregatesFilter<"Supplier"> | $Enums.SupplierDocumentType
+    ruc?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
+    dni?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
     accountNumber?: StringWithAggregatesFilter<"Supplier"> | string
     bank?: StringWithAggregatesFilter<"Supplier"> | string
     currency?: EnumCurrencyWithAggregatesFilter<"Supplier"> | $Enums.Currency
@@ -41422,7 +41486,9 @@ export namespace Prisma {
     phone: string
     email?: string | null
     address?: string | null
-    ruc: string
+    documentType?: $Enums.SupplierDocumentType
+    ruc?: string | null
+    dni?: string | null
     accountNumber: string
     bank: string
     currency?: $Enums.Currency
@@ -41439,7 +41505,9 @@ export namespace Prisma {
     phone: string
     email?: string | null
     address?: string | null
-    ruc: string
+    documentType?: $Enums.SupplierDocumentType
+    ruc?: string | null
+    dni?: string | null
     accountNumber: string
     bank: string
     currency?: $Enums.Currency
@@ -41455,7 +41523,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    ruc?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
+    ruc?: NullableStringFieldUpdateOperationsInput | string | null
+    dni?: NullableStringFieldUpdateOperationsInput | string | null
     accountNumber?: StringFieldUpdateOperationsInput | string
     bank?: StringFieldUpdateOperationsInput | string
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -41472,7 +41542,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    ruc?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
+    ruc?: NullableStringFieldUpdateOperationsInput | string | null
+    dni?: NullableStringFieldUpdateOperationsInput | string | null
     accountNumber?: StringFieldUpdateOperationsInput | string
     bank?: StringFieldUpdateOperationsInput | string
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -41489,7 +41561,9 @@ export namespace Prisma {
     phone: string
     email?: string | null
     address?: string | null
-    ruc: string
+    documentType?: $Enums.SupplierDocumentType
+    ruc?: string | null
+    dni?: string | null
     accountNumber: string
     bank: string
     currency?: $Enums.Currency
@@ -41504,7 +41578,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    ruc?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
+    ruc?: NullableStringFieldUpdateOperationsInput | string | null
+    dni?: NullableStringFieldUpdateOperationsInput | string | null
     accountNumber?: StringFieldUpdateOperationsInput | string
     bank?: StringFieldUpdateOperationsInput | string
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -41520,7 +41596,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    ruc?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
+    ruc?: NullableStringFieldUpdateOperationsInput | string | null
+    dni?: NullableStringFieldUpdateOperationsInput | string | null
     accountNumber?: StringFieldUpdateOperationsInput | string
     bank?: StringFieldUpdateOperationsInput | string
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -43707,6 +43785,13 @@ export namespace Prisma {
     _max?: NestedEnumWorkerTypeFilter<$PrismaModel>
   }
 
+  export type EnumSupplierDocumentTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupplierDocumentType | EnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SupplierDocumentType[] | ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupplierDocumentType[] | ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupplierDocumentTypeFilter<$PrismaModel> | $Enums.SupplierDocumentType
+  }
+
   export type EnumCurrencyFilter<$PrismaModel = never> = {
     equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>
     in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
@@ -43721,7 +43806,9 @@ export namespace Prisma {
     phone?: SortOrder
     email?: SortOrder
     address?: SortOrder
+    documentType?: SortOrder
     ruc?: SortOrder
+    dni?: SortOrder
     accountNumber?: SortOrder
     bank?: SortOrder
     currency?: SortOrder
@@ -43741,7 +43828,9 @@ export namespace Prisma {
     phone?: SortOrder
     email?: SortOrder
     address?: SortOrder
+    documentType?: SortOrder
     ruc?: SortOrder
+    dni?: SortOrder
     accountNumber?: SortOrder
     bank?: SortOrder
     currency?: SortOrder
@@ -43757,7 +43846,9 @@ export namespace Prisma {
     phone?: SortOrder
     email?: SortOrder
     address?: SortOrder
+    documentType?: SortOrder
     ruc?: SortOrder
+    dni?: SortOrder
     accountNumber?: SortOrder
     bank?: SortOrder
     currency?: SortOrder
@@ -43768,6 +43859,16 @@ export namespace Prisma {
 
   export type SupplierSumOrderByAggregateInput = {
     supplierId?: SortOrder
+  }
+
+  export type EnumSupplierDocumentTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupplierDocumentType | EnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SupplierDocumentType[] | ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupplierDocumentType[] | ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupplierDocumentTypeWithAggregatesFilter<$PrismaModel> | $Enums.SupplierDocumentType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupplierDocumentTypeFilter<$PrismaModel>
+    _max?: NestedEnumSupplierDocumentTypeFilter<$PrismaModel>
   }
 
   export type EnumCurrencyWithAggregatesFilter<$PrismaModel = never> = {
@@ -46290,6 +46391,10 @@ export namespace Prisma {
     connect?: PurchaseOrderWhereUniqueInput | PurchaseOrderWhereUniqueInput[]
   }
 
+  export type EnumSupplierDocumentTypeFieldUpdateOperationsInput = {
+    set?: $Enums.SupplierDocumentType
+  }
+
   export type EnumCurrencyFieldUpdateOperationsInput = {
     set?: $Enums.Currency
   }
@@ -47433,11 +47538,28 @@ export namespace Prisma {
     _max?: NestedEnumWorkerTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumSupplierDocumentTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupplierDocumentType | EnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SupplierDocumentType[] | ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupplierDocumentType[] | ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupplierDocumentTypeFilter<$PrismaModel> | $Enums.SupplierDocumentType
+  }
+
   export type NestedEnumCurrencyFilter<$PrismaModel = never> = {
     equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>
     in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
     notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
     not?: NestedEnumCurrencyFilter<$PrismaModel> | $Enums.Currency
+  }
+
+  export type NestedEnumSupplierDocumentTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupplierDocumentType | EnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SupplierDocumentType[] | ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupplierDocumentType[] | ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupplierDocumentTypeWithAggregatesFilter<$PrismaModel> | $Enums.SupplierDocumentType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupplierDocumentTypeFilter<$PrismaModel>
+    _max?: NestedEnumSupplierDocumentTypeFilter<$PrismaModel>
   }
 
   export type NestedEnumCurrencyWithAggregatesFilter<$PrismaModel = never> = {
@@ -50751,7 +50873,9 @@ export namespace Prisma {
     phone: string
     email?: string | null
     address?: string | null
-    ruc: string
+    documentType?: $Enums.SupplierDocumentType
+    ruc?: string | null
+    dni?: string | null
     accountNumber: string
     bank: string
     currency?: $Enums.Currency
@@ -50767,7 +50891,9 @@ export namespace Prisma {
     phone: string
     email?: string | null
     address?: string | null
-    ruc: string
+    documentType?: $Enums.SupplierDocumentType
+    ruc?: string | null
+    dni?: string | null
     accountNumber: string
     bank: string
     currency?: $Enums.Currency
@@ -50922,7 +51048,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    ruc?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
+    ruc?: NullableStringFieldUpdateOperationsInput | string | null
+    dni?: NullableStringFieldUpdateOperationsInput | string | null
     accountNumber?: StringFieldUpdateOperationsInput | string
     bank?: StringFieldUpdateOperationsInput | string
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -50938,7 +51066,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    ruc?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
+    ruc?: NullableStringFieldUpdateOperationsInput | string | null
+    dni?: NullableStringFieldUpdateOperationsInput | string | null
     accountNumber?: StringFieldUpdateOperationsInput | string
     bank?: StringFieldUpdateOperationsInput | string
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency

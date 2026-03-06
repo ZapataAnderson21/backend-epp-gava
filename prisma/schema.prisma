@@ -273,6 +273,11 @@ enum WorkerType {
   unspecified
 }
 
+enum SupplierDocumentType {
+  ruc
+  dni
+}
+
 model Supplier {
   supplierId     Int              @id @default(autoincrement())
   name           String           @unique
@@ -280,7 +285,9 @@ model Supplier {
   phone          String
   email          String?          @db.Citext @unique
   address        String?
-  ruc            String           @unique
+  documentType   SupplierDocumentType @default(ruc)
+  ruc            String?          @unique @db.VarChar(11)
+  dni            String?          @unique @db.VarChar(8)
   accountNumber  String
   bank           String
   currency       Currency         @default(PEN)
@@ -291,6 +298,9 @@ model Supplier {
   purchaseOrders PurchaseOrder[]
 
   @@index([name])
+  @@index([documentType])
+  @@index([ruc])
+  @@index([dni])
   @@index([createdAt])
   @@index([deletedAt])
 }

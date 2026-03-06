@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEmail, IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, Length, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, Length, MaxLength, MinLength, ValidateIf } from "class-validator";
 import { Currency } from '../enum/currency.enum';
+import { SupplierDocumentType } from '../enum/document-type.enum';
 import { Transform } from "class-transformer";
 
 /** Helpers de transformación */
@@ -42,11 +43,28 @@ export class CreateSupplierDto {
   @IsOptional()
   address?: string;
 
-  @ApiProperty({ example: '20123456789' }) 
-  @IsString() 
+  @ApiPropertyOptional({ enum: SupplierDocumentType, enumName: 'SupplierDocumentType', example: SupplierDocumentType.ruc })
+  @IsOptional()
+  @IsEnum(SupplierDocumentType)
+  documentType?: SupplierDocumentType;
+
+  @ApiProperty({ example: '20123456789' })
+  @Transform(({ value }) => toUndefIfEmpty(value))
+  @ValidateIf((o) => (o.documentType ?? SupplierDocumentType.ruc) === SupplierDocumentType.ruc)
+  @IsString()
+  @IsNotEmpty({ message: 'El RUC es obligatorio.' })
   @Length(11, 11, { message: 'El RUC debe tener exactamente 11 dígitos.' })
   @IsNumberString({ no_symbols: true }, { message: 'El RUC debe contener solo dígitos.' })
-  ruc!: string;
+  ruc?: string;
+
+  @ApiPropertyOptional({ example: '12345678' })
+  @Transform(({ value }) => toUndefIfEmpty(value))
+  @ValidateIf((o) => (o.documentType ?? SupplierDocumentType.ruc) === SupplierDocumentType.dni)
+  @IsString()
+  @IsNotEmpty({ message: 'El DNI es obligatorio.' })
+  @Length(8, 8, { message: 'El DNI debe tener exactamente 8 dígitos.' })
+  @IsNumberString({ no_symbols: true }, { message: 'El DNI debe contener solo dígitos.' })
+  dni?: string;
 
   @ApiProperty({ example: '123-456-7890' }) 
   @IsString()

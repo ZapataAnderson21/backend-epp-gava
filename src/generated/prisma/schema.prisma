@@ -273,24 +273,34 @@ enum WorkerType {
   unspecified
 }
 
+enum SupplierDocumentType {
+  ruc
+  dni
+}
+
 model Supplier {
-  supplierId    Int       @id @default(autoincrement())
-  name          String    @unique
+  supplierId    Int                  @id @default(autoincrement())
+  name          String               @unique
   contactName   String
   phone         String
-  email         String?   @unique @db.Citext
+  email         String?              @unique @db.Citext
   address       String?
-  ruc           String    @unique
+  documentType  SupplierDocumentType @default(ruc)
+  ruc           String?              @unique @db.VarChar(11)
+  dni           String?              @unique @db.VarChar(8)
   accountNumber String
   bank          String
-  currency      Currency  @default(PEN)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  currency      Currency             @default(PEN)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
   deletedAt     DateTime?
 
   purchaseOrders PurchaseOrder[]
 
   @@index([name])
+  @@index([documentType])
+  @@index([ruc])
+  @@index([dni])
   @@index([createdAt])
   @@index([deletedAt])
 }
