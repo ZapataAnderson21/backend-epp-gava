@@ -13,7 +13,7 @@ export class ElementRequestService {
   
   async create(createElementRequestDto: CreateElementRequestDto) {
    
-    await this.requestExistsAndIsDraft(createElementRequestDto.requestId);
+    await this.requestExists(createElementRequestDto.requestId);
 
     this.logger.log(`Creating Element Request with data: ${JSON.stringify(createElementRequestDto)}`);
     const newElementRequest = await this.prismaService.elementRequest.create({
@@ -130,6 +130,24 @@ export class ElementRequestService {
       data: deletedElementRequest
     };
   }
+
+  async requestExists(requestId: number) {
+    const request = await this.prismaService.request.findUnique({
+      where: { requestId },
+    });
+
+    if (!request) {
+      this.logger.error(`Associated request with ID ${requestId} not found`);
+      throw new NotFoundException('Associated request not found');
+    }
+
+    this.logger.log(`Associated request with ID ${requestId} found`);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'La solicitud asociada fue encontrada exitosamente.',
+      data: request
+    };
+  }
   
 
   async requestExistsAndIsDraft(requestId: number) {
@@ -141,7 +159,7 @@ export class ElementRequestService {
       this.logger.error(`Associated request with ID ${requestId} not found`);
       throw new NotFoundException('Associated request not found');
     }
-
+    
     if (request.status !== 'draft') {
       this.logger.error(`Request with ID ${requestId} is not in draft status`);
       throw new BadRequestException('The operation cannot be performed because the request is not in draft status');
