@@ -4,6 +4,7 @@ import * as path from 'path';
 import PdfPrinter = require('pdfmake');
 import { PrismaService } from 'src/prisma/prisma.service';
 import { logo, logoPO, sgs, iso9001, hodelpe } from './images';
+import { credit_cardIcon, locationIcon, mailIcon, phoneIcon, webIcon } from './icons';
 import { ConfigService } from '@nestjs/config';
 import { RequestStatus, RequestType } from 'src/request/enum';
 import { PaymentMethodLabelEs, PurchaseOrderTypeLabelEs } from 'src/purchase-order/enum';
@@ -546,6 +547,340 @@ export class PdfService {
       });
 
       return { outputPath, fileName }; // ✅ ahora sí, el archivo está completo
+    } catch (error) {
+      this.logger.error('Error generating PDF:', error);
+      throw new InternalServerErrorException('Error generating PDF');
+    }
+  }
+
+
+  async generateQuotationPdf(quotationId: number) {
+    const quotation = await this.prismaService.quotation.findUnique({
+      where: { quotationId },
+      include: {
+        client: true,
+        items: {
+          orderBy: [{ orderNumber: 'asc' }, { createdAt: 'desc' }],
+        },
+      },
+    });
+
+    if (!quotation) {
+      this.logger.error('Quotation not found');
+      throw new NotFoundException('Quotation not found');
+    }
+
+    const sanitizeFileName = (value: string) => {
+      return value.replace(/[\\/:*?"<>|]/g, '-').replace(/\s+/g, ' ').trim();
+    };
+    const fmt = (n: number) =>
+      new Intl.NumberFormat('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+    const formatDate = (d: Date | string | number) => {
+      const date = new Date(d);
+      const dd = date.getDate().toString().padStart(2, '0');
+      const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+      const yyyy = date.getFullYear();
+      return `${dd}/${mm}/${yyyy}`;
+    };
+
+    const company = {
+      ruc: '20480347138',
+      bank: 'BBVA',
+      accountNumber: '0011-0216-0100000630',
+      interbankAccount: '0112160001000000630 92',
+      detractionAccount: '230-003181',
+      phone: '978 994 903 / 950 528 865',
+      web: 'www.gavacyelectricidad.com',
+      email: 'logistica@gavacyc.com, admin@gavacyc.com',
+      address1: 'Calle Vicente de la Vega No 1488 - 5to piso, Chiclayo',
+      address2: 'Mz C Dpto 206 Torre 4 Condominio Garden 360. Urb Las Palmeras del Chipre, Piura.',
+    };
+
+    const issuedAtStr = formatDate(quotation.createdAt || new Date());
+    const headingRed = '#b00000';
+    const borderColor = '#d1d5db';
+
+    const fonts = {
+      Roboto: {
+        normal: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
+        bold: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
+        italics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
+        bolditalics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-BoldItalic.ttf'),
+      },
+    };
+    const printer = new PdfPrinter(fonts);
+
+    const HEADER_HEIGHT = 80;
+    const CERT_SIZE = 50;
+    const CERT_GAP = 10;
+    const CERT_MARGIN_TOP = Math.max(0, (HEADER_HEIGHT - CERT_SIZE) / 2);
+
+    const headerBlock = [
+      {
+        table: {
+          widths: [300, '*'],
+          body: [[
+            {
+              image: logo,
+              fit: [300, HEADER_HEIGHT],
+              alignment: 'left',
+              margin: [0, 0, 10, 0],
+            },
+            {
+              margin: [0, CERT_MARGIN_TOP, 0, 0],
+              columns: [
+                { width: '*', text: '' },
+                { image: iso9001, fit: [CERT_SIZE, CERT_SIZE], width: 'auto' },
+                { image: hodelpe, fit: [CERT_SIZE, CERT_SIZE], width: 'auto', margin: [CERT_GAP, 0, 0, 0] },
+                { image: sgs, fit: [CERT_SIZE, CERT_SIZE], width: 'auto', margin: [CERT_GAP, 0, 0, 0] },
+              ],
+              columnGap: 0,
+            },
+          ]],
+        },
+        layout: { defaultBorder: false },
+      },
+      {
+        columns: [
+          {
+            width: '60%',
+            text: [{ text: 'RUC: ', bold: true }, company.ruc],
+            margin: [0, 2, 0, 0],
+          },
+          { width: '40%', text: '' },
+        ],
+      },
+      { text: '“Seguridad y Calidad a su Servicio”', fontSize: 14, alignment: 'center', italics: true, bold: true, color: '#1f4b99', margin: [0, 4, 0, 10] },
+      { text: 'COTIZACIÓN', alignment: 'center', fontSize: 18, bold: true, color: headingRed, margin: [0, 2, 0, 4] },
+      {
+        canvas: [
+          { type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 1, lineColor: headingRed },
+        ],
+        margin: [0, 0, 0, 8],
+      },
+      { text: quotation.code || '', alignment: 'center', bold: true, color: headingRed, fontSize: 12, margin: [0, 0, 0, 10] },
+      { text: [{ text: 'Fecha: ', bold: true }, issuedAtStr], alignment: 'right', margin: [0, 0, 0, 8] },
+    ];
+
+    const preTableInfoBlock = {
+      columns: [
+        {
+          width: '50%',
+          stack: [
+            {
+              text: [
+                { text: 'Servicio: ', bold: true },
+                quotation.items?.[0]?.description || '',
+              ],
+              margin: [0, 0, 0, 10],
+            },
+            {
+              text: [
+                { text: 'Nombre del Cliente: ', bold: true },
+                quotation.client?.name || '',
+              ],
+            },
+          ],
+        },
+        {
+          width: '50%',
+          stack: [
+            {
+              text: [
+                { text: 'RUC: ', bold: true },
+                quotation.client?.ruc || '',
+              ],
+              margin: [0, 0, 0, 10],
+            },
+            {
+              text: [
+                { text: 'Atención: ', bold: true },
+                quotation.client?.contactName || '',
+              ],
+            },
+          ],
+        },
+      ],
+      columnGap: 16,
+      margin: [0, 12, 0, 12],
+    };
+
+    const itemsHeader = [
+      { text: 'Ítem', bold: true, color: 'white' },
+      { text: 'Descripción', bold: true, color: 'white' },
+      { text: 'Unidad', bold: true, color: 'white' },
+      { text: 'Cantidad', bold: true, color: 'white' },
+      { text: 'V Venta Unit S/', bold: true, color: 'white' },
+      { text: 'V Venta Parc S/', bold: true, color: 'white' },
+    ];
+
+    const itemsRows = (quotation.items || []).map((item, idx) => [
+      String(idx + 1),
+      item.description || '',
+      item.unit || '',
+      fmt(Number(item.quantity || 0)),
+      fmt(Number(item.unitPrice || 0)),
+      fmt(Number(item.lineTotal || 0)),
+    ]);
+
+    const itemsTable = {
+      table: {
+        headerRows: 1,
+        widths: [30, '*', 50, 60, 75, 75],
+        body: [itemsHeader, ...itemsRows],
+      },
+      layout: {
+        fillColor: (rowIndex: number) => (rowIndex === 0 ? headingRed : null),
+        vLineWidth: () => 0,
+        hLineWidth: (i: number) => (i === 0 ? 0 : 1),
+        hLineColor: (i: number) => (i === 0 ? 'transparent' : '#B5B5B5'),
+      },
+      margin: [0, 0, 0, 6],
+    };
+
+    const totalsTable = {
+      columns: [
+        { width: '*', text: '' },
+        {
+          width: 280,
+          table: {
+            widths: [190, 90],
+            body: [
+              [
+                { text: 'COSTO DIRECTO', alignment: 'right', bold: true, margin: [0, 4, 8, 4] },
+                { text: fmt(Number(quotation.costDirectAmount || 0)), alignment: 'right', margin: [6, 4, 6, 4] },
+              ],
+              [
+                { text: 'IGV (18%)', alignment: 'right', bold: true, margin: [0, 4, 8, 4] },
+                { text: fmt(Number(quotation.igvAmount || 0)), alignment: 'right', margin: [6, 4, 6, 4] },
+              ],
+              [
+                { text: 'TOTAL (S/)', alignment: 'right', bold: true, color: headingRed, margin: [0, 4, 8, 4] },
+                { text: fmt(Number(quotation.totalAmount || 0)), alignment: 'right', color: headingRed, bold: true, margin: [6, 4, 6, 4] },
+              ],
+            ],
+          },
+          layout: {
+            hLineWidth: (i: number) => (i === 2 ? 1 : 0),
+            hLineColor: (i: number) => (i === 2 ? headingRed : 'transparent'),
+            vLineWidth: () => 0,
+          },
+        },
+      ],
+      margin: [0, 0, 0, 8],
+    };
+
+    const conditions = (quotation.commercialTerms || '')
+      .split('|')
+      .map((s) => s?.trim())
+      .filter(Boolean);
+
+    const conditionsBlock = conditions.length > 0
+      ? [
+          { text: 'Condiciones Comerciales:', bold: true, margin: [0, 8, 0, 4] },
+          { ol: conditions, margin: [0, 0, 0, 8] },
+        ]
+      : [];
+
+    const iconLine = (icon: string, text: string, marginBottom = 4) => ({
+      table: {
+        widths: [18, '*'],
+        body: [[
+          { image: icon, fit: [11, 11], margin: [0, 1, 0, 0] },
+          { text, color: 'white' },
+        ]],
+      },
+      layout: {
+        hLineWidth: () => 0,
+        vLineWidth: () => 0,
+        paddingLeft: () => 0,
+        paddingRight: () => 0,
+        paddingTop: () => 0,
+        paddingBottom: () => 0,
+      },
+      margin: [0, 0, 0, marginBottom],
+    });
+
+    const footerBlock = {
+      table: {
+        widths: ['55%', '45%'],
+        body: [
+          [
+            {
+              stack: [
+                { text: 'INFORMACIÓN BANCARIA:', bold: true, color: 'white', margin: [0, 0, 0, 6] },
+                iconLine(credit_cardIcon, `N° Cuenta BBVA: ${company.accountNumber}`),
+                iconLine(credit_cardIcon, `N° Cuenta Interbancaria: ${company.interbankAccount}`),
+                iconLine(credit_cardIcon, `N° Cuenta de detracción B. NACIÓN: ${company.detractionAccount}`, 10),
+                { text: 'DIRECCIÓN:', bold: true, color: 'white', margin: [0, 0, 0, 6] },
+                iconLine(locationIcon, company.address1),
+                iconLine(locationIcon, company.address2, 0),
+              ],
+            },
+            {
+              stack: [
+                { text: 'CONTACTO:', bold: true, color: 'white', margin: [0, 0, 0, 6] },
+                iconLine(phoneIcon, `Teléfono: ${company.phone}`),
+                iconLine(webIcon, `Página web: ${company.web}`),
+                iconLine(mailIcon, `Correo: ${company.email}`, 0),
+              ],
+            },
+          ],
+        ],
+      },
+      layout: {
+        fillColor: () => headingRed,
+        hLineWidth: () => 0,
+        vLineWidth: () => 0,
+        paddingLeft: () => 12,
+        paddingRight: () => 12,
+        paddingTop: () => 10,
+        paddingBottom: () => 10,
+      },
+      margin: [0, 0, 0, 0],
+    };
+
+    const docDefinition: any = {
+      pageSize: 'A4',
+      pageMargins: [40, 30, 40, 170],
+      compress: true,
+      content: [
+        ...headerBlock,
+        preTableInfoBlock,
+        itemsTable,
+        totalsTable,
+        ...conditionsBlock,
+      ],
+      footer: () => ({
+        ...footerBlock,
+        margin: [40, 0, 40, 20],
+      }),
+      defaultStyle: {
+        font: 'Roboto',
+        fontSize: 9,
+      },
+    };
+
+    try {
+      const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || path.resolve(__dirname, '..', '..', 'output');
+      if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+
+      const rawCode = quotation.code || '';
+      const safeCode = sanitizeFileName(rawCode) || 'SIN-CODIGO';
+      const fileName = `COT-${safeCode}.pdf`;
+      const outputPath = path.resolve(outputDir, fileName);
+
+      const pdfDoc = printer.createPdfKitDocument(docDefinition);
+      const stream = fs.createWriteStream(outputPath);
+      pdfDoc.pipe(stream);
+      pdfDoc.end();
+
+      await new Promise<void>((resolve, reject) => {
+        stream.on('finish', resolve);
+        stream.on('error', reject);
+      });
+
+      return { outputPath, fileName };
     } catch (error) {
       this.logger.error('Error generating PDF:', error);
       throw new InternalServerErrorException('Error generating PDF');

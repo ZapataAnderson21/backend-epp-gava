@@ -438,6 +438,45 @@ exports.Prisma.NotificationScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ClientScalarFieldEnum = {
+  clientId: 'clientId',
+  name: 'name',
+  contactName: 'contactName',
+  phone: 'phone',
+  email: 'email',
+  address: 'address',
+  ruc: 'ruc',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QuotationScalarFieldEnum = {
+  quotationId: 'quotationId',
+  code: 'code',
+  clientId: 'clientId',
+  status: 'status',
+  commercialTerms: 'commercialTerms',
+  costDirectAmount: 'costDirectAmount',
+  igvRate: 'igvRate',
+  igvAmount: 'igvAmount',
+  totalAmount: 'totalAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QuotationItemScalarFieldEnum = {
+  quotationItemId: 'quotationItemId',
+  quotationId: 'quotationId',
+  orderNumber: 'orderNumber',
+  description: 'description',
+  unit: 'unit',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  lineTotal: 'lineTotal',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -572,6 +611,13 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   system_reminder: 'system_reminder'
 };
 
+exports.QuotationStatus = exports.$Enums.QuotationStatus = {
+  draft: 'draft',
+  sent: 'sent',
+  approved: 'approved',
+  accepted: 'accepted'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   UserType: 'UserType',
@@ -600,7 +646,10 @@ exports.Prisma.ModelName = {
   Attendance: 'Attendance',
   Task: 'Task',
   TaskAssignment: 'TaskAssignment',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  Client: 'Client',
+  Quotation: 'Quotation',
+  QuotationItem: 'QuotationItem'
 };
 
 /**

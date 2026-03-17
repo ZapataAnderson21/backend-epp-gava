@@ -30,6 +30,8 @@ import { DailyWageModule } from './daily-wage/daily-wage.module';
 import { WeeklyWageModule } from './weekly-wage/weekly-wage.module';
 import { TaskModule } from './task/task.module';
 import { NotificationModule } from './notification/notification.module';
+import { QuotationModule } from './quotation/quotation.module';
+import { ClientModule } from './client/client.module';
 
 
 @Module({
@@ -53,6 +55,8 @@ import { NotificationModule } from './notification/notification.module';
             WeeklyWageModule,
             TaskModule,
             NotificationModule,
+            QuotationModule,
+            ClientModule,
           ],
   controllers: [],
   providers: [MailService, 
