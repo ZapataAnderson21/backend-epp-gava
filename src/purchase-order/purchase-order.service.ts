@@ -65,10 +65,45 @@ export class PurchaseOrderService {
   }
 
   async formatedCode(purchaseOrderId: number, code: string) {
-
-    const formattedId = purchaseOrderId.toString().padStart(3, '0');
     const year = new Date().getFullYear();
-    const formattedCode = `No ${formattedId}-${year}/${code}/GAVA`;
+    const yearMarker = `-${year}/`;
+    const sequencePattern = /^No\s+(\d+)-\d{4}\/.+\/GAVA$/;
+
+    // Si la OC ya tenía un correlativo válido, lo conservamos (por ejemplo, en updates).
+    const currentPurchaseOrder = await this.prisma.purchaseOrder.findUnique({
+      where: { purchaseOrderId },
+      select: { code: true },
+    });
+
+    const currentMatch = currentPurchaseOrder?.code?.match(sequencePattern);
+    const existingSequence = currentMatch ? Number(currentMatch[1]) : null;
+
+    let sequenceToUse: number;
+
+    if (existingSequence && Number.isInteger(existingSequence) && existingSequence > 0) {
+      sequenceToUse = existingSequence;
+    } else {
+      const purchaseOrders = await this.prisma.purchaseOrder.findMany({
+        where: {
+          code: { contains: yearMarker },
+        },
+        select: { code: true },
+      });
+
+      let maxSequence = 0;
+      for (const po of purchaseOrders) {
+        const match = po.code?.match(sequencePattern);
+        const seq = match ? Number(match[1]) : NaN;
+        if (Number.isInteger(seq) && seq > 0) {
+          maxSequence = Math.max(maxSequence, seq);
+        }
+      }
+
+      sequenceToUse = maxSequence + 1;
+    }
+
+    const formattedSequence = sequenceToUse.toString().padStart(3, '0');
+    const formattedCode = `No ${formattedSequence}-${year}/${code}/GAVA`;
     return formattedCode;
   }
 
@@ -363,9 +398,14 @@ export class PurchaseOrderService {
 
   async remove(purchaseOrderId: number) {
     this.logger.log(`Removing purchase order with id: ${purchaseOrderId}`);
-    const deletedPurchaseOrder = await this.prisma.purchaseOrder.delete({
-      where: { purchaseOrderId },
-    });
+    const [, deletedPurchaseOrder] = await this.prisma.$transaction([
+      this.prisma.notification.deleteMany({
+        where: { purchaseOrderId },
+      }),
+      this.prisma.purchaseOrder.delete({
+        where: { purchaseOrderId },
+      }),
+    ]);
 
     if (!deletedPurchaseOrder) {
       this.logger.error(`Failed to remove purchase order with id: ${purchaseOrderId}`);
