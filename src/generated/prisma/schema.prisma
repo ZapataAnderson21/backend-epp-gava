@@ -706,17 +706,18 @@ enum QuotationStatus {
 }
 
 model Quotation {
-  quotationId      Int             @id @default(autoincrement())
-  code             String          @unique
-  clientId         Int
-  status           QuotationStatus @default(draft)
-  commercialTerms  String?         @db.Text
-  costDirectAmount Decimal         @db.Decimal(18, 2)
-  igvRate          Decimal         @default(0.18) @db.Decimal(5, 4)
-  igvAmount        Decimal         @db.Decimal(18, 2)
-  totalAmount      Decimal         @db.Decimal(18, 2)
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  quotationId        Int             @id @default(autoincrement())
+  code               String          @unique
+  serviceDescription String          @default("Sin descripción del servicio.") @db.Text
+  clientId           Int
+  status             QuotationStatus @default(draft)
+  commercialTerms    String?         @db.Text
+  costDirectAmount   Decimal         @db.Decimal(18, 2)
+  igvRate            Decimal         @default(0.18) @db.Decimal(5, 4)
+  igvAmount          Decimal         @db.Decimal(18, 2)
+  totalAmount        Decimal         @db.Decimal(18, 2)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 
   client Client          @relation(fields: [clientId], references: [clientId], onDelete: Restrict, onUpdate: Cascade)
   items  QuotationItem[]

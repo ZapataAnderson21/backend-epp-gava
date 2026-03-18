@@ -453,6 +453,7 @@ exports.Prisma.ClientScalarFieldEnum = {
 exports.Prisma.QuotationScalarFieldEnum = {
   quotationId: 'quotationId',
   code: 'code',
+  serviceDescription: 'serviceDescription',
   clientId: 'clientId',
   status: 'status',
   commercialTerms: 'commercialTerms',

@@ -84,6 +84,7 @@ export class QuotationService {
     const quotation = await this.prisma.quotation.create({
       data: {
         code: tempCode,
+        serviceDescription: dto.serviceDescription,
         clientId: dto.clientId,
         status: QuotationStatus.Draft,
         commercialTerms: dto.commercialTerms,
@@ -224,6 +225,7 @@ export class QuotationService {
 
     const data: {
       code?: string;
+      serviceDescription?: string;
       clientId?: number;
       status?: QuotationStatus;
       commercialTerms?: string | null;
@@ -244,6 +246,9 @@ export class QuotationService {
       };
     } = {};
     
+    if (dto.serviceDescription !== undefined) {
+      data.serviceDescription = dto.serviceDescription;
+    }
     if (dto.clientId !== undefined) data.clientId = dto.clientId;
     if (dto.status !== undefined) data.status = dto.status;
     if (dto.commercialTerms !== undefined) {

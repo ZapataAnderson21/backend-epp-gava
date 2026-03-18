@@ -39102,6 +39102,7 @@ export namespace Prisma {
   export type QuotationMinAggregateOutputType = {
     quotationId: number | null
     code: string | null
+    serviceDescription: string | null
     clientId: number | null
     status: $Enums.QuotationStatus | null
     commercialTerms: string | null
@@ -39116,6 +39117,7 @@ export namespace Prisma {
   export type QuotationMaxAggregateOutputType = {
     quotationId: number | null
     code: string | null
+    serviceDescription: string | null
     clientId: number | null
     status: $Enums.QuotationStatus | null
     commercialTerms: string | null
@@ -39130,6 +39132,7 @@ export namespace Prisma {
   export type QuotationCountAggregateOutputType = {
     quotationId: number
     code: number
+    serviceDescription: number
     clientId: number
     status: number
     commercialTerms: number
@@ -39164,6 +39167,7 @@ export namespace Prisma {
   export type QuotationMinAggregateInputType = {
     quotationId?: true
     code?: true
+    serviceDescription?: true
     clientId?: true
     status?: true
     commercialTerms?: true
@@ -39178,6 +39182,7 @@ export namespace Prisma {
   export type QuotationMaxAggregateInputType = {
     quotationId?: true
     code?: true
+    serviceDescription?: true
     clientId?: true
     status?: true
     commercialTerms?: true
@@ -39192,6 +39197,7 @@ export namespace Prisma {
   export type QuotationCountAggregateInputType = {
     quotationId?: true
     code?: true
+    serviceDescription?: true
     clientId?: true
     status?: true
     commercialTerms?: true
@@ -39293,6 +39299,7 @@ export namespace Prisma {
   export type QuotationGroupByOutputType = {
     quotationId: number
     code: string
+    serviceDescription: string
     clientId: number
     status: $Enums.QuotationStatus
     commercialTerms: string | null
@@ -39326,6 +39333,7 @@ export namespace Prisma {
   export type QuotationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     quotationId?: boolean
     code?: boolean
+    serviceDescription?: boolean
     clientId?: boolean
     status?: boolean
     commercialTerms?: boolean
@@ -39343,6 +39351,7 @@ export namespace Prisma {
   export type QuotationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     quotationId?: boolean
     code?: boolean
+    serviceDescription?: boolean
     clientId?: boolean
     status?: boolean
     commercialTerms?: boolean
@@ -39358,6 +39367,7 @@ export namespace Prisma {
   export type QuotationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     quotationId?: boolean
     code?: boolean
+    serviceDescription?: boolean
     clientId?: boolean
     status?: boolean
     commercialTerms?: boolean
@@ -39373,6 +39383,7 @@ export namespace Prisma {
   export type QuotationSelectScalar = {
     quotationId?: boolean
     code?: boolean
+    serviceDescription?: boolean
     clientId?: boolean
     status?: boolean
     commercialTerms?: boolean
@@ -39384,7 +39395,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"quotationId" | "code" | "clientId" | "status" | "commercialTerms" | "costDirectAmount" | "igvRate" | "igvAmount" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["quotation"]>
+  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"quotationId" | "code" | "serviceDescription" | "clientId" | "status" | "commercialTerms" | "costDirectAmount" | "igvRate" | "igvAmount" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["quotation"]>
   export type QuotationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     client?: boolean | ClientDefaultArgs<ExtArgs>
     items?: boolean | Quotation$itemsArgs<ExtArgs>
@@ -39406,6 +39417,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       quotationId: number
       code: string
+      serviceDescription: string
       clientId: number
       status: $Enums.QuotationStatus
       commercialTerms: string | null
@@ -39842,6 +39854,7 @@ export namespace Prisma {
   interface QuotationFieldRefs {
     readonly quotationId: FieldRef<"Quotation", 'Int'>
     readonly code: FieldRef<"Quotation", 'String'>
+    readonly serviceDescription: FieldRef<"Quotation", 'String'>
     readonly clientId: FieldRef<"Quotation", 'Int'>
     readonly status: FieldRef<"Quotation", 'QuotationStatus'>
     readonly commercialTerms: FieldRef<"Quotation", 'String'>
@@ -41900,6 +41913,7 @@ export namespace Prisma {
   export const QuotationScalarFieldEnum: {
     quotationId: 'quotationId',
     code: 'code',
+    serviceDescription: 'serviceDescription',
     clientId: 'clientId',
     status: 'status',
     commercialTerms: 'commercialTerms',
@@ -44578,6 +44592,7 @@ export namespace Prisma {
     NOT?: QuotationWhereInput | QuotationWhereInput[]
     quotationId?: IntFilter<"Quotation"> | number
     code?: StringFilter<"Quotation"> | string
+    serviceDescription?: StringFilter<"Quotation"> | string
     clientId?: IntFilter<"Quotation"> | number
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     commercialTerms?: StringNullableFilter<"Quotation"> | string | null
@@ -44594,6 +44609,7 @@ export namespace Prisma {
   export type QuotationOrderByWithRelationInput = {
     quotationId?: SortOrder
     code?: SortOrder
+    serviceDescription?: SortOrder
     clientId?: SortOrder
     status?: SortOrder
     commercialTerms?: SortOrderInput | SortOrder
@@ -44613,6 +44629,7 @@ export namespace Prisma {
     AND?: QuotationWhereInput | QuotationWhereInput[]
     OR?: QuotationWhereInput[]
     NOT?: QuotationWhereInput | QuotationWhereInput[]
+    serviceDescription?: StringFilter<"Quotation"> | string
     clientId?: IntFilter<"Quotation"> | number
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     commercialTerms?: StringNullableFilter<"Quotation"> | string | null
@@ -44629,6 +44646,7 @@ export namespace Prisma {
   export type QuotationOrderByWithAggregationInput = {
     quotationId?: SortOrder
     code?: SortOrder
+    serviceDescription?: SortOrder
     clientId?: SortOrder
     status?: SortOrder
     commercialTerms?: SortOrderInput | SortOrder
@@ -44651,6 +44669,7 @@ export namespace Prisma {
     NOT?: QuotationScalarWhereWithAggregatesInput | QuotationScalarWhereWithAggregatesInput[]
     quotationId?: IntWithAggregatesFilter<"Quotation"> | number
     code?: StringWithAggregatesFilter<"Quotation"> | string
+    serviceDescription?: StringWithAggregatesFilter<"Quotation"> | string
     clientId?: IntWithAggregatesFilter<"Quotation"> | number
     status?: EnumQuotationStatusWithAggregatesFilter<"Quotation"> | $Enums.QuotationStatus
     commercialTerms?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
@@ -47095,6 +47114,7 @@ export namespace Prisma {
 
   export type QuotationCreateInput = {
     code: string
+    serviceDescription?: string
     status?: $Enums.QuotationStatus
     commercialTerms?: string | null
     costDirectAmount: Decimal | DecimalJsLike | number | string
@@ -47110,6 +47130,7 @@ export namespace Prisma {
   export type QuotationUncheckedCreateInput = {
     quotationId?: number
     code: string
+    serviceDescription?: string
     clientId: number
     status?: $Enums.QuotationStatus
     commercialTerms?: string | null
@@ -47124,6 +47145,7 @@ export namespace Prisma {
 
   export type QuotationUpdateInput = {
     code?: StringFieldUpdateOperationsInput | string
+    serviceDescription?: StringFieldUpdateOperationsInput | string
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     commercialTerms?: NullableStringFieldUpdateOperationsInput | string | null
     costDirectAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -47139,6 +47161,7 @@ export namespace Prisma {
   export type QuotationUncheckedUpdateInput = {
     quotationId?: IntFieldUpdateOperationsInput | number
     code?: StringFieldUpdateOperationsInput | string
+    serviceDescription?: StringFieldUpdateOperationsInput | string
     clientId?: IntFieldUpdateOperationsInput | number
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     commercialTerms?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47154,6 +47177,7 @@ export namespace Prisma {
   export type QuotationCreateManyInput = {
     quotationId?: number
     code: string
+    serviceDescription?: string
     clientId: number
     status?: $Enums.QuotationStatus
     commercialTerms?: string | null
@@ -47167,6 +47191,7 @@ export namespace Prisma {
 
   export type QuotationUpdateManyMutationInput = {
     code?: StringFieldUpdateOperationsInput | string
+    serviceDescription?: StringFieldUpdateOperationsInput | string
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     commercialTerms?: NullableStringFieldUpdateOperationsInput | string | null
     costDirectAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -47180,6 +47205,7 @@ export namespace Prisma {
   export type QuotationUncheckedUpdateManyInput = {
     quotationId?: IntFieldUpdateOperationsInput | number
     code?: StringFieldUpdateOperationsInput | string
+    serviceDescription?: StringFieldUpdateOperationsInput | string
     clientId?: IntFieldUpdateOperationsInput | number
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     commercialTerms?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49478,6 +49504,7 @@ export namespace Prisma {
   export type QuotationCountOrderByAggregateInput = {
     quotationId?: SortOrder
     code?: SortOrder
+    serviceDescription?: SortOrder
     clientId?: SortOrder
     status?: SortOrder
     commercialTerms?: SortOrder
@@ -49501,6 +49528,7 @@ export namespace Prisma {
   export type QuotationMaxOrderByAggregateInput = {
     quotationId?: SortOrder
     code?: SortOrder
+    serviceDescription?: SortOrder
     clientId?: SortOrder
     status?: SortOrder
     commercialTerms?: SortOrder
@@ -49515,6 +49543,7 @@ export namespace Prisma {
   export type QuotationMinOrderByAggregateInput = {
     quotationId?: SortOrder
     code?: SortOrder
+    serviceDescription?: SortOrder
     clientId?: SortOrder
     status?: SortOrder
     commercialTerms?: SortOrder
@@ -58072,6 +58101,7 @@ export namespace Prisma {
 
   export type QuotationCreateWithoutClientInput = {
     code: string
+    serviceDescription?: string
     status?: $Enums.QuotationStatus
     commercialTerms?: string | null
     costDirectAmount: Decimal | DecimalJsLike | number | string
@@ -58086,6 +58116,7 @@ export namespace Prisma {
   export type QuotationUncheckedCreateWithoutClientInput = {
     quotationId?: number
     code: string
+    serviceDescription?: string
     status?: $Enums.QuotationStatus
     commercialTerms?: string | null
     costDirectAmount: Decimal | DecimalJsLike | number | string
@@ -58129,6 +58160,7 @@ export namespace Prisma {
     NOT?: QuotationScalarWhereInput | QuotationScalarWhereInput[]
     quotationId?: IntFilter<"Quotation"> | number
     code?: StringFilter<"Quotation"> | string
+    serviceDescription?: StringFilter<"Quotation"> | string
     clientId?: IntFilter<"Quotation"> | number
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     commercialTerms?: StringNullableFilter<"Quotation"> | string | null
@@ -58269,6 +58301,7 @@ export namespace Prisma {
 
   export type QuotationCreateWithoutItemsInput = {
     code: string
+    serviceDescription?: string
     status?: $Enums.QuotationStatus
     commercialTerms?: string | null
     costDirectAmount: Decimal | DecimalJsLike | number | string
@@ -58283,6 +58316,7 @@ export namespace Prisma {
   export type QuotationUncheckedCreateWithoutItemsInput = {
     quotationId?: number
     code: string
+    serviceDescription?: string
     clientId: number
     status?: $Enums.QuotationStatus
     commercialTerms?: string | null
@@ -58312,6 +58346,7 @@ export namespace Prisma {
 
   export type QuotationUpdateWithoutItemsInput = {
     code?: StringFieldUpdateOperationsInput | string
+    serviceDescription?: StringFieldUpdateOperationsInput | string
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     commercialTerms?: NullableStringFieldUpdateOperationsInput | string | null
     costDirectAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -58326,6 +58361,7 @@ export namespace Prisma {
   export type QuotationUncheckedUpdateWithoutItemsInput = {
     quotationId?: IntFieldUpdateOperationsInput | number
     code?: StringFieldUpdateOperationsInput | string
+    serviceDescription?: StringFieldUpdateOperationsInput | string
     clientId?: IntFieldUpdateOperationsInput | number
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     commercialTerms?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60122,6 +60158,7 @@ export namespace Prisma {
   export type QuotationCreateManyClientInput = {
     quotationId?: number
     code: string
+    serviceDescription?: string
     status?: $Enums.QuotationStatus
     commercialTerms?: string | null
     costDirectAmount: Decimal | DecimalJsLike | number | string
@@ -60134,6 +60171,7 @@ export namespace Prisma {
 
   export type QuotationUpdateWithoutClientInput = {
     code?: StringFieldUpdateOperationsInput | string
+    serviceDescription?: StringFieldUpdateOperationsInput | string
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     commercialTerms?: NullableStringFieldUpdateOperationsInput | string | null
     costDirectAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -60148,6 +60186,7 @@ export namespace Prisma {
   export type QuotationUncheckedUpdateWithoutClientInput = {
     quotationId?: IntFieldUpdateOperationsInput | number
     code?: StringFieldUpdateOperationsInput | string
+    serviceDescription?: StringFieldUpdateOperationsInput | string
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     commercialTerms?: NullableStringFieldUpdateOperationsInput | string | null
     costDirectAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -60162,6 +60201,7 @@ export namespace Prisma {
   export type QuotationUncheckedUpdateManyWithoutClientInput = {
     quotationId?: IntFieldUpdateOperationsInput | number
     code?: StringFieldUpdateOperationsInput | string
+    serviceDescription?: StringFieldUpdateOperationsInput | string
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     commercialTerms?: NullableStringFieldUpdateOperationsInput | string | null
     costDirectAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string

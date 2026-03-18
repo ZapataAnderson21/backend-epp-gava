@@ -708,6 +708,7 @@ enum QuotationStatus {
 model Quotation {
   quotationId         Int             @id @default(autoincrement())
   code                String          @unique
+  serviceDescription  String          @db.Text @default("Sin descripción del servicio.")
   clientId            Int
   status              QuotationStatus @default(draft)
   commercialTerms     String?         @db.Text

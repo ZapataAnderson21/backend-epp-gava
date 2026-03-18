@@ -19,6 +19,11 @@ export class CreateQuotationDto {
   @IsNotEmpty({ message: 'El ID del cliente es obligatorio.' })
   clientId!: number;
 
+  @ApiProperty({ example: 'Instalación de canaletas para el edificio XYZ.' })
+  @IsString()
+  @IsNotEmpty({ message: 'La descripción del servicio es obligatoria.' })
+  serviceDescription!: string;
+
   @ApiPropertyOptional({ example: 'Pago a la entrega de canaletas pintadas.' })
   @IsOptional()
   @IsString()

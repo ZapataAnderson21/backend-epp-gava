@@ -670,7 +670,7 @@ export class PdfService {
             {
               text: [
                 { text: 'Servicio: ', bold: true },
-                quotation.items?.[0]?.description || '',
+                quotation.serviceDescription || '',
               ],
               margin: [0, 0, 0, 10],
             },
