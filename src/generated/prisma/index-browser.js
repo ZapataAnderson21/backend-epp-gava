@@ -246,6 +246,85 @@ exports.Prisma.WorkerScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.MonthlyEvaluationTemplateScalarFieldEnum = {
+  monthlyEvaluationTemplateId: 'monthlyEvaluationTemplateId',
+  name: 'name',
+  description: 'description',
+  isActive: 'isActive',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.MonthlyEvaluationTemplateVersionScalarFieldEnum = {
+  monthlyEvaluationTemplateVersionId: 'monthlyEvaluationTemplateVersionId',
+  monthlyEvaluationTemplateId: 'monthlyEvaluationTemplateId',
+  versionNumber: 'versionNumber',
+  title: 'title',
+  description: 'description',
+  observedMaxScore: 'observedMaxScore',
+  regularMaxScore: 'regularMaxScore',
+  isPublished: 'isPublished',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MonthlyEvaluationSectionScalarFieldEnum = {
+  monthlyEvaluationSectionId: 'monthlyEvaluationSectionId',
+  monthlyEvaluationTemplateVersionId: 'monthlyEvaluationTemplateVersionId',
+  title: 'title',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MonthlyEvaluationQuestionScalarFieldEnum = {
+  monthlyEvaluationQuestionId: 'monthlyEvaluationQuestionId',
+  monthlyEvaluationSectionId: 'monthlyEvaluationSectionId',
+  displayOrder: 'displayOrder',
+  prompt: 'prompt',
+  questionType: 'questionType',
+  isRequired: 'isRequired',
+  isScored: 'isScored',
+  minScore: 'minScore',
+  maxScore: 'maxScore',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkerMonthlyEvaluationScalarFieldEnum = {
+  workerMonthlyEvaluationId: 'workerMonthlyEvaluationId',
+  workerId: 'workerId',
+  monthlyEvaluationTemplateVersionId: 'monthlyEvaluationTemplateVersionId',
+  year: 'year',
+  month: 'month',
+  sequence: 'sequence',
+  status: 'status',
+  evaluatorUserId: 'evaluatorUserId',
+  openedByUserId: 'openedByUserId',
+  closedByUserId: 'closedByUserId',
+  openedAt: 'openedAt',
+  closedAt: 'closedAt',
+  generalComment: 'generalComment',
+  totalScore: 'totalScore',
+  maxScore: 'maxScore',
+  performanceLabel: 'performanceLabel',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkerMonthlyEvaluationResponseScalarFieldEnum = {
+  workerMonthlyEvaluationResponseId: 'workerMonthlyEvaluationResponseId',
+  workerMonthlyEvaluationId: 'workerMonthlyEvaluationId',
+  monthlyEvaluationQuestionId: 'monthlyEvaluationQuestionId',
+  score: 'score',
+  textAnswer: 'textAnswer',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SupplierScalarFieldEnum = {
   supplierId: 'supplierId',
   name: 'name',
@@ -483,6 +562,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -491,6 +575,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.ProjectStatus = exports.$Enums.ProjectStatus = {
   active: 'active',
@@ -532,6 +622,16 @@ exports.WorkerType = exports.$Enums.WorkerType = {
   administrator: 'administrator',
   manager: 'manager',
   unspecified: 'unspecified'
+};
+
+exports.MonthlyEvaluationQuestionType = exports.$Enums.MonthlyEvaluationQuestionType = {
+  score: 'score',
+  text: 'text'
+};
+
+exports.MonthlyEvaluationStatus = exports.$Enums.MonthlyEvaluationStatus = {
+  open: 'open',
+  closed: 'closed'
 };
 
 exports.SupplierDocumentType = exports.$Enums.SupplierDocumentType = {
@@ -632,6 +732,12 @@ exports.Prisma.ModelName = {
   ElementRequestResponse: 'ElementRequestResponse',
   Emergency: 'Emergency',
   Worker: 'Worker',
+  MonthlyEvaluationTemplate: 'MonthlyEvaluationTemplate',
+  MonthlyEvaluationTemplateVersion: 'MonthlyEvaluationTemplateVersion',
+  MonthlyEvaluationSection: 'MonthlyEvaluationSection',
+  MonthlyEvaluationQuestion: 'MonthlyEvaluationQuestion',
+  WorkerMonthlyEvaluation: 'WorkerMonthlyEvaluation',
+  WorkerMonthlyEvaluationResponse: 'WorkerMonthlyEvaluationResponse',
   Supplier: 'Supplier',
   CategoryResource: 'CategoryResource',
   Resource: 'Resource',

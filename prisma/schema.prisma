@@ -26,6 +26,10 @@ model User {
   emergencies         Emergency[]
   taskAssignments     TaskAssignment[]
   notifications       Notification[]
+  createdMonthlyEvaluationTemplates MonthlyEvaluationTemplate[] @relation("MonthlyEvaluationTemplateCreator")
+  evaluatedMonthlyEvaluations       WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationEvaluator")
+  openedMonthlyEvaluations          WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationOpenedBy")
+  closedMonthlyEvaluations          WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationClosedBy")
 
   @@index([name])
   @@index([lastName])
@@ -259,6 +263,7 @@ model Worker {
   weeklyWages    WeeklyWage[]
   attendances    Attendance[]
   dailyWages     DailyWage[]
+  monthlyEvaluations WorkerMonthlyEvaluation[]
 
   @@index([dni])
   @@index([deletedAt])
@@ -271,6 +276,141 @@ enum WorkerType {
   administrator
   manager
   unspecified
+}
+
+enum MonthlyEvaluationQuestionType {
+  score
+  text
+}
+
+enum MonthlyEvaluationStatus {
+  open
+  closed
+}
+
+model MonthlyEvaluationTemplate {
+  monthlyEvaluationTemplateId Int      @id @default(autoincrement())
+  name                        String
+  description                 String?  @db.Text
+  isActive                    Boolean  @default(true)
+  createdByUserId             Int?
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+  deletedAt                   DateTime?
+
+  createdByUser User?                             @relation("MonthlyEvaluationTemplateCreator", fields: [createdByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  versions      MonthlyEvaluationTemplateVersion[]
+
+  @@index([name])
+  @@index([isActive])
+  @@index([deletedAt])
+}
+
+model MonthlyEvaluationTemplateVersion {
+  monthlyEvaluationTemplateVersionId Int      @id @default(autoincrement())
+  monthlyEvaluationTemplateId        Int
+  versionNumber                      Int
+  title                              String
+  description                        String?  @db.Text
+  observedMaxScore                   Int
+  regularMaxScore                    Int
+  isPublished                        Boolean  @default(true)
+  publishedAt                        DateTime @default(now())
+  createdAt                          DateTime @default(now())
+
+  template   MonthlyEvaluationTemplate  @relation(fields: [monthlyEvaluationTemplateId], references: [monthlyEvaluationTemplateId], onDelete: Cascade, onUpdate: Cascade)
+  sections   MonthlyEvaluationSection[]
+  evaluations WorkerMonthlyEvaluation[]
+
+  @@unique([monthlyEvaluationTemplateId, versionNumber])
+  @@index([monthlyEvaluationTemplateId])
+}
+
+model MonthlyEvaluationSection {
+  monthlyEvaluationSectionId         Int      @id @default(autoincrement())
+  monthlyEvaluationTemplateVersionId Int
+  title                              String
+  displayOrder                       Int      @default(0)
+  createdAt                          DateTime @default(now())
+  updatedAt                          DateTime @updatedAt
+
+  templateVersion MonthlyEvaluationTemplateVersion @relation(fields: [monthlyEvaluationTemplateVersionId], references: [monthlyEvaluationTemplateVersionId], onDelete: Cascade, onUpdate: Cascade)
+  questions       MonthlyEvaluationQuestion[]
+
+  @@index([monthlyEvaluationTemplateVersionId])
+  @@unique([monthlyEvaluationTemplateVersionId, displayOrder])
+}
+
+model MonthlyEvaluationQuestion {
+  monthlyEvaluationQuestionId Int                         @id @default(autoincrement())
+  monthlyEvaluationSectionId  Int
+  displayOrder                Int                         @default(0)
+  prompt                      String                      @db.Text
+  questionType                MonthlyEvaluationQuestionType @default(score)
+  isRequired                  Boolean                     @default(true)
+  isScored                    Boolean                     @default(true)
+  minScore                    Int                         @default(0)
+  maxScore                    Int                         @default(3)
+  metadata                    Json?
+  createdAt                   DateTime                    @default(now())
+  updatedAt                   DateTime                    @updatedAt
+
+  section   MonthlyEvaluationSection         @relation(fields: [monthlyEvaluationSectionId], references: [monthlyEvaluationSectionId], onDelete: Cascade, onUpdate: Cascade)
+  responses WorkerMonthlyEvaluationResponse[]
+
+  @@index([monthlyEvaluationSectionId])
+  @@unique([monthlyEvaluationSectionId, displayOrder])
+}
+
+model WorkerMonthlyEvaluation {
+  workerMonthlyEvaluationId          Int                    @id @default(autoincrement())
+  workerId                           Int
+  monthlyEvaluationTemplateVersionId Int
+  year                               Int
+  month                              Int
+  sequence                           Int                    @default(1)
+  status                             MonthlyEvaluationStatus @default(open)
+  evaluatorUserId                    Int
+  openedByUserId                     Int?
+  closedByUserId                     Int?
+  openedAt                           DateTime?
+  closedAt                           DateTime?
+  generalComment                     String?                @db.Text
+  totalScore                         Int                    @default(0)
+  maxScore                           Int                    @default(0)
+  performanceLabel                   String?
+  createdAt                          DateTime               @default(now())
+  updatedAt                          DateTime               @updatedAt
+
+  worker          Worker                           @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  templateVersion MonthlyEvaluationTemplateVersion @relation(fields: [monthlyEvaluationTemplateVersionId], references: [monthlyEvaluationTemplateVersionId], onDelete: Restrict, onUpdate: Cascade)
+  evaluatorUser   User                             @relation("MonthlyEvaluationEvaluator", fields: [evaluatorUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  openedByUser    User?                            @relation("MonthlyEvaluationOpenedBy", fields: [openedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  closedByUser    User?                            @relation("MonthlyEvaluationClosedBy", fields: [closedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  responses       WorkerMonthlyEvaluationResponse[]
+
+  @@unique([workerId, year, month, sequence])
+  @@index([year, month])
+  @@index([workerId])
+  @@index([status])
+  @@index([evaluatorUserId])
+}
+
+model WorkerMonthlyEvaluationResponse {
+  workerMonthlyEvaluationResponseId Int      @id @default(autoincrement())
+  workerMonthlyEvaluationId         Int
+  monthlyEvaluationQuestionId       Int
+  score                             Int?
+  textAnswer                        String?  @db.Text
+  createdAt                         DateTime @default(now())
+  updatedAt                         DateTime @updatedAt
+
+  evaluation WorkerMonthlyEvaluation @relation(fields: [workerMonthlyEvaluationId], references: [workerMonthlyEvaluationId], onDelete: Cascade, onUpdate: Cascade)
+  question   MonthlyEvaluationQuestion @relation(fields: [monthlyEvaluationQuestionId], references: [monthlyEvaluationQuestionId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([workerMonthlyEvaluationId, monthlyEvaluationQuestionId])
+  @@index([workerMonthlyEvaluationId])
+  @@index([monthlyEvaluationQuestionId])
 }
 
 enum SupplierDocumentType {

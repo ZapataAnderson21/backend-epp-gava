@@ -32,6 +32,7 @@ import { TaskModule } from './task/task.module';
 import { NotificationModule } from './notification/notification.module';
 import { QuotationModule } from './quotation/quotation.module';
 import { ClientModule } from './client/client.module';
+import { WorkerMonthlyEvaluationModule } from './worker-monthly-evaluation/worker-monthly-evaluation.module';
 
 
 @Module({
@@ -57,6 +58,7 @@ import { ClientModule } from './client/client.module';
             NotificationModule,
             QuotationModule,
             ClientModule,
+            WorkerMonthlyEvaluationModule,
           ],
   controllers: [],
   providers: [MailService, 

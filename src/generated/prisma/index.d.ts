@@ -74,6 +74,36 @@ export type Emergency = $Result.DefaultSelection<Prisma.$EmergencyPayload>
  */
 export type Worker = $Result.DefaultSelection<Prisma.$WorkerPayload>
 /**
+ * Model MonthlyEvaluationTemplate
+ * 
+ */
+export type MonthlyEvaluationTemplate = $Result.DefaultSelection<Prisma.$MonthlyEvaluationTemplatePayload>
+/**
+ * Model MonthlyEvaluationTemplateVersion
+ * 
+ */
+export type MonthlyEvaluationTemplateVersion = $Result.DefaultSelection<Prisma.$MonthlyEvaluationTemplateVersionPayload>
+/**
+ * Model MonthlyEvaluationSection
+ * 
+ */
+export type MonthlyEvaluationSection = $Result.DefaultSelection<Prisma.$MonthlyEvaluationSectionPayload>
+/**
+ * Model MonthlyEvaluationQuestion
+ * 
+ */
+export type MonthlyEvaluationQuestion = $Result.DefaultSelection<Prisma.$MonthlyEvaluationQuestionPayload>
+/**
+ * Model WorkerMonthlyEvaluation
+ * 
+ */
+export type WorkerMonthlyEvaluation = $Result.DefaultSelection<Prisma.$WorkerMonthlyEvaluationPayload>
+/**
+ * Model WorkerMonthlyEvaluationResponse
+ * 
+ */
+export type WorkerMonthlyEvaluationResponse = $Result.DefaultSelection<Prisma.$WorkerMonthlyEvaluationResponsePayload>
+/**
  * Model Supplier
  * 
  */
@@ -233,6 +263,22 @@ export const WorkerType: {
 export type WorkerType = (typeof WorkerType)[keyof typeof WorkerType]
 
 
+export const MonthlyEvaluationQuestionType: {
+  score: 'score',
+  text: 'text'
+};
+
+export type MonthlyEvaluationQuestionType = (typeof MonthlyEvaluationQuestionType)[keyof typeof MonthlyEvaluationQuestionType]
+
+
+export const MonthlyEvaluationStatus: {
+  open: 'open',
+  closed: 'closed'
+};
+
+export type MonthlyEvaluationStatus = (typeof MonthlyEvaluationStatus)[keyof typeof MonthlyEvaluationStatus]
+
+
 export const SupplierDocumentType: {
   ruc: 'ruc',
   dni: 'dni'
@@ -372,6 +418,14 @@ export const EmergencyStatus: typeof $Enums.EmergencyStatus
 export type WorkerType = $Enums.WorkerType
 
 export const WorkerType: typeof $Enums.WorkerType
+
+export type MonthlyEvaluationQuestionType = $Enums.MonthlyEvaluationQuestionType
+
+export const MonthlyEvaluationQuestionType: typeof $Enums.MonthlyEvaluationQuestionType
+
+export type MonthlyEvaluationStatus = $Enums.MonthlyEvaluationStatus
+
+export const MonthlyEvaluationStatus: typeof $Enums.MonthlyEvaluationStatus
 
 export type SupplierDocumentType = $Enums.SupplierDocumentType
 
@@ -649,6 +703,66 @@ export class PrismaClient<
     * ```
     */
   get worker(): Prisma.WorkerDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.monthlyEvaluationTemplate`: Exposes CRUD operations for the **MonthlyEvaluationTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MonthlyEvaluationTemplates
+    * const monthlyEvaluationTemplates = await prisma.monthlyEvaluationTemplate.findMany()
+    * ```
+    */
+  get monthlyEvaluationTemplate(): Prisma.MonthlyEvaluationTemplateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.monthlyEvaluationTemplateVersion`: Exposes CRUD operations for the **MonthlyEvaluationTemplateVersion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MonthlyEvaluationTemplateVersions
+    * const monthlyEvaluationTemplateVersions = await prisma.monthlyEvaluationTemplateVersion.findMany()
+    * ```
+    */
+  get monthlyEvaluationTemplateVersion(): Prisma.MonthlyEvaluationTemplateVersionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.monthlyEvaluationSection`: Exposes CRUD operations for the **MonthlyEvaluationSection** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MonthlyEvaluationSections
+    * const monthlyEvaluationSections = await prisma.monthlyEvaluationSection.findMany()
+    * ```
+    */
+  get monthlyEvaluationSection(): Prisma.MonthlyEvaluationSectionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.monthlyEvaluationQuestion`: Exposes CRUD operations for the **MonthlyEvaluationQuestion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MonthlyEvaluationQuestions
+    * const monthlyEvaluationQuestions = await prisma.monthlyEvaluationQuestion.findMany()
+    * ```
+    */
+  get monthlyEvaluationQuestion(): Prisma.MonthlyEvaluationQuestionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workerMonthlyEvaluation`: Exposes CRUD operations for the **WorkerMonthlyEvaluation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkerMonthlyEvaluations
+    * const workerMonthlyEvaluations = await prisma.workerMonthlyEvaluation.findMany()
+    * ```
+    */
+  get workerMonthlyEvaluation(): Prisma.WorkerMonthlyEvaluationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workerMonthlyEvaluationResponse`: Exposes CRUD operations for the **WorkerMonthlyEvaluationResponse** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkerMonthlyEvaluationResponses
+    * const workerMonthlyEvaluationResponses = await prisma.workerMonthlyEvaluationResponse.findMany()
+    * ```
+    */
+  get workerMonthlyEvaluationResponse(): Prisma.WorkerMonthlyEvaluationResponseDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.supplier`: Exposes CRUD operations for the **Supplier** model.
@@ -1285,6 +1399,12 @@ export namespace Prisma {
     ElementRequestResponse: 'ElementRequestResponse',
     Emergency: 'Emergency',
     Worker: 'Worker',
+    MonthlyEvaluationTemplate: 'MonthlyEvaluationTemplate',
+    MonthlyEvaluationTemplateVersion: 'MonthlyEvaluationTemplateVersion',
+    MonthlyEvaluationSection: 'MonthlyEvaluationSection',
+    MonthlyEvaluationQuestion: 'MonthlyEvaluationQuestion',
+    WorkerMonthlyEvaluation: 'WorkerMonthlyEvaluation',
+    WorkerMonthlyEvaluationResponse: 'WorkerMonthlyEvaluationResponse',
     Supplier: 'Supplier',
     CategoryResource: 'CategoryResource',
     Resource: 'Resource',
@@ -1319,7 +1439,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userType" | "userUserType" | "project" | "element" | "request" | "requestWorker" | "elementRequest" | "requestResponse" | "elementRequestResponse" | "emergency" | "worker" | "supplier" | "categoryResource" | "resource" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "week" | "dailyWage" | "weeklyWage" | "attendance" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem"
+      modelProps: "user" | "userType" | "userUserType" | "project" | "element" | "request" | "requestWorker" | "elementRequest" | "requestResponse" | "elementRequestResponse" | "emergency" | "worker" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "week" | "dailyWage" | "weeklyWage" | "attendance" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2208,6 +2328,450 @@ export namespace Prisma {
           count: {
             args: Prisma.WorkerCountArgs<ExtArgs>
             result: $Utils.Optional<WorkerCountAggregateOutputType> | number
+          }
+        }
+      }
+      MonthlyEvaluationTemplate: {
+        payload: Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>
+        fields: Prisma.MonthlyEvaluationTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MonthlyEvaluationTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MonthlyEvaluationTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.MonthlyEvaluationTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MonthlyEvaluationTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.MonthlyEvaluationTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.MonthlyEvaluationTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.MonthlyEvaluationTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MonthlyEvaluationTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.MonthlyEvaluationTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload>
+          }
+          update: {
+            args: Prisma.MonthlyEvaluationTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.MonthlyEvaluationTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MonthlyEvaluationTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MonthlyEvaluationTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.MonthlyEvaluationTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.MonthlyEvaluationTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMonthlyEvaluationTemplate>
+          }
+          groupBy: {
+            args: Prisma.MonthlyEvaluationTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyEvaluationTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MonthlyEvaluationTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyEvaluationTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
+      MonthlyEvaluationTemplateVersion: {
+        payload: Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>
+        fields: Prisma.MonthlyEvaluationTemplateVersionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MonthlyEvaluationTemplateVersionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MonthlyEvaluationTemplateVersionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload>
+          }
+          findFirst: {
+            args: Prisma.MonthlyEvaluationTemplateVersionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MonthlyEvaluationTemplateVersionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload>
+          }
+          findMany: {
+            args: Prisma.MonthlyEvaluationTemplateVersionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload>[]
+          }
+          create: {
+            args: Prisma.MonthlyEvaluationTemplateVersionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload>
+          }
+          createMany: {
+            args: Prisma.MonthlyEvaluationTemplateVersionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MonthlyEvaluationTemplateVersionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload>[]
+          }
+          delete: {
+            args: Prisma.MonthlyEvaluationTemplateVersionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload>
+          }
+          update: {
+            args: Prisma.MonthlyEvaluationTemplateVersionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload>
+          }
+          deleteMany: {
+            args: Prisma.MonthlyEvaluationTemplateVersionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MonthlyEvaluationTemplateVersionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MonthlyEvaluationTemplateVersionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload>[]
+          }
+          upsert: {
+            args: Prisma.MonthlyEvaluationTemplateVersionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationTemplateVersionPayload>
+          }
+          aggregate: {
+            args: Prisma.MonthlyEvaluationTemplateVersionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMonthlyEvaluationTemplateVersion>
+          }
+          groupBy: {
+            args: Prisma.MonthlyEvaluationTemplateVersionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyEvaluationTemplateVersionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MonthlyEvaluationTemplateVersionCountArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyEvaluationTemplateVersionCountAggregateOutputType> | number
+          }
+        }
+      }
+      MonthlyEvaluationSection: {
+        payload: Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>
+        fields: Prisma.MonthlyEvaluationSectionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MonthlyEvaluationSectionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MonthlyEvaluationSectionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload>
+          }
+          findFirst: {
+            args: Prisma.MonthlyEvaluationSectionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MonthlyEvaluationSectionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload>
+          }
+          findMany: {
+            args: Prisma.MonthlyEvaluationSectionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload>[]
+          }
+          create: {
+            args: Prisma.MonthlyEvaluationSectionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload>
+          }
+          createMany: {
+            args: Prisma.MonthlyEvaluationSectionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MonthlyEvaluationSectionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload>[]
+          }
+          delete: {
+            args: Prisma.MonthlyEvaluationSectionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload>
+          }
+          update: {
+            args: Prisma.MonthlyEvaluationSectionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload>
+          }
+          deleteMany: {
+            args: Prisma.MonthlyEvaluationSectionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MonthlyEvaluationSectionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MonthlyEvaluationSectionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload>[]
+          }
+          upsert: {
+            args: Prisma.MonthlyEvaluationSectionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationSectionPayload>
+          }
+          aggregate: {
+            args: Prisma.MonthlyEvaluationSectionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMonthlyEvaluationSection>
+          }
+          groupBy: {
+            args: Prisma.MonthlyEvaluationSectionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyEvaluationSectionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MonthlyEvaluationSectionCountArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyEvaluationSectionCountAggregateOutputType> | number
+          }
+        }
+      }
+      MonthlyEvaluationQuestion: {
+        payload: Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>
+        fields: Prisma.MonthlyEvaluationQuestionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MonthlyEvaluationQuestionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MonthlyEvaluationQuestionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload>
+          }
+          findFirst: {
+            args: Prisma.MonthlyEvaluationQuestionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MonthlyEvaluationQuestionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload>
+          }
+          findMany: {
+            args: Prisma.MonthlyEvaluationQuestionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload>[]
+          }
+          create: {
+            args: Prisma.MonthlyEvaluationQuestionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload>
+          }
+          createMany: {
+            args: Prisma.MonthlyEvaluationQuestionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MonthlyEvaluationQuestionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload>[]
+          }
+          delete: {
+            args: Prisma.MonthlyEvaluationQuestionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload>
+          }
+          update: {
+            args: Prisma.MonthlyEvaluationQuestionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload>
+          }
+          deleteMany: {
+            args: Prisma.MonthlyEvaluationQuestionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MonthlyEvaluationQuestionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MonthlyEvaluationQuestionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload>[]
+          }
+          upsert: {
+            args: Prisma.MonthlyEvaluationQuestionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyEvaluationQuestionPayload>
+          }
+          aggregate: {
+            args: Prisma.MonthlyEvaluationQuestionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMonthlyEvaluationQuestion>
+          }
+          groupBy: {
+            args: Prisma.MonthlyEvaluationQuestionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyEvaluationQuestionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MonthlyEvaluationQuestionCountArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyEvaluationQuestionCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkerMonthlyEvaluation: {
+        payload: Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>
+        fields: Prisma.WorkerMonthlyEvaluationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkerMonthlyEvaluationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkerMonthlyEvaluationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkerMonthlyEvaluationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkerMonthlyEvaluationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload>
+          }
+          findMany: {
+            args: Prisma.WorkerMonthlyEvaluationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload>[]
+          }
+          create: {
+            args: Prisma.WorkerMonthlyEvaluationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload>
+          }
+          createMany: {
+            args: Prisma.WorkerMonthlyEvaluationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkerMonthlyEvaluationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkerMonthlyEvaluationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload>
+          }
+          update: {
+            args: Prisma.WorkerMonthlyEvaluationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkerMonthlyEvaluationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkerMonthlyEvaluationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WorkerMonthlyEvaluationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload>[]
+          }
+          upsert: {
+            args: Prisma.WorkerMonthlyEvaluationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkerMonthlyEvaluationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkerMonthlyEvaluation>
+          }
+          groupBy: {
+            args: Prisma.WorkerMonthlyEvaluationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkerMonthlyEvaluationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkerMonthlyEvaluationCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkerMonthlyEvaluationCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkerMonthlyEvaluationResponse: {
+        payload: Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>
+        fields: Prisma.WorkerMonthlyEvaluationResponseFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkerMonthlyEvaluationResponseFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkerMonthlyEvaluationResponseFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload>
+          }
+          findFirst: {
+            args: Prisma.WorkerMonthlyEvaluationResponseFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkerMonthlyEvaluationResponseFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload>
+          }
+          findMany: {
+            args: Prisma.WorkerMonthlyEvaluationResponseFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload>[]
+          }
+          create: {
+            args: Prisma.WorkerMonthlyEvaluationResponseCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload>
+          }
+          createMany: {
+            args: Prisma.WorkerMonthlyEvaluationResponseCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkerMonthlyEvaluationResponseCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload>[]
+          }
+          delete: {
+            args: Prisma.WorkerMonthlyEvaluationResponseDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload>
+          }
+          update: {
+            args: Prisma.WorkerMonthlyEvaluationResponseUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkerMonthlyEvaluationResponseDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkerMonthlyEvaluationResponseUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WorkerMonthlyEvaluationResponseUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload>[]
+          }
+          upsert: {
+            args: Prisma.WorkerMonthlyEvaluationResponseUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkerMonthlyEvaluationResponsePayload>
+          }
+          aggregate: {
+            args: Prisma.WorkerMonthlyEvaluationResponseAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkerMonthlyEvaluationResponse>
+          }
+          groupBy: {
+            args: Prisma.WorkerMonthlyEvaluationResponseGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkerMonthlyEvaluationResponseGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkerMonthlyEvaluationResponseCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkerMonthlyEvaluationResponseCountAggregateOutputType> | number
           }
         }
       }
@@ -3721,6 +4285,12 @@ export namespace Prisma {
     elementRequestResponse?: ElementRequestResponseOmit
     emergency?: EmergencyOmit
     worker?: WorkerOmit
+    monthlyEvaluationTemplate?: MonthlyEvaluationTemplateOmit
+    monthlyEvaluationTemplateVersion?: MonthlyEvaluationTemplateVersionOmit
+    monthlyEvaluationSection?: MonthlyEvaluationSectionOmit
+    monthlyEvaluationQuestion?: MonthlyEvaluationQuestionOmit
+    workerMonthlyEvaluation?: WorkerMonthlyEvaluationOmit
+    workerMonthlyEvaluationResponse?: WorkerMonthlyEvaluationResponseOmit
     supplier?: SupplierOmit
     categoryResource?: CategoryResourceOmit
     resource?: ResourceOmit
@@ -3828,6 +4398,10 @@ export namespace Prisma {
     emergencies: number
     taskAssignments: number
     notifications: number
+    createdMonthlyEvaluationTemplates: number
+    evaluatedMonthlyEvaluations: number
+    openedMonthlyEvaluations: number
+    closedMonthlyEvaluations: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3839,6 +4413,10 @@ export namespace Prisma {
     emergencies?: boolean | UserCountOutputTypeCountEmergenciesArgs
     taskAssignments?: boolean | UserCountOutputTypeCountTaskAssignmentsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    createdMonthlyEvaluationTemplates?: boolean | UserCountOutputTypeCountCreatedMonthlyEvaluationTemplatesArgs
+    evaluatedMonthlyEvaluations?: boolean | UserCountOutputTypeCountEvaluatedMonthlyEvaluationsArgs
+    openedMonthlyEvaluations?: boolean | UserCountOutputTypeCountOpenedMonthlyEvaluationsArgs
+    closedMonthlyEvaluations?: boolean | UserCountOutputTypeCountClosedMonthlyEvaluationsArgs
   }
 
   // Custom InputTypes
@@ -3906,6 +4484,34 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedMonthlyEvaluationTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyEvaluationTemplateWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEvaluatedMonthlyEvaluationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkerMonthlyEvaluationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOpenedMonthlyEvaluationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkerMonthlyEvaluationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountClosedMonthlyEvaluationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkerMonthlyEvaluationWhereInput
   }
 
 
@@ -4225,6 +4831,7 @@ export namespace Prisma {
     weeklyWages: number
     attendances: number
     dailyWages: number
+    monthlyEvaluations: number
   }
 
   export type WorkerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4232,6 +4839,7 @@ export namespace Prisma {
     weeklyWages?: boolean | WorkerCountOutputTypeCountWeeklyWagesArgs
     attendances?: boolean | WorkerCountOutputTypeCountAttendancesArgs
     dailyWages?: boolean | WorkerCountOutputTypeCountDailyWagesArgs
+    monthlyEvaluations?: boolean | WorkerCountOutputTypeCountMonthlyEvaluationsArgs
   }
 
   // Custom InputTypes
@@ -4271,6 +4879,177 @@ export namespace Prisma {
    */
   export type WorkerCountOutputTypeCountDailyWagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DailyWageWhereInput
+  }
+
+  /**
+   * WorkerCountOutputType without action
+   */
+  export type WorkerCountOutputTypeCountMonthlyEvaluationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkerMonthlyEvaluationWhereInput
+  }
+
+
+  /**
+   * Count Type MonthlyEvaluationTemplateCountOutputType
+   */
+
+  export type MonthlyEvaluationTemplateCountOutputType = {
+    versions: number
+  }
+
+  export type MonthlyEvaluationTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    versions?: boolean | MonthlyEvaluationTemplateCountOutputTypeCountVersionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MonthlyEvaluationTemplateCountOutputType without action
+   */
+  export type MonthlyEvaluationTemplateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateCountOutputType
+     */
+    select?: MonthlyEvaluationTemplateCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationTemplateCountOutputType without action
+   */
+  export type MonthlyEvaluationTemplateCountOutputTypeCountVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+  }
+
+
+  /**
+   * Count Type MonthlyEvaluationTemplateVersionCountOutputType
+   */
+
+  export type MonthlyEvaluationTemplateVersionCountOutputType = {
+    sections: number
+    evaluations: number
+  }
+
+  export type MonthlyEvaluationTemplateVersionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sections?: boolean | MonthlyEvaluationTemplateVersionCountOutputTypeCountSectionsArgs
+    evaluations?: boolean | MonthlyEvaluationTemplateVersionCountOutputTypeCountEvaluationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MonthlyEvaluationTemplateVersionCountOutputType without action
+   */
+  export type MonthlyEvaluationTemplateVersionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersionCountOutputType
+     */
+    select?: MonthlyEvaluationTemplateVersionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersionCountOutputType without action
+   */
+  export type MonthlyEvaluationTemplateVersionCountOutputTypeCountSectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyEvaluationSectionWhereInput
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersionCountOutputType without action
+   */
+  export type MonthlyEvaluationTemplateVersionCountOutputTypeCountEvaluationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkerMonthlyEvaluationWhereInput
+  }
+
+
+  /**
+   * Count Type MonthlyEvaluationSectionCountOutputType
+   */
+
+  export type MonthlyEvaluationSectionCountOutputType = {
+    questions: number
+  }
+
+  export type MonthlyEvaluationSectionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    questions?: boolean | MonthlyEvaluationSectionCountOutputTypeCountQuestionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MonthlyEvaluationSectionCountOutputType without action
+   */
+  export type MonthlyEvaluationSectionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSectionCountOutputType
+     */
+    select?: MonthlyEvaluationSectionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationSectionCountOutputType without action
+   */
+  export type MonthlyEvaluationSectionCountOutputTypeCountQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyEvaluationQuestionWhereInput
+  }
+
+
+  /**
+   * Count Type MonthlyEvaluationQuestionCountOutputType
+   */
+
+  export type MonthlyEvaluationQuestionCountOutputType = {
+    responses: number
+  }
+
+  export type MonthlyEvaluationQuestionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    responses?: boolean | MonthlyEvaluationQuestionCountOutputTypeCountResponsesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MonthlyEvaluationQuestionCountOutputType without action
+   */
+  export type MonthlyEvaluationQuestionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestionCountOutputType
+     */
+    select?: MonthlyEvaluationQuestionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationQuestionCountOutputType without action
+   */
+  export type MonthlyEvaluationQuestionCountOutputTypeCountResponsesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+  }
+
+
+  /**
+   * Count Type WorkerMonthlyEvaluationCountOutputType
+   */
+
+  export type WorkerMonthlyEvaluationCountOutputType = {
+    responses: number
+  }
+
+  export type WorkerMonthlyEvaluationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    responses?: boolean | WorkerMonthlyEvaluationCountOutputTypeCountResponsesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WorkerMonthlyEvaluationCountOutputType without action
+   */
+  export type WorkerMonthlyEvaluationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationCountOutputType
+     */
+    select?: WorkerMonthlyEvaluationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WorkerMonthlyEvaluationCountOutputType without action
+   */
+  export type WorkerMonthlyEvaluationCountOutputTypeCountResponsesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkerMonthlyEvaluationResponseWhereInput
   }
 
 
@@ -4809,6 +5588,10 @@ export namespace Prisma {
     emergencies?: boolean | User$emergenciesArgs<ExtArgs>
     taskAssignments?: boolean | User$taskAssignmentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    createdMonthlyEvaluationTemplates?: boolean | User$createdMonthlyEvaluationTemplatesArgs<ExtArgs>
+    evaluatedMonthlyEvaluations?: boolean | User$evaluatedMonthlyEvaluationsArgs<ExtArgs>
+    openedMonthlyEvaluations?: boolean | User$openedMonthlyEvaluationsArgs<ExtArgs>
+    closedMonthlyEvaluations?: boolean | User$closedMonthlyEvaluationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4858,6 +5641,10 @@ export namespace Prisma {
     emergencies?: boolean | User$emergenciesArgs<ExtArgs>
     taskAssignments?: boolean | User$taskAssignmentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    createdMonthlyEvaluationTemplates?: boolean | User$createdMonthlyEvaluationTemplatesArgs<ExtArgs>
+    evaluatedMonthlyEvaluations?: boolean | User$evaluatedMonthlyEvaluationsArgs<ExtArgs>
+    openedMonthlyEvaluations?: boolean | User$openedMonthlyEvaluationsArgs<ExtArgs>
+    closedMonthlyEvaluations?: boolean | User$closedMonthlyEvaluationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4874,6 +5661,10 @@ export namespace Prisma {
       emergencies: Prisma.$EmergencyPayload<ExtArgs>[]
       taskAssignments: Prisma.$TaskAssignmentPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      createdMonthlyEvaluationTemplates: Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>[]
+      evaluatedMonthlyEvaluations: Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>[]
+      openedMonthlyEvaluations: Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>[]
+      closedMonthlyEvaluations: Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       userId: number
@@ -5287,6 +6078,10 @@ export namespace Prisma {
     emergencies<T extends User$emergenciesArgs<ExtArgs> = {}>(args?: Subset<T, User$emergenciesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmergencyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     taskAssignments<T extends User$taskAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$taskAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdMonthlyEvaluationTemplates<T extends User$createdMonthlyEvaluationTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdMonthlyEvaluationTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    evaluatedMonthlyEvaluations<T extends User$evaluatedMonthlyEvaluationsArgs<ExtArgs> = {}>(args?: Subset<T, User$evaluatedMonthlyEvaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    openedMonthlyEvaluations<T extends User$openedMonthlyEvaluationsArgs<ExtArgs> = {}>(args?: Subset<T, User$openedMonthlyEvaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    closedMonthlyEvaluations<T extends User$closedMonthlyEvaluationsArgs<ExtArgs> = {}>(args?: Subset<T, User$closedMonthlyEvaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5902,6 +6697,102 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdMonthlyEvaluationTemplates
+   */
+  export type User$createdMonthlyEvaluationTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+    where?: MonthlyEvaluationTemplateWhereInput
+    orderBy?: MonthlyEvaluationTemplateOrderByWithRelationInput | MonthlyEvaluationTemplateOrderByWithRelationInput[]
+    cursor?: MonthlyEvaluationTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MonthlyEvaluationTemplateScalarFieldEnum | MonthlyEvaluationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * User.evaluatedMonthlyEvaluations
+   */
+  export type User$evaluatedMonthlyEvaluationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    where?: WorkerMonthlyEvaluationWhereInput
+    orderBy?: WorkerMonthlyEvaluationOrderByWithRelationInput | WorkerMonthlyEvaluationOrderByWithRelationInput[]
+    cursor?: WorkerMonthlyEvaluationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkerMonthlyEvaluationScalarFieldEnum | WorkerMonthlyEvaluationScalarFieldEnum[]
+  }
+
+  /**
+   * User.openedMonthlyEvaluations
+   */
+  export type User$openedMonthlyEvaluationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    where?: WorkerMonthlyEvaluationWhereInput
+    orderBy?: WorkerMonthlyEvaluationOrderByWithRelationInput | WorkerMonthlyEvaluationOrderByWithRelationInput[]
+    cursor?: WorkerMonthlyEvaluationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkerMonthlyEvaluationScalarFieldEnum | WorkerMonthlyEvaluationScalarFieldEnum[]
+  }
+
+  /**
+   * User.closedMonthlyEvaluations
+   */
+  export type User$closedMonthlyEvaluationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    where?: WorkerMonthlyEvaluationWhereInput
+    orderBy?: WorkerMonthlyEvaluationOrderByWithRelationInput | WorkerMonthlyEvaluationOrderByWithRelationInput[]
+    cursor?: WorkerMonthlyEvaluationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkerMonthlyEvaluationScalarFieldEnum | WorkerMonthlyEvaluationScalarFieldEnum[]
   }
 
   /**
@@ -17909,6 +18800,7 @@ export namespace Prisma {
     weeklyWages?: boolean | Worker$weeklyWagesArgs<ExtArgs>
     attendances?: boolean | Worker$attendancesArgs<ExtArgs>
     dailyWages?: boolean | Worker$dailyWagesArgs<ExtArgs>
+    monthlyEvaluations?: boolean | Worker$monthlyEvaluationsArgs<ExtArgs>
     _count?: boolean | WorkerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["worker"]>
 
@@ -17960,6 +18852,7 @@ export namespace Prisma {
     weeklyWages?: boolean | Worker$weeklyWagesArgs<ExtArgs>
     attendances?: boolean | Worker$attendancesArgs<ExtArgs>
     dailyWages?: boolean | Worker$dailyWagesArgs<ExtArgs>
+    monthlyEvaluations?: boolean | Worker$monthlyEvaluationsArgs<ExtArgs>
     _count?: boolean | WorkerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WorkerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -17972,6 +18865,7 @@ export namespace Prisma {
       weeklyWages: Prisma.$WeeklyWagePayload<ExtArgs>[]
       attendances: Prisma.$AttendancePayload<ExtArgs>[]
       dailyWages: Prisma.$DailyWagePayload<ExtArgs>[]
+      monthlyEvaluations: Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       workerId: number
@@ -18383,6 +19277,7 @@ export namespace Prisma {
     weeklyWages<T extends Worker$weeklyWagesArgs<ExtArgs> = {}>(args?: Subset<T, Worker$weeklyWagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendances<T extends Worker$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, Worker$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dailyWages<T extends Worker$dailyWagesArgs<ExtArgs> = {}>(args?: Subset<T, Worker$dailyWagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyWagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    monthlyEvaluations<T extends Worker$monthlyEvaluationsArgs<ExtArgs> = {}>(args?: Subset<T, Worker$monthlyEvaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18907,6 +19802,30 @@ export namespace Prisma {
   }
 
   /**
+   * Worker.monthlyEvaluations
+   */
+  export type Worker$monthlyEvaluationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    where?: WorkerMonthlyEvaluationWhereInput
+    orderBy?: WorkerMonthlyEvaluationOrderByWithRelationInput | WorkerMonthlyEvaluationOrderByWithRelationInput[]
+    cursor?: WorkerMonthlyEvaluationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkerMonthlyEvaluationScalarFieldEnum | WorkerMonthlyEvaluationScalarFieldEnum[]
+  }
+
+  /**
    * Worker without action
    */
   export type WorkerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18922,6 +19841,7328 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: WorkerInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MonthlyEvaluationTemplate
+   */
+
+  export type AggregateMonthlyEvaluationTemplate = {
+    _count: MonthlyEvaluationTemplateCountAggregateOutputType | null
+    _avg: MonthlyEvaluationTemplateAvgAggregateOutputType | null
+    _sum: MonthlyEvaluationTemplateSumAggregateOutputType | null
+    _min: MonthlyEvaluationTemplateMinAggregateOutputType | null
+    _max: MonthlyEvaluationTemplateMaxAggregateOutputType | null
+  }
+
+  export type MonthlyEvaluationTemplateAvgAggregateOutputType = {
+    monthlyEvaluationTemplateId: number | null
+    createdByUserId: number | null
+  }
+
+  export type MonthlyEvaluationTemplateSumAggregateOutputType = {
+    monthlyEvaluationTemplateId: number | null
+    createdByUserId: number | null
+  }
+
+  export type MonthlyEvaluationTemplateMinAggregateOutputType = {
+    monthlyEvaluationTemplateId: number | null
+    name: string | null
+    description: string | null
+    isActive: boolean | null
+    createdByUserId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type MonthlyEvaluationTemplateMaxAggregateOutputType = {
+    monthlyEvaluationTemplateId: number | null
+    name: string | null
+    description: string | null
+    isActive: boolean | null
+    createdByUserId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type MonthlyEvaluationTemplateCountAggregateOutputType = {
+    monthlyEvaluationTemplateId: number
+    name: number
+    description: number
+    isActive: number
+    createdByUserId: number
+    createdAt: number
+    updatedAt: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type MonthlyEvaluationTemplateAvgAggregateInputType = {
+    monthlyEvaluationTemplateId?: true
+    createdByUserId?: true
+  }
+
+  export type MonthlyEvaluationTemplateSumAggregateInputType = {
+    monthlyEvaluationTemplateId?: true
+    createdByUserId?: true
+  }
+
+  export type MonthlyEvaluationTemplateMinAggregateInputType = {
+    monthlyEvaluationTemplateId?: true
+    name?: true
+    description?: true
+    isActive?: true
+    createdByUserId?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type MonthlyEvaluationTemplateMaxAggregateInputType = {
+    monthlyEvaluationTemplateId?: true
+    name?: true
+    description?: true
+    isActive?: true
+    createdByUserId?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type MonthlyEvaluationTemplateCountAggregateInputType = {
+    monthlyEvaluationTemplateId?: true
+    name?: true
+    description?: true
+    isActive?: true
+    createdByUserId?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type MonthlyEvaluationTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyEvaluationTemplate to aggregate.
+     */
+    where?: MonthlyEvaluationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationTemplates to fetch.
+     */
+    orderBy?: MonthlyEvaluationTemplateOrderByWithRelationInput | MonthlyEvaluationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MonthlyEvaluationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MonthlyEvaluationTemplates
+    **/
+    _count?: true | MonthlyEvaluationTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MonthlyEvaluationTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MonthlyEvaluationTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MonthlyEvaluationTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MonthlyEvaluationTemplateMaxAggregateInputType
+  }
+
+  export type GetMonthlyEvaluationTemplateAggregateType<T extends MonthlyEvaluationTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateMonthlyEvaluationTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMonthlyEvaluationTemplate[P]>
+      : GetScalarType<T[P], AggregateMonthlyEvaluationTemplate[P]>
+  }
+
+
+
+
+  export type MonthlyEvaluationTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyEvaluationTemplateWhereInput
+    orderBy?: MonthlyEvaluationTemplateOrderByWithAggregationInput | MonthlyEvaluationTemplateOrderByWithAggregationInput[]
+    by: MonthlyEvaluationTemplateScalarFieldEnum[] | MonthlyEvaluationTemplateScalarFieldEnum
+    having?: MonthlyEvaluationTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MonthlyEvaluationTemplateCountAggregateInputType | true
+    _avg?: MonthlyEvaluationTemplateAvgAggregateInputType
+    _sum?: MonthlyEvaluationTemplateSumAggregateInputType
+    _min?: MonthlyEvaluationTemplateMinAggregateInputType
+    _max?: MonthlyEvaluationTemplateMaxAggregateInputType
+  }
+
+  export type MonthlyEvaluationTemplateGroupByOutputType = {
+    monthlyEvaluationTemplateId: number
+    name: string
+    description: string | null
+    isActive: boolean
+    createdByUserId: number | null
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    _count: MonthlyEvaluationTemplateCountAggregateOutputType | null
+    _avg: MonthlyEvaluationTemplateAvgAggregateOutputType | null
+    _sum: MonthlyEvaluationTemplateSumAggregateOutputType | null
+    _min: MonthlyEvaluationTemplateMinAggregateOutputType | null
+    _max: MonthlyEvaluationTemplateMaxAggregateOutputType | null
+  }
+
+  type GetMonthlyEvaluationTemplateGroupByPayload<T extends MonthlyEvaluationTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MonthlyEvaluationTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MonthlyEvaluationTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MonthlyEvaluationTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], MonthlyEvaluationTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MonthlyEvaluationTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationTemplateId?: boolean
+    name?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdByUserId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    createdByUser?: boolean | MonthlyEvaluationTemplate$createdByUserArgs<ExtArgs>
+    versions?: boolean | MonthlyEvaluationTemplate$versionsArgs<ExtArgs>
+    _count?: boolean | MonthlyEvaluationTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationTemplate"]>
+
+  export type MonthlyEvaluationTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationTemplateId?: boolean
+    name?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdByUserId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    createdByUser?: boolean | MonthlyEvaluationTemplate$createdByUserArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationTemplate"]>
+
+  export type MonthlyEvaluationTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationTemplateId?: boolean
+    name?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdByUserId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    createdByUser?: boolean | MonthlyEvaluationTemplate$createdByUserArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationTemplate"]>
+
+  export type MonthlyEvaluationTemplateSelectScalar = {
+    monthlyEvaluationTemplateId?: boolean
+    name?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdByUserId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+  }
+
+  export type MonthlyEvaluationTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"monthlyEvaluationTemplateId" | "name" | "description" | "isActive" | "createdByUserId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["monthlyEvaluationTemplate"]>
+  export type MonthlyEvaluationTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdByUser?: boolean | MonthlyEvaluationTemplate$createdByUserArgs<ExtArgs>
+    versions?: boolean | MonthlyEvaluationTemplate$versionsArgs<ExtArgs>
+    _count?: boolean | MonthlyEvaluationTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MonthlyEvaluationTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdByUser?: boolean | MonthlyEvaluationTemplate$createdByUserArgs<ExtArgs>
+  }
+  export type MonthlyEvaluationTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdByUser?: boolean | MonthlyEvaluationTemplate$createdByUserArgs<ExtArgs>
+  }
+
+  export type $MonthlyEvaluationTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MonthlyEvaluationTemplate"
+    objects: {
+      createdByUser: Prisma.$UserPayload<ExtArgs> | null
+      versions: Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      monthlyEvaluationTemplateId: number
+      name: string
+      description: string | null
+      isActive: boolean
+      createdByUserId: number | null
+      createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+    }, ExtArgs["result"]["monthlyEvaluationTemplate"]>
+    composites: {}
+  }
+
+  type MonthlyEvaluationTemplateGetPayload<S extends boolean | null | undefined | MonthlyEvaluationTemplateDefaultArgs> = $Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload, S>
+
+  type MonthlyEvaluationTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MonthlyEvaluationTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MonthlyEvaluationTemplateCountAggregateInputType | true
+    }
+
+  export interface MonthlyEvaluationTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonthlyEvaluationTemplate'], meta: { name: 'MonthlyEvaluationTemplate' } }
+    /**
+     * Find zero or one MonthlyEvaluationTemplate that matches the filter.
+     * @param {MonthlyEvaluationTemplateFindUniqueArgs} args - Arguments to find a MonthlyEvaluationTemplate
+     * @example
+     * // Get one MonthlyEvaluationTemplate
+     * const monthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MonthlyEvaluationTemplateFindUniqueArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateFindUniqueArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MonthlyEvaluationTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MonthlyEvaluationTemplateFindUniqueOrThrowArgs} args - Arguments to find a MonthlyEvaluationTemplate
+     * @example
+     * // Get one MonthlyEvaluationTemplate
+     * const monthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MonthlyEvaluationTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonthlyEvaluationTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateFindFirstArgs} args - Arguments to find a MonthlyEvaluationTemplate
+     * @example
+     * // Get one MonthlyEvaluationTemplate
+     * const monthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MonthlyEvaluationTemplateFindFirstArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateFindFirstArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonthlyEvaluationTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateFindFirstOrThrowArgs} args - Arguments to find a MonthlyEvaluationTemplate
+     * @example
+     * // Get one MonthlyEvaluationTemplate
+     * const monthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MonthlyEvaluationTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MonthlyEvaluationTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MonthlyEvaluationTemplates
+     * const monthlyEvaluationTemplates = await prisma.monthlyEvaluationTemplate.findMany()
+     * 
+     * // Get first 10 MonthlyEvaluationTemplates
+     * const monthlyEvaluationTemplates = await prisma.monthlyEvaluationTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `monthlyEvaluationTemplateId`
+     * const monthlyEvaluationTemplateWithMonthlyEvaluationTemplateIdOnly = await prisma.monthlyEvaluationTemplate.findMany({ select: { monthlyEvaluationTemplateId: true } })
+     * 
+     */
+    findMany<T extends MonthlyEvaluationTemplateFindManyArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MonthlyEvaluationTemplate.
+     * @param {MonthlyEvaluationTemplateCreateArgs} args - Arguments to create a MonthlyEvaluationTemplate.
+     * @example
+     * // Create one MonthlyEvaluationTemplate
+     * const MonthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.create({
+     *   data: {
+     *     // ... data to create a MonthlyEvaluationTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends MonthlyEvaluationTemplateCreateArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateCreateArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MonthlyEvaluationTemplates.
+     * @param {MonthlyEvaluationTemplateCreateManyArgs} args - Arguments to create many MonthlyEvaluationTemplates.
+     * @example
+     * // Create many MonthlyEvaluationTemplates
+     * const monthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MonthlyEvaluationTemplateCreateManyArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MonthlyEvaluationTemplates and returns the data saved in the database.
+     * @param {MonthlyEvaluationTemplateCreateManyAndReturnArgs} args - Arguments to create many MonthlyEvaluationTemplates.
+     * @example
+     * // Create many MonthlyEvaluationTemplates
+     * const monthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MonthlyEvaluationTemplates and only return the `monthlyEvaluationTemplateId`
+     * const monthlyEvaluationTemplateWithMonthlyEvaluationTemplateIdOnly = await prisma.monthlyEvaluationTemplate.createManyAndReturn({
+     *   select: { monthlyEvaluationTemplateId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MonthlyEvaluationTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MonthlyEvaluationTemplate.
+     * @param {MonthlyEvaluationTemplateDeleteArgs} args - Arguments to delete one MonthlyEvaluationTemplate.
+     * @example
+     * // Delete one MonthlyEvaluationTemplate
+     * const MonthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one MonthlyEvaluationTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MonthlyEvaluationTemplateDeleteArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateDeleteArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MonthlyEvaluationTemplate.
+     * @param {MonthlyEvaluationTemplateUpdateArgs} args - Arguments to update one MonthlyEvaluationTemplate.
+     * @example
+     * // Update one MonthlyEvaluationTemplate
+     * const monthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MonthlyEvaluationTemplateUpdateArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateUpdateArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MonthlyEvaluationTemplates.
+     * @param {MonthlyEvaluationTemplateDeleteManyArgs} args - Arguments to filter MonthlyEvaluationTemplates to delete.
+     * @example
+     * // Delete a few MonthlyEvaluationTemplates
+     * const { count } = await prisma.monthlyEvaluationTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MonthlyEvaluationTemplateDeleteManyArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyEvaluationTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MonthlyEvaluationTemplates
+     * const monthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MonthlyEvaluationTemplateUpdateManyArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyEvaluationTemplates and returns the data updated in the database.
+     * @param {MonthlyEvaluationTemplateUpdateManyAndReturnArgs} args - Arguments to update many MonthlyEvaluationTemplates.
+     * @example
+     * // Update many MonthlyEvaluationTemplates
+     * const monthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MonthlyEvaluationTemplates and only return the `monthlyEvaluationTemplateId`
+     * const monthlyEvaluationTemplateWithMonthlyEvaluationTemplateIdOnly = await prisma.monthlyEvaluationTemplate.updateManyAndReturn({
+     *   select: { monthlyEvaluationTemplateId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MonthlyEvaluationTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MonthlyEvaluationTemplate.
+     * @param {MonthlyEvaluationTemplateUpsertArgs} args - Arguments to update or create a MonthlyEvaluationTemplate.
+     * @example
+     * // Update or create a MonthlyEvaluationTemplate
+     * const monthlyEvaluationTemplate = await prisma.monthlyEvaluationTemplate.upsert({
+     *   create: {
+     *     // ... data to create a MonthlyEvaluationTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MonthlyEvaluationTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MonthlyEvaluationTemplateUpsertArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateUpsertArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MonthlyEvaluationTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateCountArgs} args - Arguments to filter MonthlyEvaluationTemplates to count.
+     * @example
+     * // Count the number of MonthlyEvaluationTemplates
+     * const count = await prisma.monthlyEvaluationTemplate.count({
+     *   where: {
+     *     // ... the filter for the MonthlyEvaluationTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends MonthlyEvaluationTemplateCountArgs>(
+      args?: Subset<T, MonthlyEvaluationTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MonthlyEvaluationTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MonthlyEvaluationTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MonthlyEvaluationTemplateAggregateArgs>(args: Subset<T, MonthlyEvaluationTemplateAggregateArgs>): Prisma.PrismaPromise<GetMonthlyEvaluationTemplateAggregateType<T>>
+
+    /**
+     * Group by MonthlyEvaluationTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MonthlyEvaluationTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MonthlyEvaluationTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: MonthlyEvaluationTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MonthlyEvaluationTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonthlyEvaluationTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MonthlyEvaluationTemplate model
+   */
+  readonly fields: MonthlyEvaluationTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MonthlyEvaluationTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MonthlyEvaluationTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    createdByUser<T extends MonthlyEvaluationTemplate$createdByUserArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationTemplate$createdByUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    versions<T extends MonthlyEvaluationTemplate$versionsArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationTemplate$versionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MonthlyEvaluationTemplate model
+   */
+  interface MonthlyEvaluationTemplateFieldRefs {
+    readonly monthlyEvaluationTemplateId: FieldRef<"MonthlyEvaluationTemplate", 'Int'>
+    readonly name: FieldRef<"MonthlyEvaluationTemplate", 'String'>
+    readonly description: FieldRef<"MonthlyEvaluationTemplate", 'String'>
+    readonly isActive: FieldRef<"MonthlyEvaluationTemplate", 'Boolean'>
+    readonly createdByUserId: FieldRef<"MonthlyEvaluationTemplate", 'Int'>
+    readonly createdAt: FieldRef<"MonthlyEvaluationTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"MonthlyEvaluationTemplate", 'DateTime'>
+    readonly deletedAt: FieldRef<"MonthlyEvaluationTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MonthlyEvaluationTemplate findUnique
+   */
+  export type MonthlyEvaluationTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationTemplate to fetch.
+     */
+    where: MonthlyEvaluationTemplateWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationTemplate findUniqueOrThrow
+   */
+  export type MonthlyEvaluationTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationTemplate to fetch.
+     */
+    where: MonthlyEvaluationTemplateWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationTemplate findFirst
+   */
+  export type MonthlyEvaluationTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationTemplate to fetch.
+     */
+    where?: MonthlyEvaluationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationTemplates to fetch.
+     */
+    orderBy?: MonthlyEvaluationTemplateOrderByWithRelationInput | MonthlyEvaluationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyEvaluationTemplates.
+     */
+    cursor?: MonthlyEvaluationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyEvaluationTemplates.
+     */
+    distinct?: MonthlyEvaluationTemplateScalarFieldEnum | MonthlyEvaluationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationTemplate findFirstOrThrow
+   */
+  export type MonthlyEvaluationTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationTemplate to fetch.
+     */
+    where?: MonthlyEvaluationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationTemplates to fetch.
+     */
+    orderBy?: MonthlyEvaluationTemplateOrderByWithRelationInput | MonthlyEvaluationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyEvaluationTemplates.
+     */
+    cursor?: MonthlyEvaluationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyEvaluationTemplates.
+     */
+    distinct?: MonthlyEvaluationTemplateScalarFieldEnum | MonthlyEvaluationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationTemplate findMany
+   */
+  export type MonthlyEvaluationTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationTemplates to fetch.
+     */
+    where?: MonthlyEvaluationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationTemplates to fetch.
+     */
+    orderBy?: MonthlyEvaluationTemplateOrderByWithRelationInput | MonthlyEvaluationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MonthlyEvaluationTemplates.
+     */
+    cursor?: MonthlyEvaluationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationTemplates.
+     */
+    skip?: number
+    distinct?: MonthlyEvaluationTemplateScalarFieldEnum | MonthlyEvaluationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationTemplate create
+   */
+  export type MonthlyEvaluationTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MonthlyEvaluationTemplate.
+     */
+    data: XOR<MonthlyEvaluationTemplateCreateInput, MonthlyEvaluationTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * MonthlyEvaluationTemplate createMany
+   */
+  export type MonthlyEvaluationTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MonthlyEvaluationTemplates.
+     */
+    data: MonthlyEvaluationTemplateCreateManyInput | MonthlyEvaluationTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MonthlyEvaluationTemplate createManyAndReturn
+   */
+  export type MonthlyEvaluationTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many MonthlyEvaluationTemplates.
+     */
+    data: MonthlyEvaluationTemplateCreateManyInput | MonthlyEvaluationTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationTemplate update
+   */
+  export type MonthlyEvaluationTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MonthlyEvaluationTemplate.
+     */
+    data: XOR<MonthlyEvaluationTemplateUpdateInput, MonthlyEvaluationTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which MonthlyEvaluationTemplate to update.
+     */
+    where: MonthlyEvaluationTemplateWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationTemplate updateMany
+   */
+  export type MonthlyEvaluationTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MonthlyEvaluationTemplates.
+     */
+    data: XOR<MonthlyEvaluationTemplateUpdateManyMutationInput, MonthlyEvaluationTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyEvaluationTemplates to update
+     */
+    where?: MonthlyEvaluationTemplateWhereInput
+    /**
+     * Limit how many MonthlyEvaluationTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyEvaluationTemplate updateManyAndReturn
+   */
+  export type MonthlyEvaluationTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update MonthlyEvaluationTemplates.
+     */
+    data: XOR<MonthlyEvaluationTemplateUpdateManyMutationInput, MonthlyEvaluationTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyEvaluationTemplates to update
+     */
+    where?: MonthlyEvaluationTemplateWhereInput
+    /**
+     * Limit how many MonthlyEvaluationTemplates to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationTemplate upsert
+   */
+  export type MonthlyEvaluationTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MonthlyEvaluationTemplate to update in case it exists.
+     */
+    where: MonthlyEvaluationTemplateWhereUniqueInput
+    /**
+     * In case the MonthlyEvaluationTemplate found by the `where` argument doesn't exist, create a new MonthlyEvaluationTemplate with this data.
+     */
+    create: XOR<MonthlyEvaluationTemplateCreateInput, MonthlyEvaluationTemplateUncheckedCreateInput>
+    /**
+     * In case the MonthlyEvaluationTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MonthlyEvaluationTemplateUpdateInput, MonthlyEvaluationTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * MonthlyEvaluationTemplate delete
+   */
+  export type MonthlyEvaluationTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+    /**
+     * Filter which MonthlyEvaluationTemplate to delete.
+     */
+    where: MonthlyEvaluationTemplateWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationTemplate deleteMany
+   */
+  export type MonthlyEvaluationTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyEvaluationTemplates to delete
+     */
+    where?: MonthlyEvaluationTemplateWhereInput
+    /**
+     * Limit how many MonthlyEvaluationTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyEvaluationTemplate.createdByUser
+   */
+  export type MonthlyEvaluationTemplate$createdByUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * MonthlyEvaluationTemplate.versions
+   */
+  export type MonthlyEvaluationTemplate$versionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    orderBy?: MonthlyEvaluationTemplateVersionOrderByWithRelationInput | MonthlyEvaluationTemplateVersionOrderByWithRelationInput[]
+    cursor?: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MonthlyEvaluationTemplateVersionScalarFieldEnum | MonthlyEvaluationTemplateVersionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationTemplate without action
+   */
+  export type MonthlyEvaluationTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplate
+     */
+    select?: MonthlyEvaluationTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplate
+     */
+    omit?: MonthlyEvaluationTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MonthlyEvaluationTemplateVersion
+   */
+
+  export type AggregateMonthlyEvaluationTemplateVersion = {
+    _count: MonthlyEvaluationTemplateVersionCountAggregateOutputType | null
+    _avg: MonthlyEvaluationTemplateVersionAvgAggregateOutputType | null
+    _sum: MonthlyEvaluationTemplateVersionSumAggregateOutputType | null
+    _min: MonthlyEvaluationTemplateVersionMinAggregateOutputType | null
+    _max: MonthlyEvaluationTemplateVersionMaxAggregateOutputType | null
+  }
+
+  export type MonthlyEvaluationTemplateVersionAvgAggregateOutputType = {
+    monthlyEvaluationTemplateVersionId: number | null
+    monthlyEvaluationTemplateId: number | null
+    versionNumber: number | null
+    observedMaxScore: number | null
+    regularMaxScore: number | null
+  }
+
+  export type MonthlyEvaluationTemplateVersionSumAggregateOutputType = {
+    monthlyEvaluationTemplateVersionId: number | null
+    monthlyEvaluationTemplateId: number | null
+    versionNumber: number | null
+    observedMaxScore: number | null
+    regularMaxScore: number | null
+  }
+
+  export type MonthlyEvaluationTemplateVersionMinAggregateOutputType = {
+    monthlyEvaluationTemplateVersionId: number | null
+    monthlyEvaluationTemplateId: number | null
+    versionNumber: number | null
+    title: string | null
+    description: string | null
+    observedMaxScore: number | null
+    regularMaxScore: number | null
+    isPublished: boolean | null
+    publishedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type MonthlyEvaluationTemplateVersionMaxAggregateOutputType = {
+    monthlyEvaluationTemplateVersionId: number | null
+    monthlyEvaluationTemplateId: number | null
+    versionNumber: number | null
+    title: string | null
+    description: string | null
+    observedMaxScore: number | null
+    regularMaxScore: number | null
+    isPublished: boolean | null
+    publishedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type MonthlyEvaluationTemplateVersionCountAggregateOutputType = {
+    monthlyEvaluationTemplateVersionId: number
+    monthlyEvaluationTemplateId: number
+    versionNumber: number
+    title: number
+    description: number
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished: number
+    publishedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type MonthlyEvaluationTemplateVersionAvgAggregateInputType = {
+    monthlyEvaluationTemplateVersionId?: true
+    monthlyEvaluationTemplateId?: true
+    versionNumber?: true
+    observedMaxScore?: true
+    regularMaxScore?: true
+  }
+
+  export type MonthlyEvaluationTemplateVersionSumAggregateInputType = {
+    monthlyEvaluationTemplateVersionId?: true
+    monthlyEvaluationTemplateId?: true
+    versionNumber?: true
+    observedMaxScore?: true
+    regularMaxScore?: true
+  }
+
+  export type MonthlyEvaluationTemplateVersionMinAggregateInputType = {
+    monthlyEvaluationTemplateVersionId?: true
+    monthlyEvaluationTemplateId?: true
+    versionNumber?: true
+    title?: true
+    description?: true
+    observedMaxScore?: true
+    regularMaxScore?: true
+    isPublished?: true
+    publishedAt?: true
+    createdAt?: true
+  }
+
+  export type MonthlyEvaluationTemplateVersionMaxAggregateInputType = {
+    monthlyEvaluationTemplateVersionId?: true
+    monthlyEvaluationTemplateId?: true
+    versionNumber?: true
+    title?: true
+    description?: true
+    observedMaxScore?: true
+    regularMaxScore?: true
+    isPublished?: true
+    publishedAt?: true
+    createdAt?: true
+  }
+
+  export type MonthlyEvaluationTemplateVersionCountAggregateInputType = {
+    monthlyEvaluationTemplateVersionId?: true
+    monthlyEvaluationTemplateId?: true
+    versionNumber?: true
+    title?: true
+    description?: true
+    observedMaxScore?: true
+    regularMaxScore?: true
+    isPublished?: true
+    publishedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type MonthlyEvaluationTemplateVersionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyEvaluationTemplateVersion to aggregate.
+     */
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationTemplateVersions to fetch.
+     */
+    orderBy?: MonthlyEvaluationTemplateVersionOrderByWithRelationInput | MonthlyEvaluationTemplateVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationTemplateVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationTemplateVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MonthlyEvaluationTemplateVersions
+    **/
+    _count?: true | MonthlyEvaluationTemplateVersionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MonthlyEvaluationTemplateVersionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MonthlyEvaluationTemplateVersionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MonthlyEvaluationTemplateVersionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MonthlyEvaluationTemplateVersionMaxAggregateInputType
+  }
+
+  export type GetMonthlyEvaluationTemplateVersionAggregateType<T extends MonthlyEvaluationTemplateVersionAggregateArgs> = {
+        [P in keyof T & keyof AggregateMonthlyEvaluationTemplateVersion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMonthlyEvaluationTemplateVersion[P]>
+      : GetScalarType<T[P], AggregateMonthlyEvaluationTemplateVersion[P]>
+  }
+
+
+
+
+  export type MonthlyEvaluationTemplateVersionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    orderBy?: MonthlyEvaluationTemplateVersionOrderByWithAggregationInput | MonthlyEvaluationTemplateVersionOrderByWithAggregationInput[]
+    by: MonthlyEvaluationTemplateVersionScalarFieldEnum[] | MonthlyEvaluationTemplateVersionScalarFieldEnum
+    having?: MonthlyEvaluationTemplateVersionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MonthlyEvaluationTemplateVersionCountAggregateInputType | true
+    _avg?: MonthlyEvaluationTemplateVersionAvgAggregateInputType
+    _sum?: MonthlyEvaluationTemplateVersionSumAggregateInputType
+    _min?: MonthlyEvaluationTemplateVersionMinAggregateInputType
+    _max?: MonthlyEvaluationTemplateVersionMaxAggregateInputType
+  }
+
+  export type MonthlyEvaluationTemplateVersionGroupByOutputType = {
+    monthlyEvaluationTemplateVersionId: number
+    monthlyEvaluationTemplateId: number
+    versionNumber: number
+    title: string
+    description: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished: boolean
+    publishedAt: Date
+    createdAt: Date
+    _count: MonthlyEvaluationTemplateVersionCountAggregateOutputType | null
+    _avg: MonthlyEvaluationTemplateVersionAvgAggregateOutputType | null
+    _sum: MonthlyEvaluationTemplateVersionSumAggregateOutputType | null
+    _min: MonthlyEvaluationTemplateVersionMinAggregateOutputType | null
+    _max: MonthlyEvaluationTemplateVersionMaxAggregateOutputType | null
+  }
+
+  type GetMonthlyEvaluationTemplateVersionGroupByPayload<T extends MonthlyEvaluationTemplateVersionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MonthlyEvaluationTemplateVersionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MonthlyEvaluationTemplateVersionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MonthlyEvaluationTemplateVersionGroupByOutputType[P]>
+            : GetScalarType<T[P], MonthlyEvaluationTemplateVersionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MonthlyEvaluationTemplateVersionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationTemplateVersionId?: boolean
+    monthlyEvaluationTemplateId?: boolean
+    versionNumber?: boolean
+    title?: boolean
+    description?: boolean
+    observedMaxScore?: boolean
+    regularMaxScore?: boolean
+    isPublished?: boolean
+    publishedAt?: boolean
+    createdAt?: boolean
+    template?: boolean | MonthlyEvaluationTemplateDefaultArgs<ExtArgs>
+    sections?: boolean | MonthlyEvaluationTemplateVersion$sectionsArgs<ExtArgs>
+    evaluations?: boolean | MonthlyEvaluationTemplateVersion$evaluationsArgs<ExtArgs>
+    _count?: boolean | MonthlyEvaluationTemplateVersionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationTemplateVersion"]>
+
+  export type MonthlyEvaluationTemplateVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationTemplateVersionId?: boolean
+    monthlyEvaluationTemplateId?: boolean
+    versionNumber?: boolean
+    title?: boolean
+    description?: boolean
+    observedMaxScore?: boolean
+    regularMaxScore?: boolean
+    isPublished?: boolean
+    publishedAt?: boolean
+    createdAt?: boolean
+    template?: boolean | MonthlyEvaluationTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationTemplateVersion"]>
+
+  export type MonthlyEvaluationTemplateVersionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationTemplateVersionId?: boolean
+    monthlyEvaluationTemplateId?: boolean
+    versionNumber?: boolean
+    title?: boolean
+    description?: boolean
+    observedMaxScore?: boolean
+    regularMaxScore?: boolean
+    isPublished?: boolean
+    publishedAt?: boolean
+    createdAt?: boolean
+    template?: boolean | MonthlyEvaluationTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationTemplateVersion"]>
+
+  export type MonthlyEvaluationTemplateVersionSelectScalar = {
+    monthlyEvaluationTemplateVersionId?: boolean
+    monthlyEvaluationTemplateId?: boolean
+    versionNumber?: boolean
+    title?: boolean
+    description?: boolean
+    observedMaxScore?: boolean
+    regularMaxScore?: boolean
+    isPublished?: boolean
+    publishedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type MonthlyEvaluationTemplateVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"monthlyEvaluationTemplateVersionId" | "monthlyEvaluationTemplateId" | "versionNumber" | "title" | "description" | "observedMaxScore" | "regularMaxScore" | "isPublished" | "publishedAt" | "createdAt", ExtArgs["result"]["monthlyEvaluationTemplateVersion"]>
+  export type MonthlyEvaluationTemplateVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | MonthlyEvaluationTemplateDefaultArgs<ExtArgs>
+    sections?: boolean | MonthlyEvaluationTemplateVersion$sectionsArgs<ExtArgs>
+    evaluations?: boolean | MonthlyEvaluationTemplateVersion$evaluationsArgs<ExtArgs>
+    _count?: boolean | MonthlyEvaluationTemplateVersionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MonthlyEvaluationTemplateVersionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | MonthlyEvaluationTemplateDefaultArgs<ExtArgs>
+  }
+  export type MonthlyEvaluationTemplateVersionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | MonthlyEvaluationTemplateDefaultArgs<ExtArgs>
+  }
+
+  export type $MonthlyEvaluationTemplateVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MonthlyEvaluationTemplateVersion"
+    objects: {
+      template: Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>
+      sections: Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>[]
+      evaluations: Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      monthlyEvaluationTemplateVersionId: number
+      monthlyEvaluationTemplateId: number
+      versionNumber: number
+      title: string
+      description: string | null
+      observedMaxScore: number
+      regularMaxScore: number
+      isPublished: boolean
+      publishedAt: Date
+      createdAt: Date
+    }, ExtArgs["result"]["monthlyEvaluationTemplateVersion"]>
+    composites: {}
+  }
+
+  type MonthlyEvaluationTemplateVersionGetPayload<S extends boolean | null | undefined | MonthlyEvaluationTemplateVersionDefaultArgs> = $Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload, S>
+
+  type MonthlyEvaluationTemplateVersionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MonthlyEvaluationTemplateVersionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MonthlyEvaluationTemplateVersionCountAggregateInputType | true
+    }
+
+  export interface MonthlyEvaluationTemplateVersionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonthlyEvaluationTemplateVersion'], meta: { name: 'MonthlyEvaluationTemplateVersion' } }
+    /**
+     * Find zero or one MonthlyEvaluationTemplateVersion that matches the filter.
+     * @param {MonthlyEvaluationTemplateVersionFindUniqueArgs} args - Arguments to find a MonthlyEvaluationTemplateVersion
+     * @example
+     * // Get one MonthlyEvaluationTemplateVersion
+     * const monthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MonthlyEvaluationTemplateVersionFindUniqueArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateVersionFindUniqueArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateVersionClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MonthlyEvaluationTemplateVersion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MonthlyEvaluationTemplateVersionFindUniqueOrThrowArgs} args - Arguments to find a MonthlyEvaluationTemplateVersion
+     * @example
+     * // Get one MonthlyEvaluationTemplateVersion
+     * const monthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MonthlyEvaluationTemplateVersionFindUniqueOrThrowArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateVersionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateVersionClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonthlyEvaluationTemplateVersion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateVersionFindFirstArgs} args - Arguments to find a MonthlyEvaluationTemplateVersion
+     * @example
+     * // Get one MonthlyEvaluationTemplateVersion
+     * const monthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MonthlyEvaluationTemplateVersionFindFirstArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateVersionFindFirstArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateVersionClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonthlyEvaluationTemplateVersion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateVersionFindFirstOrThrowArgs} args - Arguments to find a MonthlyEvaluationTemplateVersion
+     * @example
+     * // Get one MonthlyEvaluationTemplateVersion
+     * const monthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MonthlyEvaluationTemplateVersionFindFirstOrThrowArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateVersionFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateVersionClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MonthlyEvaluationTemplateVersions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateVersionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MonthlyEvaluationTemplateVersions
+     * const monthlyEvaluationTemplateVersions = await prisma.monthlyEvaluationTemplateVersion.findMany()
+     * 
+     * // Get first 10 MonthlyEvaluationTemplateVersions
+     * const monthlyEvaluationTemplateVersions = await prisma.monthlyEvaluationTemplateVersion.findMany({ take: 10 })
+     * 
+     * // Only select the `monthlyEvaluationTemplateVersionId`
+     * const monthlyEvaluationTemplateVersionWithMonthlyEvaluationTemplateVersionIdOnly = await prisma.monthlyEvaluationTemplateVersion.findMany({ select: { monthlyEvaluationTemplateVersionId: true } })
+     * 
+     */
+    findMany<T extends MonthlyEvaluationTemplateVersionFindManyArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateVersionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MonthlyEvaluationTemplateVersion.
+     * @param {MonthlyEvaluationTemplateVersionCreateArgs} args - Arguments to create a MonthlyEvaluationTemplateVersion.
+     * @example
+     * // Create one MonthlyEvaluationTemplateVersion
+     * const MonthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.create({
+     *   data: {
+     *     // ... data to create a MonthlyEvaluationTemplateVersion
+     *   }
+     * })
+     * 
+     */
+    create<T extends MonthlyEvaluationTemplateVersionCreateArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateVersionCreateArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateVersionClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MonthlyEvaluationTemplateVersions.
+     * @param {MonthlyEvaluationTemplateVersionCreateManyArgs} args - Arguments to create many MonthlyEvaluationTemplateVersions.
+     * @example
+     * // Create many MonthlyEvaluationTemplateVersions
+     * const monthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MonthlyEvaluationTemplateVersionCreateManyArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateVersionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MonthlyEvaluationTemplateVersions and returns the data saved in the database.
+     * @param {MonthlyEvaluationTemplateVersionCreateManyAndReturnArgs} args - Arguments to create many MonthlyEvaluationTemplateVersions.
+     * @example
+     * // Create many MonthlyEvaluationTemplateVersions
+     * const monthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MonthlyEvaluationTemplateVersions and only return the `monthlyEvaluationTemplateVersionId`
+     * const monthlyEvaluationTemplateVersionWithMonthlyEvaluationTemplateVersionIdOnly = await prisma.monthlyEvaluationTemplateVersion.createManyAndReturn({
+     *   select: { monthlyEvaluationTemplateVersionId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MonthlyEvaluationTemplateVersionCreateManyAndReturnArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateVersionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MonthlyEvaluationTemplateVersion.
+     * @param {MonthlyEvaluationTemplateVersionDeleteArgs} args - Arguments to delete one MonthlyEvaluationTemplateVersion.
+     * @example
+     * // Delete one MonthlyEvaluationTemplateVersion
+     * const MonthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.delete({
+     *   where: {
+     *     // ... filter to delete one MonthlyEvaluationTemplateVersion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MonthlyEvaluationTemplateVersionDeleteArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateVersionDeleteArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateVersionClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MonthlyEvaluationTemplateVersion.
+     * @param {MonthlyEvaluationTemplateVersionUpdateArgs} args - Arguments to update one MonthlyEvaluationTemplateVersion.
+     * @example
+     * // Update one MonthlyEvaluationTemplateVersion
+     * const monthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MonthlyEvaluationTemplateVersionUpdateArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateVersionUpdateArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateVersionClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MonthlyEvaluationTemplateVersions.
+     * @param {MonthlyEvaluationTemplateVersionDeleteManyArgs} args - Arguments to filter MonthlyEvaluationTemplateVersions to delete.
+     * @example
+     * // Delete a few MonthlyEvaluationTemplateVersions
+     * const { count } = await prisma.monthlyEvaluationTemplateVersion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MonthlyEvaluationTemplateVersionDeleteManyArgs>(args?: SelectSubset<T, MonthlyEvaluationTemplateVersionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyEvaluationTemplateVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateVersionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MonthlyEvaluationTemplateVersions
+     * const monthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MonthlyEvaluationTemplateVersionUpdateManyArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateVersionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyEvaluationTemplateVersions and returns the data updated in the database.
+     * @param {MonthlyEvaluationTemplateVersionUpdateManyAndReturnArgs} args - Arguments to update many MonthlyEvaluationTemplateVersions.
+     * @example
+     * // Update many MonthlyEvaluationTemplateVersions
+     * const monthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MonthlyEvaluationTemplateVersions and only return the `monthlyEvaluationTemplateVersionId`
+     * const monthlyEvaluationTemplateVersionWithMonthlyEvaluationTemplateVersionIdOnly = await prisma.monthlyEvaluationTemplateVersion.updateManyAndReturn({
+     *   select: { monthlyEvaluationTemplateVersionId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MonthlyEvaluationTemplateVersionUpdateManyAndReturnArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateVersionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MonthlyEvaluationTemplateVersion.
+     * @param {MonthlyEvaluationTemplateVersionUpsertArgs} args - Arguments to update or create a MonthlyEvaluationTemplateVersion.
+     * @example
+     * // Update or create a MonthlyEvaluationTemplateVersion
+     * const monthlyEvaluationTemplateVersion = await prisma.monthlyEvaluationTemplateVersion.upsert({
+     *   create: {
+     *     // ... data to create a MonthlyEvaluationTemplateVersion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MonthlyEvaluationTemplateVersion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MonthlyEvaluationTemplateVersionUpsertArgs>(args: SelectSubset<T, MonthlyEvaluationTemplateVersionUpsertArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateVersionClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MonthlyEvaluationTemplateVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateVersionCountArgs} args - Arguments to filter MonthlyEvaluationTemplateVersions to count.
+     * @example
+     * // Count the number of MonthlyEvaluationTemplateVersions
+     * const count = await prisma.monthlyEvaluationTemplateVersion.count({
+     *   where: {
+     *     // ... the filter for the MonthlyEvaluationTemplateVersions we want to count
+     *   }
+     * })
+    **/
+    count<T extends MonthlyEvaluationTemplateVersionCountArgs>(
+      args?: Subset<T, MonthlyEvaluationTemplateVersionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MonthlyEvaluationTemplateVersionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MonthlyEvaluationTemplateVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateVersionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MonthlyEvaluationTemplateVersionAggregateArgs>(args: Subset<T, MonthlyEvaluationTemplateVersionAggregateArgs>): Prisma.PrismaPromise<GetMonthlyEvaluationTemplateVersionAggregateType<T>>
+
+    /**
+     * Group by MonthlyEvaluationTemplateVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationTemplateVersionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MonthlyEvaluationTemplateVersionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MonthlyEvaluationTemplateVersionGroupByArgs['orderBy'] }
+        : { orderBy?: MonthlyEvaluationTemplateVersionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MonthlyEvaluationTemplateVersionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonthlyEvaluationTemplateVersionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MonthlyEvaluationTemplateVersion model
+   */
+  readonly fields: MonthlyEvaluationTemplateVersionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MonthlyEvaluationTemplateVersion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MonthlyEvaluationTemplateVersionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    template<T extends MonthlyEvaluationTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationTemplateDefaultArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sections<T extends MonthlyEvaluationTemplateVersion$sectionsArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationTemplateVersion$sectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    evaluations<T extends MonthlyEvaluationTemplateVersion$evaluationsArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationTemplateVersion$evaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MonthlyEvaluationTemplateVersion model
+   */
+  interface MonthlyEvaluationTemplateVersionFieldRefs {
+    readonly monthlyEvaluationTemplateVersionId: FieldRef<"MonthlyEvaluationTemplateVersion", 'Int'>
+    readonly monthlyEvaluationTemplateId: FieldRef<"MonthlyEvaluationTemplateVersion", 'Int'>
+    readonly versionNumber: FieldRef<"MonthlyEvaluationTemplateVersion", 'Int'>
+    readonly title: FieldRef<"MonthlyEvaluationTemplateVersion", 'String'>
+    readonly description: FieldRef<"MonthlyEvaluationTemplateVersion", 'String'>
+    readonly observedMaxScore: FieldRef<"MonthlyEvaluationTemplateVersion", 'Int'>
+    readonly regularMaxScore: FieldRef<"MonthlyEvaluationTemplateVersion", 'Int'>
+    readonly isPublished: FieldRef<"MonthlyEvaluationTemplateVersion", 'Boolean'>
+    readonly publishedAt: FieldRef<"MonthlyEvaluationTemplateVersion", 'DateTime'>
+    readonly createdAt: FieldRef<"MonthlyEvaluationTemplateVersion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MonthlyEvaluationTemplateVersion findUnique
+   */
+  export type MonthlyEvaluationTemplateVersionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationTemplateVersion to fetch.
+     */
+    where: MonthlyEvaluationTemplateVersionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion findUniqueOrThrow
+   */
+  export type MonthlyEvaluationTemplateVersionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationTemplateVersion to fetch.
+     */
+    where: MonthlyEvaluationTemplateVersionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion findFirst
+   */
+  export type MonthlyEvaluationTemplateVersionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationTemplateVersion to fetch.
+     */
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationTemplateVersions to fetch.
+     */
+    orderBy?: MonthlyEvaluationTemplateVersionOrderByWithRelationInput | MonthlyEvaluationTemplateVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyEvaluationTemplateVersions.
+     */
+    cursor?: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationTemplateVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationTemplateVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyEvaluationTemplateVersions.
+     */
+    distinct?: MonthlyEvaluationTemplateVersionScalarFieldEnum | MonthlyEvaluationTemplateVersionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion findFirstOrThrow
+   */
+  export type MonthlyEvaluationTemplateVersionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationTemplateVersion to fetch.
+     */
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationTemplateVersions to fetch.
+     */
+    orderBy?: MonthlyEvaluationTemplateVersionOrderByWithRelationInput | MonthlyEvaluationTemplateVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyEvaluationTemplateVersions.
+     */
+    cursor?: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationTemplateVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationTemplateVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyEvaluationTemplateVersions.
+     */
+    distinct?: MonthlyEvaluationTemplateVersionScalarFieldEnum | MonthlyEvaluationTemplateVersionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion findMany
+   */
+  export type MonthlyEvaluationTemplateVersionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationTemplateVersions to fetch.
+     */
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationTemplateVersions to fetch.
+     */
+    orderBy?: MonthlyEvaluationTemplateVersionOrderByWithRelationInput | MonthlyEvaluationTemplateVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MonthlyEvaluationTemplateVersions.
+     */
+    cursor?: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationTemplateVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationTemplateVersions.
+     */
+    skip?: number
+    distinct?: MonthlyEvaluationTemplateVersionScalarFieldEnum | MonthlyEvaluationTemplateVersionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion create
+   */
+  export type MonthlyEvaluationTemplateVersionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MonthlyEvaluationTemplateVersion.
+     */
+    data: XOR<MonthlyEvaluationTemplateVersionCreateInput, MonthlyEvaluationTemplateVersionUncheckedCreateInput>
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion createMany
+   */
+  export type MonthlyEvaluationTemplateVersionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MonthlyEvaluationTemplateVersions.
+     */
+    data: MonthlyEvaluationTemplateVersionCreateManyInput | MonthlyEvaluationTemplateVersionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion createManyAndReturn
+   */
+  export type MonthlyEvaluationTemplateVersionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * The data used to create many MonthlyEvaluationTemplateVersions.
+     */
+    data: MonthlyEvaluationTemplateVersionCreateManyInput | MonthlyEvaluationTemplateVersionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion update
+   */
+  export type MonthlyEvaluationTemplateVersionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MonthlyEvaluationTemplateVersion.
+     */
+    data: XOR<MonthlyEvaluationTemplateVersionUpdateInput, MonthlyEvaluationTemplateVersionUncheckedUpdateInput>
+    /**
+     * Choose, which MonthlyEvaluationTemplateVersion to update.
+     */
+    where: MonthlyEvaluationTemplateVersionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion updateMany
+   */
+  export type MonthlyEvaluationTemplateVersionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MonthlyEvaluationTemplateVersions.
+     */
+    data: XOR<MonthlyEvaluationTemplateVersionUpdateManyMutationInput, MonthlyEvaluationTemplateVersionUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyEvaluationTemplateVersions to update
+     */
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    /**
+     * Limit how many MonthlyEvaluationTemplateVersions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion updateManyAndReturn
+   */
+  export type MonthlyEvaluationTemplateVersionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * The data used to update MonthlyEvaluationTemplateVersions.
+     */
+    data: XOR<MonthlyEvaluationTemplateVersionUpdateManyMutationInput, MonthlyEvaluationTemplateVersionUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyEvaluationTemplateVersions to update
+     */
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    /**
+     * Limit how many MonthlyEvaluationTemplateVersions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion upsert
+   */
+  export type MonthlyEvaluationTemplateVersionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MonthlyEvaluationTemplateVersion to update in case it exists.
+     */
+    where: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    /**
+     * In case the MonthlyEvaluationTemplateVersion found by the `where` argument doesn't exist, create a new MonthlyEvaluationTemplateVersion with this data.
+     */
+    create: XOR<MonthlyEvaluationTemplateVersionCreateInput, MonthlyEvaluationTemplateVersionUncheckedCreateInput>
+    /**
+     * In case the MonthlyEvaluationTemplateVersion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MonthlyEvaluationTemplateVersionUpdateInput, MonthlyEvaluationTemplateVersionUncheckedUpdateInput>
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion delete
+   */
+  export type MonthlyEvaluationTemplateVersionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+    /**
+     * Filter which MonthlyEvaluationTemplateVersion to delete.
+     */
+    where: MonthlyEvaluationTemplateVersionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion deleteMany
+   */
+  export type MonthlyEvaluationTemplateVersionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyEvaluationTemplateVersions to delete
+     */
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    /**
+     * Limit how many MonthlyEvaluationTemplateVersions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion.sections
+   */
+  export type MonthlyEvaluationTemplateVersion$sectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+    where?: MonthlyEvaluationSectionWhereInput
+    orderBy?: MonthlyEvaluationSectionOrderByWithRelationInput | MonthlyEvaluationSectionOrderByWithRelationInput[]
+    cursor?: MonthlyEvaluationSectionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MonthlyEvaluationSectionScalarFieldEnum | MonthlyEvaluationSectionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion.evaluations
+   */
+  export type MonthlyEvaluationTemplateVersion$evaluationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    where?: WorkerMonthlyEvaluationWhereInput
+    orderBy?: WorkerMonthlyEvaluationOrderByWithRelationInput | WorkerMonthlyEvaluationOrderByWithRelationInput[]
+    cursor?: WorkerMonthlyEvaluationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkerMonthlyEvaluationScalarFieldEnum | WorkerMonthlyEvaluationScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationTemplateVersion without action
+   */
+  export type MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationTemplateVersion
+     */
+    select?: MonthlyEvaluationTemplateVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationTemplateVersion
+     */
+    omit?: MonthlyEvaluationTemplateVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationTemplateVersionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MonthlyEvaluationSection
+   */
+
+  export type AggregateMonthlyEvaluationSection = {
+    _count: MonthlyEvaluationSectionCountAggregateOutputType | null
+    _avg: MonthlyEvaluationSectionAvgAggregateOutputType | null
+    _sum: MonthlyEvaluationSectionSumAggregateOutputType | null
+    _min: MonthlyEvaluationSectionMinAggregateOutputType | null
+    _max: MonthlyEvaluationSectionMaxAggregateOutputType | null
+  }
+
+  export type MonthlyEvaluationSectionAvgAggregateOutputType = {
+    monthlyEvaluationSectionId: number | null
+    monthlyEvaluationTemplateVersionId: number | null
+    displayOrder: number | null
+  }
+
+  export type MonthlyEvaluationSectionSumAggregateOutputType = {
+    monthlyEvaluationSectionId: number | null
+    monthlyEvaluationTemplateVersionId: number | null
+    displayOrder: number | null
+  }
+
+  export type MonthlyEvaluationSectionMinAggregateOutputType = {
+    monthlyEvaluationSectionId: number | null
+    monthlyEvaluationTemplateVersionId: number | null
+    title: string | null
+    displayOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MonthlyEvaluationSectionMaxAggregateOutputType = {
+    monthlyEvaluationSectionId: number | null
+    monthlyEvaluationTemplateVersionId: number | null
+    title: string | null
+    displayOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MonthlyEvaluationSectionCountAggregateOutputType = {
+    monthlyEvaluationSectionId: number
+    monthlyEvaluationTemplateVersionId: number
+    title: number
+    displayOrder: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MonthlyEvaluationSectionAvgAggregateInputType = {
+    monthlyEvaluationSectionId?: true
+    monthlyEvaluationTemplateVersionId?: true
+    displayOrder?: true
+  }
+
+  export type MonthlyEvaluationSectionSumAggregateInputType = {
+    monthlyEvaluationSectionId?: true
+    monthlyEvaluationTemplateVersionId?: true
+    displayOrder?: true
+  }
+
+  export type MonthlyEvaluationSectionMinAggregateInputType = {
+    monthlyEvaluationSectionId?: true
+    monthlyEvaluationTemplateVersionId?: true
+    title?: true
+    displayOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MonthlyEvaluationSectionMaxAggregateInputType = {
+    monthlyEvaluationSectionId?: true
+    monthlyEvaluationTemplateVersionId?: true
+    title?: true
+    displayOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MonthlyEvaluationSectionCountAggregateInputType = {
+    monthlyEvaluationSectionId?: true
+    monthlyEvaluationTemplateVersionId?: true
+    title?: true
+    displayOrder?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MonthlyEvaluationSectionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyEvaluationSection to aggregate.
+     */
+    where?: MonthlyEvaluationSectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationSections to fetch.
+     */
+    orderBy?: MonthlyEvaluationSectionOrderByWithRelationInput | MonthlyEvaluationSectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MonthlyEvaluationSectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationSections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationSections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MonthlyEvaluationSections
+    **/
+    _count?: true | MonthlyEvaluationSectionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MonthlyEvaluationSectionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MonthlyEvaluationSectionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MonthlyEvaluationSectionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MonthlyEvaluationSectionMaxAggregateInputType
+  }
+
+  export type GetMonthlyEvaluationSectionAggregateType<T extends MonthlyEvaluationSectionAggregateArgs> = {
+        [P in keyof T & keyof AggregateMonthlyEvaluationSection]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMonthlyEvaluationSection[P]>
+      : GetScalarType<T[P], AggregateMonthlyEvaluationSection[P]>
+  }
+
+
+
+
+  export type MonthlyEvaluationSectionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyEvaluationSectionWhereInput
+    orderBy?: MonthlyEvaluationSectionOrderByWithAggregationInput | MonthlyEvaluationSectionOrderByWithAggregationInput[]
+    by: MonthlyEvaluationSectionScalarFieldEnum[] | MonthlyEvaluationSectionScalarFieldEnum
+    having?: MonthlyEvaluationSectionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MonthlyEvaluationSectionCountAggregateInputType | true
+    _avg?: MonthlyEvaluationSectionAvgAggregateInputType
+    _sum?: MonthlyEvaluationSectionSumAggregateInputType
+    _min?: MonthlyEvaluationSectionMinAggregateInputType
+    _max?: MonthlyEvaluationSectionMaxAggregateInputType
+  }
+
+  export type MonthlyEvaluationSectionGroupByOutputType = {
+    monthlyEvaluationSectionId: number
+    monthlyEvaluationTemplateVersionId: number
+    title: string
+    displayOrder: number
+    createdAt: Date
+    updatedAt: Date
+    _count: MonthlyEvaluationSectionCountAggregateOutputType | null
+    _avg: MonthlyEvaluationSectionAvgAggregateOutputType | null
+    _sum: MonthlyEvaluationSectionSumAggregateOutputType | null
+    _min: MonthlyEvaluationSectionMinAggregateOutputType | null
+    _max: MonthlyEvaluationSectionMaxAggregateOutputType | null
+  }
+
+  type GetMonthlyEvaluationSectionGroupByPayload<T extends MonthlyEvaluationSectionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MonthlyEvaluationSectionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MonthlyEvaluationSectionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MonthlyEvaluationSectionGroupByOutputType[P]>
+            : GetScalarType<T[P], MonthlyEvaluationSectionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MonthlyEvaluationSectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationSectionId?: boolean
+    monthlyEvaluationTemplateVersionId?: boolean
+    title?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+    questions?: boolean | MonthlyEvaluationSection$questionsArgs<ExtArgs>
+    _count?: boolean | MonthlyEvaluationSectionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationSection"]>
+
+  export type MonthlyEvaluationSectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationSectionId?: boolean
+    monthlyEvaluationTemplateVersionId?: boolean
+    title?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationSection"]>
+
+  export type MonthlyEvaluationSectionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationSectionId?: boolean
+    monthlyEvaluationTemplateVersionId?: boolean
+    title?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationSection"]>
+
+  export type MonthlyEvaluationSectionSelectScalar = {
+    monthlyEvaluationSectionId?: boolean
+    monthlyEvaluationTemplateVersionId?: boolean
+    title?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MonthlyEvaluationSectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"monthlyEvaluationSectionId" | "monthlyEvaluationTemplateVersionId" | "title" | "displayOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["monthlyEvaluationSection"]>
+  export type MonthlyEvaluationSectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+    questions?: boolean | MonthlyEvaluationSection$questionsArgs<ExtArgs>
+    _count?: boolean | MonthlyEvaluationSectionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MonthlyEvaluationSectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+  }
+  export type MonthlyEvaluationSectionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+  }
+
+  export type $MonthlyEvaluationSectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MonthlyEvaluationSection"
+    objects: {
+      templateVersion: Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>
+      questions: Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      monthlyEvaluationSectionId: number
+      monthlyEvaluationTemplateVersionId: number
+      title: string
+      displayOrder: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["monthlyEvaluationSection"]>
+    composites: {}
+  }
+
+  type MonthlyEvaluationSectionGetPayload<S extends boolean | null | undefined | MonthlyEvaluationSectionDefaultArgs> = $Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload, S>
+
+  type MonthlyEvaluationSectionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MonthlyEvaluationSectionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MonthlyEvaluationSectionCountAggregateInputType | true
+    }
+
+  export interface MonthlyEvaluationSectionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonthlyEvaluationSection'], meta: { name: 'MonthlyEvaluationSection' } }
+    /**
+     * Find zero or one MonthlyEvaluationSection that matches the filter.
+     * @param {MonthlyEvaluationSectionFindUniqueArgs} args - Arguments to find a MonthlyEvaluationSection
+     * @example
+     * // Get one MonthlyEvaluationSection
+     * const monthlyEvaluationSection = await prisma.monthlyEvaluationSection.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MonthlyEvaluationSectionFindUniqueArgs>(args: SelectSubset<T, MonthlyEvaluationSectionFindUniqueArgs<ExtArgs>>): Prisma__MonthlyEvaluationSectionClient<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MonthlyEvaluationSection that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MonthlyEvaluationSectionFindUniqueOrThrowArgs} args - Arguments to find a MonthlyEvaluationSection
+     * @example
+     * // Get one MonthlyEvaluationSection
+     * const monthlyEvaluationSection = await prisma.monthlyEvaluationSection.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MonthlyEvaluationSectionFindUniqueOrThrowArgs>(args: SelectSubset<T, MonthlyEvaluationSectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonthlyEvaluationSectionClient<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonthlyEvaluationSection that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationSectionFindFirstArgs} args - Arguments to find a MonthlyEvaluationSection
+     * @example
+     * // Get one MonthlyEvaluationSection
+     * const monthlyEvaluationSection = await prisma.monthlyEvaluationSection.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MonthlyEvaluationSectionFindFirstArgs>(args?: SelectSubset<T, MonthlyEvaluationSectionFindFirstArgs<ExtArgs>>): Prisma__MonthlyEvaluationSectionClient<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonthlyEvaluationSection that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationSectionFindFirstOrThrowArgs} args - Arguments to find a MonthlyEvaluationSection
+     * @example
+     * // Get one MonthlyEvaluationSection
+     * const monthlyEvaluationSection = await prisma.monthlyEvaluationSection.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MonthlyEvaluationSectionFindFirstOrThrowArgs>(args?: SelectSubset<T, MonthlyEvaluationSectionFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonthlyEvaluationSectionClient<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MonthlyEvaluationSections that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationSectionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MonthlyEvaluationSections
+     * const monthlyEvaluationSections = await prisma.monthlyEvaluationSection.findMany()
+     * 
+     * // Get first 10 MonthlyEvaluationSections
+     * const monthlyEvaluationSections = await prisma.monthlyEvaluationSection.findMany({ take: 10 })
+     * 
+     * // Only select the `monthlyEvaluationSectionId`
+     * const monthlyEvaluationSectionWithMonthlyEvaluationSectionIdOnly = await prisma.monthlyEvaluationSection.findMany({ select: { monthlyEvaluationSectionId: true } })
+     * 
+     */
+    findMany<T extends MonthlyEvaluationSectionFindManyArgs>(args?: SelectSubset<T, MonthlyEvaluationSectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MonthlyEvaluationSection.
+     * @param {MonthlyEvaluationSectionCreateArgs} args - Arguments to create a MonthlyEvaluationSection.
+     * @example
+     * // Create one MonthlyEvaluationSection
+     * const MonthlyEvaluationSection = await prisma.monthlyEvaluationSection.create({
+     *   data: {
+     *     // ... data to create a MonthlyEvaluationSection
+     *   }
+     * })
+     * 
+     */
+    create<T extends MonthlyEvaluationSectionCreateArgs>(args: SelectSubset<T, MonthlyEvaluationSectionCreateArgs<ExtArgs>>): Prisma__MonthlyEvaluationSectionClient<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MonthlyEvaluationSections.
+     * @param {MonthlyEvaluationSectionCreateManyArgs} args - Arguments to create many MonthlyEvaluationSections.
+     * @example
+     * // Create many MonthlyEvaluationSections
+     * const monthlyEvaluationSection = await prisma.monthlyEvaluationSection.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MonthlyEvaluationSectionCreateManyArgs>(args?: SelectSubset<T, MonthlyEvaluationSectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MonthlyEvaluationSections and returns the data saved in the database.
+     * @param {MonthlyEvaluationSectionCreateManyAndReturnArgs} args - Arguments to create many MonthlyEvaluationSections.
+     * @example
+     * // Create many MonthlyEvaluationSections
+     * const monthlyEvaluationSection = await prisma.monthlyEvaluationSection.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MonthlyEvaluationSections and only return the `monthlyEvaluationSectionId`
+     * const monthlyEvaluationSectionWithMonthlyEvaluationSectionIdOnly = await prisma.monthlyEvaluationSection.createManyAndReturn({
+     *   select: { monthlyEvaluationSectionId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MonthlyEvaluationSectionCreateManyAndReturnArgs>(args?: SelectSubset<T, MonthlyEvaluationSectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MonthlyEvaluationSection.
+     * @param {MonthlyEvaluationSectionDeleteArgs} args - Arguments to delete one MonthlyEvaluationSection.
+     * @example
+     * // Delete one MonthlyEvaluationSection
+     * const MonthlyEvaluationSection = await prisma.monthlyEvaluationSection.delete({
+     *   where: {
+     *     // ... filter to delete one MonthlyEvaluationSection
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MonthlyEvaluationSectionDeleteArgs>(args: SelectSubset<T, MonthlyEvaluationSectionDeleteArgs<ExtArgs>>): Prisma__MonthlyEvaluationSectionClient<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MonthlyEvaluationSection.
+     * @param {MonthlyEvaluationSectionUpdateArgs} args - Arguments to update one MonthlyEvaluationSection.
+     * @example
+     * // Update one MonthlyEvaluationSection
+     * const monthlyEvaluationSection = await prisma.monthlyEvaluationSection.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MonthlyEvaluationSectionUpdateArgs>(args: SelectSubset<T, MonthlyEvaluationSectionUpdateArgs<ExtArgs>>): Prisma__MonthlyEvaluationSectionClient<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MonthlyEvaluationSections.
+     * @param {MonthlyEvaluationSectionDeleteManyArgs} args - Arguments to filter MonthlyEvaluationSections to delete.
+     * @example
+     * // Delete a few MonthlyEvaluationSections
+     * const { count } = await prisma.monthlyEvaluationSection.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MonthlyEvaluationSectionDeleteManyArgs>(args?: SelectSubset<T, MonthlyEvaluationSectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyEvaluationSections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationSectionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MonthlyEvaluationSections
+     * const monthlyEvaluationSection = await prisma.monthlyEvaluationSection.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MonthlyEvaluationSectionUpdateManyArgs>(args: SelectSubset<T, MonthlyEvaluationSectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyEvaluationSections and returns the data updated in the database.
+     * @param {MonthlyEvaluationSectionUpdateManyAndReturnArgs} args - Arguments to update many MonthlyEvaluationSections.
+     * @example
+     * // Update many MonthlyEvaluationSections
+     * const monthlyEvaluationSection = await prisma.monthlyEvaluationSection.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MonthlyEvaluationSections and only return the `monthlyEvaluationSectionId`
+     * const monthlyEvaluationSectionWithMonthlyEvaluationSectionIdOnly = await prisma.monthlyEvaluationSection.updateManyAndReturn({
+     *   select: { monthlyEvaluationSectionId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MonthlyEvaluationSectionUpdateManyAndReturnArgs>(args: SelectSubset<T, MonthlyEvaluationSectionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MonthlyEvaluationSection.
+     * @param {MonthlyEvaluationSectionUpsertArgs} args - Arguments to update or create a MonthlyEvaluationSection.
+     * @example
+     * // Update or create a MonthlyEvaluationSection
+     * const monthlyEvaluationSection = await prisma.monthlyEvaluationSection.upsert({
+     *   create: {
+     *     // ... data to create a MonthlyEvaluationSection
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MonthlyEvaluationSection we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MonthlyEvaluationSectionUpsertArgs>(args: SelectSubset<T, MonthlyEvaluationSectionUpsertArgs<ExtArgs>>): Prisma__MonthlyEvaluationSectionClient<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MonthlyEvaluationSections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationSectionCountArgs} args - Arguments to filter MonthlyEvaluationSections to count.
+     * @example
+     * // Count the number of MonthlyEvaluationSections
+     * const count = await prisma.monthlyEvaluationSection.count({
+     *   where: {
+     *     // ... the filter for the MonthlyEvaluationSections we want to count
+     *   }
+     * })
+    **/
+    count<T extends MonthlyEvaluationSectionCountArgs>(
+      args?: Subset<T, MonthlyEvaluationSectionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MonthlyEvaluationSectionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MonthlyEvaluationSection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationSectionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MonthlyEvaluationSectionAggregateArgs>(args: Subset<T, MonthlyEvaluationSectionAggregateArgs>): Prisma.PrismaPromise<GetMonthlyEvaluationSectionAggregateType<T>>
+
+    /**
+     * Group by MonthlyEvaluationSection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationSectionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MonthlyEvaluationSectionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MonthlyEvaluationSectionGroupByArgs['orderBy'] }
+        : { orderBy?: MonthlyEvaluationSectionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MonthlyEvaluationSectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonthlyEvaluationSectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MonthlyEvaluationSection model
+   */
+  readonly fields: MonthlyEvaluationSectionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MonthlyEvaluationSection.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MonthlyEvaluationSectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    templateVersion<T extends MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateVersionClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    questions<T extends MonthlyEvaluationSection$questionsArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationSection$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MonthlyEvaluationSection model
+   */
+  interface MonthlyEvaluationSectionFieldRefs {
+    readonly monthlyEvaluationSectionId: FieldRef<"MonthlyEvaluationSection", 'Int'>
+    readonly monthlyEvaluationTemplateVersionId: FieldRef<"MonthlyEvaluationSection", 'Int'>
+    readonly title: FieldRef<"MonthlyEvaluationSection", 'String'>
+    readonly displayOrder: FieldRef<"MonthlyEvaluationSection", 'Int'>
+    readonly createdAt: FieldRef<"MonthlyEvaluationSection", 'DateTime'>
+    readonly updatedAt: FieldRef<"MonthlyEvaluationSection", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MonthlyEvaluationSection findUnique
+   */
+  export type MonthlyEvaluationSectionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationSection to fetch.
+     */
+    where: MonthlyEvaluationSectionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationSection findUniqueOrThrow
+   */
+  export type MonthlyEvaluationSectionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationSection to fetch.
+     */
+    where: MonthlyEvaluationSectionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationSection findFirst
+   */
+  export type MonthlyEvaluationSectionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationSection to fetch.
+     */
+    where?: MonthlyEvaluationSectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationSections to fetch.
+     */
+    orderBy?: MonthlyEvaluationSectionOrderByWithRelationInput | MonthlyEvaluationSectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyEvaluationSections.
+     */
+    cursor?: MonthlyEvaluationSectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationSections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationSections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyEvaluationSections.
+     */
+    distinct?: MonthlyEvaluationSectionScalarFieldEnum | MonthlyEvaluationSectionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationSection findFirstOrThrow
+   */
+  export type MonthlyEvaluationSectionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationSection to fetch.
+     */
+    where?: MonthlyEvaluationSectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationSections to fetch.
+     */
+    orderBy?: MonthlyEvaluationSectionOrderByWithRelationInput | MonthlyEvaluationSectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyEvaluationSections.
+     */
+    cursor?: MonthlyEvaluationSectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationSections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationSections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyEvaluationSections.
+     */
+    distinct?: MonthlyEvaluationSectionScalarFieldEnum | MonthlyEvaluationSectionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationSection findMany
+   */
+  export type MonthlyEvaluationSectionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationSections to fetch.
+     */
+    where?: MonthlyEvaluationSectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationSections to fetch.
+     */
+    orderBy?: MonthlyEvaluationSectionOrderByWithRelationInput | MonthlyEvaluationSectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MonthlyEvaluationSections.
+     */
+    cursor?: MonthlyEvaluationSectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationSections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationSections.
+     */
+    skip?: number
+    distinct?: MonthlyEvaluationSectionScalarFieldEnum | MonthlyEvaluationSectionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationSection create
+   */
+  export type MonthlyEvaluationSectionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MonthlyEvaluationSection.
+     */
+    data: XOR<MonthlyEvaluationSectionCreateInput, MonthlyEvaluationSectionUncheckedCreateInput>
+  }
+
+  /**
+   * MonthlyEvaluationSection createMany
+   */
+  export type MonthlyEvaluationSectionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MonthlyEvaluationSections.
+     */
+    data: MonthlyEvaluationSectionCreateManyInput | MonthlyEvaluationSectionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MonthlyEvaluationSection createManyAndReturn
+   */
+  export type MonthlyEvaluationSectionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * The data used to create many MonthlyEvaluationSections.
+     */
+    data: MonthlyEvaluationSectionCreateManyInput | MonthlyEvaluationSectionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationSection update
+   */
+  export type MonthlyEvaluationSectionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MonthlyEvaluationSection.
+     */
+    data: XOR<MonthlyEvaluationSectionUpdateInput, MonthlyEvaluationSectionUncheckedUpdateInput>
+    /**
+     * Choose, which MonthlyEvaluationSection to update.
+     */
+    where: MonthlyEvaluationSectionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationSection updateMany
+   */
+  export type MonthlyEvaluationSectionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MonthlyEvaluationSections.
+     */
+    data: XOR<MonthlyEvaluationSectionUpdateManyMutationInput, MonthlyEvaluationSectionUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyEvaluationSections to update
+     */
+    where?: MonthlyEvaluationSectionWhereInput
+    /**
+     * Limit how many MonthlyEvaluationSections to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyEvaluationSection updateManyAndReturn
+   */
+  export type MonthlyEvaluationSectionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * The data used to update MonthlyEvaluationSections.
+     */
+    data: XOR<MonthlyEvaluationSectionUpdateManyMutationInput, MonthlyEvaluationSectionUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyEvaluationSections to update
+     */
+    where?: MonthlyEvaluationSectionWhereInput
+    /**
+     * Limit how many MonthlyEvaluationSections to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationSection upsert
+   */
+  export type MonthlyEvaluationSectionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MonthlyEvaluationSection to update in case it exists.
+     */
+    where: MonthlyEvaluationSectionWhereUniqueInput
+    /**
+     * In case the MonthlyEvaluationSection found by the `where` argument doesn't exist, create a new MonthlyEvaluationSection with this data.
+     */
+    create: XOR<MonthlyEvaluationSectionCreateInput, MonthlyEvaluationSectionUncheckedCreateInput>
+    /**
+     * In case the MonthlyEvaluationSection was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MonthlyEvaluationSectionUpdateInput, MonthlyEvaluationSectionUncheckedUpdateInput>
+  }
+
+  /**
+   * MonthlyEvaluationSection delete
+   */
+  export type MonthlyEvaluationSectionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+    /**
+     * Filter which MonthlyEvaluationSection to delete.
+     */
+    where: MonthlyEvaluationSectionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationSection deleteMany
+   */
+  export type MonthlyEvaluationSectionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyEvaluationSections to delete
+     */
+    where?: MonthlyEvaluationSectionWhereInput
+    /**
+     * Limit how many MonthlyEvaluationSections to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyEvaluationSection.questions
+   */
+  export type MonthlyEvaluationSection$questionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+    where?: MonthlyEvaluationQuestionWhereInput
+    orderBy?: MonthlyEvaluationQuestionOrderByWithRelationInput | MonthlyEvaluationQuestionOrderByWithRelationInput[]
+    cursor?: MonthlyEvaluationQuestionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MonthlyEvaluationQuestionScalarFieldEnum | MonthlyEvaluationQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationSection without action
+   */
+  export type MonthlyEvaluationSectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationSection
+     */
+    select?: MonthlyEvaluationSectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationSection
+     */
+    omit?: MonthlyEvaluationSectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationSectionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MonthlyEvaluationQuestion
+   */
+
+  export type AggregateMonthlyEvaluationQuestion = {
+    _count: MonthlyEvaluationQuestionCountAggregateOutputType | null
+    _avg: MonthlyEvaluationQuestionAvgAggregateOutputType | null
+    _sum: MonthlyEvaluationQuestionSumAggregateOutputType | null
+    _min: MonthlyEvaluationQuestionMinAggregateOutputType | null
+    _max: MonthlyEvaluationQuestionMaxAggregateOutputType | null
+  }
+
+  export type MonthlyEvaluationQuestionAvgAggregateOutputType = {
+    monthlyEvaluationQuestionId: number | null
+    monthlyEvaluationSectionId: number | null
+    displayOrder: number | null
+    minScore: number | null
+    maxScore: number | null
+  }
+
+  export type MonthlyEvaluationQuestionSumAggregateOutputType = {
+    monthlyEvaluationQuestionId: number | null
+    monthlyEvaluationSectionId: number | null
+    displayOrder: number | null
+    minScore: number | null
+    maxScore: number | null
+  }
+
+  export type MonthlyEvaluationQuestionMinAggregateOutputType = {
+    monthlyEvaluationQuestionId: number | null
+    monthlyEvaluationSectionId: number | null
+    displayOrder: number | null
+    prompt: string | null
+    questionType: $Enums.MonthlyEvaluationQuestionType | null
+    isRequired: boolean | null
+    isScored: boolean | null
+    minScore: number | null
+    maxScore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MonthlyEvaluationQuestionMaxAggregateOutputType = {
+    monthlyEvaluationQuestionId: number | null
+    monthlyEvaluationSectionId: number | null
+    displayOrder: number | null
+    prompt: string | null
+    questionType: $Enums.MonthlyEvaluationQuestionType | null
+    isRequired: boolean | null
+    isScored: boolean | null
+    minScore: number | null
+    maxScore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MonthlyEvaluationQuestionCountAggregateOutputType = {
+    monthlyEvaluationQuestionId: number
+    monthlyEvaluationSectionId: number
+    displayOrder: number
+    prompt: number
+    questionType: number
+    isRequired: number
+    isScored: number
+    minScore: number
+    maxScore: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MonthlyEvaluationQuestionAvgAggregateInputType = {
+    monthlyEvaluationQuestionId?: true
+    monthlyEvaluationSectionId?: true
+    displayOrder?: true
+    minScore?: true
+    maxScore?: true
+  }
+
+  export type MonthlyEvaluationQuestionSumAggregateInputType = {
+    monthlyEvaluationQuestionId?: true
+    monthlyEvaluationSectionId?: true
+    displayOrder?: true
+    minScore?: true
+    maxScore?: true
+  }
+
+  export type MonthlyEvaluationQuestionMinAggregateInputType = {
+    monthlyEvaluationQuestionId?: true
+    monthlyEvaluationSectionId?: true
+    displayOrder?: true
+    prompt?: true
+    questionType?: true
+    isRequired?: true
+    isScored?: true
+    minScore?: true
+    maxScore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MonthlyEvaluationQuestionMaxAggregateInputType = {
+    monthlyEvaluationQuestionId?: true
+    monthlyEvaluationSectionId?: true
+    displayOrder?: true
+    prompt?: true
+    questionType?: true
+    isRequired?: true
+    isScored?: true
+    minScore?: true
+    maxScore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MonthlyEvaluationQuestionCountAggregateInputType = {
+    monthlyEvaluationQuestionId?: true
+    monthlyEvaluationSectionId?: true
+    displayOrder?: true
+    prompt?: true
+    questionType?: true
+    isRequired?: true
+    isScored?: true
+    minScore?: true
+    maxScore?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MonthlyEvaluationQuestionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyEvaluationQuestion to aggregate.
+     */
+    where?: MonthlyEvaluationQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationQuestions to fetch.
+     */
+    orderBy?: MonthlyEvaluationQuestionOrderByWithRelationInput | MonthlyEvaluationQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MonthlyEvaluationQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationQuestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MonthlyEvaluationQuestions
+    **/
+    _count?: true | MonthlyEvaluationQuestionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MonthlyEvaluationQuestionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MonthlyEvaluationQuestionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MonthlyEvaluationQuestionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MonthlyEvaluationQuestionMaxAggregateInputType
+  }
+
+  export type GetMonthlyEvaluationQuestionAggregateType<T extends MonthlyEvaluationQuestionAggregateArgs> = {
+        [P in keyof T & keyof AggregateMonthlyEvaluationQuestion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMonthlyEvaluationQuestion[P]>
+      : GetScalarType<T[P], AggregateMonthlyEvaluationQuestion[P]>
+  }
+
+
+
+
+  export type MonthlyEvaluationQuestionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyEvaluationQuestionWhereInput
+    orderBy?: MonthlyEvaluationQuestionOrderByWithAggregationInput | MonthlyEvaluationQuestionOrderByWithAggregationInput[]
+    by: MonthlyEvaluationQuestionScalarFieldEnum[] | MonthlyEvaluationQuestionScalarFieldEnum
+    having?: MonthlyEvaluationQuestionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MonthlyEvaluationQuestionCountAggregateInputType | true
+    _avg?: MonthlyEvaluationQuestionAvgAggregateInputType
+    _sum?: MonthlyEvaluationQuestionSumAggregateInputType
+    _min?: MonthlyEvaluationQuestionMinAggregateInputType
+    _max?: MonthlyEvaluationQuestionMaxAggregateInputType
+  }
+
+  export type MonthlyEvaluationQuestionGroupByOutputType = {
+    monthlyEvaluationQuestionId: number
+    monthlyEvaluationSectionId: number
+    displayOrder: number
+    prompt: string
+    questionType: $Enums.MonthlyEvaluationQuestionType
+    isRequired: boolean
+    isScored: boolean
+    minScore: number
+    maxScore: number
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: MonthlyEvaluationQuestionCountAggregateOutputType | null
+    _avg: MonthlyEvaluationQuestionAvgAggregateOutputType | null
+    _sum: MonthlyEvaluationQuestionSumAggregateOutputType | null
+    _min: MonthlyEvaluationQuestionMinAggregateOutputType | null
+    _max: MonthlyEvaluationQuestionMaxAggregateOutputType | null
+  }
+
+  type GetMonthlyEvaluationQuestionGroupByPayload<T extends MonthlyEvaluationQuestionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MonthlyEvaluationQuestionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MonthlyEvaluationQuestionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MonthlyEvaluationQuestionGroupByOutputType[P]>
+            : GetScalarType<T[P], MonthlyEvaluationQuestionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MonthlyEvaluationQuestionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationQuestionId?: boolean
+    monthlyEvaluationSectionId?: boolean
+    displayOrder?: boolean
+    prompt?: boolean
+    questionType?: boolean
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: boolean
+    maxScore?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    section?: boolean | MonthlyEvaluationSectionDefaultArgs<ExtArgs>
+    responses?: boolean | MonthlyEvaluationQuestion$responsesArgs<ExtArgs>
+    _count?: boolean | MonthlyEvaluationQuestionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationQuestion"]>
+
+  export type MonthlyEvaluationQuestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationQuestionId?: boolean
+    monthlyEvaluationSectionId?: boolean
+    displayOrder?: boolean
+    prompt?: boolean
+    questionType?: boolean
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: boolean
+    maxScore?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    section?: boolean | MonthlyEvaluationSectionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationQuestion"]>
+
+  export type MonthlyEvaluationQuestionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    monthlyEvaluationQuestionId?: boolean
+    monthlyEvaluationSectionId?: boolean
+    displayOrder?: boolean
+    prompt?: boolean
+    questionType?: boolean
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: boolean
+    maxScore?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    section?: boolean | MonthlyEvaluationSectionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyEvaluationQuestion"]>
+
+  export type MonthlyEvaluationQuestionSelectScalar = {
+    monthlyEvaluationQuestionId?: boolean
+    monthlyEvaluationSectionId?: boolean
+    displayOrder?: boolean
+    prompt?: boolean
+    questionType?: boolean
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: boolean
+    maxScore?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MonthlyEvaluationQuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"monthlyEvaluationQuestionId" | "monthlyEvaluationSectionId" | "displayOrder" | "prompt" | "questionType" | "isRequired" | "isScored" | "minScore" | "maxScore" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["monthlyEvaluationQuestion"]>
+  export type MonthlyEvaluationQuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    section?: boolean | MonthlyEvaluationSectionDefaultArgs<ExtArgs>
+    responses?: boolean | MonthlyEvaluationQuestion$responsesArgs<ExtArgs>
+    _count?: boolean | MonthlyEvaluationQuestionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MonthlyEvaluationQuestionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    section?: boolean | MonthlyEvaluationSectionDefaultArgs<ExtArgs>
+  }
+  export type MonthlyEvaluationQuestionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    section?: boolean | MonthlyEvaluationSectionDefaultArgs<ExtArgs>
+  }
+
+  export type $MonthlyEvaluationQuestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MonthlyEvaluationQuestion"
+    objects: {
+      section: Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>
+      responses: Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      monthlyEvaluationQuestionId: number
+      monthlyEvaluationSectionId: number
+      displayOrder: number
+      prompt: string
+      questionType: $Enums.MonthlyEvaluationQuestionType
+      isRequired: boolean
+      isScored: boolean
+      minScore: number
+      maxScore: number
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["monthlyEvaluationQuestion"]>
+    composites: {}
+  }
+
+  type MonthlyEvaluationQuestionGetPayload<S extends boolean | null | undefined | MonthlyEvaluationQuestionDefaultArgs> = $Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload, S>
+
+  type MonthlyEvaluationQuestionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MonthlyEvaluationQuestionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MonthlyEvaluationQuestionCountAggregateInputType | true
+    }
+
+  export interface MonthlyEvaluationQuestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonthlyEvaluationQuestion'], meta: { name: 'MonthlyEvaluationQuestion' } }
+    /**
+     * Find zero or one MonthlyEvaluationQuestion that matches the filter.
+     * @param {MonthlyEvaluationQuestionFindUniqueArgs} args - Arguments to find a MonthlyEvaluationQuestion
+     * @example
+     * // Get one MonthlyEvaluationQuestion
+     * const monthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MonthlyEvaluationQuestionFindUniqueArgs>(args: SelectSubset<T, MonthlyEvaluationQuestionFindUniqueArgs<ExtArgs>>): Prisma__MonthlyEvaluationQuestionClient<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MonthlyEvaluationQuestion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MonthlyEvaluationQuestionFindUniqueOrThrowArgs} args - Arguments to find a MonthlyEvaluationQuestion
+     * @example
+     * // Get one MonthlyEvaluationQuestion
+     * const monthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MonthlyEvaluationQuestionFindUniqueOrThrowArgs>(args: SelectSubset<T, MonthlyEvaluationQuestionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonthlyEvaluationQuestionClient<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonthlyEvaluationQuestion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationQuestionFindFirstArgs} args - Arguments to find a MonthlyEvaluationQuestion
+     * @example
+     * // Get one MonthlyEvaluationQuestion
+     * const monthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MonthlyEvaluationQuestionFindFirstArgs>(args?: SelectSubset<T, MonthlyEvaluationQuestionFindFirstArgs<ExtArgs>>): Prisma__MonthlyEvaluationQuestionClient<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonthlyEvaluationQuestion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationQuestionFindFirstOrThrowArgs} args - Arguments to find a MonthlyEvaluationQuestion
+     * @example
+     * // Get one MonthlyEvaluationQuestion
+     * const monthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MonthlyEvaluationQuestionFindFirstOrThrowArgs>(args?: SelectSubset<T, MonthlyEvaluationQuestionFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonthlyEvaluationQuestionClient<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MonthlyEvaluationQuestions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationQuestionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MonthlyEvaluationQuestions
+     * const monthlyEvaluationQuestions = await prisma.monthlyEvaluationQuestion.findMany()
+     * 
+     * // Get first 10 MonthlyEvaluationQuestions
+     * const monthlyEvaluationQuestions = await prisma.monthlyEvaluationQuestion.findMany({ take: 10 })
+     * 
+     * // Only select the `monthlyEvaluationQuestionId`
+     * const monthlyEvaluationQuestionWithMonthlyEvaluationQuestionIdOnly = await prisma.monthlyEvaluationQuestion.findMany({ select: { monthlyEvaluationQuestionId: true } })
+     * 
+     */
+    findMany<T extends MonthlyEvaluationQuestionFindManyArgs>(args?: SelectSubset<T, MonthlyEvaluationQuestionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MonthlyEvaluationQuestion.
+     * @param {MonthlyEvaluationQuestionCreateArgs} args - Arguments to create a MonthlyEvaluationQuestion.
+     * @example
+     * // Create one MonthlyEvaluationQuestion
+     * const MonthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.create({
+     *   data: {
+     *     // ... data to create a MonthlyEvaluationQuestion
+     *   }
+     * })
+     * 
+     */
+    create<T extends MonthlyEvaluationQuestionCreateArgs>(args: SelectSubset<T, MonthlyEvaluationQuestionCreateArgs<ExtArgs>>): Prisma__MonthlyEvaluationQuestionClient<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MonthlyEvaluationQuestions.
+     * @param {MonthlyEvaluationQuestionCreateManyArgs} args - Arguments to create many MonthlyEvaluationQuestions.
+     * @example
+     * // Create many MonthlyEvaluationQuestions
+     * const monthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MonthlyEvaluationQuestionCreateManyArgs>(args?: SelectSubset<T, MonthlyEvaluationQuestionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MonthlyEvaluationQuestions and returns the data saved in the database.
+     * @param {MonthlyEvaluationQuestionCreateManyAndReturnArgs} args - Arguments to create many MonthlyEvaluationQuestions.
+     * @example
+     * // Create many MonthlyEvaluationQuestions
+     * const monthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MonthlyEvaluationQuestions and only return the `monthlyEvaluationQuestionId`
+     * const monthlyEvaluationQuestionWithMonthlyEvaluationQuestionIdOnly = await prisma.monthlyEvaluationQuestion.createManyAndReturn({
+     *   select: { monthlyEvaluationQuestionId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MonthlyEvaluationQuestionCreateManyAndReturnArgs>(args?: SelectSubset<T, MonthlyEvaluationQuestionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MonthlyEvaluationQuestion.
+     * @param {MonthlyEvaluationQuestionDeleteArgs} args - Arguments to delete one MonthlyEvaluationQuestion.
+     * @example
+     * // Delete one MonthlyEvaluationQuestion
+     * const MonthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.delete({
+     *   where: {
+     *     // ... filter to delete one MonthlyEvaluationQuestion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MonthlyEvaluationQuestionDeleteArgs>(args: SelectSubset<T, MonthlyEvaluationQuestionDeleteArgs<ExtArgs>>): Prisma__MonthlyEvaluationQuestionClient<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MonthlyEvaluationQuestion.
+     * @param {MonthlyEvaluationQuestionUpdateArgs} args - Arguments to update one MonthlyEvaluationQuestion.
+     * @example
+     * // Update one MonthlyEvaluationQuestion
+     * const monthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MonthlyEvaluationQuestionUpdateArgs>(args: SelectSubset<T, MonthlyEvaluationQuestionUpdateArgs<ExtArgs>>): Prisma__MonthlyEvaluationQuestionClient<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MonthlyEvaluationQuestions.
+     * @param {MonthlyEvaluationQuestionDeleteManyArgs} args - Arguments to filter MonthlyEvaluationQuestions to delete.
+     * @example
+     * // Delete a few MonthlyEvaluationQuestions
+     * const { count } = await prisma.monthlyEvaluationQuestion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MonthlyEvaluationQuestionDeleteManyArgs>(args?: SelectSubset<T, MonthlyEvaluationQuestionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyEvaluationQuestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationQuestionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MonthlyEvaluationQuestions
+     * const monthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MonthlyEvaluationQuestionUpdateManyArgs>(args: SelectSubset<T, MonthlyEvaluationQuestionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyEvaluationQuestions and returns the data updated in the database.
+     * @param {MonthlyEvaluationQuestionUpdateManyAndReturnArgs} args - Arguments to update many MonthlyEvaluationQuestions.
+     * @example
+     * // Update many MonthlyEvaluationQuestions
+     * const monthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MonthlyEvaluationQuestions and only return the `monthlyEvaluationQuestionId`
+     * const monthlyEvaluationQuestionWithMonthlyEvaluationQuestionIdOnly = await prisma.monthlyEvaluationQuestion.updateManyAndReturn({
+     *   select: { monthlyEvaluationQuestionId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MonthlyEvaluationQuestionUpdateManyAndReturnArgs>(args: SelectSubset<T, MonthlyEvaluationQuestionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MonthlyEvaluationQuestion.
+     * @param {MonthlyEvaluationQuestionUpsertArgs} args - Arguments to update or create a MonthlyEvaluationQuestion.
+     * @example
+     * // Update or create a MonthlyEvaluationQuestion
+     * const monthlyEvaluationQuestion = await prisma.monthlyEvaluationQuestion.upsert({
+     *   create: {
+     *     // ... data to create a MonthlyEvaluationQuestion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MonthlyEvaluationQuestion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MonthlyEvaluationQuestionUpsertArgs>(args: SelectSubset<T, MonthlyEvaluationQuestionUpsertArgs<ExtArgs>>): Prisma__MonthlyEvaluationQuestionClient<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MonthlyEvaluationQuestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationQuestionCountArgs} args - Arguments to filter MonthlyEvaluationQuestions to count.
+     * @example
+     * // Count the number of MonthlyEvaluationQuestions
+     * const count = await prisma.monthlyEvaluationQuestion.count({
+     *   where: {
+     *     // ... the filter for the MonthlyEvaluationQuestions we want to count
+     *   }
+     * })
+    **/
+    count<T extends MonthlyEvaluationQuestionCountArgs>(
+      args?: Subset<T, MonthlyEvaluationQuestionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MonthlyEvaluationQuestionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MonthlyEvaluationQuestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationQuestionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MonthlyEvaluationQuestionAggregateArgs>(args: Subset<T, MonthlyEvaluationQuestionAggregateArgs>): Prisma.PrismaPromise<GetMonthlyEvaluationQuestionAggregateType<T>>
+
+    /**
+     * Group by MonthlyEvaluationQuestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyEvaluationQuestionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MonthlyEvaluationQuestionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MonthlyEvaluationQuestionGroupByArgs['orderBy'] }
+        : { orderBy?: MonthlyEvaluationQuestionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MonthlyEvaluationQuestionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonthlyEvaluationQuestionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MonthlyEvaluationQuestion model
+   */
+  readonly fields: MonthlyEvaluationQuestionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MonthlyEvaluationQuestion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MonthlyEvaluationQuestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    section<T extends MonthlyEvaluationSectionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationSectionDefaultArgs<ExtArgs>>): Prisma__MonthlyEvaluationSectionClient<$Result.GetResult<Prisma.$MonthlyEvaluationSectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    responses<T extends MonthlyEvaluationQuestion$responsesArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationQuestion$responsesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MonthlyEvaluationQuestion model
+   */
+  interface MonthlyEvaluationQuestionFieldRefs {
+    readonly monthlyEvaluationQuestionId: FieldRef<"MonthlyEvaluationQuestion", 'Int'>
+    readonly monthlyEvaluationSectionId: FieldRef<"MonthlyEvaluationQuestion", 'Int'>
+    readonly displayOrder: FieldRef<"MonthlyEvaluationQuestion", 'Int'>
+    readonly prompt: FieldRef<"MonthlyEvaluationQuestion", 'String'>
+    readonly questionType: FieldRef<"MonthlyEvaluationQuestion", 'MonthlyEvaluationQuestionType'>
+    readonly isRequired: FieldRef<"MonthlyEvaluationQuestion", 'Boolean'>
+    readonly isScored: FieldRef<"MonthlyEvaluationQuestion", 'Boolean'>
+    readonly minScore: FieldRef<"MonthlyEvaluationQuestion", 'Int'>
+    readonly maxScore: FieldRef<"MonthlyEvaluationQuestion", 'Int'>
+    readonly metadata: FieldRef<"MonthlyEvaluationQuestion", 'Json'>
+    readonly createdAt: FieldRef<"MonthlyEvaluationQuestion", 'DateTime'>
+    readonly updatedAt: FieldRef<"MonthlyEvaluationQuestion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MonthlyEvaluationQuestion findUnique
+   */
+  export type MonthlyEvaluationQuestionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationQuestion to fetch.
+     */
+    where: MonthlyEvaluationQuestionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationQuestion findUniqueOrThrow
+   */
+  export type MonthlyEvaluationQuestionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationQuestion to fetch.
+     */
+    where: MonthlyEvaluationQuestionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationQuestion findFirst
+   */
+  export type MonthlyEvaluationQuestionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationQuestion to fetch.
+     */
+    where?: MonthlyEvaluationQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationQuestions to fetch.
+     */
+    orderBy?: MonthlyEvaluationQuestionOrderByWithRelationInput | MonthlyEvaluationQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyEvaluationQuestions.
+     */
+    cursor?: MonthlyEvaluationQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationQuestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyEvaluationQuestions.
+     */
+    distinct?: MonthlyEvaluationQuestionScalarFieldEnum | MonthlyEvaluationQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationQuestion findFirstOrThrow
+   */
+  export type MonthlyEvaluationQuestionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationQuestion to fetch.
+     */
+    where?: MonthlyEvaluationQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationQuestions to fetch.
+     */
+    orderBy?: MonthlyEvaluationQuestionOrderByWithRelationInput | MonthlyEvaluationQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyEvaluationQuestions.
+     */
+    cursor?: MonthlyEvaluationQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationQuestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyEvaluationQuestions.
+     */
+    distinct?: MonthlyEvaluationQuestionScalarFieldEnum | MonthlyEvaluationQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationQuestion findMany
+   */
+  export type MonthlyEvaluationQuestionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyEvaluationQuestions to fetch.
+     */
+    where?: MonthlyEvaluationQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyEvaluationQuestions to fetch.
+     */
+    orderBy?: MonthlyEvaluationQuestionOrderByWithRelationInput | MonthlyEvaluationQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MonthlyEvaluationQuestions.
+     */
+    cursor?: MonthlyEvaluationQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyEvaluationQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyEvaluationQuestions.
+     */
+    skip?: number
+    distinct?: MonthlyEvaluationQuestionScalarFieldEnum | MonthlyEvaluationQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationQuestion create
+   */
+  export type MonthlyEvaluationQuestionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MonthlyEvaluationQuestion.
+     */
+    data: XOR<MonthlyEvaluationQuestionCreateInput, MonthlyEvaluationQuestionUncheckedCreateInput>
+  }
+
+  /**
+   * MonthlyEvaluationQuestion createMany
+   */
+  export type MonthlyEvaluationQuestionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MonthlyEvaluationQuestions.
+     */
+    data: MonthlyEvaluationQuestionCreateManyInput | MonthlyEvaluationQuestionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MonthlyEvaluationQuestion createManyAndReturn
+   */
+  export type MonthlyEvaluationQuestionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * The data used to create many MonthlyEvaluationQuestions.
+     */
+    data: MonthlyEvaluationQuestionCreateManyInput | MonthlyEvaluationQuestionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationQuestion update
+   */
+  export type MonthlyEvaluationQuestionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MonthlyEvaluationQuestion.
+     */
+    data: XOR<MonthlyEvaluationQuestionUpdateInput, MonthlyEvaluationQuestionUncheckedUpdateInput>
+    /**
+     * Choose, which MonthlyEvaluationQuestion to update.
+     */
+    where: MonthlyEvaluationQuestionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationQuestion updateMany
+   */
+  export type MonthlyEvaluationQuestionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MonthlyEvaluationQuestions.
+     */
+    data: XOR<MonthlyEvaluationQuestionUpdateManyMutationInput, MonthlyEvaluationQuestionUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyEvaluationQuestions to update
+     */
+    where?: MonthlyEvaluationQuestionWhereInput
+    /**
+     * Limit how many MonthlyEvaluationQuestions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyEvaluationQuestion updateManyAndReturn
+   */
+  export type MonthlyEvaluationQuestionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * The data used to update MonthlyEvaluationQuestions.
+     */
+    data: XOR<MonthlyEvaluationQuestionUpdateManyMutationInput, MonthlyEvaluationQuestionUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyEvaluationQuestions to update
+     */
+    where?: MonthlyEvaluationQuestionWhereInput
+    /**
+     * Limit how many MonthlyEvaluationQuestions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyEvaluationQuestion upsert
+   */
+  export type MonthlyEvaluationQuestionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MonthlyEvaluationQuestion to update in case it exists.
+     */
+    where: MonthlyEvaluationQuestionWhereUniqueInput
+    /**
+     * In case the MonthlyEvaluationQuestion found by the `where` argument doesn't exist, create a new MonthlyEvaluationQuestion with this data.
+     */
+    create: XOR<MonthlyEvaluationQuestionCreateInput, MonthlyEvaluationQuestionUncheckedCreateInput>
+    /**
+     * In case the MonthlyEvaluationQuestion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MonthlyEvaluationQuestionUpdateInput, MonthlyEvaluationQuestionUncheckedUpdateInput>
+  }
+
+  /**
+   * MonthlyEvaluationQuestion delete
+   */
+  export type MonthlyEvaluationQuestionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+    /**
+     * Filter which MonthlyEvaluationQuestion to delete.
+     */
+    where: MonthlyEvaluationQuestionWhereUniqueInput
+  }
+
+  /**
+   * MonthlyEvaluationQuestion deleteMany
+   */
+  export type MonthlyEvaluationQuestionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyEvaluationQuestions to delete
+     */
+    where?: MonthlyEvaluationQuestionWhereInput
+    /**
+     * Limit how many MonthlyEvaluationQuestions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyEvaluationQuestion.responses
+   */
+  export type MonthlyEvaluationQuestion$responsesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+    orderBy?: WorkerMonthlyEvaluationResponseOrderByWithRelationInput | WorkerMonthlyEvaluationResponseOrderByWithRelationInput[]
+    cursor?: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkerMonthlyEvaluationResponseScalarFieldEnum | WorkerMonthlyEvaluationResponseScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyEvaluationQuestion without action
+   */
+  export type MonthlyEvaluationQuestionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyEvaluationQuestion
+     */
+    select?: MonthlyEvaluationQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyEvaluationQuestion
+     */
+    omit?: MonthlyEvaluationQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyEvaluationQuestionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkerMonthlyEvaluation
+   */
+
+  export type AggregateWorkerMonthlyEvaluation = {
+    _count: WorkerMonthlyEvaluationCountAggregateOutputType | null
+    _avg: WorkerMonthlyEvaluationAvgAggregateOutputType | null
+    _sum: WorkerMonthlyEvaluationSumAggregateOutputType | null
+    _min: WorkerMonthlyEvaluationMinAggregateOutputType | null
+    _max: WorkerMonthlyEvaluationMaxAggregateOutputType | null
+  }
+
+  export type WorkerMonthlyEvaluationAvgAggregateOutputType = {
+    workerMonthlyEvaluationId: number | null
+    workerId: number | null
+    monthlyEvaluationTemplateVersionId: number | null
+    year: number | null
+    month: number | null
+    sequence: number | null
+    evaluatorUserId: number | null
+    openedByUserId: number | null
+    closedByUserId: number | null
+    totalScore: number | null
+    maxScore: number | null
+  }
+
+  export type WorkerMonthlyEvaluationSumAggregateOutputType = {
+    workerMonthlyEvaluationId: number | null
+    workerId: number | null
+    monthlyEvaluationTemplateVersionId: number | null
+    year: number | null
+    month: number | null
+    sequence: number | null
+    evaluatorUserId: number | null
+    openedByUserId: number | null
+    closedByUserId: number | null
+    totalScore: number | null
+    maxScore: number | null
+  }
+
+  export type WorkerMonthlyEvaluationMinAggregateOutputType = {
+    workerMonthlyEvaluationId: number | null
+    workerId: number | null
+    monthlyEvaluationTemplateVersionId: number | null
+    year: number | null
+    month: number | null
+    sequence: number | null
+    status: $Enums.MonthlyEvaluationStatus | null
+    evaluatorUserId: number | null
+    openedByUserId: number | null
+    closedByUserId: number | null
+    openedAt: Date | null
+    closedAt: Date | null
+    generalComment: string | null
+    totalScore: number | null
+    maxScore: number | null
+    performanceLabel: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkerMonthlyEvaluationMaxAggregateOutputType = {
+    workerMonthlyEvaluationId: number | null
+    workerId: number | null
+    monthlyEvaluationTemplateVersionId: number | null
+    year: number | null
+    month: number | null
+    sequence: number | null
+    status: $Enums.MonthlyEvaluationStatus | null
+    evaluatorUserId: number | null
+    openedByUserId: number | null
+    closedByUserId: number | null
+    openedAt: Date | null
+    closedAt: Date | null
+    generalComment: string | null
+    totalScore: number | null
+    maxScore: number | null
+    performanceLabel: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkerMonthlyEvaluationCountAggregateOutputType = {
+    workerMonthlyEvaluationId: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence: number
+    status: number
+    evaluatorUserId: number
+    openedByUserId: number
+    closedByUserId: number
+    openedAt: number
+    closedAt: number
+    generalComment: number
+    totalScore: number
+    maxScore: number
+    performanceLabel: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkerMonthlyEvaluationAvgAggregateInputType = {
+    workerMonthlyEvaluationId?: true
+    workerId?: true
+    monthlyEvaluationTemplateVersionId?: true
+    year?: true
+    month?: true
+    sequence?: true
+    evaluatorUserId?: true
+    openedByUserId?: true
+    closedByUserId?: true
+    totalScore?: true
+    maxScore?: true
+  }
+
+  export type WorkerMonthlyEvaluationSumAggregateInputType = {
+    workerMonthlyEvaluationId?: true
+    workerId?: true
+    monthlyEvaluationTemplateVersionId?: true
+    year?: true
+    month?: true
+    sequence?: true
+    evaluatorUserId?: true
+    openedByUserId?: true
+    closedByUserId?: true
+    totalScore?: true
+    maxScore?: true
+  }
+
+  export type WorkerMonthlyEvaluationMinAggregateInputType = {
+    workerMonthlyEvaluationId?: true
+    workerId?: true
+    monthlyEvaluationTemplateVersionId?: true
+    year?: true
+    month?: true
+    sequence?: true
+    status?: true
+    evaluatorUserId?: true
+    openedByUserId?: true
+    closedByUserId?: true
+    openedAt?: true
+    closedAt?: true
+    generalComment?: true
+    totalScore?: true
+    maxScore?: true
+    performanceLabel?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkerMonthlyEvaluationMaxAggregateInputType = {
+    workerMonthlyEvaluationId?: true
+    workerId?: true
+    monthlyEvaluationTemplateVersionId?: true
+    year?: true
+    month?: true
+    sequence?: true
+    status?: true
+    evaluatorUserId?: true
+    openedByUserId?: true
+    closedByUserId?: true
+    openedAt?: true
+    closedAt?: true
+    generalComment?: true
+    totalScore?: true
+    maxScore?: true
+    performanceLabel?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkerMonthlyEvaluationCountAggregateInputType = {
+    workerMonthlyEvaluationId?: true
+    workerId?: true
+    monthlyEvaluationTemplateVersionId?: true
+    year?: true
+    month?: true
+    sequence?: true
+    status?: true
+    evaluatorUserId?: true
+    openedByUserId?: true
+    closedByUserId?: true
+    openedAt?: true
+    closedAt?: true
+    generalComment?: true
+    totalScore?: true
+    maxScore?: true
+    performanceLabel?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkerMonthlyEvaluationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkerMonthlyEvaluation to aggregate.
+     */
+    where?: WorkerMonthlyEvaluationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkerMonthlyEvaluations to fetch.
+     */
+    orderBy?: WorkerMonthlyEvaluationOrderByWithRelationInput | WorkerMonthlyEvaluationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkerMonthlyEvaluationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkerMonthlyEvaluations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkerMonthlyEvaluations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkerMonthlyEvaluations
+    **/
+    _count?: true | WorkerMonthlyEvaluationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WorkerMonthlyEvaluationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkerMonthlyEvaluationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkerMonthlyEvaluationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkerMonthlyEvaluationMaxAggregateInputType
+  }
+
+  export type GetWorkerMonthlyEvaluationAggregateType<T extends WorkerMonthlyEvaluationAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkerMonthlyEvaluation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkerMonthlyEvaluation[P]>
+      : GetScalarType<T[P], AggregateWorkerMonthlyEvaluation[P]>
+  }
+
+
+
+
+  export type WorkerMonthlyEvaluationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkerMonthlyEvaluationWhereInput
+    orderBy?: WorkerMonthlyEvaluationOrderByWithAggregationInput | WorkerMonthlyEvaluationOrderByWithAggregationInput[]
+    by: WorkerMonthlyEvaluationScalarFieldEnum[] | WorkerMonthlyEvaluationScalarFieldEnum
+    having?: WorkerMonthlyEvaluationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkerMonthlyEvaluationCountAggregateInputType | true
+    _avg?: WorkerMonthlyEvaluationAvgAggregateInputType
+    _sum?: WorkerMonthlyEvaluationSumAggregateInputType
+    _min?: WorkerMonthlyEvaluationMinAggregateInputType
+    _max?: WorkerMonthlyEvaluationMaxAggregateInputType
+  }
+
+  export type WorkerMonthlyEvaluationGroupByOutputType = {
+    workerMonthlyEvaluationId: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence: number
+    status: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    openedByUserId: number | null
+    closedByUserId: number | null
+    openedAt: Date | null
+    closedAt: Date | null
+    generalComment: string | null
+    totalScore: number
+    maxScore: number
+    performanceLabel: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkerMonthlyEvaluationCountAggregateOutputType | null
+    _avg: WorkerMonthlyEvaluationAvgAggregateOutputType | null
+    _sum: WorkerMonthlyEvaluationSumAggregateOutputType | null
+    _min: WorkerMonthlyEvaluationMinAggregateOutputType | null
+    _max: WorkerMonthlyEvaluationMaxAggregateOutputType | null
+  }
+
+  type GetWorkerMonthlyEvaluationGroupByPayload<T extends WorkerMonthlyEvaluationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkerMonthlyEvaluationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkerMonthlyEvaluationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkerMonthlyEvaluationGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkerMonthlyEvaluationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkerMonthlyEvaluationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    workerMonthlyEvaluationId?: boolean
+    workerId?: boolean
+    monthlyEvaluationTemplateVersionId?: boolean
+    year?: boolean
+    month?: boolean
+    sequence?: boolean
+    status?: boolean
+    evaluatorUserId?: boolean
+    openedByUserId?: boolean
+    closedByUserId?: boolean
+    openedAt?: boolean
+    closedAt?: boolean
+    generalComment?: boolean
+    totalScore?: boolean
+    maxScore?: boolean
+    performanceLabel?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+    evaluatorUser?: boolean | UserDefaultArgs<ExtArgs>
+    openedByUser?: boolean | WorkerMonthlyEvaluation$openedByUserArgs<ExtArgs>
+    closedByUser?: boolean | WorkerMonthlyEvaluation$closedByUserArgs<ExtArgs>
+    responses?: boolean | WorkerMonthlyEvaluation$responsesArgs<ExtArgs>
+    _count?: boolean | WorkerMonthlyEvaluationCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workerMonthlyEvaluation"]>
+
+  export type WorkerMonthlyEvaluationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    workerMonthlyEvaluationId?: boolean
+    workerId?: boolean
+    monthlyEvaluationTemplateVersionId?: boolean
+    year?: boolean
+    month?: boolean
+    sequence?: boolean
+    status?: boolean
+    evaluatorUserId?: boolean
+    openedByUserId?: boolean
+    closedByUserId?: boolean
+    openedAt?: boolean
+    closedAt?: boolean
+    generalComment?: boolean
+    totalScore?: boolean
+    maxScore?: boolean
+    performanceLabel?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+    evaluatorUser?: boolean | UserDefaultArgs<ExtArgs>
+    openedByUser?: boolean | WorkerMonthlyEvaluation$openedByUserArgs<ExtArgs>
+    closedByUser?: boolean | WorkerMonthlyEvaluation$closedByUserArgs<ExtArgs>
+  }, ExtArgs["result"]["workerMonthlyEvaluation"]>
+
+  export type WorkerMonthlyEvaluationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    workerMonthlyEvaluationId?: boolean
+    workerId?: boolean
+    monthlyEvaluationTemplateVersionId?: boolean
+    year?: boolean
+    month?: boolean
+    sequence?: boolean
+    status?: boolean
+    evaluatorUserId?: boolean
+    openedByUserId?: boolean
+    closedByUserId?: boolean
+    openedAt?: boolean
+    closedAt?: boolean
+    generalComment?: boolean
+    totalScore?: boolean
+    maxScore?: boolean
+    performanceLabel?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+    evaluatorUser?: boolean | UserDefaultArgs<ExtArgs>
+    openedByUser?: boolean | WorkerMonthlyEvaluation$openedByUserArgs<ExtArgs>
+    closedByUser?: boolean | WorkerMonthlyEvaluation$closedByUserArgs<ExtArgs>
+  }, ExtArgs["result"]["workerMonthlyEvaluation"]>
+
+  export type WorkerMonthlyEvaluationSelectScalar = {
+    workerMonthlyEvaluationId?: boolean
+    workerId?: boolean
+    monthlyEvaluationTemplateVersionId?: boolean
+    year?: boolean
+    month?: boolean
+    sequence?: boolean
+    status?: boolean
+    evaluatorUserId?: boolean
+    openedByUserId?: boolean
+    closedByUserId?: boolean
+    openedAt?: boolean
+    closedAt?: boolean
+    generalComment?: boolean
+    totalScore?: boolean
+    maxScore?: boolean
+    performanceLabel?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WorkerMonthlyEvaluationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"workerMonthlyEvaluationId" | "workerId" | "monthlyEvaluationTemplateVersionId" | "year" | "month" | "sequence" | "status" | "evaluatorUserId" | "openedByUserId" | "closedByUserId" | "openedAt" | "closedAt" | "generalComment" | "totalScore" | "maxScore" | "performanceLabel" | "createdAt" | "updatedAt", ExtArgs["result"]["workerMonthlyEvaluation"]>
+  export type WorkerMonthlyEvaluationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+    evaluatorUser?: boolean | UserDefaultArgs<ExtArgs>
+    openedByUser?: boolean | WorkerMonthlyEvaluation$openedByUserArgs<ExtArgs>
+    closedByUser?: boolean | WorkerMonthlyEvaluation$closedByUserArgs<ExtArgs>
+    responses?: boolean | WorkerMonthlyEvaluation$responsesArgs<ExtArgs>
+    _count?: boolean | WorkerMonthlyEvaluationCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type WorkerMonthlyEvaluationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+    evaluatorUser?: boolean | UserDefaultArgs<ExtArgs>
+    openedByUser?: boolean | WorkerMonthlyEvaluation$openedByUserArgs<ExtArgs>
+    closedByUser?: boolean | WorkerMonthlyEvaluation$closedByUserArgs<ExtArgs>
+  }
+  export type WorkerMonthlyEvaluationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    templateVersion?: boolean | MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>
+    evaluatorUser?: boolean | UserDefaultArgs<ExtArgs>
+    openedByUser?: boolean | WorkerMonthlyEvaluation$openedByUserArgs<ExtArgs>
+    closedByUser?: boolean | WorkerMonthlyEvaluation$closedByUserArgs<ExtArgs>
+  }
+
+  export type $WorkerMonthlyEvaluationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkerMonthlyEvaluation"
+    objects: {
+      worker: Prisma.$WorkerPayload<ExtArgs>
+      templateVersion: Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>
+      evaluatorUser: Prisma.$UserPayload<ExtArgs>
+      openedByUser: Prisma.$UserPayload<ExtArgs> | null
+      closedByUser: Prisma.$UserPayload<ExtArgs> | null
+      responses: Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      workerMonthlyEvaluationId: number
+      workerId: number
+      monthlyEvaluationTemplateVersionId: number
+      year: number
+      month: number
+      sequence: number
+      status: $Enums.MonthlyEvaluationStatus
+      evaluatorUserId: number
+      openedByUserId: number | null
+      closedByUserId: number | null
+      openedAt: Date | null
+      closedAt: Date | null
+      generalComment: string | null
+      totalScore: number
+      maxScore: number
+      performanceLabel: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workerMonthlyEvaluation"]>
+    composites: {}
+  }
+
+  type WorkerMonthlyEvaluationGetPayload<S extends boolean | null | undefined | WorkerMonthlyEvaluationDefaultArgs> = $Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload, S>
+
+  type WorkerMonthlyEvaluationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkerMonthlyEvaluationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkerMonthlyEvaluationCountAggregateInputType | true
+    }
+
+  export interface WorkerMonthlyEvaluationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkerMonthlyEvaluation'], meta: { name: 'WorkerMonthlyEvaluation' } }
+    /**
+     * Find zero or one WorkerMonthlyEvaluation that matches the filter.
+     * @param {WorkerMonthlyEvaluationFindUniqueArgs} args - Arguments to find a WorkerMonthlyEvaluation
+     * @example
+     * // Get one WorkerMonthlyEvaluation
+     * const workerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkerMonthlyEvaluationFindUniqueArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationFindUniqueArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WorkerMonthlyEvaluation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkerMonthlyEvaluationFindUniqueOrThrowArgs} args - Arguments to find a WorkerMonthlyEvaluation
+     * @example
+     * // Get one WorkerMonthlyEvaluation
+     * const workerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkerMonthlyEvaluationFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkerMonthlyEvaluation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationFindFirstArgs} args - Arguments to find a WorkerMonthlyEvaluation
+     * @example
+     * // Get one WorkerMonthlyEvaluation
+     * const workerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkerMonthlyEvaluationFindFirstArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationFindFirstArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkerMonthlyEvaluation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationFindFirstOrThrowArgs} args - Arguments to find a WorkerMonthlyEvaluation
+     * @example
+     * // Get one WorkerMonthlyEvaluation
+     * const workerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkerMonthlyEvaluationFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkerMonthlyEvaluations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkerMonthlyEvaluations
+     * const workerMonthlyEvaluations = await prisma.workerMonthlyEvaluation.findMany()
+     * 
+     * // Get first 10 WorkerMonthlyEvaluations
+     * const workerMonthlyEvaluations = await prisma.workerMonthlyEvaluation.findMany({ take: 10 })
+     * 
+     * // Only select the `workerMonthlyEvaluationId`
+     * const workerMonthlyEvaluationWithWorkerMonthlyEvaluationIdOnly = await prisma.workerMonthlyEvaluation.findMany({ select: { workerMonthlyEvaluationId: true } })
+     * 
+     */
+    findMany<T extends WorkerMonthlyEvaluationFindManyArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WorkerMonthlyEvaluation.
+     * @param {WorkerMonthlyEvaluationCreateArgs} args - Arguments to create a WorkerMonthlyEvaluation.
+     * @example
+     * // Create one WorkerMonthlyEvaluation
+     * const WorkerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.create({
+     *   data: {
+     *     // ... data to create a WorkerMonthlyEvaluation
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkerMonthlyEvaluationCreateArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationCreateArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WorkerMonthlyEvaluations.
+     * @param {WorkerMonthlyEvaluationCreateManyArgs} args - Arguments to create many WorkerMonthlyEvaluations.
+     * @example
+     * // Create many WorkerMonthlyEvaluations
+     * const workerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkerMonthlyEvaluationCreateManyArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkerMonthlyEvaluations and returns the data saved in the database.
+     * @param {WorkerMonthlyEvaluationCreateManyAndReturnArgs} args - Arguments to create many WorkerMonthlyEvaluations.
+     * @example
+     * // Create many WorkerMonthlyEvaluations
+     * const workerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkerMonthlyEvaluations and only return the `workerMonthlyEvaluationId`
+     * const workerMonthlyEvaluationWithWorkerMonthlyEvaluationIdOnly = await prisma.workerMonthlyEvaluation.createManyAndReturn({
+     *   select: { workerMonthlyEvaluationId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkerMonthlyEvaluationCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WorkerMonthlyEvaluation.
+     * @param {WorkerMonthlyEvaluationDeleteArgs} args - Arguments to delete one WorkerMonthlyEvaluation.
+     * @example
+     * // Delete one WorkerMonthlyEvaluation
+     * const WorkerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.delete({
+     *   where: {
+     *     // ... filter to delete one WorkerMonthlyEvaluation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkerMonthlyEvaluationDeleteArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationDeleteArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WorkerMonthlyEvaluation.
+     * @param {WorkerMonthlyEvaluationUpdateArgs} args - Arguments to update one WorkerMonthlyEvaluation.
+     * @example
+     * // Update one WorkerMonthlyEvaluation
+     * const workerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkerMonthlyEvaluationUpdateArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationUpdateArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WorkerMonthlyEvaluations.
+     * @param {WorkerMonthlyEvaluationDeleteManyArgs} args - Arguments to filter WorkerMonthlyEvaluations to delete.
+     * @example
+     * // Delete a few WorkerMonthlyEvaluations
+     * const { count } = await prisma.workerMonthlyEvaluation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkerMonthlyEvaluationDeleteManyArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkerMonthlyEvaluations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkerMonthlyEvaluations
+     * const workerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkerMonthlyEvaluationUpdateManyArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkerMonthlyEvaluations and returns the data updated in the database.
+     * @param {WorkerMonthlyEvaluationUpdateManyAndReturnArgs} args - Arguments to update many WorkerMonthlyEvaluations.
+     * @example
+     * // Update many WorkerMonthlyEvaluations
+     * const workerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WorkerMonthlyEvaluations and only return the `workerMonthlyEvaluationId`
+     * const workerMonthlyEvaluationWithWorkerMonthlyEvaluationIdOnly = await prisma.workerMonthlyEvaluation.updateManyAndReturn({
+     *   select: { workerMonthlyEvaluationId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WorkerMonthlyEvaluationUpdateManyAndReturnArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WorkerMonthlyEvaluation.
+     * @param {WorkerMonthlyEvaluationUpsertArgs} args - Arguments to update or create a WorkerMonthlyEvaluation.
+     * @example
+     * // Update or create a WorkerMonthlyEvaluation
+     * const workerMonthlyEvaluation = await prisma.workerMonthlyEvaluation.upsert({
+     *   create: {
+     *     // ... data to create a WorkerMonthlyEvaluation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkerMonthlyEvaluation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkerMonthlyEvaluationUpsertArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationUpsertArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WorkerMonthlyEvaluations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationCountArgs} args - Arguments to filter WorkerMonthlyEvaluations to count.
+     * @example
+     * // Count the number of WorkerMonthlyEvaluations
+     * const count = await prisma.workerMonthlyEvaluation.count({
+     *   where: {
+     *     // ... the filter for the WorkerMonthlyEvaluations we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkerMonthlyEvaluationCountArgs>(
+      args?: Subset<T, WorkerMonthlyEvaluationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkerMonthlyEvaluationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkerMonthlyEvaluation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkerMonthlyEvaluationAggregateArgs>(args: Subset<T, WorkerMonthlyEvaluationAggregateArgs>): Prisma.PrismaPromise<GetWorkerMonthlyEvaluationAggregateType<T>>
+
+    /**
+     * Group by WorkerMonthlyEvaluation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkerMonthlyEvaluationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkerMonthlyEvaluationGroupByArgs['orderBy'] }
+        : { orderBy?: WorkerMonthlyEvaluationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkerMonthlyEvaluationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkerMonthlyEvaluationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkerMonthlyEvaluation model
+   */
+  readonly fields: WorkerMonthlyEvaluationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkerMonthlyEvaluation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkerMonthlyEvaluationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    worker<T extends WorkerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkerDefaultArgs<ExtArgs>>): Prisma__WorkerClient<$Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    templateVersion<T extends MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationTemplateVersionDefaultArgs<ExtArgs>>): Prisma__MonthlyEvaluationTemplateVersionClient<$Result.GetResult<Prisma.$MonthlyEvaluationTemplateVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    evaluatorUser<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    openedByUser<T extends WorkerMonthlyEvaluation$openedByUserArgs<ExtArgs> = {}>(args?: Subset<T, WorkerMonthlyEvaluation$openedByUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    closedByUser<T extends WorkerMonthlyEvaluation$closedByUserArgs<ExtArgs> = {}>(args?: Subset<T, WorkerMonthlyEvaluation$closedByUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    responses<T extends WorkerMonthlyEvaluation$responsesArgs<ExtArgs> = {}>(args?: Subset<T, WorkerMonthlyEvaluation$responsesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkerMonthlyEvaluation model
+   */
+  interface WorkerMonthlyEvaluationFieldRefs {
+    readonly workerMonthlyEvaluationId: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly workerId: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly monthlyEvaluationTemplateVersionId: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly year: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly month: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly sequence: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly status: FieldRef<"WorkerMonthlyEvaluation", 'MonthlyEvaluationStatus'>
+    readonly evaluatorUserId: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly openedByUserId: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly closedByUserId: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly openedAt: FieldRef<"WorkerMonthlyEvaluation", 'DateTime'>
+    readonly closedAt: FieldRef<"WorkerMonthlyEvaluation", 'DateTime'>
+    readonly generalComment: FieldRef<"WorkerMonthlyEvaluation", 'String'>
+    readonly totalScore: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly maxScore: FieldRef<"WorkerMonthlyEvaluation", 'Int'>
+    readonly performanceLabel: FieldRef<"WorkerMonthlyEvaluation", 'String'>
+    readonly createdAt: FieldRef<"WorkerMonthlyEvaluation", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkerMonthlyEvaluation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkerMonthlyEvaluation findUnique
+   */
+  export type WorkerMonthlyEvaluationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkerMonthlyEvaluation to fetch.
+     */
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+  }
+
+  /**
+   * WorkerMonthlyEvaluation findUniqueOrThrow
+   */
+  export type WorkerMonthlyEvaluationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkerMonthlyEvaluation to fetch.
+     */
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+  }
+
+  /**
+   * WorkerMonthlyEvaluation findFirst
+   */
+  export type WorkerMonthlyEvaluationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkerMonthlyEvaluation to fetch.
+     */
+    where?: WorkerMonthlyEvaluationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkerMonthlyEvaluations to fetch.
+     */
+    orderBy?: WorkerMonthlyEvaluationOrderByWithRelationInput | WorkerMonthlyEvaluationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkerMonthlyEvaluations.
+     */
+    cursor?: WorkerMonthlyEvaluationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkerMonthlyEvaluations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkerMonthlyEvaluations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkerMonthlyEvaluations.
+     */
+    distinct?: WorkerMonthlyEvaluationScalarFieldEnum | WorkerMonthlyEvaluationScalarFieldEnum[]
+  }
+
+  /**
+   * WorkerMonthlyEvaluation findFirstOrThrow
+   */
+  export type WorkerMonthlyEvaluationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkerMonthlyEvaluation to fetch.
+     */
+    where?: WorkerMonthlyEvaluationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkerMonthlyEvaluations to fetch.
+     */
+    orderBy?: WorkerMonthlyEvaluationOrderByWithRelationInput | WorkerMonthlyEvaluationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkerMonthlyEvaluations.
+     */
+    cursor?: WorkerMonthlyEvaluationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkerMonthlyEvaluations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkerMonthlyEvaluations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkerMonthlyEvaluations.
+     */
+    distinct?: WorkerMonthlyEvaluationScalarFieldEnum | WorkerMonthlyEvaluationScalarFieldEnum[]
+  }
+
+  /**
+   * WorkerMonthlyEvaluation findMany
+   */
+  export type WorkerMonthlyEvaluationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkerMonthlyEvaluations to fetch.
+     */
+    where?: WorkerMonthlyEvaluationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkerMonthlyEvaluations to fetch.
+     */
+    orderBy?: WorkerMonthlyEvaluationOrderByWithRelationInput | WorkerMonthlyEvaluationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkerMonthlyEvaluations.
+     */
+    cursor?: WorkerMonthlyEvaluationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkerMonthlyEvaluations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkerMonthlyEvaluations.
+     */
+    skip?: number
+    distinct?: WorkerMonthlyEvaluationScalarFieldEnum | WorkerMonthlyEvaluationScalarFieldEnum[]
+  }
+
+  /**
+   * WorkerMonthlyEvaluation create
+   */
+  export type WorkerMonthlyEvaluationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WorkerMonthlyEvaluation.
+     */
+    data: XOR<WorkerMonthlyEvaluationCreateInput, WorkerMonthlyEvaluationUncheckedCreateInput>
+  }
+
+  /**
+   * WorkerMonthlyEvaluation createMany
+   */
+  export type WorkerMonthlyEvaluationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkerMonthlyEvaluations.
+     */
+    data: WorkerMonthlyEvaluationCreateManyInput | WorkerMonthlyEvaluationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkerMonthlyEvaluation createManyAndReturn
+   */
+  export type WorkerMonthlyEvaluationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * The data used to create many WorkerMonthlyEvaluations.
+     */
+    data: WorkerMonthlyEvaluationCreateManyInput | WorkerMonthlyEvaluationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkerMonthlyEvaluation update
+   */
+  export type WorkerMonthlyEvaluationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WorkerMonthlyEvaluation.
+     */
+    data: XOR<WorkerMonthlyEvaluationUpdateInput, WorkerMonthlyEvaluationUncheckedUpdateInput>
+    /**
+     * Choose, which WorkerMonthlyEvaluation to update.
+     */
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+  }
+
+  /**
+   * WorkerMonthlyEvaluation updateMany
+   */
+  export type WorkerMonthlyEvaluationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkerMonthlyEvaluations.
+     */
+    data: XOR<WorkerMonthlyEvaluationUpdateManyMutationInput, WorkerMonthlyEvaluationUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkerMonthlyEvaluations to update
+     */
+    where?: WorkerMonthlyEvaluationWhereInput
+    /**
+     * Limit how many WorkerMonthlyEvaluations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkerMonthlyEvaluation updateManyAndReturn
+   */
+  export type WorkerMonthlyEvaluationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * The data used to update WorkerMonthlyEvaluations.
+     */
+    data: XOR<WorkerMonthlyEvaluationUpdateManyMutationInput, WorkerMonthlyEvaluationUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkerMonthlyEvaluations to update
+     */
+    where?: WorkerMonthlyEvaluationWhereInput
+    /**
+     * Limit how many WorkerMonthlyEvaluations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkerMonthlyEvaluation upsert
+   */
+  export type WorkerMonthlyEvaluationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WorkerMonthlyEvaluation to update in case it exists.
+     */
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    /**
+     * In case the WorkerMonthlyEvaluation found by the `where` argument doesn't exist, create a new WorkerMonthlyEvaluation with this data.
+     */
+    create: XOR<WorkerMonthlyEvaluationCreateInput, WorkerMonthlyEvaluationUncheckedCreateInput>
+    /**
+     * In case the WorkerMonthlyEvaluation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkerMonthlyEvaluationUpdateInput, WorkerMonthlyEvaluationUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkerMonthlyEvaluation delete
+   */
+  export type WorkerMonthlyEvaluationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+    /**
+     * Filter which WorkerMonthlyEvaluation to delete.
+     */
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+  }
+
+  /**
+   * WorkerMonthlyEvaluation deleteMany
+   */
+  export type WorkerMonthlyEvaluationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkerMonthlyEvaluations to delete
+     */
+    where?: WorkerMonthlyEvaluationWhereInput
+    /**
+     * Limit how many WorkerMonthlyEvaluations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkerMonthlyEvaluation.openedByUser
+   */
+  export type WorkerMonthlyEvaluation$openedByUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * WorkerMonthlyEvaluation.closedByUser
+   */
+  export type WorkerMonthlyEvaluation$closedByUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * WorkerMonthlyEvaluation.responses
+   */
+  export type WorkerMonthlyEvaluation$responsesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+    orderBy?: WorkerMonthlyEvaluationResponseOrderByWithRelationInput | WorkerMonthlyEvaluationResponseOrderByWithRelationInput[]
+    cursor?: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkerMonthlyEvaluationResponseScalarFieldEnum | WorkerMonthlyEvaluationResponseScalarFieldEnum[]
+  }
+
+  /**
+   * WorkerMonthlyEvaluation without action
+   */
+  export type WorkerMonthlyEvaluationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluation
+     */
+    select?: WorkerMonthlyEvaluationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluation
+     */
+    omit?: WorkerMonthlyEvaluationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkerMonthlyEvaluationResponse
+   */
+
+  export type AggregateWorkerMonthlyEvaluationResponse = {
+    _count: WorkerMonthlyEvaluationResponseCountAggregateOutputType | null
+    _avg: WorkerMonthlyEvaluationResponseAvgAggregateOutputType | null
+    _sum: WorkerMonthlyEvaluationResponseSumAggregateOutputType | null
+    _min: WorkerMonthlyEvaluationResponseMinAggregateOutputType | null
+    _max: WorkerMonthlyEvaluationResponseMaxAggregateOutputType | null
+  }
+
+  export type WorkerMonthlyEvaluationResponseAvgAggregateOutputType = {
+    workerMonthlyEvaluationResponseId: number | null
+    workerMonthlyEvaluationId: number | null
+    monthlyEvaluationQuestionId: number | null
+    score: number | null
+  }
+
+  export type WorkerMonthlyEvaluationResponseSumAggregateOutputType = {
+    workerMonthlyEvaluationResponseId: number | null
+    workerMonthlyEvaluationId: number | null
+    monthlyEvaluationQuestionId: number | null
+    score: number | null
+  }
+
+  export type WorkerMonthlyEvaluationResponseMinAggregateOutputType = {
+    workerMonthlyEvaluationResponseId: number | null
+    workerMonthlyEvaluationId: number | null
+    monthlyEvaluationQuestionId: number | null
+    score: number | null
+    textAnswer: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkerMonthlyEvaluationResponseMaxAggregateOutputType = {
+    workerMonthlyEvaluationResponseId: number | null
+    workerMonthlyEvaluationId: number | null
+    monthlyEvaluationQuestionId: number | null
+    score: number | null
+    textAnswer: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkerMonthlyEvaluationResponseCountAggregateOutputType = {
+    workerMonthlyEvaluationResponseId: number
+    workerMonthlyEvaluationId: number
+    monthlyEvaluationQuestionId: number
+    score: number
+    textAnswer: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkerMonthlyEvaluationResponseAvgAggregateInputType = {
+    workerMonthlyEvaluationResponseId?: true
+    workerMonthlyEvaluationId?: true
+    monthlyEvaluationQuestionId?: true
+    score?: true
+  }
+
+  export type WorkerMonthlyEvaluationResponseSumAggregateInputType = {
+    workerMonthlyEvaluationResponseId?: true
+    workerMonthlyEvaluationId?: true
+    monthlyEvaluationQuestionId?: true
+    score?: true
+  }
+
+  export type WorkerMonthlyEvaluationResponseMinAggregateInputType = {
+    workerMonthlyEvaluationResponseId?: true
+    workerMonthlyEvaluationId?: true
+    monthlyEvaluationQuestionId?: true
+    score?: true
+    textAnswer?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkerMonthlyEvaluationResponseMaxAggregateInputType = {
+    workerMonthlyEvaluationResponseId?: true
+    workerMonthlyEvaluationId?: true
+    monthlyEvaluationQuestionId?: true
+    score?: true
+    textAnswer?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkerMonthlyEvaluationResponseCountAggregateInputType = {
+    workerMonthlyEvaluationResponseId?: true
+    workerMonthlyEvaluationId?: true
+    monthlyEvaluationQuestionId?: true
+    score?: true
+    textAnswer?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkerMonthlyEvaluationResponseAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkerMonthlyEvaluationResponse to aggregate.
+     */
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkerMonthlyEvaluationResponses to fetch.
+     */
+    orderBy?: WorkerMonthlyEvaluationResponseOrderByWithRelationInput | WorkerMonthlyEvaluationResponseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkerMonthlyEvaluationResponses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkerMonthlyEvaluationResponses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkerMonthlyEvaluationResponses
+    **/
+    _count?: true | WorkerMonthlyEvaluationResponseCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WorkerMonthlyEvaluationResponseAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkerMonthlyEvaluationResponseSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkerMonthlyEvaluationResponseMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkerMonthlyEvaluationResponseMaxAggregateInputType
+  }
+
+  export type GetWorkerMonthlyEvaluationResponseAggregateType<T extends WorkerMonthlyEvaluationResponseAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkerMonthlyEvaluationResponse]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkerMonthlyEvaluationResponse[P]>
+      : GetScalarType<T[P], AggregateWorkerMonthlyEvaluationResponse[P]>
+  }
+
+
+
+
+  export type WorkerMonthlyEvaluationResponseGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+    orderBy?: WorkerMonthlyEvaluationResponseOrderByWithAggregationInput | WorkerMonthlyEvaluationResponseOrderByWithAggregationInput[]
+    by: WorkerMonthlyEvaluationResponseScalarFieldEnum[] | WorkerMonthlyEvaluationResponseScalarFieldEnum
+    having?: WorkerMonthlyEvaluationResponseScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkerMonthlyEvaluationResponseCountAggregateInputType | true
+    _avg?: WorkerMonthlyEvaluationResponseAvgAggregateInputType
+    _sum?: WorkerMonthlyEvaluationResponseSumAggregateInputType
+    _min?: WorkerMonthlyEvaluationResponseMinAggregateInputType
+    _max?: WorkerMonthlyEvaluationResponseMaxAggregateInputType
+  }
+
+  export type WorkerMonthlyEvaluationResponseGroupByOutputType = {
+    workerMonthlyEvaluationResponseId: number
+    workerMonthlyEvaluationId: number
+    monthlyEvaluationQuestionId: number
+    score: number | null
+    textAnswer: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkerMonthlyEvaluationResponseCountAggregateOutputType | null
+    _avg: WorkerMonthlyEvaluationResponseAvgAggregateOutputType | null
+    _sum: WorkerMonthlyEvaluationResponseSumAggregateOutputType | null
+    _min: WorkerMonthlyEvaluationResponseMinAggregateOutputType | null
+    _max: WorkerMonthlyEvaluationResponseMaxAggregateOutputType | null
+  }
+
+  type GetWorkerMonthlyEvaluationResponseGroupByPayload<T extends WorkerMonthlyEvaluationResponseGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkerMonthlyEvaluationResponseGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkerMonthlyEvaluationResponseGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkerMonthlyEvaluationResponseGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkerMonthlyEvaluationResponseGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkerMonthlyEvaluationResponseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    workerMonthlyEvaluationResponseId?: boolean
+    workerMonthlyEvaluationId?: boolean
+    monthlyEvaluationQuestionId?: boolean
+    score?: boolean
+    textAnswer?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    evaluation?: boolean | WorkerMonthlyEvaluationDefaultArgs<ExtArgs>
+    question?: boolean | MonthlyEvaluationQuestionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workerMonthlyEvaluationResponse"]>
+
+  export type WorkerMonthlyEvaluationResponseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    workerMonthlyEvaluationResponseId?: boolean
+    workerMonthlyEvaluationId?: boolean
+    monthlyEvaluationQuestionId?: boolean
+    score?: boolean
+    textAnswer?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    evaluation?: boolean | WorkerMonthlyEvaluationDefaultArgs<ExtArgs>
+    question?: boolean | MonthlyEvaluationQuestionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workerMonthlyEvaluationResponse"]>
+
+  export type WorkerMonthlyEvaluationResponseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    workerMonthlyEvaluationResponseId?: boolean
+    workerMonthlyEvaluationId?: boolean
+    monthlyEvaluationQuestionId?: boolean
+    score?: boolean
+    textAnswer?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    evaluation?: boolean | WorkerMonthlyEvaluationDefaultArgs<ExtArgs>
+    question?: boolean | MonthlyEvaluationQuestionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workerMonthlyEvaluationResponse"]>
+
+  export type WorkerMonthlyEvaluationResponseSelectScalar = {
+    workerMonthlyEvaluationResponseId?: boolean
+    workerMonthlyEvaluationId?: boolean
+    monthlyEvaluationQuestionId?: boolean
+    score?: boolean
+    textAnswer?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WorkerMonthlyEvaluationResponseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"workerMonthlyEvaluationResponseId" | "workerMonthlyEvaluationId" | "monthlyEvaluationQuestionId" | "score" | "textAnswer" | "createdAt" | "updatedAt", ExtArgs["result"]["workerMonthlyEvaluationResponse"]>
+  export type WorkerMonthlyEvaluationResponseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    evaluation?: boolean | WorkerMonthlyEvaluationDefaultArgs<ExtArgs>
+    question?: boolean | MonthlyEvaluationQuestionDefaultArgs<ExtArgs>
+  }
+  export type WorkerMonthlyEvaluationResponseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    evaluation?: boolean | WorkerMonthlyEvaluationDefaultArgs<ExtArgs>
+    question?: boolean | MonthlyEvaluationQuestionDefaultArgs<ExtArgs>
+  }
+  export type WorkerMonthlyEvaluationResponseIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    evaluation?: boolean | WorkerMonthlyEvaluationDefaultArgs<ExtArgs>
+    question?: boolean | MonthlyEvaluationQuestionDefaultArgs<ExtArgs>
+  }
+
+  export type $WorkerMonthlyEvaluationResponsePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkerMonthlyEvaluationResponse"
+    objects: {
+      evaluation: Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>
+      question: Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      workerMonthlyEvaluationResponseId: number
+      workerMonthlyEvaluationId: number
+      monthlyEvaluationQuestionId: number
+      score: number | null
+      textAnswer: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workerMonthlyEvaluationResponse"]>
+    composites: {}
+  }
+
+  type WorkerMonthlyEvaluationResponseGetPayload<S extends boolean | null | undefined | WorkerMonthlyEvaluationResponseDefaultArgs> = $Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload, S>
+
+  type WorkerMonthlyEvaluationResponseCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkerMonthlyEvaluationResponseFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkerMonthlyEvaluationResponseCountAggregateInputType | true
+    }
+
+  export interface WorkerMonthlyEvaluationResponseDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkerMonthlyEvaluationResponse'], meta: { name: 'WorkerMonthlyEvaluationResponse' } }
+    /**
+     * Find zero or one WorkerMonthlyEvaluationResponse that matches the filter.
+     * @param {WorkerMonthlyEvaluationResponseFindUniqueArgs} args - Arguments to find a WorkerMonthlyEvaluationResponse
+     * @example
+     * // Get one WorkerMonthlyEvaluationResponse
+     * const workerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkerMonthlyEvaluationResponseFindUniqueArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationResponseFindUniqueArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationResponseClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WorkerMonthlyEvaluationResponse that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkerMonthlyEvaluationResponseFindUniqueOrThrowArgs} args - Arguments to find a WorkerMonthlyEvaluationResponse
+     * @example
+     * // Get one WorkerMonthlyEvaluationResponse
+     * const workerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkerMonthlyEvaluationResponseFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationResponseFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationResponseClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkerMonthlyEvaluationResponse that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationResponseFindFirstArgs} args - Arguments to find a WorkerMonthlyEvaluationResponse
+     * @example
+     * // Get one WorkerMonthlyEvaluationResponse
+     * const workerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkerMonthlyEvaluationResponseFindFirstArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationResponseFindFirstArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationResponseClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkerMonthlyEvaluationResponse that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationResponseFindFirstOrThrowArgs} args - Arguments to find a WorkerMonthlyEvaluationResponse
+     * @example
+     * // Get one WorkerMonthlyEvaluationResponse
+     * const workerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkerMonthlyEvaluationResponseFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationResponseFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationResponseClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkerMonthlyEvaluationResponses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationResponseFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkerMonthlyEvaluationResponses
+     * const workerMonthlyEvaluationResponses = await prisma.workerMonthlyEvaluationResponse.findMany()
+     * 
+     * // Get first 10 WorkerMonthlyEvaluationResponses
+     * const workerMonthlyEvaluationResponses = await prisma.workerMonthlyEvaluationResponse.findMany({ take: 10 })
+     * 
+     * // Only select the `workerMonthlyEvaluationResponseId`
+     * const workerMonthlyEvaluationResponseWithWorkerMonthlyEvaluationResponseIdOnly = await prisma.workerMonthlyEvaluationResponse.findMany({ select: { workerMonthlyEvaluationResponseId: true } })
+     * 
+     */
+    findMany<T extends WorkerMonthlyEvaluationResponseFindManyArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationResponseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WorkerMonthlyEvaluationResponse.
+     * @param {WorkerMonthlyEvaluationResponseCreateArgs} args - Arguments to create a WorkerMonthlyEvaluationResponse.
+     * @example
+     * // Create one WorkerMonthlyEvaluationResponse
+     * const WorkerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.create({
+     *   data: {
+     *     // ... data to create a WorkerMonthlyEvaluationResponse
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkerMonthlyEvaluationResponseCreateArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationResponseCreateArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationResponseClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WorkerMonthlyEvaluationResponses.
+     * @param {WorkerMonthlyEvaluationResponseCreateManyArgs} args - Arguments to create many WorkerMonthlyEvaluationResponses.
+     * @example
+     * // Create many WorkerMonthlyEvaluationResponses
+     * const workerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkerMonthlyEvaluationResponseCreateManyArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationResponseCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkerMonthlyEvaluationResponses and returns the data saved in the database.
+     * @param {WorkerMonthlyEvaluationResponseCreateManyAndReturnArgs} args - Arguments to create many WorkerMonthlyEvaluationResponses.
+     * @example
+     * // Create many WorkerMonthlyEvaluationResponses
+     * const workerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkerMonthlyEvaluationResponses and only return the `workerMonthlyEvaluationResponseId`
+     * const workerMonthlyEvaluationResponseWithWorkerMonthlyEvaluationResponseIdOnly = await prisma.workerMonthlyEvaluationResponse.createManyAndReturn({
+     *   select: { workerMonthlyEvaluationResponseId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkerMonthlyEvaluationResponseCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationResponseCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WorkerMonthlyEvaluationResponse.
+     * @param {WorkerMonthlyEvaluationResponseDeleteArgs} args - Arguments to delete one WorkerMonthlyEvaluationResponse.
+     * @example
+     * // Delete one WorkerMonthlyEvaluationResponse
+     * const WorkerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.delete({
+     *   where: {
+     *     // ... filter to delete one WorkerMonthlyEvaluationResponse
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkerMonthlyEvaluationResponseDeleteArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationResponseDeleteArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationResponseClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WorkerMonthlyEvaluationResponse.
+     * @param {WorkerMonthlyEvaluationResponseUpdateArgs} args - Arguments to update one WorkerMonthlyEvaluationResponse.
+     * @example
+     * // Update one WorkerMonthlyEvaluationResponse
+     * const workerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkerMonthlyEvaluationResponseUpdateArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationResponseUpdateArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationResponseClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WorkerMonthlyEvaluationResponses.
+     * @param {WorkerMonthlyEvaluationResponseDeleteManyArgs} args - Arguments to filter WorkerMonthlyEvaluationResponses to delete.
+     * @example
+     * // Delete a few WorkerMonthlyEvaluationResponses
+     * const { count } = await prisma.workerMonthlyEvaluationResponse.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkerMonthlyEvaluationResponseDeleteManyArgs>(args?: SelectSubset<T, WorkerMonthlyEvaluationResponseDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkerMonthlyEvaluationResponses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationResponseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkerMonthlyEvaluationResponses
+     * const workerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkerMonthlyEvaluationResponseUpdateManyArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationResponseUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkerMonthlyEvaluationResponses and returns the data updated in the database.
+     * @param {WorkerMonthlyEvaluationResponseUpdateManyAndReturnArgs} args - Arguments to update many WorkerMonthlyEvaluationResponses.
+     * @example
+     * // Update many WorkerMonthlyEvaluationResponses
+     * const workerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WorkerMonthlyEvaluationResponses and only return the `workerMonthlyEvaluationResponseId`
+     * const workerMonthlyEvaluationResponseWithWorkerMonthlyEvaluationResponseIdOnly = await prisma.workerMonthlyEvaluationResponse.updateManyAndReturn({
+     *   select: { workerMonthlyEvaluationResponseId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WorkerMonthlyEvaluationResponseUpdateManyAndReturnArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationResponseUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WorkerMonthlyEvaluationResponse.
+     * @param {WorkerMonthlyEvaluationResponseUpsertArgs} args - Arguments to update or create a WorkerMonthlyEvaluationResponse.
+     * @example
+     * // Update or create a WorkerMonthlyEvaluationResponse
+     * const workerMonthlyEvaluationResponse = await prisma.workerMonthlyEvaluationResponse.upsert({
+     *   create: {
+     *     // ... data to create a WorkerMonthlyEvaluationResponse
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkerMonthlyEvaluationResponse we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkerMonthlyEvaluationResponseUpsertArgs>(args: SelectSubset<T, WorkerMonthlyEvaluationResponseUpsertArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationResponseClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationResponsePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WorkerMonthlyEvaluationResponses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationResponseCountArgs} args - Arguments to filter WorkerMonthlyEvaluationResponses to count.
+     * @example
+     * // Count the number of WorkerMonthlyEvaluationResponses
+     * const count = await prisma.workerMonthlyEvaluationResponse.count({
+     *   where: {
+     *     // ... the filter for the WorkerMonthlyEvaluationResponses we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkerMonthlyEvaluationResponseCountArgs>(
+      args?: Subset<T, WorkerMonthlyEvaluationResponseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkerMonthlyEvaluationResponseCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkerMonthlyEvaluationResponse.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationResponseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkerMonthlyEvaluationResponseAggregateArgs>(args: Subset<T, WorkerMonthlyEvaluationResponseAggregateArgs>): Prisma.PrismaPromise<GetWorkerMonthlyEvaluationResponseAggregateType<T>>
+
+    /**
+     * Group by WorkerMonthlyEvaluationResponse.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkerMonthlyEvaluationResponseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkerMonthlyEvaluationResponseGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkerMonthlyEvaluationResponseGroupByArgs['orderBy'] }
+        : { orderBy?: WorkerMonthlyEvaluationResponseGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkerMonthlyEvaluationResponseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkerMonthlyEvaluationResponseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkerMonthlyEvaluationResponse model
+   */
+  readonly fields: WorkerMonthlyEvaluationResponseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkerMonthlyEvaluationResponse.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkerMonthlyEvaluationResponseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    evaluation<T extends WorkerMonthlyEvaluationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkerMonthlyEvaluationDefaultArgs<ExtArgs>>): Prisma__WorkerMonthlyEvaluationClient<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    question<T extends MonthlyEvaluationQuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyEvaluationQuestionDefaultArgs<ExtArgs>>): Prisma__MonthlyEvaluationQuestionClient<$Result.GetResult<Prisma.$MonthlyEvaluationQuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkerMonthlyEvaluationResponse model
+   */
+  interface WorkerMonthlyEvaluationResponseFieldRefs {
+    readonly workerMonthlyEvaluationResponseId: FieldRef<"WorkerMonthlyEvaluationResponse", 'Int'>
+    readonly workerMonthlyEvaluationId: FieldRef<"WorkerMonthlyEvaluationResponse", 'Int'>
+    readonly monthlyEvaluationQuestionId: FieldRef<"WorkerMonthlyEvaluationResponse", 'Int'>
+    readonly score: FieldRef<"WorkerMonthlyEvaluationResponse", 'Int'>
+    readonly textAnswer: FieldRef<"WorkerMonthlyEvaluationResponse", 'String'>
+    readonly createdAt: FieldRef<"WorkerMonthlyEvaluationResponse", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkerMonthlyEvaluationResponse", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkerMonthlyEvaluationResponse findUnique
+   */
+  export type WorkerMonthlyEvaluationResponseFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkerMonthlyEvaluationResponse to fetch.
+     */
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse findUniqueOrThrow
+   */
+  export type WorkerMonthlyEvaluationResponseFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkerMonthlyEvaluationResponse to fetch.
+     */
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse findFirst
+   */
+  export type WorkerMonthlyEvaluationResponseFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkerMonthlyEvaluationResponse to fetch.
+     */
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkerMonthlyEvaluationResponses to fetch.
+     */
+    orderBy?: WorkerMonthlyEvaluationResponseOrderByWithRelationInput | WorkerMonthlyEvaluationResponseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkerMonthlyEvaluationResponses.
+     */
+    cursor?: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkerMonthlyEvaluationResponses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkerMonthlyEvaluationResponses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkerMonthlyEvaluationResponses.
+     */
+    distinct?: WorkerMonthlyEvaluationResponseScalarFieldEnum | WorkerMonthlyEvaluationResponseScalarFieldEnum[]
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse findFirstOrThrow
+   */
+  export type WorkerMonthlyEvaluationResponseFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkerMonthlyEvaluationResponse to fetch.
+     */
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkerMonthlyEvaluationResponses to fetch.
+     */
+    orderBy?: WorkerMonthlyEvaluationResponseOrderByWithRelationInput | WorkerMonthlyEvaluationResponseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkerMonthlyEvaluationResponses.
+     */
+    cursor?: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkerMonthlyEvaluationResponses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkerMonthlyEvaluationResponses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkerMonthlyEvaluationResponses.
+     */
+    distinct?: WorkerMonthlyEvaluationResponseScalarFieldEnum | WorkerMonthlyEvaluationResponseScalarFieldEnum[]
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse findMany
+   */
+  export type WorkerMonthlyEvaluationResponseFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkerMonthlyEvaluationResponses to fetch.
+     */
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkerMonthlyEvaluationResponses to fetch.
+     */
+    orderBy?: WorkerMonthlyEvaluationResponseOrderByWithRelationInput | WorkerMonthlyEvaluationResponseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkerMonthlyEvaluationResponses.
+     */
+    cursor?: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkerMonthlyEvaluationResponses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkerMonthlyEvaluationResponses.
+     */
+    skip?: number
+    distinct?: WorkerMonthlyEvaluationResponseScalarFieldEnum | WorkerMonthlyEvaluationResponseScalarFieldEnum[]
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse create
+   */
+  export type WorkerMonthlyEvaluationResponseCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WorkerMonthlyEvaluationResponse.
+     */
+    data: XOR<WorkerMonthlyEvaluationResponseCreateInput, WorkerMonthlyEvaluationResponseUncheckedCreateInput>
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse createMany
+   */
+  export type WorkerMonthlyEvaluationResponseCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkerMonthlyEvaluationResponses.
+     */
+    data: WorkerMonthlyEvaluationResponseCreateManyInput | WorkerMonthlyEvaluationResponseCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse createManyAndReturn
+   */
+  export type WorkerMonthlyEvaluationResponseCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * The data used to create many WorkerMonthlyEvaluationResponses.
+     */
+    data: WorkerMonthlyEvaluationResponseCreateManyInput | WorkerMonthlyEvaluationResponseCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse update
+   */
+  export type WorkerMonthlyEvaluationResponseUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WorkerMonthlyEvaluationResponse.
+     */
+    data: XOR<WorkerMonthlyEvaluationResponseUpdateInput, WorkerMonthlyEvaluationResponseUncheckedUpdateInput>
+    /**
+     * Choose, which WorkerMonthlyEvaluationResponse to update.
+     */
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse updateMany
+   */
+  export type WorkerMonthlyEvaluationResponseUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkerMonthlyEvaluationResponses.
+     */
+    data: XOR<WorkerMonthlyEvaluationResponseUpdateManyMutationInput, WorkerMonthlyEvaluationResponseUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkerMonthlyEvaluationResponses to update
+     */
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+    /**
+     * Limit how many WorkerMonthlyEvaluationResponses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse updateManyAndReturn
+   */
+  export type WorkerMonthlyEvaluationResponseUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * The data used to update WorkerMonthlyEvaluationResponses.
+     */
+    data: XOR<WorkerMonthlyEvaluationResponseUpdateManyMutationInput, WorkerMonthlyEvaluationResponseUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkerMonthlyEvaluationResponses to update
+     */
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+    /**
+     * Limit how many WorkerMonthlyEvaluationResponses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse upsert
+   */
+  export type WorkerMonthlyEvaluationResponseUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WorkerMonthlyEvaluationResponse to update in case it exists.
+     */
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    /**
+     * In case the WorkerMonthlyEvaluationResponse found by the `where` argument doesn't exist, create a new WorkerMonthlyEvaluationResponse with this data.
+     */
+    create: XOR<WorkerMonthlyEvaluationResponseCreateInput, WorkerMonthlyEvaluationResponseUncheckedCreateInput>
+    /**
+     * In case the WorkerMonthlyEvaluationResponse was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkerMonthlyEvaluationResponseUpdateInput, WorkerMonthlyEvaluationResponseUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse delete
+   */
+  export type WorkerMonthlyEvaluationResponseDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
+    /**
+     * Filter which WorkerMonthlyEvaluationResponse to delete.
+     */
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse deleteMany
+   */
+  export type WorkerMonthlyEvaluationResponseDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkerMonthlyEvaluationResponses to delete
+     */
+    where?: WorkerMonthlyEvaluationResponseWhereInput
+    /**
+     * Limit how many WorkerMonthlyEvaluationResponses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkerMonthlyEvaluationResponse without action
+   */
+  export type WorkerMonthlyEvaluationResponseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerMonthlyEvaluationResponse
+     */
+    select?: WorkerMonthlyEvaluationResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkerMonthlyEvaluationResponse
+     */
+    omit?: WorkerMonthlyEvaluationResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerMonthlyEvaluationResponseInclude<ExtArgs> | null
   }
 
 
@@ -41655,6 +49896,103 @@ export namespace Prisma {
   export type WorkerScalarFieldEnum = (typeof WorkerScalarFieldEnum)[keyof typeof WorkerScalarFieldEnum]
 
 
+  export const MonthlyEvaluationTemplateScalarFieldEnum: {
+    monthlyEvaluationTemplateId: 'monthlyEvaluationTemplateId',
+    name: 'name',
+    description: 'description',
+    isActive: 'isActive',
+    createdByUserId: 'createdByUserId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
+  };
+
+  export type MonthlyEvaluationTemplateScalarFieldEnum = (typeof MonthlyEvaluationTemplateScalarFieldEnum)[keyof typeof MonthlyEvaluationTemplateScalarFieldEnum]
+
+
+  export const MonthlyEvaluationTemplateVersionScalarFieldEnum: {
+    monthlyEvaluationTemplateVersionId: 'monthlyEvaluationTemplateVersionId',
+    monthlyEvaluationTemplateId: 'monthlyEvaluationTemplateId',
+    versionNumber: 'versionNumber',
+    title: 'title',
+    description: 'description',
+    observedMaxScore: 'observedMaxScore',
+    regularMaxScore: 'regularMaxScore',
+    isPublished: 'isPublished',
+    publishedAt: 'publishedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type MonthlyEvaluationTemplateVersionScalarFieldEnum = (typeof MonthlyEvaluationTemplateVersionScalarFieldEnum)[keyof typeof MonthlyEvaluationTemplateVersionScalarFieldEnum]
+
+
+  export const MonthlyEvaluationSectionScalarFieldEnum: {
+    monthlyEvaluationSectionId: 'monthlyEvaluationSectionId',
+    monthlyEvaluationTemplateVersionId: 'monthlyEvaluationTemplateVersionId',
+    title: 'title',
+    displayOrder: 'displayOrder',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MonthlyEvaluationSectionScalarFieldEnum = (typeof MonthlyEvaluationSectionScalarFieldEnum)[keyof typeof MonthlyEvaluationSectionScalarFieldEnum]
+
+
+  export const MonthlyEvaluationQuestionScalarFieldEnum: {
+    monthlyEvaluationQuestionId: 'monthlyEvaluationQuestionId',
+    monthlyEvaluationSectionId: 'monthlyEvaluationSectionId',
+    displayOrder: 'displayOrder',
+    prompt: 'prompt',
+    questionType: 'questionType',
+    isRequired: 'isRequired',
+    isScored: 'isScored',
+    minScore: 'minScore',
+    maxScore: 'maxScore',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MonthlyEvaluationQuestionScalarFieldEnum = (typeof MonthlyEvaluationQuestionScalarFieldEnum)[keyof typeof MonthlyEvaluationQuestionScalarFieldEnum]
+
+
+  export const WorkerMonthlyEvaluationScalarFieldEnum: {
+    workerMonthlyEvaluationId: 'workerMonthlyEvaluationId',
+    workerId: 'workerId',
+    monthlyEvaluationTemplateVersionId: 'monthlyEvaluationTemplateVersionId',
+    year: 'year',
+    month: 'month',
+    sequence: 'sequence',
+    status: 'status',
+    evaluatorUserId: 'evaluatorUserId',
+    openedByUserId: 'openedByUserId',
+    closedByUserId: 'closedByUserId',
+    openedAt: 'openedAt',
+    closedAt: 'closedAt',
+    generalComment: 'generalComment',
+    totalScore: 'totalScore',
+    maxScore: 'maxScore',
+    performanceLabel: 'performanceLabel',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkerMonthlyEvaluationScalarFieldEnum = (typeof WorkerMonthlyEvaluationScalarFieldEnum)[keyof typeof WorkerMonthlyEvaluationScalarFieldEnum]
+
+
+  export const WorkerMonthlyEvaluationResponseScalarFieldEnum: {
+    workerMonthlyEvaluationResponseId: 'workerMonthlyEvaluationResponseId',
+    workerMonthlyEvaluationId: 'workerMonthlyEvaluationId',
+    monthlyEvaluationQuestionId: 'monthlyEvaluationQuestionId',
+    score: 'score',
+    textAnswer: 'textAnswer',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkerMonthlyEvaluationResponseScalarFieldEnum = (typeof WorkerMonthlyEvaluationResponseScalarFieldEnum)[keyof typeof WorkerMonthlyEvaluationResponseScalarFieldEnum]
+
+
   export const SupplierScalarFieldEnum: {
     supplierId: 'supplierId',
     name: 'name',
@@ -41952,6 +50290,14 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -41966,6 +50312,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -42100,6 +50455,55 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'MonthlyEvaluationQuestionType'
+   */
+  export type EnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MonthlyEvaluationQuestionType'>
+    
+
+
+  /**
+   * Reference to a field of type 'MonthlyEvaluationQuestionType[]'
+   */
+  export type ListEnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MonthlyEvaluationQuestionType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'MonthlyEvaluationStatus'
+   */
+  export type EnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MonthlyEvaluationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'MonthlyEvaluationStatus[]'
+   */
+  export type ListEnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MonthlyEvaluationStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'SupplierDocumentType'
    */
   export type EnumSupplierDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupplierDocumentType'>
@@ -42198,13 +50602,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
    * Reference to a field of type 'TaskStatus'
    */
   export type EnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus'>
@@ -42298,6 +50695,10 @@ export namespace Prisma {
     emergencies?: EmergencyListRelationFilter
     taskAssignments?: TaskAssignmentListRelationFilter
     notifications?: NotificationListRelationFilter
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateListRelationFilter
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationListRelationFilter
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationListRelationFilter
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -42318,6 +50719,10 @@ export namespace Prisma {
     emergencies?: EmergencyOrderByRelationAggregateInput
     taskAssignments?: TaskAssignmentOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateOrderByRelationAggregateInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationOrderByRelationAggregateInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationOrderByRelationAggregateInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -42341,6 +50746,10 @@ export namespace Prisma {
     emergencies?: EmergencyListRelationFilter
     taskAssignments?: TaskAssignmentListRelationFilter
     notifications?: NotificationListRelationFilter
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateListRelationFilter
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationListRelationFilter
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationListRelationFilter
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationListRelationFilter
   }, "userId" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -43130,6 +51539,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageListRelationFilter
     attendances?: AttendanceListRelationFilter
     dailyWages?: DailyWageListRelationFilter
+    monthlyEvaluations?: WorkerMonthlyEvaluationListRelationFilter
   }
 
   export type WorkerOrderByWithRelationInput = {
@@ -43148,6 +51558,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageOrderByRelationAggregateInput
     attendances?: AttendanceOrderByRelationAggregateInput
     dailyWages?: DailyWageOrderByRelationAggregateInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationOrderByRelationAggregateInput
   }
 
   export type WorkerWhereUniqueInput = Prisma.AtLeast<{
@@ -43169,6 +51580,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageListRelationFilter
     attendances?: AttendanceListRelationFilter
     dailyWages?: DailyWageListRelationFilter
+    monthlyEvaluations?: WorkerMonthlyEvaluationListRelationFilter
   }, "workerId" | "dni" | "phone" | "personalEmail">
 
   export type WorkerOrderByWithAggregationInput = {
@@ -43205,6 +51617,541 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Worker"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Worker"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Worker"> | Date | string | null
+  }
+
+  export type MonthlyEvaluationTemplateWhereInput = {
+    AND?: MonthlyEvaluationTemplateWhereInput | MonthlyEvaluationTemplateWhereInput[]
+    OR?: MonthlyEvaluationTemplateWhereInput[]
+    NOT?: MonthlyEvaluationTemplateWhereInput | MonthlyEvaluationTemplateWhereInput[]
+    monthlyEvaluationTemplateId?: IntFilter<"MonthlyEvaluationTemplate"> | number
+    name?: StringFilter<"MonthlyEvaluationTemplate"> | string
+    description?: StringNullableFilter<"MonthlyEvaluationTemplate"> | string | null
+    isActive?: BoolFilter<"MonthlyEvaluationTemplate"> | boolean
+    createdByUserId?: IntNullableFilter<"MonthlyEvaluationTemplate"> | number | null
+    createdAt?: DateTimeFilter<"MonthlyEvaluationTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyEvaluationTemplate"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"MonthlyEvaluationTemplate"> | Date | string | null
+    createdByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    versions?: MonthlyEvaluationTemplateVersionListRelationFilter
+  }
+
+  export type MonthlyEvaluationTemplateOrderByWithRelationInput = {
+    monthlyEvaluationTemplateId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdByUserId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdByUser?: UserOrderByWithRelationInput
+    versions?: MonthlyEvaluationTemplateVersionOrderByRelationAggregateInput
+  }
+
+  export type MonthlyEvaluationTemplateWhereUniqueInput = Prisma.AtLeast<{
+    monthlyEvaluationTemplateId?: number
+    AND?: MonthlyEvaluationTemplateWhereInput | MonthlyEvaluationTemplateWhereInput[]
+    OR?: MonthlyEvaluationTemplateWhereInput[]
+    NOT?: MonthlyEvaluationTemplateWhereInput | MonthlyEvaluationTemplateWhereInput[]
+    name?: StringFilter<"MonthlyEvaluationTemplate"> | string
+    description?: StringNullableFilter<"MonthlyEvaluationTemplate"> | string | null
+    isActive?: BoolFilter<"MonthlyEvaluationTemplate"> | boolean
+    createdByUserId?: IntNullableFilter<"MonthlyEvaluationTemplate"> | number | null
+    createdAt?: DateTimeFilter<"MonthlyEvaluationTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyEvaluationTemplate"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"MonthlyEvaluationTemplate"> | Date | string | null
+    createdByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    versions?: MonthlyEvaluationTemplateVersionListRelationFilter
+  }, "monthlyEvaluationTemplateId">
+
+  export type MonthlyEvaluationTemplateOrderByWithAggregationInput = {
+    monthlyEvaluationTemplateId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdByUserId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: MonthlyEvaluationTemplateCountOrderByAggregateInput
+    _avg?: MonthlyEvaluationTemplateAvgOrderByAggregateInput
+    _max?: MonthlyEvaluationTemplateMaxOrderByAggregateInput
+    _min?: MonthlyEvaluationTemplateMinOrderByAggregateInput
+    _sum?: MonthlyEvaluationTemplateSumOrderByAggregateInput
+  }
+
+  export type MonthlyEvaluationTemplateScalarWhereWithAggregatesInput = {
+    AND?: MonthlyEvaluationTemplateScalarWhereWithAggregatesInput | MonthlyEvaluationTemplateScalarWhereWithAggregatesInput[]
+    OR?: MonthlyEvaluationTemplateScalarWhereWithAggregatesInput[]
+    NOT?: MonthlyEvaluationTemplateScalarWhereWithAggregatesInput | MonthlyEvaluationTemplateScalarWhereWithAggregatesInput[]
+    monthlyEvaluationTemplateId?: IntWithAggregatesFilter<"MonthlyEvaluationTemplate"> | number
+    name?: StringWithAggregatesFilter<"MonthlyEvaluationTemplate"> | string
+    description?: StringNullableWithAggregatesFilter<"MonthlyEvaluationTemplate"> | string | null
+    isActive?: BoolWithAggregatesFilter<"MonthlyEvaluationTemplate"> | boolean
+    createdByUserId?: IntNullableWithAggregatesFilter<"MonthlyEvaluationTemplate"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"MonthlyEvaluationTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MonthlyEvaluationTemplate"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"MonthlyEvaluationTemplate"> | Date | string | null
+  }
+
+  export type MonthlyEvaluationTemplateVersionWhereInput = {
+    AND?: MonthlyEvaluationTemplateVersionWhereInput | MonthlyEvaluationTemplateVersionWhereInput[]
+    OR?: MonthlyEvaluationTemplateVersionWhereInput[]
+    NOT?: MonthlyEvaluationTemplateVersionWhereInput | MonthlyEvaluationTemplateVersionWhereInput[]
+    monthlyEvaluationTemplateVersionId?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    monthlyEvaluationTemplateId?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    versionNumber?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    title?: StringFilter<"MonthlyEvaluationTemplateVersion"> | string
+    description?: StringNullableFilter<"MonthlyEvaluationTemplateVersion"> | string | null
+    observedMaxScore?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    regularMaxScore?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    isPublished?: BoolFilter<"MonthlyEvaluationTemplateVersion"> | boolean
+    publishedAt?: DateTimeFilter<"MonthlyEvaluationTemplateVersion"> | Date | string
+    createdAt?: DateTimeFilter<"MonthlyEvaluationTemplateVersion"> | Date | string
+    template?: XOR<MonthlyEvaluationTemplateScalarRelationFilter, MonthlyEvaluationTemplateWhereInput>
+    sections?: MonthlyEvaluationSectionListRelationFilter
+    evaluations?: WorkerMonthlyEvaluationListRelationFilter
+  }
+
+  export type MonthlyEvaluationTemplateVersionOrderByWithRelationInput = {
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    monthlyEvaluationTemplateId?: SortOrder
+    versionNumber?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    observedMaxScore?: SortOrder
+    regularMaxScore?: SortOrder
+    isPublished?: SortOrder
+    publishedAt?: SortOrder
+    createdAt?: SortOrder
+    template?: MonthlyEvaluationTemplateOrderByWithRelationInput
+    sections?: MonthlyEvaluationSectionOrderByRelationAggregateInput
+    evaluations?: WorkerMonthlyEvaluationOrderByRelationAggregateInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionWhereUniqueInput = Prisma.AtLeast<{
+    monthlyEvaluationTemplateVersionId?: number
+    monthlyEvaluationTemplateId_versionNumber?: MonthlyEvaluationTemplateVersionMonthlyEvaluationTemplateIdVersionNumberCompoundUniqueInput
+    AND?: MonthlyEvaluationTemplateVersionWhereInput | MonthlyEvaluationTemplateVersionWhereInput[]
+    OR?: MonthlyEvaluationTemplateVersionWhereInput[]
+    NOT?: MonthlyEvaluationTemplateVersionWhereInput | MonthlyEvaluationTemplateVersionWhereInput[]
+    monthlyEvaluationTemplateId?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    versionNumber?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    title?: StringFilter<"MonthlyEvaluationTemplateVersion"> | string
+    description?: StringNullableFilter<"MonthlyEvaluationTemplateVersion"> | string | null
+    observedMaxScore?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    regularMaxScore?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    isPublished?: BoolFilter<"MonthlyEvaluationTemplateVersion"> | boolean
+    publishedAt?: DateTimeFilter<"MonthlyEvaluationTemplateVersion"> | Date | string
+    createdAt?: DateTimeFilter<"MonthlyEvaluationTemplateVersion"> | Date | string
+    template?: XOR<MonthlyEvaluationTemplateScalarRelationFilter, MonthlyEvaluationTemplateWhereInput>
+    sections?: MonthlyEvaluationSectionListRelationFilter
+    evaluations?: WorkerMonthlyEvaluationListRelationFilter
+  }, "monthlyEvaluationTemplateVersionId" | "monthlyEvaluationTemplateId_versionNumber">
+
+  export type MonthlyEvaluationTemplateVersionOrderByWithAggregationInput = {
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    monthlyEvaluationTemplateId?: SortOrder
+    versionNumber?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    observedMaxScore?: SortOrder
+    regularMaxScore?: SortOrder
+    isPublished?: SortOrder
+    publishedAt?: SortOrder
+    createdAt?: SortOrder
+    _count?: MonthlyEvaluationTemplateVersionCountOrderByAggregateInput
+    _avg?: MonthlyEvaluationTemplateVersionAvgOrderByAggregateInput
+    _max?: MonthlyEvaluationTemplateVersionMaxOrderByAggregateInput
+    _min?: MonthlyEvaluationTemplateVersionMinOrderByAggregateInput
+    _sum?: MonthlyEvaluationTemplateVersionSumOrderByAggregateInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionScalarWhereWithAggregatesInput = {
+    AND?: MonthlyEvaluationTemplateVersionScalarWhereWithAggregatesInput | MonthlyEvaluationTemplateVersionScalarWhereWithAggregatesInput[]
+    OR?: MonthlyEvaluationTemplateVersionScalarWhereWithAggregatesInput[]
+    NOT?: MonthlyEvaluationTemplateVersionScalarWhereWithAggregatesInput | MonthlyEvaluationTemplateVersionScalarWhereWithAggregatesInput[]
+    monthlyEvaluationTemplateVersionId?: IntWithAggregatesFilter<"MonthlyEvaluationTemplateVersion"> | number
+    monthlyEvaluationTemplateId?: IntWithAggregatesFilter<"MonthlyEvaluationTemplateVersion"> | number
+    versionNumber?: IntWithAggregatesFilter<"MonthlyEvaluationTemplateVersion"> | number
+    title?: StringWithAggregatesFilter<"MonthlyEvaluationTemplateVersion"> | string
+    description?: StringNullableWithAggregatesFilter<"MonthlyEvaluationTemplateVersion"> | string | null
+    observedMaxScore?: IntWithAggregatesFilter<"MonthlyEvaluationTemplateVersion"> | number
+    regularMaxScore?: IntWithAggregatesFilter<"MonthlyEvaluationTemplateVersion"> | number
+    isPublished?: BoolWithAggregatesFilter<"MonthlyEvaluationTemplateVersion"> | boolean
+    publishedAt?: DateTimeWithAggregatesFilter<"MonthlyEvaluationTemplateVersion"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"MonthlyEvaluationTemplateVersion"> | Date | string
+  }
+
+  export type MonthlyEvaluationSectionWhereInput = {
+    AND?: MonthlyEvaluationSectionWhereInput | MonthlyEvaluationSectionWhereInput[]
+    OR?: MonthlyEvaluationSectionWhereInput[]
+    NOT?: MonthlyEvaluationSectionWhereInput | MonthlyEvaluationSectionWhereInput[]
+    monthlyEvaluationSectionId?: IntFilter<"MonthlyEvaluationSection"> | number
+    monthlyEvaluationTemplateVersionId?: IntFilter<"MonthlyEvaluationSection"> | number
+    title?: StringFilter<"MonthlyEvaluationSection"> | string
+    displayOrder?: IntFilter<"MonthlyEvaluationSection"> | number
+    createdAt?: DateTimeFilter<"MonthlyEvaluationSection"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyEvaluationSection"> | Date | string
+    templateVersion?: XOR<MonthlyEvaluationTemplateVersionScalarRelationFilter, MonthlyEvaluationTemplateVersionWhereInput>
+    questions?: MonthlyEvaluationQuestionListRelationFilter
+  }
+
+  export type MonthlyEvaluationSectionOrderByWithRelationInput = {
+    monthlyEvaluationSectionId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    title?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    templateVersion?: MonthlyEvaluationTemplateVersionOrderByWithRelationInput
+    questions?: MonthlyEvaluationQuestionOrderByRelationAggregateInput
+  }
+
+  export type MonthlyEvaluationSectionWhereUniqueInput = Prisma.AtLeast<{
+    monthlyEvaluationSectionId?: number
+    monthlyEvaluationTemplateVersionId_displayOrder?: MonthlyEvaluationSectionMonthlyEvaluationTemplateVersionIdDisplayOrderCompoundUniqueInput
+    AND?: MonthlyEvaluationSectionWhereInput | MonthlyEvaluationSectionWhereInput[]
+    OR?: MonthlyEvaluationSectionWhereInput[]
+    NOT?: MonthlyEvaluationSectionWhereInput | MonthlyEvaluationSectionWhereInput[]
+    monthlyEvaluationTemplateVersionId?: IntFilter<"MonthlyEvaluationSection"> | number
+    title?: StringFilter<"MonthlyEvaluationSection"> | string
+    displayOrder?: IntFilter<"MonthlyEvaluationSection"> | number
+    createdAt?: DateTimeFilter<"MonthlyEvaluationSection"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyEvaluationSection"> | Date | string
+    templateVersion?: XOR<MonthlyEvaluationTemplateVersionScalarRelationFilter, MonthlyEvaluationTemplateVersionWhereInput>
+    questions?: MonthlyEvaluationQuestionListRelationFilter
+  }, "monthlyEvaluationSectionId" | "monthlyEvaluationTemplateVersionId_displayOrder">
+
+  export type MonthlyEvaluationSectionOrderByWithAggregationInput = {
+    monthlyEvaluationSectionId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    title?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MonthlyEvaluationSectionCountOrderByAggregateInput
+    _avg?: MonthlyEvaluationSectionAvgOrderByAggregateInput
+    _max?: MonthlyEvaluationSectionMaxOrderByAggregateInput
+    _min?: MonthlyEvaluationSectionMinOrderByAggregateInput
+    _sum?: MonthlyEvaluationSectionSumOrderByAggregateInput
+  }
+
+  export type MonthlyEvaluationSectionScalarWhereWithAggregatesInput = {
+    AND?: MonthlyEvaluationSectionScalarWhereWithAggregatesInput | MonthlyEvaluationSectionScalarWhereWithAggregatesInput[]
+    OR?: MonthlyEvaluationSectionScalarWhereWithAggregatesInput[]
+    NOT?: MonthlyEvaluationSectionScalarWhereWithAggregatesInput | MonthlyEvaluationSectionScalarWhereWithAggregatesInput[]
+    monthlyEvaluationSectionId?: IntWithAggregatesFilter<"MonthlyEvaluationSection"> | number
+    monthlyEvaluationTemplateVersionId?: IntWithAggregatesFilter<"MonthlyEvaluationSection"> | number
+    title?: StringWithAggregatesFilter<"MonthlyEvaluationSection"> | string
+    displayOrder?: IntWithAggregatesFilter<"MonthlyEvaluationSection"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"MonthlyEvaluationSection"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MonthlyEvaluationSection"> | Date | string
+  }
+
+  export type MonthlyEvaluationQuestionWhereInput = {
+    AND?: MonthlyEvaluationQuestionWhereInput | MonthlyEvaluationQuestionWhereInput[]
+    OR?: MonthlyEvaluationQuestionWhereInput[]
+    NOT?: MonthlyEvaluationQuestionWhereInput | MonthlyEvaluationQuestionWhereInput[]
+    monthlyEvaluationQuestionId?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    monthlyEvaluationSectionId?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    displayOrder?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    prompt?: StringFilter<"MonthlyEvaluationQuestion"> | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFilter<"MonthlyEvaluationQuestion"> | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFilter<"MonthlyEvaluationQuestion"> | boolean
+    isScored?: BoolFilter<"MonthlyEvaluationQuestion"> | boolean
+    minScore?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    maxScore?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    metadata?: JsonNullableFilter<"MonthlyEvaluationQuestion">
+    createdAt?: DateTimeFilter<"MonthlyEvaluationQuestion"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyEvaluationQuestion"> | Date | string
+    section?: XOR<MonthlyEvaluationSectionScalarRelationFilter, MonthlyEvaluationSectionWhereInput>
+    responses?: WorkerMonthlyEvaluationResponseListRelationFilter
+  }
+
+  export type MonthlyEvaluationQuestionOrderByWithRelationInput = {
+    monthlyEvaluationQuestionId?: SortOrder
+    monthlyEvaluationSectionId?: SortOrder
+    displayOrder?: SortOrder
+    prompt?: SortOrder
+    questionType?: SortOrder
+    isRequired?: SortOrder
+    isScored?: SortOrder
+    minScore?: SortOrder
+    maxScore?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    section?: MonthlyEvaluationSectionOrderByWithRelationInput
+    responses?: WorkerMonthlyEvaluationResponseOrderByRelationAggregateInput
+  }
+
+  export type MonthlyEvaluationQuestionWhereUniqueInput = Prisma.AtLeast<{
+    monthlyEvaluationQuestionId?: number
+    monthlyEvaluationSectionId_displayOrder?: MonthlyEvaluationQuestionMonthlyEvaluationSectionIdDisplayOrderCompoundUniqueInput
+    AND?: MonthlyEvaluationQuestionWhereInput | MonthlyEvaluationQuestionWhereInput[]
+    OR?: MonthlyEvaluationQuestionWhereInput[]
+    NOT?: MonthlyEvaluationQuestionWhereInput | MonthlyEvaluationQuestionWhereInput[]
+    monthlyEvaluationSectionId?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    displayOrder?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    prompt?: StringFilter<"MonthlyEvaluationQuestion"> | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFilter<"MonthlyEvaluationQuestion"> | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFilter<"MonthlyEvaluationQuestion"> | boolean
+    isScored?: BoolFilter<"MonthlyEvaluationQuestion"> | boolean
+    minScore?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    maxScore?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    metadata?: JsonNullableFilter<"MonthlyEvaluationQuestion">
+    createdAt?: DateTimeFilter<"MonthlyEvaluationQuestion"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyEvaluationQuestion"> | Date | string
+    section?: XOR<MonthlyEvaluationSectionScalarRelationFilter, MonthlyEvaluationSectionWhereInput>
+    responses?: WorkerMonthlyEvaluationResponseListRelationFilter
+  }, "monthlyEvaluationQuestionId" | "monthlyEvaluationSectionId_displayOrder">
+
+  export type MonthlyEvaluationQuestionOrderByWithAggregationInput = {
+    monthlyEvaluationQuestionId?: SortOrder
+    monthlyEvaluationSectionId?: SortOrder
+    displayOrder?: SortOrder
+    prompt?: SortOrder
+    questionType?: SortOrder
+    isRequired?: SortOrder
+    isScored?: SortOrder
+    minScore?: SortOrder
+    maxScore?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MonthlyEvaluationQuestionCountOrderByAggregateInput
+    _avg?: MonthlyEvaluationQuestionAvgOrderByAggregateInput
+    _max?: MonthlyEvaluationQuestionMaxOrderByAggregateInput
+    _min?: MonthlyEvaluationQuestionMinOrderByAggregateInput
+    _sum?: MonthlyEvaluationQuestionSumOrderByAggregateInput
+  }
+
+  export type MonthlyEvaluationQuestionScalarWhereWithAggregatesInput = {
+    AND?: MonthlyEvaluationQuestionScalarWhereWithAggregatesInput | MonthlyEvaluationQuestionScalarWhereWithAggregatesInput[]
+    OR?: MonthlyEvaluationQuestionScalarWhereWithAggregatesInput[]
+    NOT?: MonthlyEvaluationQuestionScalarWhereWithAggregatesInput | MonthlyEvaluationQuestionScalarWhereWithAggregatesInput[]
+    monthlyEvaluationQuestionId?: IntWithAggregatesFilter<"MonthlyEvaluationQuestion"> | number
+    monthlyEvaluationSectionId?: IntWithAggregatesFilter<"MonthlyEvaluationQuestion"> | number
+    displayOrder?: IntWithAggregatesFilter<"MonthlyEvaluationQuestion"> | number
+    prompt?: StringWithAggregatesFilter<"MonthlyEvaluationQuestion"> | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeWithAggregatesFilter<"MonthlyEvaluationQuestion"> | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolWithAggregatesFilter<"MonthlyEvaluationQuestion"> | boolean
+    isScored?: BoolWithAggregatesFilter<"MonthlyEvaluationQuestion"> | boolean
+    minScore?: IntWithAggregatesFilter<"MonthlyEvaluationQuestion"> | number
+    maxScore?: IntWithAggregatesFilter<"MonthlyEvaluationQuestion"> | number
+    metadata?: JsonNullableWithAggregatesFilter<"MonthlyEvaluationQuestion">
+    createdAt?: DateTimeWithAggregatesFilter<"MonthlyEvaluationQuestion"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MonthlyEvaluationQuestion"> | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationWhereInput = {
+    AND?: WorkerMonthlyEvaluationWhereInput | WorkerMonthlyEvaluationWhereInput[]
+    OR?: WorkerMonthlyEvaluationWhereInput[]
+    NOT?: WorkerMonthlyEvaluationWhereInput | WorkerMonthlyEvaluationWhereInput[]
+    workerMonthlyEvaluationId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    workerId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    monthlyEvaluationTemplateVersionId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    year?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    month?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    sequence?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    status?: EnumMonthlyEvaluationStatusFilter<"WorkerMonthlyEvaluation"> | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    openedByUserId?: IntNullableFilter<"WorkerMonthlyEvaluation"> | number | null
+    closedByUserId?: IntNullableFilter<"WorkerMonthlyEvaluation"> | number | null
+    openedAt?: DateTimeNullableFilter<"WorkerMonthlyEvaluation"> | Date | string | null
+    closedAt?: DateTimeNullableFilter<"WorkerMonthlyEvaluation"> | Date | string | null
+    generalComment?: StringNullableFilter<"WorkerMonthlyEvaluation"> | string | null
+    totalScore?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    maxScore?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    performanceLabel?: StringNullableFilter<"WorkerMonthlyEvaluation"> | string | null
+    createdAt?: DateTimeFilter<"WorkerMonthlyEvaluation"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkerMonthlyEvaluation"> | Date | string
+    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
+    templateVersion?: XOR<MonthlyEvaluationTemplateVersionScalarRelationFilter, MonthlyEvaluationTemplateVersionWhereInput>
+    evaluatorUser?: XOR<UserScalarRelationFilter, UserWhereInput>
+    openedByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    closedByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    responses?: WorkerMonthlyEvaluationResponseListRelationFilter
+  }
+
+  export type WorkerMonthlyEvaluationOrderByWithRelationInput = {
+    workerMonthlyEvaluationId?: SortOrder
+    workerId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    sequence?: SortOrder
+    status?: SortOrder
+    evaluatorUserId?: SortOrder
+    openedByUserId?: SortOrderInput | SortOrder
+    closedByUserId?: SortOrderInput | SortOrder
+    openedAt?: SortOrderInput | SortOrder
+    closedAt?: SortOrderInput | SortOrder
+    generalComment?: SortOrderInput | SortOrder
+    totalScore?: SortOrder
+    maxScore?: SortOrder
+    performanceLabel?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    worker?: WorkerOrderByWithRelationInput
+    templateVersion?: MonthlyEvaluationTemplateVersionOrderByWithRelationInput
+    evaluatorUser?: UserOrderByWithRelationInput
+    openedByUser?: UserOrderByWithRelationInput
+    closedByUser?: UserOrderByWithRelationInput
+    responses?: WorkerMonthlyEvaluationResponseOrderByRelationAggregateInput
+  }
+
+  export type WorkerMonthlyEvaluationWhereUniqueInput = Prisma.AtLeast<{
+    workerMonthlyEvaluationId?: number
+    workerId_year_month_sequence?: WorkerMonthlyEvaluationWorkerIdYearMonthSequenceCompoundUniqueInput
+    AND?: WorkerMonthlyEvaluationWhereInput | WorkerMonthlyEvaluationWhereInput[]
+    OR?: WorkerMonthlyEvaluationWhereInput[]
+    NOT?: WorkerMonthlyEvaluationWhereInput | WorkerMonthlyEvaluationWhereInput[]
+    workerId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    monthlyEvaluationTemplateVersionId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    year?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    month?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    sequence?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    status?: EnumMonthlyEvaluationStatusFilter<"WorkerMonthlyEvaluation"> | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    openedByUserId?: IntNullableFilter<"WorkerMonthlyEvaluation"> | number | null
+    closedByUserId?: IntNullableFilter<"WorkerMonthlyEvaluation"> | number | null
+    openedAt?: DateTimeNullableFilter<"WorkerMonthlyEvaluation"> | Date | string | null
+    closedAt?: DateTimeNullableFilter<"WorkerMonthlyEvaluation"> | Date | string | null
+    generalComment?: StringNullableFilter<"WorkerMonthlyEvaluation"> | string | null
+    totalScore?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    maxScore?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    performanceLabel?: StringNullableFilter<"WorkerMonthlyEvaluation"> | string | null
+    createdAt?: DateTimeFilter<"WorkerMonthlyEvaluation"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkerMonthlyEvaluation"> | Date | string
+    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
+    templateVersion?: XOR<MonthlyEvaluationTemplateVersionScalarRelationFilter, MonthlyEvaluationTemplateVersionWhereInput>
+    evaluatorUser?: XOR<UserScalarRelationFilter, UserWhereInput>
+    openedByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    closedByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    responses?: WorkerMonthlyEvaluationResponseListRelationFilter
+  }, "workerMonthlyEvaluationId" | "workerId_year_month_sequence">
+
+  export type WorkerMonthlyEvaluationOrderByWithAggregationInput = {
+    workerMonthlyEvaluationId?: SortOrder
+    workerId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    sequence?: SortOrder
+    status?: SortOrder
+    evaluatorUserId?: SortOrder
+    openedByUserId?: SortOrderInput | SortOrder
+    closedByUserId?: SortOrderInput | SortOrder
+    openedAt?: SortOrderInput | SortOrder
+    closedAt?: SortOrderInput | SortOrder
+    generalComment?: SortOrderInput | SortOrder
+    totalScore?: SortOrder
+    maxScore?: SortOrder
+    performanceLabel?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkerMonthlyEvaluationCountOrderByAggregateInput
+    _avg?: WorkerMonthlyEvaluationAvgOrderByAggregateInput
+    _max?: WorkerMonthlyEvaluationMaxOrderByAggregateInput
+    _min?: WorkerMonthlyEvaluationMinOrderByAggregateInput
+    _sum?: WorkerMonthlyEvaluationSumOrderByAggregateInput
+  }
+
+  export type WorkerMonthlyEvaluationScalarWhereWithAggregatesInput = {
+    AND?: WorkerMonthlyEvaluationScalarWhereWithAggregatesInput | WorkerMonthlyEvaluationScalarWhereWithAggregatesInput[]
+    OR?: WorkerMonthlyEvaluationScalarWhereWithAggregatesInput[]
+    NOT?: WorkerMonthlyEvaluationScalarWhereWithAggregatesInput | WorkerMonthlyEvaluationScalarWhereWithAggregatesInput[]
+    workerMonthlyEvaluationId?: IntWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number
+    workerId?: IntWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number
+    monthlyEvaluationTemplateVersionId?: IntWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number
+    year?: IntWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number
+    month?: IntWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number
+    sequence?: IntWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number
+    status?: EnumMonthlyEvaluationStatusWithAggregatesFilter<"WorkerMonthlyEvaluation"> | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number
+    openedByUserId?: IntNullableWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number | null
+    closedByUserId?: IntNullableWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number | null
+    openedAt?: DateTimeNullableWithAggregatesFilter<"WorkerMonthlyEvaluation"> | Date | string | null
+    closedAt?: DateTimeNullableWithAggregatesFilter<"WorkerMonthlyEvaluation"> | Date | string | null
+    generalComment?: StringNullableWithAggregatesFilter<"WorkerMonthlyEvaluation"> | string | null
+    totalScore?: IntWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number
+    maxScore?: IntWithAggregatesFilter<"WorkerMonthlyEvaluation"> | number
+    performanceLabel?: StringNullableWithAggregatesFilter<"WorkerMonthlyEvaluation"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WorkerMonthlyEvaluation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkerMonthlyEvaluation"> | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseWhereInput = {
+    AND?: WorkerMonthlyEvaluationResponseWhereInput | WorkerMonthlyEvaluationResponseWhereInput[]
+    OR?: WorkerMonthlyEvaluationResponseWhereInput[]
+    NOT?: WorkerMonthlyEvaluationResponseWhereInput | WorkerMonthlyEvaluationResponseWhereInput[]
+    workerMonthlyEvaluationResponseId?: IntFilter<"WorkerMonthlyEvaluationResponse"> | number
+    workerMonthlyEvaluationId?: IntFilter<"WorkerMonthlyEvaluationResponse"> | number
+    monthlyEvaluationQuestionId?: IntFilter<"WorkerMonthlyEvaluationResponse"> | number
+    score?: IntNullableFilter<"WorkerMonthlyEvaluationResponse"> | number | null
+    textAnswer?: StringNullableFilter<"WorkerMonthlyEvaluationResponse"> | string | null
+    createdAt?: DateTimeFilter<"WorkerMonthlyEvaluationResponse"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkerMonthlyEvaluationResponse"> | Date | string
+    evaluation?: XOR<WorkerMonthlyEvaluationScalarRelationFilter, WorkerMonthlyEvaluationWhereInput>
+    question?: XOR<MonthlyEvaluationQuestionScalarRelationFilter, MonthlyEvaluationQuestionWhereInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseOrderByWithRelationInput = {
+    workerMonthlyEvaluationResponseId?: SortOrder
+    workerMonthlyEvaluationId?: SortOrder
+    monthlyEvaluationQuestionId?: SortOrder
+    score?: SortOrderInput | SortOrder
+    textAnswer?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    evaluation?: WorkerMonthlyEvaluationOrderByWithRelationInput
+    question?: MonthlyEvaluationQuestionOrderByWithRelationInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseWhereUniqueInput = Prisma.AtLeast<{
+    workerMonthlyEvaluationResponseId?: number
+    workerMonthlyEvaluationId_monthlyEvaluationQuestionId?: WorkerMonthlyEvaluationResponseWorkerMonthlyEvaluationIdMonthlyEvaluationQuestionIdCompoundUniqueInput
+    AND?: WorkerMonthlyEvaluationResponseWhereInput | WorkerMonthlyEvaluationResponseWhereInput[]
+    OR?: WorkerMonthlyEvaluationResponseWhereInput[]
+    NOT?: WorkerMonthlyEvaluationResponseWhereInput | WorkerMonthlyEvaluationResponseWhereInput[]
+    workerMonthlyEvaluationId?: IntFilter<"WorkerMonthlyEvaluationResponse"> | number
+    monthlyEvaluationQuestionId?: IntFilter<"WorkerMonthlyEvaluationResponse"> | number
+    score?: IntNullableFilter<"WorkerMonthlyEvaluationResponse"> | number | null
+    textAnswer?: StringNullableFilter<"WorkerMonthlyEvaluationResponse"> | string | null
+    createdAt?: DateTimeFilter<"WorkerMonthlyEvaluationResponse"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkerMonthlyEvaluationResponse"> | Date | string
+    evaluation?: XOR<WorkerMonthlyEvaluationScalarRelationFilter, WorkerMonthlyEvaluationWhereInput>
+    question?: XOR<MonthlyEvaluationQuestionScalarRelationFilter, MonthlyEvaluationQuestionWhereInput>
+  }, "workerMonthlyEvaluationResponseId" | "workerMonthlyEvaluationId_monthlyEvaluationQuestionId">
+
+  export type WorkerMonthlyEvaluationResponseOrderByWithAggregationInput = {
+    workerMonthlyEvaluationResponseId?: SortOrder
+    workerMonthlyEvaluationId?: SortOrder
+    monthlyEvaluationQuestionId?: SortOrder
+    score?: SortOrderInput | SortOrder
+    textAnswer?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkerMonthlyEvaluationResponseCountOrderByAggregateInput
+    _avg?: WorkerMonthlyEvaluationResponseAvgOrderByAggregateInput
+    _max?: WorkerMonthlyEvaluationResponseMaxOrderByAggregateInput
+    _min?: WorkerMonthlyEvaluationResponseMinOrderByAggregateInput
+    _sum?: WorkerMonthlyEvaluationResponseSumOrderByAggregateInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseScalarWhereWithAggregatesInput = {
+    AND?: WorkerMonthlyEvaluationResponseScalarWhereWithAggregatesInput | WorkerMonthlyEvaluationResponseScalarWhereWithAggregatesInput[]
+    OR?: WorkerMonthlyEvaluationResponseScalarWhereWithAggregatesInput[]
+    NOT?: WorkerMonthlyEvaluationResponseScalarWhereWithAggregatesInput | WorkerMonthlyEvaluationResponseScalarWhereWithAggregatesInput[]
+    workerMonthlyEvaluationResponseId?: IntWithAggregatesFilter<"WorkerMonthlyEvaluationResponse"> | number
+    workerMonthlyEvaluationId?: IntWithAggregatesFilter<"WorkerMonthlyEvaluationResponse"> | number
+    monthlyEvaluationQuestionId?: IntWithAggregatesFilter<"WorkerMonthlyEvaluationResponse"> | number
+    score?: IntNullableWithAggregatesFilter<"WorkerMonthlyEvaluationResponse"> | number | null
+    textAnswer?: StringNullableWithAggregatesFilter<"WorkerMonthlyEvaluationResponse"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WorkerMonthlyEvaluationResponse"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkerMonthlyEvaluationResponse"> | Date | string
   }
 
   export type SupplierWhereInput = {
@@ -44781,6 +53728,10 @@ export namespace Prisma {
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -44801,6 +53752,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserUpdateInput = {
@@ -44820,6 +53775,10 @@ export namespace Prisma {
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -44840,6 +53799,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -45617,6 +54580,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
     attendances?: AttendanceCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerUncheckedCreateInput = {
@@ -45635,6 +54599,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
     attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerUpdateInput = {
@@ -45652,6 +54617,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
     attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
   }
 
   export type WorkerUncheckedUpdateInput = {
@@ -45670,6 +54636,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
     attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
   }
 
   export type WorkerCreateManyInput = {
@@ -45711,6 +54678,554 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MonthlyEvaluationTemplateCreateInput = {
+    name: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    createdByUser?: UserCreateNestedOneWithoutCreatedMonthlyEvaluationTemplatesInput
+    versions?: MonthlyEvaluationTemplateVersionCreateNestedManyWithoutTemplateInput
+  }
+
+  export type MonthlyEvaluationTemplateUncheckedCreateInput = {
+    monthlyEvaluationTemplateId?: number
+    name: string
+    description?: string | null
+    isActive?: boolean
+    createdByUserId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    versions?: MonthlyEvaluationTemplateVersionUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type MonthlyEvaluationTemplateUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdByUser?: UserUpdateOneWithoutCreatedMonthlyEvaluationTemplatesNestedInput
+    versions?: MonthlyEvaluationTemplateVersionUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateUncheckedUpdateInput = {
+    monthlyEvaluationTemplateId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    versions?: MonthlyEvaluationTemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateCreateManyInput = {
+    monthlyEvaluationTemplateId?: number
+    name: string
+    description?: string | null
+    isActive?: boolean
+    createdByUserId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type MonthlyEvaluationTemplateUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MonthlyEvaluationTemplateUncheckedUpdateManyInput = {
+    monthlyEvaluationTemplateId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateInput = {
+    versionNumber: number
+    title: string
+    description?: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished?: boolean
+    publishedAt?: Date | string
+    createdAt?: Date | string
+    template: MonthlyEvaluationTemplateCreateNestedOneWithoutVersionsInput
+    sections?: MonthlyEvaluationSectionCreateNestedManyWithoutTemplateVersionInput
+    evaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutTemplateVersionInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedCreateInput = {
+    monthlyEvaluationTemplateVersionId?: number
+    monthlyEvaluationTemplateId: number
+    versionNumber: number
+    title: string
+    description?: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished?: boolean
+    publishedAt?: Date | string
+    createdAt?: Date | string
+    sections?: MonthlyEvaluationSectionUncheckedCreateNestedManyWithoutTemplateVersionInput
+    evaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutTemplateVersionInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateInput = {
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    template?: MonthlyEvaluationTemplateUpdateOneRequiredWithoutVersionsNestedInput
+    sections?: MonthlyEvaluationSectionUpdateManyWithoutTemplateVersionNestedInput
+    evaluations?: WorkerMonthlyEvaluationUpdateManyWithoutTemplateVersionNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedUpdateInput = {
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateId?: IntFieldUpdateOperationsInput | number
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: MonthlyEvaluationSectionUncheckedUpdateManyWithoutTemplateVersionNestedInput
+    evaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutTemplateVersionNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateManyInput = {
+    monthlyEvaluationTemplateVersionId?: number
+    monthlyEvaluationTemplateId: number
+    versionNumber: number
+    title: string
+    description?: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished?: boolean
+    publishedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateManyMutationInput = {
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedUpdateManyInput = {
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateId?: IntFieldUpdateOperationsInput | number
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyEvaluationSectionCreateInput = {
+    title: string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templateVersion: MonthlyEvaluationTemplateVersionCreateNestedOneWithoutSectionsInput
+    questions?: MonthlyEvaluationQuestionCreateNestedManyWithoutSectionInput
+  }
+
+  export type MonthlyEvaluationSectionUncheckedCreateInput = {
+    monthlyEvaluationSectionId?: number
+    monthlyEvaluationTemplateVersionId: number
+    title: string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questions?: MonthlyEvaluationQuestionUncheckedCreateNestedManyWithoutSectionInput
+  }
+
+  export type MonthlyEvaluationSectionUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templateVersion?: MonthlyEvaluationTemplateVersionUpdateOneRequiredWithoutSectionsNestedInput
+    questions?: MonthlyEvaluationQuestionUpdateManyWithoutSectionNestedInput
+  }
+
+  export type MonthlyEvaluationSectionUncheckedUpdateInput = {
+    monthlyEvaluationSectionId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questions?: MonthlyEvaluationQuestionUncheckedUpdateManyWithoutSectionNestedInput
+  }
+
+  export type MonthlyEvaluationSectionCreateManyInput = {
+    monthlyEvaluationSectionId?: number
+    monthlyEvaluationTemplateVersionId: number
+    title: string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyEvaluationSectionUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyEvaluationSectionUncheckedUpdateManyInput = {
+    monthlyEvaluationSectionId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyEvaluationQuestionCreateInput = {
+    displayOrder?: number
+    prompt: string
+    questionType?: $Enums.MonthlyEvaluationQuestionType
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: number
+    maxScore?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    section: MonthlyEvaluationSectionCreateNestedOneWithoutQuestionsInput
+    responses?: WorkerMonthlyEvaluationResponseCreateNestedManyWithoutQuestionInput
+  }
+
+  export type MonthlyEvaluationQuestionUncheckedCreateInput = {
+    monthlyEvaluationQuestionId?: number
+    monthlyEvaluationSectionId: number
+    displayOrder?: number
+    prompt: string
+    questionType?: $Enums.MonthlyEvaluationQuestionType
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: number
+    maxScore?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedCreateNestedManyWithoutQuestionInput
+  }
+
+  export type MonthlyEvaluationQuestionUpdateInput = {
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    prompt?: StringFieldUpdateOperationsInput | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFieldUpdateOperationsInput | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isScored?: BoolFieldUpdateOperationsInput | boolean
+    minScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    section?: MonthlyEvaluationSectionUpdateOneRequiredWithoutQuestionsNestedInput
+    responses?: WorkerMonthlyEvaluationResponseUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type MonthlyEvaluationQuestionUncheckedUpdateInput = {
+    monthlyEvaluationQuestionId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationSectionId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    prompt?: StringFieldUpdateOperationsInput | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFieldUpdateOperationsInput | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isScored?: BoolFieldUpdateOperationsInput | boolean
+    minScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type MonthlyEvaluationQuestionCreateManyInput = {
+    monthlyEvaluationQuestionId?: number
+    monthlyEvaluationSectionId: number
+    displayOrder?: number
+    prompt: string
+    questionType?: $Enums.MonthlyEvaluationQuestionType
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: number
+    maxScore?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyEvaluationQuestionUpdateManyMutationInput = {
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    prompt?: StringFieldUpdateOperationsInput | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFieldUpdateOperationsInput | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isScored?: BoolFieldUpdateOperationsInput | boolean
+    minScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyEvaluationQuestionUncheckedUpdateManyInput = {
+    monthlyEvaluationQuestionId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationSectionId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    prompt?: StringFieldUpdateOperationsInput | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFieldUpdateOperationsInput | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isScored?: BoolFieldUpdateOperationsInput | boolean
+    minScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationCreateInput = {
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    worker: WorkerCreateNestedOneWithoutMonthlyEvaluationsInput
+    templateVersion: MonthlyEvaluationTemplateVersionCreateNestedOneWithoutEvaluationsInput
+    evaluatorUser: UserCreateNestedOneWithoutEvaluatedMonthlyEvaluationsInput
+    openedByUser?: UserCreateNestedOneWithoutOpenedMonthlyEvaluationsInput
+    closedByUser?: UserCreateNestedOneWithoutClosedMonthlyEvaluationsInput
+    responses?: WorkerMonthlyEvaluationResponseCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    openedByUserId?: number | null
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationUpdateInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker?: WorkerUpdateOneRequiredWithoutMonthlyEvaluationsNestedInput
+    templateVersion?: MonthlyEvaluationTemplateVersionUpdateOneRequiredWithoutEvaluationsNestedInput
+    evaluatorUser?: UserUpdateOneRequiredWithoutEvaluatedMonthlyEvaluationsNestedInput
+    openedByUser?: UserUpdateOneWithoutOpenedMonthlyEvaluationsNestedInput
+    closedByUser?: UserUpdateOneWithoutClosedMonthlyEvaluationsNestedInput
+    responses?: WorkerMonthlyEvaluationResponseUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationCreateManyInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    openedByUserId?: number | null
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationUpdateManyMutationInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateInput = {
+    score?: number | null
+    textAnswer?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    evaluation: WorkerMonthlyEvaluationCreateNestedOneWithoutResponsesInput
+    question: MonthlyEvaluationQuestionCreateNestedOneWithoutResponsesInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedCreateInput = {
+    workerMonthlyEvaluationResponseId?: number
+    workerMonthlyEvaluationId: number
+    monthlyEvaluationQuestionId: number
+    score?: number | null
+    textAnswer?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpdateInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    textAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    evaluation?: WorkerMonthlyEvaluationUpdateOneRequiredWithoutResponsesNestedInput
+    question?: MonthlyEvaluationQuestionUpdateOneRequiredWithoutResponsesNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedUpdateInput = {
+    workerMonthlyEvaluationResponseId?: IntFieldUpdateOperationsInput | number
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationQuestionId?: IntFieldUpdateOperationsInput | number
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    textAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateManyInput = {
+    workerMonthlyEvaluationResponseId?: number
+    workerMonthlyEvaluationId: number
+    monthlyEvaluationQuestionId: number
+    score?: number | null
+    textAnswer?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpdateManyMutationInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    textAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedUpdateManyInput = {
+    workerMonthlyEvaluationResponseId?: IntFieldUpdateOperationsInput | number
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationQuestionId?: IntFieldUpdateOperationsInput | number
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    textAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SupplierCreateInput = {
@@ -47415,6 +56930,18 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
+  export type MonthlyEvaluationTemplateListRelationFilter = {
+    every?: MonthlyEvaluationTemplateWhereInput
+    some?: MonthlyEvaluationTemplateWhereInput
+    none?: MonthlyEvaluationTemplateWhereInput
+  }
+
+  export type WorkerMonthlyEvaluationListRelationFilter = {
+    every?: WorkerMonthlyEvaluationWhereInput
+    some?: WorkerMonthlyEvaluationWhereInput
+    none?: WorkerMonthlyEvaluationWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -47449,6 +56976,14 @@ export namespace Prisma {
   }
 
   export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WorkerMonthlyEvaluationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -48295,6 +57830,557 @@ export namespace Prisma {
     _max?: NestedEnumWorkerTypeFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type MonthlyEvaluationTemplateVersionListRelationFilter = {
+    every?: MonthlyEvaluationTemplateVersionWhereInput
+    some?: MonthlyEvaluationTemplateVersionWhereInput
+    none?: MonthlyEvaluationTemplateVersionWhereInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateCountOrderByAggregateInput = {
+    monthlyEvaluationTemplateId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdByUserId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateAvgOrderByAggregateInput = {
+    monthlyEvaluationTemplateId?: SortOrder
+    createdByUserId?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateMaxOrderByAggregateInput = {
+    monthlyEvaluationTemplateId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdByUserId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateMinOrderByAggregateInput = {
+    monthlyEvaluationTemplateId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdByUserId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateSumOrderByAggregateInput = {
+    monthlyEvaluationTemplateId?: SortOrder
+    createdByUserId?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type MonthlyEvaluationTemplateScalarRelationFilter = {
+    is?: MonthlyEvaluationTemplateWhereInput
+    isNot?: MonthlyEvaluationTemplateWhereInput
+  }
+
+  export type MonthlyEvaluationSectionListRelationFilter = {
+    every?: MonthlyEvaluationSectionWhereInput
+    some?: MonthlyEvaluationSectionWhereInput
+    none?: MonthlyEvaluationSectionWhereInput
+  }
+
+  export type MonthlyEvaluationSectionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateVersionMonthlyEvaluationTemplateIdVersionNumberCompoundUniqueInput = {
+    monthlyEvaluationTemplateId: number
+    versionNumber: number
+  }
+
+  export type MonthlyEvaluationTemplateVersionCountOrderByAggregateInput = {
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    monthlyEvaluationTemplateId?: SortOrder
+    versionNumber?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    observedMaxScore?: SortOrder
+    regularMaxScore?: SortOrder
+    isPublished?: SortOrder
+    publishedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateVersionAvgOrderByAggregateInput = {
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    monthlyEvaluationTemplateId?: SortOrder
+    versionNumber?: SortOrder
+    observedMaxScore?: SortOrder
+    regularMaxScore?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateVersionMaxOrderByAggregateInput = {
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    monthlyEvaluationTemplateId?: SortOrder
+    versionNumber?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    observedMaxScore?: SortOrder
+    regularMaxScore?: SortOrder
+    isPublished?: SortOrder
+    publishedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateVersionMinOrderByAggregateInput = {
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    monthlyEvaluationTemplateId?: SortOrder
+    versionNumber?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    observedMaxScore?: SortOrder
+    regularMaxScore?: SortOrder
+    isPublished?: SortOrder
+    publishedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateVersionSumOrderByAggregateInput = {
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    monthlyEvaluationTemplateId?: SortOrder
+    versionNumber?: SortOrder
+    observedMaxScore?: SortOrder
+    regularMaxScore?: SortOrder
+  }
+
+  export type MonthlyEvaluationTemplateVersionScalarRelationFilter = {
+    is?: MonthlyEvaluationTemplateVersionWhereInput
+    isNot?: MonthlyEvaluationTemplateVersionWhereInput
+  }
+
+  export type MonthlyEvaluationQuestionListRelationFilter = {
+    every?: MonthlyEvaluationQuestionWhereInput
+    some?: MonthlyEvaluationQuestionWhereInput
+    none?: MonthlyEvaluationQuestionWhereInput
+  }
+
+  export type MonthlyEvaluationQuestionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MonthlyEvaluationSectionMonthlyEvaluationTemplateVersionIdDisplayOrderCompoundUniqueInput = {
+    monthlyEvaluationTemplateVersionId: number
+    displayOrder: number
+  }
+
+  export type MonthlyEvaluationSectionCountOrderByAggregateInput = {
+    monthlyEvaluationSectionId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    title?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationSectionAvgOrderByAggregateInput = {
+    monthlyEvaluationSectionId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    displayOrder?: SortOrder
+  }
+
+  export type MonthlyEvaluationSectionMaxOrderByAggregateInput = {
+    monthlyEvaluationSectionId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    title?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationSectionMinOrderByAggregateInput = {
+    monthlyEvaluationSectionId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    title?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationSectionSumOrderByAggregateInput = {
+    monthlyEvaluationSectionId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    displayOrder?: SortOrder
+  }
+
+  export type EnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MonthlyEvaluationQuestionType | EnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MonthlyEvaluationQuestionType[] | ListEnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MonthlyEvaluationQuestionType[] | ListEnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel> | $Enums.MonthlyEvaluationQuestionType
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type MonthlyEvaluationSectionScalarRelationFilter = {
+    is?: MonthlyEvaluationSectionWhereInput
+    isNot?: MonthlyEvaluationSectionWhereInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseListRelationFilter = {
+    every?: WorkerMonthlyEvaluationResponseWhereInput
+    some?: WorkerMonthlyEvaluationResponseWhereInput
+    none?: WorkerMonthlyEvaluationResponseWhereInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MonthlyEvaluationQuestionMonthlyEvaluationSectionIdDisplayOrderCompoundUniqueInput = {
+    monthlyEvaluationSectionId: number
+    displayOrder: number
+  }
+
+  export type MonthlyEvaluationQuestionCountOrderByAggregateInput = {
+    monthlyEvaluationQuestionId?: SortOrder
+    monthlyEvaluationSectionId?: SortOrder
+    displayOrder?: SortOrder
+    prompt?: SortOrder
+    questionType?: SortOrder
+    isRequired?: SortOrder
+    isScored?: SortOrder
+    minScore?: SortOrder
+    maxScore?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationQuestionAvgOrderByAggregateInput = {
+    monthlyEvaluationQuestionId?: SortOrder
+    monthlyEvaluationSectionId?: SortOrder
+    displayOrder?: SortOrder
+    minScore?: SortOrder
+    maxScore?: SortOrder
+  }
+
+  export type MonthlyEvaluationQuestionMaxOrderByAggregateInput = {
+    monthlyEvaluationQuestionId?: SortOrder
+    monthlyEvaluationSectionId?: SortOrder
+    displayOrder?: SortOrder
+    prompt?: SortOrder
+    questionType?: SortOrder
+    isRequired?: SortOrder
+    isScored?: SortOrder
+    minScore?: SortOrder
+    maxScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationQuestionMinOrderByAggregateInput = {
+    monthlyEvaluationQuestionId?: SortOrder
+    monthlyEvaluationSectionId?: SortOrder
+    displayOrder?: SortOrder
+    prompt?: SortOrder
+    questionType?: SortOrder
+    isRequired?: SortOrder
+    isScored?: SortOrder
+    minScore?: SortOrder
+    maxScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyEvaluationQuestionSumOrderByAggregateInput = {
+    monthlyEvaluationQuestionId?: SortOrder
+    monthlyEvaluationSectionId?: SortOrder
+    displayOrder?: SortOrder
+    minScore?: SortOrder
+    maxScore?: SortOrder
+  }
+
+  export type EnumMonthlyEvaluationQuestionTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MonthlyEvaluationQuestionType | EnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MonthlyEvaluationQuestionType[] | ListEnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MonthlyEvaluationQuestionType[] | ListEnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMonthlyEvaluationQuestionTypeWithAggregatesFilter<$PrismaModel> | $Enums.MonthlyEvaluationQuestionType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel>
+    _max?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type EnumMonthlyEvaluationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MonthlyEvaluationStatus | EnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MonthlyEvaluationStatus[] | ListEnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MonthlyEvaluationStatus[] | ListEnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMonthlyEvaluationStatusFilter<$PrismaModel> | $Enums.MonthlyEvaluationStatus
+  }
+
+  export type WorkerMonthlyEvaluationWorkerIdYearMonthSequenceCompoundUniqueInput = {
+    workerId: number
+    year: number
+    month: number
+    sequence: number
+  }
+
+  export type WorkerMonthlyEvaluationCountOrderByAggregateInput = {
+    workerMonthlyEvaluationId?: SortOrder
+    workerId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    sequence?: SortOrder
+    status?: SortOrder
+    evaluatorUserId?: SortOrder
+    openedByUserId?: SortOrder
+    closedByUserId?: SortOrder
+    openedAt?: SortOrder
+    closedAt?: SortOrder
+    generalComment?: SortOrder
+    totalScore?: SortOrder
+    maxScore?: SortOrder
+    performanceLabel?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkerMonthlyEvaluationAvgOrderByAggregateInput = {
+    workerMonthlyEvaluationId?: SortOrder
+    workerId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    sequence?: SortOrder
+    evaluatorUserId?: SortOrder
+    openedByUserId?: SortOrder
+    closedByUserId?: SortOrder
+    totalScore?: SortOrder
+    maxScore?: SortOrder
+  }
+
+  export type WorkerMonthlyEvaluationMaxOrderByAggregateInput = {
+    workerMonthlyEvaluationId?: SortOrder
+    workerId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    sequence?: SortOrder
+    status?: SortOrder
+    evaluatorUserId?: SortOrder
+    openedByUserId?: SortOrder
+    closedByUserId?: SortOrder
+    openedAt?: SortOrder
+    closedAt?: SortOrder
+    generalComment?: SortOrder
+    totalScore?: SortOrder
+    maxScore?: SortOrder
+    performanceLabel?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkerMonthlyEvaluationMinOrderByAggregateInput = {
+    workerMonthlyEvaluationId?: SortOrder
+    workerId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    sequence?: SortOrder
+    status?: SortOrder
+    evaluatorUserId?: SortOrder
+    openedByUserId?: SortOrder
+    closedByUserId?: SortOrder
+    openedAt?: SortOrder
+    closedAt?: SortOrder
+    generalComment?: SortOrder
+    totalScore?: SortOrder
+    maxScore?: SortOrder
+    performanceLabel?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkerMonthlyEvaluationSumOrderByAggregateInput = {
+    workerMonthlyEvaluationId?: SortOrder
+    workerId?: SortOrder
+    monthlyEvaluationTemplateVersionId?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    sequence?: SortOrder
+    evaluatorUserId?: SortOrder
+    openedByUserId?: SortOrder
+    closedByUserId?: SortOrder
+    totalScore?: SortOrder
+    maxScore?: SortOrder
+  }
+
+  export type EnumMonthlyEvaluationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MonthlyEvaluationStatus | EnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MonthlyEvaluationStatus[] | ListEnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MonthlyEvaluationStatus[] | ListEnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMonthlyEvaluationStatusWithAggregatesFilter<$PrismaModel> | $Enums.MonthlyEvaluationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMonthlyEvaluationStatusFilter<$PrismaModel>
+    _max?: NestedEnumMonthlyEvaluationStatusFilter<$PrismaModel>
+  }
+
+  export type WorkerMonthlyEvaluationScalarRelationFilter = {
+    is?: WorkerMonthlyEvaluationWhereInput
+    isNot?: WorkerMonthlyEvaluationWhereInput
+  }
+
+  export type MonthlyEvaluationQuestionScalarRelationFilter = {
+    is?: MonthlyEvaluationQuestionWhereInput
+    isNot?: MonthlyEvaluationQuestionWhereInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseWorkerMonthlyEvaluationIdMonthlyEvaluationQuestionIdCompoundUniqueInput = {
+    workerMonthlyEvaluationId: number
+    monthlyEvaluationQuestionId: number
+  }
+
+  export type WorkerMonthlyEvaluationResponseCountOrderByAggregateInput = {
+    workerMonthlyEvaluationResponseId?: SortOrder
+    workerMonthlyEvaluationId?: SortOrder
+    monthlyEvaluationQuestionId?: SortOrder
+    score?: SortOrder
+    textAnswer?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkerMonthlyEvaluationResponseAvgOrderByAggregateInput = {
+    workerMonthlyEvaluationResponseId?: SortOrder
+    workerMonthlyEvaluationId?: SortOrder
+    monthlyEvaluationQuestionId?: SortOrder
+    score?: SortOrder
+  }
+
+  export type WorkerMonthlyEvaluationResponseMaxOrderByAggregateInput = {
+    workerMonthlyEvaluationResponseId?: SortOrder
+    workerMonthlyEvaluationId?: SortOrder
+    monthlyEvaluationQuestionId?: SortOrder
+    score?: SortOrder
+    textAnswer?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkerMonthlyEvaluationResponseMinOrderByAggregateInput = {
+    workerMonthlyEvaluationResponseId?: SortOrder
+    workerMonthlyEvaluationId?: SortOrder
+    monthlyEvaluationQuestionId?: SortOrder
+    score?: SortOrder
+    textAnswer?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkerMonthlyEvaluationResponseSumOrderByAggregateInput = {
+    workerMonthlyEvaluationResponseId?: SortOrder
+    workerMonthlyEvaluationId?: SortOrder
+    monthlyEvaluationQuestionId?: SortOrder
+    score?: SortOrder
+  }
+
   export type EnumSupplierDocumentTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.SupplierDocumentType | EnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
     in?: $Enums.SupplierDocumentType[] | ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
@@ -48391,17 +58477,6 @@ export namespace Prisma {
     _max?: NestedEnumCurrencyFilter<$PrismaModel>
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type CategoryResourceNullableScalarRelationFilter = {
     is?: CategoryResourceWhereInput | null
     isNot?: CategoryResourceWhereInput | null
@@ -48467,22 +58542,6 @@ export namespace Prisma {
   export type CategoryResourceSumOrderByAggregateInput = {
     categoryResourceId?: SortOrder
     parentCategoryId?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type CategoryResourceScalarRelationFilter = {
@@ -48903,11 +58962,6 @@ export namespace Prisma {
     amount?: SortOrder
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type PasswordResetTokenCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -48946,19 +59000,6 @@ export namespace Prisma {
   export type PasswordResetTokenSumOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type UserNullableScalarRelationFilter = {
-    is?: UserWhereInput | null
-    isNot?: UserWhereInput | null
   }
 
   export type BlacklistedTokenCountOrderByAggregateInput = {
@@ -49697,6 +59738,34 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput = {
+    create?: XOR<MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput, MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput> | MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput[] | MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: MonthlyEvaluationTemplateCreateOrConnectWithoutCreatedByUserInput | MonthlyEvaluationTemplateCreateOrConnectWithoutCreatedByUserInput[]
+    createMany?: MonthlyEvaluationTemplateCreateManyCreatedByUserInputEnvelope
+    connect?: MonthlyEvaluationTemplateWhereUniqueInput | MonthlyEvaluationTemplateWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput> | WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutEvaluatorUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutEvaluatorUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyEvaluatorUserInputEnvelope
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput> | WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutOpenedByUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutOpenedByUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyOpenedByUserInputEnvelope
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutClosedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput> | WorkerMonthlyEvaluationCreateWithoutClosedByUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutClosedByUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutClosedByUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyClosedByUserInputEnvelope
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+  }
+
   export type BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<BlacklistedTokenCreateWithoutUserInput, BlacklistedTokenUncheckedCreateWithoutUserInput> | BlacklistedTokenCreateWithoutUserInput[] | BlacklistedTokenUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BlacklistedTokenCreateOrConnectWithoutUserInput | BlacklistedTokenCreateOrConnectWithoutUserInput[]
@@ -49751,6 +59820,34 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
     createMany?: NotificationCreateManyUserInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput = {
+    create?: XOR<MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput, MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput> | MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput[] | MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: MonthlyEvaluationTemplateCreateOrConnectWithoutCreatedByUserInput | MonthlyEvaluationTemplateCreateOrConnectWithoutCreatedByUserInput[]
+    createMany?: MonthlyEvaluationTemplateCreateManyCreatedByUserInputEnvelope
+    connect?: MonthlyEvaluationTemplateWhereUniqueInput | MonthlyEvaluationTemplateWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput> | WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutEvaluatorUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutEvaluatorUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyEvaluatorUserInputEnvelope
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput> | WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutOpenedByUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutOpenedByUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyOpenedByUserInputEnvelope
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutClosedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput> | WorkerMonthlyEvaluationCreateWithoutClosedByUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutClosedByUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutClosedByUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyClosedByUserInputEnvelope
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -49881,6 +59978,62 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput = {
+    create?: XOR<MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput, MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput> | MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput[] | MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: MonthlyEvaluationTemplateCreateOrConnectWithoutCreatedByUserInput | MonthlyEvaluationTemplateCreateOrConnectWithoutCreatedByUserInput[]
+    upsert?: MonthlyEvaluationTemplateUpsertWithWhereUniqueWithoutCreatedByUserInput | MonthlyEvaluationTemplateUpsertWithWhereUniqueWithoutCreatedByUserInput[]
+    createMany?: MonthlyEvaluationTemplateCreateManyCreatedByUserInputEnvelope
+    set?: MonthlyEvaluationTemplateWhereUniqueInput | MonthlyEvaluationTemplateWhereUniqueInput[]
+    disconnect?: MonthlyEvaluationTemplateWhereUniqueInput | MonthlyEvaluationTemplateWhereUniqueInput[]
+    delete?: MonthlyEvaluationTemplateWhereUniqueInput | MonthlyEvaluationTemplateWhereUniqueInput[]
+    connect?: MonthlyEvaluationTemplateWhereUniqueInput | MonthlyEvaluationTemplateWhereUniqueInput[]
+    update?: MonthlyEvaluationTemplateUpdateWithWhereUniqueWithoutCreatedByUserInput | MonthlyEvaluationTemplateUpdateWithWhereUniqueWithoutCreatedByUserInput[]
+    updateMany?: MonthlyEvaluationTemplateUpdateManyWithWhereWithoutCreatedByUserInput | MonthlyEvaluationTemplateUpdateManyWithWhereWithoutCreatedByUserInput[]
+    deleteMany?: MonthlyEvaluationTemplateScalarWhereInput | MonthlyEvaluationTemplateScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput> | WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutEvaluatorUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutEvaluatorUserInput[]
+    upsert?: WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutEvaluatorUserInput | WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutEvaluatorUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyEvaluatorUserInputEnvelope
+    set?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutEvaluatorUserInput | WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutEvaluatorUserInput[]
+    updateMany?: WorkerMonthlyEvaluationUpdateManyWithWhereWithoutEvaluatorUserInput | WorkerMonthlyEvaluationUpdateManyWithWhereWithoutEvaluatorUserInput[]
+    deleteMany?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput> | WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutOpenedByUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutOpenedByUserInput[]
+    upsert?: WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutOpenedByUserInput | WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutOpenedByUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyOpenedByUserInputEnvelope
+    set?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutOpenedByUserInput | WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutOpenedByUserInput[]
+    updateMany?: WorkerMonthlyEvaluationUpdateManyWithWhereWithoutOpenedByUserInput | WorkerMonthlyEvaluationUpdateManyWithWhereWithoutOpenedByUserInput[]
+    deleteMany?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutClosedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput> | WorkerMonthlyEvaluationCreateWithoutClosedByUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutClosedByUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutClosedByUserInput[]
+    upsert?: WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutClosedByUserInput | WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutClosedByUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyClosedByUserInputEnvelope
+    set?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutClosedByUserInput | WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutClosedByUserInput[]
+    updateMany?: WorkerMonthlyEvaluationUpdateManyWithWhereWithoutClosedByUserInput | WorkerMonthlyEvaluationUpdateManyWithWhereWithoutClosedByUserInput[]
+    deleteMany?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -49999,6 +60152,62 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput = {
+    create?: XOR<MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput, MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput> | MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput[] | MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: MonthlyEvaluationTemplateCreateOrConnectWithoutCreatedByUserInput | MonthlyEvaluationTemplateCreateOrConnectWithoutCreatedByUserInput[]
+    upsert?: MonthlyEvaluationTemplateUpsertWithWhereUniqueWithoutCreatedByUserInput | MonthlyEvaluationTemplateUpsertWithWhereUniqueWithoutCreatedByUserInput[]
+    createMany?: MonthlyEvaluationTemplateCreateManyCreatedByUserInputEnvelope
+    set?: MonthlyEvaluationTemplateWhereUniqueInput | MonthlyEvaluationTemplateWhereUniqueInput[]
+    disconnect?: MonthlyEvaluationTemplateWhereUniqueInput | MonthlyEvaluationTemplateWhereUniqueInput[]
+    delete?: MonthlyEvaluationTemplateWhereUniqueInput | MonthlyEvaluationTemplateWhereUniqueInput[]
+    connect?: MonthlyEvaluationTemplateWhereUniqueInput | MonthlyEvaluationTemplateWhereUniqueInput[]
+    update?: MonthlyEvaluationTemplateUpdateWithWhereUniqueWithoutCreatedByUserInput | MonthlyEvaluationTemplateUpdateWithWhereUniqueWithoutCreatedByUserInput[]
+    updateMany?: MonthlyEvaluationTemplateUpdateManyWithWhereWithoutCreatedByUserInput | MonthlyEvaluationTemplateUpdateManyWithWhereWithoutCreatedByUserInput[]
+    deleteMany?: MonthlyEvaluationTemplateScalarWhereInput | MonthlyEvaluationTemplateScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput> | WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutEvaluatorUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutEvaluatorUserInput[]
+    upsert?: WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutEvaluatorUserInput | WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutEvaluatorUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyEvaluatorUserInputEnvelope
+    set?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutEvaluatorUserInput | WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutEvaluatorUserInput[]
+    updateMany?: WorkerMonthlyEvaluationUpdateManyWithWhereWithoutEvaluatorUserInput | WorkerMonthlyEvaluationUpdateManyWithWhereWithoutEvaluatorUserInput[]
+    deleteMany?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput> | WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutOpenedByUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutOpenedByUserInput[]
+    upsert?: WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutOpenedByUserInput | WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutOpenedByUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyOpenedByUserInputEnvelope
+    set?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutOpenedByUserInput | WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutOpenedByUserInput[]
+    updateMany?: WorkerMonthlyEvaluationUpdateManyWithWhereWithoutOpenedByUserInput | WorkerMonthlyEvaluationUpdateManyWithWhereWithoutOpenedByUserInput[]
+    deleteMany?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutClosedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput> | WorkerMonthlyEvaluationCreateWithoutClosedByUserInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutClosedByUserInput | WorkerMonthlyEvaluationCreateOrConnectWithoutClosedByUserInput[]
+    upsert?: WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutClosedByUserInput | WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutClosedByUserInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyClosedByUserInputEnvelope
+    set?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutClosedByUserInput | WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutClosedByUserInput[]
+    updateMany?: WorkerMonthlyEvaluationUpdateManyWithWhereWithoutClosedByUserInput | WorkerMonthlyEvaluationUpdateManyWithWhereWithoutClosedByUserInput[]
+    deleteMany?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
   }
 
   export type UserUserTypeCreateNestedManyWithoutUserTypeInput = {
@@ -50959,6 +61168,13 @@ export namespace Prisma {
     connect?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
   }
 
+  export type WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutWorkerInput, WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput> | WorkerMonthlyEvaluationCreateWithoutWorkerInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutWorkerInput | WorkerMonthlyEvaluationCreateOrConnectWithoutWorkerInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyWorkerInputEnvelope
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+  }
+
   export type RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput = {
     create?: XOR<RequestWorkerCreateWithoutWorkerInput, RequestWorkerUncheckedCreateWithoutWorkerInput> | RequestWorkerCreateWithoutWorkerInput[] | RequestWorkerUncheckedCreateWithoutWorkerInput[]
     connectOrCreate?: RequestWorkerCreateOrConnectWithoutWorkerInput | RequestWorkerCreateOrConnectWithoutWorkerInput[]
@@ -50985,6 +61201,13 @@ export namespace Prisma {
     connectOrCreate?: DailyWageCreateOrConnectWithoutWorkerInput | DailyWageCreateOrConnectWithoutWorkerInput[]
     createMany?: DailyWageCreateManyWorkerInputEnvelope
     connect?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutWorkerInput, WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput> | WorkerMonthlyEvaluationCreateWithoutWorkerInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutWorkerInput | WorkerMonthlyEvaluationCreateOrConnectWithoutWorkerInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyWorkerInputEnvelope
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
   }
 
   export type EnumWorkerTypeFieldUpdateOperationsInput = {
@@ -51047,6 +61270,20 @@ export namespace Prisma {
     deleteMany?: DailyWageScalarWhereInput | DailyWageScalarWhereInput[]
   }
 
+  export type WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutWorkerInput, WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput> | WorkerMonthlyEvaluationCreateWithoutWorkerInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutWorkerInput | WorkerMonthlyEvaluationCreateOrConnectWithoutWorkerInput[]
+    upsert?: WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutWorkerInput | WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutWorkerInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyWorkerInputEnvelope
+    set?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutWorkerInput | WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutWorkerInput[]
+    updateMany?: WorkerMonthlyEvaluationUpdateManyWithWhereWithoutWorkerInput | WorkerMonthlyEvaluationUpdateManyWithWhereWithoutWorkerInput[]
+    deleteMany?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+  }
+
   export type RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput = {
     create?: XOR<RequestWorkerCreateWithoutWorkerInput, RequestWorkerUncheckedCreateWithoutWorkerInput> | RequestWorkerCreateWithoutWorkerInput[] | RequestWorkerUncheckedCreateWithoutWorkerInput[]
     connectOrCreate?: RequestWorkerCreateOrConnectWithoutWorkerInput | RequestWorkerCreateOrConnectWithoutWorkerInput[]
@@ -51101,6 +61338,452 @@ export namespace Prisma {
     update?: DailyWageUpdateWithWhereUniqueWithoutWorkerInput | DailyWageUpdateWithWhereUniqueWithoutWorkerInput[]
     updateMany?: DailyWageUpdateManyWithWhereWithoutWorkerInput | DailyWageUpdateManyWithWhereWithoutWorkerInput[]
     deleteMany?: DailyWageScalarWhereInput | DailyWageScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutWorkerInput, WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput> | WorkerMonthlyEvaluationCreateWithoutWorkerInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutWorkerInput | WorkerMonthlyEvaluationCreateOrConnectWithoutWorkerInput[]
+    upsert?: WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutWorkerInput | WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutWorkerInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyWorkerInputEnvelope
+    set?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutWorkerInput | WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutWorkerInput[]
+    updateMany?: WorkerMonthlyEvaluationUpdateManyWithWhereWithoutWorkerInput | WorkerMonthlyEvaluationUpdateManyWithWhereWithoutWorkerInput[]
+    deleteMany?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutCreatedMonthlyEvaluationTemplatesInput = {
+    create?: XOR<UserCreateWithoutCreatedMonthlyEvaluationTemplatesInput, UserUncheckedCreateWithoutCreatedMonthlyEvaluationTemplatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedMonthlyEvaluationTemplatesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput> | MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput[] | MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: MonthlyEvaluationTemplateVersionCreateOrConnectWithoutTemplateInput | MonthlyEvaluationTemplateVersionCreateOrConnectWithoutTemplateInput[]
+    createMany?: MonthlyEvaluationTemplateVersionCreateManyTemplateInputEnvelope
+    connect?: MonthlyEvaluationTemplateVersionWhereUniqueInput | MonthlyEvaluationTemplateVersionWhereUniqueInput[]
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput> | MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput[] | MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: MonthlyEvaluationTemplateVersionCreateOrConnectWithoutTemplateInput | MonthlyEvaluationTemplateVersionCreateOrConnectWithoutTemplateInput[]
+    createMany?: MonthlyEvaluationTemplateVersionCreateManyTemplateInputEnvelope
+    connect?: MonthlyEvaluationTemplateVersionWhereUniqueInput | MonthlyEvaluationTemplateVersionWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type UserUpdateOneWithoutCreatedMonthlyEvaluationTemplatesNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedMonthlyEvaluationTemplatesInput, UserUncheckedCreateWithoutCreatedMonthlyEvaluationTemplatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedMonthlyEvaluationTemplatesInput
+    upsert?: UserUpsertWithoutCreatedMonthlyEvaluationTemplatesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedMonthlyEvaluationTemplatesInput, UserUpdateWithoutCreatedMonthlyEvaluationTemplatesInput>, UserUncheckedUpdateWithoutCreatedMonthlyEvaluationTemplatesInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput> | MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput[] | MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: MonthlyEvaluationTemplateVersionCreateOrConnectWithoutTemplateInput | MonthlyEvaluationTemplateVersionCreateOrConnectWithoutTemplateInput[]
+    upsert?: MonthlyEvaluationTemplateVersionUpsertWithWhereUniqueWithoutTemplateInput | MonthlyEvaluationTemplateVersionUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: MonthlyEvaluationTemplateVersionCreateManyTemplateInputEnvelope
+    set?: MonthlyEvaluationTemplateVersionWhereUniqueInput | MonthlyEvaluationTemplateVersionWhereUniqueInput[]
+    disconnect?: MonthlyEvaluationTemplateVersionWhereUniqueInput | MonthlyEvaluationTemplateVersionWhereUniqueInput[]
+    delete?: MonthlyEvaluationTemplateVersionWhereUniqueInput | MonthlyEvaluationTemplateVersionWhereUniqueInput[]
+    connect?: MonthlyEvaluationTemplateVersionWhereUniqueInput | MonthlyEvaluationTemplateVersionWhereUniqueInput[]
+    update?: MonthlyEvaluationTemplateVersionUpdateWithWhereUniqueWithoutTemplateInput | MonthlyEvaluationTemplateVersionUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: MonthlyEvaluationTemplateVersionUpdateManyWithWhereWithoutTemplateInput | MonthlyEvaluationTemplateVersionUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: MonthlyEvaluationTemplateVersionScalarWhereInput | MonthlyEvaluationTemplateVersionScalarWhereInput[]
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput> | MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput[] | MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: MonthlyEvaluationTemplateVersionCreateOrConnectWithoutTemplateInput | MonthlyEvaluationTemplateVersionCreateOrConnectWithoutTemplateInput[]
+    upsert?: MonthlyEvaluationTemplateVersionUpsertWithWhereUniqueWithoutTemplateInput | MonthlyEvaluationTemplateVersionUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: MonthlyEvaluationTemplateVersionCreateManyTemplateInputEnvelope
+    set?: MonthlyEvaluationTemplateVersionWhereUniqueInput | MonthlyEvaluationTemplateVersionWhereUniqueInput[]
+    disconnect?: MonthlyEvaluationTemplateVersionWhereUniqueInput | MonthlyEvaluationTemplateVersionWhereUniqueInput[]
+    delete?: MonthlyEvaluationTemplateVersionWhereUniqueInput | MonthlyEvaluationTemplateVersionWhereUniqueInput[]
+    connect?: MonthlyEvaluationTemplateVersionWhereUniqueInput | MonthlyEvaluationTemplateVersionWhereUniqueInput[]
+    update?: MonthlyEvaluationTemplateVersionUpdateWithWhereUniqueWithoutTemplateInput | MonthlyEvaluationTemplateVersionUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: MonthlyEvaluationTemplateVersionUpdateManyWithWhereWithoutTemplateInput | MonthlyEvaluationTemplateVersionUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: MonthlyEvaluationTemplateVersionScalarWhereInput | MonthlyEvaluationTemplateVersionScalarWhereInput[]
+  }
+
+  export type MonthlyEvaluationTemplateCreateNestedOneWithoutVersionsInput = {
+    create?: XOR<MonthlyEvaluationTemplateCreateWithoutVersionsInput, MonthlyEvaluationTemplateUncheckedCreateWithoutVersionsInput>
+    connectOrCreate?: MonthlyEvaluationTemplateCreateOrConnectWithoutVersionsInput
+    connect?: MonthlyEvaluationTemplateWhereUniqueInput
+  }
+
+  export type MonthlyEvaluationSectionCreateNestedManyWithoutTemplateVersionInput = {
+    create?: XOR<MonthlyEvaluationSectionCreateWithoutTemplateVersionInput, MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput> | MonthlyEvaluationSectionCreateWithoutTemplateVersionInput[] | MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput[]
+    connectOrCreate?: MonthlyEvaluationSectionCreateOrConnectWithoutTemplateVersionInput | MonthlyEvaluationSectionCreateOrConnectWithoutTemplateVersionInput[]
+    createMany?: MonthlyEvaluationSectionCreateManyTemplateVersionInputEnvelope
+    connect?: MonthlyEvaluationSectionWhereUniqueInput | MonthlyEvaluationSectionWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationCreateNestedManyWithoutTemplateVersionInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput, WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput> | WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutTemplateVersionInput | WorkerMonthlyEvaluationCreateOrConnectWithoutTemplateVersionInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyTemplateVersionInputEnvelope
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+  }
+
+  export type MonthlyEvaluationSectionUncheckedCreateNestedManyWithoutTemplateVersionInput = {
+    create?: XOR<MonthlyEvaluationSectionCreateWithoutTemplateVersionInput, MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput> | MonthlyEvaluationSectionCreateWithoutTemplateVersionInput[] | MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput[]
+    connectOrCreate?: MonthlyEvaluationSectionCreateOrConnectWithoutTemplateVersionInput | MonthlyEvaluationSectionCreateOrConnectWithoutTemplateVersionInput[]
+    createMany?: MonthlyEvaluationSectionCreateManyTemplateVersionInputEnvelope
+    connect?: MonthlyEvaluationSectionWhereUniqueInput | MonthlyEvaluationSectionWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutTemplateVersionInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput, WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput> | WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutTemplateVersionInput | WorkerMonthlyEvaluationCreateOrConnectWithoutTemplateVersionInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyTemplateVersionInputEnvelope
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+  }
+
+  export type MonthlyEvaluationTemplateUpdateOneRequiredWithoutVersionsNestedInput = {
+    create?: XOR<MonthlyEvaluationTemplateCreateWithoutVersionsInput, MonthlyEvaluationTemplateUncheckedCreateWithoutVersionsInput>
+    connectOrCreate?: MonthlyEvaluationTemplateCreateOrConnectWithoutVersionsInput
+    upsert?: MonthlyEvaluationTemplateUpsertWithoutVersionsInput
+    connect?: MonthlyEvaluationTemplateWhereUniqueInput
+    update?: XOR<XOR<MonthlyEvaluationTemplateUpdateToOneWithWhereWithoutVersionsInput, MonthlyEvaluationTemplateUpdateWithoutVersionsInput>, MonthlyEvaluationTemplateUncheckedUpdateWithoutVersionsInput>
+  }
+
+  export type MonthlyEvaluationSectionUpdateManyWithoutTemplateVersionNestedInput = {
+    create?: XOR<MonthlyEvaluationSectionCreateWithoutTemplateVersionInput, MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput> | MonthlyEvaluationSectionCreateWithoutTemplateVersionInput[] | MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput[]
+    connectOrCreate?: MonthlyEvaluationSectionCreateOrConnectWithoutTemplateVersionInput | MonthlyEvaluationSectionCreateOrConnectWithoutTemplateVersionInput[]
+    upsert?: MonthlyEvaluationSectionUpsertWithWhereUniqueWithoutTemplateVersionInput | MonthlyEvaluationSectionUpsertWithWhereUniqueWithoutTemplateVersionInput[]
+    createMany?: MonthlyEvaluationSectionCreateManyTemplateVersionInputEnvelope
+    set?: MonthlyEvaluationSectionWhereUniqueInput | MonthlyEvaluationSectionWhereUniqueInput[]
+    disconnect?: MonthlyEvaluationSectionWhereUniqueInput | MonthlyEvaluationSectionWhereUniqueInput[]
+    delete?: MonthlyEvaluationSectionWhereUniqueInput | MonthlyEvaluationSectionWhereUniqueInput[]
+    connect?: MonthlyEvaluationSectionWhereUniqueInput | MonthlyEvaluationSectionWhereUniqueInput[]
+    update?: MonthlyEvaluationSectionUpdateWithWhereUniqueWithoutTemplateVersionInput | MonthlyEvaluationSectionUpdateWithWhereUniqueWithoutTemplateVersionInput[]
+    updateMany?: MonthlyEvaluationSectionUpdateManyWithWhereWithoutTemplateVersionInput | MonthlyEvaluationSectionUpdateManyWithWhereWithoutTemplateVersionInput[]
+    deleteMany?: MonthlyEvaluationSectionScalarWhereInput | MonthlyEvaluationSectionScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUpdateManyWithoutTemplateVersionNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput, WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput> | WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutTemplateVersionInput | WorkerMonthlyEvaluationCreateOrConnectWithoutTemplateVersionInput[]
+    upsert?: WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutTemplateVersionInput | WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutTemplateVersionInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyTemplateVersionInputEnvelope
+    set?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutTemplateVersionInput | WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutTemplateVersionInput[]
+    updateMany?: WorkerMonthlyEvaluationUpdateManyWithWhereWithoutTemplateVersionInput | WorkerMonthlyEvaluationUpdateManyWithWhereWithoutTemplateVersionInput[]
+    deleteMany?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+  }
+
+  export type MonthlyEvaluationSectionUncheckedUpdateManyWithoutTemplateVersionNestedInput = {
+    create?: XOR<MonthlyEvaluationSectionCreateWithoutTemplateVersionInput, MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput> | MonthlyEvaluationSectionCreateWithoutTemplateVersionInput[] | MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput[]
+    connectOrCreate?: MonthlyEvaluationSectionCreateOrConnectWithoutTemplateVersionInput | MonthlyEvaluationSectionCreateOrConnectWithoutTemplateVersionInput[]
+    upsert?: MonthlyEvaluationSectionUpsertWithWhereUniqueWithoutTemplateVersionInput | MonthlyEvaluationSectionUpsertWithWhereUniqueWithoutTemplateVersionInput[]
+    createMany?: MonthlyEvaluationSectionCreateManyTemplateVersionInputEnvelope
+    set?: MonthlyEvaluationSectionWhereUniqueInput | MonthlyEvaluationSectionWhereUniqueInput[]
+    disconnect?: MonthlyEvaluationSectionWhereUniqueInput | MonthlyEvaluationSectionWhereUniqueInput[]
+    delete?: MonthlyEvaluationSectionWhereUniqueInput | MonthlyEvaluationSectionWhereUniqueInput[]
+    connect?: MonthlyEvaluationSectionWhereUniqueInput | MonthlyEvaluationSectionWhereUniqueInput[]
+    update?: MonthlyEvaluationSectionUpdateWithWhereUniqueWithoutTemplateVersionInput | MonthlyEvaluationSectionUpdateWithWhereUniqueWithoutTemplateVersionInput[]
+    updateMany?: MonthlyEvaluationSectionUpdateManyWithWhereWithoutTemplateVersionInput | MonthlyEvaluationSectionUpdateManyWithWhereWithoutTemplateVersionInput[]
+    deleteMany?: MonthlyEvaluationSectionScalarWhereInput | MonthlyEvaluationSectionScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutTemplateVersionNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput, WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput> | WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput[] | WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutTemplateVersionInput | WorkerMonthlyEvaluationCreateOrConnectWithoutTemplateVersionInput[]
+    upsert?: WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutTemplateVersionInput | WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutTemplateVersionInput[]
+    createMany?: WorkerMonthlyEvaluationCreateManyTemplateVersionInputEnvelope
+    set?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput | WorkerMonthlyEvaluationWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutTemplateVersionInput | WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutTemplateVersionInput[]
+    updateMany?: WorkerMonthlyEvaluationUpdateManyWithWhereWithoutTemplateVersionInput | WorkerMonthlyEvaluationUpdateManyWithWhereWithoutTemplateVersionInput[]
+    deleteMany?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateNestedOneWithoutSectionsInput = {
+    create?: XOR<MonthlyEvaluationTemplateVersionCreateWithoutSectionsInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutSectionsInput>
+    connectOrCreate?: MonthlyEvaluationTemplateVersionCreateOrConnectWithoutSectionsInput
+    connect?: MonthlyEvaluationTemplateVersionWhereUniqueInput
+  }
+
+  export type MonthlyEvaluationQuestionCreateNestedManyWithoutSectionInput = {
+    create?: XOR<MonthlyEvaluationQuestionCreateWithoutSectionInput, MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput> | MonthlyEvaluationQuestionCreateWithoutSectionInput[] | MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: MonthlyEvaluationQuestionCreateOrConnectWithoutSectionInput | MonthlyEvaluationQuestionCreateOrConnectWithoutSectionInput[]
+    createMany?: MonthlyEvaluationQuestionCreateManySectionInputEnvelope
+    connect?: MonthlyEvaluationQuestionWhereUniqueInput | MonthlyEvaluationQuestionWhereUniqueInput[]
+  }
+
+  export type MonthlyEvaluationQuestionUncheckedCreateNestedManyWithoutSectionInput = {
+    create?: XOR<MonthlyEvaluationQuestionCreateWithoutSectionInput, MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput> | MonthlyEvaluationQuestionCreateWithoutSectionInput[] | MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: MonthlyEvaluationQuestionCreateOrConnectWithoutSectionInput | MonthlyEvaluationQuestionCreateOrConnectWithoutSectionInput[]
+    createMany?: MonthlyEvaluationQuestionCreateManySectionInputEnvelope
+    connect?: MonthlyEvaluationQuestionWhereUniqueInput | MonthlyEvaluationQuestionWhereUniqueInput[]
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateOneRequiredWithoutSectionsNestedInput = {
+    create?: XOR<MonthlyEvaluationTemplateVersionCreateWithoutSectionsInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutSectionsInput>
+    connectOrCreate?: MonthlyEvaluationTemplateVersionCreateOrConnectWithoutSectionsInput
+    upsert?: MonthlyEvaluationTemplateVersionUpsertWithoutSectionsInput
+    connect?: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    update?: XOR<XOR<MonthlyEvaluationTemplateVersionUpdateToOneWithWhereWithoutSectionsInput, MonthlyEvaluationTemplateVersionUpdateWithoutSectionsInput>, MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutSectionsInput>
+  }
+
+  export type MonthlyEvaluationQuestionUpdateManyWithoutSectionNestedInput = {
+    create?: XOR<MonthlyEvaluationQuestionCreateWithoutSectionInput, MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput> | MonthlyEvaluationQuestionCreateWithoutSectionInput[] | MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: MonthlyEvaluationQuestionCreateOrConnectWithoutSectionInput | MonthlyEvaluationQuestionCreateOrConnectWithoutSectionInput[]
+    upsert?: MonthlyEvaluationQuestionUpsertWithWhereUniqueWithoutSectionInput | MonthlyEvaluationQuestionUpsertWithWhereUniqueWithoutSectionInput[]
+    createMany?: MonthlyEvaluationQuestionCreateManySectionInputEnvelope
+    set?: MonthlyEvaluationQuestionWhereUniqueInput | MonthlyEvaluationQuestionWhereUniqueInput[]
+    disconnect?: MonthlyEvaluationQuestionWhereUniqueInput | MonthlyEvaluationQuestionWhereUniqueInput[]
+    delete?: MonthlyEvaluationQuestionWhereUniqueInput | MonthlyEvaluationQuestionWhereUniqueInput[]
+    connect?: MonthlyEvaluationQuestionWhereUniqueInput | MonthlyEvaluationQuestionWhereUniqueInput[]
+    update?: MonthlyEvaluationQuestionUpdateWithWhereUniqueWithoutSectionInput | MonthlyEvaluationQuestionUpdateWithWhereUniqueWithoutSectionInput[]
+    updateMany?: MonthlyEvaluationQuestionUpdateManyWithWhereWithoutSectionInput | MonthlyEvaluationQuestionUpdateManyWithWhereWithoutSectionInput[]
+    deleteMany?: MonthlyEvaluationQuestionScalarWhereInput | MonthlyEvaluationQuestionScalarWhereInput[]
+  }
+
+  export type MonthlyEvaluationQuestionUncheckedUpdateManyWithoutSectionNestedInput = {
+    create?: XOR<MonthlyEvaluationQuestionCreateWithoutSectionInput, MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput> | MonthlyEvaluationQuestionCreateWithoutSectionInput[] | MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: MonthlyEvaluationQuestionCreateOrConnectWithoutSectionInput | MonthlyEvaluationQuestionCreateOrConnectWithoutSectionInput[]
+    upsert?: MonthlyEvaluationQuestionUpsertWithWhereUniqueWithoutSectionInput | MonthlyEvaluationQuestionUpsertWithWhereUniqueWithoutSectionInput[]
+    createMany?: MonthlyEvaluationQuestionCreateManySectionInputEnvelope
+    set?: MonthlyEvaluationQuestionWhereUniqueInput | MonthlyEvaluationQuestionWhereUniqueInput[]
+    disconnect?: MonthlyEvaluationQuestionWhereUniqueInput | MonthlyEvaluationQuestionWhereUniqueInput[]
+    delete?: MonthlyEvaluationQuestionWhereUniqueInput | MonthlyEvaluationQuestionWhereUniqueInput[]
+    connect?: MonthlyEvaluationQuestionWhereUniqueInput | MonthlyEvaluationQuestionWhereUniqueInput[]
+    update?: MonthlyEvaluationQuestionUpdateWithWhereUniqueWithoutSectionInput | MonthlyEvaluationQuestionUpdateWithWhereUniqueWithoutSectionInput[]
+    updateMany?: MonthlyEvaluationQuestionUpdateManyWithWhereWithoutSectionInput | MonthlyEvaluationQuestionUpdateManyWithWhereWithoutSectionInput[]
+    deleteMany?: MonthlyEvaluationQuestionScalarWhereInput | MonthlyEvaluationQuestionScalarWhereInput[]
+  }
+
+  export type MonthlyEvaluationSectionCreateNestedOneWithoutQuestionsInput = {
+    create?: XOR<MonthlyEvaluationSectionCreateWithoutQuestionsInput, MonthlyEvaluationSectionUncheckedCreateWithoutQuestionsInput>
+    connectOrCreate?: MonthlyEvaluationSectionCreateOrConnectWithoutQuestionsInput
+    connect?: MonthlyEvaluationSectionWhereUniqueInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateNestedManyWithoutQuestionInput = {
+    create?: XOR<WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput> | WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput[] | WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationResponseCreateOrConnectWithoutQuestionInput | WorkerMonthlyEvaluationResponseCreateOrConnectWithoutQuestionInput[]
+    createMany?: WorkerMonthlyEvaluationResponseCreateManyQuestionInputEnvelope
+    connect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedCreateNestedManyWithoutQuestionInput = {
+    create?: XOR<WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput> | WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput[] | WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationResponseCreateOrConnectWithoutQuestionInput | WorkerMonthlyEvaluationResponseCreateOrConnectWithoutQuestionInput[]
+    createMany?: WorkerMonthlyEvaluationResponseCreateManyQuestionInputEnvelope
+    connect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+  }
+
+  export type EnumMonthlyEvaluationQuestionTypeFieldUpdateOperationsInput = {
+    set?: $Enums.MonthlyEvaluationQuestionType
+  }
+
+  export type MonthlyEvaluationSectionUpdateOneRequiredWithoutQuestionsNestedInput = {
+    create?: XOR<MonthlyEvaluationSectionCreateWithoutQuestionsInput, MonthlyEvaluationSectionUncheckedCreateWithoutQuestionsInput>
+    connectOrCreate?: MonthlyEvaluationSectionCreateOrConnectWithoutQuestionsInput
+    upsert?: MonthlyEvaluationSectionUpsertWithoutQuestionsInput
+    connect?: MonthlyEvaluationSectionWhereUniqueInput
+    update?: XOR<XOR<MonthlyEvaluationSectionUpdateToOneWithWhereWithoutQuestionsInput, MonthlyEvaluationSectionUpdateWithoutQuestionsInput>, MonthlyEvaluationSectionUncheckedUpdateWithoutQuestionsInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpdateManyWithoutQuestionNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput> | WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput[] | WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationResponseCreateOrConnectWithoutQuestionInput | WorkerMonthlyEvaluationResponseCreateOrConnectWithoutQuestionInput[]
+    upsert?: WorkerMonthlyEvaluationResponseUpsertWithWhereUniqueWithoutQuestionInput | WorkerMonthlyEvaluationResponseUpsertWithWhereUniqueWithoutQuestionInput[]
+    createMany?: WorkerMonthlyEvaluationResponseCreateManyQuestionInputEnvelope
+    set?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationResponseUpdateWithWhereUniqueWithoutQuestionInput | WorkerMonthlyEvaluationResponseUpdateWithWhereUniqueWithoutQuestionInput[]
+    updateMany?: WorkerMonthlyEvaluationResponseUpdateManyWithWhereWithoutQuestionInput | WorkerMonthlyEvaluationResponseUpdateManyWithWhereWithoutQuestionInput[]
+    deleteMany?: WorkerMonthlyEvaluationResponseScalarWhereInput | WorkerMonthlyEvaluationResponseScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutQuestionNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput> | WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput[] | WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationResponseCreateOrConnectWithoutQuestionInput | WorkerMonthlyEvaluationResponseCreateOrConnectWithoutQuestionInput[]
+    upsert?: WorkerMonthlyEvaluationResponseUpsertWithWhereUniqueWithoutQuestionInput | WorkerMonthlyEvaluationResponseUpsertWithWhereUniqueWithoutQuestionInput[]
+    createMany?: WorkerMonthlyEvaluationResponseCreateManyQuestionInputEnvelope
+    set?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationResponseUpdateWithWhereUniqueWithoutQuestionInput | WorkerMonthlyEvaluationResponseUpdateWithWhereUniqueWithoutQuestionInput[]
+    updateMany?: WorkerMonthlyEvaluationResponseUpdateManyWithWhereWithoutQuestionInput | WorkerMonthlyEvaluationResponseUpdateManyWithWhereWithoutQuestionInput[]
+    deleteMany?: WorkerMonthlyEvaluationResponseScalarWhereInput | WorkerMonthlyEvaluationResponseScalarWhereInput[]
+  }
+
+  export type WorkerCreateNestedOneWithoutMonthlyEvaluationsInput = {
+    create?: XOR<WorkerCreateWithoutMonthlyEvaluationsInput, WorkerUncheckedCreateWithoutMonthlyEvaluationsInput>
+    connectOrCreate?: WorkerCreateOrConnectWithoutMonthlyEvaluationsInput
+    connect?: WorkerWhereUniqueInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateNestedOneWithoutEvaluationsInput = {
+    create?: XOR<MonthlyEvaluationTemplateVersionCreateWithoutEvaluationsInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutEvaluationsInput>
+    connectOrCreate?: MonthlyEvaluationTemplateVersionCreateOrConnectWithoutEvaluationsInput
+    connect?: MonthlyEvaluationTemplateVersionWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutEvaluatedMonthlyEvaluationsInput = {
+    create?: XOR<UserCreateWithoutEvaluatedMonthlyEvaluationsInput, UserUncheckedCreateWithoutEvaluatedMonthlyEvaluationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEvaluatedMonthlyEvaluationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutOpenedMonthlyEvaluationsInput = {
+    create?: XOR<UserCreateWithoutOpenedMonthlyEvaluationsInput, UserUncheckedCreateWithoutOpenedMonthlyEvaluationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOpenedMonthlyEvaluationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutClosedMonthlyEvaluationsInput = {
+    create?: XOR<UserCreateWithoutClosedMonthlyEvaluationsInput, UserUncheckedCreateWithoutClosedMonthlyEvaluationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutClosedMonthlyEvaluationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateNestedManyWithoutEvaluationInput = {
+    create?: XOR<WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput> | WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput[] | WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationResponseCreateOrConnectWithoutEvaluationInput | WorkerMonthlyEvaluationResponseCreateOrConnectWithoutEvaluationInput[]
+    createMany?: WorkerMonthlyEvaluationResponseCreateManyEvaluationInputEnvelope
+    connect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedCreateNestedManyWithoutEvaluationInput = {
+    create?: XOR<WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput> | WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput[] | WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationResponseCreateOrConnectWithoutEvaluationInput | WorkerMonthlyEvaluationResponseCreateOrConnectWithoutEvaluationInput[]
+    createMany?: WorkerMonthlyEvaluationResponseCreateManyEvaluationInputEnvelope
+    connect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+  }
+
+  export type EnumMonthlyEvaluationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MonthlyEvaluationStatus
+  }
+
+  export type WorkerUpdateOneRequiredWithoutMonthlyEvaluationsNestedInput = {
+    create?: XOR<WorkerCreateWithoutMonthlyEvaluationsInput, WorkerUncheckedCreateWithoutMonthlyEvaluationsInput>
+    connectOrCreate?: WorkerCreateOrConnectWithoutMonthlyEvaluationsInput
+    upsert?: WorkerUpsertWithoutMonthlyEvaluationsInput
+    connect?: WorkerWhereUniqueInput
+    update?: XOR<XOR<WorkerUpdateToOneWithWhereWithoutMonthlyEvaluationsInput, WorkerUpdateWithoutMonthlyEvaluationsInput>, WorkerUncheckedUpdateWithoutMonthlyEvaluationsInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateOneRequiredWithoutEvaluationsNestedInput = {
+    create?: XOR<MonthlyEvaluationTemplateVersionCreateWithoutEvaluationsInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutEvaluationsInput>
+    connectOrCreate?: MonthlyEvaluationTemplateVersionCreateOrConnectWithoutEvaluationsInput
+    upsert?: MonthlyEvaluationTemplateVersionUpsertWithoutEvaluationsInput
+    connect?: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    update?: XOR<XOR<MonthlyEvaluationTemplateVersionUpdateToOneWithWhereWithoutEvaluationsInput, MonthlyEvaluationTemplateVersionUpdateWithoutEvaluationsInput>, MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutEvaluationsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutEvaluatedMonthlyEvaluationsNestedInput = {
+    create?: XOR<UserCreateWithoutEvaluatedMonthlyEvaluationsInput, UserUncheckedCreateWithoutEvaluatedMonthlyEvaluationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEvaluatedMonthlyEvaluationsInput
+    upsert?: UserUpsertWithoutEvaluatedMonthlyEvaluationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEvaluatedMonthlyEvaluationsInput, UserUpdateWithoutEvaluatedMonthlyEvaluationsInput>, UserUncheckedUpdateWithoutEvaluatedMonthlyEvaluationsInput>
+  }
+
+  export type UserUpdateOneWithoutOpenedMonthlyEvaluationsNestedInput = {
+    create?: XOR<UserCreateWithoutOpenedMonthlyEvaluationsInput, UserUncheckedCreateWithoutOpenedMonthlyEvaluationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOpenedMonthlyEvaluationsInput
+    upsert?: UserUpsertWithoutOpenedMonthlyEvaluationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOpenedMonthlyEvaluationsInput, UserUpdateWithoutOpenedMonthlyEvaluationsInput>, UserUncheckedUpdateWithoutOpenedMonthlyEvaluationsInput>
+  }
+
+  export type UserUpdateOneWithoutClosedMonthlyEvaluationsNestedInput = {
+    create?: XOR<UserCreateWithoutClosedMonthlyEvaluationsInput, UserUncheckedCreateWithoutClosedMonthlyEvaluationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutClosedMonthlyEvaluationsInput
+    upsert?: UserUpsertWithoutClosedMonthlyEvaluationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutClosedMonthlyEvaluationsInput, UserUpdateWithoutClosedMonthlyEvaluationsInput>, UserUncheckedUpdateWithoutClosedMonthlyEvaluationsInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpdateManyWithoutEvaluationNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput> | WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput[] | WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationResponseCreateOrConnectWithoutEvaluationInput | WorkerMonthlyEvaluationResponseCreateOrConnectWithoutEvaluationInput[]
+    upsert?: WorkerMonthlyEvaluationResponseUpsertWithWhereUniqueWithoutEvaluationInput | WorkerMonthlyEvaluationResponseUpsertWithWhereUniqueWithoutEvaluationInput[]
+    createMany?: WorkerMonthlyEvaluationResponseCreateManyEvaluationInputEnvelope
+    set?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationResponseUpdateWithWhereUniqueWithoutEvaluationInput | WorkerMonthlyEvaluationResponseUpdateWithWhereUniqueWithoutEvaluationInput[]
+    updateMany?: WorkerMonthlyEvaluationResponseUpdateManyWithWhereWithoutEvaluationInput | WorkerMonthlyEvaluationResponseUpdateManyWithWhereWithoutEvaluationInput[]
+    deleteMany?: WorkerMonthlyEvaluationResponseScalarWhereInput | WorkerMonthlyEvaluationResponseScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutEvaluationNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput> | WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput[] | WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput[]
+    connectOrCreate?: WorkerMonthlyEvaluationResponseCreateOrConnectWithoutEvaluationInput | WorkerMonthlyEvaluationResponseCreateOrConnectWithoutEvaluationInput[]
+    upsert?: WorkerMonthlyEvaluationResponseUpsertWithWhereUniqueWithoutEvaluationInput | WorkerMonthlyEvaluationResponseUpsertWithWhereUniqueWithoutEvaluationInput[]
+    createMany?: WorkerMonthlyEvaluationResponseCreateManyEvaluationInputEnvelope
+    set?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    disconnect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    delete?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    connect?: WorkerMonthlyEvaluationResponseWhereUniqueInput | WorkerMonthlyEvaluationResponseWhereUniqueInput[]
+    update?: WorkerMonthlyEvaluationResponseUpdateWithWhereUniqueWithoutEvaluationInput | WorkerMonthlyEvaluationResponseUpdateWithWhereUniqueWithoutEvaluationInput[]
+    updateMany?: WorkerMonthlyEvaluationResponseUpdateManyWithWhereWithoutEvaluationInput | WorkerMonthlyEvaluationResponseUpdateManyWithWhereWithoutEvaluationInput[]
+    deleteMany?: WorkerMonthlyEvaluationResponseScalarWhereInput | WorkerMonthlyEvaluationResponseScalarWhereInput[]
+  }
+
+  export type WorkerMonthlyEvaluationCreateNestedOneWithoutResponsesInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutResponsesInput, WorkerMonthlyEvaluationUncheckedCreateWithoutResponsesInput>
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutResponsesInput
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput
+  }
+
+  export type MonthlyEvaluationQuestionCreateNestedOneWithoutResponsesInput = {
+    create?: XOR<MonthlyEvaluationQuestionCreateWithoutResponsesInput, MonthlyEvaluationQuestionUncheckedCreateWithoutResponsesInput>
+    connectOrCreate?: MonthlyEvaluationQuestionCreateOrConnectWithoutResponsesInput
+    connect?: MonthlyEvaluationQuestionWhereUniqueInput
+  }
+
+  export type WorkerMonthlyEvaluationUpdateOneRequiredWithoutResponsesNestedInput = {
+    create?: XOR<WorkerMonthlyEvaluationCreateWithoutResponsesInput, WorkerMonthlyEvaluationUncheckedCreateWithoutResponsesInput>
+    connectOrCreate?: WorkerMonthlyEvaluationCreateOrConnectWithoutResponsesInput
+    upsert?: WorkerMonthlyEvaluationUpsertWithoutResponsesInput
+    connect?: WorkerMonthlyEvaluationWhereUniqueInput
+    update?: XOR<XOR<WorkerMonthlyEvaluationUpdateToOneWithWhereWithoutResponsesInput, WorkerMonthlyEvaluationUpdateWithoutResponsesInput>, WorkerMonthlyEvaluationUncheckedUpdateWithoutResponsesInput>
+  }
+
+  export type MonthlyEvaluationQuestionUpdateOneRequiredWithoutResponsesNestedInput = {
+    create?: XOR<MonthlyEvaluationQuestionCreateWithoutResponsesInput, MonthlyEvaluationQuestionUncheckedCreateWithoutResponsesInput>
+    connectOrCreate?: MonthlyEvaluationQuestionCreateOrConnectWithoutResponsesInput
+    upsert?: MonthlyEvaluationQuestionUpsertWithoutResponsesInput
+    connect?: MonthlyEvaluationQuestionWhereUniqueInput
+    update?: XOR<XOR<MonthlyEvaluationQuestionUpdateToOneWithWhereWithoutResponsesInput, MonthlyEvaluationQuestionUpdateWithoutResponsesInput>, MonthlyEvaluationQuestionUncheckedUpdateWithoutResponsesInput>
   }
 
   export type PurchaseOrderCreateNestedManyWithoutSupplierInput = {
@@ -51223,14 +61906,6 @@ export namespace Prisma {
     update?: ResourceUpdateWithWhereUniqueWithoutCategoryResourceInput | ResourceUpdateWithWhereUniqueWithoutCategoryResourceInput[]
     updateMany?: ResourceUpdateManyWithWhereWithoutCategoryResourceInput | ResourceUpdateManyWithWhereWithoutCategoryResourceInput[]
     deleteMany?: ResourceScalarWhereInput | ResourceScalarWhereInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type CategoryResourceUncheckedUpdateManyWithoutParentCategoryNestedInput = {
@@ -51513,10 +62188,6 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutPasswordResetTokensInput, UserUncheckedCreateWithoutPasswordResetTokensInput>
     connectOrCreate?: UserCreateOrConnectWithoutPasswordResetTokensInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutPasswordResetTokensNestedInput = {
@@ -52380,6 +63051,103 @@ export namespace Prisma {
     _max?: NestedEnumWorkerTypeFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MonthlyEvaluationQuestionType | EnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MonthlyEvaluationQuestionType[] | ListEnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MonthlyEvaluationQuestionType[] | ListEnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel> | $Enums.MonthlyEvaluationQuestionType
+  }
+
+  export type NestedEnumMonthlyEvaluationQuestionTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MonthlyEvaluationQuestionType | EnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MonthlyEvaluationQuestionType[] | ListEnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MonthlyEvaluationQuestionType[] | ListEnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMonthlyEvaluationQuestionTypeWithAggregatesFilter<$PrismaModel> | $Enums.MonthlyEvaluationQuestionType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel>
+    _max?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumMonthlyEvaluationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MonthlyEvaluationStatus | EnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MonthlyEvaluationStatus[] | ListEnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MonthlyEvaluationStatus[] | ListEnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMonthlyEvaluationStatusFilter<$PrismaModel> | $Enums.MonthlyEvaluationStatus
+  }
+
+  export type NestedEnumMonthlyEvaluationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MonthlyEvaluationStatus | EnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MonthlyEvaluationStatus[] | ListEnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MonthlyEvaluationStatus[] | ListEnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMonthlyEvaluationStatusWithAggregatesFilter<$PrismaModel> | $Enums.MonthlyEvaluationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMonthlyEvaluationStatusFilter<$PrismaModel>
+    _max?: NestedEnumMonthlyEvaluationStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumSupplierDocumentTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.SupplierDocumentType | EnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
     in?: $Enums.SupplierDocumentType[] | ListEnumSupplierDocumentTypeFieldRefInput<$PrismaModel>
@@ -52412,33 +63180,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumCurrencyFilter<$PrismaModel>
     _max?: NestedEnumCurrencyFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
@@ -52534,19 +63275,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPettyCashTypeFilter<$PrismaModel>
     _max?: NestedEnumPettyCashTypeFilter<$PrismaModel>
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumTaskStatusFilter<$PrismaModel = never> = {
@@ -52851,6 +63579,190 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput = {
+    name: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    versions?: MonthlyEvaluationTemplateVersionCreateNestedManyWithoutTemplateInput
+  }
+
+  export type MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput = {
+    monthlyEvaluationTemplateId?: number
+    name: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    versions?: MonthlyEvaluationTemplateVersionUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type MonthlyEvaluationTemplateCreateOrConnectWithoutCreatedByUserInput = {
+    where: MonthlyEvaluationTemplateWhereUniqueInput
+    create: XOR<MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput, MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput>
+  }
+
+  export type MonthlyEvaluationTemplateCreateManyCreatedByUserInputEnvelope = {
+    data: MonthlyEvaluationTemplateCreateManyCreatedByUserInput | MonthlyEvaluationTemplateCreateManyCreatedByUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput = {
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    worker: WorkerCreateNestedOneWithoutMonthlyEvaluationsInput
+    templateVersion: MonthlyEvaluationTemplateVersionCreateNestedOneWithoutEvaluationsInput
+    openedByUser?: UserCreateNestedOneWithoutOpenedMonthlyEvaluationsInput
+    closedByUser?: UserCreateNestedOneWithoutClosedMonthlyEvaluationsInput
+    responses?: WorkerMonthlyEvaluationResponseCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    openedByUserId?: number | null
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationCreateOrConnectWithoutEvaluatorUserInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationCreateManyEvaluatorUserInputEnvelope = {
+    data: WorkerMonthlyEvaluationCreateManyEvaluatorUserInput | WorkerMonthlyEvaluationCreateManyEvaluatorUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput = {
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    worker: WorkerCreateNestedOneWithoutMonthlyEvaluationsInput
+    templateVersion: MonthlyEvaluationTemplateVersionCreateNestedOneWithoutEvaluationsInput
+    evaluatorUser: UserCreateNestedOneWithoutEvaluatedMonthlyEvaluationsInput
+    closedByUser?: UserCreateNestedOneWithoutClosedMonthlyEvaluationsInput
+    responses?: WorkerMonthlyEvaluationResponseCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationCreateOrConnectWithoutOpenedByUserInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationCreateManyOpenedByUserInputEnvelope = {
+    data: WorkerMonthlyEvaluationCreateManyOpenedByUserInput | WorkerMonthlyEvaluationCreateManyOpenedByUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkerMonthlyEvaluationCreateWithoutClosedByUserInput = {
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    worker: WorkerCreateNestedOneWithoutMonthlyEvaluationsInput
+    templateVersion: MonthlyEvaluationTemplateVersionCreateNestedOneWithoutEvaluationsInput
+    evaluatorUser: UserCreateNestedOneWithoutEvaluatedMonthlyEvaluationsInput
+    openedByUser?: UserCreateNestedOneWithoutOpenedMonthlyEvaluationsInput
+    responses?: WorkerMonthlyEvaluationResponseCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    openedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationCreateOrConnectWithoutClosedByUserInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutClosedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationCreateManyClosedByUserInputEnvelope = {
+    data: WorkerMonthlyEvaluationCreateManyClosedByUserInput | WorkerMonthlyEvaluationCreateManyClosedByUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BlacklistedTokenUpsertWithWhereUniqueWithoutUserInput = {
     where: BlacklistedTokenWhereUniqueInput
     update: XOR<BlacklistedTokenUpdateWithoutUserInput, BlacklistedTokenUncheckedUpdateWithoutUserInput>
@@ -53086,6 +63998,108 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
+  export type MonthlyEvaluationTemplateUpsertWithWhereUniqueWithoutCreatedByUserInput = {
+    where: MonthlyEvaluationTemplateWhereUniqueInput
+    update: XOR<MonthlyEvaluationTemplateUpdateWithoutCreatedByUserInput, MonthlyEvaluationTemplateUncheckedUpdateWithoutCreatedByUserInput>
+    create: XOR<MonthlyEvaluationTemplateCreateWithoutCreatedByUserInput, MonthlyEvaluationTemplateUncheckedCreateWithoutCreatedByUserInput>
+  }
+
+  export type MonthlyEvaluationTemplateUpdateWithWhereUniqueWithoutCreatedByUserInput = {
+    where: MonthlyEvaluationTemplateWhereUniqueInput
+    data: XOR<MonthlyEvaluationTemplateUpdateWithoutCreatedByUserInput, MonthlyEvaluationTemplateUncheckedUpdateWithoutCreatedByUserInput>
+  }
+
+  export type MonthlyEvaluationTemplateUpdateManyWithWhereWithoutCreatedByUserInput = {
+    where: MonthlyEvaluationTemplateScalarWhereInput
+    data: XOR<MonthlyEvaluationTemplateUpdateManyMutationInput, MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserInput>
+  }
+
+  export type MonthlyEvaluationTemplateScalarWhereInput = {
+    AND?: MonthlyEvaluationTemplateScalarWhereInput | MonthlyEvaluationTemplateScalarWhereInput[]
+    OR?: MonthlyEvaluationTemplateScalarWhereInput[]
+    NOT?: MonthlyEvaluationTemplateScalarWhereInput | MonthlyEvaluationTemplateScalarWhereInput[]
+    monthlyEvaluationTemplateId?: IntFilter<"MonthlyEvaluationTemplate"> | number
+    name?: StringFilter<"MonthlyEvaluationTemplate"> | string
+    description?: StringNullableFilter<"MonthlyEvaluationTemplate"> | string | null
+    isActive?: BoolFilter<"MonthlyEvaluationTemplate"> | boolean
+    createdByUserId?: IntNullableFilter<"MonthlyEvaluationTemplate"> | number | null
+    createdAt?: DateTimeFilter<"MonthlyEvaluationTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyEvaluationTemplate"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"MonthlyEvaluationTemplate"> | Date | string | null
+  }
+
+  export type WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutEvaluatorUserInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    update: XOR<WorkerMonthlyEvaluationUpdateWithoutEvaluatorUserInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutEvaluatorUserInput>
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutEvaluatorUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutEvaluatorUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutEvaluatorUserInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    data: XOR<WorkerMonthlyEvaluationUpdateWithoutEvaluatorUserInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutEvaluatorUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateManyWithWhereWithoutEvaluatorUserInput = {
+    where: WorkerMonthlyEvaluationScalarWhereInput
+    data: XOR<WorkerMonthlyEvaluationUpdateManyMutationInput, WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationScalarWhereInput = {
+    AND?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+    OR?: WorkerMonthlyEvaluationScalarWhereInput[]
+    NOT?: WorkerMonthlyEvaluationScalarWhereInput | WorkerMonthlyEvaluationScalarWhereInput[]
+    workerMonthlyEvaluationId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    workerId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    monthlyEvaluationTemplateVersionId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    year?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    month?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    sequence?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    status?: EnumMonthlyEvaluationStatusFilter<"WorkerMonthlyEvaluation"> | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    openedByUserId?: IntNullableFilter<"WorkerMonthlyEvaluation"> | number | null
+    closedByUserId?: IntNullableFilter<"WorkerMonthlyEvaluation"> | number | null
+    openedAt?: DateTimeNullableFilter<"WorkerMonthlyEvaluation"> | Date | string | null
+    closedAt?: DateTimeNullableFilter<"WorkerMonthlyEvaluation"> | Date | string | null
+    generalComment?: StringNullableFilter<"WorkerMonthlyEvaluation"> | string | null
+    totalScore?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    maxScore?: IntFilter<"WorkerMonthlyEvaluation"> | number
+    performanceLabel?: StringNullableFilter<"WorkerMonthlyEvaluation"> | string | null
+    createdAt?: DateTimeFilter<"WorkerMonthlyEvaluation"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkerMonthlyEvaluation"> | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutOpenedByUserInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    update: XOR<WorkerMonthlyEvaluationUpdateWithoutOpenedByUserInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutOpenedByUserInput>
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutOpenedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutOpenedByUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutOpenedByUserInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    data: XOR<WorkerMonthlyEvaluationUpdateWithoutOpenedByUserInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutOpenedByUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateManyWithWhereWithoutOpenedByUserInput = {
+    where: WorkerMonthlyEvaluationScalarWhereInput
+    data: XOR<WorkerMonthlyEvaluationUpdateManyMutationInput, WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutClosedByUserInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    update: XOR<WorkerMonthlyEvaluationUpdateWithoutClosedByUserInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutClosedByUserInput>
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutClosedByUserInput, WorkerMonthlyEvaluationUncheckedCreateWithoutClosedByUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutClosedByUserInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    data: XOR<WorkerMonthlyEvaluationUpdateWithoutClosedByUserInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutClosedByUserInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateManyWithWhereWithoutClosedByUserInput = {
+    where: WorkerMonthlyEvaluationScalarWhereInput
+    data: XOR<WorkerMonthlyEvaluationUpdateManyMutationInput, WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserInput>
+  }
+
   export type UserUserTypeCreateWithoutUserTypeInput = {
     user: UserCreateNestedOneWithoutUserUserTypesInput
   }
@@ -53137,6 +64151,10 @@ export namespace Prisma {
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserUncheckedCreateWithoutUserUserTypesInput = {
@@ -53156,6 +64174,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserCreateOrConnectWithoutUserUserTypesInput = {
@@ -53204,6 +64226,10 @@ export namespace Prisma {
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUserUserTypesInput = {
@@ -53223,6 +64249,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserTypeUpsertWithoutUserUserTypesInput = {
@@ -53885,6 +64915,10 @@ export namespace Prisma {
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserUncheckedCreateWithoutRequestsInput = {
@@ -53904,6 +64938,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserCreateOrConnectWithoutRequestsInput = {
@@ -54120,6 +65158,10 @@ export namespace Prisma {
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRequestsInput = {
@@ -54139,6 +65181,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type ElementRequestUpsertWithWhereUniqueWithoutRequestInput = {
@@ -54267,6 +65313,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
     attendances?: AttendanceCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerUncheckedCreateWithoutRequestWorkersInput = {
@@ -54284,6 +65331,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
     attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerCreateOrConnectWithoutRequestWorkersInput = {
@@ -54356,6 +65404,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
     attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
   }
 
   export type WorkerUncheckedUpdateWithoutRequestWorkersInput = {
@@ -54373,6 +65422,7 @@ export namespace Prisma {
     weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
     attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
   }
 
   export type ElementCreateWithoutElementRequestsInput = {
@@ -54606,6 +65656,10 @@ export namespace Prisma {
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserUncheckedCreateWithoutResponsesInput = {
@@ -54625,6 +65679,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserCreateOrConnectWithoutResponsesInput = {
@@ -54724,6 +65782,10 @@ export namespace Prisma {
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResponsesInput = {
@@ -54743,6 +65805,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type ElementRequestResponseUpsertWithWhereUniqueWithoutRequestResponseInput = {
@@ -54889,6 +65955,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserUncheckedCreateWithoutEmergenciesInput = {
@@ -54908,6 +65978,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserCreateOrConnectWithoutEmergenciesInput = {
@@ -55029,6 +66103,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmergenciesInput = {
@@ -55048,6 +66126,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type ProjectUpsertWithoutEmergenciesInput = {
@@ -55224,6 +66306,57 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type WorkerMonthlyEvaluationCreateWithoutWorkerInput = {
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templateVersion: MonthlyEvaluationTemplateVersionCreateNestedOneWithoutEvaluationsInput
+    evaluatorUser: UserCreateNestedOneWithoutEvaluatedMonthlyEvaluationsInput
+    openedByUser?: UserCreateNestedOneWithoutOpenedMonthlyEvaluationsInput
+    closedByUser?: UserCreateNestedOneWithoutClosedMonthlyEvaluationsInput
+    responses?: WorkerMonthlyEvaluationResponseCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput = {
+    workerMonthlyEvaluationId?: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    openedByUserId?: number | null
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationCreateOrConnectWithoutWorkerInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutWorkerInput, WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput>
+  }
+
+  export type WorkerMonthlyEvaluationCreateManyWorkerInputEnvelope = {
+    data: WorkerMonthlyEvaluationCreateManyWorkerInput | WorkerMonthlyEvaluationCreateManyWorkerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RequestWorkerUpsertWithWhereUniqueWithoutWorkerInput = {
     where: RequestWorkerWhereUniqueInput
     update: XOR<RequestWorkerUpdateWithoutWorkerInput, RequestWorkerUncheckedUpdateWithoutWorkerInput>
@@ -55311,6 +66444,1315 @@ export namespace Prisma {
     validFromDate?: DateTimeFilter<"DailyWage"> | Date | string
     createdAt?: DateTimeFilter<"DailyWage"> | Date | string
     updatedAt?: DateTimeFilter<"DailyWage"> | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutWorkerInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    update: XOR<WorkerMonthlyEvaluationUpdateWithoutWorkerInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutWorkerInput>
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutWorkerInput, WorkerMonthlyEvaluationUncheckedCreateWithoutWorkerInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutWorkerInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    data: XOR<WorkerMonthlyEvaluationUpdateWithoutWorkerInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutWorkerInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateManyWithWhereWithoutWorkerInput = {
+    where: WorkerMonthlyEvaluationScalarWhereInput
+    data: XOR<WorkerMonthlyEvaluationUpdateManyMutationInput, WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerInput>
+  }
+
+  export type UserCreateWithoutCreatedMonthlyEvaluationTemplatesInput = {
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
+    responses?: RequestResponseCreateNestedManyWithoutResponderInput
+    requests?: RequestCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedMonthlyEvaluationTemplatesInput = {
+    userId?: number
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
+    responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
+    requests?: RequestUncheckedCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedMonthlyEvaluationTemplatesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedMonthlyEvaluationTemplatesInput, UserUncheckedCreateWithoutCreatedMonthlyEvaluationTemplatesInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput = {
+    versionNumber: number
+    title: string
+    description?: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished?: boolean
+    publishedAt?: Date | string
+    createdAt?: Date | string
+    sections?: MonthlyEvaluationSectionCreateNestedManyWithoutTemplateVersionInput
+    evaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutTemplateVersionInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput = {
+    monthlyEvaluationTemplateVersionId?: number
+    versionNumber: number
+    title: string
+    description?: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished?: boolean
+    publishedAt?: Date | string
+    createdAt?: Date | string
+    sections?: MonthlyEvaluationSectionUncheckedCreateNestedManyWithoutTemplateVersionInput
+    evaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutTemplateVersionInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateOrConnectWithoutTemplateInput = {
+    where: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    create: XOR<MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateManyTemplateInputEnvelope = {
+    data: MonthlyEvaluationTemplateVersionCreateManyTemplateInput | MonthlyEvaluationTemplateVersionCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutCreatedMonthlyEvaluationTemplatesInput = {
+    update: XOR<UserUpdateWithoutCreatedMonthlyEvaluationTemplatesInput, UserUncheckedUpdateWithoutCreatedMonthlyEvaluationTemplatesInput>
+    create: XOR<UserCreateWithoutCreatedMonthlyEvaluationTemplatesInput, UserUncheckedCreateWithoutCreatedMonthlyEvaluationTemplatesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedMonthlyEvaluationTemplatesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedMonthlyEvaluationTemplatesInput, UserUncheckedUpdateWithoutCreatedMonthlyEvaluationTemplatesInput>
+  }
+
+  export type UserUpdateWithoutCreatedMonthlyEvaluationTemplatesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUpdateManyWithoutResponderNestedInput
+    requests?: RequestUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedMonthlyEvaluationTemplatesInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
+    requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    update: XOR<MonthlyEvaluationTemplateVersionUpdateWithoutTemplateInput, MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutTemplateInput>
+    create: XOR<MonthlyEvaluationTemplateVersionCreateWithoutTemplateInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    data: XOR<MonthlyEvaluationTemplateVersionUpdateWithoutTemplateInput, MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateManyWithWhereWithoutTemplateInput = {
+    where: MonthlyEvaluationTemplateVersionScalarWhereInput
+    data: XOR<MonthlyEvaluationTemplateVersionUpdateManyMutationInput, MonthlyEvaluationTemplateVersionUncheckedUpdateManyWithoutTemplateInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionScalarWhereInput = {
+    AND?: MonthlyEvaluationTemplateVersionScalarWhereInput | MonthlyEvaluationTemplateVersionScalarWhereInput[]
+    OR?: MonthlyEvaluationTemplateVersionScalarWhereInput[]
+    NOT?: MonthlyEvaluationTemplateVersionScalarWhereInput | MonthlyEvaluationTemplateVersionScalarWhereInput[]
+    monthlyEvaluationTemplateVersionId?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    monthlyEvaluationTemplateId?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    versionNumber?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    title?: StringFilter<"MonthlyEvaluationTemplateVersion"> | string
+    description?: StringNullableFilter<"MonthlyEvaluationTemplateVersion"> | string | null
+    observedMaxScore?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    regularMaxScore?: IntFilter<"MonthlyEvaluationTemplateVersion"> | number
+    isPublished?: BoolFilter<"MonthlyEvaluationTemplateVersion"> | boolean
+    publishedAt?: DateTimeFilter<"MonthlyEvaluationTemplateVersion"> | Date | string
+    createdAt?: DateTimeFilter<"MonthlyEvaluationTemplateVersion"> | Date | string
+  }
+
+  export type MonthlyEvaluationTemplateCreateWithoutVersionsInput = {
+    name: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    createdByUser?: UserCreateNestedOneWithoutCreatedMonthlyEvaluationTemplatesInput
+  }
+
+  export type MonthlyEvaluationTemplateUncheckedCreateWithoutVersionsInput = {
+    monthlyEvaluationTemplateId?: number
+    name: string
+    description?: string | null
+    isActive?: boolean
+    createdByUserId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type MonthlyEvaluationTemplateCreateOrConnectWithoutVersionsInput = {
+    where: MonthlyEvaluationTemplateWhereUniqueInput
+    create: XOR<MonthlyEvaluationTemplateCreateWithoutVersionsInput, MonthlyEvaluationTemplateUncheckedCreateWithoutVersionsInput>
+  }
+
+  export type MonthlyEvaluationSectionCreateWithoutTemplateVersionInput = {
+    title: string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questions?: MonthlyEvaluationQuestionCreateNestedManyWithoutSectionInput
+  }
+
+  export type MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput = {
+    monthlyEvaluationSectionId?: number
+    title: string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questions?: MonthlyEvaluationQuestionUncheckedCreateNestedManyWithoutSectionInput
+  }
+
+  export type MonthlyEvaluationSectionCreateOrConnectWithoutTemplateVersionInput = {
+    where: MonthlyEvaluationSectionWhereUniqueInput
+    create: XOR<MonthlyEvaluationSectionCreateWithoutTemplateVersionInput, MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput>
+  }
+
+  export type MonthlyEvaluationSectionCreateManyTemplateVersionInputEnvelope = {
+    data: MonthlyEvaluationSectionCreateManyTemplateVersionInput | MonthlyEvaluationSectionCreateManyTemplateVersionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput = {
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    worker: WorkerCreateNestedOneWithoutMonthlyEvaluationsInput
+    evaluatorUser: UserCreateNestedOneWithoutEvaluatedMonthlyEvaluationsInput
+    openedByUser?: UserCreateNestedOneWithoutOpenedMonthlyEvaluationsInput
+    closedByUser?: UserCreateNestedOneWithoutClosedMonthlyEvaluationsInput
+    responses?: WorkerMonthlyEvaluationResponseCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    openedByUserId?: number | null
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedCreateNestedManyWithoutEvaluationInput
+  }
+
+  export type WorkerMonthlyEvaluationCreateOrConnectWithoutTemplateVersionInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput, WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput>
+  }
+
+  export type WorkerMonthlyEvaluationCreateManyTemplateVersionInputEnvelope = {
+    data: WorkerMonthlyEvaluationCreateManyTemplateVersionInput | WorkerMonthlyEvaluationCreateManyTemplateVersionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MonthlyEvaluationTemplateUpsertWithoutVersionsInput = {
+    update: XOR<MonthlyEvaluationTemplateUpdateWithoutVersionsInput, MonthlyEvaluationTemplateUncheckedUpdateWithoutVersionsInput>
+    create: XOR<MonthlyEvaluationTemplateCreateWithoutVersionsInput, MonthlyEvaluationTemplateUncheckedCreateWithoutVersionsInput>
+    where?: MonthlyEvaluationTemplateWhereInput
+  }
+
+  export type MonthlyEvaluationTemplateUpdateToOneWithWhereWithoutVersionsInput = {
+    where?: MonthlyEvaluationTemplateWhereInput
+    data: XOR<MonthlyEvaluationTemplateUpdateWithoutVersionsInput, MonthlyEvaluationTemplateUncheckedUpdateWithoutVersionsInput>
+  }
+
+  export type MonthlyEvaluationTemplateUpdateWithoutVersionsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdByUser?: UserUpdateOneWithoutCreatedMonthlyEvaluationTemplatesNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateUncheckedUpdateWithoutVersionsInput = {
+    monthlyEvaluationTemplateId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MonthlyEvaluationSectionUpsertWithWhereUniqueWithoutTemplateVersionInput = {
+    where: MonthlyEvaluationSectionWhereUniqueInput
+    update: XOR<MonthlyEvaluationSectionUpdateWithoutTemplateVersionInput, MonthlyEvaluationSectionUncheckedUpdateWithoutTemplateVersionInput>
+    create: XOR<MonthlyEvaluationSectionCreateWithoutTemplateVersionInput, MonthlyEvaluationSectionUncheckedCreateWithoutTemplateVersionInput>
+  }
+
+  export type MonthlyEvaluationSectionUpdateWithWhereUniqueWithoutTemplateVersionInput = {
+    where: MonthlyEvaluationSectionWhereUniqueInput
+    data: XOR<MonthlyEvaluationSectionUpdateWithoutTemplateVersionInput, MonthlyEvaluationSectionUncheckedUpdateWithoutTemplateVersionInput>
+  }
+
+  export type MonthlyEvaluationSectionUpdateManyWithWhereWithoutTemplateVersionInput = {
+    where: MonthlyEvaluationSectionScalarWhereInput
+    data: XOR<MonthlyEvaluationSectionUpdateManyMutationInput, MonthlyEvaluationSectionUncheckedUpdateManyWithoutTemplateVersionInput>
+  }
+
+  export type MonthlyEvaluationSectionScalarWhereInput = {
+    AND?: MonthlyEvaluationSectionScalarWhereInput | MonthlyEvaluationSectionScalarWhereInput[]
+    OR?: MonthlyEvaluationSectionScalarWhereInput[]
+    NOT?: MonthlyEvaluationSectionScalarWhereInput | MonthlyEvaluationSectionScalarWhereInput[]
+    monthlyEvaluationSectionId?: IntFilter<"MonthlyEvaluationSection"> | number
+    monthlyEvaluationTemplateVersionId?: IntFilter<"MonthlyEvaluationSection"> | number
+    title?: StringFilter<"MonthlyEvaluationSection"> | string
+    displayOrder?: IntFilter<"MonthlyEvaluationSection"> | number
+    createdAt?: DateTimeFilter<"MonthlyEvaluationSection"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyEvaluationSection"> | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutTemplateVersionInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    update: XOR<WorkerMonthlyEvaluationUpdateWithoutTemplateVersionInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutTemplateVersionInput>
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutTemplateVersionInput, WorkerMonthlyEvaluationUncheckedCreateWithoutTemplateVersionInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithWhereUniqueWithoutTemplateVersionInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    data: XOR<WorkerMonthlyEvaluationUpdateWithoutTemplateVersionInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutTemplateVersionInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateManyWithWhereWithoutTemplateVersionInput = {
+    where: WorkerMonthlyEvaluationScalarWhereInput
+    data: XOR<WorkerMonthlyEvaluationUpdateManyMutationInput, WorkerMonthlyEvaluationUncheckedUpdateManyWithoutTemplateVersionInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateWithoutSectionsInput = {
+    versionNumber: number
+    title: string
+    description?: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished?: boolean
+    publishedAt?: Date | string
+    createdAt?: Date | string
+    template: MonthlyEvaluationTemplateCreateNestedOneWithoutVersionsInput
+    evaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutTemplateVersionInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedCreateWithoutSectionsInput = {
+    monthlyEvaluationTemplateVersionId?: number
+    monthlyEvaluationTemplateId: number
+    versionNumber: number
+    title: string
+    description?: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished?: boolean
+    publishedAt?: Date | string
+    createdAt?: Date | string
+    evaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutTemplateVersionInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateOrConnectWithoutSectionsInput = {
+    where: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    create: XOR<MonthlyEvaluationTemplateVersionCreateWithoutSectionsInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutSectionsInput>
+  }
+
+  export type MonthlyEvaluationQuestionCreateWithoutSectionInput = {
+    displayOrder?: number
+    prompt: string
+    questionType?: $Enums.MonthlyEvaluationQuestionType
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: number
+    maxScore?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    responses?: WorkerMonthlyEvaluationResponseCreateNestedManyWithoutQuestionInput
+  }
+
+  export type MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput = {
+    monthlyEvaluationQuestionId?: number
+    displayOrder?: number
+    prompt: string
+    questionType?: $Enums.MonthlyEvaluationQuestionType
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: number
+    maxScore?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedCreateNestedManyWithoutQuestionInput
+  }
+
+  export type MonthlyEvaluationQuestionCreateOrConnectWithoutSectionInput = {
+    where: MonthlyEvaluationQuestionWhereUniqueInput
+    create: XOR<MonthlyEvaluationQuestionCreateWithoutSectionInput, MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput>
+  }
+
+  export type MonthlyEvaluationQuestionCreateManySectionInputEnvelope = {
+    data: MonthlyEvaluationQuestionCreateManySectionInput | MonthlyEvaluationQuestionCreateManySectionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpsertWithoutSectionsInput = {
+    update: XOR<MonthlyEvaluationTemplateVersionUpdateWithoutSectionsInput, MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutSectionsInput>
+    create: XOR<MonthlyEvaluationTemplateVersionCreateWithoutSectionsInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutSectionsInput>
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateToOneWithWhereWithoutSectionsInput = {
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    data: XOR<MonthlyEvaluationTemplateVersionUpdateWithoutSectionsInput, MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutSectionsInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateWithoutSectionsInput = {
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    template?: MonthlyEvaluationTemplateUpdateOneRequiredWithoutVersionsNestedInput
+    evaluations?: WorkerMonthlyEvaluationUpdateManyWithoutTemplateVersionNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutSectionsInput = {
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateId?: IntFieldUpdateOperationsInput | number
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    evaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutTemplateVersionNestedInput
+  }
+
+  export type MonthlyEvaluationQuestionUpsertWithWhereUniqueWithoutSectionInput = {
+    where: MonthlyEvaluationQuestionWhereUniqueInput
+    update: XOR<MonthlyEvaluationQuestionUpdateWithoutSectionInput, MonthlyEvaluationQuestionUncheckedUpdateWithoutSectionInput>
+    create: XOR<MonthlyEvaluationQuestionCreateWithoutSectionInput, MonthlyEvaluationQuestionUncheckedCreateWithoutSectionInput>
+  }
+
+  export type MonthlyEvaluationQuestionUpdateWithWhereUniqueWithoutSectionInput = {
+    where: MonthlyEvaluationQuestionWhereUniqueInput
+    data: XOR<MonthlyEvaluationQuestionUpdateWithoutSectionInput, MonthlyEvaluationQuestionUncheckedUpdateWithoutSectionInput>
+  }
+
+  export type MonthlyEvaluationQuestionUpdateManyWithWhereWithoutSectionInput = {
+    where: MonthlyEvaluationQuestionScalarWhereInput
+    data: XOR<MonthlyEvaluationQuestionUpdateManyMutationInput, MonthlyEvaluationQuestionUncheckedUpdateManyWithoutSectionInput>
+  }
+
+  export type MonthlyEvaluationQuestionScalarWhereInput = {
+    AND?: MonthlyEvaluationQuestionScalarWhereInput | MonthlyEvaluationQuestionScalarWhereInput[]
+    OR?: MonthlyEvaluationQuestionScalarWhereInput[]
+    NOT?: MonthlyEvaluationQuestionScalarWhereInput | MonthlyEvaluationQuestionScalarWhereInput[]
+    monthlyEvaluationQuestionId?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    monthlyEvaluationSectionId?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    displayOrder?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    prompt?: StringFilter<"MonthlyEvaluationQuestion"> | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFilter<"MonthlyEvaluationQuestion"> | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFilter<"MonthlyEvaluationQuestion"> | boolean
+    isScored?: BoolFilter<"MonthlyEvaluationQuestion"> | boolean
+    minScore?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    maxScore?: IntFilter<"MonthlyEvaluationQuestion"> | number
+    metadata?: JsonNullableFilter<"MonthlyEvaluationQuestion">
+    createdAt?: DateTimeFilter<"MonthlyEvaluationQuestion"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyEvaluationQuestion"> | Date | string
+  }
+
+  export type MonthlyEvaluationSectionCreateWithoutQuestionsInput = {
+    title: string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templateVersion: MonthlyEvaluationTemplateVersionCreateNestedOneWithoutSectionsInput
+  }
+
+  export type MonthlyEvaluationSectionUncheckedCreateWithoutQuestionsInput = {
+    monthlyEvaluationSectionId?: number
+    monthlyEvaluationTemplateVersionId: number
+    title: string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyEvaluationSectionCreateOrConnectWithoutQuestionsInput = {
+    where: MonthlyEvaluationSectionWhereUniqueInput
+    create: XOR<MonthlyEvaluationSectionCreateWithoutQuestionsInput, MonthlyEvaluationSectionUncheckedCreateWithoutQuestionsInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput = {
+    score?: number | null
+    textAnswer?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    evaluation: WorkerMonthlyEvaluationCreateNestedOneWithoutResponsesInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput = {
+    workerMonthlyEvaluationResponseId?: number
+    workerMonthlyEvaluationId: number
+    score?: number | null
+    textAnswer?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateOrConnectWithoutQuestionInput = {
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    create: XOR<WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateManyQuestionInputEnvelope = {
+    data: WorkerMonthlyEvaluationResponseCreateManyQuestionInput | WorkerMonthlyEvaluationResponseCreateManyQuestionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MonthlyEvaluationSectionUpsertWithoutQuestionsInput = {
+    update: XOR<MonthlyEvaluationSectionUpdateWithoutQuestionsInput, MonthlyEvaluationSectionUncheckedUpdateWithoutQuestionsInput>
+    create: XOR<MonthlyEvaluationSectionCreateWithoutQuestionsInput, MonthlyEvaluationSectionUncheckedCreateWithoutQuestionsInput>
+    where?: MonthlyEvaluationSectionWhereInput
+  }
+
+  export type MonthlyEvaluationSectionUpdateToOneWithWhereWithoutQuestionsInput = {
+    where?: MonthlyEvaluationSectionWhereInput
+    data: XOR<MonthlyEvaluationSectionUpdateWithoutQuestionsInput, MonthlyEvaluationSectionUncheckedUpdateWithoutQuestionsInput>
+  }
+
+  export type MonthlyEvaluationSectionUpdateWithoutQuestionsInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templateVersion?: MonthlyEvaluationTemplateVersionUpdateOneRequiredWithoutSectionsNestedInput
+  }
+
+  export type MonthlyEvaluationSectionUncheckedUpdateWithoutQuestionsInput = {
+    monthlyEvaluationSectionId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpsertWithWhereUniqueWithoutQuestionInput = {
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    update: XOR<WorkerMonthlyEvaluationResponseUpdateWithoutQuestionInput, WorkerMonthlyEvaluationResponseUncheckedUpdateWithoutQuestionInput>
+    create: XOR<WorkerMonthlyEvaluationResponseCreateWithoutQuestionInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpdateWithWhereUniqueWithoutQuestionInput = {
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    data: XOR<WorkerMonthlyEvaluationResponseUpdateWithoutQuestionInput, WorkerMonthlyEvaluationResponseUncheckedUpdateWithoutQuestionInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpdateManyWithWhereWithoutQuestionInput = {
+    where: WorkerMonthlyEvaluationResponseScalarWhereInput
+    data: XOR<WorkerMonthlyEvaluationResponseUpdateManyMutationInput, WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutQuestionInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseScalarWhereInput = {
+    AND?: WorkerMonthlyEvaluationResponseScalarWhereInput | WorkerMonthlyEvaluationResponseScalarWhereInput[]
+    OR?: WorkerMonthlyEvaluationResponseScalarWhereInput[]
+    NOT?: WorkerMonthlyEvaluationResponseScalarWhereInput | WorkerMonthlyEvaluationResponseScalarWhereInput[]
+    workerMonthlyEvaluationResponseId?: IntFilter<"WorkerMonthlyEvaluationResponse"> | number
+    workerMonthlyEvaluationId?: IntFilter<"WorkerMonthlyEvaluationResponse"> | number
+    monthlyEvaluationQuestionId?: IntFilter<"WorkerMonthlyEvaluationResponse"> | number
+    score?: IntNullableFilter<"WorkerMonthlyEvaluationResponse"> | number | null
+    textAnswer?: StringNullableFilter<"WorkerMonthlyEvaluationResponse"> | string | null
+    createdAt?: DateTimeFilter<"WorkerMonthlyEvaluationResponse"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkerMonthlyEvaluationResponse"> | Date | string
+  }
+
+  export type WorkerCreateWithoutMonthlyEvaluationsInput = {
+    fullName: string
+    dni: string
+    phone?: string | null
+    personalEmail?: string | null
+    address?: string | null
+    birthDate?: Date | string | null
+    workerType?: $Enums.WorkerType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
+    weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
+    attendances?: AttendanceCreateNestedManyWithoutWorkerInput
+    dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+  }
+
+  export type WorkerUncheckedCreateWithoutMonthlyEvaluationsInput = {
+    workerId?: number
+    fullName: string
+    dni: string
+    phone?: string | null
+    personalEmail?: string | null
+    address?: string | null
+    birthDate?: Date | string | null
+    workerType?: $Enums.WorkerType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
+    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
+    dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+  }
+
+  export type WorkerCreateOrConnectWithoutMonthlyEvaluationsInput = {
+    where: WorkerWhereUniqueInput
+    create: XOR<WorkerCreateWithoutMonthlyEvaluationsInput, WorkerUncheckedCreateWithoutMonthlyEvaluationsInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateWithoutEvaluationsInput = {
+    versionNumber: number
+    title: string
+    description?: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished?: boolean
+    publishedAt?: Date | string
+    createdAt?: Date | string
+    template: MonthlyEvaluationTemplateCreateNestedOneWithoutVersionsInput
+    sections?: MonthlyEvaluationSectionCreateNestedManyWithoutTemplateVersionInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedCreateWithoutEvaluationsInput = {
+    monthlyEvaluationTemplateVersionId?: number
+    monthlyEvaluationTemplateId: number
+    versionNumber: number
+    title: string
+    description?: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished?: boolean
+    publishedAt?: Date | string
+    createdAt?: Date | string
+    sections?: MonthlyEvaluationSectionUncheckedCreateNestedManyWithoutTemplateVersionInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateOrConnectWithoutEvaluationsInput = {
+    where: MonthlyEvaluationTemplateVersionWhereUniqueInput
+    create: XOR<MonthlyEvaluationTemplateVersionCreateWithoutEvaluationsInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutEvaluationsInput>
+  }
+
+  export type UserCreateWithoutEvaluatedMonthlyEvaluationsInput = {
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
+    responses?: RequestResponseCreateNestedManyWithoutResponderInput
+    requests?: RequestCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutEvaluatedMonthlyEvaluationsInput = {
+    userId?: number
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
+    responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
+    requests?: RequestUncheckedCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutEvaluatedMonthlyEvaluationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEvaluatedMonthlyEvaluationsInput, UserUncheckedCreateWithoutEvaluatedMonthlyEvaluationsInput>
+  }
+
+  export type UserCreateWithoutOpenedMonthlyEvaluationsInput = {
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
+    responses?: RequestResponseCreateNestedManyWithoutResponderInput
+    requests?: RequestCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOpenedMonthlyEvaluationsInput = {
+    userId?: number
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
+    responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
+    requests?: RequestUncheckedCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOpenedMonthlyEvaluationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOpenedMonthlyEvaluationsInput, UserUncheckedCreateWithoutOpenedMonthlyEvaluationsInput>
+  }
+
+  export type UserCreateWithoutClosedMonthlyEvaluationsInput = {
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
+    responses?: RequestResponseCreateNestedManyWithoutResponderInput
+    requests?: RequestCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutClosedMonthlyEvaluationsInput = {
+    userId?: number
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
+    responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
+    requests?: RequestUncheckedCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutClosedMonthlyEvaluationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutClosedMonthlyEvaluationsInput, UserUncheckedCreateWithoutClosedMonthlyEvaluationsInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput = {
+    score?: number | null
+    textAnswer?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    question: MonthlyEvaluationQuestionCreateNestedOneWithoutResponsesInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput = {
+    workerMonthlyEvaluationResponseId?: number
+    monthlyEvaluationQuestionId: number
+    score?: number | null
+    textAnswer?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateOrConnectWithoutEvaluationInput = {
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    create: XOR<WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateManyEvaluationInputEnvelope = {
+    data: WorkerMonthlyEvaluationResponseCreateManyEvaluationInput | WorkerMonthlyEvaluationResponseCreateManyEvaluationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkerUpsertWithoutMonthlyEvaluationsInput = {
+    update: XOR<WorkerUpdateWithoutMonthlyEvaluationsInput, WorkerUncheckedUpdateWithoutMonthlyEvaluationsInput>
+    create: XOR<WorkerCreateWithoutMonthlyEvaluationsInput, WorkerUncheckedCreateWithoutMonthlyEvaluationsInput>
+    where?: WorkerWhereInput
+  }
+
+  export type WorkerUpdateToOneWithWhereWithoutMonthlyEvaluationsInput = {
+    where?: WorkerWhereInput
+    data: XOR<WorkerUpdateWithoutMonthlyEvaluationsInput, WorkerUncheckedUpdateWithoutMonthlyEvaluationsInput>
+  }
+
+  export type WorkerUpdateWithoutMonthlyEvaluationsInput = {
+    fullName?: StringFieldUpdateOperationsInput | string
+    dni?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    personalEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    workerType?: EnumWorkerTypeFieldUpdateOperationsInput | $Enums.WorkerType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
+    weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
+    attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
+    dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type WorkerUncheckedUpdateWithoutMonthlyEvaluationsInput = {
+    workerId?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    dni?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    personalEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    workerType?: EnumWorkerTypeFieldUpdateOperationsInput | $Enums.WorkerType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
+    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
+    dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpsertWithoutEvaluationsInput = {
+    update: XOR<MonthlyEvaluationTemplateVersionUpdateWithoutEvaluationsInput, MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutEvaluationsInput>
+    create: XOR<MonthlyEvaluationTemplateVersionCreateWithoutEvaluationsInput, MonthlyEvaluationTemplateVersionUncheckedCreateWithoutEvaluationsInput>
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateToOneWithWhereWithoutEvaluationsInput = {
+    where?: MonthlyEvaluationTemplateVersionWhereInput
+    data: XOR<MonthlyEvaluationTemplateVersionUpdateWithoutEvaluationsInput, MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutEvaluationsInput>
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateWithoutEvaluationsInput = {
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    template?: MonthlyEvaluationTemplateUpdateOneRequiredWithoutVersionsNestedInput
+    sections?: MonthlyEvaluationSectionUpdateManyWithoutTemplateVersionNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutEvaluationsInput = {
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateId?: IntFieldUpdateOperationsInput | number
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: MonthlyEvaluationSectionUncheckedUpdateManyWithoutTemplateVersionNestedInput
+  }
+
+  export type UserUpsertWithoutEvaluatedMonthlyEvaluationsInput = {
+    update: XOR<UserUpdateWithoutEvaluatedMonthlyEvaluationsInput, UserUncheckedUpdateWithoutEvaluatedMonthlyEvaluationsInput>
+    create: XOR<UserCreateWithoutEvaluatedMonthlyEvaluationsInput, UserUncheckedCreateWithoutEvaluatedMonthlyEvaluationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEvaluatedMonthlyEvaluationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEvaluatedMonthlyEvaluationsInput, UserUncheckedUpdateWithoutEvaluatedMonthlyEvaluationsInput>
+  }
+
+  export type UserUpdateWithoutEvaluatedMonthlyEvaluationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUpdateManyWithoutResponderNestedInput
+    requests?: RequestUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEvaluatedMonthlyEvaluationsInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
+    requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
+  }
+
+  export type UserUpsertWithoutOpenedMonthlyEvaluationsInput = {
+    update: XOR<UserUpdateWithoutOpenedMonthlyEvaluationsInput, UserUncheckedUpdateWithoutOpenedMonthlyEvaluationsInput>
+    create: XOR<UserCreateWithoutOpenedMonthlyEvaluationsInput, UserUncheckedCreateWithoutOpenedMonthlyEvaluationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOpenedMonthlyEvaluationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOpenedMonthlyEvaluationsInput, UserUncheckedUpdateWithoutOpenedMonthlyEvaluationsInput>
+  }
+
+  export type UserUpdateWithoutOpenedMonthlyEvaluationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUpdateManyWithoutResponderNestedInput
+    requests?: RequestUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOpenedMonthlyEvaluationsInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
+    requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
+  }
+
+  export type UserUpsertWithoutClosedMonthlyEvaluationsInput = {
+    update: XOR<UserUpdateWithoutClosedMonthlyEvaluationsInput, UserUncheckedUpdateWithoutClosedMonthlyEvaluationsInput>
+    create: XOR<UserCreateWithoutClosedMonthlyEvaluationsInput, UserUncheckedCreateWithoutClosedMonthlyEvaluationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutClosedMonthlyEvaluationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutClosedMonthlyEvaluationsInput, UserUncheckedUpdateWithoutClosedMonthlyEvaluationsInput>
+  }
+
+  export type UserUpdateWithoutClosedMonthlyEvaluationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUpdateManyWithoutResponderNestedInput
+    requests?: RequestUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutClosedMonthlyEvaluationsInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
+    requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpsertWithWhereUniqueWithoutEvaluationInput = {
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    update: XOR<WorkerMonthlyEvaluationResponseUpdateWithoutEvaluationInput, WorkerMonthlyEvaluationResponseUncheckedUpdateWithoutEvaluationInput>
+    create: XOR<WorkerMonthlyEvaluationResponseCreateWithoutEvaluationInput, WorkerMonthlyEvaluationResponseUncheckedCreateWithoutEvaluationInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpdateWithWhereUniqueWithoutEvaluationInput = {
+    where: WorkerMonthlyEvaluationResponseWhereUniqueInput
+    data: XOR<WorkerMonthlyEvaluationResponseUpdateWithoutEvaluationInput, WorkerMonthlyEvaluationResponseUncheckedUpdateWithoutEvaluationInput>
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpdateManyWithWhereWithoutEvaluationInput = {
+    where: WorkerMonthlyEvaluationResponseScalarWhereInput
+    data: XOR<WorkerMonthlyEvaluationResponseUpdateManyMutationInput, WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutEvaluationInput>
+  }
+
+  export type WorkerMonthlyEvaluationCreateWithoutResponsesInput = {
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    worker: WorkerCreateNestedOneWithoutMonthlyEvaluationsInput
+    templateVersion: MonthlyEvaluationTemplateVersionCreateNestedOneWithoutEvaluationsInput
+    evaluatorUser: UserCreateNestedOneWithoutEvaluatedMonthlyEvaluationsInput
+    openedByUser?: UserCreateNestedOneWithoutOpenedMonthlyEvaluationsInput
+    closedByUser?: UserCreateNestedOneWithoutClosedMonthlyEvaluationsInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedCreateWithoutResponsesInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    openedByUserId?: number | null
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationCreateOrConnectWithoutResponsesInput = {
+    where: WorkerMonthlyEvaluationWhereUniqueInput
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutResponsesInput, WorkerMonthlyEvaluationUncheckedCreateWithoutResponsesInput>
+  }
+
+  export type MonthlyEvaluationQuestionCreateWithoutResponsesInput = {
+    displayOrder?: number
+    prompt: string
+    questionType?: $Enums.MonthlyEvaluationQuestionType
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: number
+    maxScore?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    section: MonthlyEvaluationSectionCreateNestedOneWithoutQuestionsInput
+  }
+
+  export type MonthlyEvaluationQuestionUncheckedCreateWithoutResponsesInput = {
+    monthlyEvaluationQuestionId?: number
+    monthlyEvaluationSectionId: number
+    displayOrder?: number
+    prompt: string
+    questionType?: $Enums.MonthlyEvaluationQuestionType
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: number
+    maxScore?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyEvaluationQuestionCreateOrConnectWithoutResponsesInput = {
+    where: MonthlyEvaluationQuestionWhereUniqueInput
+    create: XOR<MonthlyEvaluationQuestionCreateWithoutResponsesInput, MonthlyEvaluationQuestionUncheckedCreateWithoutResponsesInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpsertWithoutResponsesInput = {
+    update: XOR<WorkerMonthlyEvaluationUpdateWithoutResponsesInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutResponsesInput>
+    create: XOR<WorkerMonthlyEvaluationCreateWithoutResponsesInput, WorkerMonthlyEvaluationUncheckedCreateWithoutResponsesInput>
+    where?: WorkerMonthlyEvaluationWhereInput
+  }
+
+  export type WorkerMonthlyEvaluationUpdateToOneWithWhereWithoutResponsesInput = {
+    where?: WorkerMonthlyEvaluationWhereInput
+    data: XOR<WorkerMonthlyEvaluationUpdateWithoutResponsesInput, WorkerMonthlyEvaluationUncheckedUpdateWithoutResponsesInput>
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithoutResponsesInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker?: WorkerUpdateOneRequiredWithoutMonthlyEvaluationsNestedInput
+    templateVersion?: MonthlyEvaluationTemplateVersionUpdateOneRequiredWithoutEvaluationsNestedInput
+    evaluatorUser?: UserUpdateOneRequiredWithoutEvaluatedMonthlyEvaluationsNestedInput
+    openedByUser?: UserUpdateOneWithoutOpenedMonthlyEvaluationsNestedInput
+    closedByUser?: UserUpdateOneWithoutClosedMonthlyEvaluationsNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateWithoutResponsesInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyEvaluationQuestionUpsertWithoutResponsesInput = {
+    update: XOR<MonthlyEvaluationQuestionUpdateWithoutResponsesInput, MonthlyEvaluationQuestionUncheckedUpdateWithoutResponsesInput>
+    create: XOR<MonthlyEvaluationQuestionCreateWithoutResponsesInput, MonthlyEvaluationQuestionUncheckedCreateWithoutResponsesInput>
+    where?: MonthlyEvaluationQuestionWhereInput
+  }
+
+  export type MonthlyEvaluationQuestionUpdateToOneWithWhereWithoutResponsesInput = {
+    where?: MonthlyEvaluationQuestionWhereInput
+    data: XOR<MonthlyEvaluationQuestionUpdateWithoutResponsesInput, MonthlyEvaluationQuestionUncheckedUpdateWithoutResponsesInput>
+  }
+
+  export type MonthlyEvaluationQuestionUpdateWithoutResponsesInput = {
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    prompt?: StringFieldUpdateOperationsInput | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFieldUpdateOperationsInput | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isScored?: BoolFieldUpdateOperationsInput | boolean
+    minScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    section?: MonthlyEvaluationSectionUpdateOneRequiredWithoutQuestionsNestedInput
+  }
+
+  export type MonthlyEvaluationQuestionUncheckedUpdateWithoutResponsesInput = {
+    monthlyEvaluationQuestionId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationSectionId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    prompt?: StringFieldUpdateOperationsInput | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFieldUpdateOperationsInput | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isScored?: BoolFieldUpdateOperationsInput | boolean
+    minScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PurchaseOrderCreateWithoutSupplierInput = {
@@ -56360,6 +68802,10 @@ export namespace Prisma {
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
@@ -56379,6 +68825,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -56413,6 +68863,10 @@ export namespace Prisma {
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
@@ -56432,6 +68886,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserCreateWithoutBlacklistedTokensInput = {
@@ -56450,6 +68908,10 @@ export namespace Prisma {
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserUncheckedCreateWithoutBlacklistedTokensInput = {
@@ -56469,6 +68931,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserCreateOrConnectWithoutBlacklistedTokensInput = {
@@ -56503,6 +68969,10 @@ export namespace Prisma {
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBlacklistedTokensInput = {
@@ -56522,6 +68992,10 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type WeeklyWageCreateWithoutWeekInput = {
@@ -56622,6 +69096,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
     weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
     attendances?: AttendanceCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerUncheckedCreateWithoutDailyWagesInput = {
@@ -56639,6 +69114,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
     weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
     attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerCreateOrConnectWithoutDailyWagesInput = {
@@ -56671,6 +69147,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
     weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
     attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
   }
 
   export type WorkerUncheckedUpdateWithoutDailyWagesInput = {
@@ -56688,6 +69165,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
     weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
     attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
   }
 
   export type WorkerCreateWithoutWeeklyWagesInput = {
@@ -56704,6 +69182,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
     attendances?: AttendanceCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerUncheckedCreateWithoutWeeklyWagesInput = {
@@ -56721,6 +69200,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
     attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerCreateOrConnectWithoutWeeklyWagesInput = {
@@ -56775,6 +69255,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
     attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
   }
 
   export type WorkerUncheckedUpdateWithoutWeeklyWagesInput = {
@@ -56792,6 +69273,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
     attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
   }
 
   export type WeekUpsertWithoutWeeklyWagesInput = {
@@ -56836,6 +69318,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
     weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerUncheckedCreateWithoutAttendancesInput = {
@@ -56853,6 +69336,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
     weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerCreateOrConnectWithoutAttendancesInput = {
@@ -56953,6 +69437,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
     weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
   }
 
   export type WorkerUncheckedUpdateWithoutAttendancesInput = {
@@ -56970,6 +69455,7 @@ export namespace Prisma {
     requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
     weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
   }
 
   export type ProjectUpsertWithoutAttendancesInput = {
@@ -57447,6 +69933,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserUncheckedCreateWithoutTaskAssignmentsInput = {
@@ -57466,6 +69956,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserCreateOrConnectWithoutTaskAssignmentsInput = {
@@ -57546,6 +70040,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskAssignmentsInput = {
@@ -57565,6 +70063,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -57583,6 +70085,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -57602,6 +70108,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -57842,6 +70352,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -57861,6 +70375,10 @@ export namespace Prisma {
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
   }
 
   export type TaskUpsertWithoutNotificationsInput = {
@@ -58448,6 +70966,76 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type MonthlyEvaluationTemplateCreateManyCreatedByUserInput = {
+    monthlyEvaluationTemplateId?: number
+    name: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type WorkerMonthlyEvaluationCreateManyEvaluatorUserInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    openedByUserId?: number | null
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationCreateManyOpenedByUserInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationCreateManyClosedByUserInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    openedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type BlacklistedTokenUpdateWithoutUserInput = {
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58675,6 +71263,220 @@ export namespace Prisma {
     purchaseOrderId?: NullableIntFieldUpdateOperationsInput | number | null
     projectId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyEvaluationTemplateUpdateWithoutCreatedByUserInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    versions?: MonthlyEvaluationTemplateVersionUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateUncheckedUpdateWithoutCreatedByUserInput = {
+    monthlyEvaluationTemplateId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    versions?: MonthlyEvaluationTemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserInput = {
+    monthlyEvaluationTemplateId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithoutEvaluatorUserInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker?: WorkerUpdateOneRequiredWithoutMonthlyEvaluationsNestedInput
+    templateVersion?: MonthlyEvaluationTemplateVersionUpdateOneRequiredWithoutEvaluationsNestedInput
+    openedByUser?: UserUpdateOneWithoutOpenedMonthlyEvaluationsNestedInput
+    closedByUser?: UserUpdateOneWithoutClosedMonthlyEvaluationsNestedInput
+    responses?: WorkerMonthlyEvaluationResponseUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateWithoutEvaluatorUserInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithoutOpenedByUserInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker?: WorkerUpdateOneRequiredWithoutMonthlyEvaluationsNestedInput
+    templateVersion?: MonthlyEvaluationTemplateVersionUpdateOneRequiredWithoutEvaluationsNestedInput
+    evaluatorUser?: UserUpdateOneRequiredWithoutEvaluatedMonthlyEvaluationsNestedInput
+    closedByUser?: UserUpdateOneWithoutClosedMonthlyEvaluationsNestedInput
+    responses?: WorkerMonthlyEvaluationResponseUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateWithoutOpenedByUserInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithoutClosedByUserInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker?: WorkerUpdateOneRequiredWithoutMonthlyEvaluationsNestedInput
+    templateVersion?: MonthlyEvaluationTemplateVersionUpdateOneRequiredWithoutEvaluationsNestedInput
+    evaluatorUser?: UserUpdateOneRequiredWithoutEvaluatedMonthlyEvaluationsNestedInput
+    openedByUser?: UserUpdateOneWithoutOpenedMonthlyEvaluationsNestedInput
+    responses?: WorkerMonthlyEvaluationResponseUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateWithoutClosedByUserInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUserTypeCreateManyUserTypeInput = {
@@ -59509,6 +72311,26 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type WorkerMonthlyEvaluationCreateManyWorkerInput = {
+    workerMonthlyEvaluationId?: number
+    monthlyEvaluationTemplateVersionId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    openedByUserId?: number | null
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type RequestWorkerUpdateWithoutWorkerInput = {
     shoeSize?: NullableStringFieldUpdateOperationsInput | string | null
     pantsSize?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59606,6 +72428,359 @@ export namespace Prisma {
     dailyWageId?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithoutWorkerInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templateVersion?: MonthlyEvaluationTemplateVersionUpdateOneRequiredWithoutEvaluationsNestedInput
+    evaluatorUser?: UserUpdateOneRequiredWithoutEvaluatedMonthlyEvaluationsNestedInput
+    openedByUser?: UserUpdateOneWithoutOpenedMonthlyEvaluationsNestedInput
+    closedByUser?: UserUpdateOneWithoutClosedMonthlyEvaluationsNestedInput
+    responses?: WorkerMonthlyEvaluationResponseUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateWithoutWorkerInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyEvaluationTemplateVersionCreateManyTemplateInput = {
+    monthlyEvaluationTemplateVersionId?: number
+    versionNumber: number
+    title: string
+    description?: string | null
+    observedMaxScore: number
+    regularMaxScore: number
+    isPublished?: boolean
+    publishedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type MonthlyEvaluationTemplateVersionUpdateWithoutTemplateInput = {
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: MonthlyEvaluationSectionUpdateManyWithoutTemplateVersionNestedInput
+    evaluations?: WorkerMonthlyEvaluationUpdateManyWithoutTemplateVersionNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedUpdateWithoutTemplateInput = {
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: MonthlyEvaluationSectionUncheckedUpdateManyWithoutTemplateVersionNestedInput
+    evaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutTemplateVersionNestedInput
+  }
+
+  export type MonthlyEvaluationTemplateVersionUncheckedUpdateManyWithoutTemplateInput = {
+    monthlyEvaluationTemplateVersionId?: IntFieldUpdateOperationsInput | number
+    versionNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    observedMaxScore?: IntFieldUpdateOperationsInput | number
+    regularMaxScore?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyEvaluationSectionCreateManyTemplateVersionInput = {
+    monthlyEvaluationSectionId?: number
+    title: string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationCreateManyTemplateVersionInput = {
+    workerMonthlyEvaluationId?: number
+    workerId: number
+    year: number
+    month: number
+    sequence?: number
+    status?: $Enums.MonthlyEvaluationStatus
+    evaluatorUserId: number
+    openedByUserId?: number | null
+    closedByUserId?: number | null
+    openedAt?: Date | string | null
+    closedAt?: Date | string | null
+    generalComment?: string | null
+    totalScore?: number
+    maxScore?: number
+    performanceLabel?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyEvaluationSectionUpdateWithoutTemplateVersionInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questions?: MonthlyEvaluationQuestionUpdateManyWithoutSectionNestedInput
+  }
+
+  export type MonthlyEvaluationSectionUncheckedUpdateWithoutTemplateVersionInput = {
+    monthlyEvaluationSectionId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questions?: MonthlyEvaluationQuestionUncheckedUpdateManyWithoutSectionNestedInput
+  }
+
+  export type MonthlyEvaluationSectionUncheckedUpdateManyWithoutTemplateVersionInput = {
+    monthlyEvaluationSectionId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationUpdateWithoutTemplateVersionInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker?: WorkerUpdateOneRequiredWithoutMonthlyEvaluationsNestedInput
+    evaluatorUser?: UserUpdateOneRequiredWithoutEvaluatedMonthlyEvaluationsNestedInput
+    openedByUser?: UserUpdateOneWithoutOpenedMonthlyEvaluationsNestedInput
+    closedByUser?: UserUpdateOneWithoutClosedMonthlyEvaluationsNestedInput
+    responses?: WorkerMonthlyEvaluationResponseUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateWithoutTemplateVersionInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutEvaluationNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutTemplateVersionInput = {
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    sequence?: IntFieldUpdateOperationsInput | number
+    status?: EnumMonthlyEvaluationStatusFieldUpdateOperationsInput | $Enums.MonthlyEvaluationStatus
+    evaluatorUserId?: IntFieldUpdateOperationsInput | number
+    openedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    closedByUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    openedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalComment?: NullableStringFieldUpdateOperationsInput | string | null
+    totalScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    performanceLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyEvaluationQuestionCreateManySectionInput = {
+    monthlyEvaluationQuestionId?: number
+    displayOrder?: number
+    prompt: string
+    questionType?: $Enums.MonthlyEvaluationQuestionType
+    isRequired?: boolean
+    isScored?: boolean
+    minScore?: number
+    maxScore?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyEvaluationQuestionUpdateWithoutSectionInput = {
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    prompt?: StringFieldUpdateOperationsInput | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFieldUpdateOperationsInput | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isScored?: BoolFieldUpdateOperationsInput | boolean
+    minScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: WorkerMonthlyEvaluationResponseUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type MonthlyEvaluationQuestionUncheckedUpdateWithoutSectionInput = {
+    monthlyEvaluationQuestionId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    prompt?: StringFieldUpdateOperationsInput | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFieldUpdateOperationsInput | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isScored?: BoolFieldUpdateOperationsInput | boolean
+    minScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type MonthlyEvaluationQuestionUncheckedUpdateManyWithoutSectionInput = {
+    monthlyEvaluationQuestionId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    prompt?: StringFieldUpdateOperationsInput | string
+    questionType?: EnumMonthlyEvaluationQuestionTypeFieldUpdateOperationsInput | $Enums.MonthlyEvaluationQuestionType
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isScored?: BoolFieldUpdateOperationsInput | boolean
+    minScore?: IntFieldUpdateOperationsInput | number
+    maxScore?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateManyQuestionInput = {
+    workerMonthlyEvaluationResponseId?: number
+    workerMonthlyEvaluationId: number
+    score?: number | null
+    textAnswer?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpdateWithoutQuestionInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    textAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    evaluation?: WorkerMonthlyEvaluationUpdateOneRequiredWithoutResponsesNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedUpdateWithoutQuestionInput = {
+    workerMonthlyEvaluationResponseId?: IntFieldUpdateOperationsInput | number
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    textAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutQuestionInput = {
+    workerMonthlyEvaluationResponseId?: IntFieldUpdateOperationsInput | number
+    workerMonthlyEvaluationId?: IntFieldUpdateOperationsInput | number
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    textAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseCreateManyEvaluationInput = {
+    workerMonthlyEvaluationResponseId?: number
+    monthlyEvaluationQuestionId: number
+    score?: number | null
+    textAnswer?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseUpdateWithoutEvaluationInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    textAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    question?: MonthlyEvaluationQuestionUpdateOneRequiredWithoutResponsesNestedInput
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedUpdateWithoutEvaluationInput = {
+    workerMonthlyEvaluationResponseId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationQuestionId?: IntFieldUpdateOperationsInput | number
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    textAnswer?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerMonthlyEvaluationResponseUncheckedUpdateManyWithoutEvaluationInput = {
+    workerMonthlyEvaluationResponseId?: IntFieldUpdateOperationsInput | number
+    monthlyEvaluationQuestionId?: IntFieldUpdateOperationsInput | number
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    textAnswer?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
