@@ -18,8 +18,10 @@ import {
 } from './constants/worker-monthly-evaluation.constants';
 import { CreateMonthlyEvaluationTemplateDto } from './dto/create-monthly-evaluation-template.dto';
 import { CreateWorkerMonthlyEvaluationDto } from './dto/create-worker-monthly-evaluation.dto';
+import { ListWorkerMonthlyEvaluationPeriodDto } from './dto/list-worker-monthly-evaluation-period.dto';
 import { ListWorkerMonthlyEvaluationDto } from './dto/list-worker-monthly-evaluation.dto';
 import { UpdateWorkerMonthlyEvaluationResponsesDto } from './dto/update-worker-monthly-evaluation-responses.dto';
+import { WorkerMonthlyEvaluationPeriodDto } from './dto/worker-monthly-evaluation-period.dto';
 import { WorkerMonthlyEvaluationService } from './worker-monthly-evaluation.service';
 
 @Controller('worker-monthly-evaluation')
@@ -50,6 +52,19 @@ export class WorkerMonthlyEvaluationController {
     return this.workerMonthlyEvaluationService.listTemplates();
   }
 
+  @Patch('template/:templateId')
+  updateTemplate(
+    @Param('templateId', ParseIntPipe) templateId: number,
+    @Body() dto: CreateMonthlyEvaluationTemplateDto,
+    @GetUser('userId') userId: number,
+  ) {
+    return this.workerMonthlyEvaluationService.updateTemplate(
+      templateId,
+      dto,
+      Number(userId),
+    );
+  }
+
   @Get('template/:templateId')
   findTemplate(@Param('templateId', ParseIntPipe) templateId: number) {
     return this.workerMonthlyEvaluationService.findTemplate(templateId);
@@ -73,6 +88,48 @@ export class WorkerMonthlyEvaluationController {
   ) {
     return this.workerMonthlyEvaluationService.createEvaluation(
       dto,
+      Number(userId),
+    );
+  }
+
+  @Get('period')
+  listEvaluationPeriods(
+    @Query() filters: ListWorkerMonthlyEvaluationPeriodDto,
+  ) {
+    return this.workerMonthlyEvaluationService.listEvaluationPeriods(filters);
+  }
+
+  @Get('period/detail')
+  findEvaluationPeriodDetail(
+    @Query() period: WorkerMonthlyEvaluationPeriodDto,
+  ) {
+    return this.workerMonthlyEvaluationService.findEvaluationPeriodDetail(
+      period,
+    );
+  }
+
+  @Patch('period/open')
+  @UserTypes(...MONTHLY_EVALUATION_STATUS_MANAGEMENT_USER_TYPES)
+  openEvaluationPeriod(
+    @Body() period: WorkerMonthlyEvaluationPeriodDto,
+    @GetUser('userId') userId: number,
+  ) {
+    return this.workerMonthlyEvaluationService.setEvaluationPeriodStatus(
+      period,
+      MonthlyEvaluationStatus.open,
+      Number(userId),
+    );
+  }
+
+  @Patch('period/close')
+  @UserTypes(...MONTHLY_EVALUATION_STATUS_MANAGEMENT_USER_TYPES)
+  closeEvaluationPeriod(
+    @Body() period: WorkerMonthlyEvaluationPeriodDto,
+    @GetUser('userId') userId: number,
+  ) {
+    return this.workerMonthlyEvaluationService.setEvaluationPeriodStatus(
+      period,
+      MonthlyEvaluationStatus.closed,
       Number(userId),
     );
   }

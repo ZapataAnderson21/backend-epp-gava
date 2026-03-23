@@ -22,6 +22,8 @@ import {
 } from './dto/create-worker-monthly-evaluation.dto';
 import { UpdateWorkerMonthlyEvaluationResponsesDto } from './dto/update-worker-monthly-evaluation-responses.dto';
 import { ListWorkerMonthlyEvaluationDto } from './dto/list-worker-monthly-evaluation.dto';
+import { ListWorkerMonthlyEvaluationPeriodDto } from './dto/list-worker-monthly-evaluation-period.dto';
+import { WorkerMonthlyEvaluationPeriodDto } from './dto/worker-monthly-evaluation-period.dto';
 import {
   PERFORMANCE_LABELS,
   SCORE_MAX,
@@ -36,9 +38,33 @@ type QuestionSnapshot = {
   maxScore: number;
 };
 
+type EvaluationPeriodKpis = {
+  averageScore: number | null;
+  highestScore: number | null;
+  lowestScore: number | null;
+};
+
+type EvaluationPeriodSummary = {
+  year: number;
+  month: number;
+  sequence: number;
+  status: MonthlyEvaluationStatus;
+  totalWorkers: number;
+  evaluatedWorkers: number;
+  pendingWorkers: number;
+  evaluationsCount: number;
+  averageScore: number | null;
+  highestScore: number | null;
+  lowestScore: number | null;
+  monthlyEvaluationTemplateVersionId: number | null;
+  monthlyEvaluationTemplateId: number | null;
+  templateName: string | null;
+};
+
 @Injectable()
 export class WorkerMonthlyEvaluationService {
   private readonly logger = new Logger('WorkerMonthlyEvaluationService');
+  private readonly defaultSequence = 1;
 
   constructor(private readonly prismaService: PrismaService) {}
 
@@ -150,6 +176,123 @@ export class WorkerMonthlyEvaluationService {
       statusCode: HttpStatus.OK,
       message: 'Plantillas recuperadas con exito.',
       data: templates,
+    };
+  }
+
+  async updateTemplate(
+    templateId: number,
+    dto: CreateMonthlyEvaluationTemplateDto,
+    currentUserId: number,
+  ) {
+    const template =
+      await this.prismaService.monthlyEvaluationTemplate.findFirst({
+        where: {
+          monthlyEvaluationTemplateId: templateId,
+          deletedAt: null,
+        },
+        include: {
+          versions: {
+            orderBy: {
+              versionNumber: 'desc',
+            },
+            take: 1,
+          },
+        },
+      });
+
+    if (!template) {
+      throw new NotFoundException('No se encontro la plantilla solicitada.');
+    }
+
+    const normalizedSections = dto.sections.map((section, sectionIndex) => ({
+      ...section,
+      displayOrder: sectionIndex,
+      questions: section.questions.map((question, questionIndex) =>
+        this.normalizeQuestion(question, questionIndex),
+      ),
+    }));
+
+    const maxScore = this.calculateMaxScore(
+      normalizedSections.flatMap((section) => section.questions),
+    );
+    this.validateThresholds(
+      dto.observedMaxScore,
+      dto.regularMaxScore,
+      maxScore,
+    );
+
+    const currentVersionNumber = template.versions[0]?.versionNumber ?? 0;
+
+    const updated = await this.prismaService.$transaction(async (tx) => {
+      await tx.monthlyEvaluationTemplate.update({
+        where: { monthlyEvaluationTemplateId: templateId },
+        data: {
+          name: dto.name.trim(),
+          description: dto.description?.trim(),
+          isActive: true,
+          createdByUserId: currentUserId,
+        },
+      });
+
+      await tx.monthlyEvaluationTemplateVersion.create({
+        data: {
+          monthlyEvaluationTemplateId: templateId,
+          versionNumber: currentVersionNumber + 1,
+          title: dto.name.trim(),
+          description: dto.description?.trim(),
+          observedMaxScore: dto.observedMaxScore,
+          regularMaxScore: dto.regularMaxScore,
+          sections: {
+            create: normalizedSections.map((section) => ({
+              title: section.title.trim(),
+              displayOrder: section.displayOrder,
+              questions: {
+                create: section.questions.map((question) => ({
+                  displayOrder: question.displayOrder,
+                  prompt: question.prompt,
+                  questionType: question.questionType,
+                  isRequired: question.isRequired,
+                  isScored: question.isScored,
+                  minScore: question.minScore,
+                  maxScore: question.maxScore,
+                  metadata: question.metadata as
+                    | Prisma.InputJsonValue
+                    | undefined,
+                })),
+              },
+            })),
+          },
+        },
+      });
+
+      return tx.monthlyEvaluationTemplate.findFirst({
+        where: {
+          monthlyEvaluationTemplateId: templateId,
+          deletedAt: null,
+        },
+        include: {
+          versions: {
+            orderBy: { versionNumber: 'desc' },
+            take: 1,
+            include: {
+              sections: {
+                orderBy: { displayOrder: 'asc' },
+                include: {
+                  questions: {
+                    orderBy: { displayOrder: 'asc' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Plantilla actualizada con exito.',
+      data: updated,
     };
   }
 
@@ -310,7 +453,29 @@ export class WorkerMonthlyEvaluationService {
       );
     }
 
-    const sequence = dto.sequence ?? 1;
+    const sequence = this.defaultSequence;
+
+    const periodTemplate =
+      await this.prismaService.workerMonthlyEvaluation.findFirst({
+        where: {
+          year: dto.year,
+          month: dto.month,
+          sequence,
+        },
+        select: {
+          monthlyEvaluationTemplateVersionId: true,
+        },
+      });
+
+    if (
+      periodTemplate &&
+      periodTemplate.monthlyEvaluationTemplateVersionId !==
+        dto.monthlyEvaluationTemplateVersionId
+    ) {
+      throw new ConflictException(
+        'El periodo mensual ya tiene una plantilla asignada. Debes usar la misma plantilla para todos los trabajadores.',
+      );
+    }
 
     const existing =
       await this.prismaService.workerMonthlyEvaluation.findUnique({
@@ -326,7 +491,7 @@ export class WorkerMonthlyEvaluationService {
 
     if (existing) {
       throw new ConflictException(
-        'Ya existe una evaluacion para ese trabajador, periodo y secuencia.',
+        'Ya existe una evaluacion para ese trabajador en este periodo mensual.',
       );
     }
 
@@ -419,6 +584,337 @@ export class WorkerMonthlyEvaluationService {
       statusCode: HttpStatus.CREATED,
       message: 'Evaluacion mensual creada con exito.',
       data: this.formatEvaluationOutput(createdEvaluation),
+    };
+  }
+
+  async listEvaluationPeriods(filters: ListWorkerMonthlyEvaluationPeriodDto) {
+    const sequence = this.defaultSequence;
+
+    const [totalWorkers, evaluations] = await this.prismaService.$transaction([
+      this.prismaService.worker.count({
+        where: { deletedAt: null },
+      }),
+      this.prismaService.workerMonthlyEvaluation.findMany({
+        where: {
+          month: filters.month,
+          year: filters.year,
+          sequence,
+        },
+        orderBy: [
+          { year: 'desc' },
+          { month: 'desc' },
+          { sequence: 'desc' },
+          { updatedAt: 'desc' },
+        ],
+        select: {
+          workerMonthlyEvaluationId: true,
+          workerId: true,
+          year: true,
+          month: true,
+          sequence: true,
+          status: true,
+          totalScore: true,
+          updatedAt: true,
+          monthlyEvaluationTemplateVersionId: true,
+          templateVersion: {
+            select: {
+              template: {
+                select: {
+                  monthlyEvaluationTemplateId: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+
+    const grouped = new Map<
+      string,
+      {
+        year: number;
+        month: number;
+        sequence: number;
+        evaluations: typeof evaluations;
+      }
+    >();
+
+    for (const evaluation of evaluations) {
+      const key = `${evaluation.year}-${evaluation.month}-${evaluation.sequence}`;
+      const current = grouped.get(key);
+
+      if (current) {
+        current.evaluations.push(evaluation);
+      } else {
+        grouped.set(key, {
+          year: evaluation.year,
+          month: evaluation.month,
+          sequence: evaluation.sequence,
+          evaluations: [evaluation],
+        });
+      }
+    }
+
+    const data: EvaluationPeriodSummary[] = Array.from(grouped.values())
+      .map((group) => {
+        const kpis = this.computePeriodKpis(group.evaluations);
+        const latestEvaluation = [...group.evaluations].sort(
+          (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime(),
+        )[0];
+        const evaluatedWorkers = new Set(
+          group.evaluations.map((evaluation) => evaluation.workerId),
+        ).size;
+
+        return {
+          year: group.year,
+          month: group.month,
+          sequence: group.sequence,
+          status: this.resolvePeriodStatus(group.evaluations),
+          totalWorkers,
+          evaluatedWorkers,
+          pendingWorkers: Math.max(totalWorkers - evaluatedWorkers, 0),
+          evaluationsCount: group.evaluations.length,
+          averageScore: kpis.averageScore,
+          highestScore: kpis.highestScore,
+          lowestScore: kpis.lowestScore,
+          monthlyEvaluationTemplateVersionId:
+            latestEvaluation?.monthlyEvaluationTemplateVersionId ?? null,
+          monthlyEvaluationTemplateId:
+            latestEvaluation?.templateVersion?.template
+              ?.monthlyEvaluationTemplateId ?? null,
+          templateName: latestEvaluation?.templateVersion?.template?.name ?? null,
+        };
+      })
+      .sort((a, b) => {
+        if (a.year !== b.year) return b.year - a.year;
+        if (a.month !== b.month) return b.month - a.month;
+        return b.sequence - a.sequence;
+      });
+
+    if (
+      data.length === 0 &&
+      filters.year &&
+      filters.month &&
+      totalWorkers > 0
+    ) {
+      data.push({
+        year: filters.year,
+        month: filters.month,
+        sequence,
+        status: MonthlyEvaluationStatus.open,
+        totalWorkers,
+        evaluatedWorkers: 0,
+        pendingWorkers: totalWorkers,
+        evaluationsCount: 0,
+        averageScore: null,
+        highestScore: null,
+        lowestScore: null,
+        monthlyEvaluationTemplateVersionId: null,
+        monthlyEvaluationTemplateId: null,
+        templateName: null,
+      });
+    }
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Periodos de evaluacion recuperados con exito.',
+      data,
+    };
+  }
+
+  async findEvaluationPeriodDetail(period: WorkerMonthlyEvaluationPeriodDto) {
+    const sequence = this.defaultSequence;
+
+    const [workers, evaluations] = await this.prismaService.$transaction([
+      this.prismaService.worker.findMany({
+        where: { deletedAt: null },
+        orderBy: { fullName: 'asc' },
+        select: {
+          workerId: true,
+          fullName: true,
+          workerType: true,
+        },
+      }),
+      this.prismaService.workerMonthlyEvaluation.findMany({
+        where: {
+          year: period.year,
+          month: period.month,
+          sequence,
+        },
+        orderBy: [{ updatedAt: 'desc' }, { workerMonthlyEvaluationId: 'desc' }],
+        select: {
+          workerMonthlyEvaluationId: true,
+          workerId: true,
+          status: true,
+          totalScore: true,
+          maxScore: true,
+          performanceLabel: true,
+          updatedAt: true,
+          monthlyEvaluationTemplateVersionId: true,
+          templateVersion: {
+            select: {
+              template: {
+                select: {
+                  monthlyEvaluationTemplateId: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+
+    const evaluationsByWorker = new Map(
+      evaluations.map((evaluation) => [evaluation.workerId, evaluation]),
+    );
+    const kpis = this.computePeriodKpis(evaluations);
+    const status = this.resolvePeriodStatus(evaluations);
+
+    const workersData = workers.map((worker) => {
+      const evaluation = evaluationsByWorker.get(worker.workerId);
+      return {
+        workerId: worker.workerId,
+        fullName: worker.fullName,
+        workerType: worker.workerType,
+        workerMonthlyEvaluationId: evaluation?.workerMonthlyEvaluationId ?? null,
+        status: evaluation?.status ?? null,
+        totalScore: evaluation?.totalScore ?? null,
+        maxScore: evaluation?.maxScore ?? null,
+        performanceLabel: evaluation?.performanceLabel ?? null,
+        evaluated: Boolean(evaluation),
+      };
+    });
+
+    let templateSuggestion:
+      | {
+          monthlyEvaluationTemplateVersionId: number;
+          monthlyEvaluationTemplateId: number;
+          templateName: string;
+        }
+      | null = null;
+
+    const latestEvaluation = evaluations[0];
+    if (
+      latestEvaluation?.monthlyEvaluationTemplateVersionId &&
+      latestEvaluation.templateVersion?.template?.monthlyEvaluationTemplateId &&
+      latestEvaluation.templateVersion.template.name
+    ) {
+      templateSuggestion = {
+        monthlyEvaluationTemplateVersionId:
+          latestEvaluation.monthlyEvaluationTemplateVersionId,
+        monthlyEvaluationTemplateId:
+          latestEvaluation.templateVersion.template.monthlyEvaluationTemplateId,
+        templateName: latestEvaluation.templateVersion.template.name,
+      };
+    } else {
+      const template = await this.prismaService.monthlyEvaluationTemplate.findFirst({
+        where: {
+          deletedAt: null,
+          isActive: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          versions: {
+            orderBy: { versionNumber: 'desc' },
+            take: 1,
+          },
+        },
+      });
+
+      const version = template?.versions?.[0];
+      if (template && version) {
+        templateSuggestion = {
+          monthlyEvaluationTemplateVersionId:
+            version.monthlyEvaluationTemplateVersionId,
+          monthlyEvaluationTemplateId: template.monthlyEvaluationTemplateId,
+          templateName: template.name,
+        };
+      }
+    }
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Detalle de periodo de evaluacion recuperado con exito.',
+      data: {
+        year: period.year,
+        month: period.month,
+        sequence,
+        status,
+        kpis: {
+          averageScore: kpis.averageScore,
+          highestScore: kpis.highestScore,
+          lowestScore: kpis.lowestScore,
+          totalWorkers: workers.length,
+          evaluatedWorkers: evaluations.length,
+          pendingWorkers: Math.max(workers.length - evaluations.length, 0),
+        },
+        templateSuggestion,
+        workers: workersData,
+      },
+    };
+  }
+
+  async setEvaluationPeriodStatus(
+    period: WorkerMonthlyEvaluationPeriodDto,
+    status: MonthlyEvaluationStatus,
+    currentUserId: number,
+  ) {
+    const sequence = this.defaultSequence;
+
+    const existingCount = await this.prismaService.workerMonthlyEvaluation.count({
+      where: {
+        year: period.year,
+        month: period.month,
+        sequence,
+      },
+    });
+
+    if (!existingCount) {
+      throw new NotFoundException(
+        'No hay evaluaciones creadas para el periodo seleccionado.',
+      );
+    }
+
+    const now = new Date();
+    const updateResult = await this.prismaService.workerMonthlyEvaluation.updateMany({
+      where: {
+        year: period.year,
+        month: period.month,
+        sequence,
+      },
+      data:
+        status === MonthlyEvaluationStatus.open
+          ? {
+              status,
+              openedByUserId: currentUserId,
+              openedAt: now,
+              closedByUserId: null,
+              closedAt: null,
+            }
+          : {
+              status,
+              closedByUserId: currentUserId,
+              closedAt: now,
+            },
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message:
+        status === MonthlyEvaluationStatus.open
+          ? 'Periodo de evaluacion abierto con exito.'
+          : 'Periodo de evaluacion cerrado con exito.',
+      data: {
+        year: period.year,
+        month: period.month,
+        sequence,
+        status,
+        affectedEvaluations: updateResult.count,
+      },
     };
   }
 
@@ -623,6 +1119,44 @@ export class WorkerMonthlyEvaluationService {
           : 'Evaluacion cerrada con exito.',
       data: this.formatEvaluationOutput(updated),
     };
+  }
+
+  private computePeriodKpis(
+    evaluations: Array<{ totalScore: number | null }>,
+  ): EvaluationPeriodKpis {
+    if (!evaluations.length) {
+      return {
+        averageScore: null,
+        highestScore: null,
+        lowestScore: null,
+      };
+    }
+
+    const scores = evaluations.map((evaluation) => evaluation.totalScore ?? 0);
+    const total = scores.reduce((acc, score) => acc + score, 0);
+    const averageScore = Number((total / scores.length).toFixed(2));
+    const highestScore = Math.max(...scores);
+    const lowestScore = Math.min(...scores);
+
+    return {
+      averageScore,
+      highestScore,
+      lowestScore,
+    };
+  }
+
+  private resolvePeriodStatus(
+    evaluations: Array<{ status: MonthlyEvaluationStatus }>,
+  ): MonthlyEvaluationStatus {
+    if (!evaluations.length) {
+      return MonthlyEvaluationStatus.open;
+    }
+
+    return evaluations.some(
+      (evaluation) => evaluation.status === MonthlyEvaluationStatus.open,
+    )
+      ? MonthlyEvaluationStatus.open
+      : MonthlyEvaluationStatus.closed;
   }
 
   private normalizeQuestion(
