@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsOptional, IsPositive, IsString } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 export class CreateRequestWorkerDto {
   @ApiProperty({ example: 100 })
@@ -14,18 +20,18 @@ export class CreateRequestWorkerDto {
   @IsOptional()
   shoeSize?: string;
 
-  @ApiProperty({ example: 'M' }) 
+  @ApiProperty({ example: 'M' })
   @IsString()
   @IsOptional()
   pantsSize?: string;
 
-  @ApiProperty({ example: 'L' }) 
+  @ApiProperty({ example: 'L' })
   @IsString()
   @IsOptional()
   shirtSize?: string;
 
-  @ApiProperty({ example: 55 })  
-  @Type(() => Number) 
+  @ApiProperty({ example: 55 })
+  @Type(() => Number)
   @IsInt()
   @IsPositive()
   workerId!: number;

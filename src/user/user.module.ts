@@ -9,18 +9,31 @@ import { UserTypeService } from 'src/user_type/user_type.service';
 import { UserUserTypeService } from 'src/user_user_type/user_user_type.service';
 import { MailService } from 'src/mail/mail.service';
 import { PdfService } from 'src/pdf/pdf.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { RateLimitGuard } from 'src/guards/rate-limit.guard';
 
 @Module({
   controllers: [UserController],
-  providers: [UserService, UserTypeService, 
-              UserUserTypeService, MailService,
-              PdfService, JwtStrategy],
+  providers: [
+    UserService,
+    UserTypeService,
+    UserUserTypeService,
+    MailService,
+    PdfService,
+    JwtStrategy,
+    RateLimitGuard,
+  ],
   imports: [
     PrismaModule,
-    JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '3h' },
-    })
+    ConfigModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET') || jwtConstants.secret,
+        signOptions: { expiresIn: '3h' },
+      }),
+    }),
   ],
 })
 export class UserModule {}

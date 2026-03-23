@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Logger, Param, ParseIntPipe, Patch, Post, Query, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { QuotationStatus } from './enum';
 import { QuotationService } from './quotation.service';
 import { CreateQuotationDto } from './dto/create-quotation.dto';
@@ -18,7 +29,9 @@ export class QuotationController {
 
   @Post()
   create(@Body() createQuotationDto: CreateQuotationDto) {
-    this.logger.log(`Creating quotation: ${JSON.stringify(createQuotationDto)}`);
+    this.logger.log(
+      `Creating quotation: ${JSON.stringify(createQuotationDto)}`,
+    );
     return this.quotationService.create(createQuotationDto);
   }
 
@@ -37,10 +50,14 @@ export class QuotationController {
     @Res() res: Response,
   ) {
     this.logger.log(`Generating PDF for quotation with ID: ${id}`);
-    const { outputPath, fileName } = await this.pdfService.generateQuotationPdf(id);
+    const { outputPath, fileName } =
+      await this.pdfService.generateQuotationPdf(id);
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${fileName || `cotizacion-${id}.pdf`}"`);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${fileName || `cotizacion-${id}.pdf`}"`,
+    );
     return createReadStream(outputPath).pipe(res);
   }
 

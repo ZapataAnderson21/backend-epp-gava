@@ -16,10 +16,9 @@ export class CategoryResourceService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
-  
   async create(createDto: CreateCategoryResourceDto) {
     this.logger.log(
-      `Creating categoryResource with: ${JSON.stringify(createDto)}`
+      `Creating categoryResource with: ${JSON.stringify(createDto)}`,
     );
 
     // Validar duplicado: mismo padre + mismo nombre (case-insensitive)
@@ -33,7 +32,7 @@ export class CategoryResourceService {
 
     if (exists) {
       this.logger.warn(
-        `Duplicate category under same parent. name="${createDto.name}", parentId=${createDto.parentCategoryId ?? null}`
+        `Duplicate category under same parent. name="${createDto.name}", parentId=${createDto.parentCategoryId ?? null}`,
       );
       throw new ConflictException({
         statusCode: HttpStatus.CONFLICT,
@@ -55,14 +54,15 @@ export class CategoryResourceService {
       });
     }
 
-    this.logger.log(`CategoryResource created id=${category.categoryResourceId}`);
+    this.logger.log(
+      `CategoryResource created id=${category.categoryResourceId}`,
+    );
     return {
       statusCode: HttpStatus.CREATED,
       message: 'Categoría creada exitosamente.',
       data: category,
     };
   }
-  
 
   async findAll() {
     this.logger.log('Fetching all categoryResources');
@@ -70,7 +70,7 @@ export class CategoryResourceService {
       orderBy: [{ parentCategoryId: 'asc' }, { name: 'asc' }],
     });
 
-    if(!list || list.length === 0){
+    if (!list || list.length === 0) {
       return {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'No se han encontrado categorías.',
@@ -84,7 +84,6 @@ export class CategoryResourceService {
       data: list,
     };
   }
-  
 
   async findOne(categoryResourceId: number) {
     this.logger.log(`Fetching categoryResource id=${categoryResourceId}`);
@@ -108,7 +107,6 @@ export class CategoryResourceService {
       data: category,
     };
   }
-
 
   async update(
     categoryResourceId: number,
@@ -135,9 +133,11 @@ export class CategoryResourceService {
     // Si cambia name o cambia parent, validar duplicado bajo el (nuevo) padre
     if (
       (updateDto.name &&
-        updateDto.name.trim().toLowerCase() !== current.name.trim().toLowerCase()) ||
+        updateDto.name.trim().toLowerCase() !==
+          current.name.trim().toLowerCase()) ||
       (updateDto.parentCategoryId !== undefined &&
-        (updateDto.parentCategoryId ?? null) !== (current.parentCategoryId ?? null))
+        (updateDto.parentCategoryId ?? null) !==
+          (current.parentCategoryId ?? null))
     ) {
       const duplicate = await this.prismaService.categoryResource.findFirst({
         where: {
@@ -150,7 +150,7 @@ export class CategoryResourceService {
 
       if (duplicate) {
         this.logger.warn(
-          `Duplicate on update. name="${nextName}", parentId=${nextParentId ?? null}, dupId=${duplicate.categoryResourceId}`
+          `Duplicate on update. name="${nextName}", parentId=${nextParentId ?? null}, dupId=${duplicate.categoryResourceId}`,
         );
         throw new ConflictException({
           statusCode: HttpStatus.CONFLICT,

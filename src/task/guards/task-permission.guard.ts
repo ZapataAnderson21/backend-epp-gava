@@ -9,10 +9,16 @@ import { Reflector } from '@nestjs/core';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 // Tipos de operación que requieren diferentes permisos
-export type TaskOperation = 'update-status' | 'delete' | 'assign' | 'unassign' | 'update';
+export type TaskOperation =
+  | 'update-status'
+  | 'delete'
+  | 'assign'
+  | 'unassign'
+  | 'update';
 
 export const TASK_OPERATION_KEY = 'taskOperation';
-export const TaskOperation = (operation: TaskOperation) =>
+export const TaskOperation =
+  (operation: TaskOperation) =>
   (target: any, key: string, descriptor: PropertyDescriptor) => {
     Reflect.defineMetadata(TASK_OPERATION_KEY, operation, descriptor.value);
     return descriptor;

@@ -73,7 +73,7 @@ export class QuotationService {
     });
 
     const costDirectAmount = Number(
-      items.reduce((sum, item) => sum + item.lineTotal, 0).toFixed(2)
+      items.reduce((sum, item) => sum + item.lineTotal, 0).toFixed(2),
     );
     const igvRate = 0.18;
     const igvAmount = Number((costDirectAmount * igvRate).toFixed(2));
@@ -134,7 +134,7 @@ export class QuotationService {
   }
 
   async findAll(filters?: { clientId?: string; status?: QuotationStatus }) {
-    this.logger.log('Fetching all quotations'); 
+    this.logger.log('Fetching all quotations');
     const where: { clientId?: number; status?: QuotationStatus } = {};
 
     if (filters?.clientId) {
@@ -208,7 +208,7 @@ export class QuotationService {
 
   async update(quotationId: number, dto: UpdateQuotationDto) {
     this.logger.log(
-      `Updating quotation id=${quotationId} payload=${JSON.stringify(dto)}`
+      `Updating quotation id=${quotationId} payload=${JSON.stringify(dto)}`,
     );
 
     const existing = await this.prisma.quotation.findUnique({
@@ -245,7 +245,7 @@ export class QuotationService {
         }>;
       };
     } = {};
-    
+
     if (dto.serviceDescription !== undefined) {
       data.serviceDescription = dto.serviceDescription;
     }
@@ -298,7 +298,7 @@ export class QuotationService {
       });
 
       const costDirectAmount = Number(
-        items.reduce((sum, item) => sum + item.lineTotal, 0).toFixed(2)
+        items.reduce((sum, item) => sum + item.lineTotal, 0).toFixed(2),
       );
       const igvRate = 0.18;
       const igvAmount = Number((costDirectAmount * igvRate).toFixed(2));

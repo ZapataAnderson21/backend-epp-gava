@@ -1,9 +1,18 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
 
 export class CreateQuotationItemDto {
-  @ApiProperty({ example: 'Pintado de canaletas con pintura trafico color negro - amarillo' })
+  @ApiProperty({
+    example: 'Pintado de canaletas con pintura trafico color negro - amarillo',
+  })
   @IsString()
   @IsNotEmpty({ message: 'La descripcion es obligatoria.' })
   description!: string;

@@ -7,6 +7,8 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   @ApiPropertyOptional({ example: 'active' })
   @IsOptional()
-  @IsEnum(ProjectStatus, { message: `Estado de proyecto inválido. Los valores permitidos son: ${Object.values(ProjectStatus).join(', ')}.` })
+  @IsEnum(ProjectStatus, {
+    message: `Estado de proyecto inválido. Los valores permitidos son: ${Object.values(ProjectStatus).join(', ')}.`,
+  })
   status?: ProjectStatus;
 }

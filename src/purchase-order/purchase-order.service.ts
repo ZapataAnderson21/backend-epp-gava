@@ -1,4 +1,10 @@
-import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -8,8 +14,7 @@ import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class PurchaseOrderService {
-
-  private readonly logger = new Logger("PurchaseOrderService");
+  private readonly logger = new Logger('PurchaseOrderService');
 
   constructor(
     private readonly prisma: PrismaService,
@@ -30,10 +35,13 @@ export class PurchaseOrderService {
       throw new BadRequestException('No se pudo crear la orden de compra. ');
     }
 
-    const code = await this.formatedCode(newPurchaseOrder.purchaseOrderId, newPurchaseOrder.code);
-  
+    const code = await this.formatedCode(
+      newPurchaseOrder.purchaseOrderId,
+      newPurchaseOrder.code,
+    );
+
     this.logger.log(`Generated code for purchase order: ${code}`);
-    
+
     // Actualizar directamente con Prisma para evitar doble formateo en this.update()
     const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
       where: { purchaseOrderId: newPurchaseOrder.purchaseOrderId },
@@ -44,8 +52,12 @@ export class PurchaseOrderService {
     });
 
     if (!updatedPurchaseOrder) {
-      this.logger.error(`Failed to update purchase order with id: ${newPurchaseOrder.purchaseOrderId}`);
-      throw new BadRequestException('No se pudo actualizar la orden de compra con el código generado.');
+      this.logger.error(
+        `Failed to update purchase order with id: ${newPurchaseOrder.purchaseOrderId}`,
+      );
+      throw new BadRequestException(
+        'No se pudo actualizar la orden de compra con el código generado.',
+      );
     }
 
     // Notificar a GERENTE sobre nueva orden de compra pendiente
@@ -56,7 +68,9 @@ export class PurchaseOrderService {
       newPurchaseOrder.projectId,
     );
 
-    this.logger.log(`Purchase order created successfully with id: ${updatedPurchaseOrder.purchaseOrderId}`);
+    this.logger.log(
+      `Purchase order created successfully with id: ${updatedPurchaseOrder.purchaseOrderId}`,
+    );
     return {
       statusCode: HttpStatus.CREATED,
       message: 'Orden de compra creada exitosamente.',
@@ -80,7 +94,11 @@ export class PurchaseOrderService {
 
     let sequenceToUse: number;
 
-    if (existingSequence && Number.isInteger(existingSequence) && existingSequence > 0) {
+    if (
+      existingSequence &&
+      Number.isInteger(existingSequence) &&
+      existingSequence > 0
+    ) {
       sequenceToUse = existingSequence;
     } else {
       const purchaseOrders = await this.prisma.purchaseOrder.findMany({
@@ -107,9 +125,10 @@ export class PurchaseOrderService {
     return formattedCode;
   }
 
-  
   async findAllByProjectId(projectId: number) {
-    this.logger.log(`Fetching all purchase orders for project id: ${projectId}`);
+    this.logger.log(
+      `Fetching all purchase orders for project id: ${projectId}`,
+    );
     const purchaseOrders = await this.prisma.purchaseOrder.findMany({
       where: { projectId },
       orderBy: { createdAt: 'desc' },
@@ -121,11 +140,16 @@ export class PurchaseOrderService {
 
     if (!purchaseOrders || purchaseOrders.length === 0) {
       this.logger.error('Failed to fetch purchase orders');
-      throw new NotFoundException('No se encontraron órdenes de compra para este proyecto.');
+      throw new NotFoundException(
+        'No se encontraron órdenes de compra para este proyecto.',
+      );
     }
 
-    const processedPurchaseOrder = purchaseOrders.map(po => {
-      const status = PurchaseOrderStatusLabelEs[po.status as keyof typeof PurchaseOrderStatusLabelEs] || 'Desconocido';
+    const processedPurchaseOrder = purchaseOrders.map((po) => {
+      const status =
+        PurchaseOrderStatusLabelEs[
+          po.status as keyof typeof PurchaseOrderStatusLabelEs
+        ] || 'Desconocido';
       return { ...po, status };
     });
 
@@ -133,10 +157,9 @@ export class PurchaseOrderService {
     return {
       statusCode: HttpStatus.OK,
       message: 'Órdenes de compra obtenidas exitosamente.',
-      data: processedPurchaseOrder
+      data: processedPurchaseOrder,
     };
   }
-
 
   async findOne(id: number) {
     this.logger.log(`Fetching purchase order with id: ${id}`);
@@ -146,10 +169,7 @@ export class PurchaseOrderService {
         project: true,
         supplier: true,
         resources: {
-          orderBy: [
-            { orderNumber: 'asc' },
-            { createdAt: 'desc' },
-          ],
+          orderBy: [{ orderNumber: 'asc' }, { createdAt: 'desc' }],
           include: {
             resource: true,
           },
@@ -168,23 +188,28 @@ export class PurchaseOrderService {
       ...purchaseOrder,
       code: arrayCode[1],
       codeComplete: purchaseOrder.code,
-      status: PurchaseOrderStatusLabelEs[purchaseOrder.status as keyof typeof PurchaseOrderStatusLabelEs] || 'Desconocido'
+      status:
+        PurchaseOrderStatusLabelEs[
+          purchaseOrder.status as keyof typeof PurchaseOrderStatusLabelEs
+        ] || 'Desconocido',
     };
 
     this.logger.log(`Purchase order with id: ${id} found`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Orden de compra obtenida exitosamente.',
-      data: processedPurchaseOrder
+      data: processedPurchaseOrder,
     };
   }
 
   async sumAllPurchaseAmountsByProject(projectId: number) {
-    this.logger.log(`Calculating total amount of all purchase orders for project id: ${projectId}`);
+    this.logger.log(
+      `Calculating total amount of all purchase orders for project id: ${projectId}`,
+    );
     const totalPEN = await this.prisma.purchaseOrder.aggregate({
       where: {
         supplier: { currency: Currency.PEN },
-        projectId
+        projectId,
       },
       _sum: { purchaseAmount: true },
     });
@@ -192,7 +217,7 @@ export class PurchaseOrderService {
     const totalUSD = await this.prisma.purchaseOrder.aggregate({
       where: {
         supplier: { currency: Currency.USD },
-        projectId
+        projectId,
       },
       _sum: { purchaseAmount: true },
     });
@@ -200,7 +225,7 @@ export class PurchaseOrderService {
     const totalEUR = await this.prisma.purchaseOrder.aggregate({
       where: {
         supplier: { currency: Currency.EUR },
-        projectId
+        projectId,
       },
       _sum: { purchaseAmount: true },
     });
@@ -208,22 +233,24 @@ export class PurchaseOrderService {
     const data = {
       totalPEN: Number(totalPEN._sum.purchaseAmount),
       totalUSD: Number(totalUSD._sum.purchaseAmount),
-      totalEUR: Number(totalEUR._sum.purchaseAmount)
+      totalEUR: Number(totalEUR._sum.purchaseAmount),
     };
 
     return {
       statusCode: HttpStatus.OK,
       message: 'Total amounts calculated successfully.',
-      data
+      data,
     };
   }
 
   async sumAllSalesAmountsByProject(projectId: number) {
-    this.logger.log(`Calculating total amount of all purchase orders for project id: ${projectId}`);
+    this.logger.log(
+      `Calculating total amount of all purchase orders for project id: ${projectId}`,
+    );
     const totalPEN = await this.prisma.purchaseOrder.aggregate({
       where: {
         supplier: { currency: Currency.PEN },
-        projectId
+        projectId,
       },
       _sum: { saleAmount: true },
     });
@@ -231,7 +258,7 @@ export class PurchaseOrderService {
     const totalUSD = await this.prisma.purchaseOrder.aggregate({
       where: {
         supplier: { currency: Currency.USD },
-        projectId
+        projectId,
       },
       _sum: { saleAmount: true },
     });
@@ -239,25 +266,28 @@ export class PurchaseOrderService {
     const totalEUR = await this.prisma.purchaseOrder.aggregate({
       where: {
         supplier: { currency: Currency.EUR },
-        projectId
+        projectId,
       },
       _sum: { saleAmount: true },
     });
 
     const data = {
-      totalPEN : Number(totalPEN._sum.saleAmount),
-      totalUSD : Number(totalUSD._sum.saleAmount),
-      totalEUR : Number(totalEUR._sum.saleAmount)
+      totalPEN: Number(totalPEN._sum.saleAmount),
+      totalUSD: Number(totalUSD._sum.saleAmount),
+      totalEUR: Number(totalEUR._sum.saleAmount),
     };
 
     return {
       statusCode: HttpStatus.OK,
       message: 'Total amounts calculated successfully.',
-      data
+      data,
     };
   }
 
-  async update(purchaseOrderId: number, updatePurchaseOrderDto: UpdatePurchaseOrderDto) {
+  async update(
+    purchaseOrderId: number,
+    updatePurchaseOrderDto: UpdatePurchaseOrderDto,
+  ) {
     this.logger.log(`Updating purchase order with id: ${purchaseOrderId}`);
 
     // Obtener el estado anterior si hay cambio de estado
@@ -270,8 +300,11 @@ export class PurchaseOrderService {
       previousStatus = currentPO?.status || null;
     }
 
-    if(updatePurchaseOrderDto.code){
-      const code = await this.formatedCode(purchaseOrderId, updatePurchaseOrderDto.code);
+    if (updatePurchaseOrderDto.code) {
+      const code = await this.formatedCode(
+        purchaseOrderId,
+        updatePurchaseOrderDto.code,
+      );
       updatePurchaseOrderDto.code = code;
       this.logger.log(`Formatted code for purchase order: ${code}`);
     }
@@ -285,12 +318,19 @@ export class PurchaseOrderService {
     });
 
     if (!updatedPurchaseOrder) {
-      this.logger.error(`Failed to update purchase order with id: ${purchaseOrderId}`);
-      throw new BadRequestException('No se pudo actualizar la orden de compra.');
+      this.logger.error(
+        `Failed to update purchase order with id: ${purchaseOrderId}`,
+      );
+      throw new BadRequestException(
+        'No se pudo actualizar la orden de compra.',
+      );
     }
 
     // Notificar si hubo cambio de estado
-    if (updatePurchaseOrderDto.status && previousStatus !== updatePurchaseOrderDto.status) {
+    if (
+      updatePurchaseOrderDto.status &&
+      previousStatus !== updatePurchaseOrderDto.status
+    ) {
       const code = updatedPurchaseOrder.code;
 
       switch (updatePurchaseOrderDto.status) {
@@ -318,7 +358,9 @@ export class PurchaseOrderService {
       }
     }
 
-    this.logger.log(`Purchase order with id: ${purchaseOrderId} updated successfully`);
+    this.logger.log(
+      `Purchase order with id: ${purchaseOrderId} updated successfully`,
+    );
     return {
       statusCode: HttpStatus.OK,
       message: 'Orden de compra actualizada exitosamente.',
@@ -326,10 +368,9 @@ export class PurchaseOrderService {
     };
   }
 
-
   async duplicate(purchaseOrderId: number, projectId: number) {
     this.logger.log(`Duplicating purchase order with id: ${purchaseOrderId}`);
-    
+
     // Obtener la orden de compra original con sus recursos
     const originalPurchaseOrder = await this.prisma.purchaseOrder.findUnique({
       where: { purchaseOrderId },
@@ -340,7 +381,9 @@ export class PurchaseOrderService {
 
     if (!originalPurchaseOrder) {
       this.logger.error(`Purchase order with id: ${purchaseOrderId} not found`);
-      throw new NotFoundException(`No se encontró la orden de compra con id: ${purchaseOrderId}`);
+      throw new NotFoundException(
+        `No se encontró la orden de compra con id: ${purchaseOrderId}`,
+      );
     }
 
     // Verificar que el proyecto existe
@@ -351,7 +394,13 @@ export class PurchaseOrderService {
     const originalCode = arrayCode[1] || originalPurchaseOrder.code;
 
     // Crear nueva orden de compra con los mismos datos pero nuevo projectId, código y estado pending
-    const { purchaseOrderId: _, resources, createdAt, updatedAt, ...purchaseOrderData } = originalPurchaseOrder;
+    const {
+      purchaseOrderId: _,
+      resources,
+      createdAt,
+      updatedAt,
+      ...purchaseOrderData
+    } = originalPurchaseOrder;
 
     const newPurchaseOrder = await this.prisma.purchaseOrder.create({
       data: {
@@ -368,8 +417,11 @@ export class PurchaseOrderService {
     }
 
     // Generar el código formateado
-    const formattedCode = await this.formatedCode(newPurchaseOrder.purchaseOrderId, newPurchaseOrder.code);
-    
+    const formattedCode = await this.formatedCode(
+      newPurchaseOrder.purchaseOrderId,
+      newPurchaseOrder.code,
+    );
+
     // Actualizar con el código formateado
     const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
       where: { purchaseOrderId: newPurchaseOrder.purchaseOrderId },
@@ -378,17 +430,21 @@ export class PurchaseOrderService {
 
     // Duplicar los recursos asociados
     if (resources && resources.length > 0) {
-      const resourcesData = resources.map(({ resourcePurchaseOrderId, purchaseOrderId: _, ...resource }) => ({
-        ...resource,
-        purchaseOrderId: newPurchaseOrder.purchaseOrderId,
-      }));
+      const resourcesData = resources.map(
+        ({ resourcePurchaseOrderId, purchaseOrderId: _, ...resource }) => ({
+          ...resource,
+          purchaseOrderId: newPurchaseOrder.purchaseOrderId,
+        }),
+      );
 
       await this.prisma.resourcePurchaseOrder.createMany({
         data: resourcesData,
       });
     }
 
-    this.logger.log(`Purchase order duplicated successfully with id: ${newPurchaseOrder.purchaseOrderId}`);
+    this.logger.log(
+      `Purchase order duplicated successfully with id: ${newPurchaseOrder.purchaseOrderId}`,
+    );
     return {
       statusCode: HttpStatus.CREATED,
       message: 'Orden de compra duplicada exitosamente.',
@@ -408,14 +464,17 @@ export class PurchaseOrderService {
     ]);
 
     if (!deletedPurchaseOrder) {
-      this.logger.error(`Failed to remove purchase order with id: ${purchaseOrderId}`);
+      this.logger.error(
+        `Failed to remove purchase order with id: ${purchaseOrderId}`,
+      );
       throw new BadRequestException('No se pudo eliminar la orden de compra.');
     }
 
-    this.logger.log(`Purchase order with id: ${purchaseOrderId} removed successfully`);
+    this.logger.log(
+      `Purchase order with id: ${purchaseOrderId} removed successfully`,
+    );
     return deletedPurchaseOrder;
   }
-
 
   async findProject(projectId: number) {
     this.logger.log(`Fetching project with id: ${projectId}`);
@@ -427,7 +486,7 @@ export class PurchaseOrderService {
       this.logger.error(`Project with id: ${projectId} not found`);
       throw new BadRequestException(`Project with id: ${projectId} not found`);
     }
-    
+
     this.logger.log(`Project with id: ${projectId} found`);
     return project;
   }

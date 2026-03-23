@@ -1,4 +1,11 @@
-import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
@@ -116,13 +123,16 @@ export class ClientService {
 
   async update(clientId: number, updateClientDto: UpdateClientDto) {
     this.logger.log(
-      `Updating client with ID: ${clientId} - payload: ${JSON.stringify(updateClientDto)}`
+      `Updating client with ID: ${clientId} - payload: ${JSON.stringify(updateClientDto)}`,
     );
 
     const currentWrap = await this.findOne(clientId);
     const current = currentWrap.data;
 
-    if (updateClientDto.ruc && updateClientDto.ruc.trim() !== current.ruc.trim()) {
+    if (
+      updateClientDto.ruc &&
+      updateClientDto.ruc.trim() !== current.ruc.trim()
+    ) {
       const byRuc = await this.findByRuc(updateClientDto.ruc);
       if (byRuc && byRuc.clientId !== clientId) {
         throw new ConflictException({
@@ -135,7 +145,8 @@ export class ClientService {
 
     if (
       updateClientDto.email &&
-      updateClientDto.email.trim().toLowerCase() !== (current.email ?? '').trim().toLowerCase()
+      updateClientDto.email.trim().toLowerCase() !==
+        (current.email ?? '').trim().toLowerCase()
     ) {
       const byEmail = await this.findByEmail(updateClientDto.email);
       if (byEmail && byEmail.clientId !== clientId) {

@@ -162,7 +162,10 @@ export class ExcelService {
         };
 
         // Clasificar por tipo de trabajador
-        if (worker.workerType === 'technician' || worker.workerType === 'engineer') {
+        if (
+          worker.workerType === 'technician' ||
+          worker.workerType === 'engineer'
+        ) {
           technicians.push(workerRow);
         } else {
           laborers.push(workerRow);
@@ -204,8 +207,12 @@ export class ExcelService {
       weekLabel,
       laborers: this.consolidateWorkers(generalLaborers),
       technicians: this.consolidateWorkers(generalTechnicians),
-      laborersTotals: this.calculateTotals(this.consolidateWorkers(generalLaborers)),
-      techniciansTotals: this.calculateTotals(this.consolidateWorkers(generalTechnicians)),
+      laborersTotals: this.calculateTotals(
+        this.consolidateWorkers(generalLaborers),
+      ),
+      techniciansTotals: this.calculateTotals(
+        this.consolidateWorkers(generalTechnicians),
+      ),
     };
     this.createProjectSheet(workbook, 'GENERAL', generalData);
 
@@ -351,7 +358,11 @@ export class ExcelService {
         pattern: 'solid',
         fgColor: { argb: 'FF008080' },
       };
-      cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+      cell.alignment = {
+        horizontal: 'center',
+        vertical: 'middle',
+        wrapText: true,
+      };
       cell.border = {
         top: { style: 'thin' },
         left: { style: 'thin' },
@@ -385,22 +396,24 @@ export class ExcelService {
 
       rowData.forEach((value, colIndex) => {
         const cell = sheet.getCell(currentRow, colIndex + 1);
-        
+
         // Columna K (índice 10) = Total, usar fórmula SUM de días L a S (columnas D a I)
         if (colIndex === 10) {
           cell.value = { formula: `SUM(D${currentRow}:I${currentRow})` };
-        } 
+        }
         // Columna M (índice 12) = Pago semana, usar fórmula Total * Jornal/dia (K * L)
         else if (colIndex === 12) {
           cell.value = { formula: `K${currentRow}*L${currentRow}` };
         }
         // Columna P (índice 15) = Neto a depositar, usar fórmula Pago semana - AFP - Dscts (M - N - O)
         else if (colIndex === 15) {
-          cell.value = { formula: `M${currentRow}-N${currentRow}-O${currentRow}` };
+          cell.value = {
+            formula: `M${currentRow}-N${currentRow}-O${currentRow}`,
+          };
         } else {
           cell.value = value;
         }
-        
+
         cell.alignment = { horizontal: 'center', vertical: 'middle' };
         cell.border = {
           top: { style: 'thin' },
@@ -434,7 +447,9 @@ export class ExcelService {
     const dayColumns = ['D', 'E', 'F', 'G', 'H', 'I'];
     dayColumns.forEach((colLetter, idx) => {
       const cell = sheet.getCell(totalRow, 4 + idx);
-      cell.value = { formula: `SUM(${colLetter}${dataStartRow}:${colLetter}${dataEndRow})` };
+      cell.value = {
+        formula: `SUM(${colLetter}${dataStartRow}:${colLetter}${dataEndRow})`,
+      };
       cell.font = { bold: true };
       cell.alignment = { horizontal: 'center', vertical: 'middle' };
       cell.border = {
@@ -456,9 +471,14 @@ export class ExcelService {
 
     // Columna K (Total) = SUM de totales de asistencias
     const totalAttendanceCell = sheet.getCell(totalRow, 11);
-    totalAttendanceCell.value = { formula: `SUM(K${dataStartRow}:K${dataEndRow})` };
+    totalAttendanceCell.value = {
+      formula: `SUM(K${dataStartRow}:K${dataEndRow})`,
+    };
     totalAttendanceCell.font = { bold: true };
-    totalAttendanceCell.alignment = { horizontal: 'center', vertical: 'middle' };
+    totalAttendanceCell.alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
     totalAttendanceCell.border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
@@ -479,7 +499,9 @@ export class ExcelService {
     const moneyColumns = ['M', 'N', 'O', 'P'];
     moneyColumns.forEach((colLetter, idx) => {
       const cell = sheet.getCell(totalRow, 13 + idx);
-      cell.value = { formula: `SUM(${colLetter}${dataStartRow}:${colLetter}${dataEndRow})` };
+      cell.value = {
+        formula: `SUM(${colLetter}${dataStartRow}:${colLetter}${dataEndRow})`,
+      };
       cell.numFmt = '#,##0.00';
       cell.font = { bold: true };
       cell.border = {
@@ -562,15 +584,18 @@ export class ExcelService {
           const existingDay = existing.attendancesByDay[day] || 0;
           const workerDay = worker.attendancesByDay[day] || 0;
           // Si asistió en cualquier proyecto ese día, marca como 1
-          existing.attendancesByDay[day] = existingDay > 0 || workerDay > 0 ? 1 : 0;
+          existing.attendancesByDay[day] =
+            existingDay > 0 || workerDay > 0 ? 1 : 0;
         }
         // Recalcular totales basado en asistencias consolidadas
-        existing.totalAttendances = Object.values(existing.attendancesByDay).reduce((a, b) => a + b, 0);
+        existing.totalAttendances = Object.values(
+          existing.attendancesByDay,
+        ).reduce((a, b) => a + b, 0);
         existing.dominpicolDays = existing.attendancesByDay['D'] || 0;
         existing.grossAmount = existing.totalAttendances * existing.dailyWage;
         existing.netAmount = existing.grossAmount;
       } else {
-        workerMap.set(worker.workerId, { 
+        workerMap.set(worker.workerId, {
           ...worker,
           attendancesByDay: { ...worker.attendancesByDay },
         });
@@ -578,17 +603,21 @@ export class ExcelService {
     }
 
     // Ordenar alfabéticamente por nombre
-    return Array.from(workerMap.values()).sort((a, b) => 
-      a.workerName.localeCompare(b.workerName, 'es', { sensitivity: 'base' })
+    return Array.from(workerMap.values()).sort((a, b) =>
+      a.workerName.localeCompare(b.workerName, 'es', { sensitivity: 'base' }),
     );
   }
 
   /**
    * Ordena los trabajadores alfabéticamente para hojas individuales
    */
-  private sortWorkersAlphabetically(project: ProjectSheetData): ProjectSheetData {
+  private sortWorkersAlphabetically(
+    project: ProjectSheetData,
+  ): ProjectSheetData {
     const sortWorkers = (workers: WorkerData[]): WorkerData[] =>
-      [...workers].sort((a, b) => a.workerName.localeCompare(b.workerName, 'es', { sensitivity: 'base' }));
+      [...workers].sort((a, b) =>
+        a.workerName.localeCompare(b.workerName, 'es', { sensitivity: 'base' }),
+      );
 
     const laborers = sortWorkers(project.laborers);
     const technicians = sortWorkers(project.technicians);
@@ -606,9 +635,7 @@ export class ExcelService {
    * Sanitiza el nombre de la hoja (máximo 31 caracteres, sin caracteres especiales)
    */
   private sanitizeSheetName(name: string): string {
-    return name
-      .replace(/[\\/*?[\]:]/g, '')
-      .substring(0, 31);
+    return name.replace(/[\\/*?[\]:]/g, '').substring(0, 31);
   }
 
   /**
@@ -616,10 +643,28 @@ export class ExcelService {
    */
   private formatWeekLabel(startDate: Date, endDate: Date): string {
     const months = [
-      'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO',
-      'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE',
+      'ENERO',
+      'FEBRERO',
+      'MARZO',
+      'ABRIL',
+      'MAYO',
+      'JUNIO',
+      'JULIO',
+      'AGOSTO',
+      'SEPTIEMBRE',
+      'OCTUBRE',
+      'NOVIEMBRE',
+      'DICIEMBRE',
     ];
-    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const days = [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+    ];
 
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -631,5 +676,4 @@ export class ExcelService {
 
     return `${startDay} ${startNum} al ${endNum} ${month}`;
   }
-
 }

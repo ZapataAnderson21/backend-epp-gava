@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  Logger,
+} from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -7,7 +17,6 @@ import { ProjectStatus } from './enum/project-status.enum';
 
 @Controller('project')
 export class ProjectController {
-
   private readonly logger = new Logger('ProjectController');
 
   constructor(private readonly projectService: ProjectService) {}
@@ -45,14 +54,20 @@ export class ProjectController {
 
   @Patch(':id')
   @UserTypes('GERENTE', 'ADMINISTRADORA')
-  async update(@Param('id') id: number, @Body() updateProjectDto: UpdateProjectDto) {
+  async update(
+    @Param('id') id: number,
+    @Body() updateProjectDto: UpdateProjectDto,
+  ) {
     this.logger.log(`Updating project with ID: ${id}`);
     return await this.projectService.update(id, updateProjectDto);
   }
 
   @Patch(':id/status')
   @UserTypes('GERENTE', 'ADMINISTRADORA')
-  async updateStatus(@Param('id', ParseIntPipe) id: number, @Body('status') status: ProjectStatus) {
+  async updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status') status: ProjectStatus,
+  ) {
     this.logger.log(`Updating status of project with ID: ${id} to ${status}`);
     return await this.projectService.updateStatus(id, status);
   }

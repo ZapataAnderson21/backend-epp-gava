@@ -4,7 +4,6 @@ import { UpsertWeekDailyWageDto } from './dto/upsert-week-daily-wage.dto';
 
 @Injectable()
 export class DailyWageService {
-
   private readonly logger = new Logger('DailyWageService');
 
   constructor(private readonly prismaService: PrismaService) {}
@@ -14,10 +13,7 @@ export class DailyWageService {
    * - si existe registro para esa semana (validFromDate), hace UPDATE del amount
    * - si no existe, crea uno nuevo con esa semana
    */
-  async upsertForWeek(
-    weekId: number,
-    dto: UpsertWeekDailyWageDto,
-  ) {
+  async upsertForWeek(weekId: number, dto: UpsertWeekDailyWageDto) {
     this.logger.log(
       `Upserting daily wages for weekId=${weekId}, items=${JSON.stringify(dto.items)}`,
     );
@@ -57,9 +53,7 @@ export class DailyWageService {
 
     const result = await this.prismaService.$transaction(tx);
 
-    this.logger.log(
-      result
-    );
+    this.logger.log(result);
 
     return {
       message: 'Pagos diarios actualizados.',

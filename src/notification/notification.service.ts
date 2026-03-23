@@ -1,4 +1,11 @@
-import { Injectable, NotFoundException, HttpStatus, Logger, forwardRef, Inject } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  HttpStatus,
+  Logger,
+  forwardRef,
+  Inject,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateNotificationDto, NotificationType } from './dto';
@@ -15,7 +22,8 @@ export class NotificationService {
     @Inject(forwardRef(() => NotificationGateway))
     private readonly notificationGateway: NotificationGateway,
   ) {
-    this.appUrl = this.configService.get<string>('APP_URL') || 'http://localhost:5173';
+    this.appUrl =
+      this.configService.get<string>('APP_URL') || 'http://localhost:5173';
   }
 
   /**
@@ -32,7 +40,9 @@ export class NotificationService {
     const notification = await this.prismaService.notification.create({
       data: createNotificationDto,
       include: {
-        user: { select: { userId: true, name: true, lastName: true, email: true } },
+        user: {
+          select: { userId: true, name: true, lastName: true, email: true },
+        },
         project: { select: { projectId: true, name: true, code: true } },
         task: { select: { taskId: true, title: true } },
         request: { select: { requestId: true, description: true } },
@@ -41,14 +51,22 @@ export class NotificationService {
       },
     });
 
-    this.logger.log(`Notificación creada: ${notification.type} para usuario ${notification.userId}`);
+    this.logger.log(
+      `Notificación creada: ${notification.type} para usuario ${notification.userId}`,
+    );
 
     // Emitir por WebSocket en tiempo real
-    this.notificationGateway.sendNotificationToUser(notification.userId, notification);
-    
+    this.notificationGateway.sendNotificationToUser(
+      notification.userId,
+      notification,
+    );
+
     // Actualizar contador de no leídas
     const unreadResult = await this.getUnreadCount(notification.userId);
-    this.notificationGateway.sendUnreadCountToUser(notification.userId, unreadResult.data.unreadCount);
+    this.notificationGateway.sendUnreadCountToUser(
+      notification.userId,
+      unreadResult.data.unreadCount,
+    );
 
     return notification;
   }
@@ -65,7 +83,7 @@ export class NotificationService {
 
     // Obtener las notificaciones creadas para emitirlas por WebSocket
     // Emitir a cada usuario su notificación
-    const userIds = [...new Set(notifications.map(n => n.userId))];
+    const userIds = [...new Set(notifications.map((n) => n.userId))];
     for (const userId of userIds) {
       const userNotifications = await this.prismaService.notification.findMany({
         where: { userId, isRead: false },
@@ -82,12 +100,18 @@ export class NotificationService {
 
       // Emitir evento de nuevas notificaciones
       if (userNotifications.length > 0) {
-        this.notificationGateway.sendNotificationToUser(userId, userNotifications[0]);
+        this.notificationGateway.sendNotificationToUser(
+          userId,
+          userNotifications[0],
+        );
       }
 
       // Actualizar contador
       const unreadResult = await this.getUnreadCount(userId);
-      this.notificationGateway.sendUnreadCountToUser(userId, unreadResult.data.unreadCount);
+      this.notificationGateway.sendUnreadCountToUser(
+        userId,
+        unreadResult.data.unreadCount,
+      );
     }
 
     return created;
@@ -96,7 +120,10 @@ export class NotificationService {
   /**
    * Obtener notificaciones de un usuario
    */
-  async findByUser(userId: number, options?: { onlyUnread?: boolean; limit?: number }) {
+  async findByUser(
+    userId: number,
+    options?: { onlyUnread?: boolean; limit?: number },
+  ) {
     const { onlyUnread = false, limit = 50 } = options || {};
 
     const notifications = await this.prismaService.notification.findMany({
@@ -216,13 +243,13 @@ export class NotificationService {
   }
 
   // ==================== DEBUG ====================
-  
+
   /**
    * DEBUG: Obtener tipos de usuario y usuarios por tipo
    */
   async debugGetUserTypes() {
     const userTypes = await this.prismaService.userType.findMany();
-    
+
     const usersWithTypes = await this.prismaService.user.findMany({
       where: { deletedAt: null },
       select: {
@@ -231,21 +258,21 @@ export class NotificationService {
         email: true,
         userUserTypes: {
           select: {
-            userType: { select: { name: true } }
-          }
-        }
-      }
+            userType: { select: { name: true } },
+          },
+        },
+      },
     });
 
     return {
       statusCode: HttpStatus.OK,
       data: {
         userTypes,
-        users: usersWithTypes.map(u => ({
+        users: usersWithTypes.map((u) => ({
           ...u,
-          types: u.userUserTypes.map(ut => ut.userType.name)
-        }))
-      }
+          types: u.userUserTypes.map((ut) => ut.userType.name),
+        })),
+      },
     };
   }
 
@@ -265,7 +292,7 @@ export class NotificationService {
         userUserTypes: {
           some: {
             userType: {
-              name: { 
+              name: {
                 in: userTypeNames,
                 mode: 'insensitive',
               },
@@ -276,10 +303,14 @@ export class NotificationService {
       select: { userId: true },
     });
 
-    this.logger.log(`notifyByUserType: Buscando usuarios con tipos [${userTypeNames.join(', ')}]. Encontrados: ${users.length}`);
+    this.logger.log(
+      `notifyByUserType: Buscando usuarios con tipos [${userTypeNames.join(', ')}]. Encontrados: ${users.length}`,
+    );
 
     if (users.length === 0) {
-      this.logger.warn(`No se encontraron usuarios con los tipos: ${userTypeNames.join(', ')}`);
+      this.logger.warn(
+        `No se encontraron usuarios con los tipos: ${userTypeNames.join(', ')}`,
+      );
       return;
     }
 
@@ -323,7 +354,13 @@ export class NotificationService {
 
   // ----- TAREAS -----
 
-  async notifyTaskAssigned(taskId: number, userId: number, taskTitle: string, projectId: number, projectName: string) {
+  async notifyTaskAssigned(
+    taskId: number,
+    userId: number,
+    taskTitle: string,
+    projectId: number,
+    projectName: string,
+  ) {
     return this.create({
       userId,
       type: NotificationType.task_assigned,
@@ -335,7 +372,12 @@ export class NotificationService {
     });
   }
 
-  async notifyTaskUnassigned(taskId: number, userId: number, taskTitle: string, projectId: number) {
+  async notifyTaskUnassigned(
+    taskId: number,
+    userId: number,
+    taskTitle: string,
+    projectId: number,
+  ) {
     return this.create({
       userId,
       type: NotificationType.task_unassigned,
@@ -374,7 +416,12 @@ export class NotificationService {
     );
   }
 
-  async notifyTaskDueSoon(taskId: number, taskTitle: string, daysRemaining: number, projectId: number) {
+  async notifyTaskDueSoon(
+    taskId: number,
+    taskTitle: string,
+    daysRemaining: number,
+    projectId: number,
+  ) {
     return this.notifyTaskAssignees(taskId, {
       type: NotificationType.task_due_soon,
       title: 'Tarea próxima a vencer',
@@ -384,7 +431,11 @@ export class NotificationService {
     });
   }
 
-  async notifyTaskOverdue(taskId: number, taskTitle: string, projectId: number) {
+  async notifyTaskOverdue(
+    taskId: number,
+    taskTitle: string,
+    projectId: number,
+  ) {
     return this.notifyTaskAssignees(taskId, {
       type: NotificationType.task_overdue,
       title: '⚠️ Tarea vencida',
@@ -433,7 +484,11 @@ export class NotificationService {
     });
   }
 
-  async notifyRequestApproved(requestId: number, userId: number, requestDescription: string) {
+  async notifyRequestApproved(
+    requestId: number,
+    userId: number,
+    requestDescription: string,
+  ) {
     return this.create({
       userId,
       type: NotificationType.request_approved,
@@ -444,7 +499,11 @@ export class NotificationService {
     });
   }
 
-  async notifyRequestRejected(requestId: number, userId: number, reason?: string) {
+  async notifyRequestRejected(
+    requestId: number,
+    userId: number,
+    reason?: string,
+  ) {
     return this.create({
       userId,
       type: NotificationType.request_rejected,
@@ -484,7 +543,11 @@ export class NotificationService {
     });
   }
 
-  async notifyEmergencyAddressed(emergencyId: number, userId: number, emergencyTitle: string) {
+  async notifyEmergencyAddressed(
+    emergencyId: number,
+    userId: number,
+    emergencyTitle: string,
+  ) {
     return this.create({
       userId,
       type: NotificationType.emergency_addressed,
@@ -495,7 +558,11 @@ export class NotificationService {
     });
   }
 
-  async notifyEmergencyRejected(emergencyId: number, userId: number, emergencyTitle: string) {
+  async notifyEmergencyRejected(
+    emergencyId: number,
+    userId: number,
+    emergencyTitle: string,
+  ) {
     return this.create({
       userId,
       type: NotificationType.emergency_rejected,
@@ -508,37 +575,60 @@ export class NotificationService {
 
   // ----- ÓRDENES DE COMPRA -----
 
-  async notifyPurchaseOrderPending(purchaseOrderId: number, code: string, projectName: string, projectId: number) {
+  async notifyPurchaseOrderPending(
+    purchaseOrderId: number,
+    code: string,
+    projectName: string,
+    projectId: number,
+  ) {
     return this.notifyByUserType(['GERENTE'], {
       type: NotificationType.purchase_order_pending,
       title: 'OC pendiente de autorización',
       message: `La orden de compra ${code} del proyecto ${projectName} requiere autorización`,
       purchaseOrderId,
-      url: this.buildUrl(`/admin/projects/${projectId}/purchase-orders/edit/${purchaseOrderId}`),
+      url: this.buildUrl(
+        `/admin/projects/${projectId}/purchase-orders/edit/${purchaseOrderId}`,
+      ),
     });
   }
 
-  async notifyPurchaseOrderAuthorized(purchaseOrderId: number, code: string, projectId: number) {
+  async notifyPurchaseOrderAuthorized(
+    purchaseOrderId: number,
+    code: string,
+    projectId: number,
+  ) {
     return this.notifyByUserType(['LOGISTICA', 'ADMINISTRADORA'], {
       type: NotificationType.purchase_order_authorized,
       title: 'OC autorizada',
       message: `La orden de compra ${code} fue autorizada`,
       purchaseOrderId,
-      url: this.buildUrl(`/admin/projects/${projectId}/purchase-orders/${purchaseOrderId}`),
+      url: this.buildUrl(
+        `/admin/projects/${projectId}/purchase-orders/${purchaseOrderId}`,
+      ),
     });
   }
 
-  async notifyPurchaseOrderDelivered(purchaseOrderId: number, code: string, projectId: number) {
+  async notifyPurchaseOrderDelivered(
+    purchaseOrderId: number,
+    code: string,
+    projectId: number,
+  ) {
     return this.notifyByUserType(['LOGISTICA', 'ADMINISTRADORA'], {
       type: NotificationType.purchase_order_delivered,
       title: 'OC entregada',
       message: `La orden de compra ${code} fue entregada`,
       purchaseOrderId,
-      url: this.buildUrl(`/admin/projects/${projectId}/purchase-orders/${purchaseOrderId}`),
+      url: this.buildUrl(
+        `/admin/projects/${projectId}/purchase-orders/${purchaseOrderId}`,
+      ),
     });
   }
 
-  async notifyPurchaseOrderCancelled(purchaseOrderId: number, code: string, projectId: number) {
+  async notifyPurchaseOrderCancelled(
+    purchaseOrderId: number,
+    code: string,
+    projectId: number,
+  ) {
     return this.notifyByUserType(['GERENTE', 'ADMINISTRADORA', 'LOGISTICA'], {
       type: NotificationType.purchase_order_cancelled,
       title: 'OC cancelada',
@@ -550,14 +640,20 @@ export class NotificationService {
 
   // ----- PROYECTOS -----
 
-  async notifyProjectCreated(projectId: number, projectName: string, projectCode: string) {
+  async notifyProjectCreated(
+    projectId: number,
+    projectName: string,
+    projectCode: string,
+  ) {
     // Notificar a TODOS los usuarios activos
     const users = await this.prismaService.user.findMany({
       where: { deletedAt: null },
       select: { userId: true },
     });
 
-    this.logger.log(`notifyProjectCreated: Notificando a ${users.length} usuarios sobre el nuevo proyecto "${projectName}"`);
+    this.logger.log(
+      `notifyProjectCreated: Notificando a ${users.length} usuarios sobre el nuevo proyecto "${projectName}"`,
+    );
 
     if (users.length === 0) {
       this.logger.warn('No se encontraron usuarios activos para notificar');

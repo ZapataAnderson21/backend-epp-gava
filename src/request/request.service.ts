@@ -1,4 +1,10 @@
-import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -7,21 +13,21 @@ import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class RequestService {
-  
   private readonly logger = new Logger('RequestService');
 
   constructor(
     private readonly prismaService: PrismaService,
     private readonly notificationService: NotificationService,
   ) {}
-  
-  async create(createRequestDto: CreateRequestDto) {
 
-    this.logger.log(`Creating request with data: ${JSON.stringify(createRequestDto)}`);
-    
+  async create(createRequestDto: CreateRequestDto) {
+    this.logger.log(
+      `Creating request with data: ${JSON.stringify(createRequestDto)}`,
+    );
+
     const requestData = {
       ...createRequestDto,
-      deliveryDueDate: new Date(createRequestDto.deliveryDueDate)
+      deliveryDueDate: new Date(createRequestDto.deliveryDueDate),
     };
 
     const request = await this.prismaService.request.create({
@@ -51,15 +57,15 @@ export class RequestService {
     return {
       statusCode: HttpStatus.CREATED,
       message: 'La solicitud ha sido creada exitosamente.',
-      data: request
+      data: request,
     };
   }
-  
+
   async findAll(
     projectId?: number,
-    userId?: number,                 // filtro “duro” (para usuarios normales)
+    userId?: number, // filtro “duro” (para usuarios normales)
     status?: RequestStatus,
-    viewerId?: number                // quién está mirando (siempre)
+    viewerId?: number, // quién está mirando (siempre)
   ) {
     this.logger.log('Retrieving all requests');
 
@@ -75,14 +81,19 @@ export class RequestService {
         orderBy: { requestId: 'desc' },
       });
 
-      const processed = found.map(req => ({
+      const processed = found.map((req) => ({
         ...req,
-        status: RequestStatusLabelEs[req.status as keyof typeof RequestStatusLabelEs] || req.status,
+        status:
+          RequestStatusLabelEs[
+            req.status as keyof typeof RequestStatusLabelEs
+          ] || req.status,
       }));
 
       return {
         statusCode: processed.length ? HttpStatus.OK : HttpStatus.NOT_FOUND,
-        message: processed.length ? 'Solicitudes encontradas exitosamente.' : 'No se han encontrado solicitudes.',
+        message: processed.length
+          ? 'Solicitudes encontradas exitosamente.'
+          : 'No se han encontrado solicitudes.',
         data: processed,
       };
     }
@@ -95,14 +106,19 @@ export class RequestService {
         orderBy: { requestId: 'desc' },
       });
 
-      const processed = found.map(req => ({
+      const processed = found.map((req) => ({
         ...req,
-        status: RequestStatusLabelEs[req.status as keyof typeof RequestStatusLabelEs] || req.status,
+        status:
+          RequestStatusLabelEs[
+            req.status as keyof typeof RequestStatusLabelEs
+          ] || req.status,
       }));
 
       return {
         statusCode: processed.length ? HttpStatus.OK : HttpStatus.NOT_FOUND,
-        message: processed.length ? 'Solicitudes encontradas exitosamente.' : 'No se han encontrado solicitudes.',
+        message: processed.length
+          ? 'Solicitudes encontradas exitosamente.'
+          : 'No se han encontrado solicitudes.',
         data: processed,
       };
     }
@@ -118,7 +134,16 @@ export class RequestService {
           : {
               OR: [
                 { status: { not: RequestStatus.draft } },
-                ...(viewerId ? [{ AND: [{ status: RequestStatus.draft }, { userId: viewerId }] }] : []),
+                ...(viewerId
+                  ? [
+                      {
+                        AND: [
+                          { status: RequestStatus.draft },
+                          { userId: viewerId },
+                        ],
+                      },
+                    ]
+                  : []),
               ],
             }),
       },
@@ -126,14 +151,18 @@ export class RequestService {
       orderBy: { requestId: 'desc' },
     });
 
-    const processed = found.map(req => ({
+    const processed = found.map((req) => ({
       ...req,
-      status: RequestStatusLabelEs[req.status as keyof typeof RequestStatusLabelEs] || req.status,
+      status:
+        RequestStatusLabelEs[req.status as keyof typeof RequestStatusLabelEs] ||
+        req.status,
     }));
 
     return {
       statusCode: processed.length ? HttpStatus.OK : HttpStatus.NOT_FOUND,
-      message: processed.length ? 'Solicitudes encontradas exitosamente.' : 'No se han encontrado solicitudes.',
+      message: processed.length
+        ? 'Solicitudes encontradas exitosamente.'
+        : 'No se han encontrado solicitudes.',
       data: processed,
     };
   }
@@ -148,22 +177,22 @@ export class RequestService {
           include: {
             userUserTypes: {
               include: {
-                userType: true
-              }
-            }
-          }
+                userType: true,
+              },
+            },
+          },
         },
         elementRequests: {
           include: {
             element: true,
             elementRequestResponses: {
               include: {
-                requestResponse: true
-              }
-            }
-          }
+                requestResponse: true,
+              },
+            },
+          },
         },
-      }
+      },
     });
 
     if (!request) {
@@ -171,16 +200,19 @@ export class RequestService {
       throw new BadRequestException('Request not found');
     }
 
-    const processedRequest = { 
+    const processedRequest = {
       ...request,
-      status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
+      status:
+        RequestStatusLabelEs[
+          request.status as keyof typeof RequestStatusLabelEs
+        ] || request.status,
     };
 
     this.logger.log(`Request with ID ${requestId} found`);
     return {
       statusCode: HttpStatus.OK,
       message: 'Solicitud encontrada exitosamente.',
-      data: processedRequest
+      data: processedRequest,
     };
   }
 
@@ -191,7 +223,7 @@ export class RequestService {
       include: {
         project: true,
         user: true,
-      }
+      },
     });
 
     if (!foundRequests || foundRequests.length === 0) {
@@ -199,93 +231,112 @@ export class RequestService {
       return {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'No se han encontrado solicitudes para este proyecto.',
-        data: []
+        data: [],
       };
     }
 
-    const processedRequests = foundRequests.map(request => {
-      const requestObj = { 
+    const processedRequests = foundRequests.map((request) => {
+      const requestObj = {
         ...request,
-        status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
+        status:
+          RequestStatusLabelEs[
+            request.status as keyof typeof RequestStatusLabelEs
+          ] || request.status,
       };
       return requestObj;
     });
 
-    this.logger.log(`Found ${foundRequests.length} requests for project ID: ${projectId}`);
+    this.logger.log(
+      `Found ${foundRequests.length} requests for project ID: ${projectId}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       message: 'Solicitudes encontradas exitosamente.',
-      data: processedRequests
+      data: processedRequests,
     };
   }
 
   async findAllByUserId(userId: number) {
     this.logger.log(`Finding all requests for user ID: ${userId}`);
-    const foundRequests = (await this.prismaService.request.findMany({
-      where: { userId },
-      include: {
-        project: true,
-        user: true
-      }
-    })).sort((a, b) => a.requestId - b.requestId);
+    const foundRequests = (
+      await this.prismaService.request.findMany({
+        where: { userId },
+        include: {
+          project: true,
+          user: true,
+        },
+      })
+    ).sort((a, b) => a.requestId - b.requestId);
 
     if (!foundRequests || foundRequests.length === 0) {
       this.logger.warn(`No requests found for user ID: ${userId}`);
       return {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'No se han encontrado solicitudes para este usuario.',
-        data: []
+        data: [],
       };
     }
 
-    const processedRequests = foundRequests.map(request => {
+    const processedRequests = foundRequests.map((request) => {
       const requestObj = {
         ...request,
-        status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
+        status:
+          RequestStatusLabelEs[
+            request.status as keyof typeof RequestStatusLabelEs
+          ] || request.status,
       };
       return requestObj;
     });
 
-    this.logger.log(`Found ${foundRequests.length} requests for user ID: ${userId}`);
+    this.logger.log(
+      `Found ${foundRequests.length} requests for user ID: ${userId}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       message: 'Solicitudes encontradas exitosamente.',
-      data: processedRequests
+      data: processedRequests,
     };
   }
 
   async findAllByStatus(status: RequestStatus) {
     this.logger.log(`Finding all requests with status: ${status}`);
-    const foundRequests = (await this.prismaService.request.findMany({
-      where: { status },
-      include: {
-        project: true,
-        user: true
-      }
-    })).sort((a, b) => b.requestId - a.requestId);
+    const foundRequests = (
+      await this.prismaService.request.findMany({
+        where: { status },
+        include: {
+          project: true,
+          user: true,
+        },
+      })
+    ).sort((a, b) => b.requestId - a.requestId);
 
     if (!foundRequests || foundRequests.length === 0) {
       this.logger.warn(`No requests found with status: ${status}`);
       return {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'No se han encontrado solicitudes con este estado.',
-        data: []
+        data: [],
       };
     }
 
-    const processedRequests = foundRequests.map(request => {
-      const requestObj = { 
+    const processedRequests = foundRequests.map((request) => {
+      const requestObj = {
         ...request,
-        status: RequestStatusLabelEs[request.status as keyof typeof RequestStatusLabelEs] || request.status
+        status:
+          RequestStatusLabelEs[
+            request.status as keyof typeof RequestStatusLabelEs
+          ] || request.status,
       };
       return requestObj;
     });
 
-    this.logger.log(`Found ${foundRequests.length} requests with status: ${status}`);
+    this.logger.log(
+      `Found ${foundRequests.length} requests with status: ${status}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       message: 'Solicitudes encontradas exitosamente.',
-      data: processedRequests
+      data: processedRequests,
     };
   }
 
@@ -296,7 +347,9 @@ export class RequestService {
     const existingRequest = await this.findOne(requestId);
     const previousStatus = existingRequest.data.status;
 
-    this.logger.log(`Request ID ${requestId} exists. Proceeding to update status.`);
+    this.logger.log(
+      `Request ID ${requestId} exists. Proceeding to update status.`,
+    );
     const updatedRequest = await this.prismaService.request.update({
       where: { requestId },
       data: { status },
@@ -331,40 +384,53 @@ export class RequestService {
         updatedRequest.description,
       );
     } else if (status === RequestStatus.rejected) {
-      await this.notificationService.notifyRequestRejected(requestId, creatorUserId);
+      await this.notificationService.notifyRequestRejected(
+        requestId,
+        creatorUserId,
+      );
     }
 
-    this.logger.log(`Request ID ${requestId} status updated successfully to ${status}`);
+    this.logger.log(
+      `Request ID ${requestId} status updated successfully to ${status}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       message: 'El estado de la solicitud ha sido actualizado exitosamente.',
-      data: updatedRequest
+      data: updatedRequest,
     };
   }
 
   async update(requestId: number, updateRequestDto: UpdateRequestDto) {
-    this.logger.log(`Updating request ID ${requestId} with data: ${JSON.stringify(updateRequestDto)}`);
-    
+    this.logger.log(
+      `Updating request ID ${requestId} with data: ${JSON.stringify(updateRequestDto)}`,
+    );
+
     if (!this.requestIsDraft(requestId)) {
-      this.logger.error(`Cannot update request ID ${requestId} because its status is not 'draft'`);
-      throw new BadRequestException('Only requests with status "draft" can be updated');
+      this.logger.error(
+        `Cannot update request ID ${requestId} because its status is not 'draft'`,
+      );
+      throw new BadRequestException(
+        'Only requests with status "draft" can be updated',
+      );
     }
 
     const updatedRequest = await this.prismaService.request.update({
       where: { requestId },
-      data: updateRequestDto
+      data: updateRequestDto,
     });
-    
+
     if (!updatedRequest) {
       this.logger.error(`Failed to update request ID ${requestId}`);
       throw new BadRequestException('Failed to update request');
     }
 
-    this.logger.log(`Request ID ${requestId} updated successfully: ${JSON.stringify(updatedRequest)}`);
+    this.logger.log(
+      `Request ID ${requestId} updated successfully: ${JSON.stringify(updatedRequest)}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       message: 'La solicitud ha sido actualizada exitosamente.',
-      data: updatedRequest
+      data: updatedRequest,
     };
   }
 
@@ -374,12 +440,16 @@ export class RequestService {
     const { status } = existingRequest;
 
     if (status !== 'draft') {
-      this.logger.error(`Cannot delete request ID ${requestId} because its status is not 'draft'`);
-      throw new BadRequestException('Only requests with status "draft" can be deleted');
+      this.logger.error(
+        `Cannot delete request ID ${requestId} because its status is not 'draft'`,
+      );
+      throw new BadRequestException(
+        'Only requests with status "draft" can be deleted',
+      );
     }
 
     const deletedRequest = await this.prismaService.request.delete({
-      where: { requestId }
+      where: { requestId },
     });
 
     if (!deletedRequest) {
@@ -391,14 +461,16 @@ export class RequestService {
     return {
       statusCode: HttpStatus.OK,
       message: 'La solicitud ha sido eliminada exitosamente.',
-      data: deletedRequest
+      data: deletedRequest,
     };
   }
 
   async requestIsDraft(requestId: number) {
-    this.logger.log(`Verifying existence of request ID: ${requestId} and checking if its status is 'draft'`);
+    this.logger.log(
+      `Verifying existence of request ID: ${requestId} and checking if its status is 'draft'`,
+    );
     const request = await this.prismaService.request.findUnique({
-      where: { requestId }
+      where: { requestId },
     });
 
     if (!request) {

@@ -1,6 +1,9 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { WorkerType, WorkerTypeLabelEs } from 'src/worker/enum/worker-type.enum';
+import {
+  WorkerType,
+  WorkerTypeLabelEs,
+} from 'src/worker/enum/worker-type.enum';
 
 interface WeeklyWorkerInfo {
   workerId: number;
@@ -22,18 +25,15 @@ export interface WeeklyProjectPayroll {
 
 @Injectable()
 export class WeekService {
-  private readonly logger = new Logger("WeekService");
+  private readonly logger = new Logger('WeekService');
 
   constructor(private readonly prismaService: PrismaService) {}
-  
+
   // Obtiene el lunes de la semana en UTC (para evitar problemas de zona horaria)
   private getMonday(date: Date): Date {
-    const d = new Date(Date.UTC(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      0, 0, 0, 0
-    ));
+    const d = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0),
+    );
     const day = d.getUTCDay(); // 0 = domingo, 1 = lunes, ...
     const diff = (day + 6) % 7; // días desde lunes
     d.setUTCDate(d.getUTCDate() - diff);
@@ -43,23 +43,33 @@ export class WeekService {
   // Crea una semana a partir de un lunes (lunes 00:00:00 - domingo 23:59:59)
   private async createWeekFromMonday(monday: Date) {
     // startDate: lunes a las 00:00:00.000 UTC
-    const startDate = new Date(Date.UTC(
-      monday.getUTCFullYear(),
-      monday.getUTCMonth(),
-      monday.getUTCDate(),
-      0, 0, 0, 0
-    ));
-    
+    const startDate = new Date(
+      Date.UTC(
+        monday.getUTCFullYear(),
+        monday.getUTCMonth(),
+        monday.getUTCDate(),
+        0,
+        0,
+        0,
+        0,
+      ),
+    );
+
     // endDate: domingo (6 días después) a las 23:59:59.999 UTC
-    const endDate = new Date(Date.UTC(
-      monday.getUTCFullYear(),
-      monday.getUTCMonth(),
-      monday.getUTCDate() + 6,
-      23, 59, 59, 999
-    ));
+    const endDate = new Date(
+      Date.UTC(
+        monday.getUTCFullYear(),
+        monday.getUTCMonth(),
+        monday.getUTCDate() + 6,
+        23,
+        59,
+        59,
+        999,
+      ),
+    );
 
     this.logger.log(
-      `Creando semana: ${startDate.toISOString()} - ${endDate.toISOString()}`
+      `Creando semana: ${startDate.toISOString()} - ${endDate.toISOString()}`,
     );
 
     return this.prismaService.week.create({
@@ -107,22 +117,22 @@ export class WeekService {
     });
 
     const existingWeeksSet = new Set(
-      existingWeeks.map(w => w.startDate.toISOString().split('T')[0])
+      existingWeeks.map((w) => w.startDate.toISOString().split('T')[0]),
     );
 
     // Iterar desde la primera semana hasta la semana actual
-    let currentIterationMonday = new Date(startMonday);
+    const currentIterationMonday = new Date(startMonday);
     let createdCount = 0;
 
     while (currentIterationMonday <= currentMonday) {
       const mondayKey = currentIterationMonday.toISOString().split('T')[0];
-      
+
       // Solo crear si no existe
       if (!existingWeeksSet.has(mondayKey)) {
         await this.createWeekFromMonday(new Date(currentIterationMonday));
         createdCount++;
       }
-      
+
       // Avanzar a la siguiente semana
       currentIterationMonday.setDate(currentIterationMonday.getDate() + 7);
     }
@@ -135,11 +145,10 @@ export class WeekService {
   }
 
   async getWeeklyPayrollByProject(projectId: number): Promise<{
-      message: string;
-      statusCode: number;
-      data: WeeklyProjectPayroll[];
-    }> {
-
+    message: string;
+    statusCode: number;
+    data: WeeklyProjectPayroll[];
+  }> {
     this.logger.log(`Calculating weekly payroll for project ID: ${projectId}`);
 
     // 1. Semanas que tienen asistencias de ese proyecto
@@ -169,9 +178,9 @@ export class WeekService {
       // 2. Agrupar asistencias por workerId dentro de la semana
       const workersMap = new Map<
         number,
-        { 
-          workerType: String; 
-          attendanceCount: number 
+        {
+          workerType: string;
+          attendanceCount: number;
         }
       >();
 
@@ -179,7 +188,10 @@ export class WeekService {
         const { worker } = attendance;
 
         // solo laborer y technician
-        if (worker.workerType !== 'laborer' && worker.workerType !== 'technician') {
+        if (
+          worker.workerType !== 'laborer' &&
+          worker.workerType !== 'technician'
+        ) {
           continue;
         }
 
@@ -204,7 +216,7 @@ export class WeekService {
           where: {
             workerId,
             validFromDate: {
-              lte: week.startDate,   // vigente hasta el inicio de esta semana
+              lte: week.startDate, // vigente hasta el inicio de esta semana
             },
           },
           orderBy: {
@@ -213,7 +225,7 @@ export class WeekService {
         });
 
         const dailyAmount = dailyWage?.amount ?? 0;
-        
+
         const workerTotal = Number(dailyAmount) * info.attendanceCount;
 
         if (info.workerType === 'laborer') {
@@ -224,8 +236,15 @@ export class WeekService {
 
         workers.push({
           workerId,
-          workerName: (await this.prismaService.worker.findUnique({ where: { workerId } }))?.fullName || 'Unknown',
-          workerType: (await this.prismaService.worker.findUnique({ where: { workerId } }))?.workerType as WorkerType,
+          workerName:
+            (
+              await this.prismaService.worker.findUnique({
+                where: { workerId },
+              })
+            )?.fullName || 'Unknown',
+          workerType: (
+            await this.prismaService.worker.findUnique({ where: { workerId } })
+          )?.workerType as WorkerType,
           attendances: info.attendanceCount,
           dailyWage: Number(dailyAmount),
         });

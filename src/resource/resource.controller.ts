@@ -1,11 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Logger,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { ResourceService } from './resource.service';
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
 
 @Controller('resource')
 export class ResourceController {
-
   private readonly logger = new Logger('ResourceController');
 
   constructor(private readonly resourceService: ResourceService) {}
@@ -29,13 +38,20 @@ export class ResourceController {
   }
 
   @Get('category/:id')
-  findByCategoryResourceId(@Param('id', ParseIntPipe) categoryResourceId: number) {
-    this.logger.log(`Finding resources for categoryResourceId: ${categoryResourceId}`);
+  findByCategoryResourceId(
+    @Param('id', ParseIntPipe) categoryResourceId: number,
+  ) {
+    this.logger.log(
+      `Finding resources for categoryResourceId: ${categoryResourceId}`,
+    );
     return this.resourceService.findByCategoryResourceId(categoryResourceId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateResourceDto: UpdateResourceDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateResourceDto: UpdateResourceDto,
+  ) {
     this.logger.log(`Updating resource with ID: ${id}`);
     return this.resourceService.update(+id, updateResourceDto);
   }

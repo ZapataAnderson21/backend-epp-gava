@@ -1,6 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsNumberString, IsOptional, IsString, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumberString,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 
 const toNullIfEmpty = (v: any) => {
   if (v === undefined || v === null) return null;
@@ -23,7 +30,10 @@ export class CreateClientDto {
   @Transform(({ value }) => toNullIfEmpty(value))
   @IsOptional()
   @Length(9, 9, { message: 'El teléfono debe tener exactamente 9 dígitos.' })
-  @IsNumberString({ no_symbols: true }, { message: 'El teléfono debe contener solo dígitos.' })
+  @IsNumberString(
+    { no_symbols: true },
+    { message: 'El teléfono debe contener solo dígitos.' },
+  )
   phone?: string;
 
   @ApiPropertyOptional({ example: 'contacto@cliente.com' })
@@ -42,6 +52,9 @@ export class CreateClientDto {
   @IsString()
   @IsNotEmpty({ message: 'El RUC es obligatorio.' })
   @Length(11, 11, { message: 'El RUC debe tener exactamente 11 dígitos.' })
-  @IsNumberString({ no_symbols: true }, { message: 'El RUC debe contener solo dígitos.' })
+  @IsNumberString(
+    { no_symbols: true },
+    { message: 'El RUC debe contener solo dígitos.' },
+  )
   ruc!: string;
 }

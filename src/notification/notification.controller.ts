@@ -23,7 +23,8 @@ export class NotificationController {
   @Get()
   findMyNotifications(
     @GetUser('userId') userId: number,
-    @Query('onlyUnread', new DefaultValuePipe(false), ParseBoolPipe) onlyUnread: boolean,
+    @Query('onlyUnread', new DefaultValuePipe(false), ParseBoolPipe)
+    onlyUnread: boolean,
     @Query('limit', new DefaultValuePipe(50), ParseIntPipe) limit: number,
   ) {
     return this.notificationService.findByUser(userId, { onlyUnread, limit });
@@ -78,14 +79,5 @@ export class NotificationController {
   @Delete('read')
   removeAllRead(@GetUser('userId') userId: number) {
     return this.notificationService.removeAllRead(userId);
-  }
-
-  /**
-   * GET /notification/debug/user-types
-   * DEBUG: Ver tipos de usuario disponibles
-   */
-  @Get('debug/user-types')
-  debugUserTypes() {
-    return this.notificationService.debugGetUserTypes();
   }
 }

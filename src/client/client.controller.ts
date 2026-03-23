@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Logger,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
@@ -32,7 +42,9 @@ export class ClientController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateClientDto: UpdateClientDto,
   ) {
-    this.logger.log(`Updating client with ID: ${id}, Data: ${JSON.stringify(updateClientDto)}`);
+    this.logger.log(
+      `Updating client with ID: ${id}, Data: ${JSON.stringify(updateClientDto)}`,
+    );
     return this.clientService.update(id, updateClientDto);
   }
 

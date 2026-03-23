@@ -4,27 +4,34 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { jwtConstants } from './jwt.constants';
 import { Request } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private prisma: PrismaService) {
+  constructor(
+    private prisma: PrismaService,
+    private configService: ConfigService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: jwtConstants.secret,
+      secretOrKey:
+        configService.get<string>('JWT_SECRET') || jwtConstants.secret,
       passReqToCallback: true,
     });
   }
 
   async validate(req: Request, payload: any) {
-    const token = req.headers.authorization?.replace('Bearer ', '');
-    
+    const token = req.headers.authorization?.replace('Bearer ', '').trim();
+
     const blacklistedToken = await this.prisma.blacklistedToken.findFirst({
       where: { token },
     });
 
     if (blacklistedToken) {
-      throw new UnauthorizedException('La sesión ha expirado. Por favor, inicie sesión de nuevo.');
+      throw new UnauthorizedException(
+        'La sesión ha expirado. Por favor, inicie sesión de nuevo.',
+      );
     }
 
     return { userId: payload.userId, email: payload.email };

@@ -38,10 +38,12 @@ export class PettyCashService {
 
     const pettyCashData = {
       ...dto,
-      expenseDate: new Date(dto.expenseDate)
-    }
+      expenseDate: new Date(dto.expenseDate),
+    };
 
-    const pettyCash = await this.prisma.pettyCash.create({ data: pettyCashData });
+    const pettyCash = await this.prisma.pettyCash.create({
+      data: pettyCashData,
+    });
     if (!pettyCash) {
       this.logger.error('Failed to create petty cash');
       throw new BadRequestException({
@@ -68,7 +70,9 @@ export class PettyCashService {
     });
 
     if (!list || list.length === 0) {
-      this.logger.warn(`No petty cash entries found for project ID: ${projectId}`);
+      this.logger.warn(
+        `No petty cash entries found for project ID: ${projectId}`,
+      );
       throw new NotFoundException({
         statusCode: HttpStatus.NOT_FOUND,
         message: 'No se encontraron salidas de caja chica.',
@@ -76,17 +80,14 @@ export class PettyCashService {
       });
     }
 
-    const proccessedList = list.map(item => ({
+    const proccessedList = list.map((item) => ({
       ...item,
-      expenseDate: new Date(item.expenseDate).toLocaleDateString(
-        'es-PE',
-        {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          timeZone: 'America/Lima',
-        }
-      ),
+      expenseDate: new Date(item.expenseDate).toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        timeZone: 'America/Lima',
+      }),
       expenseType: PettyCashLabelEs[item.expenseType], // Convertir enum a string
     }));
 
@@ -121,7 +122,9 @@ export class PettyCashService {
 
   /* ---------- SUM ---------- */
   async sumAllAmountsByProject(projectId: number) {
-    this.logger.log(`Calculating total amount of all petty cash entries for project ID: ${projectId}`);
+    this.logger.log(
+      `Calculating total amount of all petty cash entries for project ID: ${projectId}`,
+    );
     const result = await this.prisma.pettyCash.aggregate({
       where: { projectId },
       _sum: { amount: true },
@@ -132,12 +135,17 @@ export class PettyCashService {
     return {
       statusCode: HttpStatus.OK,
       message: 'Total de salidas de caja chica calculado exitosamente.',
-      data: total
+      data: total,
     };
   }
 
-  async sumAmountsByTypeAndProject( projectId: number, pettyCashType: PettyCashType) {
-    this.logger.log(`Calculating total amount of petty cash entries for project ID: ${projectId} and type: ${pettyCashType}`);
+  async sumAmountsByTypeAndProject(
+    projectId: number,
+    pettyCashType: PettyCashType,
+  ) {
+    this.logger.log(
+      `Calculating total amount of petty cash entries for project ID: ${projectId} and type: ${pettyCashType}`,
+    );
     const result = await this.prisma.pettyCash.aggregate({
       where: { projectId, expenseType: pettyCashType },
       _sum: { amount: true },
@@ -148,14 +156,14 @@ export class PettyCashService {
     return {
       statusCode: HttpStatus.OK,
       message: 'Total de salidas de caja chica calculado exitosamente.',
-      data: total
+      data: total,
     };
   }
 
   /* ---------- UPDATE ---------- */
   async update(pettyCashId: number, dto: UpdatePettyCashDto) {
     this.logger.log(
-      `Updating petty cash id=${pettyCashId} payload=${JSON.stringify(dto)}`
+      `Updating petty cash id=${pettyCashId} payload=${JSON.stringify(dto)}`,
     );
 
     // asegúrate de que exista

@@ -1,8 +1,8 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsDateString } from 'class-validator';
 
 export class CreateWeekDto {
-  @ApiProperty() 
+  @ApiProperty()
   @IsDateString()
   startDate!: string;
 

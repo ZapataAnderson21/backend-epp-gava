@@ -1,4 +1,10 @@
-import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -7,7 +13,6 @@ import { SupplierDocumentType } from './enum/document-type.enum';
 
 @Injectable()
 export class SupplierService {
-
   private readonly logger = new Logger('SupplierService');
 
   constructor(private readonly prismaService: PrismaService) {}
@@ -27,7 +32,9 @@ export class SupplierService {
 
   async create(createSupplierDto: CreateSupplierDto) {
     this.logger.log('Creating a new supplier');
-    const documentType = this.resolveDocumentType(createSupplierDto.documentType);
+    const documentType = this.resolveDocumentType(
+      createSupplierDto.documentType,
+    );
     const data: Omit<CreateSupplierDto, 'documentType' | 'dni' | 'ruc'> & {
       documentType: SupplierDocumentType;
       dni?: string;
@@ -75,7 +82,7 @@ export class SupplierService {
       data,
     });
 
-    if(!supplier) {
+    if (!supplier) {
       this.logger.error('Failed to create supplier');
       throw new BadRequestException('No se pudo crear el proveedor.');
     }
@@ -99,12 +106,12 @@ export class SupplierService {
       },
     });
 
-    if(!suppliers || suppliers.length === 0) {
+    if (!suppliers || suppliers.length === 0) {
       this.logger.error('Failed to fetch suppliers');
       throw new BadRequestException('No se pudieron obtener los proveedores.');
     }
 
-    const processedSuppliers = suppliers.map(supplier => ({
+    const processedSuppliers = suppliers.map((supplier) => ({
       ...supplier,
       currency: CurrencyLabelEs[supplier.currency] || supplier.currency,
     }));
@@ -126,7 +133,7 @@ export class SupplierService {
       },
     });
 
-    if(!supplier) {
+    if (!supplier) {
       this.logger.error(`Supplier with ID: ${supplierId} not found`);
       throw new BadRequestException('No se pudo obtener el proveedor.');
     }
@@ -141,7 +148,7 @@ export class SupplierService {
 
   async update(supplierId: number, updateSupplierDto: UpdateSupplierDto) {
     this.logger.log(
-      `Updating supplier with ID: ${supplierId} - payload: ${JSON.stringify(updateSupplierDto)}`
+      `Updating supplier with ID: ${supplierId} - payload: ${JSON.stringify(updateSupplierDto)}`,
     );
 
     // Traer el actual (activo)
@@ -151,7 +158,8 @@ export class SupplierService {
     // Si cambia el name, validar conflicto
     if (
       updateSupplierDto.name &&
-      updateSupplierDto.name.trim().toLowerCase() !== current.name.trim().toLowerCase()
+      updateSupplierDto.name.trim().toLowerCase() !==
+        current.name.trim().toLowerCase()
     ) {
       const byName = await this.findByName(updateSupplierDto.name);
       if (byName && byName.supplierId !== supplierId) {
@@ -166,7 +174,8 @@ export class SupplierService {
     // Si cambia el email, validar conflicto (CITEXT => case-insensitive)
     if (
       updateSupplierDto.email &&
-      updateSupplierDto.email.trim().toLowerCase() !== (current.email ?? '').trim().toLowerCase()
+      updateSupplierDto.email.trim().toLowerCase() !==
+        (current.email ?? '').trim().toLowerCase()
     ) {
       const byEmail = await this.findByEmail(updateSupplierDto.email);
       if (byEmail && byEmail.supplierId !== supplierId) {
@@ -178,7 +187,10 @@ export class SupplierService {
       }
     }
 
-    const updateData: Omit<UpdateSupplierDto, 'documentType' | 'dni' | 'ruc'> & {
+    const updateData: Omit<
+      UpdateSupplierDto,
+      'documentType' | 'dni' | 'ruc'
+    > & {
       documentType?: SupplierDocumentType;
       dni?: string | null;
       ruc?: string | null;
@@ -260,7 +272,6 @@ export class SupplierService {
     };
   }
 
-
   async findByName(name: string) {
     this.logger.log(`Searching supplier by name: ${name}`);
     const supplier = await this.prismaService.supplier.findUnique({
@@ -270,7 +281,7 @@ export class SupplierService {
       },
     });
 
-    if(!supplier) {
+    if (!supplier) {
       this.logger.warn(`Supplier with name: ${name} not found`);
       return null;
     }
@@ -288,7 +299,7 @@ export class SupplierService {
       },
     });
 
-    if(!supplier) {
+    if (!supplier) {
       this.logger.warn(`Supplier with email: ${email} not found`);
       return null;
     }
@@ -306,7 +317,7 @@ export class SupplierService {
       },
     });
 
-    if(!supplier) {
+    if (!supplier) {
       this.logger.warn(`Supplier with RUC: ${ruc} not found`);
       return null;
     }
@@ -338,11 +349,11 @@ export class SupplierService {
     await this.findOne(id);
 
     const supplier = await this.prismaService.supplier.update({
-      where: { 
-        supplierId: id 
+      where: {
+        supplierId: id,
       },
-      data: { 
-        deletedAt: new Date() 
+      data: {
+        deletedAt: new Date(),
       },
     });
 

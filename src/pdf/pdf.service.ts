@@ -1,19 +1,33 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import PdfPrinter = require('pdfmake');
 import { PrismaService } from 'src/prisma/prisma.service';
 import { logo, logoPO, sgs, iso9001, hodelpe } from './images';
-import { credit_cardIcon, locationIcon, mailIcon, phoneIcon, webIcon } from './icons';
+import {
+  credit_cardIcon,
+  locationIcon,
+  mailIcon,
+  phoneIcon,
+  webIcon,
+} from './icons';
 import { ConfigService } from '@nestjs/config';
 import { RequestStatus, RequestType } from 'src/request/enum';
-import { PaymentMethodLabelEs, PurchaseOrderTypeLabelEs } from 'src/purchase-order/enum';
+import {
+  PaymentMethodLabelEs,
+  PurchaseOrderTypeLabelEs,
+} from 'src/purchase-order/enum';
 import { CurrencyLabelEs } from 'src/supplier/enum/currency.enum';
 
 @Injectable()
 export class PdfService {
-
-  private readonly logger = new Logger("PdfService");
+  private readonly logger = new Logger('PdfService');
 
   constructor(
     private readonly prismaService: PrismaService,
@@ -54,9 +68,15 @@ export class PdfService {
         .trim();
     };
     const fmt = (n: number) =>
-      new Intl.NumberFormat('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+      new Intl.NumberFormat('es-PE', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(n);
     const fmtUnit = (n: number) =>
-      new Intl.NumberFormat('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+      new Intl.NumberFormat('es-PE', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(n);
     const formatDate = (d: Date | string | number) => {
       const date = new Date(d);
       const dd = date.getDate().toString().padStart(2, '0');
@@ -71,11 +91,12 @@ export class PdfService {
     const igvRate = 0.18;
 
     // Cálculos base (sin IGV)
-    const subtotalVenta = purchaseOrder.resources?.reduce((acc, it) => {
-      const unit = Number(it.unitPurchasePrice || 0);
-      const qty = Number(it.quantity || 0);
-      return acc + unit * qty;
-    }, 0) || 0;
+    const subtotalVenta =
+      purchaseOrder.resources?.reduce((acc, it) => {
+        const unit = Number(it.unitPurchasePrice || 0);
+        const qty = Number(it.quantity || 0);
+        return acc + unit * qty;
+      }, 0) || 0;
 
     const igv = subtotalVenta * igvRate;
     const total = subtotalVenta + igv;
@@ -88,7 +109,10 @@ export class PdfService {
         normal: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
         bold: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
         italics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
-        bolditalics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-BoldItalic.ttf'),
+        bolditalics: path.join(
+          process.cwd(),
+          'src/pdf/fonts/Roboto-BoldItalic.ttf',
+        ),
       },
     };
     const printer = new PdfPrinter(fonts);
@@ -97,61 +121,104 @@ export class PdfService {
     const headingBlue = '#14519d';
 
     const HEADER_HEIGHT = 80;
-    const CERT_SIZE    = 50;
-    const CERT_GAP     = 10;
+    const CERT_SIZE = 50;
+    const CERT_GAP = 10;
     const CERT_MARGIN_TOP = Math.max(0, (HEADER_HEIGHT - CERT_SIZE) / 2);
 
     const headerBlock = [
       {
         table: {
           widths: [300, '*'],
-          body: [[
-            // celda izquierda: logo principal
-            {
-              image: logoPO,
-              fit: [300, HEADER_HEIGHT],
-              alignment: 'left',
-              margin: [0, 0, 10, 0],
-            },
+          body: [
+            [
+              // celda izquierda: logo principal
+              {
+                image: logoPO,
+                fit: [300, HEADER_HEIGHT],
+                alignment: 'left',
+                margin: [0, 0, 10, 0],
+              },
 
-            // celda derecha: certificaciones centradas verticalmente
-            {
-              margin: [0, CERT_MARGIN_TOP, 0, 0],
-              columns: [
-                { width: '*', text: '' },
-                { image: iso9001, fit: [CERT_SIZE, CERT_SIZE], width: 'auto' },
-                { image: sgs, fit: [CERT_SIZE, CERT_SIZE], width: 'auto', margin: [CERT_GAP, 0, 0, 0] },
-                { image: hodelpe, fit: [CERT_SIZE, CERT_SIZE], width: 'auto', margin: [CERT_GAP, 0, 0, 0] },
-              ],
-              columnGap: 0,
-            },
-          ]],
+              // celda derecha: certificaciones centradas verticalmente
+              {
+                margin: [0, CERT_MARGIN_TOP, 0, 0],
+                columns: [
+                  { width: '*', text: '' },
+                  {
+                    image: iso9001,
+                    fit: [CERT_SIZE, CERT_SIZE],
+                    width: 'auto',
+                  },
+                  {
+                    image: sgs,
+                    fit: [CERT_SIZE, CERT_SIZE],
+                    width: 'auto',
+                    margin: [CERT_GAP, 0, 0, 0],
+                  },
+                  {
+                    image: hodelpe,
+                    fit: [CERT_SIZE, CERT_SIZE],
+                    width: 'auto',
+                    margin: [CERT_GAP, 0, 0, 0],
+                  },
+                ],
+                columnGap: 0,
+              },
+            ],
+          ],
         },
         layout: { defaultBorder: false },
       },
-      { text: (purchaseOrder.project?.name || '').toUpperCase(), style: 'titleProject', margin: [0, 6, 0, 0] },
+      {
+        text: (purchaseOrder.project?.name || '').toUpperCase(),
+        style: 'titleProject',
+        margin: [0, 6, 0, 0],
+      },
       {
         table: {
           widths: ['*'],
-          body: [[{ text: `ORDEN DE COMPRA ${purchaseOrder.code?.toUpperCase() || ''}`, style: 'ocTitle', color: 'white', alignment: 'center', margin: [4, 5, 4, 5] }]],
+          body: [
+            [
+              {
+                text: `ORDEN DE COMPRA ${purchaseOrder.code?.toUpperCase() || ''}`,
+                style: 'ocTitle',
+                color: 'white',
+                alignment: 'center',
+                margin: [4, 5, 4, 5],
+              },
+            ],
+          ],
         },
         layout: {
           fillColor: () => '#14519d',
-          hLineWidth: () => 0, vLineWidth: () => 0,
-          paddingLeft: () => 0, paddingRight: () => 0,
+          hLineWidth: () => 0,
+          vLineWidth: () => 0,
+          paddingLeft: () => 0,
+          paddingRight: () => 0,
         },
         margin: [0, 6, 0, 0],
       },
-      { text: [{ text: 'Fecha: ', bold: true }, nowStr], alignment: 'right', margin: [0, 4, 0, 0] },
+      {
+        text: [{ text: 'Fecha: ', bold: true }, nowStr],
+        alignment: 'right',
+        margin: [0, 4, 0, 0],
+      },
     ];
-
 
     // Bloque: Datos del proveedor
     const proveedorBlock = [
       {
         table: {
           widths: ['*'],
-          body: [[{ text: 'DATOS DEL PROVEEDOR', style: 'sectionHeader', color: 'white' }]],
+          body: [
+            [
+              {
+                text: 'DATOS DEL PROVEEDOR',
+                style: 'sectionHeader',
+                color: 'white',
+              },
+            ],
+          ],
         },
         layout: {
           fillColor: () => headingBlue,
@@ -172,12 +239,48 @@ export class PdfService {
             [
               {
                 stack: [
-                  { text: [{ text: 'Proveedor: ', bold: true }, purchaseOrder.supplier?.name || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'RUC: ', bold: true }, purchaseOrder.supplier?.ruc || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'Contacto: ', bold: true }, purchaseOrder.supplier?.contactName || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'Correo: ', bold: true }, purchaseOrder.supplier?.email || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'Teléfono: ', bold: true }, purchaseOrder.supplier?.phone || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'Cotización: ', bold: true }, purchaseOrder.quotation || '' ], lineHeight: 1.75 },
+                  {
+                    text: [
+                      { text: 'Proveedor: ', bold: true },
+                      purchaseOrder.supplier?.name || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'RUC: ', bold: true },
+                      purchaseOrder.supplier?.ruc || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'Contacto: ', bold: true },
+                      purchaseOrder.supplier?.contactName || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'Correo: ', bold: true },
+                      purchaseOrder.supplier?.email || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'Teléfono: ', bold: true },
+                      purchaseOrder.supplier?.phone || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'Cotización: ', bold: true },
+                      purchaseOrder.quotation || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
                 ],
                 margin: [4, 4, 4, 4],
               },
@@ -186,8 +289,10 @@ export class PdfService {
         },
         layout: {
           // borde “caja”: solo líneas exteriores
-          hLineWidth: (i, node) => (i === 0 || i === node.table.body.length ? 1 : 0),
-          vLineWidth: (i, node) => (i === 0 || i === node.table.widths.length ? 1 : 0),
+          hLineWidth: (i, node) =>
+            i === 0 || i === node.table.body.length ? 1 : 0,
+          vLineWidth: (i, node) =>
+            i === 0 || i === node.table.widths.length ? 1 : 0,
           hLineColor: () => borderColor,
           vLineColor: () => borderColor,
           paddingLeft: () => 8,
@@ -203,7 +308,15 @@ export class PdfService {
       {
         table: {
           widths: ['*'],
-          body: [[{ text: 'DATOS DE ENTREGA O ENVÍO', style: 'sectionHeader', color: 'white' }]],
+          body: [
+            [
+              {
+                text: 'DATOS DE ENTREGA O ENVÍO',
+                style: 'sectionHeader',
+                color: 'white',
+              },
+            ],
+          ],
         },
         layout: {
           fillColor: () => headingBlue,
@@ -224,11 +337,41 @@ export class PdfService {
             [
               {
                 stack: [
-                  { text: [{ text: 'Lugar de entrega: ', bold: true }, purchaseOrder.deliveryLocation || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'Destino: ', bold: true }, purchaseOrder.destination || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'Atención: ', bold: true }, purchaseOrder.carePerson || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'DNI: ', bold: true }, purchaseOrder.dniCarePerson || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'Observación: ', bold: true }, purchaseOrder.observations || '' ], lineHeight: 1.75 },
+                  {
+                    text: [
+                      { text: 'Lugar de entrega: ', bold: true },
+                      purchaseOrder.deliveryLocation || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'Destino: ', bold: true },
+                      purchaseOrder.destination || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'Atención: ', bold: true },
+                      purchaseOrder.carePerson || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'DNI: ', bold: true },
+                      purchaseOrder.dniCarePerson || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'Observación: ', bold: true },
+                      purchaseOrder.observations || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
                   { text: ' ', lineHeight: 1.75 },
                 ],
                 margin: [4, 4, 4, 4],
@@ -237,8 +380,10 @@ export class PdfService {
           ],
         },
         layout: {
-          hLineWidth: (i, node) => (i === 0 || i === node.table.body.length ? 1 : 0),
-          vLineWidth: (i, node) => (i === 0 || i === node.table.widths.length ? 1 : 0),
+          hLineWidth: (i, node) =>
+            i === 0 || i === node.table.body.length ? 1 : 0,
+          vLineWidth: (i, node) =>
+            i === 0 || i === node.table.widths.length ? 1 : 0,
           hLineColor: () => borderColor,
           vLineColor: () => borderColor,
           paddingLeft: () => 8,
@@ -249,13 +394,20 @@ export class PdfService {
       },
     ];
 
-
     // Bloque: Condiciones de pago
     const pagoBlock = [
       {
         table: {
           widths: ['*'],
-          body: [[{ text: 'CONDICIONES DE PAGO', style: 'sectionHeader', color: 'white' }]],
+          body: [
+            [
+              {
+                text: 'CONDICIONES DE PAGO',
+                style: 'sectionHeader',
+                color: 'white',
+              },
+            ],
+          ],
         },
         layout: {
           fillColor: () => headingBlue,
@@ -276,9 +428,27 @@ export class PdfService {
             [
               {
                 stack: [
-                  { text: [{ text: 'Crédito: ', bold: true }, purchaseOrder.paymentConditions || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'Método de pago: ', bold: true }, PaymentMethodLabelEs[purchaseOrder.paymentMethod] || '' ], lineHeight: 1.75 },
-                  { text: [{ text: 'Cta. cte: ', bold: true }, `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}` ], lineHeight: 1.75 },
+                  {
+                    text: [
+                      { text: 'Crédito: ', bold: true },
+                      purchaseOrder.paymentConditions || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'Método de pago: ', bold: true },
+                      PaymentMethodLabelEs[purchaseOrder.paymentMethod] || '',
+                    ],
+                    lineHeight: 1.75,
+                  },
+                  {
+                    text: [
+                      { text: 'Cta. cte: ', bold: true },
+                      `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}`,
+                    ],
+                    lineHeight: 1.75,
+                  },
                   { text: ' ', lineHeight: 1.75 },
                   { text: ' ', lineHeight: 1.75 },
                   { text: ' ', lineHeight: 1.75 },
@@ -289,8 +459,10 @@ export class PdfService {
           ],
         },
         layout: {
-          hLineWidth: (i, node) => (i === 0 || i === node.table.body.length ? 1 : 0),
-          vLineWidth: (i, node) => (i === 0 || i === node.table.widths.length ? 1 : 0),
+          hLineWidth: (i, node) =>
+            i === 0 || i === node.table.body.length ? 1 : 0,
+          vLineWidth: (i, node) =>
+            i === 0 || i === node.table.widths.length ? 1 : 0,
           hLineColor: () => borderColor,
           vLineColor: () => borderColor,
           paddingLeft: () => 8,
@@ -300,7 +472,6 @@ export class PdfService {
         },
       },
     ];
-
 
     // Texto introductorio antes de la tabla
     const introRecursos = [
@@ -347,13 +518,11 @@ export class PdfService {
         table: {
           headerRows: 1,
           widths: [30, '*', 45, 45, 70, 70],
-          body: [
-            recursosHeader,
-            ...recursosRows,
-          ],
+          body: [recursosHeader, ...recursosRows],
         },
         layout: {
-          fillColor: (rowIndex: number) => (rowIndex === 0 ? headingBlue : null),
+          fillColor: (rowIndex: number) =>
+            rowIndex === 0 ? headingBlue : null,
           hLineColor: () => '#9ca3af',
           vLineColor: () => '#9ca3af',
         },
@@ -362,8 +531,10 @@ export class PdfService {
 
     // Totales
     const boxedLayout = {
-      hLineWidth: (i, node) => (i === 0 || i === node.table.body.length ? 1 : 0),
-      vLineWidth: (i, node) => (i === 0 || i === node.table.widths.length ? 1 : 0),
+      hLineWidth: (i, node) =>
+        i === 0 || i === node.table.body.length ? 1 : 0,
+      vLineWidth: (i, node) =>
+        i === 0 || i === node.table.widths.length ? 1 : 0,
       hLineColor: () => '#9ca3af',
       vLineColor: () => '#9ca3af',
     };
@@ -374,34 +545,78 @@ export class PdfService {
           widths: ['*', 80],
           body: [
             [
-              { text: 'SUBTOTAL', alignment: 'right', bold: true, margin: [0, 4, 8, 4] },
               {
-                table: { widths: ['*'], body: [[
-                  { text: `${currencySym} ${fmt(subtotalVenta)}`, alignment: 'right', margin: [6, 4, 6, 4] }
-                ]]},
-                layout: boxedLayout
+                text: 'SUBTOTAL',
+                alignment: 'right',
+                bold: true,
+                margin: [0, 4, 8, 4],
+              },
+              {
+                table: {
+                  widths: ['*'],
+                  body: [
+                    [
+                      {
+                        text: `${currencySym} ${fmt(subtotalVenta)}`,
+                        alignment: 'right',
+                        margin: [6, 4, 6, 4],
+                      },
+                    ],
+                  ],
+                },
+                layout: boxedLayout,
               },
             ],
             [
-              { text: 'IGV', alignment: 'right', bold: true, margin: [0, 4, 8, 4] },
               {
-                table: { widths: ['*'], body: [[
-                  { text: `${currencySym} ${fmt(igv)}`, alignment: 'right', margin: [6, 4, 6, 4] }
-                ]]},
-                layout: boxedLayout
+                text: 'IGV',
+                alignment: 'right',
+                bold: true,
+                margin: [0, 4, 8, 4],
+              },
+              {
+                table: {
+                  widths: ['*'],
+                  body: [
+                    [
+                      {
+                        text: `${currencySym} ${fmt(igv)}`,
+                        alignment: 'right',
+                        margin: [6, 4, 6, 4],
+                      },
+                    ],
+                  ],
+                },
+                layout: boxedLayout,
               },
             ],
             [
-              { text: 'TOTAL', alignment: 'right', bold: true, margin: [0, 4, 8, 4] },
               {
-                table: { widths: ['*'], body: [[
-                  { text: `${currencySym} ${fmt(total)}`, alignment: 'right', margin: [6, 4, 6, 4], fillColor: '#1f2937', color: 'white' }
-                ]]},
+                text: 'TOTAL',
+                alignment: 'right',
+                bold: true,
+                margin: [0, 4, 8, 4],
+              },
+              {
+                table: {
+                  widths: ['*'],
+                  body: [
+                    [
+                      {
+                        text: `${currencySym} ${fmt(total)}`,
+                        alignment: 'right',
+                        margin: [6, 4, 6, 4],
+                        fillColor: '#1f2937',
+                        color: 'white',
+                      },
+                    ],
+                  ],
+                },
                 layout: {
                   ...boxedLayout,
                   hLineColor: () => '#1f2937',
                   vLineColor: () => '#1f2937',
-                }
+                },
               },
             ],
           ],
@@ -427,19 +642,47 @@ export class PdfService {
           widths: ['*', '*', '*'],
           body: [
             [
-              { text: 'Elaboración', alignment: 'center', bold: true, color: 'white' },
-              { text: 'Autorización', alignment: 'center', bold: true, color: 'white' },
-              { text: 'Seguimiento y Control', alignment: 'center', bold: true, color: 'white' },
+              {
+                text: 'Elaboración',
+                alignment: 'center',
+                bold: true,
+                color: 'white',
+              },
+              {
+                text: 'Autorización',
+                alignment: 'center',
+                bold: true,
+                color: 'white',
+              },
+              {
+                text: 'Seguimiento y Control',
+                alignment: 'center',
+                bold: true,
+                color: 'white',
+              },
             ],
             [
-              { text: 'Angi Gonzales Cotrina', alignment: 'center', margin: [0, 4, 0, 4] },
-              { text: 'Henrry Gayoso Valdera', alignment: 'center', margin: [0, 4, 0, 4] },
-              { text: 'Angi Gonzales Cotrina', alignment: 'center', margin: [0, 4, 0, 4] },
+              {
+                text: 'Angi Gonzales Cotrina',
+                alignment: 'center',
+                margin: [0, 4, 0, 4],
+              },
+              {
+                text: 'Henrry Gayoso Valdera',
+                alignment: 'center',
+                margin: [0, 4, 0, 4],
+              },
+              {
+                text: 'Angi Gonzales Cotrina',
+                alignment: 'center',
+                margin: [0, 4, 0, 4],
+              },
             ],
           ],
         },
         layout: {
-          fillColor: (rowIndex: number) => (rowIndex === 0 ? headingBlue : null),
+          fillColor: (rowIndex: number) =>
+            rowIndex === 0 ? headingBlue : null,
           hLineColor: () => '#9ca3af',
           vLineColor: () => '#9ca3af',
         },
@@ -460,23 +703,33 @@ export class PdfService {
     const condicionesBlock: any[] = [];
     if (generalConditions.length > 0) {
       condicionesBlock.push(
-        { text: 'CONDICIONES COMERCIALES', style: 'listTitle', margin: [0, 8, 0, 3], fontSize: 8 },
-        { ol: generalConditions, margin: [0, 0, 0, 4], fontSize: 7 }
+        {
+          text: 'CONDICIONES COMERCIALES',
+          style: 'listTitle',
+          margin: [0, 8, 0, 3],
+          fontSize: 8,
+        },
+        { ol: generalConditions, margin: [0, 0, 0, 4], fontSize: 7 },
       );
     }
     if (qualityConditions.length > 0) {
       condicionesBlock.push(
-        { text: 'CONDICIONES DE CALIDAD', style: 'listTitle', margin: [0, 4, 0, 3], fontSize: 8 },
-        { ol: qualityConditions, fontSize: 7 }
+        {
+          text: 'CONDICIONES DE CALIDAD',
+          style: 'listTitle',
+          margin: [0, 4, 0, 3],
+          fontSize: 8,
+        },
+        { ol: qualityConditions, fontSize: 7 },
       );
     }
 
     // === 5) Definición del documento ===
-    
+
     // Calcular factor de escala dinámico basado en cantidad de recursos
     const itemCount = purchaseOrder.resources?.length || 0;
     let scaleFactor = 1;
-    
+
     // Si hay muchos recursos, reducir el tamaño proporcionalmente
     if (itemCount > 10) {
       scaleFactor = 0.85;
@@ -515,7 +768,11 @@ export class PdfService {
         ...condicionesBlock,
       ],
       styles: {
-        titleProject: { fontSize: titleProjectSize, bold: true, alignment: 'center' },
+        titleProject: {
+          fontSize: titleProjectSize,
+          bold: true,
+          alignment: 'center',
+        },
         ocTitle: { fontSize: ocTitleSize, bold: true },
         sectionHeader: { fontSize: sectionHeaderSize, bold: true },
         listTitle: { fontSize: listTitleSize, bold: true },
@@ -528,8 +785,11 @@ export class PdfService {
 
     // === 6) Crear archivo ===
     try {
-      const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || path.resolve(__dirname, '..', '..', 'output');
-      if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+      const outputDir =
+        this.configService.get<string>('PDF_OUTPUT_DIR') ||
+        path.resolve(__dirname, '..', '..', 'output');
+      if (!fs.existsSync(outputDir))
+        fs.mkdirSync(outputDir, { recursive: true });
 
       const rawCode = purchaseOrder.code || '';
       const safeCode = sanitizeFileName(rawCode) || 'SIN-CODIGO';
@@ -553,7 +813,6 @@ export class PdfService {
     }
   }
 
-
   async generateQuotationPdf(quotationId: number) {
     const quotation = await this.prismaService.quotation.findUnique({
       where: { quotationId },
@@ -571,10 +830,16 @@ export class PdfService {
     }
 
     const sanitizeFileName = (value: string) => {
-      return value.replace(/[\\/:*?"<>|]/g, '-').replace(/\s+/g, ' ').trim();
+      return value
+        .replace(/[\\/:*?"<>|]/g, '-')
+        .replace(/\s+/g, ' ')
+        .trim();
     };
     const fmt = (n: number) =>
-      new Intl.NumberFormat('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+      new Intl.NumberFormat('es-PE', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(n);
     const formatDate = (d: Date | string | number) => {
       const date = new Date(d);
       const dd = date.getDate().toString().padStart(2, '0');
@@ -593,7 +858,8 @@ export class PdfService {
       web: 'www.gavacyelectricidad.com',
       email: 'logistica@gavacyc.com, admin@gavacyc.com',
       address1: 'Calle Vicente de la Vega No 1488 - 5to piso, Chiclayo',
-      address2: 'Mz C Dpto 206 Torre 4 Condominio Garden 360. Urb Las Palmeras del Chipre, Piura.',
+      address2:
+        'Mz C Dpto 206 Torre 4 Condominio Garden 360. Urb Las Palmeras del Chipre, Piura.',
     };
 
     const issuedAtStr = formatDate(quotation.createdAt || new Date());
@@ -605,7 +871,10 @@ export class PdfService {
         normal: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
         bold: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
         italics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
-        bolditalics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-BoldItalic.ttf'),
+        bolditalics: path.join(
+          process.cwd(),
+          'src/pdf/fonts/Roboto-BoldItalic.ttf',
+        ),
       },
     };
     const printer = new PdfPrinter(fonts);
@@ -619,24 +888,40 @@ export class PdfService {
       {
         table: {
           widths: [300, '*'],
-          body: [[
-            {
-              image: logo,
-              fit: [300, HEADER_HEIGHT],
-              alignment: 'left',
-              margin: [0, 0, 10, 0],
-            },
-            {
-              margin: [0, CERT_MARGIN_TOP, 0, 0],
-              columns: [
-                { width: '*', text: '' },
-                { image: iso9001, fit: [CERT_SIZE, CERT_SIZE], width: 'auto' },
-                { image: hodelpe, fit: [CERT_SIZE, CERT_SIZE], width: 'auto', margin: [CERT_GAP, 0, 0, 0] },
-                { image: sgs, fit: [CERT_SIZE, CERT_SIZE], width: 'auto', margin: [CERT_GAP, 0, 0, 0] },
-              ],
-              columnGap: 0,
-            },
-          ]],
+          body: [
+            [
+              {
+                image: logo,
+                fit: [300, HEADER_HEIGHT],
+                alignment: 'left',
+                margin: [0, 0, 10, 0],
+              },
+              {
+                margin: [0, CERT_MARGIN_TOP, 0, 0],
+                columns: [
+                  { width: '*', text: '' },
+                  {
+                    image: iso9001,
+                    fit: [CERT_SIZE, CERT_SIZE],
+                    width: 'auto',
+                  },
+                  {
+                    image: hodelpe,
+                    fit: [CERT_SIZE, CERT_SIZE],
+                    width: 'auto',
+                    margin: [CERT_GAP, 0, 0, 0],
+                  },
+                  {
+                    image: sgs,
+                    fit: [CERT_SIZE, CERT_SIZE],
+                    width: 'auto',
+                    margin: [CERT_GAP, 0, 0, 0],
+                  },
+                ],
+                columnGap: 0,
+              },
+            ],
+          ],
         },
         layout: { defaultBorder: false },
       },
@@ -650,16 +935,50 @@ export class PdfService {
           { width: '40%', text: '' },
         ],
       },
-      { text: '“Seguridad y Calidad a su Servicio”', fontSize: 14, alignment: 'center', italics: true, bold: true, color: '#1f4b99', margin: [0, 4, 0, 10] },
-      { text: 'COTIZACIÓN', alignment: 'center', fontSize: 18, bold: true, color: headingRed, margin: [0, 2, 0, 4] },
+      {
+        text: '“Seguridad y Calidad a su Servicio”',
+        fontSize: 14,
+        alignment: 'center',
+        italics: true,
+        bold: true,
+        color: '#1f4b99',
+        margin: [0, 4, 0, 10],
+      },
+      {
+        text: 'COTIZACIÓN',
+        alignment: 'center',
+        fontSize: 18,
+        bold: true,
+        color: headingRed,
+        margin: [0, 2, 0, 4],
+      },
       {
         canvas: [
-          { type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 1, lineColor: headingRed },
+          {
+            type: 'line',
+            x1: 0,
+            y1: 0,
+            x2: 515,
+            y2: 0,
+            lineWidth: 1,
+            lineColor: headingRed,
+          },
         ],
         margin: [0, 0, 0, 8],
       },
-      { text: quotation.code || '', alignment: 'center', bold: true, color: headingRed, fontSize: 12, margin: [0, 0, 0, 10] },
-      { text: [{ text: 'Fecha: ', bold: true }, issuedAtStr], alignment: 'right', margin: [0, 0, 0, 8] },
+      {
+        text: quotation.code || '',
+        alignment: 'center',
+        bold: true,
+        color: headingRed,
+        fontSize: 12,
+        margin: [0, 0, 0, 10],
+      },
+      {
+        text: [{ text: 'Fecha: ', bold: true }, issuedAtStr],
+        alignment: 'right',
+        margin: [0, 0, 0, 8],
+      },
     ];
 
     const preTableInfoBlock = {
@@ -747,16 +1066,46 @@ export class PdfService {
             widths: [190, 90],
             body: [
               [
-                { text: 'COSTO DIRECTO', alignment: 'right', bold: true, margin: [0, 4, 8, 4] },
-                { text: fmt(Number(quotation.costDirectAmount || 0)), alignment: 'right', margin: [6, 4, 6, 4] },
+                {
+                  text: 'COSTO DIRECTO',
+                  alignment: 'right',
+                  bold: true,
+                  margin: [0, 4, 8, 4],
+                },
+                {
+                  text: fmt(Number(quotation.costDirectAmount || 0)),
+                  alignment: 'right',
+                  margin: [6, 4, 6, 4],
+                },
               ],
               [
-                { text: 'IGV (18%)', alignment: 'right', bold: true, margin: [0, 4, 8, 4] },
-                { text: fmt(Number(quotation.igvAmount || 0)), alignment: 'right', margin: [6, 4, 6, 4] },
+                {
+                  text: 'IGV (18%)',
+                  alignment: 'right',
+                  bold: true,
+                  margin: [0, 4, 8, 4],
+                },
+                {
+                  text: fmt(Number(quotation.igvAmount || 0)),
+                  alignment: 'right',
+                  margin: [6, 4, 6, 4],
+                },
               ],
               [
-                { text: 'TOTAL (S/)', alignment: 'right', bold: true, color: headingRed, margin: [0, 4, 8, 4] },
-                { text: fmt(Number(quotation.totalAmount || 0)), alignment: 'right', color: headingRed, bold: true, margin: [6, 4, 6, 4] },
+                {
+                  text: 'TOTAL (S/)',
+                  alignment: 'right',
+                  bold: true,
+                  color: headingRed,
+                  margin: [0, 4, 8, 4],
+                },
+                {
+                  text: fmt(Number(quotation.totalAmount || 0)),
+                  alignment: 'right',
+                  color: headingRed,
+                  bold: true,
+                  margin: [6, 4, 6, 4],
+                },
               ],
             ],
           },
@@ -775,20 +1124,27 @@ export class PdfService {
       .map((s) => s?.trim())
       .filter(Boolean);
 
-    const conditionsBlock = conditions.length > 0
-      ? [
-          { text: 'Condiciones Comerciales:', bold: true, margin: [0, 8, 0, 4] },
-          { ol: conditions, margin: [0, 0, 0, 8] },
-        ]
-      : [];
+    const conditionsBlock =
+      conditions.length > 0
+        ? [
+            {
+              text: 'Condiciones Comerciales:',
+              bold: true,
+              margin: [0, 8, 0, 4],
+            },
+            { ol: conditions, margin: [0, 0, 0, 8] },
+          ]
+        : [];
 
     const iconLine = (icon: string, text: string, marginBottom = 4) => ({
       table: {
         widths: [18, '*'],
-        body: [[
-          { image: icon, fit: [11, 11], margin: [0, 1, 0, 0] },
-          { text, color: 'white' },
-        ]],
+        body: [
+          [
+            { image: icon, fit: [11, 11], margin: [0, 1, 0, 0] },
+            { text, color: 'white' },
+          ],
+        ],
       },
       layout: {
         hLineWidth: () => 0,
@@ -808,18 +1164,43 @@ export class PdfService {
           [
             {
               stack: [
-                { text: 'INFORMACIÓN BANCARIA:', bold: true, color: 'white', margin: [0, 0, 0, 6] },
-                iconLine(credit_cardIcon, `N° Cuenta BBVA: ${company.accountNumber}`),
-                iconLine(credit_cardIcon, `N° Cuenta Interbancaria: ${company.interbankAccount}`),
-                iconLine(credit_cardIcon, `N° Cuenta de detracción B. NACIÓN: ${company.detractionAccount}`, 10),
-                { text: 'DIRECCIÓN:', bold: true, color: 'white', margin: [0, 0, 0, 6] },
+                {
+                  text: 'INFORMACIÓN BANCARIA:',
+                  bold: true,
+                  color: 'white',
+                  margin: [0, 0, 0, 6],
+                },
+                iconLine(
+                  credit_cardIcon,
+                  `N° Cuenta BBVA: ${company.accountNumber}`,
+                ),
+                iconLine(
+                  credit_cardIcon,
+                  `N° Cuenta Interbancaria: ${company.interbankAccount}`,
+                ),
+                iconLine(
+                  credit_cardIcon,
+                  `N° Cuenta de detracción B. NACIÓN: ${company.detractionAccount}`,
+                  10,
+                ),
+                {
+                  text: 'DIRECCIÓN:',
+                  bold: true,
+                  color: 'white',
+                  margin: [0, 0, 0, 6],
+                },
                 iconLine(locationIcon, company.address1),
                 iconLine(locationIcon, company.address2, 0),
               ],
             },
             {
               stack: [
-                { text: 'CONTACTO:', bold: true, color: 'white', margin: [0, 0, 0, 6] },
+                {
+                  text: 'CONTACTO:',
+                  bold: true,
+                  color: 'white',
+                  margin: [0, 0, 0, 6],
+                },
                 iconLine(phoneIcon, `Teléfono: ${company.phone}`),
                 iconLine(webIcon, `Página web: ${company.web}`),
                 iconLine(mailIcon, `Correo: ${company.email}`, 0),
@@ -862,8 +1243,11 @@ export class PdfService {
     };
 
     try {
-      const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || path.resolve(__dirname, '..', '..', 'output');
-      if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+      const outputDir =
+        this.configService.get<string>('PDF_OUTPUT_DIR') ||
+        path.resolve(__dirname, '..', '..', 'output');
+      if (!fs.existsSync(outputDir))
+        fs.mkdirSync(outputDir, { recursive: true });
 
       const rawCode = quotation.code || '';
       const safeCode = sanitizeFileName(rawCode) || 'SIN-CODIGO';
@@ -887,259 +1271,317 @@ export class PdfService {
     }
   }
 
-
   async generateRequestPdf(requestId: number) {
-  // 1) Traer la solicitud (con proyecto y usuario/cargo)
-  const request = await this.prismaService.request.findUnique({
-    where: { requestId },
-    include: {
-      project: true,
-      user: {
-        include: {
-          userUserTypes: { include: { userType: true } }
+    // 1) Traer la solicitud (con proyecto y usuario/cargo)
+    const request = await this.prismaService.request.findUnique({
+      where: { requestId },
+      include: {
+        project: true,
+        user: {
+          include: {
+            userUserTypes: { include: { userType: true } },
+          },
+        },
+      },
+    });
+
+    this.logger.log('Request with ID found.');
+
+    if (!request) {
+      this.logger.error('Request not found');
+      throw new NotFoundException('Request not found');
+    }
+
+    // Solo impedir envío si NO está en draft (la generación del PDF sí la permitimos aquí)
+    if (request.status !== RequestStatus.draft) {
+      this.logger.error('Request status is not draft');
+      throw new BadRequestException(
+        'Only requests with status "draft" can be sent',
+      );
+    }
+
+    if (!request.type) {
+      this.logger.error('Invalid request type');
+      this.logger.error(`Request type provided: ${request.type}`);
+      throw new BadRequestException('Invalid request type');
+    }
+
+    const type = request.type;
+
+    this.logger.log(`Request type: ${type}`);
+
+    // 2) Traer elementos y trabajadores seleccionados
+    const elementRequests = await this.prismaService.elementRequest.findMany({
+      where: { requestId },
+      include: { request: true, element: true },
+      orderBy: { elementRequestId: 'asc' },
+    });
+
+    const requestWorkers = await this.prismaService.requestWorker.findMany({
+      where: { requestId },
+      include: { worker: true },
+      orderBy: { requestWorkerId: 'asc' },
+    });
+
+    this.logger.log('Element Requests:', elementRequests);
+    this.logger.log('Request Workers:', requestWorkers);
+
+    // Permitir cualquiera de los dos; solo rechazar si no hay ninguno
+    if (
+      (elementRequests?.length ?? 0) === 0 &&
+      (requestWorkers?.length ?? 0) === 0
+    ) {
+      throw new NotFoundException(
+        'No se encontraron Element Requests ni Request Workers.',
+      );
+    }
+
+    // 3) Datos para cabecera
+    const sender = `${request.user.name} ${request.user.lastName}`;
+    const jobTitle = request.user.userUserTypes?.[0]?.userType?.name ?? '—';
+    const to2 = (n: number) => n.toString().padStart(2, '0');
+
+    const createdAt = new Date(request.createdAt);
+    const dateCreatedAt = `${to2(createdAt.getDate())}/${to2(createdAt.getMonth() + 1)}/${createdAt.getFullYear()} ${to2(createdAt.getHours())}:${to2(createdAt.getMinutes())}`;
+
+    const deliveryDueDate = new Date(request.deliveryDueDate);
+    const formattedDeliveryDueDate = `${to2(deliveryDueDate.getDate())}/${to2(deliveryDueDate.getMonth() + 1)}/${deliveryDueDate.getFullYear()} ${to2(deliveryDueDate.getHours())}:${to2(deliveryDueDate.getMinutes())}`;
+
+    const description = request.description || 'Sin descripción.';
+    const projectName = request.project.name;
+
+    // 4) Título y footer por tipo
+    let title = '',
+      footer = '';
+    switch (type) {
+      case RequestType.Operative:
+        title = 'SOLICITUD DE REQUERIMIENTO DE ELEMENTOS OPERATIVOS';
+        footer =
+          'Agradecemos de antemano su atención a esta solicitud y quedamos atentos a su aprobación para proceder con las gestiones correspondientes.';
+        break;
+      case RequestType.Epp:
+        title =
+          'SOLICITUD DE REQUERIMIENTO DE ELEMENTOS DE PROTECCIÓN PERSONAL (EPP)';
+        footer =
+          'Agradecemos de antemano su atención a esta solicitud. Quedamos atentos a su aprobación y a la gestión correspondiente para la adquisición de los EPP requeridos.';
+        break;
+      case RequestType.EppAndOperative:
+        title = 'SOLICITUD DE REQUERIMIENTO DE EPP Y ELEMENTOS OPERATIVOS';
+        footer =
+          'Agradecemos su atención a esta solicitud y quedamos atentos a su aprobación para proceder con las gestiones necesarias.';
+        break;
+    }
+
+    // 5) PDFMake: fuentes y printer
+    const fonts = {
+      Roboto: {
+        normal: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
+        bold: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
+        italics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
+        bolditalics: path.join(
+          process.cwd(),
+          'src/pdf/fonts/Roboto-BoldItalic.ttf',
+        ),
+      },
+    };
+    const printer = new PdfPrinter(fonts);
+
+    // 6) Contenido base
+    const docContent: any[] = [
+      {
+        columns: [
+          { width: '*', text: '' },
+          { width: 100, image: logo, fit: [100, 100], alignment: 'right' },
+        ],
+      },
+      { text: title, style: 'header', margin: [0, 10, 0, 20] },
+      { text: [{ text: 'De: ', bold: true }, { text: `Ing. ${sender}` }] },
+      {
+        text: [{ text: `${jobTitle} – GAVA C&C`, bold: true }],
+        margin: [0, 0, 0, 10],
+      },
+      {
+        text: [{ text: 'Para: ', bold: true }, { text: 'Equipo de Logística' }],
+      },
+      {
+        text: [{ text: 'Proyecto: ', bold: true }, { text: projectName }],
+        margin: [0, 0, 0, 10],
+      },
+      {
+        text: [
+          { text: 'Fecha y Hora de Solicitud: ', bold: true },
+          { text: dateCreatedAt },
+        ],
+      },
+      {
+        text: [
+          { text: 'Fecha y Hora de Entrega: ', bold: true },
+          { text: formattedDeliveryDueDate },
+        ],
+        margin: [0, 0, 0, 10],
+      },
+    ];
+
+    // 7) Tablas de ELEMENTOS (si hay)
+    if ((elementRequests?.length ?? 0) > 0) {
+      if (type === RequestType.EppAndOperative) {
+        const operativeElements = elementRequests.filter(
+          (el) => el.element.type === RequestType.Operative,
+        );
+        const securityElements = elementRequests.filter(
+          (el) => el.element.type === RequestType.Epp,
+        );
+
+        if (operativeElements.length > 0) {
+          docContent.push(
+            {
+              text: 'DETALLE DEL REQUERIMIENTO OPERATIVO',
+              style: 'subheader',
+              margin: [0, 20, 0, 10],
+            },
+            {
+              table: {
+                widths: ['auto', '*', 'auto', 'auto'],
+                body: [
+                  ['N° ITEM', 'DESCRIPCIÓN', 'UNIDAD', 'CANTIDAD'],
+                  ...operativeElements.map((el, idx) => [
+                    idx + 1,
+                    el.element.name,
+                    el.unit,
+                    el.quantityRequested.toString(),
+                  ]),
+                ],
+              },
+            },
+          );
         }
+
+        if (securityElements.length > 0) {
+          docContent.push(
+            {
+              text: 'DETALLE DEL REQUERIMIENTO EPP',
+              style: 'subheader',
+              margin: [0, 20, 0, 10],
+            },
+            {
+              table: {
+                widths: ['auto', '*', 'auto', 'auto'],
+                body: [
+                  ['N° ITEM', 'DESCRIPCIÓN', 'UNIDAD', 'CANTIDAD'],
+                  ...securityElements.map((el, idx) => [
+                    idx + 1,
+                    el.element.name,
+                    el.unit,
+                    el.quantityRequested.toString(),
+                  ]),
+                ],
+              },
+            },
+          );
+        }
+      } else {
+        docContent.push(
+          {
+            text: 'DETALLE DEL REQUERIMIENTO',
+            style: 'subheader',
+            margin: [0, 20, 0, 10],
+          },
+          {
+            table: {
+              widths: ['auto', '*', 'auto', 'auto'],
+              body: [
+                ['N° ITEM', 'DESCRIPCIÓN', 'UNIDAD', 'CANTIDAD'],
+                ...elementRequests.map((el, idx) => [
+                  idx + 1,
+                  el.element.name,
+                  el.unit,
+                  el.quantityRequested.toString(),
+                ]),
+              ],
+            },
+          },
+        );
       }
     }
-  });
 
-  this.logger.log("Request with ID found.");
-
-  if (!request) {
-    this.logger.error('Request not found');
-    throw new NotFoundException('Request not found');
-  }
-
-  // Solo impedir envío si NO está en draft (la generación del PDF sí la permitimos aquí)
-  if (request.status !== RequestStatus.draft) {
-    this.logger.error('Request status is not draft');
-    throw new BadRequestException('Only requests with status "draft" can be sent');
-  }
-
-  if (!request.type) {
-    this.logger.error('Invalid request type');
-    this.logger.error(`Request type provided: ${request.type}`);
-    throw new BadRequestException('Invalid request type');
-  }
-
-  const type = request.type;
-
-  this.logger.log(`Request type: ${type}`);
-
-  // 2) Traer elementos y trabajadores seleccionados
-  const elementRequests = await this.prismaService.elementRequest.findMany({
-    where: { requestId },
-    include: { request: true, element: true },
-    orderBy: { elementRequestId: 'asc' }
-  });
-
-  const requestWorkers = await this.prismaService.requestWorker.findMany({
-    where: { requestId },
-    include: { worker: true },
-    orderBy: { requestWorkerId: 'asc' }
-  });
-
-  this.logger.log('Element Requests:', elementRequests);
-  this.logger.log('Request Workers:', requestWorkers);
-
-  // Permitir cualquiera de los dos; solo rechazar si no hay ninguno
-  if ((elementRequests?.length ?? 0) === 0 && (requestWorkers?.length ?? 0) === 0) {
-    throw new NotFoundException('No se encontraron Element Requests ni Request Workers.');
-  }
-
-  // 3) Datos para cabecera
-  const sender = `${request.user.name} ${request.user.lastName}`;
-  const jobTitle = request.user.userUserTypes?.[0]?.userType?.name ?? '—';
-  const to2 = (n: number) => n.toString().padStart(2, '0');
-
-  const createdAt = new Date(request.createdAt);
-  const dateCreatedAt = `${to2(createdAt.getDate())}/${to2(createdAt.getMonth() + 1)}/${createdAt.getFullYear()} ${to2(createdAt.getHours())}:${to2(createdAt.getMinutes())}`;
-
-  const deliveryDueDate = new Date(request.deliveryDueDate);
-  const formattedDeliveryDueDate = `${to2(deliveryDueDate.getDate())}/${to2(deliveryDueDate.getMonth() + 1)}/${deliveryDueDate.getFullYear()} ${to2(deliveryDueDate.getHours())}:${to2(deliveryDueDate.getMinutes())}`;
-
-  const description = request.description || 'Sin descripción.';
-  const projectName = request.project.name;
-
-  // 4) Título y footer por tipo
-  let title = '', footer = '';
-  switch (type) {
-    case RequestType.Operative:
-      title = 'SOLICITUD DE REQUERIMIENTO DE ELEMENTOS OPERATIVOS';
-      footer = 'Agradecemos de antemano su atención a esta solicitud y quedamos atentos a su aprobación para proceder con las gestiones correspondientes.';
-      break;
-    case RequestType.Epp:
-      title = 'SOLICITUD DE REQUERIMIENTO DE ELEMENTOS DE PROTECCIÓN PERSONAL (EPP)';
-      footer = 'Agradecemos de antemano su atención a esta solicitud. Quedamos atentos a su aprobación y a la gestión correspondiente para la adquisición de los EPP requeridos.';
-      break;
-    case RequestType.EppAndOperative:
-      title = 'SOLICITUD DE REQUERIMIENTO DE EPP Y ELEMENTOS OPERATIVOS';
-      footer = 'Agradecemos su atención a esta solicitud y quedamos atentos a su aprobación para proceder con las gestiones necesarias.';
-      break;
-  }
-
-  // 5) PDFMake: fuentes y printer
-  const fonts = {
-    Roboto: {
-      normal: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
-      bold: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
-      italics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
-      bolditalics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-BoldItalic.ttf'),
-    },
-  };
-  const printer = new PdfPrinter(fonts);
-
-  // 6) Contenido base
-  const docContent: any[] = [
-    {
-      columns: [
-        { width: '*', text: '' },
-        { width: 100, image: logo, fit: [100, 100], alignment: 'right' },
-      ],
-    },
-    { text: title, style: 'header', margin: [0, 10, 0, 20] },
-    { text: [{ text: 'De: ', bold: true }, { text: `Ing. ${sender}` }] },
-    { text: [{ text: `${jobTitle} – GAVA C&C`, bold: true }], margin: [0, 0, 0, 10] },
-    { text: [{ text: 'Para: ', bold: true }, { text: 'Equipo de Logística' }] },
-    { text: [{ text: 'Proyecto: ', bold: true }, { text: projectName }], margin: [0, 0, 0, 10] },
-    { text: [{ text: 'Fecha y Hora de Solicitud: ', bold: true }, { text: dateCreatedAt }] },
-    { text: [{ text: 'Fecha y Hora de Entrega: ', bold: true }, { text: formattedDeliveryDueDate }], margin: [0, 0, 0, 10] },
-  ];
-
-  // 7) Tablas de ELEMENTOS (si hay)
-  if ((elementRequests?.length ?? 0) > 0) {
-    if (type === RequestType.EppAndOperative) {
-      const operativeElements = elementRequests.filter(el => el.element.type === RequestType.Operative);
-      const securityElements  = elementRequests.filter(el => el.element.type === RequestType.Epp);
-
-      if (operativeElements.length > 0) {
-        docContent.push(
-          { text: 'DETALLE DEL REQUERIMIENTO OPERATIVO', style: 'subheader', margin: [0, 20, 0, 10] },
-          {
-            table: {
-              widths: ['auto', '*', 'auto', 'auto'],
-              body: [
-                ['N° ITEM', 'DESCRIPCIÓN', 'UNIDAD', 'CANTIDAD'],
-                ...operativeElements.map((el, idx) => [
-                  idx + 1,
-                  el.element.name,
-                  el.unit,
-                  el.quantityRequested.toString()
-                ]),
-              ],
-            },
-          }
-        );
-      }
-
-      if (securityElements.length > 0) {
-        docContent.push(
-          { text: 'DETALLE DEL REQUERIMIENTO EPP', style: 'subheader', margin: [0, 20, 0, 10] },
-          {
-            table: {
-              widths: ['auto', '*', 'auto', 'auto'],
-              body: [
-                ['N° ITEM', 'DESCRIPCIÓN', 'UNIDAD', 'CANTIDAD'],
-                ...securityElements.map((el, idx) => [
-                  idx + 1,
-                  el.element.name,
-                  el.unit,
-                  el.quantityRequested.toString()
-                ]),
-              ],
-            },
-          }
-        );
-      }
-    } else {
+    // 8) Tabla de TRABAJADORES (si hay)
+    if ((requestWorkers?.length ?? 0) > 0) {
       docContent.push(
-        { text: 'DETALLE DEL REQUERIMIENTO', style: 'subheader', margin: [0, 20, 0, 10] },
+        {
+          text: 'DETALLE DE PERSONAL Y TALLAS',
+          style: 'subheader',
+          margin: [0, 20, 0, 10],
+        },
         {
           table: {
-            widths: ['auto', '*', 'auto', 'auto'],
+            widths: ['auto', '*', 'auto', 'auto', 'auto'],
             body: [
-              ['N° ITEM', 'DESCRIPCIÓN', 'UNIDAD', 'CANTIDAD'],
-              ...elementRequests.map((el, idx) => [
-                idx + 1,
-                el.element.name,
-                el.unit,
-                el.quantityRequested.toString()
+              ['N°', 'TRABAJADOR', 'ZAPATO', 'PANTALÓN', 'POLO'],
+              ...requestWorkers.map((rw, idx) => [
+                idx + 1, // índice 1..n
+                rw.worker?.fullName ?? '—',
+                (rw.shoeSize ?? '—').toString().toUpperCase(),
+                (rw.pantsSize ?? '—').toString().toUpperCase(),
+                (rw.shirtSize ?? '—').toString().toUpperCase(),
               ]),
             ],
           },
-        }
+        },
       );
     }
-  }
 
-  // 8) Tabla de TRABAJADORES (si hay)
-  if ((requestWorkers?.length ?? 0) > 0) {
+    // 9) Descripción + cierre
     docContent.push(
-      { text: 'DETALLE DE PERSONAL Y TALLAS', style: 'subheader', margin: [0, 20, 0, 10] },
+      { text: 'Descripción:', style: 'subheader', margin: [0, 20, 0, 10] },
+      { text: description, margin: [0, 10], alignment: 'justify' },
+      { text: footer, margin: [0, 20], alignment: 'justify' },
       {
-        table: {
-          widths: ['auto', '*', 'auto', 'auto', 'auto'],
-          body: [
-            ['N°', 'TRABAJADOR', 'ZAPATO', 'PANTALÓN', 'POLO'],
-            ...requestWorkers.map((rw, idx) => [
-              idx + 1, // índice 1..n
-              rw.worker?.fullName ?? '—',
-              (rw.shoeSize  ?? '—').toString().toUpperCase(),
-              (rw.pantsSize ?? '—').toString().toUpperCase(),
-              (rw.shirtSize ?? '—').toString().toUpperCase(),
-            ]),
-          ],
-        },
-      }
+        text: [
+          { text: 'Atentamente,\n\n', bold: true },
+          { text: `Ing. ${sender}` },
+        ],
+        alignment: 'left',
+        margin: [0, 10, 0, 0],
+      },
     );
-  }
 
-  // 9) Descripción + cierre
-  docContent.push(
-    { text: 'Descripción:', style: 'subheader', margin: [0, 20, 0, 10] },
-    { text: description, margin: [0, 10], alignment: 'justify' },
-    { text: footer, margin: [0, 20], alignment: 'justify' },
-    {
-      text: [{ text: 'Atentamente,\n\n', bold: true }, { text: `Ing. ${sender}` }],
-      alignment: 'left',
-      margin: [0, 10, 0, 0],
+    const docDefinition = {
+      pageMargins: [60, 40, 60, 40],
+      content: docContent,
+      styles: {
+        header: { fontSize: 14, bold: true, alignment: 'center' },
+        subheader: { fontSize: 12, bold: true },
+      },
+      defaultStyle: { font: 'Roboto', fontSize: 10 },
+    };
+
+    // 10) Generar y guardar
+    try {
+      const outputDir =
+        this.configService.get<string>('PDF_OUTPUT_DIR') ||
+        path.resolve(__dirname, '..', '..', 'output');
+
+      // Crear el directorio si no existe
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
+
+      const fileName = `requerimiento-${requestId}.pdf`;
+      const outputPath = path.resolve(outputDir, fileName);
+
+      const pdfDoc = printer.createPdfKitDocument(docDefinition);
+      const stream = fs.createWriteStream(outputPath);
+
+      pdfDoc.pipe(stream);
+      pdfDoc.end();
+
+      return new Promise<string>((resolve, reject) => {
+        stream.on('finish', () => resolve(outputPath));
+        stream.on('error', (err) => reject(err));
+      });
+    } catch (error) {
+      this.logger.error('Error generating PDF:', error);
+      throw new InternalServerErrorException('Error generating PDF');
     }
-  );
-
-  const docDefinition = {
-    pageMargins: [60, 40, 60, 40],
-    content: docContent,
-    styles: {
-      header: { fontSize: 14, bold: true, alignment: 'center' },
-      subheader: { fontSize: 12, bold: true },
-    },
-    defaultStyle: { font: 'Roboto', fontSize: 10 },
-  };
-
-  // 10) Generar y guardar
-  try {
-    const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || path.resolve(__dirname, '..', '..', 'output');
-    
-    // Crear el directorio si no existe
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
-    
-    const fileName = `requerimiento-${requestId}.pdf`;
-    const outputPath = path.resolve(outputDir, fileName);
-
-    const pdfDoc = printer.createPdfKitDocument(docDefinition);
-    const stream = fs.createWriteStream(outputPath);
-
-    pdfDoc.pipe(stream);
-    pdfDoc.end();
-
-    return new Promise<string>((resolve, reject) => {
-      stream.on('finish', () => resolve(outputPath));
-      stream.on('error', (err) => reject(err));
-    });
-  } catch (error) {
-    this.logger.error('Error generating PDF:', error);
-    throw new InternalServerErrorException('Error generating PDF');
   }
-}
 }

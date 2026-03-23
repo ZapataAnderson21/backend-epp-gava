@@ -1,5 +1,10 @@
 // attendance.service.ts
-import { ConflictException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { CreateAttendanceDto } from './dto/create-attendance.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { WorkerType } from 'src/worker/enum/worker-type.enum';
@@ -12,7 +17,7 @@ type BreakdownItem = {
   dailyWage: number;
   total: number;
   discounts: number; // para "Dscts" del wireframe (0 si no manejas descuentos)
-  net: number;       // total - discounts
+  net: number; // total - discounts
 };
 
 @Injectable()
@@ -23,7 +28,9 @@ export class AttendanceService {
 
   // ------------------------ CRUD existente ------------------------
   async create(createAttendanceDto: CreateAttendanceDto) {
-    this.logger.log(`Creating attendance with data: ${JSON.stringify(createAttendanceDto)}`);
+    this.logger.log(
+      `Creating attendance with data: ${JSON.stringify(createAttendanceDto)}`,
+    );
 
     this.logger.log(
       `Checking for existing attendance for workerId: ${createAttendanceDto.workerId} on date: ${createAttendanceDto.date}`,
@@ -39,14 +46,18 @@ export class AttendanceService {
       this.logger.warn(
         `Attendance already exists for workerId: ${createAttendanceDto.workerId} on date: ${createAttendanceDto.date}`,
       );
-      throw new ConflictException('Ya existe una asistencia para este trabajador en la fecha proporcionada.');
+      throw new ConflictException(
+        'Ya existe una asistencia para este trabajador en la fecha proporcionada.',
+      );
     }
 
     const week = await this.findWeekByDate(new Date(createAttendanceDto.date));
 
     if (!week) {
       this.logger.warn(`No week found for date: ${createAttendanceDto.date}`);
-      throw new ConflictException('No se encontró una semana válida para la fecha proporcionada.');
+      throw new ConflictException(
+        'No se encontró una semana válida para la fecha proporcionada.',
+      );
     }
 
     const attendance = await this.prismaService.attendance.create({
@@ -56,7 +67,9 @@ export class AttendanceService {
       },
     });
 
-    this.logger.log(`Attendance created successfully with ID: ${attendance.attendanceId}`);
+    this.logger.log(
+      `Attendance created successfully with ID: ${attendance.attendanceId}`,
+    );
     return {
       message: 'Asistencia creada exitosamente.',
       statusCode: HttpStatus.CREATED,

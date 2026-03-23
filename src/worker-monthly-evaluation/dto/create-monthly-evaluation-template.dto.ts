@@ -76,17 +76,25 @@ export class CreateMonthlyEvaluationTemplateDto {
   @IsNotEmpty()
   name!: string;
 
-  @ApiPropertyOptional({ example: 'Plantilla para evaluacion mensual del personal.' })
+  @ApiPropertyOptional({
+    example: 'Plantilla para evaluacion mensual del personal.',
+  })
   @IsOptional()
   @IsString()
   description?: string;
 
-  @ApiProperty({ example: 20, description: 'Umbral maximo para: Trabajador observado.' })
+  @ApiProperty({
+    example: 20,
+    description: 'Umbral maximo para: Trabajador observado.',
+  })
   @IsInt()
   @Min(0)
   observedMaxScore!: number;
 
-  @ApiProperty({ example: 40, description: 'Umbral maximo para: Bien, pero puede mejorar.' })
+  @ApiProperty({
+    example: 40,
+    description: 'Umbral maximo para: Bien, pero puede mejorar.',
+  })
   @IsInt()
   @Min(1)
   regularMaxScore!: number;

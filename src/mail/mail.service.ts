@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -8,23 +14,25 @@ import { RequestType } from 'src/request/enum/request-type.enum';
 
 @Injectable()
 export class MailService {
+  private readonly logger = new Logger('MailService');
 
-  private readonly logger = new Logger("MailService");
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  constructor(private readonly prismaService: PrismaService,
-              private readonly configService: ConfigService){}
-
-  async sendPasswordResetEmail( toEmail: string, token: string) {
+  async sendPasswordResetEmail(toEmail: string, token: string) {
     const fromEmail = this.configService.get<string>('MAIL_FROM');
     const fromPassword = this.configService.get<string>('MAIL_PASSWORD');
     const mailHost = this.configService.get<string>('MAIL_HOST');
     const mailPort = this.configService.get<number>('MAIL_PORT') || 465;
-    const resetPasswordUrl = this.configService.get<string>('RESET_PASSWORD_URL');
+    const resetPasswordUrl =
+      this.configService.get<string>('RESET_PASSWORD_URL');
 
     if (!fromEmail || !fromPassword || !mailHost) {
       throw new HttpException(
         'Configuración de correo incompleta. Verifique las variables de entorno.',
-        HttpStatus.INTERNAL_SERVER_ERROR
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
 
@@ -34,8 +42,8 @@ export class MailService {
       secure: true,
       auth: {
         user: fromEmail,
-        pass: fromPassword
-      }
+        pass: fromPassword,
+      },
     });
 
     const resetLink = `${resetPasswordUrl}?token=${token}`;
@@ -51,14 +59,14 @@ export class MailService {
         <p>Este enlace expirará en 1 hora.</p>
         <p>Si no solicitaste este cambio, puedes ignorar este mensaje.</p>
         <p>Saludos,<br>Equipo GAVA</p>
-      `
+      `,
     };
 
     await transporter.sendMail(mailOptions);
 
     return {
       statusCode: HttpStatus.OK,
-      message: 'Correo de recuperación de contraseña enviado.'
+      message: 'Correo de recuperación de contraseña enviado.',
     };
   }
 
@@ -72,12 +80,12 @@ export class MailService {
           include: {
             userUserTypes: {
               include: {
-                userType: true
-              }
-            }
-          }
-        }
-      }
+                userType: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!request) {
@@ -90,24 +98,33 @@ export class MailService {
   }
 
   async sendRequestToLogistics(requestId: number, passwordCPanel: string) {
-    this.logger.log(`Preparing to send request ID: ${requestId} to logistics via email`);
+    this.logger.log(
+      `Preparing to send request ID: ${requestId} to logistics via email`,
+    );
     try {
       const request = await this.findRequestById(requestId);
-      this.logger.log(`Request ID: ${requestId} found. Project: ${request.project.name}, User: ${request.user.email}`);
+      this.logger.log(
+        `Request ID: ${requestId} found. Project: ${request.project.name}, User: ${request.user.email}`,
+      );
 
       const sender = request.user.email;
       const toEmail = this.configService.get<string>('MAIL_LOGISTICS_TO');
-      const copyEmails = this.configService.get<string>('MAIL_LOGISTICS_CC')?.split(',') || [];
+      const copyEmails =
+        this.configService.get<string>('MAIL_LOGISTICS_CC')?.split(',') || [];
       const mailHost = this.configService.get<string>('MAIL_HOST');
       const mailPort = this.configService.get<number>('MAIL_PORT') || 465;
 
-      this.logger.debug(`Mail config - Host: ${mailHost}, Port: ${mailPort}, To: ${toEmail}, CC: ${copyEmails.join(', ') || 'none'}`);
+      this.logger.debug(
+        `Mail config - Host: ${mailHost}, Port: ${mailPort}, To: ${toEmail}, CC: ${copyEmails.join(', ') || 'none'}`,
+      );
 
       if (!mailHost || !toEmail) {
-        this.logger.error('Incomplete mail configuration. MAIL_HOST or MAIL_LOGISTICS_TO is missing.');
+        this.logger.error(
+          'Incomplete mail configuration. MAIL_HOST or MAIL_LOGISTICS_TO is missing.',
+        );
         throw new HttpException(
           'Configuración de correo incompleta. Verifique las variables de entorno.',
-          HttpStatus.INTERNAL_SERVER_ERROR
+          HttpStatus.INTERNAL_SERVER_ERROR,
         );
       }
 
@@ -124,12 +141,16 @@ export class MailService {
           break;
         case RequestType.EppAndOperative:
           subjectEmail = `Solicitud de Requerimiento mixto - ${request.project.name}`;
-          type = 'Requerimiento de Elementos Operativos y de Protección Personal (EPP)';
+          type =
+            'Requerimiento de Elementos Operativos y de Protección Personal (EPP)';
           break;
       }
-      this.logger.log(`Request type: ${request.type} - Subject: ${subjectEmail}`);
+      this.logger.log(
+        `Request type: ${request.type} - Subject: ${subjectEmail}`,
+      );
 
-      const outputDir = this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
+      const outputDir =
+        this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
       const pdfPath = path.resolve(outputDir, `requerimiento-${requestId}.pdf`);
       this.logger.debug(`PDF path: ${pdfPath}`);
 
@@ -159,10 +180,15 @@ export class MailService {
       this.logger.log('SMTP authentication successful');
 
       const now = new Date();
-      const formattedDate = now.toLocaleString('es-PE', { timeZone: 'America/Lima' });
-      const formattedDeliveryDueDate = new Date(request.deliveryDueDate).toLocaleString('es-PE', { timeZone: 'America/Lima' });
-      
-      const appUrl = this.configService.get<string>('APP_URL') || 'https://sir.gavacyc.com';
+      const formattedDate = now.toLocaleString('es-PE', {
+        timeZone: 'America/Lima',
+      });
+      const formattedDeliveryDueDate = new Date(
+        request.deliveryDueDate,
+      ).toLocaleString('es-PE', { timeZone: 'America/Lima' });
+
+      const appUrl =
+        this.configService.get<string>('APP_URL') || 'https://sir.gavacyc.com';
 
       const mailOptions = {
         from: `"${request.user.name} ${request.user.lastName}" <${sender}>`,
@@ -208,12 +234,16 @@ export class MailService {
           </div>
         </div>
           `,
-        attachments: [{ filename: `requerimiento-${requestId}.pdf`, path: pdfPath }],
+        attachments: [
+          { filename: `requerimiento-${requestId}.pdf`, path: pdfPath },
+        ],
       };
 
       this.logger.log(`Sending email from ${sender} to ${toEmail}...`);
       const result = await transporter.sendMail(mailOptions);
-      this.logger.log(`Email sent successfully. MessageId: ${result.messageId}`);
+      this.logger.log(
+        `Email sent successfully. MessageId: ${result.messageId}`,
+      );
 
       return {
         statusCode: 200,
@@ -223,31 +253,51 @@ export class MailService {
           response: result.response,
         },
       };
-
     } catch (error: any) {
-      // 💥 Captura errores de login SMTP u otros
-      if (error.code === 'EAUTH') {
-        this.logger.error(`SMTP authentication error for request ID: ${requestId}. Response: ${error.response}`);
+      if (error instanceof NotFoundException) {
         return {
-          statusCode: error.code,
-          message: 'Contraseña incorrecta.',
+          statusCode: HttpStatus.NOT_FOUND,
+          message: error.message,
+          data: null,
+        };
+      }
+
+      if (error instanceof HttpException) {
+        return {
+          statusCode: error.getStatus(),
+          message: error.message,
+          data: null,
+        };
+      }
+
+      if (error.code === 'EAUTH') {
+        this.logger.error(
+          `SMTP authentication error for request ID: ${requestId}. Response: ${error.response}`,
+        );
+        return {
+          statusCode: HttpStatus.UNAUTHORIZED,
+          message: 'Error de autenticacion SMTP: credenciales invalidas.',
           data: error.response || null,
         };
       }
 
       if (error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED') {
-        this.logger.error(`SMTP connection error for request ID: ${requestId}. Code: ${error.code}, Message: ${error.message}`);
+        this.logger.error(
+          `SMTP connection error for request ID: ${requestId}. Code: ${error.code}, Message: ${error.message}`,
+        );
         return {
-          statusCode: error.code,
-          message: 'No se pudo conectar con el servidor de correos SMTP.',
+          statusCode: HttpStatus.SERVICE_UNAVAILABLE,
+          message: 'No se pudo conectar con el servidor SMTP.',
           data: error.message,
         };
       }
 
-      // Error general
-      this.logger.error(`Unexpected error sending email for request ID: ${requestId}. Error: ${error.message}`, error.stack);
+      this.logger.error(
+        `Unexpected error sending email for request ID: ${requestId}. Error: ${error.message}`,
+        error.stack,
+      );
       return {
-        statusCode: error.code,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error.message || 'Error desconocido al enviar el correo.',
         data: error.stack || null,
       };

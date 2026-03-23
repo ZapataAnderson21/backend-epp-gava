@@ -1,11 +1,21 @@
-import { Controller, Get, Post, Body, Param, Patch, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Patch,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { RequestResponseService } from './request_response.service';
 import { CreateRequestResponseDto } from './dto/create-request_response.dto';
 import { UpdateRequestResponseDto } from './dto/update-request_response.dto';
 
 @Controller('request-response')
 export class RequestResponseController {
-  constructor(private readonly requestResponseService: RequestResponseService) {}
+  constructor(
+    private readonly requestResponseService: RequestResponseService,
+  ) {}
 
   @Post()
   async create(@Body() createRequestResponseDto: CreateRequestResponseDto) {
@@ -23,8 +33,13 @@ export class RequestResponseController {
   }
 
   @Patch(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updateRequestResponseDto: UpdateRequestResponseDto) {
-    return await this.requestResponseService.update(id, updateRequestResponseDto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateRequestResponseDto: UpdateRequestResponseDto,
+  ) {
+    return await this.requestResponseService.update(
+      id,
+      updateRequestResponseDto,
+    );
   }
-
 }

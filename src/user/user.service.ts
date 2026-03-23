@@ -1,4 +1,12 @@
-import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { User } from '../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { compare } from 'bcrypt';
@@ -12,22 +20,29 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
   private readonly logger = new Logger('UserService');
 
   async create(createUserDto: CreateUserDto) {
+    this.logger.log(
+      `Validating associated user type: ${createUserDto.userTypeId.toString()}`,
+    );
 
-    this.logger.log(`Validating associated user type: ${createUserDto.userTypeId.toString()}`);
-    
     const userType = await this.prisma.userType.findUnique({
-      where: { userTypeId: createUserDto.userTypeId }
+      where: { userTypeId: createUserDto.userTypeId },
     });
 
     if (!userType) {
-      this.logger.warn(`User type not found: ${createUserDto.userTypeId.toString()}`);
-      throw new BadRequestException('El tipo de usuario proporcionado no es válido.');
+      this.logger.warn(
+        `User type not found: ${createUserDto.userTypeId.toString()}`,
+      );
+      throw new BadRequestException(
+        'El tipo de usuario proporcionado no es válido.',
+      );
     }
 
     const existingUser = await this.findByEmail(createUserDto.email);
@@ -37,7 +52,7 @@ export class UserService {
       throw new ConflictException('El correo ya está en uso.');
     }
 
-    if(createUserDto.phone) {
+    if (createUserDto.phone) {
       const existingUserByPhone = await this.findByPhone(createUserDto.phone);
 
       if (existingUserByPhone) {
@@ -48,66 +63,85 @@ export class UserService {
 
     const hashedPassword = await hash(createUserDto.password, 10);
 
-
-    const createUserDtoWithoutUserTypeId = (({ userTypeId, ...o }) => o)(createUserDto);
+    const createUserDtoWithoutUserTypeId = (({ userTypeId, ...o }) => o)(
+      createUserDto,
+    );
 
     const data = {
       ...createUserDtoWithoutUserTypeId,
-      password: hashedPassword
-    }
+      password: hashedPassword,
+    };
 
-    this.logger.log(`Creating user: ${JSON.stringify(createUserDto.password ? { ...createUserDto, password: '****' } : createUserDto)}`);
+    this.logger.log(
+      `Creating user: ${JSON.stringify(createUserDto.password ? { ...createUserDto, password: '****' } : createUserDto)}`,
+    );
     const newUser = await this.prisma.user.create({
-      data
+      data,
     });
 
-    if(!newUser) {
-      this.logger.error(`Failed to create user: ${JSON.stringify(createUserDto)}`);
+    if (!newUser) {
+      this.logger.error(
+        `Failed to create user: ${JSON.stringify(createUserDto)}`,
+      );
       throw new BadRequestException('Failed to create user');
     }
 
-    this.logger.log('Assigning user type to new user', `User ID: ${newUser.userId}, User Type ID: ${userType.userTypeId}`);
+    this.logger.log(
+      'Assigning user type to new user',
+      `User ID: ${newUser.userId}, User Type ID: ${userType.userTypeId}`,
+    );
     const payloadUserUserType: CreateUserUserTypeDto = {
       userId: newUser.userId,
-      userTypeId: userType.userTypeId
-    }
+      userTypeId: userType.userTypeId,
+    };
 
-    this.logger.log('Creating user - userType association', JSON.stringify(payloadUserUserType));
+    this.logger.log(
+      'Creating user - userType association',
+      JSON.stringify(payloadUserUserType),
+    );
     const association = await this.prisma.userUserType.create({
-      data: payloadUserUserType
+      data: payloadUserUserType,
     });
 
     if (!association) {
-      this.logger.error('Failed to create user - userType association', JSON.stringify(payloadUserUserType));
-      throw new BadRequestException('Failed to create user - userType association');
+      this.logger.error(
+        'Failed to create user - userType association',
+        JSON.stringify(payloadUserUserType),
+      );
+      throw new BadRequestException(
+        'Failed to create user - userType association',
+      );
     }
-    
+
     const userReturn = {
       ...newUser,
       password: '',
-      userType: userType.name
-    }
+      userType: userType.name,
+    };
 
-    this.logger.log(`User created successfully: ${JSON.stringify(newUser.password ? { ...newUser, password: '****' } : newUser)}`);
+    this.logger.log(
+      `User created successfully: ${JSON.stringify(newUser.password ? { ...newUser, password: '****' } : newUser)}`,
+    );
     return {
       statusCode: HttpStatus.CREATED,
       message: 'Usuario registrado exitosamente.',
-      data: userReturn
+      data: userReturn,
     };
   }
 
   async login(loginDto: LoginDto) {
-    
     const { email, password } = loginDto;
 
-    if(!email || !password) {
+    if (!email || !password) {
       this.logger.warn('Email and password must be provided for login');
-      throw new BadRequestException('El correo y la contraseña son obligatorios.');
+      throw new BadRequestException(
+        'El correo y la contraseña son obligatorios.',
+      );
     }
 
     this.logger.log(`Attempting login for email: ${email}`);
-    let user = await this.findByEmail(email);
-    
+    const user = await this.findByEmail(email);
+
     if (!user) {
       this.logger.warn(`Login failed: User not found for email ${email}`);
       throw new NotFoundException('El usuario con este correo no existe.');
@@ -136,18 +170,17 @@ export class UserService {
       message: 'Login successful',
       data: {
         user: returnUser.data,
-        accessToken
+        accessToken,
       },
     };
   }
 
   async findAll() {
-
     this.logger.log('Finding all users');
     const users = await this.prisma.user.findMany({
-      where: { 
-        deletedAt: null 
-      }
+      where: {
+        deletedAt: null,
+      },
     });
 
     if (!users || users.length === 0) {
@@ -155,7 +188,7 @@ export class UserService {
       return {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'No se han encontrado usuarios.',
-        data: []
+        data: [],
       };
     }
 
@@ -164,31 +197,30 @@ export class UserService {
       users.map(async (user) => {
         const returnUser = await this.findOne(user.userId);
         return returnUser.data;
-      })
+      }),
     );
 
     return {
       statusCode: HttpStatus.OK,
       message: 'Los usuarios han sido encontrados exitosamente.',
-      data: usersWithTypes
+      data: usersWithTypes,
     };
   }
 
   async findOne(id: number) {
-    
     this.logger.log(`Finding user with id: ${id}`);
     const user = await this.prisma.user.findUnique({
-      where: { 
+      where: {
         userId: id,
-        deletedAt: null
+        deletedAt: null,
       },
       include: {
         userUserTypes: {
           include: {
-            userType: true
-          }
-        }
-      }
+            userType: true,
+          },
+        },
+      },
     });
 
     if (!user) {
@@ -196,38 +228,40 @@ export class UserService {
       throw new NotFoundException('El usuario no ha sido encontrado.');
     }
 
-    const userType = user.userUserTypes[0].userType.name ? user.userUserTypes[0].userType.name : null;
+    const userType = user.userUserTypes[0].userType.name
+      ? user.userUserTypes[0].userType.name
+      : null;
 
     const userWithType = {
       userId: user.userId,
       name: user.name,
       lastName: user.lastName,
       email: user.email,
-      userType: userType
+      userType: userType,
     };
 
     this.logger.log(`User found with id: ${id}`);
     return {
       statusCode: HttpStatus.OK,
       message: 'El usuario ha sido encontrado exitosamente.',
-      data:userWithType
+      data: userWithType,
     };
   }
 
   async findByEmail(email: string) {
     this.logger.log(`Finding user by email: ${email}`);
     const foundUser = await this.prisma.user.findUnique({
-      where: { 
+      where: {
         email: email,
-        deletedAt: null
+        deletedAt: null,
       },
       include: {
         userUserTypes: {
           include: {
-            userType: true
-          }
-        }
-      }
+            userType: true,
+          },
+        },
+      },
     });
 
     if (!foundUser) {
@@ -244,15 +278,15 @@ export class UserService {
     const foundUser = await this.prisma.user.findUnique({
       where: {
         phone: phone,
-        deletedAt: null
+        deletedAt: null,
       },
       include: {
         userUserTypes: {
           include: {
-            userType: true
-          }
-        }
-      }
+            userType: true,
+          },
+        },
+      },
     });
 
     if (!foundUser) {
@@ -265,7 +299,6 @@ export class UserService {
   }
 
   async updatePassword(resetPasswordDto: ResetPasswordDto) {
-
     const { accessToken, password } = resetPasswordDto;
 
     const user = await this.validateResetToken(accessToken);
@@ -280,7 +313,7 @@ export class UserService {
     this.logger.log(`Updating password for userId: ${user.userId}`);
     const updatedUser = await this.prisma.user.update({
       where: { userId: user.userId },
-      data: { password: hashedPassword }
+      data: { password: hashedPassword },
     });
 
     if (!updatedUser) {
@@ -290,7 +323,7 @@ export class UserService {
 
     await this.prisma.passwordResetToken.update({
       where: { token: accessToken },
-      data: { used: true }
+      data: { used: true },
     });
 
     this.logger.log(`Password updated successfully for userId: ${user.userId}`);
@@ -298,10 +331,10 @@ export class UserService {
     return {
       statusCode: HttpStatus.OK,
       message: 'Contraseña actualizada con éxito.',
-      data: { 
-        userId: updatedUser.userId, 
-        email: updatedUser.email 
-      }
+      data: {
+        userId: updatedUser.userId,
+        email: updatedUser.email,
+      },
     };
   }
 
@@ -320,7 +353,7 @@ export class UserService {
     this.logger.log(`Updating self user with id: ${userId}`);
     const updatedUser = await this.prisma.user.update({
       where: { userId },
-      data
+      data,
     });
 
     if (!updatedUser) {
@@ -334,12 +367,11 @@ export class UserService {
     return {
       statusCode: HttpStatus.OK,
       message: 'Usuario actualizado exitosamente.',
-      data: returnUser.data
+      data: returnUser.data,
     };
   }
 
-  async update(id: number, updateUserDto: Partial<User>): Promise<User | null> {
-
+  async update(id: number, updateUserDto: Partial<User>) {
     await this.findOne(id);
 
     const data = { ...updateUserDto } as Partial<User>;
@@ -353,7 +385,7 @@ export class UserService {
     this.logger.log(`Updating user with id: ${id}`);
     const updatedUser = await this.prisma.user.update({
       where: { userId: id },
-      data
+      data,
     });
 
     if (!updatedUser) {
@@ -361,19 +393,25 @@ export class UserService {
       throw new BadRequestException('Failed to update user');
     }
 
+    const returnUser = await this.findOne(id);
+
     this.logger.log(`User with id: ${id} updated successfully`);
-    return updatedUser;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Usuario actualizado exitosamente.',
+      data: returnUser.data,
+    };
   }
 
   async emailExists(email: string): Promise<string | null> {
     this.logger.log(`Checking if email exists: ${email}`);
     const user = await this.prisma.user.findUnique({
-      where: { 
+      where: {
         email: email,
-        deletedAt: null
-      }
+        deletedAt: null,
+      },
     });
-    
+
     if (!user) {
       this.logger.log(`Email does not exist: ${email}`);
       throw new NotFoundException('Email does not exist');
@@ -383,12 +421,14 @@ export class UserService {
       data: {
         userId: user.userId,
         token: this.jwtService.sign({ email: user.email }),
-        expiresAt: new Date(Date.now() + 3600000)
-      }
+        expiresAt: new Date(Date.now() + 3600000),
+      },
     });
 
-    if(!createdToken) {
-      this.logger.error(`Failed to create password reset token for email: ${email}`);
+    if (!createdToken) {
+      this.logger.error(
+        `Failed to create password reset token for email: ${email}`,
+      );
       throw new BadRequestException('Failed to create password reset token');
     }
 
@@ -398,7 +438,7 @@ export class UserService {
 
   async validateResetToken(token: string) {
     const foundToken = await this.prisma.passwordResetToken.findUnique({
-      where: { token }
+      where: { token },
     });
 
     if (!foundToken || foundToken.used || foundToken.expiresAt < new Date()) {
@@ -407,7 +447,7 @@ export class UserService {
     }
 
     const decoded = this.jwtService.verify(token);
-    
+
     const user = await this.findByEmail(decoded.email);
 
     this.logger.log('User found for the provided token');
@@ -419,11 +459,11 @@ export class UserService {
 
     this.logger.log(`Removing user with id: ${id}`);
 
-    const deletedAt = new Date(); 
+    const deletedAt = new Date();
 
     const deletedUser = await this.prisma.user.update({
       where: { userId: id },
-      data: { deletedAt }
+      data: { deletedAt },
     });
 
     if (!deletedUser) {
@@ -432,7 +472,14 @@ export class UserService {
     }
 
     this.logger.log(`User with id: ${id} deleted successfully`);
-    return deletedUser;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Usuario eliminado exitosamente.',
+      data: {
+        userId: deletedUser.userId,
+        deletedAt: deletedUser.deletedAt,
+      },
+    };
   }
 
   async logout(token: string) {
@@ -440,31 +487,58 @@ export class UserService {
       throw new BadRequestException('Token is required for logout');
     }
 
+    const normalizedToken = token.replace(/^Bearer\s+/i, '').trim();
+
+    let decodedToken: any;
+    try {
+      decodedToken = this.jwtService.decode(normalizedToken);
+    } catch {
+      throw new BadRequestException('Invalid token');
+    }
+
+    if (!decodedToken?.exp) {
+      throw new BadRequestException('Invalid token');
+    }
+
     this.logger.log('Logging out token');
-    const decodedToken = this.jwtService.decode(token) as any;
     const expiresAt = new Date(decodedToken.exp * 1000);
 
     await this.prisma.blacklistedToken.create({
       data: {
-        token,
-        expiresAt
-      }
+        token: normalizedToken,
+        expiresAt,
+      },
     });
 
     this.logger.log('Token logged out successfully');
     return { statusCode: HttpStatus.OK };
   }
 
-  async isTokenBlacklisted(token: string) {
-    
+  async validateToken(token: string) {
     if (!token) {
       throw new BadRequestException('Token is required');
     }
 
+    const normalizedToken = token.replace(/^Bearer\s+/i, '').trim();
+
+    try {
+      this.jwtService.verify(normalizedToken);
+    } catch {
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Token inv\u00e1lido o expirado.',
+        data: { valid: false },
+      };
+    }
+
     const blacklistedToken = await this.prisma.blacklistedToken.findUnique({
-      where: { token }
+      where: { token: normalizedToken },
     });
 
-    return !!blacklistedToken;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Token validado exitosamente.',
+      data: { valid: !blacklistedToken },
+    };
   }
 }

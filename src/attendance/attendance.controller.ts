@@ -16,12 +16,14 @@ import { CreateAttendanceDto } from './dto/create-attendance.dto';
 
 @Controller('attendance')
 export class AttendanceController {
-  private readonly logger = new Logger("AttendanceController");
+  private readonly logger = new Logger('AttendanceController');
   constructor(private readonly attendanceService: AttendanceService) {}
 
   @Post()
   create(@Body() createAttendanceDto: CreateAttendanceDto) {
-    this.logger.log(`Creating attendance with data: ${JSON.stringify(createAttendanceDto)}`);
+    this.logger.log(
+      `Creating attendance with data: ${JSON.stringify(createAttendanceDto)}`,
+    );
     return this.attendanceService.create(createAttendanceDto);
   }
 
@@ -31,7 +33,9 @@ export class AttendanceController {
     @Query('projectId') projectId?: string,
     @Query('workerId') workerId?: string,
   ) {
-    this.logger.log(`Finding all attendance records with filters - weekId: ${weekId}, projectId: ${projectId}, workerId: ${workerId}`); 
+    this.logger.log(
+      `Finding all attendance records with filters - weekId: ${weekId}, projectId: ${projectId}, workerId: ${workerId}`,
+    );
     return this.attendanceService.findAll(
       weekId ? Number(weekId) : undefined,
       projectId ? Number(projectId) : undefined,

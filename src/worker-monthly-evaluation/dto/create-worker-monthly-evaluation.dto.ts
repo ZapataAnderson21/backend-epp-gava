@@ -16,14 +16,20 @@ export class MonthlyEvaluationResponseInputDto {
   @IsInt()
   monthlyEvaluationQuestionId!: number;
 
-  @ApiPropertyOptional({ minimum: 0, maximum: 3, description: 'Solo aplica para preguntas de tipo score.' })
+  @ApiPropertyOptional({
+    minimum: 0,
+    maximum: 3,
+    description: 'Solo aplica para preguntas de tipo score.',
+  })
   @IsOptional()
   @IsInt()
   @Min(0)
   @Max(3)
   score?: number;
 
-  @ApiPropertyOptional({ description: 'Solo aplica para preguntas de tipo text.' })
+  @ApiPropertyOptional({
+    description: 'Solo aplica para preguntas de tipo text.',
+  })
   @IsOptional()
   @IsString()
   textAnswer?: string;
@@ -48,7 +54,10 @@ export class CreateWorkerMonthlyEvaluationDto {
   @Max(12)
   month!: number;
 
-  @ApiPropertyOptional({ default: 1, description: 'Permite multiples evaluaciones por mes en el futuro.' })
+  @ApiPropertyOptional({
+    default: 1,
+    description: 'Permite multiples evaluaciones por mes en el futuro.',
+  })
   @IsOptional()
   @IsInt()
   @Min(1)

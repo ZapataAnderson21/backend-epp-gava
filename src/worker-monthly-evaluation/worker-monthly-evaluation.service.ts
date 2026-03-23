@@ -22,7 +22,11 @@ import {
 } from './dto/create-worker-monthly-evaluation.dto';
 import { UpdateWorkerMonthlyEvaluationResponsesDto } from './dto/update-worker-monthly-evaluation-responses.dto';
 import { ListWorkerMonthlyEvaluationDto } from './dto/list-worker-monthly-evaluation.dto';
-import { PERFORMANCE_LABELS, SCORE_MAX, SCORE_MIN } from './constants/worker-monthly-evaluation.constants';
+import {
+  PERFORMANCE_LABELS,
+  SCORE_MAX,
+  SCORE_MIN,
+} from './constants/worker-monthly-evaluation.constants';
 
 type QuestionSnapshot = {
   monthlyEvaluationQuestionId: number;
@@ -38,7 +42,10 @@ export class WorkerMonthlyEvaluationService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createTemplate(dto: CreateMonthlyEvaluationTemplateDto, currentUserId: number) {
+  async createTemplate(
+    dto: CreateMonthlyEvaluationTemplateDto,
+    currentUserId: number,
+  ) {
     const normalizedSections = dto.sections.map((section, sectionIndex) => ({
       ...section,
       displayOrder: sectionIndex,
@@ -47,8 +54,14 @@ export class WorkerMonthlyEvaluationService {
       ),
     }));
 
-    const maxScore = this.calculateMaxScore(normalizedSections.flatMap((section) => section.questions));
-    this.validateThresholds(dto.observedMaxScore, dto.regularMaxScore, maxScore);
+    const maxScore = this.calculateMaxScore(
+      normalizedSections.flatMap((section) => section.questions),
+    );
+    this.validateThresholds(
+      dto.observedMaxScore,
+      dto.regularMaxScore,
+      maxScore,
+    );
 
     const created = await this.prismaService.$transaction(async (tx) => {
       const template = await tx.monthlyEvaluationTemplate.create({
@@ -76,7 +89,9 @@ export class WorkerMonthlyEvaluationService {
                       isScored: question.isScored,
                       minScore: question.minScore,
                       maxScore: question.maxScore,
-                      metadata: question.metadata as Prisma.InputJsonValue | undefined,
+                      metadata: question.metadata as
+                        | Prisma.InputJsonValue
+                        | undefined,
                     })),
                   },
                 })),
@@ -109,26 +124,27 @@ export class WorkerMonthlyEvaluationService {
   }
 
   async listTemplates() {
-    const templates = await this.prismaService.monthlyEvaluationTemplate.findMany({
-      where: { deletedAt: null },
-      orderBy: { createdAt: 'desc' },
-      include: {
-        versions: {
-          orderBy: { versionNumber: 'desc' },
-          take: 1,
-          include: {
-            sections: {
-              orderBy: { displayOrder: 'asc' },
-              include: {
-                questions: {
-                  orderBy: { displayOrder: 'asc' },
+    const templates =
+      await this.prismaService.monthlyEvaluationTemplate.findMany({
+        where: { deletedAt: null },
+        orderBy: { createdAt: 'desc' },
+        include: {
+          versions: {
+            orderBy: { versionNumber: 'desc' },
+            take: 1,
+            include: {
+              sections: {
+                orderBy: { displayOrder: 'asc' },
+                include: {
+                  questions: {
+                    orderBy: { displayOrder: 'asc' },
+                  },
                 },
               },
             },
           },
         },
-      },
-    });
+      });
 
     return {
       statusCode: HttpStatus.OK,
@@ -138,24 +154,25 @@ export class WorkerMonthlyEvaluationService {
   }
 
   async findTemplate(templateId: number) {
-    const template = await this.prismaService.monthlyEvaluationTemplate.findFirst({
-      where: { monthlyEvaluationTemplateId: templateId, deletedAt: null },
-      include: {
-        versions: {
-          orderBy: { versionNumber: 'desc' },
-          include: {
-            sections: {
-              orderBy: { displayOrder: 'asc' },
-              include: {
-                questions: {
-                  orderBy: { displayOrder: 'asc' },
+    const template =
+      await this.prismaService.monthlyEvaluationTemplate.findFirst({
+        where: { monthlyEvaluationTemplateId: templateId, deletedAt: null },
+        include: {
+          versions: {
+            orderBy: { versionNumber: 'desc' },
+            include: {
+              sections: {
+                orderBy: { displayOrder: 'asc' },
+                include: {
+                  questions: {
+                    orderBy: { displayOrder: 'asc' },
+                  },
                 },
               },
             },
           },
         },
-      },
-    });
+      });
 
     if (!template) {
       throw new NotFoundException('No se encontro la plantilla solicitada.');
@@ -169,77 +186,83 @@ export class WorkerMonthlyEvaluationService {
   }
 
   async duplicateTemplate(templateId: number, currentUserId: number) {
-    const sourceTemplate = await this.prismaService.monthlyEvaluationTemplate.findFirst({
-      where: { monthlyEvaluationTemplateId: templateId, deletedAt: null },
-      include: {
-        versions: {
-          orderBy: { versionNumber: 'desc' },
-          take: 1,
-          include: {
-            sections: {
-              orderBy: { displayOrder: 'asc' },
-              include: {
-                questions: {
-                  orderBy: { displayOrder: 'asc' },
+    const sourceTemplate =
+      await this.prismaService.monthlyEvaluationTemplate.findFirst({
+        where: { monthlyEvaluationTemplateId: templateId, deletedAt: null },
+        include: {
+          versions: {
+            orderBy: { versionNumber: 'desc' },
+            take: 1,
+            include: {
+              sections: {
+                orderBy: { displayOrder: 'asc' },
+                include: {
+                  questions: {
+                    orderBy: { displayOrder: 'asc' },
+                  },
                 },
               },
             },
           },
         },
-      },
-    });
+      });
 
     if (!sourceTemplate || sourceTemplate.versions.length === 0) {
-      throw new NotFoundException('No se encontro la plantilla base a duplicar.');
+      throw new NotFoundException(
+        'No se encontro la plantilla base a duplicar.',
+      );
     }
 
     const baseVersion = sourceTemplate.versions[0];
 
-    const duplicated = await this.prismaService.monthlyEvaluationTemplate.create({
-      data: {
-        name: `${sourceTemplate.name} (Copia)`,
-        description: sourceTemplate.description,
-        createdByUserId: currentUserId,
-        versions: {
-          create: {
-            versionNumber: 1,
-            title: `${baseVersion.title} (Copia)`,
-            description: baseVersion.description,
-            observedMaxScore: baseVersion.observedMaxScore,
-            regularMaxScore: baseVersion.regularMaxScore,
-            sections: {
-              create: baseVersion.sections.map((section) => ({
-                title: section.title,
-                displayOrder: section.displayOrder,
-                questions: {
-                  create: section.questions.map((question) => ({
-                    displayOrder: question.displayOrder,
-                    prompt: question.prompt,
-                    questionType: question.questionType,
-                    isRequired: question.isRequired,
-                    isScored: question.isScored,
-                    minScore: question.minScore,
-                    maxScore: question.maxScore,
-                    metadata: (question.metadata as Prisma.InputJsonValue | null) ?? undefined,
-                  })),
-                },
-              })),
-            },
-          },
-        },
-      },
-      include: {
-        versions: {
-          include: {
-            sections: {
-              include: {
-                questions: true,
+    const duplicated =
+      await this.prismaService.monthlyEvaluationTemplate.create({
+        data: {
+          name: `${sourceTemplate.name} (Copia)`,
+          description: sourceTemplate.description,
+          createdByUserId: currentUserId,
+          versions: {
+            create: {
+              versionNumber: 1,
+              title: `${baseVersion.title} (Copia)`,
+              description: baseVersion.description,
+              observedMaxScore: baseVersion.observedMaxScore,
+              regularMaxScore: baseVersion.regularMaxScore,
+              sections: {
+                create: baseVersion.sections.map((section) => ({
+                  title: section.title,
+                  displayOrder: section.displayOrder,
+                  questions: {
+                    create: section.questions.map((question) => ({
+                      displayOrder: question.displayOrder,
+                      prompt: question.prompt,
+                      questionType: question.questionType,
+                      isRequired: question.isRequired,
+                      isScored: question.isScored,
+                      minScore: question.minScore,
+                      maxScore: question.maxScore,
+                      metadata:
+                        (question.metadata as Prisma.InputJsonValue | null) ??
+                        undefined,
+                    })),
+                  },
+                })),
               },
             },
           },
         },
-      },
-    });
+        include: {
+          versions: {
+            include: {
+              sections: {
+                include: {
+                  questions: true,
+                },
+              },
+            },
+          },
+        },
+      });
 
     return {
       statusCode: HttpStatus.CREATED,
@@ -248,7 +271,10 @@ export class WorkerMonthlyEvaluationService {
     };
   }
 
-  async createEvaluation(dto: CreateWorkerMonthlyEvaluationDto, currentUserId: number) {
+  async createEvaluation(
+    dto: CreateWorkerMonthlyEvaluationDto,
+    currentUserId: number,
+  ) {
     const worker = await this.prismaService.worker.findFirst({
       where: {
         workerId: dto.workerId,
@@ -257,43 +283,56 @@ export class WorkerMonthlyEvaluationService {
     });
 
     if (!worker) {
-      throw new NotFoundException('El trabajador no existe o esta deshabilitado.');
+      throw new NotFoundException(
+        'El trabajador no existe o esta deshabilitado.',
+      );
     }
 
-    const templateVersion = await this.prismaService.monthlyEvaluationTemplateVersion.findUnique({
-      where: { monthlyEvaluationTemplateVersionId: dto.monthlyEvaluationTemplateVersionId },
-      include: {
-        template: true,
-        sections: {
-          include: {
-            questions: true,
+    const templateVersion =
+      await this.prismaService.monthlyEvaluationTemplateVersion.findUnique({
+        where: {
+          monthlyEvaluationTemplateVersionId:
+            dto.monthlyEvaluationTemplateVersionId,
+        },
+        include: {
+          template: true,
+          sections: {
+            include: {
+              questions: true,
+            },
           },
         },
-      },
-    });
+      });
 
     if (!templateVersion || templateVersion.template.deletedAt) {
-      throw new NotFoundException('La version de plantilla indicada no existe.');
+      throw new NotFoundException(
+        'La version de plantilla indicada no existe.',
+      );
     }
 
     const sequence = dto.sequence ?? 1;
 
-    const existing = await this.prismaService.workerMonthlyEvaluation.findUnique({
-      where: {
-        workerId_year_month_sequence: {
-          workerId: dto.workerId,
-          year: dto.year,
-          month: dto.month,
-          sequence,
+    const existing =
+      await this.prismaService.workerMonthlyEvaluation.findUnique({
+        where: {
+          workerId_year_month_sequence: {
+            workerId: dto.workerId,
+            year: dto.year,
+            month: dto.month,
+            sequence,
+          },
         },
-      },
-    });
+      });
 
     if (existing) {
-      throw new ConflictException('Ya existe una evaluacion para ese trabajador, periodo y secuencia.');
+      throw new ConflictException(
+        'Ya existe una evaluacion para ese trabajador, periodo y secuencia.',
+      );
     }
 
-    const questions = templateVersion.sections.flatMap((section) => section.questions);
+    const questions = templateVersion.sections.flatMap(
+      (section) => section.questions,
+    );
     const questionMap = new Map<number, QuestionSnapshot>(
       questions.map((question) => [
         question.monthlyEvaluationQuestionId,
@@ -314,56 +353,67 @@ export class WorkerMonthlyEvaluationService {
 
     const evaluatorUserId = currentUserId;
 
-    const createdEvaluation = await this.prismaService.$transaction(async (tx) => {
-      const evaluation = await tx.workerMonthlyEvaluation.create({
-        data: {
-          workerId: dto.workerId,
-          monthlyEvaluationTemplateVersionId: dto.monthlyEvaluationTemplateVersionId,
-          year: dto.year,
-          month: dto.month,
-          sequence,
-          status: MonthlyEvaluationStatus.open,
-          evaluatorUserId,
-          openedByUserId: currentUserId,
-          openedAt: new Date(),
-          generalComment: dto.generalComment?.trim(),
-        },
-      });
-
-      if (responses.length > 0) {
-        await tx.workerMonthlyEvaluationResponse.createMany({
-          data: responses.map((response) => {
-            const question = questionMap.get(response.monthlyEvaluationQuestionId)!;
-            return {
-              workerMonthlyEvaluationId: evaluation.workerMonthlyEvaluationId,
-              monthlyEvaluationQuestionId: response.monthlyEvaluationQuestionId,
-              score: question.questionType === MonthlyEvaluationQuestionType.score ? response.score ?? null : null,
-              textAnswer:
-                question.questionType === MonthlyEvaluationQuestionType.text
-                  ? response.textAnswer?.trim() ?? null
-                  : null,
-            };
-          }),
+    const createdEvaluation = await this.prismaService.$transaction(
+      async (tx) => {
+        const evaluation = await tx.workerMonthlyEvaluation.create({
+          data: {
+            workerId: dto.workerId,
+            monthlyEvaluationTemplateVersionId:
+              dto.monthlyEvaluationTemplateVersionId,
+            year: dto.year,
+            month: dto.month,
+            sequence,
+            status: MonthlyEvaluationStatus.open,
+            evaluatorUserId,
+            openedByUserId: currentUserId,
+            openedAt: new Date(),
+            generalComment: dto.generalComment?.trim(),
+          },
         });
-      }
 
-      const computed = await this.computeEvaluationScores(
-        tx,
-        evaluation.workerMonthlyEvaluationId,
-        templateVersion.observedMaxScore,
-        templateVersion.regularMaxScore,
-      );
+        if (responses.length > 0) {
+          await tx.workerMonthlyEvaluationResponse.createMany({
+            data: responses.map((response) => {
+              const question = questionMap.get(
+                response.monthlyEvaluationQuestionId,
+              )!;
+              return {
+                workerMonthlyEvaluationId: evaluation.workerMonthlyEvaluationId,
+                monthlyEvaluationQuestionId:
+                  response.monthlyEvaluationQuestionId,
+                score:
+                  question.questionType === MonthlyEvaluationQuestionType.score
+                    ? (response.score ?? null)
+                    : null,
+                textAnswer:
+                  question.questionType === MonthlyEvaluationQuestionType.text
+                    ? (response.textAnswer?.trim() ?? null)
+                    : null,
+              };
+            }),
+          });
+        }
 
-      return tx.workerMonthlyEvaluation.update({
-        where: { workerMonthlyEvaluationId: evaluation.workerMonthlyEvaluationId },
-        data: {
-          totalScore: computed.totalScore,
-          maxScore: computed.maxScore,
-          performanceLabel: computed.performanceLabel,
-        },
-        include: this.evaluationInclude(),
-      });
-    });
+        const computed = await this.computeEvaluationScores(
+          tx,
+          evaluation.workerMonthlyEvaluationId,
+          templateVersion.observedMaxScore,
+          templateVersion.regularMaxScore,
+        );
+
+        return tx.workerMonthlyEvaluation.update({
+          where: {
+            workerMonthlyEvaluationId: evaluation.workerMonthlyEvaluationId,
+          },
+          data: {
+            totalScore: computed.totalScore,
+            maxScore: computed.maxScore,
+            performanceLabel: computed.performanceLabel,
+          },
+          include: this.evaluationInclude(),
+        });
+      },
+    );
 
     return {
       statusCode: HttpStatus.CREATED,
@@ -373,28 +423,32 @@ export class WorkerMonthlyEvaluationService {
   }
 
   async findAllEvaluations(filters: ListWorkerMonthlyEvaluationDto) {
-    const evaluations = await this.prismaService.workerMonthlyEvaluation.findMany({
-      where: {
-        workerId: filters.workerId,
-        month: filters.month,
-        year: filters.year,
-      },
-      orderBy: [{ year: 'desc' }, { month: 'desc' }, { sequence: 'desc' }],
-      include: this.evaluationInclude(),
-    });
+    const evaluations =
+      await this.prismaService.workerMonthlyEvaluation.findMany({
+        where: {
+          workerId: filters.workerId,
+          month: filters.month,
+          year: filters.year,
+        },
+        orderBy: [{ year: 'desc' }, { month: 'desc' }, { sequence: 'desc' }],
+        include: this.evaluationInclude(),
+      });
 
     return {
       statusCode: HttpStatus.OK,
       message: 'Evaluaciones recuperadas con exito.',
-      data: evaluations.map((evaluation) => this.formatEvaluationOutput(evaluation)),
+      data: evaluations.map((evaluation) =>
+        this.formatEvaluationOutput(evaluation),
+      ),
     };
   }
 
   async findOneEvaluation(workerMonthlyEvaluationId: number) {
-    const evaluation = await this.prismaService.workerMonthlyEvaluation.findUnique({
-      where: { workerMonthlyEvaluationId },
-      include: this.evaluationInclude(),
-    });
+    const evaluation =
+      await this.prismaService.workerMonthlyEvaluation.findUnique({
+        where: { workerMonthlyEvaluationId },
+        include: this.evaluationInclude(),
+      });
 
     if (!evaluation) {
       throw new NotFoundException('No se encontro la evaluacion solicitada.');
@@ -407,28 +461,34 @@ export class WorkerMonthlyEvaluationService {
     };
   }
 
-  async updateResponses(workerMonthlyEvaluationId: number, dto: UpdateWorkerMonthlyEvaluationResponsesDto) {
-    const evaluation = await this.prismaService.workerMonthlyEvaluation.findUnique({
-      where: { workerMonthlyEvaluationId },
-      include: {
-        templateVersion: {
-          include: {
-            sections: {
-              include: {
-                questions: true,
+  async updateResponses(
+    workerMonthlyEvaluationId: number,
+    dto: UpdateWorkerMonthlyEvaluationResponsesDto,
+  ) {
+    const evaluation =
+      await this.prismaService.workerMonthlyEvaluation.findUnique({
+        where: { workerMonthlyEvaluationId },
+        include: {
+          templateVersion: {
+            include: {
+              sections: {
+                include: {
+                  questions: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      });
 
     if (!evaluation) {
       throw new NotFoundException('No se encontro la evaluacion indicada.');
     }
 
     if (evaluation.status !== MonthlyEvaluationStatus.open) {
-      throw new BadRequestException('La evaluacion esta cerrada y no se puede editar.');
+      throw new BadRequestException(
+        'La evaluacion esta cerrada y no se puede editar.',
+      );
     }
 
     const questionMap = new Map<number, QuestionSnapshot>(
@@ -463,17 +523,23 @@ export class WorkerMonthlyEvaluationService {
           create: {
             workerMonthlyEvaluationId,
             monthlyEvaluationQuestionId: response.monthlyEvaluationQuestionId,
-            score: question.questionType === MonthlyEvaluationQuestionType.score ? response.score ?? null : null,
+            score:
+              question.questionType === MonthlyEvaluationQuestionType.score
+                ? (response.score ?? null)
+                : null,
             textAnswer:
               question.questionType === MonthlyEvaluationQuestionType.text
-                ? response.textAnswer?.trim() ?? null
+                ? (response.textAnswer?.trim() ?? null)
                 : null,
           },
           update: {
-            score: question.questionType === MonthlyEvaluationQuestionType.score ? response.score ?? null : null,
+            score:
+              question.questionType === MonthlyEvaluationQuestionType.score
+                ? (response.score ?? null)
+                : null,
             textAnswer:
               question.questionType === MonthlyEvaluationQuestionType.text
-                ? response.textAnswer?.trim() ?? null
+                ? (response.textAnswer?.trim() ?? null)
                 : null,
           },
         });
@@ -489,7 +555,10 @@ export class WorkerMonthlyEvaluationService {
       return tx.workerMonthlyEvaluation.update({
         where: { workerMonthlyEvaluationId },
         data: {
-          generalComment: dto.generalComment === undefined ? evaluation.generalComment : dto.generalComment.trim(),
+          generalComment:
+            dto.generalComment === undefined
+              ? evaluation.generalComment
+              : dto.generalComment.trim(),
           totalScore: computed.totalScore,
           maxScore: computed.maxScore,
           performanceLabel: computed.performanceLabel,
@@ -505,10 +574,15 @@ export class WorkerMonthlyEvaluationService {
     };
   }
 
-  async setEvaluationStatus(workerMonthlyEvaluationId: number, status: MonthlyEvaluationStatus, currentUserId: number) {
-    const evaluation = await this.prismaService.workerMonthlyEvaluation.findUnique({
-      where: { workerMonthlyEvaluationId },
-    });
+  async setEvaluationStatus(
+    workerMonthlyEvaluationId: number,
+    status: MonthlyEvaluationStatus,
+    currentUserId: number,
+  ) {
+    const evaluation =
+      await this.prismaService.workerMonthlyEvaluation.findUnique({
+        where: { workerMonthlyEvaluationId },
+      });
 
     if (!evaluation) {
       throw new NotFoundException('No se encontro la evaluacion indicada.');
@@ -551,8 +625,14 @@ export class WorkerMonthlyEvaluationService {
     };
   }
 
-  private normalizeQuestion(question: CreateMonthlyEvaluationQuestionDto, displayOrder: number) {
-    const questionType = question.questionType === 'text' ? MonthlyEvaluationQuestionType.text : MonthlyEvaluationQuestionType.score;
+  private normalizeQuestion(
+    question: CreateMonthlyEvaluationQuestionDto,
+    displayOrder: number,
+  ) {
+    const questionType =
+      question.questionType === 'text'
+        ? MonthlyEvaluationQuestionType.text
+        : MonthlyEvaluationQuestionType.score;
 
     if (questionType === MonthlyEvaluationQuestionType.score) {
       return {
@@ -579,17 +659,30 @@ export class WorkerMonthlyEvaluationService {
     };
   }
 
-  private calculateMaxScore(questions: Array<{ isScored: boolean; maxScore: number }>) {
-    return questions.reduce((acc, question) => (question.isScored ? acc + question.maxScore : acc), 0);
+  private calculateMaxScore(
+    questions: Array<{ isScored: boolean; maxScore: number }>,
+  ) {
+    return questions.reduce(
+      (acc, question) => (question.isScored ? acc + question.maxScore : acc),
+      0,
+    );
   }
 
-  private validateThresholds(observedMaxScore: number, regularMaxScore: number, maxScore: number) {
+  private validateThresholds(
+    observedMaxScore: number,
+    regularMaxScore: number,
+    maxScore: number,
+  ) {
     if (maxScore <= 0) {
-      throw new BadRequestException('La plantilla debe tener al menos una pregunta con puntaje.');
+      throw new BadRequestException(
+        'La plantilla debe tener al menos una pregunta con puntaje.',
+      );
     }
 
     if (observedMaxScore < 0 || observedMaxScore > maxScore) {
-      throw new BadRequestException('El umbral observado debe estar entre 0 y el puntaje maximo.');
+      throw new BadRequestException(
+        'El umbral observado debe estar entre 0 y el puntaje maximo.',
+      );
     }
 
     if (regularMaxScore <= observedMaxScore || regularMaxScore > maxScore) {

@@ -27,15 +27,22 @@ import { WorkerMonthlyEvaluationService } from './worker-monthly-evaluation.serv
 export class WorkerMonthlyEvaluationController {
   private readonly logger = new Logger('WorkerMonthlyEvaluationController');
 
-  constructor(private readonly workerMonthlyEvaluationService: WorkerMonthlyEvaluationService) {}
+  constructor(
+    private readonly workerMonthlyEvaluationService: WorkerMonthlyEvaluationService,
+  ) {}
 
   @Post('template')
   createTemplate(
     @Body() dto: CreateMonthlyEvaluationTemplateDto,
     @GetUser('userId') userId: number,
   ) {
-    this.logger.log(`Creando plantilla mensual para evaluaciones. userId=${userId}`);
-    return this.workerMonthlyEvaluationService.createTemplate(dto, Number(userId));
+    this.logger.log(
+      `Creando plantilla mensual para evaluaciones. userId=${userId}`,
+    );
+    return this.workerMonthlyEvaluationService.createTemplate(
+      dto,
+      Number(userId),
+    );
   }
 
   @Get('template')
@@ -53,7 +60,10 @@ export class WorkerMonthlyEvaluationController {
     @Param('templateId', ParseIntPipe) templateId: number,
     @GetUser('userId') userId: number,
   ) {
-    return this.workerMonthlyEvaluationService.duplicateTemplate(templateId, Number(userId));
+    return this.workerMonthlyEvaluationService.duplicateTemplate(
+      templateId,
+      Number(userId),
+    );
   }
 
   @Post('instance')
@@ -61,7 +71,10 @@ export class WorkerMonthlyEvaluationController {
     @Body() dto: CreateWorkerMonthlyEvaluationDto,
     @GetUser('userId') userId: number,
   ) {
-    return this.workerMonthlyEvaluationService.createEvaluation(dto, Number(userId));
+    return this.workerMonthlyEvaluationService.createEvaluation(
+      dto,
+      Number(userId),
+    );
   }
 
   @Get('instance')
@@ -71,23 +84,31 @@ export class WorkerMonthlyEvaluationController {
 
   @Get('instance/:workerMonthlyEvaluationId')
   findOneEvaluation(
-    @Param('workerMonthlyEvaluationId', ParseIntPipe) workerMonthlyEvaluationId: number,
+    @Param('workerMonthlyEvaluationId', ParseIntPipe)
+    workerMonthlyEvaluationId: number,
   ) {
-    return this.workerMonthlyEvaluationService.findOneEvaluation(workerMonthlyEvaluationId);
+    return this.workerMonthlyEvaluationService.findOneEvaluation(
+      workerMonthlyEvaluationId,
+    );
   }
 
   @Patch('instance/:workerMonthlyEvaluationId/responses')
   updateResponses(
-    @Param('workerMonthlyEvaluationId', ParseIntPipe) workerMonthlyEvaluationId: number,
+    @Param('workerMonthlyEvaluationId', ParseIntPipe)
+    workerMonthlyEvaluationId: number,
     @Body() dto: UpdateWorkerMonthlyEvaluationResponsesDto,
   ) {
-    return this.workerMonthlyEvaluationService.updateResponses(workerMonthlyEvaluationId, dto);
+    return this.workerMonthlyEvaluationService.updateResponses(
+      workerMonthlyEvaluationId,
+      dto,
+    );
   }
 
   @Patch('instance/:workerMonthlyEvaluationId/open')
   @UserTypes(...MONTHLY_EVALUATION_STATUS_MANAGEMENT_USER_TYPES)
   openEvaluation(
-    @Param('workerMonthlyEvaluationId', ParseIntPipe) workerMonthlyEvaluationId: number,
+    @Param('workerMonthlyEvaluationId', ParseIntPipe)
+    workerMonthlyEvaluationId: number,
     @GetUser('userId') userId: number,
   ) {
     return this.workerMonthlyEvaluationService.setEvaluationStatus(
@@ -100,7 +121,8 @@ export class WorkerMonthlyEvaluationController {
   @Patch('instance/:workerMonthlyEvaluationId/close')
   @UserTypes(...MONTHLY_EVALUATION_STATUS_MANAGEMENT_USER_TYPES)
   closeEvaluation(
-    @Param('workerMonthlyEvaluationId', ParseIntPipe) workerMonthlyEvaluationId: number,
+    @Param('workerMonthlyEvaluationId', ParseIntPipe)
+    workerMonthlyEvaluationId: number,
     @GetUser('userId') userId: number,
   ) {
     return this.workerMonthlyEvaluationService.setEvaluationStatus(

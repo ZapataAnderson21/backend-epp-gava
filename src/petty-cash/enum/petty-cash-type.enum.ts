@@ -5,7 +5,7 @@ export enum PettyCashType {
   Supplies = 'supplies',
   SafetyEquipment = 'safety_equipment',
   Services = 'services',
-  Other = 'other'
+  Other = 'other',
 }
 export const PettyCashLabelEs: Record<PettyCashType, string> = {
   [PettyCashType.Meals]: 'Comidas',

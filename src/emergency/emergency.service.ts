@@ -1,4 +1,10 @@
-import { BadRequestException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateEmergencyDto } from './dto/create-emergency.dto';
 import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -6,7 +12,7 @@ import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class EmergencyService {
-  private readonly logger = new Logger("EmergencyService");
+  private readonly logger = new Logger('EmergencyService');
 
   constructor(
     private readonly prismaService: PrismaService,
@@ -14,7 +20,9 @@ export class EmergencyService {
   ) {}
 
   async create(createEmergencyDto: CreateEmergencyDto) {
-    this.logger.log(`Creating emergency with data: ${JSON.stringify(createEmergencyDto)}`);
+    this.logger.log(
+      `Creating emergency with data: ${JSON.stringify(createEmergencyDto)}`,
+    );
     const emergency = await this.prismaService.emergency.create({
       data: createEmergencyDto,
       include: {
@@ -35,11 +43,13 @@ export class EmergencyService {
       emergency.title,
     );
 
-    this.logger.log(`Emergency created successfully: ${JSON.stringify(emergency)}`);
+    this.logger.log(
+      `Emergency created successfully: ${JSON.stringify(emergency)}`,
+    );
     return {
       statusCode: HttpStatus.CREATED,
       data: emergency,
-      message: 'Emergencia registrada exitosamente.'
+      message: 'Emergencia registrada exitosamente.',
     };
   }
 
@@ -52,10 +62,10 @@ export class EmergencyService {
           include: {
             userUserTypes: {
               include: {
-                userType: true
-              }
-            }
-          }
+                userType: true,
+              },
+            },
+          },
         },
       },
       where: { projectId, userId },
@@ -66,11 +76,11 @@ export class EmergencyService {
       return {
         statusCode: HttpStatus.NOT_FOUND,
         data: [],
-        message: 'No se encontraron emergencias.'
+        message: 'No se encontraron emergencias.',
       };
     }
 
-    const returnEmergencies = emergencies.map(emergency => {
+    const returnEmergencies = emergencies.map((emergency) => {
       const returnUser = {
         userId: emergency.user.userId,
         name: emergency.user.name,
@@ -85,7 +95,7 @@ export class EmergencyService {
     return {
       statusCode: HttpStatus.OK,
       data: returnEmergencies,
-      message: 'Emergencies retrieved successfully.'
+      message: 'Emergencies retrieved successfully.',
     };
   }
 
@@ -99,9 +109,9 @@ export class EmergencyService {
           include: {
             userUserTypes: {
               include: {
-                userType: true
-              }
-            }
+                userType: true,
+              },
+            },
           },
         },
       },
@@ -126,13 +136,13 @@ export class EmergencyService {
     return {
       statusCode: HttpStatus.OK,
       data: returnEmergency,
-      message: 'Emergency retrieved successfully.'
+      message: 'Emergency retrieved successfully.',
     };
   }
 
   async update(id: number, updateEmergencyDto: UpdateEmergencyDto) {
     this.logger.log(`Updating emergency with ID: ${id}`);
-    
+
     // Obtener la emergencia antes de actualizar para comparar el estado
     const existingEmergency = await this.prismaService.emergency.findUnique({
       where: { emergencyId: id },
@@ -151,7 +161,10 @@ export class EmergencyService {
     });
 
     // Notificar al creador si el estado cambió
-    if (updateEmergencyDto.status && updateEmergencyDto.status !== previousStatus) {
+    if (
+      updateEmergencyDto.status &&
+      updateEmergencyDto.status !== previousStatus
+    ) {
       if (updateEmergencyDto.status === 'addressed') {
         await this.notificationService.notifyEmergencyAddressed(
           id,
@@ -167,11 +180,13 @@ export class EmergencyService {
       }
     }
 
-    this.logger.log(`Emergency updated successfully: ${JSON.stringify(emergency)}`);
+    this.logger.log(
+      `Emergency updated successfully: ${JSON.stringify(emergency)}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       data: emergency,
-      message: 'Emergency updated successfully.'
+      message: 'Emergency updated successfully.',
     };
   }
 
@@ -184,12 +199,12 @@ export class EmergencyService {
           include: {
             userUserTypes: {
               include: {
-                userType: true
-              }
-            }
-          }
-        }
-      }
+                userType: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!emergencies || emergencies.length === 0) {
@@ -197,11 +212,11 @@ export class EmergencyService {
       return {
         statusCode: HttpStatus.NOT_FOUND,
         data: [],
-        message: `No emergencies found for project ID ${projectId}.`
+        message: `No emergencies found for project ID ${projectId}.`,
       };
     }
 
-    const returnEmergencies = emergencies.map(emergency => {
+    const returnEmergencies = emergencies.map((emergency) => {
       const returnUser = {
         userId: emergency.user.userId,
         name: emergency.user.name,
@@ -212,11 +227,13 @@ export class EmergencyService {
       return { ...emergency, user: returnUser };
     });
 
-    this.logger.log(`Found ${emergencies.length} emergencies for project ID ${projectId}`);
+    this.logger.log(
+      `Found ${emergencies.length} emergencies for project ID ${projectId}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       data: returnEmergencies,
-      message: `Emergencies for project ID ${projectId} retrieved successfully.`
+      message: `Emergencies for project ID ${projectId} retrieved successfully.`,
     };
   }
 
@@ -230,12 +247,12 @@ export class EmergencyService {
           include: {
             userUserTypes: {
               include: {
-                userType: true
-              }
-            }
-          }
-        }
-      }
+                userType: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!emergencies || emergencies.length === 0) {
@@ -243,11 +260,11 @@ export class EmergencyService {
       return {
         statusCode: HttpStatus.NOT_FOUND,
         data: [],
-        message: `No emergencies found for user ID ${userId}.`
+        message: `No emergencies found for user ID ${userId}.`,
       };
     }
 
-    const returnEmergencies = emergencies.map(emergency => {
+    const returnEmergencies = emergencies.map((emergency) => {
       const returnUser = {
         userId: emergency.user.userId,
         name: emergency.user.name,
@@ -258,11 +275,13 @@ export class EmergencyService {
       return { ...emergency, user: returnUser };
     });
 
-    this.logger.log(`Found ${emergencies.length} emergencies for user ID ${userId}`);
+    this.logger.log(
+      `Found ${emergencies.length} emergencies for user ID ${userId}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       data: returnEmergencies,
-      message: `Emergencies for user ID ${userId} retrieved successfully.`
+      message: `Emergencies for user ID ${userId} retrieved successfully.`,
     };
   }
 }

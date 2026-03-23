@@ -33,7 +33,7 @@ export class ResourceService {
     });
     if (dup) {
       this.logger.warn(
-        `Duplicate resource in category ${dto.categoryResourceId} with name "${dto.name}"`
+        `Duplicate resource in category ${dto.categoryResourceId} with name "${dto.name}"`,
       );
       throw new ConflictException({
         statusCode: HttpStatus.CONFLICT,
@@ -60,7 +60,6 @@ export class ResourceService {
     };
   }
 
-
   async findAll() {
     this.logger.log('Fetching resources (active only)');
     const list = await this.prisma.resource.findMany({
@@ -69,7 +68,7 @@ export class ResourceService {
       orderBy: [{ categoryResourceId: 'asc' }, { name: 'asc' }],
     });
 
-    if(!list || list.length === 0){
+    if (!list || list.length === 0) {
       return {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'No se han encontrado recursos.',
@@ -83,17 +82,16 @@ export class ResourceService {
       data: list,
     };
   }
-  
 
   async findOne(resourceId: number) {
     this.logger.log(`Fetching resource id=${resourceId}`);
     const resource = await this.prisma.resource.findFirst({
-      where: { 
-        resourceId, 
-        deletedAt: null
+      where: {
+        resourceId,
+        deletedAt: null,
       },
-      include: { 
-        categoryResource: true
+      include: {
+        categoryResource: true,
       },
     });
     if (!resource) {
@@ -111,10 +109,9 @@ export class ResourceService {
     };
   }
 
-
   async findByCategoryResourceId(categoryResourceId: number) {
     this.logger.log(
-      `Fetching resources by categoryResourceId=${categoryResourceId} (active only)`
+      `Fetching resources by categoryResourceId=${categoryResourceId} (active only)`,
     );
     const list = await this.prisma.resource.findMany({
       where: { categoryResourceId, deletedAt: null },
@@ -128,10 +125,9 @@ export class ResourceService {
     };
   }
 
-  
   async update(resourceId: number, dto: UpdateResourceDto) {
     this.logger.log(
-      `Updating resource id=${resourceId} with: ${JSON.stringify(dto)}`
+      `Updating resource id=${resourceId} with: ${JSON.stringify(dto)}`,
     );
 
     // Actual actual
@@ -139,8 +135,7 @@ export class ResourceService {
     const current = currentWrap.data;
 
     // Determinar valores finales
-    const nextName =
-      dto.name !== undefined ? dto.name : (current.name as string);
+    const nextName = dto.name !== undefined ? dto.name : current.name;
     const nextCategoryId =
       dto.categoryResourceId !== undefined
         ? dto.categoryResourceId
@@ -164,7 +159,7 @@ export class ResourceService {
       });
       if (dup) {
         this.logger.warn(
-          `Duplicate on update in category ${nextCategoryId} with name "${nextName}" (existing id=${dup.resourceId})`
+          `Duplicate on update in category ${nextCategoryId} with name "${nextName}" (existing id=${dup.resourceId})`,
         );
         throw new ConflictException({
           statusCode: HttpStatus.CONFLICT,
@@ -186,7 +181,6 @@ export class ResourceService {
     };
   }
 
-  
   async remove(resourceId: number) {
     this.logger.log(`Soft-deleting resource id=${resourceId}`);
 
@@ -195,7 +189,9 @@ export class ResourceService {
       select: { resourceId: true },
     });
     if (!exists) {
-      this.logger.warn(`Resource id=${resourceId} not found or already deleted`);
+      this.logger.warn(
+        `Resource id=${resourceId} not found or already deleted`,
+      );
       throw new NotFoundException({
         statusCode: HttpStatus.NOT_FOUND,
         message: 'Recurso no encontrado.',
@@ -215,7 +211,6 @@ export class ResourceService {
     };
   }
 
-  
   async restore(resourceId: number) {
     this.logger.log(`Restoring resource id=${resourceId}`);
 
@@ -243,7 +238,7 @@ export class ResourceService {
     });
     if (dup) {
       this.logger.warn(
-        `Restore would violate unique (category=${exists.categoryResourceId}, name="${exists.name}")`
+        `Restore would violate unique (category=${exists.categoryResourceId}, name="${exists.name}")`,
       );
       throw new ConflictException({
         statusCode: HttpStatus.CONFLICT,

@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Logger, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Logger,
+  Delete,
+} from '@nestjs/common';
 import { ElementService } from './element.service';
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
@@ -6,7 +15,6 @@ import { ElementType } from './enum/element-type.enum';
 
 @Controller('element')
 export class ElementController {
-
   private readonly logger = new Logger('ElementController');
 
   constructor(private readonly elementService: ElementService) {}
@@ -34,9 +42,12 @@ export class ElementController {
     this.logger.log(`Fetching elements with type: ${type}`);
     return await this.elementService.findAllByType(type);
   }
-  
+
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateElementDto: UpdateElementDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateElementDto: UpdateElementDto,
+  ) {
     this.logger.log(`Updating element with ID: ${id}`);
     return await this.elementService.update(+id, updateElementDto);
   }

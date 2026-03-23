@@ -29,7 +29,6 @@ export class ServiceSaleService {
     }
   }
 
-  
   async create(dto: CreateServiceSaleDto) {
     this.logger.log(`Creating service sale: ${JSON.stringify(dto)}`);
 
@@ -52,7 +51,6 @@ export class ServiceSaleService {
       data: sale,
     };
   }
-
 
   async findAllByProject(projectId: number) {
     this.logger.log(`Fetching service sales for project ID: ${projectId}`);
@@ -77,7 +75,6 @@ export class ServiceSaleService {
     };
   }
 
-  
   async findOne(serviceSaleId: number) {
     this.logger.log(`Fetching service sale id=${serviceSaleId}`);
     const row = await this.prisma.serviceSale.findUnique({
@@ -99,24 +96,26 @@ export class ServiceSaleService {
   }
 
   async sumAllAmountsByProject(projectId: number) {
-    this.logger.log(`Calculating total amount of all service sales for project ID: ${projectId}`);
+    this.logger.log(
+      `Calculating total amount of all service sales for project ID: ${projectId}`,
+    );
     const result = await this.prisma.serviceSale.aggregate({
       where: { projectId },
       _sum: { amount: true },
     });
-    
+
     const total = result._sum.amount || 0;
 
     return {
       statusCode: HttpStatus.OK,
       message: 'Total de ventas de servicio calculado exitosamente.',
-      data: total
+      data: total,
     };
   }
 
   async update(serviceSaleId: number, dto: UpdateServiceSaleDto) {
     this.logger.log(
-      `Updating service sale id=${serviceSaleId} payload=${JSON.stringify(dto)}`
+      `Updating service sale id=${serviceSaleId} payload=${JSON.stringify(dto)}`,
     );
 
     // asegúrate de que exista
@@ -136,7 +135,6 @@ export class ServiceSaleService {
       data: updated,
     };
   }
-
 
   async remove(serviceSaleId: number) {
     this.logger.log(`Deleting service sale id=${serviceSaleId}`);

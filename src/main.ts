@@ -1,4 +1,4 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
@@ -6,18 +6,23 @@ import * as express from 'express';
 import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule,{
+  const app = await NestFactory.create(AppModule, {
     logger: ['error', 'warn', 'log', 'debug', 'verbose'],
   });
 
-  const reflector = app.get(Reflector);
+  const defaultCorsOrigins = [
+    'http://localhost:5173',
+    'http://sir.gavacyc.com',
+    'https://sir.gavacyc.com',
+  ];
+
+  const corsOrigins = (process.env.CORS_ORIGINS || defaultCorsOrigins.join(','))
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
   app.enableCors({
-    origin: [
-      'http://localhost:5173',
-      'http://sir.gavacyc.com',
-      'https://sir.gavacyc.com',
-    ],
+    origin: corsOrigins,
     credentials: true,
   });
 
@@ -33,10 +38,12 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('GAVA C&C Requirements Request System')
-    .setDescription('API documentation for the GAVA C&C Requirements Request System')
+    .setDescription(
+      'API documentation for the GAVA C&C Requirements Request System',
+    )
     .setVersion('1.0')
     .build();
-  
+
   const documentFactory = () => SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('documentation', app, documentFactory);

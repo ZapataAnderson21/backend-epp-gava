@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MailService } from './mail.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { NotFoundException } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import * as fs from 'fs';
 
@@ -12,8 +11,6 @@ jest.mock('fs');
 
 describe('MailService', () => {
   let service: MailService;
-  let prismaService: PrismaService;
-  let configService: ConfigService;
 
   const mockPrismaService = {
     request: {
@@ -44,8 +41,6 @@ describe('MailService', () => {
     }).compile();
 
     service = module.get<MailService>(MailService);
-    prismaService = module.get<PrismaService>(PrismaService);
-    configService = module.get<ConfigService>(ConfigService);
   });
 
   it('should be defined', () => {
@@ -76,7 +71,9 @@ describe('MailService', () => {
     };
 
     beforeEach(() => {
-      mockConfigService.get.mockImplementation((key: string) => defaultConfigValues[key]);
+      mockConfigService.get.mockImplementation(
+        (key: string) => defaultConfigValues[key],
+      );
       mockPrismaService.request.findUnique.mockResolvedValue(mockRequest);
       (fs.existsSync as jest.Mock).mockReturnValue(true);
       mockTransporter.verify.mockResolvedValue(true);
@@ -127,12 +124,12 @@ describe('MailService', () => {
       expect(mailOptions.subject).toContain('mixto');
     });
 
-    it('should return 500 when request is not found', async () => {
+    it('should return 404 when request is not found', async () => {
       mockPrismaService.request.findUnique.mockResolvedValue(null);
 
       const result = await service.sendRequestToLogistics(1, 'password123');
 
-      expect(result.statusCode).toBe(500);
+      expect(result.statusCode).toBe(404);
       expect(result.message).toBe('Request not found');
     });
 
@@ -154,7 +151,9 @@ describe('MailService', () => {
       const result = await service.sendRequestToLogistics(1, 'wrongpassword');
 
       expect(result.statusCode).toBe(401);
-      expect(result.message).toBe('Error de autenticación SMTP: credenciales inválidas.');
+      expect(result.message).toBe(
+        'Error de autenticacion SMTP: credenciales invalidas.',
+      );
     });
 
     it('should return 503 when SMTP server is not reachable (ENOTFOUND)', async () => {
@@ -257,7 +256,9 @@ describe('MailService', () => {
 
       expect(result.statusCode).toBe(200);
       const mailOptions = mockTransporter.sendMail.mock.calls[0][0];
-      expect(mailOptions.html).toContain('https://sir.gavacyc.com/admin/requests/1');
+      expect(mailOptions.html).toContain(
+        'https://sir.gavacyc.com/admin/requests/1',
+      );
       expect(mailOptions.html).toContain('Ver Requerimiento');
     });
   });

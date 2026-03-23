@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Logger,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
 import { WorkerService } from './worker.service';
 import { CreateWorkerDto } from './dto/create-worker.dto';
 import { UpdateWorkerDto } from './dto/update-worker.dto';
@@ -6,8 +17,7 @@ import { WorkerType } from './enum/worker-type.enum';
 
 @Controller('worker')
 export class WorkerController {
-
-  private readonly logger = new Logger("WorkerController");
+  private readonly logger = new Logger('WorkerController');
 
   constructor(private readonly workerService: WorkerService) {}
 
@@ -41,8 +51,13 @@ export class WorkerController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateWorkerDto: UpdateWorkerDto) {
-    this.logger.log(`Updating worker with ID: ${id}, Data: ${JSON.stringify(updateWorkerDto)}`);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateWorkerDto: UpdateWorkerDto,
+  ) {
+    this.logger.log(
+      `Updating worker with ID: ${id}, Data: ${JSON.stringify(updateWorkerDto)}`,
+    );
     return this.workerService.update(id, updateWorkerDto);
   }
 

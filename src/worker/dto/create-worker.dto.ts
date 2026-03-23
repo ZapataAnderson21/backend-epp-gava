@@ -1,9 +1,15 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Transform, Type } from "class-transformer";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform, Type } from 'class-transformer';
 import {
-  IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, Length, IsEmail,
-  IsEnum
-} from "class-validator";
+  IsDateString,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+  IsEmail,
+  IsEnum,
+} from 'class-validator';
 import { WorkerType } from '../enum/worker-type.enum';
 
 /** Helpers de transformación */
@@ -28,7 +34,7 @@ export class CreateWorkerDto {
 
   @ApiProperty({ example: '12345678' })
   @Transform(({ value }) => trim(value))
-  @Length(8, 8, { message: "El DNI debe tener exactamente 8 caracteres." })
+  @Length(8, 8, { message: 'El DNI debe tener exactamente 8 caracteres.' })
   @IsString()
   @IsNotEmpty({ message: 'El DNI es requerido.' })
   dni!: string;

@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserUserTypeDto } from './dto/create-user_user_type.dto';
 import { UpdateUserUserTypeDto } from './dto/update-user_user_type.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -6,23 +11,28 @@ import { UserUserType } from '../generated/prisma';
 
 @Injectable()
 export class UserUserTypeService {
-
   private readonly logger = new Logger('UserUserTypeService');
 
-  constructor ( private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async create(createUserUserTypeDto: CreateUserUserTypeDto) {
-    this.logger.log(`Creating user_user_type: ${JSON.stringify(createUserUserTypeDto)}`);
+    this.logger.log(
+      `Creating user_user_type: ${JSON.stringify(createUserUserTypeDto)}`,
+    );
     const userUserType = await this.prismaService.userUserType.create({
       data: createUserUserTypeDto,
     });
 
     if (!userUserType) {
-      this.logger.error(`Failed to create user_user_type: ${JSON.stringify(createUserUserTypeDto)}`);
+      this.logger.error(
+        `Failed to create user_user_type: ${JSON.stringify(createUserUserTypeDto)}`,
+      );
       throw new BadRequestException('Failed to create user_user_type');
     }
 
-    this.logger.log(`user_user_type created successfully: ${JSON.stringify(userUserType)}`);
+    this.logger.log(
+      `user_user_type created successfully: ${JSON.stringify(userUserType)}`,
+    );
     return userUserType;
   }
 

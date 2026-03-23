@@ -1,15 +1,24 @@
-import { BadRequestException, ConflictException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ProjectStatus, ProjectStatusLabelEs } from './enum/project-status.enum';
+import {
+  ProjectStatus,
+  ProjectStatusLabelEs,
+} from './enum/project-status.enum';
 import { TaskService } from 'src/task/task.service';
 import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class ProjectService {
-
-  private readonly logger = new Logger("ProjectService");
+  private readonly logger = new Logger('ProjectService');
 
   constructor(
     private readonly prismaService: PrismaService,
@@ -18,26 +27,35 @@ export class ProjectService {
   ) {}
 
   async create(createProjectDto: CreateProjectDto) {
-
     this.logger.log('Creating project', JSON.stringify(createProjectDto));
 
-    this.logger.log('Checking for existing project with code', createProjectDto.code);
+    this.logger.log(
+      'Checking for existing project with code',
+      createProjectDto.code,
+    );
     const existingProject = await this.findByCode(createProjectDto.code);
 
     if (existingProject) {
-      this.logger.error('Project creation failed: Project with this code already exists', createProjectDto.code);
+      this.logger.error(
+        'Project creation failed: Project with this code already exists',
+        createProjectDto.code,
+      );
       throw new ConflictException('Ya existe un proyecto con este código.');
     }
 
     const status = 'active';
 
-    this.logger.log(`Creating project in database: ${JSON.stringify(createProjectDto)}`);
+    this.logger.log(
+      `Creating project in database: ${JSON.stringify(createProjectDto)}`,
+    );
     const project = await this.prismaService.project.create({
-      data: { ...createProjectDto, status }
+      data: { ...createProjectDto, status },
     });
 
     if (!project) {
-      this.logger.error(`Project creation failed: ${JSON.stringify(createProjectDto)}`);
+      this.logger.error(
+        `Project creation failed: ${JSON.stringify(createProjectDto)}`,
+      );
       throw new BadRequestException('No se pudo crear el proyecto.');
     }
 
@@ -52,31 +70,36 @@ export class ProjectService {
     return {
       statusCode: HttpStatus.CREATED,
       message: 'Proyecto registrado exitosamente.',
-      data: project
+      data: project,
     };
   }
 
   async findAll() {
     this.logger.log('Retrieving all projects');
-    const foundProjects = (await this.prismaService.project.findMany({
-      where: { 
-        deletedAt: null
-      },
-    })).sort((a, b) => b.projectId - a.projectId);
+    const foundProjects = (
+      await this.prismaService.project.findMany({
+        where: {
+          deletedAt: null,
+        },
+      })
+    ).sort((a, b) => b.projectId - a.projectId);
 
     if (!foundProjects || foundProjects.length === 0) {
       this.logger.warn('No projects found');
       return {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'No se han encontrado proyectos.',
-        data: []
+        data: [],
       };
     }
 
-    const processedProjects = foundProjects.map(project => {
-      const projectObj = { 
+    const processedProjects = foundProjects.map((project) => {
+      const projectObj = {
         ...project,
-        status: ProjectStatusLabelEs[project.status as keyof typeof ProjectStatusLabelEs] || project.status
+        status:
+          ProjectStatusLabelEs[
+            project.status as keyof typeof ProjectStatusLabelEs
+          ] || project.status,
       };
       return projectObj;
     });
@@ -85,30 +108,29 @@ export class ProjectService {
     return {
       statusCode: HttpStatus.OK,
       message: 'Projects retrieved successfully',
-      data: processedProjects
+      data: processedProjects,
     };
   }
 
   async findOne(projectId: number) {
-
     if (!projectId) {
       this.logger.error('Project ID is required');
       throw new BadRequestException('No hemos encontrado el ID del proyecto.');
     }
-    
+
     this.logger.log('Retrieving project with ID', projectId);
     const foundProject = await this.prismaService.project.findUnique({
-      where: { 
+      where: {
         projectId,
-        deletedAt: null
+        deletedAt: null,
       },
       include: {
         requests: true,
         purchaseOrders: true,
         emergencies: true,
         serviceSales: true,
-        pettyCashes: true
-      }
+        pettyCashes: true,
+      },
     });
 
     this.logger.log(`Found project with ID ${projectId}`);
@@ -116,28 +138,31 @@ export class ProjectService {
       throw new NotFoundException('No se ha encontrado el proyecto.');
     }
 
-    const processedProject = { 
+    const processedProject = {
       ...foundProject,
-      status: ProjectStatusLabelEs[foundProject.status as keyof typeof ProjectStatusLabelEs] || foundProject.status
+      status:
+        ProjectStatusLabelEs[
+          foundProject.status as keyof typeof ProjectStatusLabelEs
+        ] || foundProject.status,
     };
-    
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Proyecto encontrado exitosamente.',
-      data: processedProject
+      data: processedProject,
     };
   }
 
   async findByCode(code: string) {
     this.logger.log(`Retrieving project with code: ${code}`);
     const foundProject = await this.prismaService.project.findUnique({
-      where: { 
+      where: {
         code,
-        deletedAt: null
+        deletedAt: null,
       },
       include: {
-        requests: true
-      }
+        requests: true,
+      },
     });
 
     if (!foundProject) {
@@ -152,10 +177,10 @@ export class ProjectService {
   async findByStatus(status: ProjectStatus) {
     this.logger.log(`Retrieving projects with status: ${status}`);
     const foundProjects = await this.prismaService.project.findMany({
-      where: { 
+      where: {
         status,
-        deletedAt: null
-      }
+        deletedAt: null,
+      },
     });
 
     if (!foundProjects || foundProjects.length === 0) {
@@ -163,52 +188,62 @@ export class ProjectService {
       return {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'No se han encontrado proyectos.',
-        data: []
+        data: [],
       };
     }
 
-    const processedProjects = foundProjects.map(project => {
-      const projectObj = { 
+    const processedProjects = foundProjects.map((project) => {
+      const projectObj = {
         ...project,
-        status: ProjectStatusLabelEs[project.status as keyof typeof ProjectStatusLabelEs] || project.status
+        status:
+          ProjectStatusLabelEs[
+            project.status as keyof typeof ProjectStatusLabelEs
+          ] || project.status,
       };
       return projectObj;
     });
 
-    this.logger.log(`Found ${foundProjects.length} projects with status: ${status}`);
+    this.logger.log(
+      `Found ${foundProjects.length} projects with status: ${status}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       message: 'Projects retrieved successfully',
-      data: processedProjects
+      data: processedProjects,
     };
   }
 
   async update(projectId: number, updateProjectDto: UpdateProjectDto) {
-
     this.logger.log(`Updating project with ID: ${projectId}`);
 
     this.logger.log(`Verifying existence of project with ID: ${projectId}`);
     this.findOne(projectId);
 
     if (updateProjectDto.code) {
-      this.logger.log(`Checking for existing project with code: ${updateProjectDto.code}`);
+      this.logger.log(
+        `Checking for existing project with code: ${updateProjectDto.code}`,
+      );
       const existingProject = await this.prismaService.project.findUnique({
-        where: { 
+        where: {
           code: updateProjectDto.code,
-          deletedAt: null
-        }
+          deletedAt: null,
+        },
       });
 
       if (existingProject && existingProject.projectId !== projectId) {
-        this.logger.error(`Update failed: Project with code ${updateProjectDto.code} already exists`);
+        this.logger.error(
+          `Update failed: Project with code ${updateProjectDto.code} already exists`,
+        );
         throw new ConflictException('Ya existe un proyecto con este código.');
       }
     }
 
-    this.logger.log(`Updating project in db. Data: ${JSON.stringify(updateProjectDto)}`);
+    this.logger.log(
+      `Updating project in db. Data: ${JSON.stringify(updateProjectDto)}`,
+    );
     const updatedProject = await this.prismaService.project.update({
       where: { projectId },
-      data: updateProjectDto
+      data: updateProjectDto,
     });
 
     if (!updatedProject) {
@@ -216,21 +251,26 @@ export class ProjectService {
       throw new BadRequestException('El proyecto no pudo ser actualizado.');
     }
 
-    this.logger.log(`Project with ID ${projectId} updated successfully: ${JSON.stringify(updatedProject)}`);
+    this.logger.log(
+      `Project with ID ${projectId} updated successfully: ${JSON.stringify(updatedProject)}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       message: 'Proyecto actualizado exitosamente.',
-      data: updatedProject
+      data: updatedProject,
     };
   }
 
   async updateStatus(projectId: number, status: ProjectStatus) {
-    this.logger.log(`Updating status for project with ID: ${projectId} to: ${status}`);
+    this.logger.log(
+      `Updating status for project with ID: ${projectId} to: ${status}`,
+    );
 
     // REGLA: Solo permitir cambiar el estado a completed si todas las tareas están completadas/canceladas
     if (status === ProjectStatus.Completed) {
-      const taskStatus = await this.taskService.areAllTasksCompletedOrCancelled(projectId);
-      
+      const taskStatus =
+        await this.taskService.areAllTasksCompletedOrCancelled(projectId);
+
       if (!taskStatus.allCompleted) {
         const messages: string[] = [];
         if (taskStatus.pendingCount > 0) {
@@ -239,17 +279,17 @@ export class ProjectService {
         if (taskStatus.inProgressCount > 0) {
           messages.push(`${taskStatus.inProgressCount} tarea(s) en progreso`);
         }
-        
+
         throw new BadRequestException(
           `No se puede completar el proyecto porque tiene ${messages.join(' y ')}. ` +
-          'Todas las tareas deben estar completadas o canceladas.',
+            'Todas las tareas deben estar completadas o canceladas.',
         );
       }
     }
 
     const updatedProject = await this.prismaService.project.update({
       where: { projectId },
-      data: { status }
+      data: { status },
     });
 
     if (!updatedProject) {
@@ -270,20 +310,22 @@ export class ProjectService {
       );
     }
 
-    this.logger.log(`Project with ID ${projectId} status updated successfully: ${JSON.stringify(updatedProject)}`);
-    
+    this.logger.log(
+      `Project with ID ${projectId} status updated successfully: ${JSON.stringify(updatedProject)}`,
+    );
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Estado actualizado exitosamente.',
-      data: updatedProject
-    }
+      data: updatedProject,
+    };
   }
 
   async remove(projectId: number) {
     this.logger.log(`Deleting project with ID: ${projectId}`);
     const deletedProject = await this.prismaService.project.update({
       where: { projectId },
-      data: { deletedAt: new Date() }
+      data: { deletedAt: new Date() },
     });
 
     if (!deletedProject) {
@@ -291,11 +333,13 @@ export class ProjectService {
       throw new NotFoundException('No se ha encontrado el proyecto.');
     }
 
-    this.logger.log(`Project with ID ${projectId} deleted successfully: ${JSON.stringify(deletedProject)}`);
+    this.logger.log(
+      `Project with ID ${projectId} deleted successfully: ${JSON.stringify(deletedProject)}`,
+    );
     return {
       statusCode: HttpStatus.OK,
       message: 'El proyecto ha sido eliminado exitosamente.',
-      data: deletedProject
+      data: deletedProject,
     };
   }
 }

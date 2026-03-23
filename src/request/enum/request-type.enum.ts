@@ -2,9 +2,6 @@ export enum RequestType {
   Epp = 'epp',
   Operative = 'operative',
   EppAndOperative = 'eppAndOperative',
-
-
-
 }
 
 export const RequestTypeLabelEs: Record<RequestType, string> = {
