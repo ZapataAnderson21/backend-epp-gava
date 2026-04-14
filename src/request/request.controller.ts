@@ -61,9 +61,13 @@ export class RequestController {
   @Patch(':id/status')
   async updateStatus(
     @Param('id', ParseIntPipe) id: number,
-    @Body() status: { status: RequestStatus },
+    @Body() body: { status: RequestStatus; actorUserId?: number },
   ) {
-    return await this.requestService.updateStatus(id, status.status);
+    return await this.requestService.updateStatus(
+      id,
+      body.status,
+      body.actorUserId,
+    );
   }
 
   @Patch(':id')

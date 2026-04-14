@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsPositive, Min } from 'class-validator';
+import { IsInt, IsNumber, IsPositive, Min } from 'class-validator';
 
 export class CreateElementRequestResponseDto {
   @ApiProperty({ example: 1 })
@@ -17,7 +17,10 @@ export class CreateElementRequestResponseDto {
 
   @ApiProperty({ example: 10 })
   @Type(() => Number)
-  @IsInt()
+  @IsNumber(
+    { maxDecimalPlaces: 4 },
+    { message: 'La cantidad aceptada debe ser numerica.' },
+  )
   @Min(0, { message: 'La cantidad aceptada no puede ser negativa.' })
   quantityAccepted!: number;
 }

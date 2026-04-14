@@ -157,11 +157,24 @@ exports.Prisma.ProjectScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.ElementCategoryScalarFieldEnum = {
+  elementCategoryId: 'elementCategoryId',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
 exports.Prisma.ElementScalarFieldEnum = {
   elementId: 'elementId',
   name: 'name',
+  code: 'code',
   description: 'description',
   type: 'type',
+  family: 'family',
+  controlType: 'controlType',
+  elementCategoryId: 'elementCategoryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -175,6 +188,8 @@ exports.Prisma.RequestScalarFieldEnum = {
   userId: 'userId',
   projectId: 'projectId',
   type: 'type',
+  inventoryLoadedAt: 'inventoryLoadedAt',
+  inventoryReceivedByUserId: 'inventoryReceivedByUserId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -200,6 +215,17 @@ exports.Prisma.ElementRequestScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ElementRequestWorkerPlanScalarFieldEnum = {
+  elementRequestWorkerPlanId: 'elementRequestWorkerPlanId',
+  elementRequestId: 'elementRequestId',
+  requestWorkerId: 'requestWorkerId',
+  plannedQuantity: 'plannedQuantity',
+  size: 'size',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.RequestResponseScalarFieldEnum = {
   requestResponseId: 'requestResponseId',
   responderUserId: 'responderUserId',
@@ -209,6 +235,38 @@ exports.Prisma.RequestResponseScalarFieldEnum = {
   adminDescription: 'adminDescription',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProjectInventoryEntryScalarFieldEnum = {
+  projectInventoryEntryId: 'projectInventoryEntryId',
+  projectId: 'projectId',
+  elementId: 'elementId',
+  requestId: 'requestId',
+  requestResponseId: 'requestResponseId',
+  elementRequestId: 'elementRequestId',
+  responsibleUserId: 'responsibleUserId',
+  unit: 'unit',
+  quantityReceived: 'quantityReceived',
+  quantityReturned: 'quantityReturned',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InventoryMovementScalarFieldEnum = {
+  inventoryMovementId: 'inventoryMovementId',
+  projectInventoryEntryId: 'projectInventoryEntryId',
+  projectId: 'projectId',
+  elementId: 'elementId',
+  requestId: 'requestId',
+  movementType: 'movementType',
+  fromLocation: 'fromLocation',
+  toLocation: 'toLocation',
+  quantity: 'quantity',
+  performedByUserId: 'performedByUserId',
+  responsibleUserId: 'responsibleUserId',
+  notes: 'notes',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.ElementRequestResponseScalarFieldEnum = {
@@ -593,6 +651,20 @@ exports.ElementType = exports.$Enums.ElementType = {
   operative: 'operative'
 };
 
+exports.ElementFamily = exports.$Enums.ElementFamily = {
+  epp: 'epp',
+  epi: 'epi',
+  ese: 'ese',
+  measurement: 'measurement',
+  consumible: 'consumible'
+};
+
+exports.ElementControlType = exports.$Enums.ElementControlType = {
+  consumable: 'consumable',
+  returnable: 'returnable',
+  individual: 'individual'
+};
+
 exports.RequestStatus = exports.$Enums.RequestStatus = {
   draft: 'draft',
   inProgress: 'inProgress',
@@ -607,6 +679,17 @@ exports.RequestType = exports.$Enums.RequestType = {
   epp: 'epp',
   operative: 'operative',
   eppAndOperative: 'eppAndOperative'
+};
+
+exports.InventoryMovementType = exports.$Enums.InventoryMovementType = {
+  request_received: 'request_received',
+  returned_to_office: 'returned_to_office',
+  adjustment: 'adjustment'
+};
+
+exports.InventoryLocation = exports.$Enums.InventoryLocation = {
+  office: 'office',
+  project: 'project'
 };
 
 exports.EmergencyStatus = exports.$Enums.EmergencyStatus = {
@@ -724,11 +807,15 @@ exports.Prisma.ModelName = {
   UserType: 'UserType',
   UserUserType: 'UserUserType',
   Project: 'Project',
+  ElementCategory: 'ElementCategory',
   Element: 'Element',
   Request: 'Request',
   RequestWorker: 'RequestWorker',
   ElementRequest: 'ElementRequest',
+  ElementRequestWorkerPlan: 'ElementRequestWorkerPlan',
   RequestResponse: 'RequestResponse',
+  ProjectInventoryEntry: 'ProjectInventoryEntry',
+  InventoryMovement: 'InventoryMovement',
   ElementRequestResponse: 'ElementRequestResponse',
   Emergency: 'Emergency',
   Worker: 'Worker',

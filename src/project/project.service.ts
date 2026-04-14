@@ -15,6 +15,7 @@ import {
 } from './enum/project-status.enum';
 import { TaskService } from 'src/task/task.service';
 import { NotificationService } from 'src/notification/notification.service';
+import { InventoryService } from 'src/inventory/inventory.service';
 
 @Injectable()
 export class ProjectService {
@@ -24,6 +25,7 @@ export class ProjectService {
     private readonly prismaService: PrismaService,
     private readonly taskService: TaskService,
     private readonly notificationService: NotificationService,
+    private readonly inventoryService: InventoryService,
   ) {}
 
   async create(createProjectDto: CreateProjectDto) {
@@ -40,7 +42,7 @@ export class ProjectService {
         'Project creation failed: Project with this code already exists',
         createProjectDto.code,
       );
-      throw new ConflictException('Ya existe un proyecto con este código.');
+      throw new ConflictException('Ya existe un proyecto con este codigo.');
     }
 
     const status = 'active';
@@ -59,7 +61,6 @@ export class ProjectService {
       throw new BadRequestException('No se pudo crear el proyecto.');
     }
 
-    // Notificar a todos los roles sobre nuevo proyecto
     await this.notificationService.notifyProjectCreated(
       project.projectId,
       project.name,
@@ -93,16 +94,13 @@ export class ProjectService {
       };
     }
 
-    const processedProjects = foundProjects.map((project) => {
-      const projectObj = {
-        ...project,
-        status:
-          ProjectStatusLabelEs[
-            project.status as keyof typeof ProjectStatusLabelEs
-          ] || project.status,
-      };
-      return projectObj;
-    });
+    const processedProjects = foundProjects.map((project) => ({
+      ...project,
+      status:
+        ProjectStatusLabelEs[
+          project.status as keyof typeof ProjectStatusLabelEs
+        ] || project.status,
+    }));
 
     this.logger.log(`Found ${foundProjects.length} projects`);
     return {
@@ -192,16 +190,13 @@ export class ProjectService {
       };
     }
 
-    const processedProjects = foundProjects.map((project) => {
-      const projectObj = {
-        ...project,
-        status:
-          ProjectStatusLabelEs[
-            project.status as keyof typeof ProjectStatusLabelEs
-          ] || project.status,
-      };
-      return projectObj;
-    });
+    const processedProjects = foundProjects.map((project) => ({
+      ...project,
+      status:
+        ProjectStatusLabelEs[
+          project.status as keyof typeof ProjectStatusLabelEs
+        ] || project.status,
+    }));
 
     this.logger.log(
       `Found ${foundProjects.length} projects with status: ${status}`,
@@ -234,7 +229,7 @@ export class ProjectService {
         this.logger.error(
           `Update failed: Project with code ${updateProjectDto.code} already exists`,
         );
-        throw new ConflictException('Ya existe un proyecto con este código.');
+        throw new ConflictException('Ya existe un proyecto con este codigo.');
       }
     }
 
@@ -266,7 +261,27 @@ export class ProjectService {
       `Updating status for project with ID: ${projectId} to: ${status}`,
     );
 
-    // REGLA: Solo permitir cambiar el estado a completed si todas las tareas están completadas/canceladas
+    if (status === ProjectStatus.Inactive) {
+      const blockers =
+        await this.inventoryService.getProjectInactivationBlockers(projectId);
+
+      if (blockers.length > 0) {
+        const details = blockers
+          .map(
+            (blocker) => {
+              const codePart = blocker.elementCode ? ` [${blocker.elementCode}]` : '';
+              const familyPart = blocker.familyLabel ? ` - ${blocker.familyLabel}` : '';
+              return `${blocker.elementName}${codePart}${familyPart} (${blocker.quantityPending} ${blocker.unit}) - Responsable: ${blocker.responsibleUserName ?? 'Sin responsable'}`;
+            },
+          )
+          .join('; ');
+
+        throw new BadRequestException(
+          `No se puede inactivar el proyecto porque aun tiene elementos pendientes de retorno en obra: ${details}.`,
+        );
+      }
+    }
+
     if (status === ProjectStatus.Completed) {
       const taskStatus =
         await this.taskService.areAllTasksCompletedOrCancelled(projectId);
@@ -297,7 +312,6 @@ export class ProjectService {
       throw new NotFoundException('Project not found');
     }
 
-    // Notificar cambio de estado del proyecto
     if (status === ProjectStatus.Completed) {
       await this.notificationService.notifyProjectCompleted(
         projectId,

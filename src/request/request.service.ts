@@ -10,6 +10,7 @@ import { UpdateRequestDto } from './dto/update-request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RequestStatus, RequestStatusLabelEs } from './enum';
 import { NotificationService } from 'src/notification/notification.service';
+import { InventoryService } from 'src/inventory/inventory.service';
 
 @Injectable()
 export class RequestService {
@@ -18,6 +19,7 @@ export class RequestService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly notificationService: NotificationService,
+    private readonly inventoryService: InventoryService,
   ) {}
 
   async create(createRequestDto: CreateRequestDto) {
@@ -184,12 +186,30 @@ export class RequestService {
         },
         elementRequests: {
           include: {
-            element: true,
+            element: {
+              include: {
+                category: true,
+              },
+            },
             elementRequestResponses: {
               include: {
                 requestResponse: true,
               },
             },
+            epiPlans: {
+              include: {
+                requestWorker: {
+                  include: {
+                    worker: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        requestWorkers: {
+          include: {
+            worker: true,
           },
         },
       },
@@ -340,12 +360,39 @@ export class RequestService {
     };
   }
 
-  async updateStatus(requestId: number, status: RequestStatus) {
+  async updateStatus(
+    requestId: number,
+    status: RequestStatus,
+    actorUserId?: number,
+  ) {
     this.logger.log(`Updating status of request ID ${requestId} to ${status}`);
 
+    if (status === RequestStatus.completed) {
+      if (!actorUserId) {
+        throw new BadRequestException(
+          'Se requiere identificar al responsable que confirma la recepcion final.',
+        );
+      }
+
+      return await this.inventoryService.receiveRequestIntoProjectInventory(
+        requestId,
+        actorUserId,
+      );
+    }
+
     this.logger.log(`Verifying existence of request ID: ${requestId}`);
-    const existingRequest = await this.findOne(requestId);
-    const previousStatus = existingRequest.data.status;
+    const existingRequest = await this.prismaService.request.findUnique({
+      where: { requestId },
+      include: {
+        project: { select: { projectId: true, name: true } },
+      },
+    });
+
+    if (!existingRequest) {
+      throw new NotFoundException('La solicitud no fue encontrada');
+    }
+
+    const previousStatus = existingRequest.status;
 
     this.logger.log(
       `Request ID ${requestId} exists. Proceeding to update status.`,
@@ -364,7 +411,7 @@ export class RequestService {
     }
 
     // Notificar al creador de la solicitud según el cambio de estado
-    const creatorUserId = existingRequest.data.userId;
+    const creatorUserId = existingRequest.userId;
 
     // Si pasó de draft a otro estado, notificar a ADMINISTRADORA/LOGISTICA
     if (previousStatus === 'draft' && status !== 'draft') {
@@ -414,9 +461,16 @@ export class RequestService {
       );
     }
 
+    const updateData = {
+      ...updateRequestDto,
+      ...(updateRequestDto.deliveryDueDate && {
+        deliveryDueDate: new Date(updateRequestDto.deliveryDueDate),
+      }),
+    };
+
     const updatedRequest = await this.prismaService.request.update({
       where: { requestId },
-      data: updateRequestDto,
+      data: updateData,
     });
 
     if (!updatedRequest) {

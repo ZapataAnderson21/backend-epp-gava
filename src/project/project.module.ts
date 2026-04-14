@@ -4,9 +4,10 @@ import { ProjectController } from './project.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { TaskModule } from 'src/task/task.module';
 import { NotificationModule } from 'src/notification/notification.module';
+import { InventoryModule } from 'src/inventory/inventory.module';
 
 @Module({
-  imports: [PrismaModule, TaskModule, NotificationModule],
+  imports: [PrismaModule, TaskModule, NotificationModule, InventoryModule],
   controllers: [ProjectController],
   providers: [ProjectService],
 })

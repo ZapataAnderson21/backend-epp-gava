@@ -7,11 +7,12 @@ import {
   Param,
   Logger,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ElementService } from './element.service';
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
-import { ElementType } from './enum/element-type.enum';
+import { ElementFamily, ElementType } from './enum/element-type.enum';
 
 @Controller('element')
 export class ElementController {
@@ -31,16 +32,28 @@ export class ElementController {
     return await this.elementService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: number) {
-    this.logger.log(`Fetching element with ID: ${id}`);
-    return await this.elementService.findOne(id);
-  }
-
   @Get('type/:type')
   async findAllByType(@Param('type') type: ElementType) {
     this.logger.log(`Fetching elements with type: ${type}`);
     return await this.elementService.findAllByType(type);
+  }
+
+  @Get('family/:family')
+  async findAllByFamily(@Param('family') family: ElementFamily) {
+    this.logger.log(`Fetching elements with family: ${family}`);
+    return await this.elementService.findAllByFamily(family);
+  }
+
+  @Get('legacy')
+  async findAllLegacy() {
+    this.logger.log('Fetching legacy elements');
+    return await this.elementService.findAllLegacy();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    this.logger.log(`Fetching element with ID: ${id}`);
+    return await this.elementService.findOne(id);
   }
 
   @Patch(':id')

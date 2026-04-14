@@ -30,6 +30,10 @@ model User {
   evaluatedMonthlyEvaluations       WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationEvaluator")
   openedMonthlyEvaluations          WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationOpenedBy")
   closedMonthlyEvaluations          WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationClosedBy")
+  receivedRequestsIntoInventory     Request[]                   @relation("RequestInventoryReceivedBy")
+  projectInventoryResponsibilities  ProjectInventoryEntry[]     @relation("ProjectInventoryResponsibleUser")
+  performedInventoryMovements       InventoryMovement[]         @relation("InventoryMovementPerformedBy")
+  responsibleInventoryMovements     InventoryMovement[]         @relation("InventoryMovementResponsibleUser")
 
   @@index([name])
   @@index([lastName])
@@ -82,6 +86,8 @@ model Project {
   attendances     Attendance[]
   tasks           Task[]
   notifications   Notification[]
+  inventoryEntries ProjectInventoryEntry[]
+  inventoryMovements InventoryMovement[]
 
   @@index([status])
   @@index([name])
@@ -94,18 +100,55 @@ enum ElementType {
   operative
 }
 
+enum ElementFamily {
+  epp
+  epi
+  ese
+  measurement
+  consumible
+}
+
+enum ElementControlType {
+  consumable
+  returnable
+  individual
+}
+
+model ElementCategory {
+  elementCategoryId Int       @id @default(autoincrement())
+  name              String    @unique
+  description       String?   @db.Text
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  elements          Element[]
+
+  @@index([deletedAt])
+}
+
 model Element {
   elementId       Int               @id @default(autoincrement())
   name            String
+  code            String?           @unique
   description     String            @db.Text @default("Sin descripción.")
   type            ElementType
+  family          ElementFamily?
+  controlType     ElementControlType @default(returnable)
+  elementCategoryId Int?
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   deletedAt       DateTime?
 
+  category        ElementCategory?  @relation(fields: [elementCategoryId], references: [elementCategoryId], onDelete: SetNull, onUpdate: Cascade)
   elementRequests ElementRequest[]
+  projectInventoryEntries ProjectInventoryEntry[]
+  inventoryMovements InventoryMovement[]
 
   @@index([type])
+  @@index([family])
+  @@index([controlType])
+  @@index([elementCategoryId])
   @@index([deletedAt])
 }
 
@@ -133,20 +176,27 @@ model Request {
   userId           Int
   projectId        Int
   type             RequestType
+  inventoryLoadedAt DateTime?
+  inventoryReceivedByUserId Int?
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
 
   project          Project            @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
   user             User               @relation(fields: [userId], references: [userId],     onDelete: Restrict, onUpdate: Cascade)
+  inventoryReceivedByUser User?       @relation("RequestInventoryReceivedBy", fields: [inventoryReceivedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
   elementRequests  ElementRequest[]
   requestWorkers   RequestWorker[]
   responses        RequestResponse[]
   notifications    Notification[]
+  projectInventoryEntries ProjectInventoryEntry[]
+  inventoryMovements InventoryMovement[]
 
   @@index([status])
   @@index([type])
   @@index([projectId])
   @@index([userId])
+  @@index([inventoryLoadedAt])
+  @@index([inventoryReceivedByUserId])
   @@index([deliveryDueDate])
   @@index([createdAt])
 }
@@ -163,6 +213,7 @@ model RequestWorker {
 
   request         Request   @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
   worker          Worker    @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  elementRequestWorkerPlans ElementRequestWorkerPlan[]
 
   @@unique([requestId, workerId])
   @@index([requestId])
@@ -171,7 +222,7 @@ model RequestWorker {
 
 model ElementRequest {
   elementRequestId        Int                       @id @default(autoincrement())
-  quantityRequested       Int
+  quantityRequested       Decimal                   @db.Decimal(18,4)
   unit                    String
   elementId               Int
   requestId               Int
@@ -181,10 +232,30 @@ model ElementRequest {
   element                 Element                   @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
   request                 Request                   @relation(fields: [requestId], references: [requestId], onDelete: Cascade,  onUpdate: Cascade)
   elementRequestResponses ElementRequestResponse[]
+  projectInventoryEntries ProjectInventoryEntry[]
+  epiPlans                ElementRequestWorkerPlan[]
 
   @@unique([requestId, elementId])
   @@index([elementId])
   @@index([requestId])
+}
+
+model ElementRequestWorkerPlan {
+  elementRequestWorkerPlanId Int       @id @default(autoincrement())
+  elementRequestId           Int
+  requestWorkerId            Int
+  plannedQuantity            Decimal   @db.Decimal(18,4)
+  size                       String?
+  notes                      String?   @db.Text
+  createdAt                  DateTime  @default(now())
+  updatedAt                  DateTime  @updatedAt
+
+  elementRequest             ElementRequest @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Cascade, onUpdate: Cascade)
+  requestWorker              RequestWorker  @relation(fields: [requestWorkerId], references: [requestWorkerId], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([elementRequestId, requestWorkerId])
+  @@index([elementRequestId])
+  @@index([requestWorkerId])
 }
 
 model RequestResponse {
@@ -200,15 +271,87 @@ model RequestResponse {
   request                 Request                    @relation(fields: [requestId], references: [requestId], onDelete: Cascade,  onUpdate: Cascade)
   responder               User                       @relation("UserResponses", fields: [responderUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
   elementRequestResponses ElementRequestResponse[]
+  projectInventoryEntries ProjectInventoryEntry[]
 
   @@index([responderUserId])
+}
+
+model ProjectInventoryEntry {
+  projectInventoryEntryId Int             @id @default(autoincrement())
+  projectId               Int
+  elementId               Int
+  requestId               Int
+  requestResponseId       Int?
+  elementRequestId        Int             @unique
+  responsibleUserId       Int
+  unit                    String
+  quantityReceived        Decimal         @db.Decimal(18,4)
+  quantityReturned        Decimal         @db.Decimal(18,4) @default(0)
+  notes                   String?         @db.Text
+  createdAt               DateTime        @default(now())
+  updatedAt               DateTime        @updatedAt
+
+  project                 Project         @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  element                 Element         @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  request                 Request         @relation(fields: [requestId], references: [requestId], onDelete: Restrict, onUpdate: Cascade)
+  requestResponse         RequestResponse? @relation(fields: [requestResponseId], references: [requestResponseId], onDelete: SetNull, onUpdate: Cascade)
+  elementRequest          ElementRequest  @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Restrict, onUpdate: Cascade)
+  responsibleUser         User            @relation("ProjectInventoryResponsibleUser", fields: [responsibleUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  movements               InventoryMovement[]
+
+  @@index([projectId])
+  @@index([elementId])
+  @@index([requestId])
+  @@index([requestResponseId])
+  @@index([responsibleUserId])
+}
+
+enum InventoryLocation {
+  office
+  project
+}
+
+enum InventoryMovementType {
+  request_received
+  returned_to_office
+  adjustment
+}
+
+model InventoryMovement {
+  inventoryMovementId     Int                   @id @default(autoincrement())
+  projectInventoryEntryId Int
+  projectId               Int
+  elementId               Int
+  requestId               Int?
+  movementType            InventoryMovementType
+  fromLocation            InventoryLocation
+  toLocation              InventoryLocation
+  quantity                Decimal               @db.Decimal(18,4)
+  performedByUserId       Int?
+  responsibleUserId       Int?
+  notes                   String?               @db.Text
+  createdAt               DateTime              @default(now())
+
+  projectInventoryEntry   ProjectInventoryEntry @relation(fields: [projectInventoryEntryId], references: [projectInventoryEntryId], onDelete: Cascade, onUpdate: Cascade)
+  project                 Project               @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  element                 Element               @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  request                 Request?              @relation(fields: [requestId], references: [requestId], onDelete: SetNull, onUpdate: Cascade)
+  performedByUser         User?                 @relation("InventoryMovementPerformedBy", fields: [performedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  responsibleUser         User?                 @relation("InventoryMovementResponsibleUser", fields: [responsibleUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([projectInventoryEntryId])
+  @@index([projectId])
+  @@index([elementId])
+  @@index([requestId])
+  @@index([movementType])
+  @@index([createdAt])
 }
 
 model ElementRequestResponse {
   elementRequestResponseId Int               @id @default(autoincrement())
   elementRequestId         Int
   requestResponseId        Int
-  quantityAccepted         Int
+  quantityAccepted         Decimal           @db.Decimal(18,4)
   createdAt                DateTime          @default(now())
   updatedAt                DateTime          @updatedAt
 

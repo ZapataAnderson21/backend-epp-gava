@@ -25,7 +25,20 @@ export class ElementRequestService {
       data: createElementRequestDto,
       include: {
         request: true,
-        element: true,
+        element: {
+          include: {
+            category: true,
+          },
+        },
+        epiPlans: {
+          include: {
+            requestWorker: {
+              include: {
+                worker: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -51,7 +64,20 @@ export class ElementRequestService {
         where: { requestId },
         include: {
           request: true,
-          element: true,
+          element: {
+            include: {
+              category: true,
+            },
+          },
+          epiPlans: {
+            include: {
+              requestWorker: {
+                include: {
+                  worker: true,
+                },
+              },
+            },
+          },
         },
       });
 
@@ -75,7 +101,20 @@ export class ElementRequestService {
       where: { elementRequestId },
       include: {
         request: true,
-        element: true,
+        element: {
+          include: {
+            category: true,
+          },
+        },
+        epiPlans: {
+          include: {
+            requestWorker: {
+              include: {
+                worker: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -104,6 +143,23 @@ export class ElementRequestService {
     const updatedRequest = await this.prismaService.elementRequest.update({
       where: { elementRequestId },
       data: updateElementRequestDto,
+      include: {
+        request: true,
+        element: {
+          include: {
+            category: true,
+          },
+        },
+        epiPlans: {
+          include: {
+            requestWorker: {
+              include: {
+                worker: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     return {

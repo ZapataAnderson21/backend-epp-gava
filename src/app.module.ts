@@ -33,6 +33,8 @@ import { NotificationModule } from './notification/notification.module';
 import { QuotationModule } from './quotation/quotation.module';
 import { ClientModule } from './client/client.module';
 import { WorkerMonthlyEvaluationModule } from './worker-monthly-evaluation/worker-monthly-evaluation.module';
+import { InventoryModule } from './inventory/inventory.module';
+import { ElementRequestWorkerPlanModule } from './element_request_worker_plan/element_request_worker_plan.module';
 
 @Module({
   imports: [
@@ -65,6 +67,8 @@ import { WorkerMonthlyEvaluationModule } from './worker-monthly-evaluation/worke
     QuotationModule,
     ClientModule,
     WorkerMonthlyEvaluationModule,
+    InventoryModule,
+    ElementRequestWorkerPlanModule,
   ],
   controllers: [],
   providers: [
