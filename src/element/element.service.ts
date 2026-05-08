@@ -19,16 +19,46 @@ import {
 } from './enum/element-type.enum';
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
+import { CreateFallProtectionGroupDto } from './dto/create-fall-protection-group.dto';
 
 @Injectable()
 export class ElementService {
   private readonly logger = new Logger('ElementService');
+  private readonly elementCatalogInclude = {
+    category: true,
+    variants: {
+      where: { deletedAt: null },
+      orderBy: [{ normalizedLabel: 'asc' as const }],
+    },
+    inventoryAssets: {
+      where: { deletedAt: null },
+      select: {
+        inventoryAssetId: true,
+        status: true,
+      },
+    },
+  };
 
   constructor(private readonly prismaService: PrismaService) {}
 
   private normalizeOptionalText(value?: string | null) {
     const trimmed = value?.trim();
     return trimmed ? trimmed : null;
+  }
+
+  private normalizeOptionalDate(value?: string | null) {
+    if (!value) {
+      return null;
+    }
+
+    const parsedDate = new Date(value);
+    return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+  }
+
+  private getDeprecatedVariantLabels(
+    dto: CreateElementDto | UpdateElementDto,
+  ) {
+    return (dto as { variantLabels?: string[] | null }).variantLabels;
   }
 
   private isElementFamily(value?: string | null): value is ElementFamily {
@@ -60,7 +90,9 @@ export class ElementService {
       return null;
     }
 
-    return family === ElementFamily.Epp || family === ElementFamily.Epi
+    return family === ElementFamily.Epp ||
+      family === ElementFamily.Epi ||
+      family === ElementFamily.Uniform
       ? ElementType.Epp
       : ElementType.Operative;
   }
@@ -80,21 +112,96 @@ export class ElementService {
     return ElementControlType.Returnable;
   }
 
+  private supportsVariants() {
+    return false;
+  }
+
+  private supportsStockMinimum(family?: ElementFamily | null) {
+    return (
+      family === ElementFamily.Epp ||
+      family === ElementFamily.Epi ||
+      family === ElementFamily.Uniform
+    );
+  }
+
+  private normalizeVariantLabels(variantLabels?: string[] | null) {
+    if (!variantLabels?.length) {
+      return [];
+    }
+
+    const normalizedMap = new Map<string, string>();
+
+    for (const rawValue of variantLabels) {
+      const trimmed = rawValue?.trim();
+      if (!trimmed) {
+        continue;
+      }
+
+      const normalizedLabel = trimmed.toUpperCase();
+      normalizedMap.set(normalizedLabel, normalizedLabel);
+    }
+
+    return [...normalizedMap.entries()].map(([normalizedLabel, label]) => ({
+      label,
+      normalizedLabel,
+    }));
+  }
+
+  private buildAssetSummary(
+    inventoryAssets?: Array<{ status: string }>,
+  ) {
+    const totalAssets = inventoryAssets?.length ?? 0;
+    const availableAssets =
+      inventoryAssets?.filter((asset) => asset.status === 'available').length ?? 0;
+    const assignedAssets =
+      inventoryAssets?.filter((asset) => asset.status === 'assigned').length ?? 0;
+    const maintenanceAssets =
+      inventoryAssets?.filter((asset) => asset.status === 'in_maintenance')
+        .length ?? 0;
+    const retiredAssets =
+      inventoryAssets?.filter((asset) => asset.status === 'retired').length ?? 0;
+
+    return {
+      totalAssets,
+      availableAssets,
+      assignedAssets,
+      maintenanceAssets,
+      retiredAssets,
+    };
+  }
+
   private buildElementView<T extends {
     category?: { name: string } | null;
     type: string;
     controlType: string;
     family?: string | null;
     deletedAt?: Date | null;
+    variants?: Array<{
+      elementVariantId: number;
+      label: string;
+      normalizedLabel: string;
+      code?: string | null;
+      description?: string | null;
+    }>;
+    inventoryAssets?: Array<{ inventoryAssetId: number; status: string }>;
   }>(element: T) {
     const family = this.isElementFamily(element.family)
       ? (element.family as ElementFamily)
       : null;
     const isLegacy = !family;
+    const variants: Array<{
+      elementVariantId: number;
+      label: string;
+      normalizedLabel: string;
+      code?: string | null;
+      description?: string | null;
+    }> = [];
+    const assetSummary = this.buildAssetSummary(element.inventoryAssets);
 
     return {
       ...element,
       family,
+      categoryName: element.category?.name ?? null,
       familyLabel: family ? ElementFamilyLabelEs[family] : 'Legado',
       isLegacy,
       typeLabel:
@@ -107,6 +214,10 @@ export class ElementService {
       legacyWarning: isLegacy
         ? 'Elemento legado conservado para compatibilidad e historial.'
         : null,
+      supportsVariants: this.supportsVariants(),
+      variants,
+      variantCount: variants.length,
+      assetSummary,
     };
   }
 
@@ -126,6 +237,60 @@ export class ElementService {
     return category.elementCategoryId;
   }
 
+  private normalizeCategoryText(value?: string | null) {
+    return value
+      ?.normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLowerCase() ?? '';
+  }
+
+  private async ensureFallProtectionPart(
+    elementId: number,
+    expectedCategory: 'arnes' | 'banda' | 'linea' | 'eslinga',
+  ) {
+    const element = await this.prismaService.element.findFirst({
+      where: {
+        elementId,
+        deletedAt: null,
+        family: ElementFamily.Harness,
+      },
+      include: { category: true },
+    });
+
+    if (!element) {
+      throw new BadRequestException(
+        `El elemento EPA ${elementId} no existe o no pertenece a proteccion anticaida.`,
+      );
+    }
+
+    const categoryName = this.normalizeCategoryText(
+      element.category?.name || element.name,
+    );
+    const matchesCategory =
+      (expectedCategory === 'arnes' && categoryName.includes('arnes')) ||
+      (expectedCategory === 'banda' && categoryName.includes('banda')) ||
+      (expectedCategory === 'linea' && categoryName.includes('linea')) ||
+      (expectedCategory === 'eslinga' && categoryName.includes('eslinga'));
+
+    if (!matchesCategory) {
+      throw new BadRequestException(
+        `El elemento ${element.code ?? element.name} no corresponde a la categoria requerida del grupo EPA.`,
+      );
+    }
+
+    return element;
+  }
+
+  private fallProtectionGroupInclude() {
+    return {
+      harnessElement: { include: { category: true } },
+      anchorBandElement: { include: { category: true } },
+      lifelineElement: { include: { category: true } },
+      positioningLanyardElement: { include: { category: true } },
+    };
+  }
+
   private buildLegacyFamilyWhere(family: ElementFamily) {
     switch (family) {
       case ElementFamily.Epp:
@@ -140,27 +305,87 @@ export class ElementService {
           type: ElementType.Epp,
           controlType: ElementControlType.Individual,
         };
+      case ElementFamily.Uniform:
+        return {
+          family: null,
+          type: ElementType.Epp,
+          controlType: ElementControlType.Consumable,
+        };
       case ElementFamily.Ese:
         return {
           family: null,
           type: ElementType.Operative,
           controlType: ElementControlType.Returnable,
         };
+      case ElementFamily.Harness:
+        return null;
       case ElementFamily.Measurement:
         return {
           family: null,
           type: ElementType.Operative,
           controlType: ElementControlType.Individual,
         };
-      case ElementFamily.Consumible:
-        return {
-          family: null,
-          type: ElementType.Operative,
-          controlType: ElementControlType.Consumable,
-        };
       default:
         return null;
     }
+  }
+
+  async createFallProtectionGroup(dto: CreateFallProtectionGroupDto) {
+    const normalizedCode = dto.code.trim();
+
+    await Promise.all([
+      this.ensureFallProtectionPart(dto.harnessElementId, 'arnes'),
+      this.ensureFallProtectionPart(dto.anchorBandElementId, 'banda'),
+      this.ensureFallProtectionPart(dto.lifelineElementId, 'linea'),
+      this.ensureFallProtectionPart(dto.positioningLanyardElementId, 'eslinga'),
+    ]);
+
+    const uniquePartIds = new Set([
+      dto.harnessElementId,
+      dto.anchorBandElementId,
+      dto.lifelineElementId,
+      dto.positioningLanyardElementId,
+    ]);
+
+    if (uniquePartIds.size !== 4) {
+      throw new BadRequestException(
+        'Un grupo EPA debe tener cuatro elementos distintos.',
+      );
+    }
+
+    const group = await this.prismaService.fallProtectionGroup.create({
+      data: {
+        code: normalizedCode,
+        description: this.normalizeOptionalText(dto.description),
+        harnessElementId: dto.harnessElementId,
+        anchorBandElementId: dto.anchorBandElementId,
+        lifelineElementId: dto.lifelineElementId,
+        positioningLanyardElementId: dto.positioningLanyardElementId,
+      },
+      include: this.fallProtectionGroupInclude(),
+    });
+
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Grupo EPA registrado exitosamente.',
+      data: group,
+    };
+  }
+
+  async findFallProtectionGroups() {
+    const groups = await this.prismaService.fallProtectionGroup.findMany({
+      where: { deletedAt: null },
+      include: this.fallProtectionGroupInclude(),
+      orderBy: { code: 'asc' },
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: groups.length
+        ? 'Grupos EPA encontrados exitosamente.'
+        : 'No se han encontrado grupos EPA.',
+      data: groups,
+    };
   }
 
   private async ensureNameIsAvailable(name: string, elementId?: number) {
@@ -178,6 +403,10 @@ export class ElementService {
     if (hasConflict) {
       throw new ConflictException('Ya existe un elemento con este nombre.');
     }
+  }
+
+  private shouldEnforceUniqueName(family?: string | null) {
+    return family !== ElementFamily.Ese;
   }
 
   private async ensureCodeIsAvailable(code: string, elementId?: number) {
@@ -252,6 +481,67 @@ export class ElementService {
     };
   }
 
+  private async syncElementVariants(
+    tx: PrismaService,
+    elementId: number,
+    variantLabels?: string[] | null,
+  ) {
+    const normalizedVariants = this.normalizeVariantLabels(variantLabels);
+    const existingVariants = await tx.elementVariant.findMany({
+      where: { elementId },
+    });
+
+    const existingByNormalizedLabel = new Map(
+      existingVariants.map((variant) => [variant.normalizedLabel, variant]),
+    );
+    const nextNormalizedLabels = new Set(
+      normalizedVariants.map((variant) => variant.normalizedLabel),
+    );
+
+    for (const variant of normalizedVariants) {
+      const existing = existingByNormalizedLabel.get(variant.normalizedLabel);
+
+      if (existing) {
+        await tx.elementVariant.update({
+          where: { elementVariantId: existing.elementVariantId },
+          data: {
+            label: variant.label,
+            normalizedLabel: variant.normalizedLabel,
+            deletedAt: null,
+          },
+        });
+        continue;
+      }
+
+      await tx.elementVariant.create({
+        data: {
+          elementId,
+          label: variant.label,
+          normalizedLabel: variant.normalizedLabel,
+        },
+      });
+    }
+
+    const variantsToArchive = existingVariants.filter(
+      (variant) =>
+        variant.deletedAt === null &&
+        !nextNormalizedLabels.has(variant.normalizedLabel),
+    );
+
+    if (variantsToArchive.length) {
+      await tx.elementVariant.updateMany({
+        where: {
+          elementVariantId: {
+            in: variantsToArchive.map((variant) => variant.elementVariantId),
+          },
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+    }
+  }
+
   async create(createElementDto: CreateElementDto) {
     this.logger.log('Creating element', JSON.stringify(createElementDto));
 
@@ -270,7 +560,26 @@ export class ElementService {
       );
     }
 
-    await this.ensureNameIsAvailable(createElementDto.name);
+    if (
+      this.getDeprecatedVariantLabels(createElementDto)?.length
+    ) {
+      throw new BadRequestException(
+        'Cada talla debe registrarse como un elemento independiente.',
+      );
+    }
+
+    if (
+      Number(createElementDto.stockMinimum ?? 0) > 0 &&
+      !this.supportsStockMinimum(resolved.family as ElementFamily | null)
+    ) {
+      throw new BadRequestException(
+        'El stock minimo solo aplica para EPP, EPI y Uniforme.',
+      );
+    }
+
+    if (this.shouldEnforceUniqueName(resolved.family)) {
+      await this.ensureNameIsAvailable(createElementDto.name);
+    }
 
     if (normalizedCode) {
       await this.ensureCodeIsAvailable(normalizedCode);
@@ -280,19 +589,42 @@ export class ElementService {
       createElementDto.categoryName,
     );
 
-    const element = await this.prismaService.element.create({
-      data: {
-        name: createElementDto.name.trim(),
-        code: normalizedCode,
-        description: createElementDto.description?.trim(),
-        type: resolved.type as any,
-        family: resolved.family as any,
-        controlType: resolved.controlType as any,
-        elementCategoryId,
-      },
-      include: {
-        category: true,
-      },
+    const element = await this.prismaService.$transaction(async (tx) => {
+      const createdElement = await tx.element.create({
+        data: {
+          name: createElementDto.name.trim(),
+          code: normalizedCode,
+          description: createElementDto.description?.trim(),
+          brand: this.normalizeOptionalText(createElementDto.brand),
+          model: this.normalizeOptionalText(createElementDto.model),
+          size: this.normalizeOptionalText(createElementDto.size),
+          serialNumber: this.normalizeOptionalText(createElementDto.serialNumber),
+          technicalSheetLink: this.normalizeOptionalText(
+            createElementDto.technicalSheetLink,
+          ),
+          operationalStatus: this.normalizeOptionalText(
+            createElementDto.operationalStatus,
+          ),
+          manufactureDate: this.normalizeOptionalDate(
+            createElementDto.manufactureDate,
+          ),
+          expirationDate: this.normalizeOptionalDate(
+            createElementDto.expirationDate,
+          ),
+          type: resolved.type as any,
+          family: resolved.family as any,
+          controlType: resolved.controlType as any,
+          elementCategoryId,
+          stockMinimum: this.supportsStockMinimum(resolved.family as ElementFamily | null)
+            ? createElementDto.stockMinimum ?? 0
+            : 0,
+        },
+      });
+
+      return tx.element.findUniqueOrThrow({
+        where: { elementId: createdElement.elementId },
+        include: this.elementCatalogInclude,
+      });
     });
 
     return {
@@ -305,9 +637,7 @@ export class ElementService {
   async findAll() {
     const foundElements = await this.prismaService.element.findMany({
       where: { deletedAt: null },
-      include: {
-        category: true,
-      },
+      include: this.elementCatalogInclude,
       orderBy: { name: 'asc' },
     });
 
@@ -325,9 +655,7 @@ export class ElementService {
       where: {
         elementId,
       },
-      include: {
-        category: true,
-      },
+      include: this.elementCatalogInclude,
     });
 
     if (!foundElement) {
@@ -360,9 +688,7 @@ export class ElementService {
         type,
         deletedAt: null,
       },
-      include: {
-        category: true,
-      },
+      include: this.elementCatalogInclude,
       orderBy: { name: 'asc' },
     });
 
@@ -390,9 +716,7 @@ export class ElementService {
         ],
         deletedAt: null,
       },
-      include: {
-        category: true,
-      },
+      include: this.elementCatalogInclude,
       orderBy: { name: 'asc' },
     });
 
@@ -411,9 +735,7 @@ export class ElementService {
         family: null,
         deletedAt: null,
       },
-      include: {
-        category: true,
-      },
+      include: this.elementCatalogInclude,
       orderBy: { name: 'asc' },
     });
 
@@ -456,10 +778,6 @@ export class ElementService {
       throw new BadRequestException('Selecciona un tipo de control valido.');
     }
 
-    if (updateElementDto.name) {
-      await this.ensureNameIsAvailable(updateElementDto.name, elementId);
-    }
-
     const normalizedCode = Object.prototype.hasOwnProperty.call(
       updateElementDto,
       'code',
@@ -481,9 +799,31 @@ export class ElementService {
       ? resolved.family
       : existingElement.family;
 
+    if (updateElementDto.name && this.shouldEnforceUniqueName(nextFamily)) {
+      await this.ensureNameIsAvailable(updateElementDto.name, elementId);
+    }
+
     if (resolved.family && ElementFamilyRequiresCode[resolved.family] && !normalizedCode) {
       throw new BadRequestException(
         `La familia ${ElementFamilyLabelEs[resolved.family]} requiere codigo obligatorio.`,
+      );
+    }
+
+    if (
+      Object.prototype.hasOwnProperty.call(updateElementDto, 'variantLabels') &&
+      this.getDeprecatedVariantLabels(updateElementDto)?.length
+    ) {
+      throw new BadRequestException(
+        'Cada talla debe registrarse como un elemento independiente.',
+      );
+    }
+
+    if (
+      Number(updateElementDto.stockMinimum ?? 0) > 0 &&
+      !this.supportsStockMinimum(nextFamily as ElementFamily | null)
+    ) {
+      throw new BadRequestException(
+        'El stock minimo solo aplica para EPP, EPI y Uniforme.',
       );
     }
 
@@ -499,6 +839,15 @@ export class ElementService {
       family?: ElementFamily | null;
       controlType?: ElementControlType;
       elementCategoryId?: number | null;
+      stockMinimum?: number;
+      brand?: string | null;
+      model?: string | null;
+      size?: string | null;
+      serialNumber?: string | null;
+      technicalSheetLink?: string | null;
+      operationalStatus?: string | null;
+      manufactureDate?: Date | null;
+      expirationDate?: Date | null;
     } = {};
 
     if (Object.prototype.hasOwnProperty.call(updateElementDto, 'name')) {
@@ -511,6 +860,55 @@ export class ElementService {
 
     if (Object.prototype.hasOwnProperty.call(updateElementDto, 'description')) {
       data.description = updateElementDto.description?.trim();
+    }
+
+    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'brand')) {
+      data.brand = this.normalizeOptionalText(updateElementDto.brand);
+    }
+
+    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'model')) {
+      data.model = this.normalizeOptionalText(updateElementDto.model);
+    }
+
+    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'size')) {
+      data.size = this.normalizeOptionalText(updateElementDto.size);
+    }
+
+    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'serialNumber')) {
+      data.serialNumber = this.normalizeOptionalText(updateElementDto.serialNumber);
+    }
+
+    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'technicalSheetLink')) {
+      data.technicalSheetLink = this.normalizeOptionalText(
+        updateElementDto.technicalSheetLink,
+      );
+    }
+
+    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'operationalStatus')) {
+      data.operationalStatus = this.normalizeOptionalText(
+        updateElementDto.operationalStatus,
+      );
+    }
+
+    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'manufactureDate')) {
+      data.manufactureDate = this.normalizeOptionalDate(
+        updateElementDto.manufactureDate,
+      );
+    }
+
+    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'expirationDate')) {
+      data.expirationDate = this.normalizeOptionalDate(
+        updateElementDto.expirationDate,
+      );
+    }
+
+    if (
+      Object.prototype.hasOwnProperty.call(updateElementDto, 'stockMinimum') ||
+      Object.prototype.hasOwnProperty.call(updateElementDto, 'family')
+    ) {
+      data.stockMinimum = this.supportsStockMinimum(nextFamily as ElementFamily | null)
+        ? Number(updateElementDto.stockMinimum ?? existingElement.stockMinimum ?? 0)
+        : 0;
     }
 
     if (
@@ -532,12 +930,28 @@ export class ElementService {
       );
     }
 
-    const updatedElement = await this.prismaService.element.update({
-      where: { elementId },
-      data,
-      include: {
-        category: true,
-      },
+    const updatedElement = await this.prismaService.$transaction(async (tx) => {
+      await tx.element.update({
+        where: { elementId },
+        data,
+      });
+
+      if (Object.prototype.hasOwnProperty.call(updateElementDto, 'variantLabels')) {
+        await tx.elementVariant.updateMany({
+          where: {
+            elementId,
+            deletedAt: null,
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        });
+      }
+
+      return tx.element.findUniqueOrThrow({
+        where: { elementId },
+        include: this.elementCatalogInclude,
+      });
     });
 
     return {
@@ -556,6 +970,8 @@ export class ElementService {
             elementRequests: true,
             projectInventoryEntries: true,
             inventoryMovements: true,
+            variants: true,
+            inventoryAssets: true,
           },
         },
       },
@@ -576,7 +992,9 @@ export class ElementService {
     const hasHistory =
       existingElement._count.elementRequests > 0 ||
       existingElement._count.projectInventoryEntries > 0 ||
-      existingElement._count.inventoryMovements > 0;
+      existingElement._count.inventoryMovements > 0 ||
+      existingElement._count.variants > 0 ||
+      existingElement._count.inventoryAssets > 0;
 
     return {
       statusCode: HttpStatus.OK,

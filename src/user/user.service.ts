@@ -27,6 +27,106 @@ export class UserService {
 
   private readonly logger = new Logger('UserService');
 
+  private buildDisabledEmail(user: Pick<User, 'userId' | 'email'>) {
+    const safeLocalPart =
+      user.email
+        .split('@')[0]
+        ?.replace(/[^a-zA-Z0-9._-]/g, '')
+        .slice(0, 30) || 'usuario';
+    const timestamp = new Date().toISOString().replace(/\D/g, '').slice(0, 14);
+    return `${safeLocalPart}+inactivo-${user.userId}-${timestamp}@disabled.local`;
+  }
+
+  private toUserResponse(
+    user: User & {
+      userUserTypes?: { userType?: { name: string } }[];
+    },
+  ) {
+    const userType = user.userUserTypes?.[0]?.userType?.name ?? null;
+
+    return {
+      userId: user.userId,
+      name: user.name,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      userType,
+      deletedAt: user.deletedAt,
+    };
+  }
+
+  private async findAnyByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+      include: {
+        userUserTypes: {
+          include: {
+            userType: true,
+          },
+        },
+      },
+    });
+  }
+
+  private async findAnyByPhone(phone: string) {
+    return this.prisma.user.findUnique({
+      where: { phone },
+      include: {
+        userUserTypes: {
+          include: {
+            userType: true,
+          },
+        },
+      },
+    });
+  }
+
+  private async releaseDisabledUserIdentity(user: User) {
+    this.logger.log(
+      `Releasing disabled user unique identity. User ID: ${user.userId}`,
+    );
+
+    return this.prisma.user.update({
+      where: { userId: user.userId },
+      data: {
+        email: this.buildDisabledEmail(user),
+        phone: null,
+        deletedAt: user.deletedAt ?? new Date(),
+      },
+    });
+  }
+
+  private async ensureUniqueIdentityIsAvailable(
+    data: { email?: string; phone?: string | null },
+    currentUserId?: number,
+  ) {
+    if (data.email) {
+      const existingUser = await this.findAnyByEmail(data.email);
+
+      if (existingUser && existingUser.userId !== currentUserId) {
+        if (!existingUser.deletedAt) {
+          this.logger.warn(`Email already exists: ${data.email}`);
+          throw new ConflictException('El correo ya está en uso.');
+        }
+
+        await this.releaseDisabledUserIdentity(existingUser);
+      }
+    }
+
+    if (data.phone) {
+      const existingUserByPhone = await this.findAnyByPhone(data.phone);
+
+      if (existingUserByPhone && existingUserByPhone.userId !== currentUserId) {
+        if (!existingUserByPhone.deletedAt) {
+          this.logger.warn(`Phone already exists: ${data.phone}`);
+          throw new ConflictException('El teléfono ya está en uso.');
+        }
+
+        await this.releaseDisabledUserIdentity(existingUserByPhone);
+      }
+    }
+  }
+
   async create(createUserDto: CreateUserDto) {
     this.logger.log(
       `Validating associated user type: ${createUserDto.userTypeId.toString()}`,
@@ -45,21 +145,10 @@ export class UserService {
       );
     }
 
-    const existingUser = await this.findByEmail(createUserDto.email);
-
-    if (existingUser) {
-      this.logger.warn(`Email already exists: ${createUserDto.email}`);
-      throw new ConflictException('El correo ya está en uso.');
-    }
-
-    if (createUserDto.phone) {
-      const existingUserByPhone = await this.findByPhone(createUserDto.phone);
-
-      if (existingUserByPhone) {
-        this.logger.warn(`Phone already exists: ${createUserDto.phone}`);
-        throw new ConflictException('El teléfono ya está en uso.');
-      }
-    }
+    await this.ensureUniqueIdentityIsAvailable({
+      email: createUserDto.email,
+      phone: createUserDto.phone,
+    });
 
     const hashedPassword = await hash(createUserDto.password, 10);
 
@@ -207,6 +296,33 @@ export class UserService {
     };
   }
 
+  async findInactive() {
+    this.logger.log('Finding inactive users');
+    const users = await this.prisma.user.findMany({
+      where: {
+        deletedAt: {
+          not: null,
+        },
+      },
+      include: {
+        userUserTypes: {
+          include: {
+            userType: true,
+          },
+        },
+      },
+      orderBy: {
+        deletedAt: 'desc',
+      },
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Los usuarios inactivos han sido encontrados exitosamente.',
+      data: users.map((user) => this.toUserResponse(user)),
+    };
+  }
+
   async findOne(id: number) {
     this.logger.log(`Finding user with id: ${id}`);
     const user = await this.prisma.user.findUnique({
@@ -228,17 +344,7 @@ export class UserService {
       throw new NotFoundException('El usuario no ha sido encontrado.');
     }
 
-    const userType = user.userUserTypes[0].userType.name
-      ? user.userUserTypes[0].userType.name
-      : null;
-
-    const userWithType = {
-      userId: user.userId,
-      name: user.name,
-      lastName: user.lastName,
-      email: user.email,
-      userType: userType,
-    };
+    const userWithType = this.toUserResponse(user);
 
     this.logger.log(`User found with id: ${id}`);
     return {
@@ -250,7 +356,7 @@ export class UserService {
 
   async findByEmail(email: string) {
     this.logger.log(`Finding user by email: ${email}`);
-    const foundUser = await this.prisma.user.findUnique({
+    const foundUser = await this.prisma.user.findFirst({
       where: {
         email: email,
         deletedAt: null,
@@ -275,7 +381,7 @@ export class UserService {
 
   async findByPhone(phone: string) {
     this.logger.log(`Finding user by phone: ${phone}`);
-    const foundUser = await this.prisma.user.findUnique({
+    const foundUser = await this.prisma.user.findFirst({
       where: {
         phone: phone,
         deletedAt: null,
@@ -344,6 +450,14 @@ export class UserService {
     const { userTypeId, ...rest } = updateUserDto as any;
     const data = { ...rest } as Partial<User>;
 
+    await this.ensureUniqueIdentityIsAvailable(
+      {
+        email: typeof data.email === 'string' ? data.email : undefined,
+        phone: typeof data.phone === 'string' ? data.phone : undefined,
+      },
+      userId,
+    );
+
     if (typeof data.password === 'string' && data.password.trim().length > 0) {
       data.password = await hash(data.password, 10);
     } else {
@@ -375,6 +489,14 @@ export class UserService {
     await this.findOne(id);
 
     const data = { ...updateUserDto } as Partial<User>;
+
+    await this.ensureUniqueIdentityIsAvailable(
+      {
+        email: typeof data.email === 'string' ? data.email : undefined,
+        phone: typeof data.phone === 'string' ? data.phone : undefined,
+      },
+      id,
+    );
 
     if (typeof data.password === 'string' && data.password.trim().length > 0) {
       data.password = await hash(data.password, 10);
@@ -446,37 +568,59 @@ export class UserService {
       throw new UnauthorizedException('Invalid or expired reset token');
     }
 
-    const decoded = this.jwtService.verify(token);
+    this.jwtService.verify(token);
 
-    const user = await this.findByEmail(decoded.email);
+    const user = await this.prisma.user.findFirst({
+      where: {
+        userId: foundToken.userId,
+        deletedAt: null,
+      },
+      include: {
+        userUserTypes: {
+          include: {
+            userType: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      this.logger.warn('Reset token belongs to a disabled or missing user');
+      throw new UnauthorizedException('Invalid or expired reset token');
+    }
 
     this.logger.log('User found for the provided token');
     return user;
   }
 
   async remove(id: number) {
-    await this.findOne(id);
-
-    this.logger.log(`Removing user with id: ${id}`);
-
-    const deletedAt = new Date();
-
-    const deletedUser = await this.prisma.user.update({
+    const user = await this.prisma.user.findUnique({
       where: { userId: id },
-      data: { deletedAt },
     });
+
+    if (!user) {
+      this.logger.warn(`User not found with id: ${id}`);
+      throw new NotFoundException('El usuario no ha sido encontrado.');
+    }
+
+    this.logger.log(`Disabling user with id: ${id}`);
+
+    const deletedUser = user.deletedAt
+      ? user
+      : await this.releaseDisabledUserIdentity(user);
 
     if (!deletedUser) {
       this.logger.error(`Failed to delete user with id: ${id}`);
       throw new BadRequestException('Failed to delete user');
     }
 
-    this.logger.log(`User with id: ${id} deleted successfully`);
+    this.logger.log(`User with id: ${id} disabled successfully`);
     return {
       statusCode: HttpStatus.OK,
-      message: 'Usuario eliminado exitosamente.',
+      message: 'Usuario deshabilitado exitosamente.',
       data: {
         userId: deletedUser.userId,
+        email: deletedUser.email,
         deletedAt: deletedUser.deletedAt,
       },
     };

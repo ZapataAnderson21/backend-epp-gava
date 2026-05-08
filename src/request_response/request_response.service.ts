@@ -21,8 +21,10 @@ export class RequestResponseService {
       createRequestResponseDto,
     );
 
-    const requestResponse = await this.prismaService.requestResponse.create({
-      data: createRequestResponseDto,
+    const requestResponse = await this.prismaService.requestResponse.upsert({
+      where: { requestId: createRequestResponseDto.requestId },
+      create: createRequestResponseDto,
+      update: createRequestResponseDto,
     });
 
     this.logger.log(
@@ -35,8 +37,9 @@ export class RequestResponseService {
     }
 
     return {
-      statusCode: HttpStatus.CREATED,
-      message: 'La respuesta a la solicitud ha sido creada exitosamente.',
+      statusCode: HttpStatus.OK,
+      message:
+        'La respuesta a la solicitud ha sido creada o actualizada exitosamente.',
       data: requestResponse,
     };
   }

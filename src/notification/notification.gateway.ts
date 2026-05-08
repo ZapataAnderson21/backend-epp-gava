@@ -178,6 +178,10 @@ export class NotificationGateway
     this.server.to(`user_${userId}`).emit('unreadCount', { count });
   }
 
+  sendRequestMailProgressToUser(userId: number, progress: any) {
+    this.server.to(`user_${userId}`).emit('requestMailProgress', progress);
+  }
+
   // Verificar si un usuario está conectado
   isUserOnline(userId: number): boolean {
     return (

@@ -12,6 +12,7 @@ import {
 import { ElementService } from './element.service';
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
+import { CreateFallProtectionGroupDto } from './dto/create-fall-protection-group.dto';
 import { ElementFamily, ElementType } from './enum/element-type.enum';
 
 @Controller('element')
@@ -48,6 +49,24 @@ export class ElementController {
   async findAllLegacy() {
     this.logger.log('Fetching legacy elements');
     return await this.elementService.findAllLegacy();
+  }
+
+  @Post('fall-protection-groups')
+  async createFallProtectionGroup(
+    @Body() createFallProtectionGroupDto: CreateFallProtectionGroupDto,
+  ) {
+    this.logger.log(
+      `Creating fall protection group: ${JSON.stringify(createFallProtectionGroupDto)}`,
+    );
+    return await this.elementService.createFallProtectionGroup(
+      createFallProtectionGroupDto,
+    );
+  }
+
+  @Get('fall-protection-groups')
+  async findFallProtectionGroups() {
+    this.logger.log('Fetching fall protection groups');
+    return await this.elementService.findFallProtectionGroups();
   }
 
   @Get(':id')

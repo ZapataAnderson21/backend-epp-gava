@@ -11,6 +11,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
   Query,
+  HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { RequestService } from './request.service';
@@ -22,6 +23,7 @@ import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { RequestStatus } from './enum';
+import { NotificationGateway } from 'src/notification/notification.gateway';
 
 @Controller('request')
 export class RequestController {
@@ -30,6 +32,7 @@ export class RequestController {
     private readonly pdfService: PdfService,
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
+    private readonly notificationGateway: NotificationGateway,
   ) {}
 
   @Post()
@@ -80,24 +83,126 @@ export class RequestController {
 
   @Post('sendLogistics')
   async sendToLogistics(
-    @Body() body: { requestId: number; passwordCPanel: string },
+    @Body()
+    body: {
+      requestId: number;
+      passwordCPanel: string;
+      operationId?: string;
+      progressUserId?: number;
+    },
   ) {
-    await this.pdfService.generateRequestPdf(body.requestId);
+    const requestId = Number(body.requestId);
+    const progressUserId = Number(body.progressUserId || 0);
+    const operationId = body.operationId || `request-mail-${requestId}`;
 
+    const emitProgress = (
+      step: string,
+      status: 'running' | 'success' | 'error',
+      message: string,
+      extra: Record<string, unknown> = {},
+    ) => {
+      if (!progressUserId) return;
+
+      this.notificationGateway.sendRequestMailProgressToUser(progressUserId, {
+        operationId,
+        requestId,
+        step,
+        status,
+        message,
+        timestamp: new Date().toISOString(),
+        ...extra,
+      });
+    };
+
+    emitProgress(
+      'validate-smtp',
+      'running',
+      'Validando la contrasena con el servidor de correos...',
+    );
+
+    const validationResult =
+      await this.mailService.validateRequestSmtpCredentials(
+        requestId,
+        body.passwordCPanel,
+      );
+
+    if (validationResult.statusCode !== HttpStatus.OK) {
+      emitProgress('validate-smtp', 'error', validationResult.message, {
+        data: validationResult.data,
+      });
+      return validationResult;
+    }
+
+    emitProgress(
+      'validate-smtp',
+      'success',
+      'Contrasena validada correctamente.',
+    );
+
+    try {
+      emitProgress(
+        'generate-pdf',
+        'running',
+        'Generando el PDF del requerimiento...',
+      );
+      await this.pdfService.generateRequestPdf(requestId);
+      emitProgress('generate-pdf', 'success', 'PDF generado correctamente.');
+    } catch (error: any) {
+      const message =
+        error?.message ||
+        'No se pudo generar el PDF del requerimiento antes del envio.';
+      emitProgress('generate-pdf', 'error', message);
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message,
+        data: null,
+      };
+    }
+
+    emitProgress('send-email', 'running', 'Enviando correo a logistica...');
     const mailResult = await this.mailService.sendRequestToLogistics(
-      body.requestId,
+      requestId,
       body.passwordCPanel,
+      { skipVerification: true },
     );
 
     // Verificar si el envío del correo fue exitoso antes de actualizar el estado
     if (mailResult.statusCode !== 200) {
-      return mailResult; // Retornar el error del servicio de correo
+      emitProgress('send-email', 'error', mailResult.message, {
+        data: mailResult.data,
+      });
+      return mailResult;
     }
 
-    return await this.requestService.updateStatus(
-      +body.requestId,
-      RequestStatus.inProgress,
-    );
+    emitProgress('send-email', 'success', 'Correo enviado correctamente.');
+
+    try {
+      emitProgress(
+        'update-status',
+        'running',
+        'Actualizando el estado del requerimiento...',
+      );
+      const result = await this.requestService.updateStatus(
+        requestId,
+        RequestStatus.inProgress,
+      );
+      emitProgress(
+        'done',
+        'success',
+        'Requerimiento enviado y actualizado correctamente.',
+      );
+      return result;
+    } catch (error: any) {
+      const message =
+        error?.message ||
+        'El correo fue enviado, pero no se pudo actualizar el estado.';
+      emitProgress('update-status', 'error', message);
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message,
+        data: null,
+      };
+    }
   }
 
   @Delete(':id')

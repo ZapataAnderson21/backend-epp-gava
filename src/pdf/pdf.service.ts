@@ -1313,7 +1313,18 @@ export class PdfService {
     // 2) Traer elementos y trabajadores seleccionados
     const elementRequests = await this.prismaService.elementRequest.findMany({
       where: { requestId },
-      include: { request: true, element: true },
+      include: {
+        request: true,
+        element: true,
+        fallProtectionGroup: {
+          include: {
+            harnessElement: true,
+            anchorBandElement: true,
+            lifelineElement: true,
+            positioningLanyardElement: true,
+          },
+        },
+      },
       orderBy: { elementRequestId: 'asc' },
     });
 
@@ -1321,6 +1332,55 @@ export class PdfService {
       where: { requestId },
       include: { worker: true },
       orderBy: { requestWorkerId: 'asc' },
+    });
+
+    const fallProtectionElementIds = elementRequests
+      .filter((line) => {
+        const family = line.element?.family?.trim?.().toLowerCase?.();
+        const elementType = line.element?.type?.trim?.().toLowerCase?.();
+        const controlType = line.element?.controlType?.trim?.().toLowerCase?.();
+        return (
+          line.fallProtectionGroup ||
+          line.fallProtectionGroupId ||
+          family === 'harness' ||
+          (elementType === RequestType.Operative && controlType === 'individual')
+        );
+      })
+      .map((line) => line.elementId);
+
+    const legacyFallProtectionGroups =
+      fallProtectionElementIds.length > 0
+        ? await this.prismaService.fallProtectionGroup.findMany({
+            where: {
+              deletedAt: null,
+              OR: [
+                { harnessElementId: { in: fallProtectionElementIds } },
+                { anchorBandElementId: { in: fallProtectionElementIds } },
+                { lifelineElementId: { in: fallProtectionElementIds } },
+                { positioningLanyardElementId: { in: fallProtectionElementIds } },
+              ],
+            },
+            include: {
+              harnessElement: true,
+              anchorBandElement: true,
+              lifelineElement: true,
+              positioningLanyardElement: true,
+            },
+          })
+        : [];
+
+    const legacyFallProtectionGroupByElementId = new Map<number, any>();
+    legacyFallProtectionGroups.forEach((group) => {
+      [
+        group.harnessElementId,
+        group.anchorBandElementId,
+        group.lifelineElementId,
+        group.positioningLanyardElementId,
+      ].forEach((elementId) => {
+        if (!legacyFallProtectionGroupByElementId.has(elementId)) {
+          legacyFallProtectionGroupByElementId.set(elementId, group);
+        }
+      });
     });
 
     this.logger.log('Element Requests:', elementRequests);
@@ -1349,6 +1409,89 @@ export class PdfService {
 
     const description = request.description || 'Sin descripción.';
     const projectName = request.project.name;
+
+    const resolveLineFamily = (line: any) => {
+      if (
+        line.fallProtectionGroup ||
+        line.fallProtectionGroupId ||
+        legacyFallProtectionGroupByElementId.has(line.elementId)
+      ) {
+        return 'harness';
+      }
+
+      const family = line.element?.family?.trim?.().toLowerCase?.();
+      if (['epp', 'epi', 'uniform', 'ese', 'harness'].includes(family)) {
+        return family;
+      }
+
+      const elementType = line.element?.type?.trim?.().toLowerCase?.();
+      const controlType = line.element?.controlType?.trim?.().toLowerCase?.();
+
+      if (elementType === RequestType.Operative) {
+        return controlType === 'individual' ? 'harness' : 'ese';
+      }
+
+      if (controlType === 'consumable') return 'uniform';
+      if (controlType === 'individual') return 'epi';
+      return 'epp';
+    };
+
+    const formatElementNameWithCode = (element?: any) => {
+      if (!element) return 'Pendiente';
+      return element.code ? `${element.name} - ${element.code}` : element.name;
+    };
+
+    const getLineFallProtectionGroup = (line: any) =>
+      line.fallProtectionGroup ??
+      legacyFallProtectionGroupByElementId.get(line.elementId) ??
+      null;
+
+    const getLineDescription = (line: any) => {
+      const fallProtectionGroup = getLineFallProtectionGroup(line);
+      if (fallProtectionGroup) {
+        return fallProtectionGroup.code;
+      }
+
+      if (resolveLineFamily(line) === 'ese') {
+        return line.element?.name ?? `Elemento ${line.elementId}`;
+      }
+
+      return line.element?.code
+        ? `${line.element.name} - ${line.element.code}`
+        : line.element?.name ?? `Elemento ${line.elementId}`;
+    };
+
+    const getFallProtectionParts = (line: any) => {
+      const group = getLineFallProtectionGroup(line);
+      if (!group) return null;
+
+      return [
+        `Arnes: ${formatElementNameWithCode(group.harnessElement)}`,
+        `Banda de anclaje: ${formatElementNameWithCode(group.anchorBandElement)}`,
+        `Linea de vida: ${formatElementNameWithCode(group.lifelineElement)}`,
+        `Eslinga de posicionamiento: ${formatElementNameWithCode(group.positioningLanyardElement)}`,
+      ].join('\n');
+    };
+
+    const buildRequestTableRows = (lines: any[]) =>
+      lines.map((line, idx) => {
+        const parts = getFallProtectionParts(line);
+        const descriptionCell = parts
+          ? {
+              stack: [
+                { text: getLineDescription(line), bold: true },
+                { text: parts, fontSize: 8, color: '#4b5563' },
+              ],
+            }
+          : getLineDescription(line);
+
+        return [
+          idx + 1,
+          descriptionCell,
+          line.unit,
+          line.quantityRequested.toString(),
+        ];
+      });
 
     // 4) Título y footer por tipo
     let title = '',
@@ -1422,8 +1565,54 @@ export class PdfService {
       },
     ];
 
+    const addRequestSection = (sectionTitle: string, lines: any[]) => {
+      if (lines.length === 0) return;
+
+      docContent.push(
+        {
+          text: sectionTitle,
+          style: 'subheader',
+          margin: [0, 20, 0, 10],
+        },
+        {
+          table: {
+            widths: ['auto', '*', 'auto', 'auto'],
+            body: [
+              ['N° ITEM', 'DESCRIPCIÓN', 'UNIDAD', 'CANTIDAD'],
+              ...buildRequestTableRows(lines),
+            ],
+          },
+        },
+      );
+    };
+
     // 7) Tablas de ELEMENTOS (si hay)
     if ((elementRequests?.length ?? 0) > 0) {
+      const protectionElements = elementRequests.filter((line) =>
+        ['epp', 'epi', 'uniform'].includes(resolveLineFamily(line)),
+      );
+      const safetyElements = elementRequests.filter(
+        (line) => resolveLineFamily(line) === 'ese',
+      );
+      const fallProtectionElements = elementRequests.filter(
+        (line) => resolveLineFamily(line) === 'harness',
+      );
+
+      addRequestSection(
+        'DETALLE DEL REQUERIMIENTO DE ELEMENTOS DE PROTECCION',
+        protectionElements,
+      );
+      addRequestSection(
+        'DETALLE DEL REQUERIMIENTO DE EQUIPOS DE SEGURIDAD Y EMERGENCIA',
+        safetyElements,
+      );
+      addRequestSection(
+        'DETALLE DEL REQUERIMIENTO DE EQUIPOS DE PROTECCION ANTICAIDA',
+        fallProtectionElements,
+      );
+    }
+
+    if (false && (elementRequests?.length ?? 0) > 0) {
       if (type === RequestType.EppAndOperative) {
         const operativeElements = elementRequests.filter(
           (el) => el.element.type === RequestType.Operative,

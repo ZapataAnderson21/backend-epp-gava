@@ -72,6 +72,12 @@ export class UserController {
     return await this.userService.findAll();
   }
 
+  @Get('inactive')
+  async findInactive() {
+    this.logger.log('Fetching inactive users');
+    return await this.userService.findInactive();
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async me(@Req() req: Request) {

@@ -65,19 +65,20 @@ export class RequestService {
 
   async findAll(
     projectId?: number,
-    userId?: number, // filtro “duro” (para usuarios normales)
+    userId?: number,
     status?: RequestStatus,
-    viewerId?: number, // quién está mirando (siempre)
+    viewerId?: number,
   ) {
     this.logger.log('Retrieving all requests');
+    const viewerUserId = userId || viewerId;
 
-    // Caso 1: si me piden explícitamente solo “draft”, forzamos mis borradores.
+    // Drafts are private: only the creator can see their own drafts.
     if (status === RequestStatus.draft) {
       const found = await this.prismaService.request.findMany({
         where: {
           projectId,
           status: RequestStatus.draft,
-          ...(userId ? { userId } : viewerId ? { userId: viewerId } : {}), // si no hay userId, usamos viewerId
+          ...(viewerUserId ? { userId: viewerUserId } : {}),
         },
         include: { project: true, user: true },
         orderBy: { requestId: 'desc' },
@@ -100,48 +101,22 @@ export class RequestService {
       };
     }
 
-    // Caso 2: si me pasan userId (usuario normal), mantenemos comportamiento actual
-    if (userId) {
-      const found = await this.prismaService.request.findMany({
-        where: { projectId, userId, ...(status ? { status } : {}) },
-        include: { project: true, user: true },
-        orderBy: { requestId: 'desc' },
-      });
-
-      const processed = found.map((req) => ({
-        ...req,
-        status:
-          RequestStatusLabelEs[
-            req.status as keyof typeof RequestStatusLabelEs
-          ] || req.status,
-      }));
-
-      return {
-        statusCode: processed.length ? HttpStatus.OK : HttpStatus.NOT_FOUND,
-        message: processed.length
-          ? 'Solicitudes encontradas exitosamente.'
-          : 'No se han encontrado solicitudes.',
-        data: processed,
-      };
-    }
-
-    // Caso 3 (GERENTE/ADMINISTRADORA):
-    // - incluir TODO lo NO-draft
-    // - y SOLO mis borradores (viewerId)
+    // Once a request leaves draft, it is visible to everyone.
+    // Without a status filter, include all non-drafts plus only my drafts.
     const found = await this.prismaService.request.findMany({
       where: {
         projectId,
         ...(status
-          ? { status } // si filtran por un estado distinto a draft, respetamos el filtro
+          ? { status }
           : {
               OR: [
                 { status: { not: RequestStatus.draft } },
-                ...(viewerId
+                ...(viewerUserId
                   ? [
                       {
                         AND: [
                           { status: RequestStatus.draft },
-                          { userId: viewerId },
+                          { userId: viewerUserId },
                         ],
                       },
                     ]
@@ -185,19 +160,34 @@ export class RequestService {
           },
         },
         elementRequests: {
+          orderBy: [{ lineItemOrder: 'asc' }, { elementRequestId: 'asc' }],
           include: {
             element: {
               include: {
                 category: true,
+                variants: {
+                  where: { deletedAt: null },
+                  orderBy: { label: 'asc' as const },
+                },
               },
             },
-            elementRequestResponses: {
+              elementVariant: true,
+              fallProtectionGroup: {
+                include: {
+                  harnessElement: { include: { category: true } },
+                  anchorBandElement: { include: { category: true } },
+                  lifelineElement: { include: { category: true } },
+                  positioningLanyardElement: { include: { category: true } },
+                },
+              },
+              elementRequestResponses: {
               include: {
                 requestResponse: true,
               },
             },
             epiPlans: {
               include: {
+                elementVariant: true,
                 requestWorker: {
                   include: {
                     worker: true,

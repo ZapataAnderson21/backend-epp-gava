@@ -171,10 +171,44 @@ exports.Prisma.ElementScalarFieldEnum = {
   name: 'name',
   code: 'code',
   description: 'description',
+  brand: 'brand',
+  model: 'model',
+  size: 'size',
+  serialNumber: 'serialNumber',
+  technicalSheetLink: 'technicalSheetLink',
+  operationalStatus: 'operationalStatus',
+  manufactureDate: 'manufactureDate',
+  expirationDate: 'expirationDate',
   type: 'type',
   family: 'family',
   controlType: 'controlType',
   elementCategoryId: 'elementCategoryId',
+  stockMinimum: 'stockMinimum',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.FallProtectionGroupScalarFieldEnum = {
+  fallProtectionGroupId: 'fallProtectionGroupId',
+  code: 'code',
+  description: 'description',
+  harnessElementId: 'harnessElementId',
+  anchorBandElementId: 'anchorBandElementId',
+  lifelineElementId: 'lifelineElementId',
+  positioningLanyardElementId: 'positioningLanyardElementId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.ElementVariantScalarFieldEnum = {
+  elementVariantId: 'elementVariantId',
+  elementId: 'elementId',
+  label: 'label',
+  normalizedLabel: 'normalizedLabel',
+  code: 'code',
+  description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -210,7 +244,11 @@ exports.Prisma.ElementRequestScalarFieldEnum = {
   quantityRequested: 'quantityRequested',
   unit: 'unit',
   elementId: 'elementId',
+  elementVariantId: 'elementVariantId',
+  fallProtectionGroupId: 'fallProtectionGroupId',
   requestId: 'requestId',
+  lineItemOrder: 'lineItemOrder',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -219,6 +257,7 @@ exports.Prisma.ElementRequestWorkerPlanScalarFieldEnum = {
   elementRequestWorkerPlanId: 'elementRequestWorkerPlanId',
   elementRequestId: 'elementRequestId',
   requestWorkerId: 'requestWorkerId',
+  elementVariantId: 'elementVariantId',
   plannedQuantity: 'plannedQuantity',
   size: 'size',
   notes: 'notes',
@@ -241,6 +280,8 @@ exports.Prisma.ProjectInventoryEntryScalarFieldEnum = {
   projectInventoryEntryId: 'projectInventoryEntryId',
   projectId: 'projectId',
   elementId: 'elementId',
+  elementVariantId: 'elementVariantId',
+  fallProtectionGroupId: 'fallProtectionGroupId',
   requestId: 'requestId',
   requestResponseId: 'requestResponseId',
   elementRequestId: 'elementRequestId',
@@ -256,8 +297,13 @@ exports.Prisma.ProjectInventoryEntryScalarFieldEnum = {
 exports.Prisma.InventoryMovementScalarFieldEnum = {
   inventoryMovementId: 'inventoryMovementId',
   projectInventoryEntryId: 'projectInventoryEntryId',
+  officeInventoryEntryId: 'officeInventoryEntryId',
+  workerInventoryAssignmentId: 'workerInventoryAssignmentId',
+  inventoryAssetId: 'inventoryAssetId',
   projectId: 'projectId',
+  workerId: 'workerId',
   elementId: 'elementId',
+  elementVariantId: 'elementVariantId',
   requestId: 'requestId',
   movementType: 'movementType',
   fromLocation: 'fromLocation',
@@ -269,11 +315,83 @@ exports.Prisma.InventoryMovementScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.OfficeInventoryEntryScalarFieldEnum = {
+  officeInventoryEntryId: 'officeInventoryEntryId',
+  elementId: 'elementId',
+  elementVariantId: 'elementVariantId',
+  unit: 'unit',
+  currentStock: 'currentStock',
+  status: 'status',
+  purchaseOrderId: 'purchaseOrderId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InventoryAssetScalarFieldEnum = {
+  inventoryAssetId: 'inventoryAssetId',
+  elementId: 'elementId',
+  officeInventoryEntryId: 'officeInventoryEntryId',
+  currentProjectId: 'currentProjectId',
+  currentWorkerId: 'currentWorkerId',
+  currentLocation: 'currentLocation',
+  status: 'status',
+  assetCode: 'assetCode',
+  serialNumber: 'serialNumber',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.HarnessAssetProfileScalarFieldEnum = {
+  harnessAssetProfileId: 'harnessAssetProfileId',
+  inventoryAssetId: 'inventoryAssetId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.HarnessComponentScalarFieldEnum = {
+  harnessComponentId: 'harnessComponentId',
+  componentType: 'componentType',
+  code: 'code',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.HarnessComponentAssignmentScalarFieldEnum = {
+  harnessComponentAssignmentId: 'harnessComponentAssignmentId',
+  harnessAssetProfileId: 'harnessAssetProfileId',
+  harnessComponentId: 'harnessComponentId',
+  installedAt: 'installedAt',
+  removedAt: 'removedAt',
+  notes: 'notes'
+};
+
+exports.Prisma.MeasurementAssetProfileScalarFieldEnum = {
+  measurementAssetProfileId: 'measurementAssetProfileId',
+  inventoryAssetId: 'inventoryAssetId',
+  brand: 'brand',
+  modelName: 'modelName',
+  series: 'series',
+  acquisitionDate: 'acquisitionDate',
+  invoiceNumber: 'invoiceNumber',
+  operabilityStatus: 'operabilityStatus',
+  calibrationDate: 'calibrationDate',
+  nextCalibrationDate: 'nextCalibrationDate',
+  calibrationStatus: 'calibrationStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ElementRequestResponseScalarFieldEnum = {
   elementRequestResponseId: 'elementRequestResponseId',
   elementRequestId: 'elementRequestId',
   requestResponseId: 'requestResponseId',
   quantityAccepted: 'quantityAccepted',
+  selectedElementIds: 'selectedElementIds',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -302,6 +420,22 @@ exports.Prisma.WorkerScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
+};
+
+exports.Prisma.WorkerInventoryAssignmentScalarFieldEnum = {
+  workerInventoryAssignmentId: 'workerInventoryAssignmentId',
+  workerId: 'workerId',
+  projectId: 'projectId',
+  elementId: 'elementId',
+  elementVariantId: 'elementVariantId',
+  inventoryAssetId: 'inventoryAssetId',
+  sourceProjectInventoryEntryId: 'sourceProjectInventoryEntryId',
+  quantityAssigned: 'quantityAssigned',
+  quantityReturned: 'quantityReturned',
+  status: 'status',
+  assignedAt: 'assignedAt',
+  returnedAt: 'returnedAt',
+  notes: 'notes'
 };
 
 exports.Prisma.MonthlyEvaluationTemplateScalarFieldEnum = {
@@ -654,9 +788,10 @@ exports.ElementType = exports.$Enums.ElementType = {
 exports.ElementFamily = exports.$Enums.ElementFamily = {
   epp: 'epp',
   epi: 'epi',
+  uniform: 'uniform',
   ese: 'ese',
-  measurement: 'measurement',
-  consumible: 'consumible'
+  harness: 'harness',
+  measurement: 'measurement'
 };
 
 exports.ElementControlType = exports.$Enums.ElementControlType = {
@@ -682,14 +817,53 @@ exports.RequestType = exports.$Enums.RequestType = {
 };
 
 exports.InventoryMovementType = exports.$Enums.InventoryMovementType = {
+  office_entry: 'office_entry',
   request_received: 'request_received',
   returned_to_office: 'returned_to_office',
-  adjustment: 'adjustment'
+  transfer_between_projects: 'transfer_between_projects',
+  assigned_to_worker: 'assigned_to_worker',
+  returned_from_worker: 'returned_from_worker',
+  disposal: 'disposal',
+  adjustment: 'adjustment',
+  maintenance_out: 'maintenance_out',
+  maintenance_return: 'maintenance_return'
 };
 
 exports.InventoryLocation = exports.$Enums.InventoryLocation = {
   office: 'office',
-  project: 'project'
+  project: 'project',
+  worker: 'worker',
+  external: 'external'
+};
+
+exports.OfficeInventoryStatus = exports.$Enums.OfficeInventoryStatus = {
+  available: 'available',
+  in_maintenance: 'in_maintenance',
+  disposed: 'disposed'
+};
+
+exports.InventoryAssetStatus = exports.$Enums.InventoryAssetStatus = {
+  available: 'available',
+  assigned: 'assigned',
+  in_maintenance: 'in_maintenance',
+  retired: 'retired'
+};
+
+exports.HarnessComponentType = exports.$Enums.HarnessComponentType = {
+  faja: 'faja',
+  banda_anclaje: 'banda_anclaje',
+  linea_vida: 'linea_vida',
+  soga: 'soga'
+};
+
+exports.MeasurementOperabilityStatus = exports.$Enums.MeasurementOperabilityStatus = {
+  operative: 'operative',
+  inoperative: 'inoperative'
+};
+
+exports.MeasurementCalibrationStatus = exports.$Enums.MeasurementCalibrationStatus = {
+  valid: 'valid',
+  expired: 'expired'
 };
 
 exports.EmergencyStatus = exports.$Enums.EmergencyStatus = {
@@ -705,6 +879,13 @@ exports.WorkerType = exports.$Enums.WorkerType = {
   administrator: 'administrator',
   manager: 'manager',
   unspecified: 'unspecified'
+};
+
+exports.WorkerInventoryAssignmentStatus = exports.$Enums.WorkerInventoryAssignmentStatus = {
+  active: 'active',
+  partially_returned: 'partially_returned',
+  returned: 'returned',
+  regularized: 'regularized'
 };
 
 exports.MonthlyEvaluationQuestionType = exports.$Enums.MonthlyEvaluationQuestionType = {
@@ -809,6 +990,8 @@ exports.Prisma.ModelName = {
   Project: 'Project',
   ElementCategory: 'ElementCategory',
   Element: 'Element',
+  FallProtectionGroup: 'FallProtectionGroup',
+  ElementVariant: 'ElementVariant',
   Request: 'Request',
   RequestWorker: 'RequestWorker',
   ElementRequest: 'ElementRequest',
@@ -816,9 +999,16 @@ exports.Prisma.ModelName = {
   RequestResponse: 'RequestResponse',
   ProjectInventoryEntry: 'ProjectInventoryEntry',
   InventoryMovement: 'InventoryMovement',
+  OfficeInventoryEntry: 'OfficeInventoryEntry',
+  InventoryAsset: 'InventoryAsset',
+  HarnessAssetProfile: 'HarnessAssetProfile',
+  HarnessComponent: 'HarnessComponent',
+  HarnessComponentAssignment: 'HarnessComponentAssignment',
+  MeasurementAssetProfile: 'MeasurementAssetProfile',
   ElementRequestResponse: 'ElementRequestResponse',
   Emergency: 'Emergency',
   Worker: 'Worker',
+  WorkerInventoryAssignment: 'WorkerInventoryAssignment',
   MonthlyEvaluationTemplate: 'MonthlyEvaluationTemplate',
   MonthlyEvaluationTemplateVersion: 'MonthlyEvaluationTemplateVersion',
   MonthlyEvaluationSection: 'MonthlyEvaluationSection',

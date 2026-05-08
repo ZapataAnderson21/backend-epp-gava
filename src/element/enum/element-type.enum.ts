@@ -23,17 +23,19 @@ export const ElementControlTypeLabelEs: Record<ElementControlType, string> = {
 export enum ElementFamily {
   Epp = 'epp',
   Epi = 'epi',
+  Uniform = 'uniform',
   Ese = 'ese',
+  Harness = 'harness',
   Measurement = 'measurement',
-  Consumible = 'consumible',
 }
 
 export const ElementFamilyLabelEs: Record<ElementFamily, string> = {
   [ElementFamily.Epp]: 'EPP',
   [ElementFamily.Epi]: 'EPI',
+  [ElementFamily.Uniform]: 'Uniforme',
   [ElementFamily.Ese]: 'ESE',
   [ElementFamily.Measurement]: 'Equipos de Medicion',
-  [ElementFamily.Consumible]: 'Consumibles SSOMA',
+  [ElementFamily.Harness]: 'Arnes',
 };
 
 export const ElementFamilyControlType: Record<
@@ -42,25 +44,28 @@ export const ElementFamilyControlType: Record<
 > = {
   [ElementFamily.Epp]: ElementControlType.Returnable,
   [ElementFamily.Epi]: ElementControlType.Individual,
+  [ElementFamily.Uniform]: ElementControlType.Consumable,
   [ElementFamily.Ese]: ElementControlType.Returnable,
+  [ElementFamily.Harness]: ElementControlType.Individual,
   [ElementFamily.Measurement]: ElementControlType.Individual,
-  [ElementFamily.Consumible]: ElementControlType.Consumable,
 };
 
 export const ElementFamilyReturnsToOffice: Record<ElementFamily, boolean> = {
   [ElementFamily.Epp]: true,
-  [ElementFamily.Epi]: false,
+  [ElementFamily.Epi]: true,
+  [ElementFamily.Uniform]: false,
   [ElementFamily.Ese]: true,
+  [ElementFamily.Harness]: true,
   [ElementFamily.Measurement]: true,
-  [ElementFamily.Consumible]: true,
 };
 
 export const ElementFamilyRequiresCode: Record<ElementFamily, boolean> = {
   [ElementFamily.Epp]: false,
   [ElementFamily.Epi]: false,
-  [ElementFamily.Ese]: true,
-  [ElementFamily.Measurement]: true,
-  [ElementFamily.Consumible]: false,
+  [ElementFamily.Uniform]: false,
+  [ElementFamily.Ese]: false,
+  [ElementFamily.Harness]: false,
+  [ElementFamily.Measurement]: false,
 };
 
 export const ElementFamilyUsesDecimalQuantity: Record<
@@ -69,9 +74,10 @@ export const ElementFamilyUsesDecimalQuantity: Record<
 > = {
   [ElementFamily.Epp]: false,
   [ElementFamily.Epi]: false,
+  [ElementFamily.Uniform]: false,
   [ElementFamily.Ese]: false,
+  [ElementFamily.Harness]: false,
   [ElementFamily.Measurement]: false,
-  [ElementFamily.Consumible]: true,
 };
 
 export const ElementFamilyUsesUniqueInventory: Record<
@@ -80,7 +86,8 @@ export const ElementFamilyUsesUniqueInventory: Record<
 > = {
   [ElementFamily.Epp]: false,
   [ElementFamily.Epi]: false,
-  [ElementFamily.Ese]: true,
+  [ElementFamily.Uniform]: false,
+  [ElementFamily.Ese]: false,
+  [ElementFamily.Harness]: true,
   [ElementFamily.Measurement]: true,
-  [ElementFamily.Consumible]: false,
 };

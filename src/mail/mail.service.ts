@@ -21,11 +21,155 @@ export class MailService {
     private readonly configService: ConfigService,
   ) {}
 
+  private createSmtpTransporter(
+    sender: string,
+    password: string,
+    mailHost: string,
+    mailPort: number,
+  ) {
+    const normalizedMailPort = Number(mailPort || 465);
+    const isImplicitTls = normalizedMailPort === 465;
+
+    return nodemailer.createTransport({
+      host: mailHost,
+      port: normalizedMailPort,
+      secure: isImplicitTls,
+      requireTLS: normalizedMailPort === 587,
+      name: mailHost,
+      family: 4,
+      auth: {
+        user: sender,
+        pass: password,
+      },
+      tls: {
+        servername: mailHost,
+      },
+      connectionTimeout: 20000,
+      greetingTimeout: 20000,
+      socketTimeout: 30000,
+    });
+  }
+
+  private buildSmtpErrorData(error: any) {
+    return {
+      code: error?.code || null,
+      command: error?.command || null,
+      responseCode: error?.responseCode || null,
+      response: error?.response || error?.message || null,
+    };
+  }
+
+  private formatSmtpError(error: any) {
+    const response = this.buildSmtpErrorData(error);
+
+    if (error?.code === 'EAUTH' || error?.responseCode === 535) {
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message:
+          'La contrasena del servidor de correos no es valida. Verifica la contrasena e intenta nuevamente.',
+        data: response,
+      };
+    }
+
+    if (['ENOTFOUND', 'ECONNREFUSED', 'ETIMEDOUT', 'ESOCKET'].includes(error?.code)) {
+      return {
+        statusCode: HttpStatus.SERVICE_UNAVAILABLE,
+        message:
+          'No se pudo conectar con el servidor de correos. Verifique host, puerto, conexión del VPS o firewall.',
+        data: response,
+      };
+    }
+
+    if (typeof error?.responseCode === 'number') {
+      return {
+        statusCode: HttpStatus.BAD_GATEWAY,
+        message: `El servidor de correos respondió con el código ${error.responseCode}.`,
+        data: response,
+      };
+    }
+
+    return {
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      message: error?.message || 'Error desconocido al validar el correo.',
+      data: response,
+    };
+  }
+
+  async validateRequestSmtpCredentials(
+    requestId: number,
+    passwordCPanel: string,
+  ) {
+    if (!passwordCPanel) {
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'La contraseña del sistema de correos es requerida.',
+        data: null,
+      };
+    }
+
+    try {
+      const request = await this.findRequestById(requestId);
+      const sender = request.user.email;
+      const mailHost = this.configService.get<string>('MAIL_HOST');
+      const mailPort = Number(this.configService.get<number>('MAIL_PORT') || 465);
+
+      if (!sender) {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'El usuario solicitante no tiene correo registrado.',
+          data: null,
+        };
+      }
+
+      if (!mailHost) {
+        return {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Configuración de correo incompleta. Falta MAIL_HOST.',
+          data: null,
+        };
+      }
+
+      const transporter = this.createSmtpTransporter(
+        sender,
+        passwordCPanel,
+        mailHost,
+        mailPort,
+      );
+
+      await transporter.verify();
+      transporter.close();
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Contraseña validada correctamente con el servidor de correos.',
+        data: null,
+      };
+    } catch (error: any) {
+      if (error instanceof NotFoundException) {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: error.message,
+          data: null,
+        };
+      }
+
+      if (error instanceof HttpException) {
+        return {
+          statusCode: error.getStatus(),
+          message: error.message,
+          data: null,
+        };
+      }
+
+      return this.formatSmtpError(error);
+    }
+  }
+
   async sendPasswordResetEmail(toEmail: string, token: string) {
     const fromEmail = this.configService.get<string>('MAIL_FROM');
     const fromPassword = this.configService.get<string>('MAIL_PASSWORD');
     const mailHost = this.configService.get<string>('MAIL_HOST');
-    const mailPort = this.configService.get<number>('MAIL_PORT') || 465;
+    const mailPort = Number(this.configService.get<number>('MAIL_PORT') || 465);
     const resetPasswordUrl =
       this.configService.get<string>('RESET_PASSWORD_URL');
 
@@ -36,15 +180,12 @@ export class MailService {
       );
     }
 
-    const transporter = nodemailer.createTransport({
-      host: mailHost,
-      port: mailPort,
-      secure: true,
-      auth: {
-        user: fromEmail,
-        pass: fromPassword,
-      },
-    });
+    const transporter = this.createSmtpTransporter(
+      fromEmail,
+      fromPassword,
+      mailHost,
+      mailPort,
+    );
 
     const resetLink = `${resetPasswordUrl}?token=${token}`;
 
@@ -97,7 +238,11 @@ export class MailService {
     return request;
   }
 
-  async sendRequestToLogistics(requestId: number, passwordCPanel: string) {
+  async sendRequestToLogistics(
+    requestId: number,
+    passwordCPanel: string,
+    options: { skipVerification?: boolean } = {},
+  ) {
     this.logger.log(
       `Preparing to send request ID: ${requestId} to logistics via email`,
     );
@@ -112,7 +257,7 @@ export class MailService {
       const copyEmails =
         this.configService.get<string>('MAIL_LOGISTICS_CC')?.split(',') || [];
       const mailHost = this.configService.get<string>('MAIL_HOST');
-      const mailPort = this.configService.get<number>('MAIL_PORT') || 465;
+      const mailPort = Number(this.configService.get<number>('MAIL_PORT') || 465);
 
       this.logger.debug(
         `Mail config - Host: ${mailHost}, Port: ${mailPort}, To: ${toEmail}, CC: ${copyEmails.join(', ') || 'none'}`,
@@ -165,19 +310,18 @@ export class MailService {
       this.logger.log(`PDF file found at: ${pdfPath}`);
 
       this.logger.log(`Creating SMTP transporter for sender: ${sender}`);
-      const transporter = nodemailer.createTransport({
-        host: mailHost,
-        port: mailPort,
-        secure: true,
-        auth: {
-          user: sender,
-          pass: passwordCPanel,
-        },
-      });
+      const transporter = this.createSmtpTransporter(
+        sender,
+        passwordCPanel,
+        mailHost,
+        mailPort,
+      );
 
-      this.logger.log('Verifying SMTP authentication...');
-      await transporter.verify();
-      this.logger.log('SMTP authentication successful');
+      if (!options.skipVerification) {
+        this.logger.log('Verifying SMTP authentication...');
+        await transporter.verify();
+        this.logger.log('SMTP authentication successful');
+      }
 
       const now = new Date();
       const formattedDate = now.toLocaleString('es-PE', {
@@ -241,6 +385,7 @@ export class MailService {
 
       this.logger.log(`Sending email from ${sender} to ${toEmail}...`);
       const result = await transporter.sendMail(mailOptions);
+      transporter.close();
       this.logger.log(
         `Email sent successfully. MessageId: ${result.messageId}`,
       );
@@ -274,22 +419,19 @@ export class MailService {
         this.logger.error(
           `SMTP authentication error for request ID: ${requestId}. Response: ${error.response}`,
         );
-        return {
-          statusCode: HttpStatus.UNAUTHORIZED,
-          message: 'Error de autenticacion SMTP: credenciales invalidas.',
-          data: error.response || null,
-        };
+        return this.formatSmtpError(error);
       }
 
-      if (error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED') {
+      if (
+        error.code === 'ENOTFOUND' ||
+        error.code === 'ECONNREFUSED' ||
+        error.code === 'ETIMEDOUT' ||
+        error.code === 'ESOCKET'
+      ) {
         this.logger.error(
           `SMTP connection error for request ID: ${requestId}. Code: ${error.code}, Message: ${error.message}`,
         );
-        return {
-          statusCode: HttpStatus.SERVICE_UNAVAILABLE,
-          message: 'No se pudo conectar con el servidor SMTP.',
-          data: error.message,
-        };
+        return this.formatSmtpError(error);
       }
 
       this.logger.error(

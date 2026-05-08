@@ -88,6 +88,8 @@ model Project {
   notifications   Notification[]
   inventoryEntries ProjectInventoryEntry[]
   inventoryMovements InventoryMovement[]
+  currentInventoryAssets InventoryAsset[] @relation("InventoryAssetCurrentProject")
+  workerInventoryAssignments WorkerInventoryAssignment[]
 
   @@index([status])
   @@index([name])
@@ -103,9 +105,10 @@ enum ElementType {
 enum ElementFamily {
   epp
   epi
+  uniform
   ese
+  harness
   measurement
-  consumible
 }
 
 enum ElementControlType {
@@ -132,10 +135,19 @@ model Element {
   name            String
   code            String?           @unique
   description     String            @db.Text @default("Sin descripción.")
+  brand           String?
+  model           String?
+  size            String?
+  serialNumber    String?
+  technicalSheetLink String?
+  operationalStatus String?
+  manufactureDate DateTime?
+  expirationDate  DateTime?
   type            ElementType
   family          ElementFamily?
   controlType     ElementControlType @default(returnable)
   elementCategoryId Int?
+  stockMinimum    Decimal            @db.Decimal(18,4) @default(0)
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   deletedAt       DateTime?
@@ -143,12 +155,70 @@ model Element {
   category        ElementCategory?  @relation(fields: [elementCategoryId], references: [elementCategoryId], onDelete: SetNull, onUpdate: Cascade)
   elementRequests ElementRequest[]
   projectInventoryEntries ProjectInventoryEntry[]
+  officeInventoryEntries OfficeInventoryEntry[]
   inventoryMovements InventoryMovement[]
+  variants        ElementVariant[]
+  inventoryAssets InventoryAsset[]
+  workerInventoryAssignments WorkerInventoryAssignment[]
+  fallProtectionHarnessGroups FallProtectionGroup[] @relation("FallProtectionHarness")
+  fallProtectionAnchorBandGroups FallProtectionGroup[] @relation("FallProtectionAnchorBand")
+  fallProtectionLifelineGroups FallProtectionGroup[] @relation("FallProtectionLifeline")
+  fallProtectionPositioningLanyardGroups FallProtectionGroup[] @relation("FallProtectionPositioningLanyard")
 
   @@index([type])
   @@index([family])
   @@index([controlType])
   @@index([elementCategoryId])
+  @@index([deletedAt])
+}
+
+model FallProtectionGroup {
+  fallProtectionGroupId Int      @id @default(autoincrement())
+  code                  String   @unique
+  description           String?  @db.Text
+  harnessElementId      Int
+  anchorBandElementId   Int
+  lifelineElementId     Int
+  positioningLanyardElementId Int
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  deletedAt             DateTime?
+
+  harnessElement             Element @relation("FallProtectionHarness", fields: [harnessElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  anchorBandElement          Element @relation("FallProtectionAnchorBand", fields: [anchorBandElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  lifelineElement            Element @relation("FallProtectionLifeline", fields: [lifelineElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  positioningLanyardElement  Element @relation("FallProtectionPositioningLanyard", fields: [positioningLanyardElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementRequests            ElementRequest[]
+  projectInventoryEntries    ProjectInventoryEntry[]
+
+  @@index([harnessElementId])
+  @@index([anchorBandElementId])
+  @@index([lifelineElementId])
+  @@index([positioningLanyardElementId])
+  @@index([deletedAt])
+}
+
+model ElementVariant {
+  elementVariantId Int       @id @default(autoincrement())
+  elementId        Int
+  label            String
+  normalizedLabel  String
+  code             String?
+  description      String?   @db.Text
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  element                Element                   @relation(fields: [elementId], references: [elementId], onDelete: Cascade, onUpdate: Cascade)
+  elementRequests        ElementRequest[]
+  projectInventoryEntries ProjectInventoryEntry[]
+  officeInventoryEntries OfficeInventoryEntry[]
+  inventoryMovements     InventoryMovement[]
+  requestWorkerPlans     ElementRequestWorkerPlan[]
+  workerInventoryAssignments WorkerInventoryAssignment[]
+
+  @@unique([elementId, normalizedLabel])
+  @@index([elementId])
   @@index([deletedAt])
 }
 
@@ -225,25 +295,35 @@ model ElementRequest {
   quantityRequested       Decimal                   @db.Decimal(18,4)
   unit                    String
   elementId               Int
+  elementVariantId        Int?
+  fallProtectionGroupId   Int?
   requestId               Int
+  lineItemOrder           Int                       @default(0)
+  notes                   String?                   @db.Text
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @updatedAt
 
   element                 Element                   @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant          ElementVariant?           @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
+  fallProtectionGroup     FallProtectionGroup?      @relation(fields: [fallProtectionGroupId], references: [fallProtectionGroupId], onDelete: SetNull, onUpdate: Cascade)
   request                 Request                   @relation(fields: [requestId], references: [requestId], onDelete: Cascade,  onUpdate: Cascade)
   elementRequestResponses ElementRequestResponse[]
   projectInventoryEntries ProjectInventoryEntry[]
   epiPlans                ElementRequestWorkerPlan[]
 
-  @@unique([requestId, elementId])
   @@index([elementId])
+  @@index([elementVariantId])
+  @@index([fallProtectionGroupId])
   @@index([requestId])
+  @@index([requestId, elementId])
+  @@index([requestId, lineItemOrder])
 }
 
 model ElementRequestWorkerPlan {
   elementRequestWorkerPlanId Int       @id @default(autoincrement())
   elementRequestId           Int
   requestWorkerId            Int
+  elementVariantId           Int?
   plannedQuantity            Decimal   @db.Decimal(18,4)
   size                       String?
   notes                      String?   @db.Text
@@ -251,10 +331,12 @@ model ElementRequestWorkerPlan {
   updatedAt                  DateTime  @updatedAt
 
   elementRequest             ElementRequest @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Cascade, onUpdate: Cascade)
+  elementVariant             ElementVariant? @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
   requestWorker              RequestWorker  @relation(fields: [requestWorkerId], references: [requestWorkerId], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([elementRequestId, requestWorkerId])
   @@index([elementRequestId])
+  @@index([elementVariantId])
   @@index([requestWorkerId])
 }
 
@@ -280,9 +362,11 @@ model ProjectInventoryEntry {
   projectInventoryEntryId Int             @id @default(autoincrement())
   projectId               Int
   elementId               Int
+  elementVariantId        Int?
+  fallProtectionGroupId   Int?
   requestId               Int
   requestResponseId       Int?
-  elementRequestId        Int             @unique
+  elementRequestId        Int
   responsibleUserId       Int
   unit                    String
   quantityReceived        Decimal         @db.Decimal(18,4)
@@ -293,35 +377,69 @@ model ProjectInventoryEntry {
 
   project                 Project         @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
   element                 Element         @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant          ElementVariant? @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
+  fallProtectionGroup     FallProtectionGroup? @relation(fields: [fallProtectionGroupId], references: [fallProtectionGroupId], onDelete: SetNull, onUpdate: Cascade)
   request                 Request         @relation(fields: [requestId], references: [requestId], onDelete: Restrict, onUpdate: Cascade)
   requestResponse         RequestResponse? @relation(fields: [requestResponseId], references: [requestResponseId], onDelete: SetNull, onUpdate: Cascade)
   elementRequest          ElementRequest  @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Restrict, onUpdate: Cascade)
   responsibleUser         User            @relation("ProjectInventoryResponsibleUser", fields: [responsibleUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
   movements               InventoryMovement[]
+  workerInventoryAssignments WorkerInventoryAssignment[]
 
   @@index([projectId])
   @@index([elementId])
+  @@index([elementVariantId])
+  @@index([fallProtectionGroupId])
   @@index([requestId])
   @@index([requestResponseId])
+  @@index([elementRequestId])
   @@index([responsibleUserId])
+  @@index([projectId, elementId, elementVariantId])
 }
 
 enum InventoryLocation {
   office
   project
+  worker
+  external
 }
 
 enum InventoryMovementType {
+  office_entry
   request_received
   returned_to_office
+  transfer_between_projects
+  assigned_to_worker
+  returned_from_worker
+  disposal
   adjustment
+  maintenance_out
+  maintenance_return
+}
+
+enum OfficeInventoryStatus {
+  available
+  in_maintenance
+  disposed
+}
+
+enum InventoryAssetStatus {
+  available
+  assigned
+  in_maintenance
+  retired
 }
 
 model InventoryMovement {
   inventoryMovementId     Int                   @id @default(autoincrement())
-  projectInventoryEntryId Int
-  projectId               Int
+  projectInventoryEntryId Int?
+  officeInventoryEntryId  Int?
+  workerInventoryAssignmentId Int?
+  inventoryAssetId        Int?
+  projectId               Int?
+  workerId                Int?
   elementId               Int
+  elementVariantId        Int?
   requestId               Int?
   movementType            InventoryMovementType
   fromLocation            InventoryLocation
@@ -332,19 +450,165 @@ model InventoryMovement {
   notes                   String?               @db.Text
   createdAt               DateTime              @default(now())
 
-  projectInventoryEntry   ProjectInventoryEntry @relation(fields: [projectInventoryEntryId], references: [projectInventoryEntryId], onDelete: Cascade, onUpdate: Cascade)
-  project                 Project               @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  projectInventoryEntry   ProjectInventoryEntry? @relation(fields: [projectInventoryEntryId], references: [projectInventoryEntryId], onDelete: Cascade, onUpdate: Cascade)
+  officeInventoryEntry    OfficeInventoryEntry?  @relation(fields: [officeInventoryEntryId], references: [officeInventoryEntryId], onDelete: Cascade, onUpdate: Cascade)
+  workerInventoryAssignment WorkerInventoryAssignment? @relation(fields: [workerInventoryAssignmentId], references: [workerInventoryAssignmentId], onDelete: SetNull, onUpdate: Cascade)
+  inventoryAsset          InventoryAsset?       @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: SetNull, onUpdate: Cascade)
+  project                 Project?              @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  worker                  Worker?               @relation("InventoryMovementWorker", fields: [workerId], references: [workerId], onDelete: SetNull, onUpdate: Cascade)
   element                 Element               @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant          ElementVariant?       @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
   request                 Request?              @relation(fields: [requestId], references: [requestId], onDelete: SetNull, onUpdate: Cascade)
   performedByUser         User?                 @relation("InventoryMovementPerformedBy", fields: [performedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
   responsibleUser         User?                 @relation("InventoryMovementResponsibleUser", fields: [responsibleUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
 
   @@index([projectInventoryEntryId])
+  @@index([officeInventoryEntryId])
+  @@index([workerInventoryAssignmentId])
+  @@index([inventoryAssetId])
   @@index([projectId])
+  @@index([workerId])
   @@index([elementId])
+  @@index([elementVariantId])
   @@index([requestId])
   @@index([movementType])
   @@index([createdAt])
+}
+
+model OfficeInventoryEntry {
+  officeInventoryEntryId Int                    @id @default(autoincrement())
+  elementId              Int
+  elementVariantId       Int?
+  unit                   String
+  currentStock           Decimal                @db.Decimal(18,4) @default(0)
+  status                 OfficeInventoryStatus  @default(available)
+  purchaseOrderId        Int?
+  notes                  String?                @db.Text
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+
+  element                Element                @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant         ElementVariant?        @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
+  purchaseOrder          PurchaseOrder?         @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: SetNull, onUpdate: Cascade)
+  movements              InventoryMovement[]
+  inventoryAssets        InventoryAsset[]
+
+  @@index([elementId])
+  @@index([elementVariantId])
+  @@index([status])
+  @@index([purchaseOrderId])
+  @@index([createdAt])
+  @@index([elementId, elementVariantId])
+}
+
+model InventoryAsset {
+  inventoryAssetId    Int                  @id @default(autoincrement())
+  elementId           Int
+  officeInventoryEntryId Int?
+  currentProjectId    Int?
+  currentWorkerId     Int?
+  currentLocation     InventoryLocation    @default(office)
+  status              InventoryAssetStatus @default(available)
+  assetCode           String               @unique
+  serialNumber        String?              @unique
+  notes               String?              @db.Text
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  deletedAt           DateTime?
+
+  element             Element              @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  officeInventoryEntry OfficeInventoryEntry? @relation(fields: [officeInventoryEntryId], references: [officeInventoryEntryId], onDelete: SetNull, onUpdate: Cascade)
+  currentProject      Project?             @relation("InventoryAssetCurrentProject", fields: [currentProjectId], references: [projectId], onDelete: SetNull, onUpdate: Cascade)
+  currentWorker       Worker?              @relation("InventoryAssetCurrentWorker", fields: [currentWorkerId], references: [workerId], onDelete: SetNull, onUpdate: Cascade)
+  movements           InventoryMovement[]
+  workerInventoryAssignments WorkerInventoryAssignment[]
+  harnessProfile      HarnessAssetProfile?
+  measurementProfile  MeasurementAssetProfile?
+
+  @@index([elementId])
+  @@index([officeInventoryEntryId])
+  @@index([currentProjectId])
+  @@index([currentWorkerId])
+  @@index([currentLocation])
+  @@index([status])
+  @@index([deletedAt])
+}
+
+enum HarnessComponentType {
+  faja
+  banda_anclaje
+  linea_vida
+  soga
+}
+
+model HarnessAssetProfile {
+  harnessAssetProfileId Int       @id @default(autoincrement())
+  inventoryAssetId      Int       @unique
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  inventoryAsset        InventoryAsset              @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: Cascade, onUpdate: Cascade)
+  componentAssignments  HarnessComponentAssignment[]
+}
+
+model HarnessComponent {
+  harnessComponentId Int                @id @default(autoincrement())
+  componentType      HarnessComponentType
+  code               String?            @unique
+  description        String?            @db.Text
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  deletedAt          DateTime?
+
+  assignments        HarnessComponentAssignment[]
+
+  @@index([componentType])
+  @@index([deletedAt])
+}
+
+model HarnessComponentAssignment {
+  harnessComponentAssignmentId Int       @id @default(autoincrement())
+  harnessAssetProfileId        Int
+  harnessComponentId           Int
+  installedAt                  DateTime  @default(now())
+  removedAt                    DateTime?
+  notes                        String?   @db.Text
+
+  harnessAssetProfile          HarnessAssetProfile @relation(fields: [harnessAssetProfileId], references: [harnessAssetProfileId], onDelete: Cascade, onUpdate: Cascade)
+  harnessComponent             HarnessComponent    @relation(fields: [harnessComponentId], references: [harnessComponentId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@index([harnessAssetProfileId])
+  @@index([harnessComponentId])
+  @@index([installedAt])
+  @@index([removedAt])
+}
+
+enum MeasurementOperabilityStatus {
+  operative
+  inoperative
+}
+
+enum MeasurementCalibrationStatus {
+  valid
+  expired
+}
+
+model MeasurementAssetProfile {
+  measurementAssetProfileId Int                          @id @default(autoincrement())
+  inventoryAssetId          Int                          @unique
+  brand                     String?
+  modelName                 String?
+  series                    String?
+  acquisitionDate           DateTime?
+  invoiceNumber             String?
+  operabilityStatus         MeasurementOperabilityStatus @default(operative)
+  calibrationDate           DateTime?
+  nextCalibrationDate       DateTime?
+  calibrationStatus         MeasurementCalibrationStatus @default(valid)
+  createdAt                 DateTime                     @default(now())
+  updatedAt                 DateTime                     @updatedAt
+
+  inventoryAsset            InventoryAsset @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ElementRequestResponse {
@@ -352,6 +616,7 @@ model ElementRequestResponse {
   elementRequestId         Int
   requestResponseId        Int
   quantityAccepted         Decimal           @db.Decimal(18,4)
+  selectedElementIds       Int[]             @default([])
   createdAt                DateTime          @default(now())
   updatedAt                DateTime          @updatedAt
 
@@ -407,9 +672,52 @@ model Worker {
   attendances    Attendance[]
   dailyWages     DailyWage[]
   monthlyEvaluations WorkerMonthlyEvaluation[]
+  inventoryMovements InventoryMovement[] @relation("InventoryMovementWorker")
+  currentInventoryAssets InventoryAsset[] @relation("InventoryAssetCurrentWorker")
+  workerInventoryAssignments WorkerInventoryAssignment[]
 
   @@index([dni])
   @@index([deletedAt])
+}
+
+enum WorkerInventoryAssignmentStatus {
+  active
+  partially_returned
+  returned
+  regularized
+}
+
+model WorkerInventoryAssignment {
+  workerInventoryAssignmentId Int                           @id @default(autoincrement())
+  workerId                    Int
+  projectId                   Int
+  elementId                   Int
+  elementVariantId            Int?
+  inventoryAssetId            Int?
+  sourceProjectInventoryEntryId Int?
+  quantityAssigned            Decimal                       @db.Decimal(18,4) @default(1)
+  quantityReturned            Decimal                       @db.Decimal(18,4) @default(0)
+  status                      WorkerInventoryAssignmentStatus @default(active)
+  assignedAt                  DateTime                      @default(now())
+  returnedAt                  DateTime?
+  notes                       String?                       @db.Text
+
+  worker                      Worker                         @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  project                     Project                        @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  element                     Element                        @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant              ElementVariant?                @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
+  inventoryAsset              InventoryAsset?                @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: SetNull, onUpdate: Cascade)
+  sourceProjectInventoryEntry ProjectInventoryEntry?         @relation(fields: [sourceProjectInventoryEntryId], references: [projectInventoryEntryId], onDelete: SetNull, onUpdate: Cascade)
+  movements                   InventoryMovement[]
+
+  @@index([workerId])
+  @@index([projectId])
+  @@index([elementId])
+  @@index([elementVariantId])
+  @@index([inventoryAssetId])
+  @@index([sourceProjectInventoryEntryId])
+  @@index([status])
+  @@index([assignedAt])
 }
 
 enum WorkerType {
@@ -676,6 +984,7 @@ model PurchaseOrder {
   supplier                Supplier                @relation(fields: [supplierId], references: [supplierId], onDelete: Restrict, onUpdate: Cascade)
   resources               ResourcePurchaseOrder[]
   notifications           Notification[]
+  officeInventoryEntries  OfficeInventoryEntry[]
 
   @@index([status])
   @@index([projectId])

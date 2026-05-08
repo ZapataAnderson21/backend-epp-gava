@@ -8,6 +8,9 @@ import {
 import { CreateElementRequestResponseDto } from './dto/create-element_request_response.dto';
 import { UpdateElementRequestResponseDto } from './dto/update-element_request_response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { OfficeInventoryStatus } from 'src/generated/prisma';
+
+type ResponseLineFamily = 'protection' | 'safety' | 'fallProtection' | 'other';
 
 @Injectable()
 export class ElementRequestResponseService {
@@ -15,20 +18,252 @@ export class ElementRequestResponseService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
+  private normalizeQuantity(value: unknown) {
+    const numberValue = Number(value ?? 0);
+    return Math.round(numberValue * 10000) / 10000;
+  }
+
+  private getSafetyTypeName(element: any) {
+    return (element?.category?.name || element?.name || 'Sin tipo').trim();
+  }
+
+  private getResponseLineFamily(elementRequest: any): ResponseLineFamily {
+    if (elementRequest.fallProtectionGroupId || elementRequest.fallProtectionGroup) {
+      return 'fallProtection';
+    }
+
+    const family = elementRequest.element?.family;
+
+    if (['epp', 'epi', 'uniform'].includes(family)) {
+      return 'protection';
+    }
+
+    if (family === 'ese') {
+      return 'safety';
+    }
+
+    return 'other';
+  }
+
+  private async getOfficeStockForElement(elementId: number) {
+    const aggregate = await this.prismaService.officeInventoryEntry.aggregate({
+      where: {
+        elementId,
+        status: OfficeInventoryStatus.available,
+        currentStock: { gt: 0 },
+      },
+      _sum: {
+        currentStock: true,
+      },
+    });
+
+    return this.normalizeQuantity(aggregate._sum.currentStock);
+  }
+
+  private async validateAndNormalizePayload<
+    T extends CreateElementRequestResponseDto | UpdateElementRequestResponseDto,
+  >(payload: T): Promise<T> {
+    if (!payload.elementRequestId) {
+      return payload;
+    }
+
+    const elementRequest = await this.prismaService.elementRequest.findUnique({
+      where: { elementRequestId: payload.elementRequestId },
+      include: {
+        element: { include: { category: true } },
+        fallProtectionGroup: {
+          include: {
+            harnessElement: true,
+            anchorBandElement: true,
+            lifelineElement: true,
+            positioningLanyardElement: true,
+          },
+        },
+      },
+    });
+
+    if (!elementRequest) {
+      throw new NotFoundException('La linea del requerimiento no fue encontrada.');
+    }
+
+    const family = this.getResponseLineFamily(elementRequest);
+    const requestedQuantity = this.normalizeQuantity(
+      elementRequest.quantityRequested,
+    );
+    const acceptedQuantity = this.normalizeQuantity(payload.quantityAccepted);
+
+    if (acceptedQuantity > requestedQuantity) {
+      throw new BadRequestException(
+        `La cantidad aceptada no puede superar la cantidad solicitada (${requestedQuantity}).`,
+      );
+    }
+
+    if (family === 'protection') {
+      const availableStock = await this.getOfficeStockForElement(
+        elementRequest.elementId,
+      );
+
+      if (acceptedQuantity > availableStock) {
+        throw new BadRequestException(
+          `Stock insuficiente para ${elementRequest.element.name}. Disponible en oficina: ${availableStock}; cantidad aceptada: ${acceptedQuantity}.`,
+        );
+      }
+
+      return {
+        ...payload,
+        quantityAccepted: acceptedQuantity,
+        selectedElementIds: [],
+      };
+    }
+
+    if (family === 'safety') {
+      const selectedElementIds = Array.from(
+        new Set((payload.selectedElementIds || []).map(Number).filter(Boolean)),
+      );
+
+      if (selectedElementIds.length > requestedQuantity) {
+        throw new BadRequestException(
+          `Solo puedes seleccionar hasta ${requestedQuantity} equipo(s) para esta linea.`,
+        );
+      }
+
+      if (selectedElementIds.length === 0) {
+        return {
+          ...payload,
+          quantityAccepted: 0,
+          selectedElementIds: [],
+        };
+      }
+
+      const selectedElements = await this.prismaService.element.findMany({
+        where: {
+          elementId: { in: selectedElementIds },
+          family: 'ese',
+          deletedAt: null,
+        },
+        include: {
+          category: true,
+          officeInventoryEntries: {
+            where: {
+              status: OfficeInventoryStatus.available,
+              currentStock: { gt: 0 },
+            },
+          },
+        },
+      });
+
+      if (selectedElements.length !== selectedElementIds.length) {
+        throw new BadRequestException(
+          'Uno o mas equipos seleccionados no existen, no son ESE o no estan disponibles en oficina.',
+        );
+      }
+
+      const requestedType = this.getSafetyTypeName(elementRequest.element);
+      const invalidType = selectedElements.find(
+        (element) => this.getSafetyTypeName(element) !== requestedType,
+      );
+
+      if (invalidType) {
+        throw new BadRequestException(
+          `El equipo ${invalidType.name} no corresponde al tipo solicitado (${requestedType}).`,
+        );
+      }
+
+      const unavailable = selectedElements.find(
+        (element) => element.officeInventoryEntries.length === 0,
+      );
+
+      if (unavailable) {
+        throw new BadRequestException(
+          `El equipo ${unavailable.name}${unavailable.code ? ` - ${unavailable.code}` : ''} no tiene stock disponible en oficina.`,
+        );
+      }
+
+      return {
+        ...payload,
+        quantityAccepted: selectedElementIds.length,
+        selectedElementIds,
+      };
+    }
+
+    if (family === 'fallProtection') {
+      if (![0, 1].includes(acceptedQuantity)) {
+        throw new BadRequestException(
+          'Los grupos EPA solo pueden aceptarse o cancelarse.',
+        );
+      }
+
+      if (acceptedQuantity === 1) {
+        const parts = [
+          elementRequest.fallProtectionGroup?.harnessElement,
+          elementRequest.fallProtectionGroup?.anchorBandElement,
+          elementRequest.fallProtectionGroup?.lifelineElement,
+          elementRequest.fallProtectionGroup?.positioningLanyardElement,
+        ].filter(Boolean);
+
+        const inoperativePart = parts.find((part: any) =>
+          ['inoperativo', 'inoperative'].includes(
+            String(part.operationalStatus || '').toLowerCase(),
+          ),
+        );
+
+        if (inoperativePart) {
+          throw new BadRequestException(
+            `No se puede aceptar el grupo EPA porque ${inoperativePart.name} esta inoperativo.`,
+          );
+        }
+      }
+
+      return {
+        ...payload,
+        quantityAccepted: acceptedQuantity,
+        selectedElementIds: [],
+      };
+    }
+
+    return {
+      ...payload,
+      quantityAccepted: acceptedQuantity,
+      selectedElementIds: [],
+    };
+  }
+
   async create(
     createElementRequestResponseDto: CreateElementRequestResponseDto,
   ) {
     this.logger.log(
       `Creating ElementRequestResponse with data: ${JSON.stringify(createElementRequestResponseDto)}`,
     );
-    const elementRequestResponse =
-      await this.prismaService.elementRequestResponse.create({
-        data: createElementRequestResponseDto,
-        include: {
-          elementRequest: true,
-          requestResponse: true,
+    const payload = await this.validateAndNormalizePayload(
+      createElementRequestResponseDto,
+    );
+    const existingElementRequestResponse =
+      await this.prismaService.elementRequestResponse.findFirst({
+        where: {
+          elementRequestId: payload.elementRequestId,
+          requestResponseId: payload.requestResponseId,
         },
       });
+
+    const elementRequestResponse = existingElementRequestResponse
+      ? await this.prismaService.elementRequestResponse.update({
+          where: {
+            elementRequestResponseId:
+              existingElementRequestResponse.elementRequestResponseId,
+          },
+          data: payload,
+          include: {
+            elementRequest: true,
+            requestResponse: true,
+          },
+        })
+      : await this.prismaService.elementRequestResponse.create({
+          data: payload,
+          include: {
+            elementRequest: true,
+            requestResponse: true,
+          },
+        });
 
     if (!elementRequestResponse) {
       this.logger.error('Failed to create ElementRequestResponse');
@@ -39,9 +274,11 @@ export class ElementRequestResponseService {
       `ElementRequestResponse created successfully: ${JSON.stringify(elementRequestResponse)}`,
     );
     return {
-      statusCode: HttpStatus.CREATED,
+      statusCode: existingElementRequestResponse
+        ? HttpStatus.OK
+        : HttpStatus.CREATED,
       message:
-        'La respuesta a la solicitud de elemento ha sido creada exitosamente.',
+        'La respuesta a la solicitud de elemento ha sido creada o actualizada exitosamente.',
       data: elementRequestResponse,
     };
   }
@@ -117,7 +354,9 @@ export class ElementRequestResponseService {
     const updatedElementRequestResponse =
       await this.prismaService.elementRequestResponse.update({
         where: { elementRequestResponseId },
-        data: updateElementRequestResponseDto,
+        data: await this.validateAndNormalizePayload(
+          updateElementRequestResponseDto,
+        ),
         include: {
           elementRequest: true,
           requestResponse: true,

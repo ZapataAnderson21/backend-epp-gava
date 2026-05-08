@@ -34,6 +34,22 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       );
     }
 
+    const user = await this.prisma.user.findFirst({
+      where: {
+        userId: payload.userId,
+        deletedAt: null,
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException(
+        'El usuario se encuentra deshabilitado o ya no existe.',
+      );
+    }
+
     return { userId: payload.userId, email: payload.email };
   }
 }
