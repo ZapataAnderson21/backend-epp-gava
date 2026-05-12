@@ -8,17 +8,25 @@ import {
   Delete,
   Logger,
   ParseIntPipe,
+  Res,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { PettyCashService } from './petty-cash.service';
 import { CreatePettyCashDto } from './dto/create-petty-cash.dto';
 import { UpdatePettyCashDto } from './dto/update-petty-cash.dto';
 import { PettyCashType } from './enum';
+import { ExcelService } from 'src/excel/excel.service';
 
 @Controller('petty-cash')
 export class PettyCashController {
   private readonly logger = new Logger('PettyCashController');
 
-  constructor(private readonly pettyCashService: PettyCashService) {}
+  constructor(
+    private readonly pettyCashService: PettyCashService,
+    private readonly excelService: ExcelService,
+  ) {}
 
   @Post()
   create(@Body() createPettyCashDto: CreatePettyCashDto) {
@@ -34,6 +42,35 @@ export class PettyCashController {
       `Fetching all petty cash entries for project ID: ${projectId}`,
     );
     return this.pettyCashService.findAllByProject(projectId);
+  }
+
+  @Get('project/:projectId/excel')
+  async downloadProjectExcel(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Res() res: Response,
+  ) {
+    try {
+      this.logger.log(
+        `Generating petty cash Excel for project ID: ${projectId}`,
+      );
+      const buffer = await this.excelService.generatePettyCashExcel(projectId);
+
+      res.setHeader(
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      );
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename=caja_chica_proyecto_${projectId}.xlsx`,
+      );
+
+      res.send(buffer);
+    } catch (error) {
+      throw new HttpException(
+        error.message || 'Error al generar el Excel',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get(':id')

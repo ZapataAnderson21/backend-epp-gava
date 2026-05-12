@@ -64,7 +64,7 @@ export const ElementFamilyRequiresCode: Record<ElementFamily, boolean> = {
   [ElementFamily.Epi]: false,
   [ElementFamily.Uniform]: false,
   [ElementFamily.Ese]: false,
-  [ElementFamily.Harness]: false,
+  [ElementFamily.Harness]: true,
   [ElementFamily.Measurement]: false,
 };
 
@@ -87,7 +87,7 @@ export const ElementFamilyUsesUniqueInventory: Record<
   [ElementFamily.Epp]: false,
   [ElementFamily.Epi]: false,
   [ElementFamily.Uniform]: false,
-  [ElementFamily.Ese]: false,
+  [ElementFamily.Ese]: true,
   [ElementFamily.Harness]: true,
   [ElementFamily.Measurement]: true,
 };

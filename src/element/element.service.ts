@@ -406,7 +406,7 @@ export class ElementService {
   }
 
   private shouldEnforceUniqueName(family?: string | null) {
-    return family !== ElementFamily.Ese;
+    return family !== ElementFamily.Ese && family !== ElementFamily.Harness;
   }
 
   private async ensureCodeIsAvailable(code: string, elementId?: number) {

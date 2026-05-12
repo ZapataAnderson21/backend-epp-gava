@@ -493,7 +493,12 @@ export class InventoryService {
 
   private mapOfficeInventoryEntry(entry: any) {
     const profile = this.getInventoryProfile(entry.element);
-    const currentStock = this.normalizeQuantity(entry.currentStock);
+    const rawCurrentStock = this.normalizeQuantity(entry.currentStock);
+    const currentStock = profile.usesUniqueInventory
+      ? entry.status === OfficeInventoryStatus.disposed || rawCurrentStock <= 0
+        ? 0
+        : 1
+      : rawCurrentStock;
 
     return {
       officeInventoryEntryId: entry.officeInventoryEntryId,
@@ -1167,6 +1172,23 @@ export class InventoryService {
       let officeEntry: any;
 
       if (profile.usesUniqueInventory) {
+        const [existingOfficeEntries, existingProjectEntries, existingMovements] =
+          await Promise.all([
+            tx.officeInventoryEntry.count({ where: { elementId: dto.elementId } }),
+            tx.projectInventoryEntry.count({ where: { elementId: dto.elementId } }),
+            tx.inventoryMovement.count({ where: { elementId: dto.elementId } }),
+          ]);
+
+        if (
+          existingOfficeEntries > 0 ||
+          existingProjectEntries > 0 ||
+          existingMovements > 0
+        ) {
+          throw new BadRequestException(
+            'Este item se maneja como equipo unico y ya tiene trazabilidad. No se pueden registrar ingresos manuales de stock.',
+          );
+        }
+
         // Unique items: one record per physical unit — always create new
         officeEntry = await tx.officeInventoryEntry.create({
           data: {
@@ -1307,6 +1329,12 @@ export class InventoryService {
     const currentStock = this.normalizeQuantity(entry.currentStock);
     const quantityToDispose = this.normalizeQuantity(dto.quantity);
     const profile = this.getInventoryProfile(entry.element);
+
+    if (profile.usesUniqueInventory) {
+      throw new BadRequestException(
+        'Este item se maneja como equipo unico. No se registran salidas manuales de stock; usa los flujos de requerimiento, retorno o cambio de estado.',
+      );
+    }
 
     if (quantityToDispose > currentStock) {
       throw new BadRequestException(
@@ -1496,6 +1524,14 @@ export class InventoryService {
     if (entry.status === OfficeInventoryStatus.disposed) {
       throw new BadRequestException(
         'No se puede ajustar un registro dado de baja.',
+      );
+    }
+
+    const profile = this.getInventoryProfile(entry.element);
+
+    if (profile.usesUniqueInventory) {
+      throw new BadRequestException(
+        'Este item se maneja como equipo unico. No se registran ajustes manuales de stock.',
       );
     }
 

@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as ExcelJS from 'exceljs';
+import { PettyCashLabelEs } from 'src/petty-cash/enum';
 
 interface WorkerData {
   workerId: number;
@@ -35,6 +36,140 @@ export class ExcelService {
   private readonly logger = new Logger('ExcelService');
 
   constructor(private readonly prismaService: PrismaService) {}
+
+  /**
+   * Genera un Excel con el detalle de caja chica de un proyecto.
+   */
+  async generatePettyCashExcel(projectId: number): Promise<Buffer> {
+    this.logger.log(`Generating petty cash Excel for projectId=${projectId}`);
+
+    const project = await this.prismaService.project.findUnique({
+      where: { projectId },
+      select: {
+        name: true,
+        code: true,
+        pettyCashes: {
+          orderBy: [{ expenseDate: 'desc' }],
+        },
+      },
+    });
+
+    if (!project) {
+      throw new Error('Proyecto no encontrado');
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Caja chica');
+    sheet.properties.defaultRowHeight = 22;
+
+    sheet.columns = [
+      { key: 'item', width: 8 },
+      { key: 'expenseDate', width: 14 },
+      { key: 'expenseType', width: 22 },
+      { key: 'invoiceNumber', width: 18 },
+      { key: 'description', width: 50 },
+      { key: 'amount', width: 16 },
+    ];
+
+    sheet.mergeCells('A1:F1');
+    const titleCell = sheet.getCell('A1');
+    titleCell.value = `DETALLE DE CAJA CHICA - ${project.name.toUpperCase()}`;
+    titleCell.font = { bold: true, size: 16 };
+    titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+
+    sheet.mergeCells('A2:F2');
+    const subtitleCell = sheet.getCell('A2');
+    subtitleCell.value = `Codigo: ${project.code}`;
+    subtitleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+
+    const headerRow = sheet.getRow(4);
+    headerRow.values = [
+      'ITEM',
+      'FECHA',
+      'TIPO',
+      'COMPROBANTE',
+      'DESCRIPCION',
+      'MONTO S/.',
+    ];
+    headerRow.eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF008080' },
+      };
+      cell.alignment = { horizontal: 'center', vertical: 'middle' };
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+    });
+
+    let currentRow = 5;
+    for (const [index, pettyCash] of project.pettyCashes.entries()) {
+      const row = sheet.getRow(currentRow);
+      row.values = [
+        index + 1,
+        this.formatDateEs(pettyCash.expenseDate),
+        PettyCashLabelEs[pettyCash.expenseType],
+        pettyCash.invoiceNumber || '',
+        pettyCash.description,
+        Number(pettyCash.amount),
+      ];
+
+      row.eachCell((cell, colNumber) => {
+        cell.alignment = {
+          horizontal: colNumber === 5 ? 'left' : 'center',
+          vertical: 'middle',
+          wrapText: colNumber === 5,
+        };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      row.getCell(6).numFmt = '#,##0.00';
+      currentRow++;
+    }
+
+    const totalRow = sheet.getRow(currentRow);
+    sheet.mergeCells(`A${currentRow}:E${currentRow}`);
+    const totalLabelCell = sheet.getCell(`A${currentRow}`);
+    totalLabelCell.value = 'TOTAL S/.';
+    totalLabelCell.font = { bold: true };
+    totalLabelCell.alignment = { horizontal: 'right', vertical: 'middle' };
+
+    const totalAmountCell = totalRow.getCell(6);
+    totalAmountCell.value = {
+      formula:
+        project.pettyCashes.length > 0
+          ? `SUM(F5:F${currentRow - 1})`
+          : '0',
+      result: project.pettyCashes.reduce(
+        (sum, pettyCash) => sum + Number(pettyCash.amount),
+        0,
+      ),
+    };
+    totalAmountCell.numFmt = '#,##0.00';
+    totalAmountCell.font = { bold: true };
+
+    totalRow.eachCell((cell) => {
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    return Buffer.from(buffer);
+  }
 
   /**
    * Genera un Excel con la planilla semanal por proyectos
@@ -636,6 +771,18 @@ export class ExcelService {
    */
   private sanitizeSheetName(name: string): string {
     return name.replace(/[\\/*?[\]:]/g, '').substring(0, 31);
+  }
+
+  /**
+   * Formatea una fecha como dd/mm/yyyy en zona horaria de Lima.
+   */
+  private formatDateEs(date: Date): string {
+    return new Date(date).toLocaleDateString('es-PE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      timeZone: 'America/Lima',
+    });
   }
 
   /**
