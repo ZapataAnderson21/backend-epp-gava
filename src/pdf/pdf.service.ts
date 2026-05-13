@@ -1420,7 +1420,11 @@ export class PdfService {
       }
 
       const family = line.element?.family?.trim?.().toLowerCase?.();
-      if (['epp', 'epi', 'uniform', 'ese', 'harness'].includes(family)) {
+      if (
+        ['epp', 'epi', 'uniform', 'ese', 'harness', 'officematerial'].includes(
+          family,
+        )
+      ) {
         return family;
       }
 
@@ -1597,6 +1601,9 @@ export class PdfService {
       const fallProtectionElements = elementRequests.filter(
         (line) => resolveLineFamily(line) === 'harness',
       );
+      const officeMaterialElements = elementRequests.filter(
+        (line) => resolveLineFamily(line) === 'officematerial',
+      );
 
       addRequestSection(
         'DETALLE DEL REQUERIMIENTO DE ELEMENTOS DE PROTECCION',
@@ -1609,6 +1616,10 @@ export class PdfService {
       addRequestSection(
         'DETALLE DEL REQUERIMIENTO DE EQUIPOS DE PROTECCION ANTICAIDA',
         fallProtectionElements,
+      );
+      addRequestSection(
+        'DETALLE DEL REQUERIMIENTO DE MATERIALES DE OFICINA',
+        officeMaterialElements,
       );
     }
 

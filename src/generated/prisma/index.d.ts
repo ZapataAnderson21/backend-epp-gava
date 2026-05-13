@@ -289,6 +289,7 @@ export const ElementFamily: {
   epp: 'epp',
   epi: 'epi',
   uniform: 'uniform',
+  officeMaterial: 'officeMaterial',
   ese: 'ese',
   harness: 'harness',
   measurement: 'measurement'

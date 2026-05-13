@@ -106,6 +106,7 @@ enum ElementFamily {
   epp
   epi
   uniform
+  officeMaterial
   ese
   harness
   measurement

@@ -92,7 +92,8 @@ export class ElementService {
 
     return family === ElementFamily.Epp ||
       family === ElementFamily.Epi ||
-      family === ElementFamily.Uniform
+      family === ElementFamily.Uniform ||
+      family === ElementFamily.OfficeMaterial
       ? ElementType.Epp
       : ElementType.Operative;
   }
@@ -120,7 +121,8 @@ export class ElementService {
     return (
       family === ElementFamily.Epp ||
       family === ElementFamily.Epi ||
-      family === ElementFamily.Uniform
+      family === ElementFamily.Uniform ||
+      family === ElementFamily.OfficeMaterial
     );
   }
 
@@ -573,7 +575,7 @@ export class ElementService {
       !this.supportsStockMinimum(resolved.family as ElementFamily | null)
     ) {
       throw new BadRequestException(
-        'El stock minimo solo aplica para EPP, EPI y Uniforme.',
+        'El stock minimo solo aplica para EPP, EPI, Uniforme y Materiales de Oficina.',
       );
     }
 
@@ -823,7 +825,7 @@ export class ElementService {
       !this.supportsStockMinimum(nextFamily as ElementFamily | null)
     ) {
       throw new BadRequestException(
-        'El stock minimo solo aplica para EPP, EPI y Uniforme.',
+        'El stock minimo solo aplica para EPP, EPI, Uniforme y Materiales de Oficina.',
       );
     }
 

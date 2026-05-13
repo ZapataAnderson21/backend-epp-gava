@@ -34,7 +34,7 @@ export class ElementRequestResponseService {
 
     const family = elementRequest.element?.family;
 
-    if (['epp', 'epi', 'uniform'].includes(family)) {
+    if (['epp', 'epi', 'uniform', 'officeMaterial'].includes(family)) {
       return 'protection';
     }
 

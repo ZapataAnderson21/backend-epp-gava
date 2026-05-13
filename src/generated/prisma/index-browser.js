@@ -789,6 +789,7 @@ exports.ElementFamily = exports.$Enums.ElementFamily = {
   epp: 'epp',
   epi: 'epi',
   uniform: 'uniform',
+  officeMaterial: 'officeMaterial',
   ese: 'ese',
   harness: 'harness',
   measurement: 'measurement'
