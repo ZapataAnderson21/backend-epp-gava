@@ -77,6 +77,12 @@ export class PdfService {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(n);
+    const roundMoney = (value: number) =>
+      Math.round((value + Number.EPSILON) * 100) / 100;
+    const lineAmount = (
+      quantity: unknown,
+      unitPrice: unknown,
+    ) => roundMoney((Number(quantity) || 0) * (Number(unitPrice) || 0));
     const formatDate = (d: Date | string | number) => {
       const date = new Date(d);
       const dd = date.getDate().toString().padStart(2, '0');
@@ -90,16 +96,29 @@ export class PdfService {
 
     const igvRate = 0.18;
 
-    // Cálculos base (sin IGV)
-    const subtotalVenta =
-      purchaseOrder.resources?.reduce((acc, it) => {
-        const unit = Number(it.unitPurchasePrice || 0);
-        const qty = Number(it.quantity || 0);
-        return acc + unit * qty;
-      }, 0) || 0;
+    const orderedResources = [...(purchaseOrder.resources || [])].sort(
+      (a, b) => {
+        const aOrder = a.orderNumber ?? Number.MAX_SAFE_INTEGER;
+        const bOrder = b.orderNumber ?? Number.MAX_SAFE_INTEGER;
+        if (aOrder !== bOrder) return aOrder - bOrder;
+        return (
+          (a.resourcePurchaseOrderId ?? 0) -
+          (b.resourcePurchaseOrderId ?? 0)
+        );
+      },
+    );
 
-    const igv = subtotalVenta * igvRate;
-    const total = subtotalVenta + igv;
+    // Calculos base (sin IGV). Deben coincidir con la suma visible
+    // de los parciales redondeados a 2 decimales.
+    const subtotalVenta = roundMoney(
+      orderedResources.reduce(
+        (acc, it) => acc + lineAmount(it.quantity, it.unitPurchasePrice),
+        0,
+      ),
+    );
+
+    const igv = roundMoney(subtotalVenta * igvRate);
+    const total = roundMoney(subtotalVenta + igv);
 
     const borderColor = '#cbd5e1';
 
@@ -498,10 +517,10 @@ export class PdfService {
       { text: 'V PARC', bold: true, color: 'white' },
     ];
 
-    const recursosRows = (purchaseOrder.resources || []).map((item, idx) => {
+    const recursosRows = orderedResources.map((item, idx) => {
       const unit = Number(item.unitPurchasePrice || 0);
       const qty = Number(item.quantity || 0);
-      const parc = unit * qty;
+      const parc = lineAmount(qty, unit);
 
       return [
         { text: String(idx + 1) },
