@@ -12,6 +12,8 @@ import { RequestStatus, RequestStatusLabelEs } from './enum';
 import { NotificationService } from 'src/notification/notification.service';
 import { InventoryService } from 'src/inventory/inventory.service';
 
+const REQUEST_STATUS_MANAGERS = ['ADMINISTRADORA', 'GERENTE'];
+
 @Injectable()
 export class RequestService {
   private readonly logger = new Logger('RequestService');
@@ -21,6 +23,88 @@ export class RequestService {
     private readonly notificationService: NotificationService,
     private readonly inventoryService: InventoryService,
   ) {}
+
+  private async getUserTypeNames(userId: number) {
+    const links = await this.prismaService.userUserType.findMany({
+      where: { userId },
+      include: { userType: true },
+    });
+
+    return links.map((link) => link.userType.name);
+  }
+
+  private isRequestStatusManager(userTypes: string[]) {
+    return userTypes.some((type) => REQUEST_STATUS_MANAGERS.includes(type));
+  }
+
+  private async assertCanUpdateStatus(
+    request: {
+      userId: number;
+      status: RequestStatus;
+    },
+    status: RequestStatus,
+    actorUserId?: number,
+  ) {
+    if (!actorUserId) {
+      throw new BadRequestException(
+        'Se requiere identificar al usuario que actualiza el estado.',
+      );
+    }
+
+    const userTypes = await this.getUserTypeNames(actorUserId);
+    const isManager = this.isRequestStatusManager(userTypes);
+    const isRequester = request.userId === actorUserId;
+    const isLogistics = userTypes.includes('LOGISTICA');
+
+    if (status === RequestStatus.completed) {
+      if (!isRequester || request.status !== RequestStatus.addressed) {
+        throw new BadRequestException(
+          'Solo quien solicito el requerimiento puede confirmar la recepcion total cuando esta atendido.',
+        );
+      }
+      return;
+    }
+
+    if (isManager) {
+      return;
+    }
+
+    if (
+      request.status === RequestStatus.draft &&
+      status === RequestStatus.inProgress &&
+      isRequester
+    ) {
+      return;
+    }
+
+    if (
+      request.status === RequestStatus.approved &&
+      status === RequestStatus.addressed &&
+      isLogistics
+    ) {
+      return;
+    }
+
+    if (
+      request.status === RequestStatus.reviewed &&
+      status === RequestStatus.approved &&
+      userTypes.includes('GERENTE')
+    ) {
+      return;
+    }
+
+    if (
+      request.status === RequestStatus.inProgress &&
+      status === RequestStatus.reviewed &&
+      userTypes.includes('ADMINISTRADORA')
+    ) {
+      return;
+    }
+
+    throw new BadRequestException(
+      'No tienes permisos para actualizar este estado del requerimiento.',
+    );
+  }
 
   async create(createRequestDto: CreateRequestDto) {
     this.logger.log(
@@ -181,10 +265,14 @@ export class RequestService {
                 },
               },
               elementRequestResponses: {
-              include: {
-                requestResponse: true,
+                include: {
+                  requestResponse: true,
+                },
+                orderBy: [
+                  { updatedAt: 'desc' as const },
+                  { elementRequestResponseId: 'desc' as const },
+                ],
               },
-            },
             epiPlans: {
               include: {
                 elementVariant: true,
@@ -357,19 +445,6 @@ export class RequestService {
   ) {
     this.logger.log(`Updating status of request ID ${requestId} to ${status}`);
 
-    if (status === RequestStatus.completed) {
-      if (!actorUserId) {
-        throw new BadRequestException(
-          'Se requiere identificar al responsable que confirma la recepcion final.',
-        );
-      }
-
-      return await this.inventoryService.receiveRequestIntoProjectInventory(
-        requestId,
-        actorUserId,
-      );
-    }
-
     this.logger.log(`Verifying existence of request ID: ${requestId}`);
     const existingRequest = await this.prismaService.request.findUnique({
       where: { requestId },
@@ -380,6 +455,22 @@ export class RequestService {
 
     if (!existingRequest) {
       throw new NotFoundException('La solicitud no fue encontrada');
+    }
+
+    await this.assertCanUpdateStatus(
+      {
+        userId: existingRequest.userId,
+        status: existingRequest.status as RequestStatus,
+      },
+      status,
+      actorUserId,
+    );
+
+    if (status === RequestStatus.completed) {
+      return await this.inventoryService.receiveRequestIntoProjectInventory(
+        requestId,
+        actorUserId!,
+      );
     }
 
     const previousStatus = existingRequest.status;

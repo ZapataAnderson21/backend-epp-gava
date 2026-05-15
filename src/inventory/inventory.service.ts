@@ -1765,7 +1765,12 @@ export class InventoryService {
           },
         responses: {
           include: {
-            elementRequestResponses: true,
+            elementRequestResponses: {
+              orderBy: [
+                { updatedAt: 'desc' as const },
+                { elementRequestResponseId: 'desc' as const },
+              ],
+            },
           },
         },
       },
@@ -1803,6 +1808,10 @@ export class InventoryService {
     const selectedElementIdsByElementRequestId = new Map<number, number[]>();
 
     for (const responseLine of requestResponse?.elementRequestResponses ?? []) {
+      if (acceptedByElementRequestId.has(responseLine.elementRequestId)) {
+        continue;
+      }
+
       acceptedByElementRequestId.set(
         responseLine.elementRequestId,
         this.normalizeQuantity(responseLine.quantityAccepted),

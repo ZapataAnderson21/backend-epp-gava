@@ -624,6 +624,7 @@ model ElementRequestResponse {
   elementRequest  ElementRequest  @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Cascade, onUpdate: Cascade)
   requestResponse RequestResponse @relation(fields: [requestResponseId], references: [requestResponseId], onDelete: Cascade, onUpdate: Cascade)
 
+  @@unique([elementRequestId, requestResponseId])
   @@index([elementRequestId])
   @@index([requestResponseId])
 }

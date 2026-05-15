@@ -72717,6 +72717,7 @@ export namespace Prisma {
 
   export type ElementRequestResponseWhereUniqueInput = Prisma.AtLeast<{
     elementRequestResponseId?: number
+    elementRequestId_requestResponseId?: ElementRequestResponseElementRequestIdRequestResponseIdCompoundUniqueInput
     AND?: ElementRequestResponseWhereInput | ElementRequestResponseWhereInput[]
     OR?: ElementRequestResponseWhereInput[]
     NOT?: ElementRequestResponseWhereInput | ElementRequestResponseWhereInput[]
@@ -72728,7 +72729,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ElementRequestResponse"> | Date | string
     elementRequest?: XOR<ElementRequestScalarRelationFilter, ElementRequestWhereInput>
     requestResponse?: XOR<RequestResponseScalarRelationFilter, RequestResponseWhereInput>
-  }, "elementRequestResponseId">
+  }, "elementRequestResponseId" | "elementRequestId_requestResponseId">
 
   export type ElementRequestResponseOrderByWithAggregationInput = {
     elementRequestResponseId?: SortOrder
@@ -81666,6 +81667,11 @@ export namespace Prisma {
   export type RequestResponseScalarRelationFilter = {
     is?: RequestResponseWhereInput
     isNot?: RequestResponseWhereInput
+  }
+
+  export type ElementRequestResponseElementRequestIdRequestResponseIdCompoundUniqueInput = {
+    elementRequestId: number
+    requestResponseId: number
   }
 
   export type ElementRequestResponseCountOrderByAggregateInput = {

@@ -626,6 +626,7 @@ model ElementRequestResponse {
 
   @@index([elementRequestId])
   @@index([requestResponseId])
+  @@unique([elementRequestId, requestResponseId])
 }
 
 enum EmergencyStatus {

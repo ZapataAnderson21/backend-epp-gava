@@ -175,7 +175,12 @@ export class RequestResponseService {
               },
             },
           },
-          elementRequestResponses: true,
+          elementRequestResponses: {
+            orderBy: [
+              { updatedAt: 'desc' as const },
+              { elementRequestResponseId: 'desc' as const },
+            ],
+          },
         },
       },
     );

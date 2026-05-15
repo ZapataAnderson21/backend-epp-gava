@@ -24,6 +24,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { RequestStatus } from './enum';
 import { NotificationGateway } from 'src/notification/notification.gateway';
+import { GetUser } from 'src/decorators/get-user.decorator';
 
 @Controller('request')
 export class RequestController {
@@ -65,11 +66,12 @@ export class RequestController {
   async updateStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body() body: { status: RequestStatus; actorUserId?: number },
+    @GetUser('userId') userId: number,
   ) {
     return await this.requestService.updateStatus(
       id,
       body.status,
-      body.actorUserId,
+      userId || body.actorUserId,
     );
   }
 
@@ -83,6 +85,7 @@ export class RequestController {
 
   @Post('sendLogistics')
   async sendToLogistics(
+    @GetUser('userId') userId: number,
     @Body()
     body: {
       requestId: number;
@@ -185,6 +188,7 @@ export class RequestController {
       const result = await this.requestService.updateStatus(
         requestId,
         RequestStatus.inProgress,
+        userId || progressUserId || undefined,
       );
       emitProgress(
         'done',
