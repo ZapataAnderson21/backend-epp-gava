@@ -38,6 +38,17 @@ export class PurchaseOrderController {
     return this.purchaseOrderService.create(createPurchaseOrderDto);
   }
 
+  @Get('project/:projectId/unit-values')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
+  findUnitValuesByProject(
+    @Param('projectId', ParseIntPipe) projectId: number,
+  ) {
+    this.logger.log(
+      `Finding purchase order unit values for Project ID: ${projectId}`,
+    );
+    return this.purchaseOrderService.findUnitValuesByProject(projectId);
+  }
+
   @Get('project/:projectId')
   @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
   findAllByProjectId(@Param('projectId', ParseIntPipe) projectId: number) {

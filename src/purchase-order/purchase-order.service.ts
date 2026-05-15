@@ -161,6 +161,49 @@ export class PurchaseOrderService {
     };
   }
 
+  async findUnitValuesByProject(projectId: number) {
+    this.logger.log(
+      `Fetching purchase order unit values for project id: ${projectId}`,
+    );
+
+    await this.findProject(projectId);
+
+    const purchaseOrders = await this.prisma.purchaseOrder.findMany({
+      where: { projectId },
+      orderBy: [{ createdAt: 'desc' }, { purchaseOrderId: 'desc' }],
+      include: {
+        supplier: true,
+        resources: {
+          orderBy: [{ orderNumber: 'asc' }, { resourcePurchaseOrderId: 'asc' }],
+          include: {
+            resource: true,
+          },
+        },
+      },
+    });
+
+    const data = purchaseOrders.flatMap((purchaseOrder) =>
+      purchaseOrder.resources.map((item) => ({
+        resourcePurchaseOrderId: item.resourcePurchaseOrderId,
+        purchaseOrderId: purchaseOrder.purchaseOrderId,
+        purchaseOrderCode: purchaseOrder.code,
+        purchaseOrderType: purchaseOrder.purchaseOrderType,
+        description: item.resource?.description ?? 'Sin descripcion',
+        supplierId: purchaseOrder.supplierId,
+        supplierName: purchaseOrder.supplier?.name ?? 'N/A',
+        currency: purchaseOrder.supplier?.currency ?? null,
+        unitPurchasePrice: Number(item.unitPurchasePrice),
+        orderNumber: item.orderNumber,
+      })),
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Valores unitarios obtenidos exitosamente.',
+      data,
+    };
+  }
+
   async findOne(id: number) {
     this.logger.log(`Fetching purchase order with id: ${id}`);
     const purchaseOrder = await this.prisma.purchaseOrder.findUnique({
