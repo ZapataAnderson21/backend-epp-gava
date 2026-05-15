@@ -109,6 +109,19 @@ export class InventoryService {
     ];
   }
 
+  private isSafetyRequestLine(element: {
+    family?: string | null;
+    type: string;
+    controlType: string;
+  }) {
+    return (
+      element.family === ElementFamily.Ese ||
+      (!element.family &&
+        element.type === 'operative' &&
+        element.controlType !== ElementControlType.Individual)
+    );
+  }
+
   private getActiveAssignedPending(assignments?: any[]) {
     return this.normalizeQuantity(
       (assignments || []).reduce((total, assignment) => {
@@ -1866,7 +1879,10 @@ export class InventoryService {
           continue;
         }
 
-        if (profile.family === ElementFamily.Ese && selectedElementIds.length) {
+        if (
+          this.isSafetyRequestLine(elementRequest.element) &&
+          selectedElementIds.length
+        ) {
           for (const selectedElementId of selectedElementIds) {
             const selectedElement = await tx.element.findUnique({
               where: { elementId: selectedElementId },

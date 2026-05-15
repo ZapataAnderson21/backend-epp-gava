@@ -33,12 +33,17 @@ export class ElementRequestResponseService {
     }
 
     const family = elementRequest.element?.family;
+    const type = elementRequest.element?.type;
+    const controlType = elementRequest.element?.controlType;
 
     if (['epp', 'epi', 'uniform', 'officeMaterial'].includes(family)) {
       return 'protection';
     }
 
-    if (family === 'ese') {
+    if (
+      family === 'ese' ||
+      (!family && type === 'operative' && controlType !== 'individual')
+    ) {
       return 'safety';
     }
 
@@ -138,7 +143,14 @@ export class ElementRequestResponseService {
       const selectedElements = await this.prismaService.element.findMany({
         where: {
           elementId: { in: selectedElementIds },
-          family: 'ese',
+          OR: [
+            { family: 'ese' },
+            {
+              family: null,
+              type: 'operative',
+              controlType: { not: 'individual' },
+            },
+          ],
           deletedAt: null,
         },
         include: {
