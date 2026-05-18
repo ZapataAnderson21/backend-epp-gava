@@ -130,15 +130,28 @@ export class ElementRequestService {
       : false;
 
     const normalizedQuantity = this.normalizeQuantity(dto.quantityRequested);
+    const isSsomaSupply = family === ElementFamily.SsomaSupply;
+
+    if (isSsomaSupply && normalizedQuantity <= 0) {
+      throw new BadRequestException(
+        'La cantidad solicitada para Insumos SSOMA debe ser mayor a 0.',
+      );
+    }
 
     return {
       elementId: resolvedElementId,
       elementVariantId: null,
-      fallProtectionGroupId: fallProtectionGroup?.fallProtectionGroupId ?? null,
+      fallProtectionGroupId: isSsomaSupply
+        ? null
+        : fallProtectionGroup?.fallProtectionGroupId ?? null,
       quantityRequested: usesUniqueInventory
         ? 1
         : Math.max(normalizedQuantity, 0),
-      unit: usesUniqueInventory ? dto.unit?.trim() || 'UNIDAD' : dto.unit?.trim() || '',
+      unit: isSsomaSupply
+        ? 'unidad'
+        : usesUniqueInventory
+          ? dto.unit?.trim() || 'UNIDAD'
+          : dto.unit?.trim() || '',
       requestId: resolvedRequestId,
       lineItemOrder: this.normalizeLineItemOrder(dto.lineItemOrder),
       notes: this.normalizeNotes(dto.notes),

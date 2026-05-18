@@ -1440,9 +1440,15 @@ export class PdfService {
 
       const family = line.element?.family?.trim?.().toLowerCase?.();
       if (
-        ['epp', 'epi', 'uniform', 'ese', 'harness', 'officematerial'].includes(
-          family,
-        )
+        [
+          'epp',
+          'epi',
+          'uniform',
+          'ese',
+          'harness',
+          'officematerial',
+          'ssomasupply',
+        ].includes(family)
       ) {
         return family;
       }
@@ -1623,6 +1629,9 @@ export class PdfService {
       const officeMaterialElements = elementRequests.filter(
         (line) => resolveLineFamily(line) === 'officematerial',
       );
+      const ssomaSupplyElements = elementRequests.filter(
+        (line) => resolveLineFamily(line) === 'ssomasupply',
+      );
 
       addRequestSection(
         'DETALLE DEL REQUERIMIENTO DE ELEMENTOS DE PROTECCION',
@@ -1639,6 +1648,10 @@ export class PdfService {
       addRequestSection(
         'DETALLE DEL REQUERIMIENTO DE MATERIALES DE OFICINA',
         officeMaterialElements,
+      );
+      addRequestSection(
+        'DETALLE DEL REQUERIMIENTO DE INSUMOS SSOMA',
+        ssomaSupplyElements,
       );
     }
 

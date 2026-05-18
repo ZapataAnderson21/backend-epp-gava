@@ -36,7 +36,11 @@ export class ElementRequestResponseService {
     const type = elementRequest.element?.type;
     const controlType = elementRequest.element?.controlType;
 
-    if (['epp', 'epi', 'uniform', 'officeMaterial'].includes(family)) {
+    if (
+      ['epp', 'epi', 'uniform', 'officeMaterial', 'ssomaSupply'].includes(
+        family,
+      )
+    ) {
       return 'protection';
     }
 

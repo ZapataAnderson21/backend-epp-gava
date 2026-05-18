@@ -107,6 +107,7 @@ enum ElementFamily {
   epi
   uniform
   officeMaterial
+  ssomaSupply
   ese
   harness
   measurement

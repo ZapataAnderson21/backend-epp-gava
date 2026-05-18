@@ -313,6 +313,8 @@ export class ElementService {
           type: ElementType.Epp,
           controlType: ElementControlType.Consumable,
         };
+      case ElementFamily.SsomaSupply:
+        return null;
       case ElementFamily.Ese:
         return {
           family: null,
@@ -590,6 +592,7 @@ export class ElementService {
     const elementCategoryId = await this.resolveCategoryId(
       createElementDto.categoryName,
     );
+    const isSsomaSupply = resolved.family === ElementFamily.SsomaSupply;
 
     const element = await this.prismaService.$transaction(async (tx) => {
       const createdElement = await tx.element.create({
@@ -599,20 +602,22 @@ export class ElementService {
           description: createElementDto.description?.trim(),
           brand: this.normalizeOptionalText(createElementDto.brand),
           model: this.normalizeOptionalText(createElementDto.model),
-          size: this.normalizeOptionalText(createElementDto.size),
-          serialNumber: this.normalizeOptionalText(createElementDto.serialNumber),
+          size: isSsomaSupply ? null : this.normalizeOptionalText(createElementDto.size),
+          serialNumber: isSsomaSupply
+            ? null
+            : this.normalizeOptionalText(createElementDto.serialNumber),
           technicalSheetLink: this.normalizeOptionalText(
             createElementDto.technicalSheetLink,
           ),
-          operationalStatus: this.normalizeOptionalText(
-            createElementDto.operationalStatus,
-          ),
-          manufactureDate: this.normalizeOptionalDate(
-            createElementDto.manufactureDate,
-          ),
-          expirationDate: this.normalizeOptionalDate(
-            createElementDto.expirationDate,
-          ),
+          operationalStatus: isSsomaSupply
+            ? null
+            : this.normalizeOptionalText(createElementDto.operationalStatus),
+          manufactureDate: isSsomaSupply
+            ? null
+            : this.normalizeOptionalDate(createElementDto.manufactureDate),
+          expirationDate: isSsomaSupply
+            ? null
+            : this.normalizeOptionalDate(createElementDto.expirationDate),
           type: resolved.type as any,
           family: resolved.family as any,
           controlType: resolved.controlType as any,
@@ -930,6 +935,14 @@ export class ElementService {
       data.elementCategoryId = await this.resolveCategoryId(
         updateElementDto.categoryName,
       );
+    }
+
+    if (nextFamily === ElementFamily.SsomaSupply) {
+      data.size = null;
+      data.serialNumber = null;
+      data.operationalStatus = null;
+      data.manufactureDate = null;
+      data.expirationDate = null;
     }
 
     const updatedElement = await this.prismaService.$transaction(async (tx) => {

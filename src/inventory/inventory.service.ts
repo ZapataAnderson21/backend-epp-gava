@@ -871,6 +871,12 @@ export class InventoryService {
     ];
 
     if (!profile.family || !allowedFamilies.includes(profile.family)) {
+      if (profile.family === ElementFamily.SsomaSupply) {
+        throw new BadRequestException(
+          'Los Insumos SSOMA no se asignan a trabajadores.',
+        );
+      }
+
       throw new BadRequestException(
         'Solo se pueden asignar EP y EPA a trabajadores. Los ESE permanecen en obra.',
       );
@@ -977,6 +983,12 @@ export class InventoryService {
     ];
 
     if (!profile.family || !allowedFamilies.includes(profile.family)) {
+      if (profile.family === ElementFamily.SsomaSupply) {
+        throw new BadRequestException(
+          'Los Insumos SSOMA no se asignan a trabajadores.',
+        );
+      }
+
       throw new BadRequestException(
         'Solo se pueden asignar EP y EPA a trabajadores. Los ESE permanecen en obra.',
       );
@@ -1174,6 +1186,8 @@ export class InventoryService {
 
     const profile = this.getInventoryProfile(element);
     const quantity = this.normalizeQuantity(dto.quantity);
+    const unit =
+      profile.family === ElementFamily.SsomaSupply ? 'unidad' : dto.unit;
 
     if (profile.usesUniqueInventory && quantity !== 1) {
       throw new BadRequestException(
@@ -1206,7 +1220,7 @@ export class InventoryService {
         officeEntry = await tx.officeInventoryEntry.create({
           data: {
             elementId: dto.elementId,
-            unit: dto.unit,
+            unit,
             currentStock: 1,
             status: OfficeInventoryStatus.available,
             purchaseOrderId: dto.purchaseOrderId ?? null,
@@ -1228,7 +1242,7 @@ export class InventoryService {
             where: { officeInventoryEntryId: existing.officeInventoryEntryId },
             data: {
               currentStock: { increment: quantity },
-              unit: dto.unit,
+              unit,
               notes: dto.notes?.trim() || existing.notes || undefined,
             },
             include: this.officeEntryInclude,
@@ -1237,7 +1251,7 @@ export class InventoryService {
           officeEntry = await tx.officeInventoryEntry.create({
             data: {
               elementId: dto.elementId,
-              unit: dto.unit,
+              unit,
               currentStock: quantity,
               status: OfficeInventoryStatus.available,
               purchaseOrderId: dto.purchaseOrderId ?? null,
@@ -1874,6 +1888,10 @@ export class InventoryService {
           (profile.usesUniqueInventory
             ? 1
             : this.normalizeQuantity(elementRequest.quantityRequested));
+        const receivedUnit =
+          profile.family === ElementFamily.SsomaSupply
+            ? 'unidad'
+            : elementRequest.unit;
 
         if (quantityReceived <= 0) {
           continue;
@@ -1975,7 +1993,7 @@ export class InventoryService {
             requestResponseId: requestResponse?.requestResponseId ?? null,
             elementRequestId: elementRequest.elementRequestId,
             responsibleUserId: request.userId,
-            unit: elementRequest.unit,
+            unit: receivedUnit,
             quantityReceived,
             quantityReturned: 0,
             notes: (elementRequest as any).notes ?? request.description,
