@@ -1010,9 +1010,11 @@ export class InventoryService {
     const cleanAssignments = dto.assignments.map((assignment) => ({
       workerId: Number(assignment.workerId),
       quantity: this.normalizeQuantity(assignment.quantity),
+      assignedAt: this.normalizeAssignmentDate(
+        assignment.assignedAt ?? dto.assignedAt,
+      ),
       notes: assignment.notes?.trim() || null,
     }));
-    const assignedAt = this.normalizeAssignmentDate(dto.assignedAt);
     const requestedQuantity = this.normalizeQuantity(
       cleanAssignments.reduce(
         (total, assignment) => total + assignment.quantity,
@@ -1076,7 +1078,7 @@ export class InventoryService {
               quantityAssigned: quantity,
               quantityReturned: 0,
               status: WorkerInventoryAssignmentStatus.active,
-              assignedAt,
+              assignedAt: assignment.assignedAt,
               notes: assignment.notes,
             },
             include: this.workerAssignmentInclude,

@@ -26,6 +26,11 @@ export class RegisterWorkerAssignmentLineDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @ApiPropertyOptional({ example: '2026-05-19T05:00:00.000Z' })
+  @IsOptional()
+  @IsDateString()
+  assignedAt?: string;
 }
 
 export class RegisterWorkerAssignmentsDto {
