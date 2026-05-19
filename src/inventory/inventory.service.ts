@@ -55,6 +55,17 @@ export class InventoryService {
     return Math.round(numberValue * 10000) / 10000;
   }
 
+  private normalizeAssignmentDate(assignedAt?: string) {
+    if (!assignedAt) return new Date();
+
+    const date = new Date(assignedAt);
+    if (Number.isNaN(date.getTime())) {
+      throw new BadRequestException('La fecha de asignacion no es valida.');
+    }
+
+    return date;
+  }
+
   private getInventoryProfile(element: {
     family?: string | null;
     controlType: string;
@@ -912,6 +923,7 @@ export class InventoryService {
       projectPending - assignedPending,
     );
     const quantity = this.normalizeQuantity(dto.quantity);
+    const assignedAt = this.normalizeAssignmentDate(dto.assignedAt);
 
     if (quantity > availableToAssign) {
       throw new BadRequestException(
@@ -930,6 +942,7 @@ export class InventoryService {
           quantityAssigned: quantity,
           quantityReturned: 0,
           status: WorkerInventoryAssignmentStatus.active,
+          assignedAt,
           notes: dto.notes?.trim() || null,
         },
         include: this.workerAssignmentInclude,
@@ -999,6 +1012,7 @@ export class InventoryService {
       quantity: this.normalizeQuantity(assignment.quantity),
       notes: assignment.notes?.trim() || null,
     }));
+    const assignedAt = this.normalizeAssignmentDate(dto.assignedAt);
     const requestedQuantity = this.normalizeQuantity(
       cleanAssignments.reduce(
         (total, assignment) => total + assignment.quantity,
@@ -1062,6 +1076,7 @@ export class InventoryService {
               quantityAssigned: quantity,
               quantityReturned: 0,
               status: WorkerInventoryAssignmentStatus.active,
+              assignedAt,
               notes: assignment.notes,
             },
             include: this.workerAssignmentInclude,

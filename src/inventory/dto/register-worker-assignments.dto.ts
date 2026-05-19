@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   ArrayMinSize,
   IsArray,
+  IsDateString,
   IsInt,
   IsNumber,
   IsOptional,
@@ -38,4 +39,9 @@ export class RegisterWorkerAssignmentsDto {
   @ValidateNested({ each: true })
   @Type(() => RegisterWorkerAssignmentLineDto)
   assignments!: RegisterWorkerAssignmentLineDto[];
+
+  @ApiPropertyOptional({ example: '2026-05-19T05:00:00.000Z' })
+  @IsOptional()
+  @IsDateString()
+  assignedAt?: string;
 }
