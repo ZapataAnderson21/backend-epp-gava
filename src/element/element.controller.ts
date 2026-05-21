@@ -14,6 +14,14 @@ import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
 import { CreateFallProtectionGroupDto } from './dto/create-fall-protection-group.dto';
 import { ElementFamily, ElementType } from './enum/element-type.enum';
+import { UserTypes } from 'src/decorators/user-types.decorator';
+
+const INVENTORY_ITEM_MANAGER_ROLES = [
+  'GERENTE',
+  'ADMINISTRADORA',
+  'LOGISTICA',
+  'PREVENCIONISTA DE RIESGOS',
+] as const;
 
 @Controller('element')
 export class ElementController {
@@ -22,6 +30,7 @@ export class ElementController {
   constructor(private readonly elementService: ElementService) {}
 
   @Post()
+  @UserTypes(...INVENTORY_ITEM_MANAGER_ROLES)
   async create(@Body() createElementDto: CreateElementDto) {
     this.logger.log(`Creating element: ${JSON.stringify(createElementDto)}`);
     return await this.elementService.create(createElementDto);
@@ -52,6 +61,7 @@ export class ElementController {
   }
 
   @Post('fall-protection-groups')
+  @UserTypes(...INVENTORY_ITEM_MANAGER_ROLES)
   async createFallProtectionGroup(
     @Body() createFallProtectionGroupDto: CreateFallProtectionGroupDto,
   ) {
@@ -76,6 +86,7 @@ export class ElementController {
   }
 
   @Patch(':id')
+  @UserTypes(...INVENTORY_ITEM_MANAGER_ROLES)
   async update(
     @Param('id') id: string,
     @Body() updateElementDto: UpdateElementDto,
@@ -85,6 +96,7 @@ export class ElementController {
   }
 
   @Delete(':id')
+  @UserTypes(...INVENTORY_ITEM_MANAGER_ROLES)
   async remove(@Param('id') id: string) {
     this.logger.log(`Deleting element with ID: ${id}`);
     return await this.elementService.remove(+id);
