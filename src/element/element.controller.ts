@@ -79,6 +79,19 @@ export class ElementController {
     return await this.elementService.findFallProtectionGroups();
   }
 
+  @Get('categories/family/:family')
+  async findCategoriesByFamily(@Param('family') family: ElementFamily) {
+    this.logger.log(`Fetching categories with family: ${family}`);
+    return await this.elementService.findCategoriesByFamily(family);
+  }
+
+  @Delete('categories/:id')
+  @UserTypes(...INVENTORY_ITEM_MANAGER_ROLES)
+  async removeCategory(@Param('id', ParseIntPipe) id: number) {
+    this.logger.log(`Deleting element category with ID: ${id}`);
+    return await this.elementService.removeCategory(id);
+  }
+
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     this.logger.log(`Fetching element with ID: ${id}`);

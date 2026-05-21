@@ -392,6 +392,92 @@ export class ElementService {
     };
   }
 
+  async findCategoriesByFamily(family: ElementFamily) {
+    if (!this.isElementFamily(family)) {
+      throw new BadRequestException('Selecciona una familia valida.');
+    }
+
+    const categories = await this.prismaService.elementCategory.findMany({
+      where: {
+        deletedAt: null,
+        elements: {
+          some: { family },
+        },
+      },
+      orderBy: { name: 'asc' },
+    });
+
+    const activeCounts = await this.prismaService.element.groupBy({
+      by: ['elementCategoryId'],
+      where: {
+        family,
+        deletedAt: null,
+        elementCategoryId: {
+          in: categories.map((category) => category.elementCategoryId),
+        },
+      },
+      _count: { _all: true },
+    });
+
+    const activeCountByCategoryId = new Map(
+      activeCounts.map((count) => [
+        count.elementCategoryId,
+        count._count._all,
+      ]),
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: categories.length
+        ? 'Categorias encontradas exitosamente.'
+        : 'No se han encontrado categorias.',
+      data: categories.map((category) => ({
+        elementCategoryId: category.elementCategoryId,
+        name: category.name,
+        description: category.description,
+        activeElementCount:
+          activeCountByCategoryId.get(category.elementCategoryId) ?? 0,
+        createdAt: category.createdAt,
+        updatedAt: category.updatedAt,
+        deletedAt: category.deletedAt,
+      })),
+    };
+  }
+
+  async removeCategory(elementCategoryId: number) {
+    const category = await this.prismaService.elementCategory.findFirst({
+      where: { elementCategoryId, deletedAt: null },
+    });
+
+    if (!category) {
+      throw new NotFoundException('Categoria no encontrada.');
+    }
+
+    const activeElementCount = await this.prismaService.element.count({
+      where: {
+        elementCategoryId,
+        deletedAt: null,
+      },
+    });
+
+    if (activeElementCount > 0) {
+      throw new BadRequestException(
+        'No se puede eliminar la categoria porque tiene items activos. Archiva primero los items de esa categoria.',
+      );
+    }
+
+    const deletedCategory = await this.prismaService.elementCategory.update({
+      where: { elementCategoryId },
+      data: { deletedAt: new Date() },
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Categoria eliminada correctamente.',
+      data: deletedCategory,
+    };
+  }
+
   private async ensureNameIsAvailable(
     name: string,
     family?: string | null,
