@@ -399,9 +399,8 @@ export class ElementService {
 
     const categories = await this.prismaService.elementCategory.findMany({
       where: {
-        deletedAt: null,
         elements: {
-          some: { family },
+          some: { family, deletedAt: null },
         },
       },
       orderBy: { name: 'asc' },
