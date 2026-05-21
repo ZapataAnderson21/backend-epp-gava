@@ -459,21 +459,32 @@ export class ElementService {
       },
     });
 
-    if (activeElementCount > 0) {
-      throw new BadRequestException(
-        'No se puede eliminar la categoria porque tiene items activos. Archiva primero los items de esa categoria.',
-      );
-    }
+    const deletedCategory = await this.prismaService.$transaction(async (tx) => {
+      const deletedAt = new Date();
 
-    const deletedCategory = await this.prismaService.elementCategory.update({
-      where: { elementCategoryId },
-      data: { deletedAt: new Date() },
+      await tx.element.updateMany({
+        where: {
+          elementCategoryId,
+          deletedAt: null,
+        },
+        data: { deletedAt },
+      });
+
+      return tx.elementCategory.update({
+        where: { elementCategoryId },
+        data: { deletedAt },
+      });
     });
 
     return {
       statusCode: HttpStatus.OK,
-      message: 'Categoria eliminada correctamente.',
-      data: deletedCategory,
+      message: activeElementCount
+        ? `Categoria eliminada correctamente. Se archivaron ${activeElementCount} item(s) asociados.`
+        : 'Categoria eliminada correctamente.',
+      data: {
+        ...deletedCategory,
+        archivedElementCount: activeElementCount,
+      },
     };
   }
 
