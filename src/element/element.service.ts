@@ -392,10 +392,17 @@ export class ElementService {
     };
   }
 
-  private async ensureNameIsAvailable(name: string, elementId?: number) {
+  private async ensureNameIsAvailable(
+    name: string,
+    family?: string | null,
+    elementCategoryId?: number | null,
+    elementId?: number,
+  ) {
     const conflictingElements = await this.prismaService.element.findMany({
       where: {
-        name: name.trim(),
+        name: { equals: name.trim(), mode: 'insensitive' },
+        family: family as any,
+        elementCategoryId: elementCategoryId ?? null,
         deletedAt: null,
       },
     });
@@ -405,7 +412,9 @@ export class ElementService {
     );
 
     if (hasConflict) {
-      throw new ConflictException('Ya existe un elemento con este nombre.');
+      throw new ConflictException(
+        'Ya existe un elemento con este nombre en esta categoria.',
+      );
     }
   }
 
@@ -581,17 +590,22 @@ export class ElementService {
       );
     }
 
+    const elementCategoryId = await this.resolveCategoryId(
+      createElementDto.categoryName,
+    );
+
     if (this.shouldEnforceUniqueName(resolved.family)) {
-      await this.ensureNameIsAvailable(createElementDto.name);
+      await this.ensureNameIsAvailable(
+        createElementDto.name,
+        resolved.family,
+        elementCategoryId,
+      );
     }
 
     if (normalizedCode) {
       await this.ensureCodeIsAvailable(normalizedCode);
     }
 
-    const elementCategoryId = await this.resolveCategoryId(
-      createElementDto.categoryName,
-    );
     const isSsomaSupply = resolved.family === ElementFamily.SsomaSupply;
 
     const element = await this.prismaService.$transaction(async (tx) => {
@@ -806,10 +820,6 @@ export class ElementService {
       ? resolved.family
       : existingElement.family;
 
-    if (updateElementDto.name && this.shouldEnforceUniqueName(nextFamily)) {
-      await this.ensureNameIsAvailable(updateElementDto.name, elementId);
-    }
-
     if (resolved.family && ElementFamilyRequiresCode[resolved.family] && !normalizedCode) {
       throw new BadRequestException(
         `La familia ${ElementFamilyLabelEs[resolved.family]} requiere codigo obligatorio.`,
@@ -856,6 +866,29 @@ export class ElementService {
       manufactureDate?: Date | null;
       expirationDate?: Date | null;
     } = {};
+
+    const nextElementCategoryId = Object.prototype.hasOwnProperty.call(
+      updateElementDto,
+      'categoryName',
+    )
+      ? await this.resolveCategoryId(updateElementDto.categoryName)
+      : existingElement.elementCategoryId;
+
+    const nextName = Object.prototype.hasOwnProperty.call(
+      updateElementDto,
+      'name',
+    )
+      ? updateElementDto.name
+      : existingElement.name;
+
+    if (nextName && this.shouldEnforceUniqueName(nextFamily)) {
+      await this.ensureNameIsAvailable(
+        nextName,
+        nextFamily,
+        nextElementCategoryId,
+        elementId,
+      );
+    }
 
     if (Object.prototype.hasOwnProperty.call(updateElementDto, 'name')) {
       data.name = updateElementDto.name?.trim();
@@ -932,9 +965,7 @@ export class ElementService {
     if (
       Object.prototype.hasOwnProperty.call(updateElementDto, 'categoryName')
     ) {
-      data.elementCategoryId = await this.resolveCategoryId(
-        updateElementDto.categoryName,
-      );
+      data.elementCategoryId = nextElementCategoryId;
     }
 
     if (nextFamily === ElementFamily.SsomaSupply) {
