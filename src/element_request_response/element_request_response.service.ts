@@ -101,12 +101,6 @@ export class ElementRequestResponseService {
     );
     const acceptedQuantity = this.normalizeQuantity(payload.quantityAccepted);
 
-    if (acceptedQuantity > requestedQuantity) {
-      throw new BadRequestException(
-        `La cantidad aceptada no puede superar la cantidad solicitada (${requestedQuantity}).`,
-      );
-    }
-
     if (family === 'protection') {
       const availableStock = await this.getOfficeStockForElement(
         elementRequest.elementId,
@@ -129,12 +123,6 @@ export class ElementRequestResponseService {
       const selectedElementIds = Array.from(
         new Set((payload.selectedElementIds || []).map(Number).filter(Boolean)),
       );
-
-      if (selectedElementIds.length > requestedQuantity) {
-        throw new BadRequestException(
-          `Solo puedes seleccionar hasta ${requestedQuantity} equipo(s) para esta linea.`,
-        );
-      }
 
       if (selectedElementIds.length === 0) {
         return {
