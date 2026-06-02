@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -217,6 +218,17 @@ export class InventoryController {
     return await this.inventoryService.registerWorkerAssignments(
       projectInventoryEntryId,
       registerWorkerAssignmentsDto,
+    );
+  }
+
+  @Delete('worker-assignment/:workerInventoryAssignmentId')
+  @UserTypes()
+  async deleteWorkerAssignment(
+    @Param('workerInventoryAssignmentId', ParseIntPipe)
+    workerInventoryAssignmentId: number,
+  ) {
+    return await this.inventoryService.deleteWorkerAssignment(
+      workerInventoryAssignmentId,
     );
   }
 

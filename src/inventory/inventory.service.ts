@@ -1124,6 +1124,60 @@ export class InventoryService {
     };
   }
 
+  async deleteWorkerAssignment(workerInventoryAssignmentId: number) {
+    const assignment =
+      await this.prismaService.workerInventoryAssignment.findUnique({
+        where: { workerInventoryAssignmentId },
+        include: {
+          ...this.workerAssignmentInclude,
+          movements: true,
+        },
+      });
+
+    if (!assignment) {
+      throw new NotFoundException('Asignacion a trabajador no encontrada.');
+    }
+
+    if (this.normalizeQuantity(assignment.quantityReturned) > 0) {
+      throw new BadRequestException(
+        'No se puede eliminar una asignacion que ya tiene retornos registrados.',
+      );
+    }
+
+    const hasNonAssignmentMovements = assignment.movements.some(
+      (movement) =>
+        movement.movementType !== InventoryMovementType.assigned_to_worker,
+    );
+
+    if (
+      assignment.status !== WorkerInventoryAssignmentStatus.active ||
+      hasNonAssignmentMovements
+    ) {
+      throw new BadRequestException(
+        'Esta asignacion ya tiene historial asociado y no puede eliminarse.',
+      );
+    }
+
+    await this.prismaService.$transaction(async (tx) => {
+      await tx.inventoryMovement.deleteMany({
+        where: {
+          workerInventoryAssignmentId,
+          movementType: InventoryMovementType.assigned_to_worker,
+        },
+      });
+
+      await tx.workerInventoryAssignment.delete({
+        where: { workerInventoryAssignmentId },
+      });
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Asignacion a trabajador eliminada exitosamente.',
+      data: this.mapWorkerInventoryAssignment(assignment),
+    };
+  }
+
   async findWorkerInventoryHistory(
     workerId: number,
     query: { family?: string; month?: number; year?: number },
