@@ -14,7 +14,6 @@ import { GetUser } from 'src/decorators/get-user.decorator';
 import { MonthlyEvaluationStatus } from 'src/generated/prisma';
 import {
   MONTHLY_EVALUATION_ALLOWED_USER_TYPES,
-  MONTHLY_EVALUATION_STATUS_MANAGEMENT_USER_TYPES,
 } from './constants/worker-monthly-evaluation.constants';
 import { CreateMonthlyEvaluationTemplateDto } from './dto/create-monthly-evaluation-template.dto';
 import { CreateWorkerMonthlyEvaluationDto } from './dto/create-worker-monthly-evaluation.dto';
@@ -109,7 +108,7 @@ export class WorkerMonthlyEvaluationController {
   }
 
   @Patch('period/open')
-  @UserTypes(...MONTHLY_EVALUATION_STATUS_MANAGEMENT_USER_TYPES)
+  @UserTypes()
   openEvaluationPeriod(
     @Body() period: WorkerMonthlyEvaluationPeriodDto,
     @GetUser('userId') userId: number,
@@ -122,7 +121,7 @@ export class WorkerMonthlyEvaluationController {
   }
 
   @Patch('period/close')
-  @UserTypes(...MONTHLY_EVALUATION_STATUS_MANAGEMENT_USER_TYPES)
+  @UserTypes()
   closeEvaluationPeriod(
     @Body() period: WorkerMonthlyEvaluationPeriodDto,
     @GetUser('userId') userId: number,
@@ -162,7 +161,7 @@ export class WorkerMonthlyEvaluationController {
   }
 
   @Patch('instance/:workerMonthlyEvaluationId/open')
-  @UserTypes(...MONTHLY_EVALUATION_STATUS_MANAGEMENT_USER_TYPES)
+  @UserTypes()
   openEvaluation(
     @Param('workerMonthlyEvaluationId', ParseIntPipe)
     workerMonthlyEvaluationId: number,
@@ -176,7 +175,7 @@ export class WorkerMonthlyEvaluationController {
   }
 
   @Patch('instance/:workerMonthlyEvaluationId/close')
-  @UserTypes(...MONTHLY_EVALUATION_STATUS_MANAGEMENT_USER_TYPES)
+  @UserTypes()
   closeEvaluation(
     @Param('workerMonthlyEvaluationId', ParseIntPipe)
     workerMonthlyEvaluationId: number,
