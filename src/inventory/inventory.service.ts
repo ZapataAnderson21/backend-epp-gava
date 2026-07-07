@@ -1199,8 +1199,18 @@ export class InventoryService {
       where.element = { family: query.family as ElementFamily };
     }
 
-    if (query.month || query.year) {
-      const { from, to } = this.getMonthRange(query.month, query.year);
+    const hasValidMonth =
+      typeof query.month === 'number' && query.month >= 1 && query.month <= 12;
+    const hasValidYear = typeof query.year === 'number' && query.year > 0;
+
+    if (hasValidMonth || hasValidYear) {
+      const safeYear = hasValidYear ? query.year! : new Date().getFullYear();
+      const from = hasValidMonth
+        ? new Date(Date.UTC(safeYear, query.month! - 1, 1, 0, 0, 0, 0))
+        : new Date(Date.UTC(safeYear, 0, 1, 0, 0, 0, 0));
+      const to = hasValidMonth
+        ? new Date(Date.UTC(safeYear, query.month!, 1, 0, 0, 0, 0))
+        : new Date(Date.UTC(safeYear + 1, 0, 1, 0, 0, 0, 0));
       where.assignedAt = { gte: from, lt: to };
     }
 
