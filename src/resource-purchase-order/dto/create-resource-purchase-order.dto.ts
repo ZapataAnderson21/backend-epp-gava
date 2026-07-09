@@ -51,7 +51,7 @@ export class CreateResourcePurchaseOrderDto {
 
   @ApiProperty({ example: 12.3, minimum: 0 })
   @Type(() => Number)
-  @IsNumber({ maxDecimalPlaces: 4 })
+  @IsNumber({ maxDecimalPlaces: 6 })
   @Min(0, { message: 'El precio de compra debe ser al menos 0.' })
   @IsNotEmpty({ message: 'El precio de compra es obligatorio.' })
   unitPurchasePrice!: number;

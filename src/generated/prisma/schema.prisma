@@ -1027,7 +1027,7 @@ model ResourcePurchaseOrder {
   orderNumber             Int      @default(0)
   quantity                Decimal  @db.Decimal(18, 4)
   unitSalesPrice          Decimal  @db.Decimal(18, 4)
-  unitPurchasePrice       Decimal  @db.Decimal(18, 4)
+  unitPurchasePrice       Decimal  @db.Decimal(18, 6)
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
 
