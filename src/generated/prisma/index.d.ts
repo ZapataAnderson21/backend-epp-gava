@@ -49,6 +49,11 @@ export type Element = $Result.DefaultSelection<Prisma.$ElementPayload>
  */
 export type FallProtectionGroup = $Result.DefaultSelection<Prisma.$FallProtectionGroupPayload>
 /**
+ * Model FallProtectionGroupComponent
+ * 
+ */
+export type FallProtectionGroupComponent = $Result.DefaultSelection<Prisma.$FallProtectionGroupComponentPayload>
+/**
  * Model ElementVariant
  * 
  */
@@ -306,6 +311,16 @@ export const ElementControlType: {
 };
 
 export type ElementControlType = (typeof ElementControlType)[keyof typeof ElementControlType]
+
+
+export const FallProtectionComponentRole: {
+  harness: 'harness',
+  anchorBand: 'anchorBand',
+  lifeline: 'lifeline',
+  positioningLanyard: 'positioningLanyard'
+};
+
+export type FallProtectionComponentRole = (typeof FallProtectionComponentRole)[keyof typeof FallProtectionComponentRole]
 
 
 export const RequestStatus: {
@@ -579,6 +594,10 @@ export const ElementFamily: typeof $Enums.ElementFamily
 export type ElementControlType = $Enums.ElementControlType
 
 export const ElementControlType: typeof $Enums.ElementControlType
+
+export type FallProtectionComponentRole = $Enums.FallProtectionComponentRole
+
+export const FallProtectionComponentRole: typeof $Enums.FallProtectionComponentRole
 
 export type RequestStatus = $Enums.RequestStatus
 
@@ -862,6 +881,16 @@ export class PrismaClient<
     * ```
     */
   get fallProtectionGroup(): Prisma.FallProtectionGroupDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fallProtectionGroupComponent`: Exposes CRUD operations for the **FallProtectionGroupComponent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FallProtectionGroupComponents
+    * const fallProtectionGroupComponents = await prisma.fallProtectionGroupComponent.findMany()
+    * ```
+    */
+  get fallProtectionGroupComponent(): Prisma.FallProtectionGroupComponentDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.elementVariant`: Exposes CRUD operations for the **ElementVariant** model.
@@ -1733,6 +1762,7 @@ export namespace Prisma {
     ElementCategory: 'ElementCategory',
     Element: 'Element',
     FallProtectionGroup: 'FallProtectionGroup',
+    FallProtectionGroupComponent: 'FallProtectionGroupComponent',
     ElementVariant: 'ElementVariant',
     Request: 'Request',
     RequestWorker: 'RequestWorker',
@@ -1791,7 +1821,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userType" | "userUserType" | "project" | "elementCategory" | "element" | "fallProtectionGroup" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "week" | "dailyWage" | "weeklyWage" | "attendance" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem"
+      modelProps: "user" | "userType" | "userUserType" | "project" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "week" | "dailyWage" | "weeklyWage" | "attendance" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2310,6 +2340,80 @@ export namespace Prisma {
           count: {
             args: Prisma.FallProtectionGroupCountArgs<ExtArgs>
             result: $Utils.Optional<FallProtectionGroupCountAggregateOutputType> | number
+          }
+        }
+      }
+      FallProtectionGroupComponent: {
+        payload: Prisma.$FallProtectionGroupComponentPayload<ExtArgs>
+        fields: Prisma.FallProtectionGroupComponentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FallProtectionGroupComponentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FallProtectionGroupComponentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload>
+          }
+          findFirst: {
+            args: Prisma.FallProtectionGroupComponentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FallProtectionGroupComponentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload>
+          }
+          findMany: {
+            args: Prisma.FallProtectionGroupComponentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload>[]
+          }
+          create: {
+            args: Prisma.FallProtectionGroupComponentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload>
+          }
+          createMany: {
+            args: Prisma.FallProtectionGroupComponentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FallProtectionGroupComponentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload>[]
+          }
+          delete: {
+            args: Prisma.FallProtectionGroupComponentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload>
+          }
+          update: {
+            args: Prisma.FallProtectionGroupComponentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload>
+          }
+          deleteMany: {
+            args: Prisma.FallProtectionGroupComponentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FallProtectionGroupComponentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FallProtectionGroupComponentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload>[]
+          }
+          upsert: {
+            args: Prisma.FallProtectionGroupComponentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FallProtectionGroupComponentPayload>
+          }
+          aggregate: {
+            args: Prisma.FallProtectionGroupComponentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFallProtectionGroupComponent>
+          }
+          groupBy: {
+            args: Prisma.FallProtectionGroupComponentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FallProtectionGroupComponentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FallProtectionGroupComponentCountArgs<ExtArgs>
+            result: $Utils.Optional<FallProtectionGroupComponentCountAggregateOutputType> | number
           }
         }
       }
@@ -5594,6 +5698,7 @@ export namespace Prisma {
     elementCategory?: ElementCategoryOmit
     element?: ElementOmit
     fallProtectionGroup?: FallProtectionGroupOmit
+    fallProtectionGroupComponent?: FallProtectionGroupComponentOmit
     elementVariant?: ElementVariantOmit
     request?: RequestOmit
     requestWorker?: RequestWorkerOmit
@@ -6086,6 +6191,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups: number
     fallProtectionLifelineGroups: number
     fallProtectionPositioningLanyardGroups: number
+    fallProtectionGroupComponents: number
   }
 
   export type ElementCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6100,6 +6206,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: boolean | ElementCountOutputTypeCountFallProtectionAnchorBandGroupsArgs
     fallProtectionLifelineGroups?: boolean | ElementCountOutputTypeCountFallProtectionLifelineGroupsArgs
     fallProtectionPositioningLanyardGroups?: boolean | ElementCountOutputTypeCountFallProtectionPositioningLanyardGroupsArgs
+    fallProtectionGroupComponents?: boolean | ElementCountOutputTypeCountFallProtectionGroupComponentsArgs
   }
 
   // Custom InputTypes
@@ -6190,17 +6297,26 @@ export namespace Prisma {
     where?: FallProtectionGroupWhereInput
   }
 
+  /**
+   * ElementCountOutputType without action
+   */
+  export type ElementCountOutputTypeCountFallProtectionGroupComponentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FallProtectionGroupComponentWhereInput
+  }
+
 
   /**
    * Count Type FallProtectionGroupCountOutputType
    */
 
   export type FallProtectionGroupCountOutputType = {
+    components: number
     elementRequests: number
     projectInventoryEntries: number
   }
 
   export type FallProtectionGroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    components?: boolean | FallProtectionGroupCountOutputTypeCountComponentsArgs
     elementRequests?: boolean | FallProtectionGroupCountOutputTypeCountElementRequestsArgs
     projectInventoryEntries?: boolean | FallProtectionGroupCountOutputTypeCountProjectInventoryEntriesArgs
   }
@@ -6214,6 +6330,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the FallProtectionGroupCountOutputType
      */
     select?: FallProtectionGroupCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FallProtectionGroupCountOutputType without action
+   */
+  export type FallProtectionGroupCountOutputTypeCountComponentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FallProtectionGroupComponentWhereInput
   }
 
   /**
@@ -13979,6 +14102,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: boolean | Element$fallProtectionAnchorBandGroupsArgs<ExtArgs>
     fallProtectionLifelineGroups?: boolean | Element$fallProtectionLifelineGroupsArgs<ExtArgs>
     fallProtectionPositioningLanyardGroups?: boolean | Element$fallProtectionPositioningLanyardGroupsArgs<ExtArgs>
+    fallProtectionGroupComponents?: boolean | Element$fallProtectionGroupComponentsArgs<ExtArgs>
     _count?: boolean | ElementCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["element"]>
 
@@ -14067,6 +14191,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: boolean | Element$fallProtectionAnchorBandGroupsArgs<ExtArgs>
     fallProtectionLifelineGroups?: boolean | Element$fallProtectionLifelineGroupsArgs<ExtArgs>
     fallProtectionPositioningLanyardGroups?: boolean | Element$fallProtectionPositioningLanyardGroupsArgs<ExtArgs>
+    fallProtectionGroupComponents?: boolean | Element$fallProtectionGroupComponentsArgs<ExtArgs>
     _count?: boolean | ElementCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ElementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14091,6 +14216,7 @@ export namespace Prisma {
       fallProtectionAnchorBandGroups: Prisma.$FallProtectionGroupPayload<ExtArgs>[]
       fallProtectionLifelineGroups: Prisma.$FallProtectionGroupPayload<ExtArgs>[]
       fallProtectionPositioningLanyardGroups: Prisma.$FallProtectionGroupPayload<ExtArgs>[]
+      fallProtectionGroupComponents: Prisma.$FallProtectionGroupComponentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       elementId: number
@@ -14519,6 +14645,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups<T extends Element$fallProtectionAnchorBandGroupsArgs<ExtArgs> = {}>(args?: Subset<T, Element$fallProtectionAnchorBandGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FallProtectionGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fallProtectionLifelineGroups<T extends Element$fallProtectionLifelineGroupsArgs<ExtArgs> = {}>(args?: Subset<T, Element$fallProtectionLifelineGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FallProtectionGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fallProtectionPositioningLanyardGroups<T extends Element$fallProtectionPositioningLanyardGroupsArgs<ExtArgs> = {}>(args?: Subset<T, Element$fallProtectionPositioningLanyardGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FallProtectionGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fallProtectionGroupComponents<T extends Element$fallProtectionGroupComponentsArgs<ExtArgs> = {}>(args?: Subset<T, Element$fallProtectionGroupComponentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15247,6 +15374,30 @@ export namespace Prisma {
   }
 
   /**
+   * Element.fallProtectionGroupComponents
+   */
+  export type Element$fallProtectionGroupComponentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    where?: FallProtectionGroupComponentWhereInput
+    orderBy?: FallProtectionGroupComponentOrderByWithRelationInput | FallProtectionGroupComponentOrderByWithRelationInput[]
+    cursor?: FallProtectionGroupComponentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FallProtectionGroupComponentScalarFieldEnum | FallProtectionGroupComponentScalarFieldEnum[]
+  }
+
+  /**
    * Element without action
    */
   export type ElementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15523,6 +15674,7 @@ export namespace Prisma {
     anchorBandElement?: boolean | ElementDefaultArgs<ExtArgs>
     lifelineElement?: boolean | ElementDefaultArgs<ExtArgs>
     positioningLanyardElement?: boolean | ElementDefaultArgs<ExtArgs>
+    components?: boolean | FallProtectionGroup$componentsArgs<ExtArgs>
     elementRequests?: boolean | FallProtectionGroup$elementRequestsArgs<ExtArgs>
     projectInventoryEntries?: boolean | FallProtectionGroup$projectInventoryEntriesArgs<ExtArgs>
     _count?: boolean | FallProtectionGroupCountOutputTypeDefaultArgs<ExtArgs>
@@ -15581,6 +15733,7 @@ export namespace Prisma {
     anchorBandElement?: boolean | ElementDefaultArgs<ExtArgs>
     lifelineElement?: boolean | ElementDefaultArgs<ExtArgs>
     positioningLanyardElement?: boolean | ElementDefaultArgs<ExtArgs>
+    components?: boolean | FallProtectionGroup$componentsArgs<ExtArgs>
     elementRequests?: boolean | FallProtectionGroup$elementRequestsArgs<ExtArgs>
     projectInventoryEntries?: boolean | FallProtectionGroup$projectInventoryEntriesArgs<ExtArgs>
     _count?: boolean | FallProtectionGroupCountOutputTypeDefaultArgs<ExtArgs>
@@ -15605,6 +15758,7 @@ export namespace Prisma {
       anchorBandElement: Prisma.$ElementPayload<ExtArgs>
       lifelineElement: Prisma.$ElementPayload<ExtArgs>
       positioningLanyardElement: Prisma.$ElementPayload<ExtArgs>
+      components: Prisma.$FallProtectionGroupComponentPayload<ExtArgs>[]
       elementRequests: Prisma.$ElementRequestPayload<ExtArgs>[]
       projectInventoryEntries: Prisma.$ProjectInventoryEntryPayload<ExtArgs>[]
     }
@@ -16017,6 +16171,7 @@ export namespace Prisma {
     anchorBandElement<T extends ElementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ElementDefaultArgs<ExtArgs>>): Prisma__ElementClient<$Result.GetResult<Prisma.$ElementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     lifelineElement<T extends ElementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ElementDefaultArgs<ExtArgs>>): Prisma__ElementClient<$Result.GetResult<Prisma.$ElementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     positioningLanyardElement<T extends ElementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ElementDefaultArgs<ExtArgs>>): Prisma__ElementClient<$Result.GetResult<Prisma.$ElementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    components<T extends FallProtectionGroup$componentsArgs<ExtArgs> = {}>(args?: Subset<T, FallProtectionGroup$componentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     elementRequests<T extends FallProtectionGroup$elementRequestsArgs<ExtArgs> = {}>(args?: Subset<T, FallProtectionGroup$elementRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ElementRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     projectInventoryEntries<T extends FallProtectionGroup$projectInventoryEntriesArgs<ExtArgs> = {}>(args?: Subset<T, FallProtectionGroup$projectInventoryEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectInventoryEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -16454,6 +16609,30 @@ export namespace Prisma {
   }
 
   /**
+   * FallProtectionGroup.components
+   */
+  export type FallProtectionGroup$componentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    where?: FallProtectionGroupComponentWhereInput
+    orderBy?: FallProtectionGroupComponentOrderByWithRelationInput | FallProtectionGroupComponentOrderByWithRelationInput[]
+    cursor?: FallProtectionGroupComponentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FallProtectionGroupComponentScalarFieldEnum | FallProtectionGroupComponentScalarFieldEnum[]
+  }
+
+  /**
    * FallProtectionGroup.elementRequests
    */
   export type FallProtectionGroup$elementRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16517,6 +16696,1114 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FallProtectionGroupInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FallProtectionGroupComponent
+   */
+
+  export type AggregateFallProtectionGroupComponent = {
+    _count: FallProtectionGroupComponentCountAggregateOutputType | null
+    _avg: FallProtectionGroupComponentAvgAggregateOutputType | null
+    _sum: FallProtectionGroupComponentSumAggregateOutputType | null
+    _min: FallProtectionGroupComponentMinAggregateOutputType | null
+    _max: FallProtectionGroupComponentMaxAggregateOutputType | null
+  }
+
+  export type FallProtectionGroupComponentAvgAggregateOutputType = {
+    fallProtectionGroupComponentId: number | null
+    fallProtectionGroupId: number | null
+    elementId: number | null
+  }
+
+  export type FallProtectionGroupComponentSumAggregateOutputType = {
+    fallProtectionGroupComponentId: number | null
+    fallProtectionGroupId: number | null
+    elementId: number | null
+  }
+
+  export type FallProtectionGroupComponentMinAggregateOutputType = {
+    fallProtectionGroupComponentId: number | null
+    fallProtectionGroupId: number | null
+    elementId: number | null
+    role: $Enums.FallProtectionComponentRole | null
+    createdAt: Date | null
+  }
+
+  export type FallProtectionGroupComponentMaxAggregateOutputType = {
+    fallProtectionGroupComponentId: number | null
+    fallProtectionGroupId: number | null
+    elementId: number | null
+    role: $Enums.FallProtectionComponentRole | null
+    createdAt: Date | null
+  }
+
+  export type FallProtectionGroupComponentCountAggregateOutputType = {
+    fallProtectionGroupComponentId: number
+    fallProtectionGroupId: number
+    elementId: number
+    role: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FallProtectionGroupComponentAvgAggregateInputType = {
+    fallProtectionGroupComponentId?: true
+    fallProtectionGroupId?: true
+    elementId?: true
+  }
+
+  export type FallProtectionGroupComponentSumAggregateInputType = {
+    fallProtectionGroupComponentId?: true
+    fallProtectionGroupId?: true
+    elementId?: true
+  }
+
+  export type FallProtectionGroupComponentMinAggregateInputType = {
+    fallProtectionGroupComponentId?: true
+    fallProtectionGroupId?: true
+    elementId?: true
+    role?: true
+    createdAt?: true
+  }
+
+  export type FallProtectionGroupComponentMaxAggregateInputType = {
+    fallProtectionGroupComponentId?: true
+    fallProtectionGroupId?: true
+    elementId?: true
+    role?: true
+    createdAt?: true
+  }
+
+  export type FallProtectionGroupComponentCountAggregateInputType = {
+    fallProtectionGroupComponentId?: true
+    fallProtectionGroupId?: true
+    elementId?: true
+    role?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FallProtectionGroupComponentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FallProtectionGroupComponent to aggregate.
+     */
+    where?: FallProtectionGroupComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FallProtectionGroupComponents to fetch.
+     */
+    orderBy?: FallProtectionGroupComponentOrderByWithRelationInput | FallProtectionGroupComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FallProtectionGroupComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FallProtectionGroupComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FallProtectionGroupComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FallProtectionGroupComponents
+    **/
+    _count?: true | FallProtectionGroupComponentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FallProtectionGroupComponentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FallProtectionGroupComponentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FallProtectionGroupComponentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FallProtectionGroupComponentMaxAggregateInputType
+  }
+
+  export type GetFallProtectionGroupComponentAggregateType<T extends FallProtectionGroupComponentAggregateArgs> = {
+        [P in keyof T & keyof AggregateFallProtectionGroupComponent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFallProtectionGroupComponent[P]>
+      : GetScalarType<T[P], AggregateFallProtectionGroupComponent[P]>
+  }
+
+
+
+
+  export type FallProtectionGroupComponentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FallProtectionGroupComponentWhereInput
+    orderBy?: FallProtectionGroupComponentOrderByWithAggregationInput | FallProtectionGroupComponentOrderByWithAggregationInput[]
+    by: FallProtectionGroupComponentScalarFieldEnum[] | FallProtectionGroupComponentScalarFieldEnum
+    having?: FallProtectionGroupComponentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FallProtectionGroupComponentCountAggregateInputType | true
+    _avg?: FallProtectionGroupComponentAvgAggregateInputType
+    _sum?: FallProtectionGroupComponentSumAggregateInputType
+    _min?: FallProtectionGroupComponentMinAggregateInputType
+    _max?: FallProtectionGroupComponentMaxAggregateInputType
+  }
+
+  export type FallProtectionGroupComponentGroupByOutputType = {
+    fallProtectionGroupComponentId: number
+    fallProtectionGroupId: number
+    elementId: number
+    role: $Enums.FallProtectionComponentRole
+    createdAt: Date
+    _count: FallProtectionGroupComponentCountAggregateOutputType | null
+    _avg: FallProtectionGroupComponentAvgAggregateOutputType | null
+    _sum: FallProtectionGroupComponentSumAggregateOutputType | null
+    _min: FallProtectionGroupComponentMinAggregateOutputType | null
+    _max: FallProtectionGroupComponentMaxAggregateOutputType | null
+  }
+
+  type GetFallProtectionGroupComponentGroupByPayload<T extends FallProtectionGroupComponentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FallProtectionGroupComponentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FallProtectionGroupComponentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FallProtectionGroupComponentGroupByOutputType[P]>
+            : GetScalarType<T[P], FallProtectionGroupComponentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FallProtectionGroupComponentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    fallProtectionGroupComponentId?: boolean
+    fallProtectionGroupId?: boolean
+    elementId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    fallProtectionGroup?: boolean | FallProtectionGroupDefaultArgs<ExtArgs>
+    element?: boolean | ElementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fallProtectionGroupComponent"]>
+
+  export type FallProtectionGroupComponentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    fallProtectionGroupComponentId?: boolean
+    fallProtectionGroupId?: boolean
+    elementId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    fallProtectionGroup?: boolean | FallProtectionGroupDefaultArgs<ExtArgs>
+    element?: boolean | ElementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fallProtectionGroupComponent"]>
+
+  export type FallProtectionGroupComponentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    fallProtectionGroupComponentId?: boolean
+    fallProtectionGroupId?: boolean
+    elementId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    fallProtectionGroup?: boolean | FallProtectionGroupDefaultArgs<ExtArgs>
+    element?: boolean | ElementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fallProtectionGroupComponent"]>
+
+  export type FallProtectionGroupComponentSelectScalar = {
+    fallProtectionGroupComponentId?: boolean
+    fallProtectionGroupId?: boolean
+    elementId?: boolean
+    role?: boolean
+    createdAt?: boolean
+  }
+
+  export type FallProtectionGroupComponentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"fallProtectionGroupComponentId" | "fallProtectionGroupId" | "elementId" | "role" | "createdAt", ExtArgs["result"]["fallProtectionGroupComponent"]>
+  export type FallProtectionGroupComponentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fallProtectionGroup?: boolean | FallProtectionGroupDefaultArgs<ExtArgs>
+    element?: boolean | ElementDefaultArgs<ExtArgs>
+  }
+  export type FallProtectionGroupComponentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fallProtectionGroup?: boolean | FallProtectionGroupDefaultArgs<ExtArgs>
+    element?: boolean | ElementDefaultArgs<ExtArgs>
+  }
+  export type FallProtectionGroupComponentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fallProtectionGroup?: boolean | FallProtectionGroupDefaultArgs<ExtArgs>
+    element?: boolean | ElementDefaultArgs<ExtArgs>
+  }
+
+  export type $FallProtectionGroupComponentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FallProtectionGroupComponent"
+    objects: {
+      fallProtectionGroup: Prisma.$FallProtectionGroupPayload<ExtArgs>
+      element: Prisma.$ElementPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      fallProtectionGroupComponentId: number
+      fallProtectionGroupId: number
+      elementId: number
+      role: $Enums.FallProtectionComponentRole
+      createdAt: Date
+    }, ExtArgs["result"]["fallProtectionGroupComponent"]>
+    composites: {}
+  }
+
+  type FallProtectionGroupComponentGetPayload<S extends boolean | null | undefined | FallProtectionGroupComponentDefaultArgs> = $Result.GetResult<Prisma.$FallProtectionGroupComponentPayload, S>
+
+  type FallProtectionGroupComponentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FallProtectionGroupComponentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FallProtectionGroupComponentCountAggregateInputType | true
+    }
+
+  export interface FallProtectionGroupComponentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FallProtectionGroupComponent'], meta: { name: 'FallProtectionGroupComponent' } }
+    /**
+     * Find zero or one FallProtectionGroupComponent that matches the filter.
+     * @param {FallProtectionGroupComponentFindUniqueArgs} args - Arguments to find a FallProtectionGroupComponent
+     * @example
+     * // Get one FallProtectionGroupComponent
+     * const fallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FallProtectionGroupComponentFindUniqueArgs>(args: SelectSubset<T, FallProtectionGroupComponentFindUniqueArgs<ExtArgs>>): Prisma__FallProtectionGroupComponentClient<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FallProtectionGroupComponent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FallProtectionGroupComponentFindUniqueOrThrowArgs} args - Arguments to find a FallProtectionGroupComponent
+     * @example
+     * // Get one FallProtectionGroupComponent
+     * const fallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FallProtectionGroupComponentFindUniqueOrThrowArgs>(args: SelectSubset<T, FallProtectionGroupComponentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FallProtectionGroupComponentClient<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FallProtectionGroupComponent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FallProtectionGroupComponentFindFirstArgs} args - Arguments to find a FallProtectionGroupComponent
+     * @example
+     * // Get one FallProtectionGroupComponent
+     * const fallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FallProtectionGroupComponentFindFirstArgs>(args?: SelectSubset<T, FallProtectionGroupComponentFindFirstArgs<ExtArgs>>): Prisma__FallProtectionGroupComponentClient<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FallProtectionGroupComponent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FallProtectionGroupComponentFindFirstOrThrowArgs} args - Arguments to find a FallProtectionGroupComponent
+     * @example
+     * // Get one FallProtectionGroupComponent
+     * const fallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FallProtectionGroupComponentFindFirstOrThrowArgs>(args?: SelectSubset<T, FallProtectionGroupComponentFindFirstOrThrowArgs<ExtArgs>>): Prisma__FallProtectionGroupComponentClient<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FallProtectionGroupComponents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FallProtectionGroupComponentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FallProtectionGroupComponents
+     * const fallProtectionGroupComponents = await prisma.fallProtectionGroupComponent.findMany()
+     * 
+     * // Get first 10 FallProtectionGroupComponents
+     * const fallProtectionGroupComponents = await prisma.fallProtectionGroupComponent.findMany({ take: 10 })
+     * 
+     * // Only select the `fallProtectionGroupComponentId`
+     * const fallProtectionGroupComponentWithFallProtectionGroupComponentIdOnly = await prisma.fallProtectionGroupComponent.findMany({ select: { fallProtectionGroupComponentId: true } })
+     * 
+     */
+    findMany<T extends FallProtectionGroupComponentFindManyArgs>(args?: SelectSubset<T, FallProtectionGroupComponentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FallProtectionGroupComponent.
+     * @param {FallProtectionGroupComponentCreateArgs} args - Arguments to create a FallProtectionGroupComponent.
+     * @example
+     * // Create one FallProtectionGroupComponent
+     * const FallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.create({
+     *   data: {
+     *     // ... data to create a FallProtectionGroupComponent
+     *   }
+     * })
+     * 
+     */
+    create<T extends FallProtectionGroupComponentCreateArgs>(args: SelectSubset<T, FallProtectionGroupComponentCreateArgs<ExtArgs>>): Prisma__FallProtectionGroupComponentClient<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FallProtectionGroupComponents.
+     * @param {FallProtectionGroupComponentCreateManyArgs} args - Arguments to create many FallProtectionGroupComponents.
+     * @example
+     * // Create many FallProtectionGroupComponents
+     * const fallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FallProtectionGroupComponentCreateManyArgs>(args?: SelectSubset<T, FallProtectionGroupComponentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FallProtectionGroupComponents and returns the data saved in the database.
+     * @param {FallProtectionGroupComponentCreateManyAndReturnArgs} args - Arguments to create many FallProtectionGroupComponents.
+     * @example
+     * // Create many FallProtectionGroupComponents
+     * const fallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FallProtectionGroupComponents and only return the `fallProtectionGroupComponentId`
+     * const fallProtectionGroupComponentWithFallProtectionGroupComponentIdOnly = await prisma.fallProtectionGroupComponent.createManyAndReturn({
+     *   select: { fallProtectionGroupComponentId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FallProtectionGroupComponentCreateManyAndReturnArgs>(args?: SelectSubset<T, FallProtectionGroupComponentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FallProtectionGroupComponent.
+     * @param {FallProtectionGroupComponentDeleteArgs} args - Arguments to delete one FallProtectionGroupComponent.
+     * @example
+     * // Delete one FallProtectionGroupComponent
+     * const FallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.delete({
+     *   where: {
+     *     // ... filter to delete one FallProtectionGroupComponent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FallProtectionGroupComponentDeleteArgs>(args: SelectSubset<T, FallProtectionGroupComponentDeleteArgs<ExtArgs>>): Prisma__FallProtectionGroupComponentClient<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FallProtectionGroupComponent.
+     * @param {FallProtectionGroupComponentUpdateArgs} args - Arguments to update one FallProtectionGroupComponent.
+     * @example
+     * // Update one FallProtectionGroupComponent
+     * const fallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FallProtectionGroupComponentUpdateArgs>(args: SelectSubset<T, FallProtectionGroupComponentUpdateArgs<ExtArgs>>): Prisma__FallProtectionGroupComponentClient<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FallProtectionGroupComponents.
+     * @param {FallProtectionGroupComponentDeleteManyArgs} args - Arguments to filter FallProtectionGroupComponents to delete.
+     * @example
+     * // Delete a few FallProtectionGroupComponents
+     * const { count } = await prisma.fallProtectionGroupComponent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FallProtectionGroupComponentDeleteManyArgs>(args?: SelectSubset<T, FallProtectionGroupComponentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FallProtectionGroupComponents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FallProtectionGroupComponentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FallProtectionGroupComponents
+     * const fallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FallProtectionGroupComponentUpdateManyArgs>(args: SelectSubset<T, FallProtectionGroupComponentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FallProtectionGroupComponents and returns the data updated in the database.
+     * @param {FallProtectionGroupComponentUpdateManyAndReturnArgs} args - Arguments to update many FallProtectionGroupComponents.
+     * @example
+     * // Update many FallProtectionGroupComponents
+     * const fallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FallProtectionGroupComponents and only return the `fallProtectionGroupComponentId`
+     * const fallProtectionGroupComponentWithFallProtectionGroupComponentIdOnly = await prisma.fallProtectionGroupComponent.updateManyAndReturn({
+     *   select: { fallProtectionGroupComponentId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FallProtectionGroupComponentUpdateManyAndReturnArgs>(args: SelectSubset<T, FallProtectionGroupComponentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FallProtectionGroupComponent.
+     * @param {FallProtectionGroupComponentUpsertArgs} args - Arguments to update or create a FallProtectionGroupComponent.
+     * @example
+     * // Update or create a FallProtectionGroupComponent
+     * const fallProtectionGroupComponent = await prisma.fallProtectionGroupComponent.upsert({
+     *   create: {
+     *     // ... data to create a FallProtectionGroupComponent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FallProtectionGroupComponent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FallProtectionGroupComponentUpsertArgs>(args: SelectSubset<T, FallProtectionGroupComponentUpsertArgs<ExtArgs>>): Prisma__FallProtectionGroupComponentClient<$Result.GetResult<Prisma.$FallProtectionGroupComponentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FallProtectionGroupComponents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FallProtectionGroupComponentCountArgs} args - Arguments to filter FallProtectionGroupComponents to count.
+     * @example
+     * // Count the number of FallProtectionGroupComponents
+     * const count = await prisma.fallProtectionGroupComponent.count({
+     *   where: {
+     *     // ... the filter for the FallProtectionGroupComponents we want to count
+     *   }
+     * })
+    **/
+    count<T extends FallProtectionGroupComponentCountArgs>(
+      args?: Subset<T, FallProtectionGroupComponentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FallProtectionGroupComponentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FallProtectionGroupComponent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FallProtectionGroupComponentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FallProtectionGroupComponentAggregateArgs>(args: Subset<T, FallProtectionGroupComponentAggregateArgs>): Prisma.PrismaPromise<GetFallProtectionGroupComponentAggregateType<T>>
+
+    /**
+     * Group by FallProtectionGroupComponent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FallProtectionGroupComponentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FallProtectionGroupComponentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FallProtectionGroupComponentGroupByArgs['orderBy'] }
+        : { orderBy?: FallProtectionGroupComponentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FallProtectionGroupComponentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFallProtectionGroupComponentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FallProtectionGroupComponent model
+   */
+  readonly fields: FallProtectionGroupComponentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FallProtectionGroupComponent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FallProtectionGroupComponentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    fallProtectionGroup<T extends FallProtectionGroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FallProtectionGroupDefaultArgs<ExtArgs>>): Prisma__FallProtectionGroupClient<$Result.GetResult<Prisma.$FallProtectionGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    element<T extends ElementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ElementDefaultArgs<ExtArgs>>): Prisma__ElementClient<$Result.GetResult<Prisma.$ElementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FallProtectionGroupComponent model
+   */
+  interface FallProtectionGroupComponentFieldRefs {
+    readonly fallProtectionGroupComponentId: FieldRef<"FallProtectionGroupComponent", 'Int'>
+    readonly fallProtectionGroupId: FieldRef<"FallProtectionGroupComponent", 'Int'>
+    readonly elementId: FieldRef<"FallProtectionGroupComponent", 'Int'>
+    readonly role: FieldRef<"FallProtectionGroupComponent", 'FallProtectionComponentRole'>
+    readonly createdAt: FieldRef<"FallProtectionGroupComponent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FallProtectionGroupComponent findUnique
+   */
+  export type FallProtectionGroupComponentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which FallProtectionGroupComponent to fetch.
+     */
+    where: FallProtectionGroupComponentWhereUniqueInput
+  }
+
+  /**
+   * FallProtectionGroupComponent findUniqueOrThrow
+   */
+  export type FallProtectionGroupComponentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which FallProtectionGroupComponent to fetch.
+     */
+    where: FallProtectionGroupComponentWhereUniqueInput
+  }
+
+  /**
+   * FallProtectionGroupComponent findFirst
+   */
+  export type FallProtectionGroupComponentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which FallProtectionGroupComponent to fetch.
+     */
+    where?: FallProtectionGroupComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FallProtectionGroupComponents to fetch.
+     */
+    orderBy?: FallProtectionGroupComponentOrderByWithRelationInput | FallProtectionGroupComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FallProtectionGroupComponents.
+     */
+    cursor?: FallProtectionGroupComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FallProtectionGroupComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FallProtectionGroupComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FallProtectionGroupComponents.
+     */
+    distinct?: FallProtectionGroupComponentScalarFieldEnum | FallProtectionGroupComponentScalarFieldEnum[]
+  }
+
+  /**
+   * FallProtectionGroupComponent findFirstOrThrow
+   */
+  export type FallProtectionGroupComponentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which FallProtectionGroupComponent to fetch.
+     */
+    where?: FallProtectionGroupComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FallProtectionGroupComponents to fetch.
+     */
+    orderBy?: FallProtectionGroupComponentOrderByWithRelationInput | FallProtectionGroupComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FallProtectionGroupComponents.
+     */
+    cursor?: FallProtectionGroupComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FallProtectionGroupComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FallProtectionGroupComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FallProtectionGroupComponents.
+     */
+    distinct?: FallProtectionGroupComponentScalarFieldEnum | FallProtectionGroupComponentScalarFieldEnum[]
+  }
+
+  /**
+   * FallProtectionGroupComponent findMany
+   */
+  export type FallProtectionGroupComponentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which FallProtectionGroupComponents to fetch.
+     */
+    where?: FallProtectionGroupComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FallProtectionGroupComponents to fetch.
+     */
+    orderBy?: FallProtectionGroupComponentOrderByWithRelationInput | FallProtectionGroupComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FallProtectionGroupComponents.
+     */
+    cursor?: FallProtectionGroupComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FallProtectionGroupComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FallProtectionGroupComponents.
+     */
+    skip?: number
+    distinct?: FallProtectionGroupComponentScalarFieldEnum | FallProtectionGroupComponentScalarFieldEnum[]
+  }
+
+  /**
+   * FallProtectionGroupComponent create
+   */
+  export type FallProtectionGroupComponentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FallProtectionGroupComponent.
+     */
+    data: XOR<FallProtectionGroupComponentCreateInput, FallProtectionGroupComponentUncheckedCreateInput>
+  }
+
+  /**
+   * FallProtectionGroupComponent createMany
+   */
+  export type FallProtectionGroupComponentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FallProtectionGroupComponents.
+     */
+    data: FallProtectionGroupComponentCreateManyInput | FallProtectionGroupComponentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FallProtectionGroupComponent createManyAndReturn
+   */
+  export type FallProtectionGroupComponentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * The data used to create many FallProtectionGroupComponents.
+     */
+    data: FallProtectionGroupComponentCreateManyInput | FallProtectionGroupComponentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FallProtectionGroupComponent update
+   */
+  export type FallProtectionGroupComponentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FallProtectionGroupComponent.
+     */
+    data: XOR<FallProtectionGroupComponentUpdateInput, FallProtectionGroupComponentUncheckedUpdateInput>
+    /**
+     * Choose, which FallProtectionGroupComponent to update.
+     */
+    where: FallProtectionGroupComponentWhereUniqueInput
+  }
+
+  /**
+   * FallProtectionGroupComponent updateMany
+   */
+  export type FallProtectionGroupComponentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FallProtectionGroupComponents.
+     */
+    data: XOR<FallProtectionGroupComponentUpdateManyMutationInput, FallProtectionGroupComponentUncheckedUpdateManyInput>
+    /**
+     * Filter which FallProtectionGroupComponents to update
+     */
+    where?: FallProtectionGroupComponentWhereInput
+    /**
+     * Limit how many FallProtectionGroupComponents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FallProtectionGroupComponent updateManyAndReturn
+   */
+  export type FallProtectionGroupComponentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * The data used to update FallProtectionGroupComponents.
+     */
+    data: XOR<FallProtectionGroupComponentUpdateManyMutationInput, FallProtectionGroupComponentUncheckedUpdateManyInput>
+    /**
+     * Filter which FallProtectionGroupComponents to update
+     */
+    where?: FallProtectionGroupComponentWhereInput
+    /**
+     * Limit how many FallProtectionGroupComponents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FallProtectionGroupComponent upsert
+   */
+  export type FallProtectionGroupComponentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FallProtectionGroupComponent to update in case it exists.
+     */
+    where: FallProtectionGroupComponentWhereUniqueInput
+    /**
+     * In case the FallProtectionGroupComponent found by the `where` argument doesn't exist, create a new FallProtectionGroupComponent with this data.
+     */
+    create: XOR<FallProtectionGroupComponentCreateInput, FallProtectionGroupComponentUncheckedCreateInput>
+    /**
+     * In case the FallProtectionGroupComponent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FallProtectionGroupComponentUpdateInput, FallProtectionGroupComponentUncheckedUpdateInput>
+  }
+
+  /**
+   * FallProtectionGroupComponent delete
+   */
+  export type FallProtectionGroupComponentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
+    /**
+     * Filter which FallProtectionGroupComponent to delete.
+     */
+    where: FallProtectionGroupComponentWhereUniqueInput
+  }
+
+  /**
+   * FallProtectionGroupComponent deleteMany
+   */
+  export type FallProtectionGroupComponentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FallProtectionGroupComponents to delete
+     */
+    where?: FallProtectionGroupComponentWhereInput
+    /**
+     * Limit how many FallProtectionGroupComponents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FallProtectionGroupComponent without action
+   */
+  export type FallProtectionGroupComponentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FallProtectionGroupComponent
+     */
+    select?: FallProtectionGroupComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FallProtectionGroupComponent
+     */
+    omit?: FallProtectionGroupComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FallProtectionGroupComponentInclude<ExtArgs> | null
   }
 
 
@@ -69484,6 +70771,17 @@ export namespace Prisma {
   export type FallProtectionGroupScalarFieldEnum = (typeof FallProtectionGroupScalarFieldEnum)[keyof typeof FallProtectionGroupScalarFieldEnum]
 
 
+  export const FallProtectionGroupComponentScalarFieldEnum: {
+    fallProtectionGroupComponentId: 'fallProtectionGroupComponentId',
+    fallProtectionGroupId: 'fallProtectionGroupId',
+    elementId: 'elementId',
+    role: 'role',
+    createdAt: 'createdAt'
+  };
+
+  export type FallProtectionGroupComponentScalarFieldEnum = (typeof FallProtectionGroupComponentScalarFieldEnum)[keyof typeof FallProtectionGroupComponentScalarFieldEnum]
+
+
   export const ElementVariantScalarFieldEnum: {
     elementVariantId: 'elementVariantId',
     elementId: 'elementId',
@@ -70319,6 +71617,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'FallProtectionComponentRole'
+   */
+  export type EnumFallProtectionComponentRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FallProtectionComponentRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'FallProtectionComponentRole[]'
+   */
+  export type ListEnumFallProtectionComponentRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FallProtectionComponentRole[]'>
+    
+
+
+  /**
    * Reference to a field of type 'RequestStatus'
    */
   export type EnumRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RequestStatus'>
@@ -71125,6 +72437,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupListRelationFilter
     fallProtectionLifelineGroups?: FallProtectionGroupListRelationFilter
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupListRelationFilter
+    fallProtectionGroupComponents?: FallProtectionGroupComponentListRelationFilter
   }
 
   export type ElementOrderByWithRelationInput = {
@@ -71160,6 +72473,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupOrderByRelationAggregateInput
     fallProtectionLifelineGroups?: FallProtectionGroupOrderByRelationAggregateInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupOrderByRelationAggregateInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentOrderByRelationAggregateInput
   }
 
   export type ElementWhereUniqueInput = Prisma.AtLeast<{
@@ -71198,6 +72512,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupListRelationFilter
     fallProtectionLifelineGroups?: FallProtectionGroupListRelationFilter
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupListRelationFilter
+    fallProtectionGroupComponents?: FallProtectionGroupComponentListRelationFilter
   }, "elementId" | "code">
 
   export type ElementOrderByWithAggregationInput = {
@@ -71272,6 +72587,7 @@ export namespace Prisma {
     anchorBandElement?: XOR<ElementScalarRelationFilter, ElementWhereInput>
     lifelineElement?: XOR<ElementScalarRelationFilter, ElementWhereInput>
     positioningLanyardElement?: XOR<ElementScalarRelationFilter, ElementWhereInput>
+    components?: FallProtectionGroupComponentListRelationFilter
     elementRequests?: ElementRequestListRelationFilter
     projectInventoryEntries?: ProjectInventoryEntryListRelationFilter
   }
@@ -71291,6 +72607,7 @@ export namespace Prisma {
     anchorBandElement?: ElementOrderByWithRelationInput
     lifelineElement?: ElementOrderByWithRelationInput
     positioningLanyardElement?: ElementOrderByWithRelationInput
+    components?: FallProtectionGroupComponentOrderByRelationAggregateInput
     elementRequests?: ElementRequestOrderByRelationAggregateInput
     projectInventoryEntries?: ProjectInventoryEntryOrderByRelationAggregateInput
   }
@@ -71313,6 +72630,7 @@ export namespace Prisma {
     anchorBandElement?: XOR<ElementScalarRelationFilter, ElementWhereInput>
     lifelineElement?: XOR<ElementScalarRelationFilter, ElementWhereInput>
     positioningLanyardElement?: XOR<ElementScalarRelationFilter, ElementWhereInput>
+    components?: FallProtectionGroupComponentListRelationFilter
     elementRequests?: ElementRequestListRelationFilter
     projectInventoryEntries?: ProjectInventoryEntryListRelationFilter
   }, "fallProtectionGroupId" | "code">
@@ -71349,6 +72667,67 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"FallProtectionGroup"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FallProtectionGroup"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"FallProtectionGroup"> | Date | string | null
+  }
+
+  export type FallProtectionGroupComponentWhereInput = {
+    AND?: FallProtectionGroupComponentWhereInput | FallProtectionGroupComponentWhereInput[]
+    OR?: FallProtectionGroupComponentWhereInput[]
+    NOT?: FallProtectionGroupComponentWhereInput | FallProtectionGroupComponentWhereInput[]
+    fallProtectionGroupComponentId?: IntFilter<"FallProtectionGroupComponent"> | number
+    fallProtectionGroupId?: IntFilter<"FallProtectionGroupComponent"> | number
+    elementId?: IntFilter<"FallProtectionGroupComponent"> | number
+    role?: EnumFallProtectionComponentRoleFilter<"FallProtectionGroupComponent"> | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFilter<"FallProtectionGroupComponent"> | Date | string
+    fallProtectionGroup?: XOR<FallProtectionGroupScalarRelationFilter, FallProtectionGroupWhereInput>
+    element?: XOR<ElementScalarRelationFilter, ElementWhereInput>
+  }
+
+  export type FallProtectionGroupComponentOrderByWithRelationInput = {
+    fallProtectionGroupComponentId?: SortOrder
+    fallProtectionGroupId?: SortOrder
+    elementId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    fallProtectionGroup?: FallProtectionGroupOrderByWithRelationInput
+    element?: ElementOrderByWithRelationInput
+  }
+
+  export type FallProtectionGroupComponentWhereUniqueInput = Prisma.AtLeast<{
+    fallProtectionGroupComponentId?: number
+    fallProtectionGroupId_role_elementId?: FallProtectionGroupComponentFallProtectionGroupIdRoleElementIdCompoundUniqueInput
+    AND?: FallProtectionGroupComponentWhereInput | FallProtectionGroupComponentWhereInput[]
+    OR?: FallProtectionGroupComponentWhereInput[]
+    NOT?: FallProtectionGroupComponentWhereInput | FallProtectionGroupComponentWhereInput[]
+    fallProtectionGroupId?: IntFilter<"FallProtectionGroupComponent"> | number
+    elementId?: IntFilter<"FallProtectionGroupComponent"> | number
+    role?: EnumFallProtectionComponentRoleFilter<"FallProtectionGroupComponent"> | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFilter<"FallProtectionGroupComponent"> | Date | string
+    fallProtectionGroup?: XOR<FallProtectionGroupScalarRelationFilter, FallProtectionGroupWhereInput>
+    element?: XOR<ElementScalarRelationFilter, ElementWhereInput>
+  }, "fallProtectionGroupComponentId" | "fallProtectionGroupId_role_elementId">
+
+  export type FallProtectionGroupComponentOrderByWithAggregationInput = {
+    fallProtectionGroupComponentId?: SortOrder
+    fallProtectionGroupId?: SortOrder
+    elementId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    _count?: FallProtectionGroupComponentCountOrderByAggregateInput
+    _avg?: FallProtectionGroupComponentAvgOrderByAggregateInput
+    _max?: FallProtectionGroupComponentMaxOrderByAggregateInput
+    _min?: FallProtectionGroupComponentMinOrderByAggregateInput
+    _sum?: FallProtectionGroupComponentSumOrderByAggregateInput
+  }
+
+  export type FallProtectionGroupComponentScalarWhereWithAggregatesInput = {
+    AND?: FallProtectionGroupComponentScalarWhereWithAggregatesInput | FallProtectionGroupComponentScalarWhereWithAggregatesInput[]
+    OR?: FallProtectionGroupComponentScalarWhereWithAggregatesInput[]
+    NOT?: FallProtectionGroupComponentScalarWhereWithAggregatesInput | FallProtectionGroupComponentScalarWhereWithAggregatesInput[]
+    fallProtectionGroupComponentId?: IntWithAggregatesFilter<"FallProtectionGroupComponent"> | number
+    fallProtectionGroupId?: IntWithAggregatesFilter<"FallProtectionGroupComponent"> | number
+    elementId?: IntWithAggregatesFilter<"FallProtectionGroupComponent"> | number
+    role?: EnumFallProtectionComponentRoleWithAggregatesFilter<"FallProtectionGroupComponent"> | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeWithAggregatesFilter<"FallProtectionGroupComponent"> | Date | string
   }
 
   export type ElementVariantWhereInput = {
@@ -75618,6 +76997,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateInput = {
@@ -75652,6 +77032,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementUpdateInput = {
@@ -75685,6 +77066,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateInput = {
@@ -75719,6 +77101,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementCreateManyInput = {
@@ -75798,6 +77181,7 @@ export namespace Prisma {
     anchorBandElement: ElementCreateNestedOneWithoutFallProtectionAnchorBandGroupsInput
     lifelineElement: ElementCreateNestedOneWithoutFallProtectionLifelineGroupsInput
     positioningLanyardElement: ElementCreateNestedOneWithoutFallProtectionPositioningLanyardGroupsInput
+    components?: FallProtectionGroupComponentCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutFallProtectionGroupInput
   }
@@ -75813,6 +77197,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    components?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutFallProtectionGroupInput
   }
@@ -75827,6 +77212,7 @@ export namespace Prisma {
     anchorBandElement?: ElementUpdateOneRequiredWithoutFallProtectionAnchorBandGroupsNestedInput
     lifelineElement?: ElementUpdateOneRequiredWithoutFallProtectionLifelineGroupsNestedInput
     positioningLanyardElement?: ElementUpdateOneRequiredWithoutFallProtectionPositioningLanyardGroupsNestedInput
+    components?: FallProtectionGroupComponentUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUpdateManyWithoutFallProtectionGroupNestedInput
   }
@@ -75842,6 +77228,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    components?: FallProtectionGroupComponentUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
   }
@@ -75878,6 +77265,57 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type FallProtectionGroupComponentCreateInput = {
+    role: $Enums.FallProtectionComponentRole
+    createdAt?: Date | string
+    fallProtectionGroup: FallProtectionGroupCreateNestedOneWithoutComponentsInput
+    element: ElementCreateNestedOneWithoutFallProtectionGroupComponentsInput
+  }
+
+  export type FallProtectionGroupComponentUncheckedCreateInput = {
+    fallProtectionGroupComponentId?: number
+    fallProtectionGroupId: number
+    elementId: number
+    role: $Enums.FallProtectionComponentRole
+    createdAt?: Date | string
+  }
+
+  export type FallProtectionGroupComponentUpdateInput = {
+    role?: EnumFallProtectionComponentRoleFieldUpdateOperationsInput | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fallProtectionGroup?: FallProtectionGroupUpdateOneRequiredWithoutComponentsNestedInput
+    element?: ElementUpdateOneRequiredWithoutFallProtectionGroupComponentsNestedInput
+  }
+
+  export type FallProtectionGroupComponentUncheckedUpdateInput = {
+    fallProtectionGroupComponentId?: IntFieldUpdateOperationsInput | number
+    fallProtectionGroupId?: IntFieldUpdateOperationsInput | number
+    elementId?: IntFieldUpdateOperationsInput | number
+    role?: EnumFallProtectionComponentRoleFieldUpdateOperationsInput | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FallProtectionGroupComponentCreateManyInput = {
+    fallProtectionGroupComponentId?: number
+    fallProtectionGroupId: number
+    elementId: number
+    role: $Enums.FallProtectionComponentRole
+    createdAt?: Date | string
+  }
+
+  export type FallProtectionGroupComponentUpdateManyMutationInput = {
+    role?: EnumFallProtectionComponentRoleFieldUpdateOperationsInput | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FallProtectionGroupComponentUncheckedUpdateManyInput = {
+    fallProtectionGroupComponentId?: IntFieldUpdateOperationsInput | number
+    fallProtectionGroupId?: IntFieldUpdateOperationsInput | number
+    elementId?: IntFieldUpdateOperationsInput | number
+    role?: EnumFallProtectionComponentRoleFieldUpdateOperationsInput | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ElementVariantCreateInput = {
@@ -80352,6 +81790,12 @@ export namespace Prisma {
     none?: FallProtectionGroupWhereInput
   }
 
+  export type FallProtectionGroupComponentListRelationFilter = {
+    every?: FallProtectionGroupComponentWhereInput
+    some?: FallProtectionGroupComponentWhereInput
+    none?: FallProtectionGroupComponentWhereInput
+  }
+
   export type ElementRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -80365,6 +81809,10 @@ export namespace Prisma {
   }
 
   export type FallProtectionGroupOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FallProtectionGroupComponentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -80569,6 +82017,70 @@ export namespace Prisma {
     anchorBandElementId?: SortOrder
     lifelineElementId?: SortOrder
     positioningLanyardElementId?: SortOrder
+  }
+
+  export type EnumFallProtectionComponentRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.FallProtectionComponentRole | EnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.FallProtectionComponentRole[] | ListEnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FallProtectionComponentRole[] | ListEnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumFallProtectionComponentRoleFilter<$PrismaModel> | $Enums.FallProtectionComponentRole
+  }
+
+  export type FallProtectionGroupScalarRelationFilter = {
+    is?: FallProtectionGroupWhereInput
+    isNot?: FallProtectionGroupWhereInput
+  }
+
+  export type FallProtectionGroupComponentFallProtectionGroupIdRoleElementIdCompoundUniqueInput = {
+    fallProtectionGroupId: number
+    role: $Enums.FallProtectionComponentRole
+    elementId: number
+  }
+
+  export type FallProtectionGroupComponentCountOrderByAggregateInput = {
+    fallProtectionGroupComponentId?: SortOrder
+    fallProtectionGroupId?: SortOrder
+    elementId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FallProtectionGroupComponentAvgOrderByAggregateInput = {
+    fallProtectionGroupComponentId?: SortOrder
+    fallProtectionGroupId?: SortOrder
+    elementId?: SortOrder
+  }
+
+  export type FallProtectionGroupComponentMaxOrderByAggregateInput = {
+    fallProtectionGroupComponentId?: SortOrder
+    fallProtectionGroupId?: SortOrder
+    elementId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FallProtectionGroupComponentMinOrderByAggregateInput = {
+    fallProtectionGroupComponentId?: SortOrder
+    fallProtectionGroupId?: SortOrder
+    elementId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FallProtectionGroupComponentSumOrderByAggregateInput = {
+    fallProtectionGroupComponentId?: SortOrder
+    fallProtectionGroupId?: SortOrder
+    elementId?: SortOrder
+  }
+
+  export type EnumFallProtectionComponentRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FallProtectionComponentRole | EnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.FallProtectionComponentRole[] | ListEnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FallProtectionComponentRole[] | ListEnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumFallProtectionComponentRoleWithAggregatesFilter<$PrismaModel> | $Enums.FallProtectionComponentRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFallProtectionComponentRoleFilter<$PrismaModel>
+    _max?: NestedEnumFallProtectionComponentRoleFilter<$PrismaModel>
   }
 
   export type ElementRequestWorkerPlanListRelationFilter = {
@@ -85137,6 +86649,13 @@ export namespace Prisma {
     connect?: FallProtectionGroupWhereUniqueInput | FallProtectionGroupWhereUniqueInput[]
   }
 
+  export type FallProtectionGroupComponentCreateNestedManyWithoutElementInput = {
+    create?: XOR<FallProtectionGroupComponentCreateWithoutElementInput, FallProtectionGroupComponentUncheckedCreateWithoutElementInput> | FallProtectionGroupComponentCreateWithoutElementInput[] | FallProtectionGroupComponentUncheckedCreateWithoutElementInput[]
+    connectOrCreate?: FallProtectionGroupComponentCreateOrConnectWithoutElementInput | FallProtectionGroupComponentCreateOrConnectWithoutElementInput[]
+    createMany?: FallProtectionGroupComponentCreateManyElementInputEnvelope
+    connect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+  }
+
   export type ElementRequestUncheckedCreateNestedManyWithoutElementInput = {
     create?: XOR<ElementRequestCreateWithoutElementInput, ElementRequestUncheckedCreateWithoutElementInput> | ElementRequestCreateWithoutElementInput[] | ElementRequestUncheckedCreateWithoutElementInput[]
     connectOrCreate?: ElementRequestCreateOrConnectWithoutElementInput | ElementRequestCreateOrConnectWithoutElementInput[]
@@ -85212,6 +86731,13 @@ export namespace Prisma {
     connectOrCreate?: FallProtectionGroupCreateOrConnectWithoutPositioningLanyardElementInput | FallProtectionGroupCreateOrConnectWithoutPositioningLanyardElementInput[]
     createMany?: FallProtectionGroupCreateManyPositioningLanyardElementInputEnvelope
     connect?: FallProtectionGroupWhereUniqueInput | FallProtectionGroupWhereUniqueInput[]
+  }
+
+  export type FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput = {
+    create?: XOR<FallProtectionGroupComponentCreateWithoutElementInput, FallProtectionGroupComponentUncheckedCreateWithoutElementInput> | FallProtectionGroupComponentCreateWithoutElementInput[] | FallProtectionGroupComponentUncheckedCreateWithoutElementInput[]
+    connectOrCreate?: FallProtectionGroupComponentCreateOrConnectWithoutElementInput | FallProtectionGroupComponentCreateOrConnectWithoutElementInput[]
+    createMany?: FallProtectionGroupComponentCreateManyElementInputEnvelope
+    connect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
   }
 
   export type EnumElementTypeFieldUpdateOperationsInput = {
@@ -85398,6 +86924,20 @@ export namespace Prisma {
     deleteMany?: FallProtectionGroupScalarWhereInput | FallProtectionGroupScalarWhereInput[]
   }
 
+  export type FallProtectionGroupComponentUpdateManyWithoutElementNestedInput = {
+    create?: XOR<FallProtectionGroupComponentCreateWithoutElementInput, FallProtectionGroupComponentUncheckedCreateWithoutElementInput> | FallProtectionGroupComponentCreateWithoutElementInput[] | FallProtectionGroupComponentUncheckedCreateWithoutElementInput[]
+    connectOrCreate?: FallProtectionGroupComponentCreateOrConnectWithoutElementInput | FallProtectionGroupComponentCreateOrConnectWithoutElementInput[]
+    upsert?: FallProtectionGroupComponentUpsertWithWhereUniqueWithoutElementInput | FallProtectionGroupComponentUpsertWithWhereUniqueWithoutElementInput[]
+    createMany?: FallProtectionGroupComponentCreateManyElementInputEnvelope
+    set?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    disconnect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    delete?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    connect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    update?: FallProtectionGroupComponentUpdateWithWhereUniqueWithoutElementInput | FallProtectionGroupComponentUpdateWithWhereUniqueWithoutElementInput[]
+    updateMany?: FallProtectionGroupComponentUpdateManyWithWhereWithoutElementInput | FallProtectionGroupComponentUpdateManyWithWhereWithoutElementInput[]
+    deleteMany?: FallProtectionGroupComponentScalarWhereInput | FallProtectionGroupComponentScalarWhereInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -85560,6 +87100,20 @@ export namespace Prisma {
     deleteMany?: FallProtectionGroupScalarWhereInput | FallProtectionGroupScalarWhereInput[]
   }
 
+  export type FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput = {
+    create?: XOR<FallProtectionGroupComponentCreateWithoutElementInput, FallProtectionGroupComponentUncheckedCreateWithoutElementInput> | FallProtectionGroupComponentCreateWithoutElementInput[] | FallProtectionGroupComponentUncheckedCreateWithoutElementInput[]
+    connectOrCreate?: FallProtectionGroupComponentCreateOrConnectWithoutElementInput | FallProtectionGroupComponentCreateOrConnectWithoutElementInput[]
+    upsert?: FallProtectionGroupComponentUpsertWithWhereUniqueWithoutElementInput | FallProtectionGroupComponentUpsertWithWhereUniqueWithoutElementInput[]
+    createMany?: FallProtectionGroupComponentCreateManyElementInputEnvelope
+    set?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    disconnect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    delete?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    connect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    update?: FallProtectionGroupComponentUpdateWithWhereUniqueWithoutElementInput | FallProtectionGroupComponentUpdateWithWhereUniqueWithoutElementInput[]
+    updateMany?: FallProtectionGroupComponentUpdateManyWithWhereWithoutElementInput | FallProtectionGroupComponentUpdateManyWithWhereWithoutElementInput[]
+    deleteMany?: FallProtectionGroupComponentScalarWhereInput | FallProtectionGroupComponentScalarWhereInput[]
+  }
+
   export type ElementCreateNestedOneWithoutFallProtectionHarnessGroupsInput = {
     create?: XOR<ElementCreateWithoutFallProtectionHarnessGroupsInput, ElementUncheckedCreateWithoutFallProtectionHarnessGroupsInput>
     connectOrCreate?: ElementCreateOrConnectWithoutFallProtectionHarnessGroupsInput
@@ -85584,6 +87138,13 @@ export namespace Prisma {
     connect?: ElementWhereUniqueInput
   }
 
+  export type FallProtectionGroupComponentCreateNestedManyWithoutFallProtectionGroupInput = {
+    create?: XOR<FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput, FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput> | FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput[] | FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput[]
+    connectOrCreate?: FallProtectionGroupComponentCreateOrConnectWithoutFallProtectionGroupInput | FallProtectionGroupComponentCreateOrConnectWithoutFallProtectionGroupInput[]
+    createMany?: FallProtectionGroupComponentCreateManyFallProtectionGroupInputEnvelope
+    connect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+  }
+
   export type ElementRequestCreateNestedManyWithoutFallProtectionGroupInput = {
     create?: XOR<ElementRequestCreateWithoutFallProtectionGroupInput, ElementRequestUncheckedCreateWithoutFallProtectionGroupInput> | ElementRequestCreateWithoutFallProtectionGroupInput[] | ElementRequestUncheckedCreateWithoutFallProtectionGroupInput[]
     connectOrCreate?: ElementRequestCreateOrConnectWithoutFallProtectionGroupInput | ElementRequestCreateOrConnectWithoutFallProtectionGroupInput[]
@@ -85596,6 +87157,13 @@ export namespace Prisma {
     connectOrCreate?: ProjectInventoryEntryCreateOrConnectWithoutFallProtectionGroupInput | ProjectInventoryEntryCreateOrConnectWithoutFallProtectionGroupInput[]
     createMany?: ProjectInventoryEntryCreateManyFallProtectionGroupInputEnvelope
     connect?: ProjectInventoryEntryWhereUniqueInput | ProjectInventoryEntryWhereUniqueInput[]
+  }
+
+  export type FallProtectionGroupComponentUncheckedCreateNestedManyWithoutFallProtectionGroupInput = {
+    create?: XOR<FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput, FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput> | FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput[] | FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput[]
+    connectOrCreate?: FallProtectionGroupComponentCreateOrConnectWithoutFallProtectionGroupInput | FallProtectionGroupComponentCreateOrConnectWithoutFallProtectionGroupInput[]
+    createMany?: FallProtectionGroupComponentCreateManyFallProtectionGroupInputEnvelope
+    connect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
   }
 
   export type ElementRequestUncheckedCreateNestedManyWithoutFallProtectionGroupInput = {
@@ -85644,6 +87212,20 @@ export namespace Prisma {
     update?: XOR<XOR<ElementUpdateToOneWithWhereWithoutFallProtectionPositioningLanyardGroupsInput, ElementUpdateWithoutFallProtectionPositioningLanyardGroupsInput>, ElementUncheckedUpdateWithoutFallProtectionPositioningLanyardGroupsInput>
   }
 
+  export type FallProtectionGroupComponentUpdateManyWithoutFallProtectionGroupNestedInput = {
+    create?: XOR<FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput, FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput> | FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput[] | FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput[]
+    connectOrCreate?: FallProtectionGroupComponentCreateOrConnectWithoutFallProtectionGroupInput | FallProtectionGroupComponentCreateOrConnectWithoutFallProtectionGroupInput[]
+    upsert?: FallProtectionGroupComponentUpsertWithWhereUniqueWithoutFallProtectionGroupInput | FallProtectionGroupComponentUpsertWithWhereUniqueWithoutFallProtectionGroupInput[]
+    createMany?: FallProtectionGroupComponentCreateManyFallProtectionGroupInputEnvelope
+    set?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    disconnect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    delete?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    connect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    update?: FallProtectionGroupComponentUpdateWithWhereUniqueWithoutFallProtectionGroupInput | FallProtectionGroupComponentUpdateWithWhereUniqueWithoutFallProtectionGroupInput[]
+    updateMany?: FallProtectionGroupComponentUpdateManyWithWhereWithoutFallProtectionGroupInput | FallProtectionGroupComponentUpdateManyWithWhereWithoutFallProtectionGroupInput[]
+    deleteMany?: FallProtectionGroupComponentScalarWhereInput | FallProtectionGroupComponentScalarWhereInput[]
+  }
+
   export type ElementRequestUpdateManyWithoutFallProtectionGroupNestedInput = {
     create?: XOR<ElementRequestCreateWithoutFallProtectionGroupInput, ElementRequestUncheckedCreateWithoutFallProtectionGroupInput> | ElementRequestCreateWithoutFallProtectionGroupInput[] | ElementRequestUncheckedCreateWithoutFallProtectionGroupInput[]
     connectOrCreate?: ElementRequestCreateOrConnectWithoutFallProtectionGroupInput | ElementRequestCreateOrConnectWithoutFallProtectionGroupInput[]
@@ -85672,6 +87254,20 @@ export namespace Prisma {
     deleteMany?: ProjectInventoryEntryScalarWhereInput | ProjectInventoryEntryScalarWhereInput[]
   }
 
+  export type FallProtectionGroupComponentUncheckedUpdateManyWithoutFallProtectionGroupNestedInput = {
+    create?: XOR<FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput, FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput> | FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput[] | FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput[]
+    connectOrCreate?: FallProtectionGroupComponentCreateOrConnectWithoutFallProtectionGroupInput | FallProtectionGroupComponentCreateOrConnectWithoutFallProtectionGroupInput[]
+    upsert?: FallProtectionGroupComponentUpsertWithWhereUniqueWithoutFallProtectionGroupInput | FallProtectionGroupComponentUpsertWithWhereUniqueWithoutFallProtectionGroupInput[]
+    createMany?: FallProtectionGroupComponentCreateManyFallProtectionGroupInputEnvelope
+    set?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    disconnect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    delete?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    connect?: FallProtectionGroupComponentWhereUniqueInput | FallProtectionGroupComponentWhereUniqueInput[]
+    update?: FallProtectionGroupComponentUpdateWithWhereUniqueWithoutFallProtectionGroupInput | FallProtectionGroupComponentUpdateWithWhereUniqueWithoutFallProtectionGroupInput[]
+    updateMany?: FallProtectionGroupComponentUpdateManyWithWhereWithoutFallProtectionGroupInput | FallProtectionGroupComponentUpdateManyWithWhereWithoutFallProtectionGroupInput[]
+    deleteMany?: FallProtectionGroupComponentScalarWhereInput | FallProtectionGroupComponentScalarWhereInput[]
+  }
+
   export type ElementRequestUncheckedUpdateManyWithoutFallProtectionGroupNestedInput = {
     create?: XOR<ElementRequestCreateWithoutFallProtectionGroupInput, ElementRequestUncheckedCreateWithoutFallProtectionGroupInput> | ElementRequestCreateWithoutFallProtectionGroupInput[] | ElementRequestUncheckedCreateWithoutFallProtectionGroupInput[]
     connectOrCreate?: ElementRequestCreateOrConnectWithoutFallProtectionGroupInput | ElementRequestCreateOrConnectWithoutFallProtectionGroupInput[]
@@ -85698,6 +87294,38 @@ export namespace Prisma {
     update?: ProjectInventoryEntryUpdateWithWhereUniqueWithoutFallProtectionGroupInput | ProjectInventoryEntryUpdateWithWhereUniqueWithoutFallProtectionGroupInput[]
     updateMany?: ProjectInventoryEntryUpdateManyWithWhereWithoutFallProtectionGroupInput | ProjectInventoryEntryUpdateManyWithWhereWithoutFallProtectionGroupInput[]
     deleteMany?: ProjectInventoryEntryScalarWhereInput | ProjectInventoryEntryScalarWhereInput[]
+  }
+
+  export type FallProtectionGroupCreateNestedOneWithoutComponentsInput = {
+    create?: XOR<FallProtectionGroupCreateWithoutComponentsInput, FallProtectionGroupUncheckedCreateWithoutComponentsInput>
+    connectOrCreate?: FallProtectionGroupCreateOrConnectWithoutComponentsInput
+    connect?: FallProtectionGroupWhereUniqueInput
+  }
+
+  export type ElementCreateNestedOneWithoutFallProtectionGroupComponentsInput = {
+    create?: XOR<ElementCreateWithoutFallProtectionGroupComponentsInput, ElementUncheckedCreateWithoutFallProtectionGroupComponentsInput>
+    connectOrCreate?: ElementCreateOrConnectWithoutFallProtectionGroupComponentsInput
+    connect?: ElementWhereUniqueInput
+  }
+
+  export type EnumFallProtectionComponentRoleFieldUpdateOperationsInput = {
+    set?: $Enums.FallProtectionComponentRole
+  }
+
+  export type FallProtectionGroupUpdateOneRequiredWithoutComponentsNestedInput = {
+    create?: XOR<FallProtectionGroupCreateWithoutComponentsInput, FallProtectionGroupUncheckedCreateWithoutComponentsInput>
+    connectOrCreate?: FallProtectionGroupCreateOrConnectWithoutComponentsInput
+    upsert?: FallProtectionGroupUpsertWithoutComponentsInput
+    connect?: FallProtectionGroupWhereUniqueInput
+    update?: XOR<XOR<FallProtectionGroupUpdateToOneWithWhereWithoutComponentsInput, FallProtectionGroupUpdateWithoutComponentsInput>, FallProtectionGroupUncheckedUpdateWithoutComponentsInput>
+  }
+
+  export type ElementUpdateOneRequiredWithoutFallProtectionGroupComponentsNestedInput = {
+    create?: XOR<ElementCreateWithoutFallProtectionGroupComponentsInput, ElementUncheckedCreateWithoutFallProtectionGroupComponentsInput>
+    connectOrCreate?: ElementCreateOrConnectWithoutFallProtectionGroupComponentsInput
+    upsert?: ElementUpsertWithoutFallProtectionGroupComponentsInput
+    connect?: ElementWhereUniqueInput
+    update?: XOR<XOR<ElementUpdateToOneWithWhereWithoutFallProtectionGroupComponentsInput, ElementUpdateWithoutFallProtectionGroupComponentsInput>, ElementUncheckedUpdateWithoutFallProtectionGroupComponentsInput>
   }
 
   export type ElementCreateNestedOneWithoutVariantsInput = {
@@ -89896,6 +91524,23 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
+  export type NestedEnumFallProtectionComponentRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.FallProtectionComponentRole | EnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.FallProtectionComponentRole[] | ListEnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FallProtectionComponentRole[] | ListEnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumFallProtectionComponentRoleFilter<$PrismaModel> | $Enums.FallProtectionComponentRole
+  }
+
+  export type NestedEnumFallProtectionComponentRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FallProtectionComponentRole | EnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.FallProtectionComponentRole[] | ListEnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FallProtectionComponentRole[] | ListEnumFallProtectionComponentRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumFallProtectionComponentRoleWithAggregatesFilter<$PrismaModel> | $Enums.FallProtectionComponentRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFallProtectionComponentRoleFilter<$PrismaModel>
+    _max?: NestedEnumFallProtectionComponentRoleFilter<$PrismaModel>
+  }
+
   export type NestedEnumRequestStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.RequestStatus | EnumRequestStatusFieldRefInput<$PrismaModel>
     in?: $Enums.RequestStatus[] | ListEnumRequestStatusFieldRefInput<$PrismaModel>
@@ -92445,6 +94090,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutCategoryInput = {
@@ -92478,6 +94124,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutCategoryInput = {
@@ -92868,6 +94515,7 @@ export namespace Prisma {
     anchorBandElement: ElementCreateNestedOneWithoutFallProtectionAnchorBandGroupsInput
     lifelineElement: ElementCreateNestedOneWithoutFallProtectionLifelineGroupsInput
     positioningLanyardElement: ElementCreateNestedOneWithoutFallProtectionPositioningLanyardGroupsInput
+    components?: FallProtectionGroupComponentCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutFallProtectionGroupInput
   }
@@ -92882,6 +94530,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    components?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutFallProtectionGroupInput
   }
@@ -92905,6 +94554,7 @@ export namespace Prisma {
     harnessElement: ElementCreateNestedOneWithoutFallProtectionHarnessGroupsInput
     lifelineElement: ElementCreateNestedOneWithoutFallProtectionLifelineGroupsInput
     positioningLanyardElement: ElementCreateNestedOneWithoutFallProtectionPositioningLanyardGroupsInput
+    components?: FallProtectionGroupComponentCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutFallProtectionGroupInput
   }
@@ -92919,6 +94569,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    components?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutFallProtectionGroupInput
   }
@@ -92942,6 +94593,7 @@ export namespace Prisma {
     harnessElement: ElementCreateNestedOneWithoutFallProtectionHarnessGroupsInput
     anchorBandElement: ElementCreateNestedOneWithoutFallProtectionAnchorBandGroupsInput
     positioningLanyardElement: ElementCreateNestedOneWithoutFallProtectionPositioningLanyardGroupsInput
+    components?: FallProtectionGroupComponentCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutFallProtectionGroupInput
   }
@@ -92956,6 +94608,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    components?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutFallProtectionGroupInput
   }
@@ -92979,6 +94632,7 @@ export namespace Prisma {
     harnessElement: ElementCreateNestedOneWithoutFallProtectionHarnessGroupsInput
     anchorBandElement: ElementCreateNestedOneWithoutFallProtectionAnchorBandGroupsInput
     lifelineElement: ElementCreateNestedOneWithoutFallProtectionLifelineGroupsInput
+    components?: FallProtectionGroupComponentCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutFallProtectionGroupInput
   }
@@ -92993,6 +94647,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    components?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutFallProtectionGroupInput
   }
@@ -93004,6 +94659,29 @@ export namespace Prisma {
 
   export type FallProtectionGroupCreateManyPositioningLanyardElementInputEnvelope = {
     data: FallProtectionGroupCreateManyPositioningLanyardElementInput | FallProtectionGroupCreateManyPositioningLanyardElementInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FallProtectionGroupComponentCreateWithoutElementInput = {
+    role: $Enums.FallProtectionComponentRole
+    createdAt?: Date | string
+    fallProtectionGroup: FallProtectionGroupCreateNestedOneWithoutComponentsInput
+  }
+
+  export type FallProtectionGroupComponentUncheckedCreateWithoutElementInput = {
+    fallProtectionGroupComponentId?: number
+    fallProtectionGroupId: number
+    role: $Enums.FallProtectionComponentRole
+    createdAt?: Date | string
+  }
+
+  export type FallProtectionGroupComponentCreateOrConnectWithoutElementInput = {
+    where: FallProtectionGroupComponentWhereUniqueInput
+    create: XOR<FallProtectionGroupComponentCreateWithoutElementInput, FallProtectionGroupComponentUncheckedCreateWithoutElementInput>
+  }
+
+  export type FallProtectionGroupComponentCreateManyElementInputEnvelope = {
+    data: FallProtectionGroupComponentCreateManyElementInput | FallProtectionGroupComponentCreateManyElementInput[]
     skipDuplicates?: boolean
   }
 
@@ -93275,6 +94953,33 @@ export namespace Prisma {
     data: XOR<FallProtectionGroupUpdateManyMutationInput, FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementInput>
   }
 
+  export type FallProtectionGroupComponentUpsertWithWhereUniqueWithoutElementInput = {
+    where: FallProtectionGroupComponentWhereUniqueInput
+    update: XOR<FallProtectionGroupComponentUpdateWithoutElementInput, FallProtectionGroupComponentUncheckedUpdateWithoutElementInput>
+    create: XOR<FallProtectionGroupComponentCreateWithoutElementInput, FallProtectionGroupComponentUncheckedCreateWithoutElementInput>
+  }
+
+  export type FallProtectionGroupComponentUpdateWithWhereUniqueWithoutElementInput = {
+    where: FallProtectionGroupComponentWhereUniqueInput
+    data: XOR<FallProtectionGroupComponentUpdateWithoutElementInput, FallProtectionGroupComponentUncheckedUpdateWithoutElementInput>
+  }
+
+  export type FallProtectionGroupComponentUpdateManyWithWhereWithoutElementInput = {
+    where: FallProtectionGroupComponentScalarWhereInput
+    data: XOR<FallProtectionGroupComponentUpdateManyMutationInput, FallProtectionGroupComponentUncheckedUpdateManyWithoutElementInput>
+  }
+
+  export type FallProtectionGroupComponentScalarWhereInput = {
+    AND?: FallProtectionGroupComponentScalarWhereInput | FallProtectionGroupComponentScalarWhereInput[]
+    OR?: FallProtectionGroupComponentScalarWhereInput[]
+    NOT?: FallProtectionGroupComponentScalarWhereInput | FallProtectionGroupComponentScalarWhereInput[]
+    fallProtectionGroupComponentId?: IntFilter<"FallProtectionGroupComponent"> | number
+    fallProtectionGroupId?: IntFilter<"FallProtectionGroupComponent"> | number
+    elementId?: IntFilter<"FallProtectionGroupComponent"> | number
+    role?: EnumFallProtectionComponentRoleFilter<"FallProtectionGroupComponent"> | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFilter<"FallProtectionGroupComponent"> | Date | string
+  }
+
   export type ElementCreateWithoutFallProtectionHarnessGroupsInput = {
     name: string
     code?: string | null
@@ -93305,6 +95010,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutFallProtectionHarnessGroupsInput = {
@@ -93338,6 +95044,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutFallProtectionHarnessGroupsInput = {
@@ -93375,6 +95082,7 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupCreateNestedManyWithoutHarnessElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutFallProtectionAnchorBandGroupsInput = {
@@ -93408,6 +95116,7 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutHarnessElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutFallProtectionAnchorBandGroupsInput = {
@@ -93445,6 +95154,7 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupCreateNestedManyWithoutHarnessElementInput
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutFallProtectionLifelineGroupsInput = {
@@ -93478,6 +95188,7 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutHarnessElementInput
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutFallProtectionLifelineGroupsInput = {
@@ -93515,6 +95226,7 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupCreateNestedManyWithoutHarnessElementInput
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutFallProtectionPositioningLanyardGroupsInput = {
@@ -93548,11 +95260,35 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutHarnessElementInput
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutFallProtectionPositioningLanyardGroupsInput = {
     where: ElementWhereUniqueInput
     create: XOR<ElementCreateWithoutFallProtectionPositioningLanyardGroupsInput, ElementUncheckedCreateWithoutFallProtectionPositioningLanyardGroupsInput>
+  }
+
+  export type FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput = {
+    role: $Enums.FallProtectionComponentRole
+    createdAt?: Date | string
+    element: ElementCreateNestedOneWithoutFallProtectionGroupComponentsInput
+  }
+
+  export type FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput = {
+    fallProtectionGroupComponentId?: number
+    elementId: number
+    role: $Enums.FallProtectionComponentRole
+    createdAt?: Date | string
+  }
+
+  export type FallProtectionGroupComponentCreateOrConnectWithoutFallProtectionGroupInput = {
+    where: FallProtectionGroupComponentWhereUniqueInput
+    create: XOR<FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput, FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput>
+  }
+
+  export type FallProtectionGroupComponentCreateManyFallProtectionGroupInputEnvelope = {
+    data: FallProtectionGroupComponentCreateManyFallProtectionGroupInput | FallProtectionGroupComponentCreateManyFallProtectionGroupInput[]
+    skipDuplicates?: boolean
   }
 
   export type ElementRequestCreateWithoutFallProtectionGroupInput = {
@@ -93684,6 +95420,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutFallProtectionHarnessGroupsInput = {
@@ -93717,6 +95454,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUpsertWithoutFallProtectionAnchorBandGroupsInput = {
@@ -93760,6 +95498,7 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupUpdateManyWithoutHarnessElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutFallProtectionAnchorBandGroupsInput = {
@@ -93793,6 +95532,7 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupUncheckedUpdateManyWithoutHarnessElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUpsertWithoutFallProtectionLifelineGroupsInput = {
@@ -93836,6 +95576,7 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupUpdateManyWithoutHarnessElementNestedInput
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutFallProtectionLifelineGroupsInput = {
@@ -93869,6 +95610,7 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupUncheckedUpdateManyWithoutHarnessElementNestedInput
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUpsertWithoutFallProtectionPositioningLanyardGroupsInput = {
@@ -93912,6 +95654,7 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupUpdateManyWithoutHarnessElementNestedInput
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutFallProtectionPositioningLanyardGroupsInput = {
@@ -93945,6 +95688,23 @@ export namespace Prisma {
     fallProtectionHarnessGroups?: FallProtectionGroupUncheckedUpdateManyWithoutHarnessElementNestedInput
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
+  }
+
+  export type FallProtectionGroupComponentUpsertWithWhereUniqueWithoutFallProtectionGroupInput = {
+    where: FallProtectionGroupComponentWhereUniqueInput
+    update: XOR<FallProtectionGroupComponentUpdateWithoutFallProtectionGroupInput, FallProtectionGroupComponentUncheckedUpdateWithoutFallProtectionGroupInput>
+    create: XOR<FallProtectionGroupComponentCreateWithoutFallProtectionGroupInput, FallProtectionGroupComponentUncheckedCreateWithoutFallProtectionGroupInput>
+  }
+
+  export type FallProtectionGroupComponentUpdateWithWhereUniqueWithoutFallProtectionGroupInput = {
+    where: FallProtectionGroupComponentWhereUniqueInput
+    data: XOR<FallProtectionGroupComponentUpdateWithoutFallProtectionGroupInput, FallProtectionGroupComponentUncheckedUpdateWithoutFallProtectionGroupInput>
+  }
+
+  export type FallProtectionGroupComponentUpdateManyWithWhereWithoutFallProtectionGroupInput = {
+    where: FallProtectionGroupComponentScalarWhereInput
+    data: XOR<FallProtectionGroupComponentUpdateManyMutationInput, FallProtectionGroupComponentUncheckedUpdateManyWithoutFallProtectionGroupInput>
   }
 
   export type ElementRequestUpsertWithWhereUniqueWithoutFallProtectionGroupInput = {
@@ -93979,6 +95739,230 @@ export namespace Prisma {
     data: XOR<ProjectInventoryEntryUpdateManyMutationInput, ProjectInventoryEntryUncheckedUpdateManyWithoutFallProtectionGroupInput>
   }
 
+  export type FallProtectionGroupCreateWithoutComponentsInput = {
+    code: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    harnessElement: ElementCreateNestedOneWithoutFallProtectionHarnessGroupsInput
+    anchorBandElement: ElementCreateNestedOneWithoutFallProtectionAnchorBandGroupsInput
+    lifelineElement: ElementCreateNestedOneWithoutFallProtectionLifelineGroupsInput
+    positioningLanyardElement: ElementCreateNestedOneWithoutFallProtectionPositioningLanyardGroupsInput
+    elementRequests?: ElementRequestCreateNestedManyWithoutFallProtectionGroupInput
+    projectInventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutFallProtectionGroupInput
+  }
+
+  export type FallProtectionGroupUncheckedCreateWithoutComponentsInput = {
+    fallProtectionGroupId?: number
+    code: string
+    description?: string | null
+    harnessElementId: number
+    anchorBandElementId: number
+    lifelineElementId: number
+    positioningLanyardElementId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    elementRequests?: ElementRequestUncheckedCreateNestedManyWithoutFallProtectionGroupInput
+    projectInventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutFallProtectionGroupInput
+  }
+
+  export type FallProtectionGroupCreateOrConnectWithoutComponentsInput = {
+    where: FallProtectionGroupWhereUniqueInput
+    create: XOR<FallProtectionGroupCreateWithoutComponentsInput, FallProtectionGroupUncheckedCreateWithoutComponentsInput>
+  }
+
+  export type ElementCreateWithoutFallProtectionGroupComponentsInput = {
+    name: string
+    code?: string | null
+    description?: string
+    brand?: string | null
+    model?: string | null
+    size?: string | null
+    serialNumber?: string | null
+    technicalSheetLink?: string | null
+    operationalStatus?: string | null
+    manufactureDate?: Date | string | null
+    expirationDate?: Date | string | null
+    type: $Enums.ElementType
+    family?: $Enums.ElementFamily | null
+    controlType?: $Enums.ElementControlType
+    stockMinimum?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    category?: ElementCategoryCreateNestedOneWithoutElementsInput
+    elementRequests?: ElementRequestCreateNestedManyWithoutElementInput
+    projectInventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutElementInput
+    officeInventoryEntries?: OfficeInventoryEntryCreateNestedManyWithoutElementInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutElementInput
+    variants?: ElementVariantCreateNestedManyWithoutElementInput
+    inventoryAssets?: InventoryAssetCreateNestedManyWithoutElementInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentCreateNestedManyWithoutElementInput
+    fallProtectionHarnessGroups?: FallProtectionGroupCreateNestedManyWithoutHarnessElementInput
+    fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
+    fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
+    fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+  }
+
+  export type ElementUncheckedCreateWithoutFallProtectionGroupComponentsInput = {
+    elementId?: number
+    name: string
+    code?: string | null
+    description?: string
+    brand?: string | null
+    model?: string | null
+    size?: string | null
+    serialNumber?: string | null
+    technicalSheetLink?: string | null
+    operationalStatus?: string | null
+    manufactureDate?: Date | string | null
+    expirationDate?: Date | string | null
+    type: $Enums.ElementType
+    family?: $Enums.ElementFamily | null
+    controlType?: $Enums.ElementControlType
+    elementCategoryId?: number | null
+    stockMinimum?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    elementRequests?: ElementRequestUncheckedCreateNestedManyWithoutElementInput
+    projectInventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutElementInput
+    officeInventoryEntries?: OfficeInventoryEntryUncheckedCreateNestedManyWithoutElementInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutElementInput
+    variants?: ElementVariantUncheckedCreateNestedManyWithoutElementInput
+    inventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutElementInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedCreateNestedManyWithoutElementInput
+    fallProtectionHarnessGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutHarnessElementInput
+    fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
+    fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
+    fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+  }
+
+  export type ElementCreateOrConnectWithoutFallProtectionGroupComponentsInput = {
+    where: ElementWhereUniqueInput
+    create: XOR<ElementCreateWithoutFallProtectionGroupComponentsInput, ElementUncheckedCreateWithoutFallProtectionGroupComponentsInput>
+  }
+
+  export type FallProtectionGroupUpsertWithoutComponentsInput = {
+    update: XOR<FallProtectionGroupUpdateWithoutComponentsInput, FallProtectionGroupUncheckedUpdateWithoutComponentsInput>
+    create: XOR<FallProtectionGroupCreateWithoutComponentsInput, FallProtectionGroupUncheckedCreateWithoutComponentsInput>
+    where?: FallProtectionGroupWhereInput
+  }
+
+  export type FallProtectionGroupUpdateToOneWithWhereWithoutComponentsInput = {
+    where?: FallProtectionGroupWhereInput
+    data: XOR<FallProtectionGroupUpdateWithoutComponentsInput, FallProtectionGroupUncheckedUpdateWithoutComponentsInput>
+  }
+
+  export type FallProtectionGroupUpdateWithoutComponentsInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    harnessElement?: ElementUpdateOneRequiredWithoutFallProtectionHarnessGroupsNestedInput
+    anchorBandElement?: ElementUpdateOneRequiredWithoutFallProtectionAnchorBandGroupsNestedInput
+    lifelineElement?: ElementUpdateOneRequiredWithoutFallProtectionLifelineGroupsNestedInput
+    positioningLanyardElement?: ElementUpdateOneRequiredWithoutFallProtectionPositioningLanyardGroupsNestedInput
+    elementRequests?: ElementRequestUpdateManyWithoutFallProtectionGroupNestedInput
+    projectInventoryEntries?: ProjectInventoryEntryUpdateManyWithoutFallProtectionGroupNestedInput
+  }
+
+  export type FallProtectionGroupUncheckedUpdateWithoutComponentsInput = {
+    fallProtectionGroupId?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    harnessElementId?: IntFieldUpdateOperationsInput | number
+    anchorBandElementId?: IntFieldUpdateOperationsInput | number
+    lifelineElementId?: IntFieldUpdateOperationsInput | number
+    positioningLanyardElementId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    elementRequests?: ElementRequestUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
+    projectInventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
+  }
+
+  export type ElementUpsertWithoutFallProtectionGroupComponentsInput = {
+    update: XOR<ElementUpdateWithoutFallProtectionGroupComponentsInput, ElementUncheckedUpdateWithoutFallProtectionGroupComponentsInput>
+    create: XOR<ElementCreateWithoutFallProtectionGroupComponentsInput, ElementUncheckedCreateWithoutFallProtectionGroupComponentsInput>
+    where?: ElementWhereInput
+  }
+
+  export type ElementUpdateToOneWithWhereWithoutFallProtectionGroupComponentsInput = {
+    where?: ElementWhereInput
+    data: XOR<ElementUpdateWithoutFallProtectionGroupComponentsInput, ElementUncheckedUpdateWithoutFallProtectionGroupComponentsInput>
+  }
+
+  export type ElementUpdateWithoutFallProtectionGroupComponentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    technicalSheetLink?: NullableStringFieldUpdateOperationsInput | string | null
+    operationalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    manufactureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    type?: EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
+    family?: NullableEnumElementFamilyFieldUpdateOperationsInput | $Enums.ElementFamily | null
+    controlType?: EnumElementControlTypeFieldUpdateOperationsInput | $Enums.ElementControlType
+    stockMinimum?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    category?: ElementCategoryUpdateOneWithoutElementsNestedInput
+    elementRequests?: ElementRequestUpdateManyWithoutElementNestedInput
+    projectInventoryEntries?: ProjectInventoryEntryUpdateManyWithoutElementNestedInput
+    officeInventoryEntries?: OfficeInventoryEntryUpdateManyWithoutElementNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutElementNestedInput
+    variants?: ElementVariantUpdateManyWithoutElementNestedInput
+    inventoryAssets?: InventoryAssetUpdateManyWithoutElementNestedInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentUpdateManyWithoutElementNestedInput
+    fallProtectionHarnessGroups?: FallProtectionGroupUpdateManyWithoutHarnessElementNestedInput
+    fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
+    fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
+    fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+  }
+
+  export type ElementUncheckedUpdateWithoutFallProtectionGroupComponentsInput = {
+    elementId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    technicalSheetLink?: NullableStringFieldUpdateOperationsInput | string | null
+    operationalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    manufactureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    type?: EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
+    family?: NullableEnumElementFamilyFieldUpdateOperationsInput | $Enums.ElementFamily | null
+    controlType?: EnumElementControlTypeFieldUpdateOperationsInput | $Enums.ElementControlType
+    elementCategoryId?: NullableIntFieldUpdateOperationsInput | number | null
+    stockMinimum?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    elementRequests?: ElementRequestUncheckedUpdateManyWithoutElementNestedInput
+    projectInventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutElementNestedInput
+    officeInventoryEntries?: OfficeInventoryEntryUncheckedUpdateManyWithoutElementNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutElementNestedInput
+    variants?: ElementVariantUncheckedUpdateManyWithoutElementNestedInput
+    inventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutElementNestedInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutElementNestedInput
+    fallProtectionHarnessGroups?: FallProtectionGroupUncheckedUpdateManyWithoutHarnessElementNestedInput
+    fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
+    fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
+    fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+  }
+
   export type ElementCreateWithoutVariantsInput = {
     name: string
     code?: string | null
@@ -94009,6 +95993,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutVariantsInput = {
@@ -94042,6 +96027,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutVariantsInput = {
@@ -94336,6 +96322,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutVariantsInput = {
@@ -94369,6 +96356,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementRequestUpsertWithWhereUniqueWithoutElementVariantInput = {
@@ -95457,6 +97445,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutElementRequestsInput = {
@@ -95490,6 +97479,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutElementRequestsInput = {
@@ -95545,6 +97535,7 @@ export namespace Prisma {
     anchorBandElement: ElementCreateNestedOneWithoutFallProtectionAnchorBandGroupsInput
     lifelineElement: ElementCreateNestedOneWithoutFallProtectionLifelineGroupsInput
     positioningLanyardElement: ElementCreateNestedOneWithoutFallProtectionPositioningLanyardGroupsInput
+    components?: FallProtectionGroupComponentCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutFallProtectionGroupInput
   }
 
@@ -95559,6 +97550,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    components?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutFallProtectionGroupInput
   }
 
@@ -95755,6 +97747,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutElementRequestsInput = {
@@ -95788,6 +97781,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementVariantUpsertWithoutElementRequestsInput = {
@@ -95855,6 +97849,7 @@ export namespace Prisma {
     anchorBandElement?: ElementUpdateOneRequiredWithoutFallProtectionAnchorBandGroupsNestedInput
     lifelineElement?: ElementUpdateOneRequiredWithoutFallProtectionLifelineGroupsNestedInput
     positioningLanyardElement?: ElementUpdateOneRequiredWithoutFallProtectionPositioningLanyardGroupsNestedInput
+    components?: FallProtectionGroupComponentUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUpdateManyWithoutFallProtectionGroupNestedInput
   }
 
@@ -95869,6 +97864,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    components?: FallProtectionGroupComponentUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
   }
 
@@ -96601,6 +98597,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutProjectInventoryEntriesInput = {
@@ -96634,6 +98631,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutProjectInventoryEntriesInput = {
@@ -96689,6 +98687,7 @@ export namespace Prisma {
     anchorBandElement: ElementCreateNestedOneWithoutFallProtectionAnchorBandGroupsInput
     lifelineElement: ElementCreateNestedOneWithoutFallProtectionLifelineGroupsInput
     positioningLanyardElement: ElementCreateNestedOneWithoutFallProtectionPositioningLanyardGroupsInput
+    components?: FallProtectionGroupComponentCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestCreateNestedManyWithoutFallProtectionGroupInput
   }
 
@@ -96703,6 +98702,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    components?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutFallProtectionGroupInput
     elementRequests?: ElementRequestUncheckedCreateNestedManyWithoutFallProtectionGroupInput
   }
 
@@ -97066,6 +99066,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutProjectInventoryEntriesInput = {
@@ -97099,6 +99100,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementVariantUpsertWithoutProjectInventoryEntriesInput = {
@@ -97166,6 +99168,7 @@ export namespace Prisma {
     anchorBandElement?: ElementUpdateOneRequiredWithoutFallProtectionAnchorBandGroupsNestedInput
     lifelineElement?: ElementUpdateOneRequiredWithoutFallProtectionLifelineGroupsNestedInput
     positioningLanyardElement?: ElementUpdateOneRequiredWithoutFallProtectionPositioningLanyardGroupsNestedInput
+    components?: FallProtectionGroupComponentUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUpdateManyWithoutFallProtectionGroupNestedInput
   }
 
@@ -97180,6 +99183,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    components?: FallProtectionGroupComponentUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
   }
 
@@ -97685,6 +99689,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutInventoryMovementsInput = {
@@ -97718,6 +99723,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutInventoryMovementsInput = {
@@ -98250,6 +100256,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -98283,6 +100290,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementVariantUpsertWithoutInventoryMovementsInput = {
@@ -98535,6 +100543,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutOfficeInventoryEntriesInput = {
@@ -98568,6 +100577,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutOfficeInventoryEntriesInput = {
@@ -98810,6 +100820,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutOfficeInventoryEntriesInput = {
@@ -98843,6 +100854,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementVariantUpsertWithoutOfficeInventoryEntriesInput = {
@@ -99017,6 +101029,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutInventoryAssetsInput = {
@@ -99050,6 +101063,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutInventoryAssetsInput = {
@@ -99372,6 +101386,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutInventoryAssetsInput = {
@@ -99405,6 +101420,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type OfficeInventoryEntryUpsertWithoutInventoryAssetsInput = {
@@ -101035,6 +103051,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentCreateNestedManyWithoutElementInput
   }
 
   export type ElementUncheckedCreateWithoutWorkerInventoryAssignmentsInput = {
@@ -101068,6 +103085,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutAnchorBandElementInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutLifelineElementInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedCreateNestedManyWithoutPositioningLanyardElementInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedCreateNestedManyWithoutElementInput
   }
 
   export type ElementCreateOrConnectWithoutWorkerInventoryAssignmentsInput = {
@@ -101399,6 +103417,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutWorkerInventoryAssignmentsInput = {
@@ -101432,6 +103451,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementVariantUpsertWithoutWorkerInventoryAssignmentsInput = {
@@ -108063,6 +110083,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateWithoutCategoryInput = {
@@ -108096,6 +110117,7 @@ export namespace Prisma {
     fallProtectionAnchorBandGroups?: FallProtectionGroupUncheckedUpdateManyWithoutAnchorBandElementNestedInput
     fallProtectionLifelineGroups?: FallProtectionGroupUncheckedUpdateManyWithoutLifelineElementNestedInput
     fallProtectionPositioningLanyardGroups?: FallProtectionGroupUncheckedUpdateManyWithoutPositioningLanyardElementNestedInput
+    fallProtectionGroupComponents?: FallProtectionGroupComponentUncheckedUpdateManyWithoutElementNestedInput
   }
 
   export type ElementUncheckedUpdateManyWithoutCategoryInput = {
@@ -108269,6 +110291,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+  }
+
+  export type FallProtectionGroupComponentCreateManyElementInput = {
+    fallProtectionGroupComponentId?: number
+    fallProtectionGroupId: number
+    role: $Enums.FallProtectionComponentRole
+    createdAt?: Date | string
   }
 
   export type ElementRequestUpdateWithoutElementInput = {
@@ -108618,6 +110647,7 @@ export namespace Prisma {
     anchorBandElement?: ElementUpdateOneRequiredWithoutFallProtectionAnchorBandGroupsNestedInput
     lifelineElement?: ElementUpdateOneRequiredWithoutFallProtectionLifelineGroupsNestedInput
     positioningLanyardElement?: ElementUpdateOneRequiredWithoutFallProtectionPositioningLanyardGroupsNestedInput
+    components?: FallProtectionGroupComponentUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUpdateManyWithoutFallProtectionGroupNestedInput
   }
@@ -108632,6 +110662,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    components?: FallProtectionGroupComponentUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
   }
@@ -108657,6 +110688,7 @@ export namespace Prisma {
     harnessElement?: ElementUpdateOneRequiredWithoutFallProtectionHarnessGroupsNestedInput
     lifelineElement?: ElementUpdateOneRequiredWithoutFallProtectionLifelineGroupsNestedInput
     positioningLanyardElement?: ElementUpdateOneRequiredWithoutFallProtectionPositioningLanyardGroupsNestedInput
+    components?: FallProtectionGroupComponentUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUpdateManyWithoutFallProtectionGroupNestedInput
   }
@@ -108671,6 +110703,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    components?: FallProtectionGroupComponentUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
   }
@@ -108696,6 +110729,7 @@ export namespace Prisma {
     harnessElement?: ElementUpdateOneRequiredWithoutFallProtectionHarnessGroupsNestedInput
     anchorBandElement?: ElementUpdateOneRequiredWithoutFallProtectionAnchorBandGroupsNestedInput
     positioningLanyardElement?: ElementUpdateOneRequiredWithoutFallProtectionPositioningLanyardGroupsNestedInput
+    components?: FallProtectionGroupComponentUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUpdateManyWithoutFallProtectionGroupNestedInput
   }
@@ -108710,6 +110744,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    components?: FallProtectionGroupComponentUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
   }
@@ -108735,6 +110770,7 @@ export namespace Prisma {
     harnessElement?: ElementUpdateOneRequiredWithoutFallProtectionHarnessGroupsNestedInput
     anchorBandElement?: ElementUpdateOneRequiredWithoutFallProtectionAnchorBandGroupsNestedInput
     lifelineElement?: ElementUpdateOneRequiredWithoutFallProtectionLifelineGroupsNestedInput
+    components?: FallProtectionGroupComponentUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUpdateManyWithoutFallProtectionGroupNestedInput
   }
@@ -108749,6 +110785,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    components?: FallProtectionGroupComponentUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     elementRequests?: ElementRequestUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
     projectInventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutFallProtectionGroupNestedInput
   }
@@ -108763,6 +110800,33 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type FallProtectionGroupComponentUpdateWithoutElementInput = {
+    role?: EnumFallProtectionComponentRoleFieldUpdateOperationsInput | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fallProtectionGroup?: FallProtectionGroupUpdateOneRequiredWithoutComponentsNestedInput
+  }
+
+  export type FallProtectionGroupComponentUncheckedUpdateWithoutElementInput = {
+    fallProtectionGroupComponentId?: IntFieldUpdateOperationsInput | number
+    fallProtectionGroupId?: IntFieldUpdateOperationsInput | number
+    role?: EnumFallProtectionComponentRoleFieldUpdateOperationsInput | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FallProtectionGroupComponentUncheckedUpdateManyWithoutElementInput = {
+    fallProtectionGroupComponentId?: IntFieldUpdateOperationsInput | number
+    fallProtectionGroupId?: IntFieldUpdateOperationsInput | number
+    role?: EnumFallProtectionComponentRoleFieldUpdateOperationsInput | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FallProtectionGroupComponentCreateManyFallProtectionGroupInput = {
+    fallProtectionGroupComponentId?: number
+    elementId: number
+    role: $Enums.FallProtectionComponentRole
+    createdAt?: Date | string
   }
 
   export type ElementRequestCreateManyFallProtectionGroupInput = {
@@ -108793,6 +110857,26 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type FallProtectionGroupComponentUpdateWithoutFallProtectionGroupInput = {
+    role?: EnumFallProtectionComponentRoleFieldUpdateOperationsInput | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    element?: ElementUpdateOneRequiredWithoutFallProtectionGroupComponentsNestedInput
+  }
+
+  export type FallProtectionGroupComponentUncheckedUpdateWithoutFallProtectionGroupInput = {
+    fallProtectionGroupComponentId?: IntFieldUpdateOperationsInput | number
+    elementId?: IntFieldUpdateOperationsInput | number
+    role?: EnumFallProtectionComponentRoleFieldUpdateOperationsInput | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FallProtectionGroupComponentUncheckedUpdateManyWithoutFallProtectionGroupInput = {
+    fallProtectionGroupComponentId?: IntFieldUpdateOperationsInput | number
+    elementId?: IntFieldUpdateOperationsInput | number
+    role?: EnumFallProtectionComponentRoleFieldUpdateOperationsInput | $Enums.FallProtectionComponentRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ElementRequestUpdateWithoutFallProtectionGroupInput = {

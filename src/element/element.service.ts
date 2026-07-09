@@ -19,7 +19,10 @@ import {
 } from './enum/element-type.enum';
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
-import { CreateFallProtectionGroupDto } from './dto/create-fall-protection-group.dto';
+import {
+  CreateFallProtectionGroupDto,
+  FallProtectionComponentRole,
+} from './dto/create-fall-protection-group.dto';
 
 @Injectable()
 export class ElementService {
@@ -290,7 +293,58 @@ export class ElementService {
       anchorBandElement: { include: { category: true } },
       lifelineElement: { include: { category: true } },
       positioningLanyardElement: { include: { category: true } },
+      components: {
+        include: {
+          element: { include: { category: true } },
+        },
+        orderBy: [
+          { role: 'asc' as const },
+          { fallProtectionGroupComponentId: 'asc' as const },
+        ],
+      },
     };
+  }
+
+  private readonly fallProtectionRoleCategory: Record<
+    FallProtectionComponentRole,
+    'arnes' | 'banda' | 'linea' | 'eslinga'
+  > = {
+    harness: 'arnes',
+    anchorBand: 'banda',
+    lifeline: 'linea',
+    positioningLanyard: 'eslinga',
+  };
+
+  private getFallProtectionGroupComponents(dto: CreateFallProtectionGroupDto) {
+    const components = [...(dto.components ?? [])];
+
+    if (dto.harnessElementId) {
+      components.push({ role: 'harness', elementId: dto.harnessElementId });
+    }
+    if (dto.anchorBandElementId) {
+      components.push({ role: 'anchorBand', elementId: dto.anchorBandElementId });
+    }
+    if (dto.lifelineElementId) {
+      components.push({ role: 'lifeline', elementId: dto.lifelineElementId });
+    }
+    if (dto.positioningLanyardElementId) {
+      components.push({
+        role: 'positioningLanyard',
+        elementId: dto.positioningLanyardElementId,
+      });
+    }
+
+    const deduped = new Map<string, { role: FallProtectionComponentRole; elementId: number }>();
+    for (const component of components) {
+      const elementId = Number(component.elementId);
+      if (!elementId) continue;
+      deduped.set(`${component.role}:${elementId}`, {
+        role: component.role,
+        elementId,
+      });
+    }
+
+    return [...deduped.values()];
   }
 
   private buildLegacyFamilyWhere(family: ElementFamily) {
@@ -336,35 +390,59 @@ export class ElementService {
 
   async createFallProtectionGroup(dto: CreateFallProtectionGroupDto) {
     const normalizedCode = dto.code.trim();
+    const components = this.getFallProtectionGroupComponents(dto);
+    const componentsByRole = new Map<
+      FallProtectionComponentRole,
+      { role: FallProtectionComponentRole; elementId: number }[]
+    >();
 
-    await Promise.all([
-      this.ensureFallProtectionPart(dto.harnessElementId, 'arnes'),
-      this.ensureFallProtectionPart(dto.anchorBandElementId, 'banda'),
-      this.ensureFallProtectionPart(dto.lifelineElementId, 'linea'),
-      this.ensureFallProtectionPart(dto.positioningLanyardElementId, 'eslinga'),
-    ]);
+    for (const component of components) {
+      componentsByRole.set(component.role, [
+        ...(componentsByRole.get(component.role) ?? []),
+        component,
+      ]);
+    }
 
-    const uniquePartIds = new Set([
-      dto.harnessElementId,
-      dto.anchorBandElementId,
-      dto.lifelineElementId,
-      dto.positioningLanyardElementId,
-    ]);
+    const requiredRoles: FallProtectionComponentRole[] = [
+      'harness',
+      'anchorBand',
+      'lifeline',
+      'positioningLanyard',
+    ];
 
-    if (uniquePartIds.size !== 4) {
+    if (requiredRoles.some((role) => !componentsByRole.get(role)?.length)) {
       throw new BadRequestException(
-        'Un grupo EPA debe tener cuatro elementos distintos.',
+        'El grupo EPA debe tener codigo y al menos un elemento de cada categoria.',
       );
     }
+
+    await Promise.all(
+      components.map((component) =>
+        this.ensureFallProtectionPart(
+          component.elementId,
+          this.fallProtectionRoleCategory[component.role],
+        ),
+      ),
+    );
+
+    const firstByRole = Object.fromEntries(
+      requiredRoles.map((role) => [role, componentsByRole.get(role)![0].elementId]),
+    ) as Record<FallProtectionComponentRole, number>;
 
     const group = await this.prismaService.fallProtectionGroup.create({
       data: {
         code: normalizedCode,
         description: this.normalizeOptionalText(dto.description),
-        harnessElementId: dto.harnessElementId,
-        anchorBandElementId: dto.anchorBandElementId,
-        lifelineElementId: dto.lifelineElementId,
-        positioningLanyardElementId: dto.positioningLanyardElementId,
+        harnessElementId: firstByRole.harness,
+        anchorBandElementId: firstByRole.anchorBand,
+        lifelineElementId: firstByRole.lifeline,
+        positioningLanyardElementId: firstByRole.positioningLanyard,
+        components: {
+          create: components.map((component) => ({
+            role: component.role,
+            elementId: component.elementId,
+          })),
+        },
       },
       include: this.fallProtectionGroupInclude(),
     });

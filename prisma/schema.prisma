@@ -166,6 +166,7 @@ model Element {
   fallProtectionAnchorBandGroups FallProtectionGroup[] @relation("FallProtectionAnchorBand")
   fallProtectionLifelineGroups FallProtectionGroup[] @relation("FallProtectionLifeline")
   fallProtectionPositioningLanyardGroups FallProtectionGroup[] @relation("FallProtectionPositioningLanyard")
+  fallProtectionGroupComponents FallProtectionGroupComponent[]
 
   @@index([type])
   @@index([family])
@@ -190,6 +191,7 @@ model FallProtectionGroup {
   anchorBandElement          Element @relation("FallProtectionAnchorBand", fields: [anchorBandElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
   lifelineElement            Element @relation("FallProtectionLifeline", fields: [lifelineElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
   positioningLanyardElement  Element @relation("FallProtectionPositioningLanyard", fields: [positioningLanyardElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  components                  FallProtectionGroupComponent[]
   elementRequests            ElementRequest[]
   projectInventoryEntries    ProjectInventoryEntry[]
 
@@ -198,6 +200,29 @@ model FallProtectionGroup {
   @@index([lifelineElementId])
   @@index([positioningLanyardElementId])
   @@index([deletedAt])
+}
+
+enum FallProtectionComponentRole {
+  harness
+  anchorBand
+  lifeline
+  positioningLanyard
+}
+
+model FallProtectionGroupComponent {
+  fallProtectionGroupComponentId Int                         @id @default(autoincrement())
+  fallProtectionGroupId          Int
+  elementId                      Int
+  role                           FallProtectionComponentRole
+  createdAt                      DateTime                    @default(now())
+
+  fallProtectionGroup FallProtectionGroup @relation(fields: [fallProtectionGroupId], references: [fallProtectionGroupId], onDelete: Cascade, onUpdate: Cascade)
+  element             Element             @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([fallProtectionGroupId, role, elementId])
+  @@index([fallProtectionGroupId])
+  @@index([elementId])
+  @@index([role])
 }
 
 model ElementVariant {

@@ -112,6 +112,20 @@ export class InventoryService {
   private getFallProtectionGroupParts(group?: any) {
     if (!group) return [];
 
+    if (group.components?.length) {
+      const roleLabels: Record<string, string> = {
+        harness: 'Arnes',
+        anchorBand: 'Banda de anclaje',
+        lifeline: 'Linea de vida',
+        positioningLanyard: 'Eslinga de posicionamiento',
+      };
+
+      return group.components.map((component: any) => {
+        const label = roleLabels[component.role] ?? 'Componente';
+        return `${label}: ${this.getFallProtectionElementLabel(component.element)}`;
+      });
+    }
+
     return [
       `Arnes: ${this.getFallProtectionElementLabel(group.harnessElement)}`,
       `Banda de anclaje: ${this.getFallProtectionElementLabel(group.anchorBandElement)}`,
@@ -411,6 +425,14 @@ export class InventoryService {
     const byElementId = new Map<number, any>();
 
     for (const group of groups) {
+      if (group.components?.length) {
+        group.components
+          .map((component: any) => component.elementId)
+          .filter(Boolean)
+          .forEach((elementId: number) => byElementId.set(Number(elementId), group));
+        continue;
+      }
+
       [
         group.harnessElementId,
         group.anchorBandElementId,
@@ -662,6 +684,15 @@ export class InventoryService {
     anchorBandElement: { include: { category: true } },
     lifelineElement: { include: { category: true } },
     positioningLanyardElement: { include: { category: true } },
+    components: {
+      include: {
+        element: { include: { category: true } },
+      },
+      orderBy: [
+        { role: 'asc' as const },
+        { fallProtectionGroupComponentId: 'asc' as const },
+      ],
+    },
   };
 
   private readonly projectEntryInclude = {

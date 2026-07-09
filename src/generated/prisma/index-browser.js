@@ -202,6 +202,14 @@ exports.Prisma.FallProtectionGroupScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.FallProtectionGroupComponentScalarFieldEnum = {
+  fallProtectionGroupComponentId: 'fallProtectionGroupComponentId',
+  fallProtectionGroupId: 'fallProtectionGroupId',
+  elementId: 'elementId',
+  role: 'role',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.ElementVariantScalarFieldEnum = {
   elementVariantId: 'elementVariantId',
   elementId: 'elementId',
@@ -802,6 +810,13 @@ exports.ElementControlType = exports.$Enums.ElementControlType = {
   individual: 'individual'
 };
 
+exports.FallProtectionComponentRole = exports.$Enums.FallProtectionComponentRole = {
+  harness: 'harness',
+  anchorBand: 'anchorBand',
+  lifeline: 'lifeline',
+  positioningLanyard: 'positioningLanyard'
+};
+
 exports.RequestStatus = exports.$Enums.RequestStatus = {
   draft: 'draft',
   inProgress: 'inProgress',
@@ -993,6 +1008,7 @@ exports.Prisma.ModelName = {
   ElementCategory: 'ElementCategory',
   Element: 'Element',
   FallProtectionGroup: 'FallProtectionGroup',
+  FallProtectionGroupComponent: 'FallProtectionGroupComponent',
   ElementVariant: 'ElementVariant',
   Request: 'Request',
   RequestWorker: 'RequestWorker',
