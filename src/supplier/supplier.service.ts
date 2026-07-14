@@ -8,7 +8,7 @@ import {
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Currency, CurrencyLabelEs } from './enum/currency.enum';
+import { CurrencyLabelEs } from './enum/currency.enum';
 import { SupplierDocumentType } from './enum/document-type.enum';
 
 @Injectable()
@@ -171,22 +171,6 @@ export class SupplierService {
       }
     }
 
-    // Si cambia el email, validar conflicto (CITEXT => case-insensitive)
-    if (
-      updateSupplierDto.email &&
-      updateSupplierDto.email.trim().toLowerCase() !==
-        (current.email ?? '').trim().toLowerCase()
-    ) {
-      const byEmail = await this.findByEmail(updateSupplierDto.email);
-      if (byEmail && byEmail.supplierId !== supplierId) {
-        throw new ConflictException({
-          statusCode: HttpStatus.CONFLICT,
-          message: 'Ya existe un proveedor con ese correo.',
-          data: null,
-        });
-      }
-    }
-
     const updateData: Omit<
       UpdateSupplierDto,
       'documentType' | 'dni' | 'ruc'
@@ -287,24 +271,6 @@ export class SupplierService {
     }
 
     this.logger.log(`Supplier with name: ${name} found`);
-    return supplier;
-  }
-
-  async findByEmail(email: string) {
-    this.logger.log(`Searching supplier by email: ${email}`);
-    const supplier = await this.prismaService.supplier.findUnique({
-      where: {
-        email,
-        deletedAt: null,
-      },
-    });
-
-    if (!supplier) {
-      this.logger.warn(`Supplier with email: ${email} not found`);
-      return null;
-    }
-
-    this.logger.log(`Supplier with email: ${email} found`);
     return supplier;
   }
 

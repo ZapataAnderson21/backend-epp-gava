@@ -1,3 +1,4 @@
+-- @idempotent
 ALTER TYPE "ElementFamily" ADD VALUE IF NOT EXISTS 'uniform';
 
 ALTER TABLE "Element"

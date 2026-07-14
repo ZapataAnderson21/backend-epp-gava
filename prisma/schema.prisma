@@ -905,7 +905,7 @@ model Supplier {
   name           String           @unique
   contactName    String
   phone          String
-  email          String?          @db.Citext @unique
+  email          String?          @db.Citext
   address        String?
   documentType   SupplierDocumentType @default(ruc)
   ruc            String?          @unique @db.VarChar(11)

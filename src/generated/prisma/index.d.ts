@@ -80451,7 +80451,6 @@ export namespace Prisma {
   export type SupplierWhereUniqueInput = Prisma.AtLeast<{
     supplierId?: number
     name?: string
-    email?: string
     ruc?: string
     dni?: string
     AND?: SupplierWhereInput | SupplierWhereInput[]
@@ -80459,6 +80458,7 @@ export namespace Prisma {
     NOT?: SupplierWhereInput | SupplierWhereInput[]
     contactName?: StringFilter<"Supplier"> | string
     phone?: StringFilter<"Supplier"> | string
+    email?: StringNullableFilter<"Supplier"> | string | null
     address?: StringNullableFilter<"Supplier"> | string | null
     documentType?: EnumSupplierDocumentTypeFilter<"Supplier"> | $Enums.SupplierDocumentType
     accountNumber?: StringFilter<"Supplier"> | string
@@ -80468,7 +80468,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Supplier"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Supplier"> | Date | string | null
     purchaseOrders?: PurchaseOrderListRelationFilter
-  }, "supplierId" | "name" | "email" | "ruc" | "dni">
+  }, "supplierId" | "name" | "ruc" | "dni">
 
   export type SupplierOrderByWithAggregationInput = {
     supplierId?: SortOrder

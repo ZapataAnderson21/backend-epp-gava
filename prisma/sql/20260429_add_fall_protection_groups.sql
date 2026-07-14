@@ -1,3 +1,4 @@
+-- @idempotent
 CREATE TABLE IF NOT EXISTS "FallProtectionGroup" (
   "fallProtectionGroupId" SERIAL PRIMARY KEY,
   "code" TEXT NOT NULL UNIQUE,

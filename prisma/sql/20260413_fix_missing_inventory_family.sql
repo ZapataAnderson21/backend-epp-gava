@@ -1,3 +1,4 @@
+-- @idempotent
 DO $$
 BEGIN
   IF NOT EXISTS (

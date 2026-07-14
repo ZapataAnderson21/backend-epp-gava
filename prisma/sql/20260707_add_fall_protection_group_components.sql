@@ -1,3 +1,4 @@
+-- @idempotent
 DO $$ BEGIN
   CREATE TYPE "FallProtectionComponentRole" AS ENUM (
     'harness',

@@ -257,6 +257,7 @@ git pull origin main
 npm install
 npx prisma generate
 npx prisma migrate deploy
+npm run db:apply-idempotent
 npm run build
 npm run start:prod
 ```
@@ -271,7 +272,9 @@ pm2 save
 Consideraciones de despliegue:
 
 - Configurar `DATABASE_URL` y `JWT_SECRET` en el servidor.
+- Configurar el secret `VPS_BACKEND_PATH` en GitHub con la ruta absoluta del backend en el VPS.
 - Ejecutar migraciones antes de iniciar la aplicacion.
+- Los SQL manuales que sean seguros para repetirse deben comenzar con `-- @idempotent`; el deploy ejecuta todos los archivos marcados en orden alfabetico.
 - Configurar proxy inverso con Nginx o servicio equivalente.
 - Habilitar HTTPS.
 - Restringir origenes permitidos mediante `CORS_ORIGINS`.

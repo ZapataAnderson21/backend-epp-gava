@@ -1,3 +1,4 @@
+-- @idempotent
 BEGIN;
 
 CREATE TEMP TABLE "_deprecated_element_ids" ON COMMIT DROP AS
