@@ -2,6 +2,7 @@ import {
   BadRequestException,
   HttpStatus,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -46,6 +47,8 @@ type ElementInventoryProfile = {
 
 @Injectable()
 export class InventoryService {
+  private readonly logger = new Logger(InventoryService.name);
+
   constructor(private readonly prismaService: PrismaService) {}
 
   // ─── Helpers ──────────────────────────────────────────────────
@@ -53,6 +56,18 @@ export class InventoryService {
   private normalizeQuantity(value: unknown) {
     const numberValue = Number(value ?? 0);
     return Math.round(numberValue * 10000) / 10000;
+  }
+
+  private async dashboardQuery<T>(name: string, query: Promise<T>) {
+    try {
+      return await query;
+    } catch (error) {
+      this.logger.error(
+        `Fallo la consulta "${name}" del dashboard de inventario: ${error instanceof Error ? error.message : String(error)}`,
+        error instanceof Error ? error.stack : undefined,
+      );
+      throw error;
+    }
   }
 
   private normalizeAssignmentDate(assignedAt?: string) {
@@ -755,7 +770,7 @@ export class InventoryService {
 
     const [movements, officeEntries, projectEntries, latestMovements] =
       await Promise.all([
-        this.prismaService.inventoryMovement.findMany({
+        this.dashboardQuery('entregas a trabajadores', this.prismaService.inventoryMovement.findMany({
           where: {
             movementType: InventoryMovementType.assigned_to_worker,
             createdAt: { gte: from, lt: to },
@@ -766,18 +781,18 @@ export class InventoryService {
           },
           include: this.movementInclude,
           orderBy: [{ createdAt: 'desc' }],
-        }),
-        this.prismaService.officeInventoryEntry.findMany({
+        })),
+        this.dashboardQuery('inventario de oficina', this.prismaService.officeInventoryEntry.findMany({
           include: this.officeEntryInclude,
-        }),
-        this.prismaService.projectInventoryEntry.findMany({
+        })),
+        this.dashboardQuery('inventario de proyectos', this.prismaService.projectInventoryEntry.findMany({
           include: this.projectEntryInclude,
-        }),
-        this.prismaService.inventoryMovement.findMany({
+        })),
+        this.dashboardQuery('ultimos movimientos', this.prismaService.inventoryMovement.findMany({
           include: this.movementInclude,
           orderBy: [{ createdAt: 'desc' }, { inventoryMovementId: 'desc' }],
           take: 8,
-        }),
+        })),
       ]);
 
     const deliveredByElement = new Map<
@@ -827,7 +842,7 @@ export class InventoryService {
       );
     }
 
-    const elementsWithMinimum = await this.prismaService.element.findMany({
+    const elementsWithMinimum = await this.dashboardQuery('stock minimo', this.prismaService.element.findMany({
       where: {
         deletedAt: null,
         family: { in: protectionFamilies },
@@ -835,7 +850,7 @@ export class InventoryService {
       },
       include: { category: true },
       orderBy: { name: 'asc' },
-    });
+    }));
 
     const minimumStock = elementsWithMinimum
       .map((element) => {

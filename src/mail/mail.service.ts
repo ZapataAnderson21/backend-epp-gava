@@ -21,6 +21,73 @@ export class MailService {
     private readonly configService: ConfigService,
   ) {}
 
+  async sendDocumentExpiryAlert(input: {
+    recipients: string[];
+    title: string;
+    categoryName: string;
+    expirationDate: Date;
+    daysRemaining: number;
+    referenceDescription: string;
+    storageSpace: string;
+    storagePath?: string | null;
+    storageDescription?: string | null;
+  }) {
+    const sender = this.configService.get<string>('MAIL_FROM');
+    const password = this.configService.get<string>('MAIL_PASSWORD');
+    const mailHost = this.configService.get<string>('MAIL_HOST');
+    const mailPort = Number(this.configService.get<number>('MAIL_PORT') || 465);
+
+    if (!sender || !password || !mailHost || input.recipients.length === 0) {
+      throw new Error(
+        'No se ha configurado el remitente SMTP o los destinatarios de vencimientos.',
+      );
+    }
+
+    const escapeHtml = (value: string) =>
+      value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    const formattedDate = input.expirationDate.toLocaleDateString('es-PE', {
+      timeZone: 'UTC',
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+    });
+    const urgency = input.daysRemaining < 0
+      ? `vencio hace ${Math.abs(input.daysRemaining)} dia(s)`
+      : input.daysRemaining === 0
+        ? 'vence hoy'
+        : `vence en ${input.daysRemaining} dia(s)`;
+    const appUrl = this.configService.get<string>('APP_URL') || 'https://sir.gavacyc.com';
+    const transporter = this.createSmtpTransporter(sender, password, mailHost, mailPort);
+
+    try {
+      const result = await transporter.sendMail({
+        from: `"SIR GAVA - Vencimientos" <${sender}>`,
+        to: input.recipients,
+        subject: `Aviso de vencimiento: ${input.title} (${urgency})`,
+        html: `
+          <div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#30343b">
+            <h2 style="color:#0047a3">Aviso de vencimiento documental</h2>
+            <p>El documento <strong>${escapeHtml(input.title)}</strong> ${escapeHtml(urgency)}.</p>
+            <table style="width:100%;border-collapse:collapse">
+              <tr><td style="padding:8px;border:1px solid #ddd"><strong>Categoria</strong></td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(input.categoryName)}</td></tr>
+              <tr><td style="padding:8px;border:1px solid #ddd"><strong>Vencimiento</strong></td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(formattedDate)}</td></tr>
+              <tr><td style="padding:8px;border:1px solid #ddd"><strong>Relacionado con</strong></td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(input.referenceDescription)}</td></tr>
+              <tr><td style="padding:8px;border:1px solid #ddd"><strong>Almacenamiento</strong></td><td style="padding:8px;border:1px solid #ddd">${escapeHtml([input.storageSpace, input.storagePath, input.storageDescription].filter(Boolean).join(' - '))}</td></tr>
+            </table>
+            <p style="margin-top:24px"><a href="${appUrl}/admin/document-expirations" style="background:#0047a3;color:#fff;padding:12px 18px;border-radius:6px;text-decoration:none">Ver documentos</a></p>
+          </div>`,
+      });
+      return result;
+    } finally {
+      transporter.close();
+    }
+  }
+
   private createSmtpTransporter(
     sender: string,
     password: string,

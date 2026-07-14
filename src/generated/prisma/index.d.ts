@@ -268,6 +268,26 @@ export type Quotation = $Result.DefaultSelection<Prisma.$QuotationPayload>
  * 
  */
 export type QuotationItem = $Result.DefaultSelection<Prisma.$QuotationItemPayload>
+/**
+ * Model ExpiringDocumentCategory
+ * 
+ */
+export type ExpiringDocumentCategory = $Result.DefaultSelection<Prisma.$ExpiringDocumentCategoryPayload>
+/**
+ * Model ExpiringDocument
+ * 
+ */
+export type ExpiringDocument = $Result.DefaultSelection<Prisma.$ExpiringDocumentPayload>
+/**
+ * Model ExpiringDocumentHistory
+ * 
+ */
+export type ExpiringDocumentHistory = $Result.DefaultSelection<Prisma.$ExpiringDocumentHistoryPayload>
+/**
+ * Model ExpiringDocumentNotification
+ * 
+ */
+export type ExpiringDocumentNotification = $Result.DefaultSelection<Prisma.$ExpiringDocumentNotificationPayload>
 
 /**
  * Enums
@@ -577,6 +597,25 @@ export const QuotationStatus: {
 
 export type QuotationStatus = (typeof QuotationStatus)[keyof typeof QuotationStatus]
 
+
+export const ExpiringDocumentHistoryAction: {
+  created: 'created',
+  updated: 'updated',
+  deleted: 'deleted',
+  restored: 'restored'
+};
+
+export type ExpiringDocumentHistoryAction = (typeof ExpiringDocumentHistoryAction)[keyof typeof ExpiringDocumentHistoryAction]
+
+
+export const ExpiringDocumentAlertLevel: {
+  first: 'first',
+  second: 'second',
+  third: 'third'
+};
+
+export type ExpiringDocumentAlertLevel = (typeof ExpiringDocumentAlertLevel)[keyof typeof ExpiringDocumentAlertLevel]
+
 }
 
 export type ProjectStatus = $Enums.ProjectStatus
@@ -694,6 +733,14 @@ export const NotificationType: typeof $Enums.NotificationType
 export type QuotationStatus = $Enums.QuotationStatus
 
 export const QuotationStatus: typeof $Enums.QuotationStatus
+
+export type ExpiringDocumentHistoryAction = $Enums.ExpiringDocumentHistoryAction
+
+export const ExpiringDocumentHistoryAction: typeof $Enums.ExpiringDocumentHistoryAction
+
+export type ExpiringDocumentAlertLevel = $Enums.ExpiringDocumentAlertLevel
+
+export const ExpiringDocumentAlertLevel: typeof $Enums.ExpiringDocumentAlertLevel
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1321,6 +1368,46 @@ export class PrismaClient<
     * ```
     */
   get quotationItem(): Prisma.QuotationItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.expiringDocumentCategory`: Exposes CRUD operations for the **ExpiringDocumentCategory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ExpiringDocumentCategories
+    * const expiringDocumentCategories = await prisma.expiringDocumentCategory.findMany()
+    * ```
+    */
+  get expiringDocumentCategory(): Prisma.ExpiringDocumentCategoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.expiringDocument`: Exposes CRUD operations for the **ExpiringDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ExpiringDocuments
+    * const expiringDocuments = await prisma.expiringDocument.findMany()
+    * ```
+    */
+  get expiringDocument(): Prisma.ExpiringDocumentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.expiringDocumentHistory`: Exposes CRUD operations for the **ExpiringDocumentHistory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ExpiringDocumentHistories
+    * const expiringDocumentHistories = await prisma.expiringDocumentHistory.findMany()
+    * ```
+    */
+  get expiringDocumentHistory(): Prisma.ExpiringDocumentHistoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.expiringDocumentNotification`: Exposes CRUD operations for the **ExpiringDocumentNotification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ExpiringDocumentNotifications
+    * const expiringDocumentNotifications = await prisma.expiringDocumentNotification.findMany()
+    * ```
+    */
+  get expiringDocumentNotification(): Prisma.ExpiringDocumentNotificationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1805,7 +1892,11 @@ export namespace Prisma {
     Notification: 'Notification',
     Client: 'Client',
     Quotation: 'Quotation',
-    QuotationItem: 'QuotationItem'
+    QuotationItem: 'QuotationItem',
+    ExpiringDocumentCategory: 'ExpiringDocumentCategory',
+    ExpiringDocument: 'ExpiringDocument',
+    ExpiringDocumentHistory: 'ExpiringDocumentHistory',
+    ExpiringDocumentNotification: 'ExpiringDocumentNotification'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1821,7 +1912,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userType" | "userUserType" | "project" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "week" | "dailyWage" | "weeklyWage" | "attendance" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem"
+      modelProps: "user" | "userType" | "userUserType" | "project" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "week" | "dailyWage" | "weeklyWage" | "attendance" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem" | "expiringDocumentCategory" | "expiringDocument" | "expiringDocumentHistory" | "expiringDocumentNotification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5599,6 +5690,302 @@ export namespace Prisma {
           }
         }
       }
+      ExpiringDocumentCategory: {
+        payload: Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>
+        fields: Prisma.ExpiringDocumentCategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ExpiringDocumentCategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ExpiringDocumentCategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.ExpiringDocumentCategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ExpiringDocumentCategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload>
+          }
+          findMany: {
+            args: Prisma.ExpiringDocumentCategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload>[]
+          }
+          create: {
+            args: Prisma.ExpiringDocumentCategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload>
+          }
+          createMany: {
+            args: Prisma.ExpiringDocumentCategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ExpiringDocumentCategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.ExpiringDocumentCategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload>
+          }
+          update: {
+            args: Prisma.ExpiringDocumentCategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.ExpiringDocumentCategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ExpiringDocumentCategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ExpiringDocumentCategoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.ExpiringDocumentCategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentCategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.ExpiringDocumentCategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateExpiringDocumentCategory>
+          }
+          groupBy: {
+            args: Prisma.ExpiringDocumentCategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ExpiringDocumentCategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ExpiringDocumentCategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<ExpiringDocumentCategoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      ExpiringDocument: {
+        payload: Prisma.$ExpiringDocumentPayload<ExtArgs>
+        fields: Prisma.ExpiringDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ExpiringDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ExpiringDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.ExpiringDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ExpiringDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.ExpiringDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.ExpiringDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.ExpiringDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ExpiringDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.ExpiringDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload>
+          }
+          update: {
+            args: Prisma.ExpiringDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.ExpiringDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ExpiringDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ExpiringDocumentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload>[]
+          }
+          upsert: {
+            args: Prisma.ExpiringDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.ExpiringDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateExpiringDocument>
+          }
+          groupBy: {
+            args: Prisma.ExpiringDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ExpiringDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ExpiringDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<ExpiringDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
+      ExpiringDocumentHistory: {
+        payload: Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>
+        fields: Prisma.ExpiringDocumentHistoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ExpiringDocumentHistoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ExpiringDocumentHistoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload>
+          }
+          findFirst: {
+            args: Prisma.ExpiringDocumentHistoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ExpiringDocumentHistoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload>
+          }
+          findMany: {
+            args: Prisma.ExpiringDocumentHistoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload>[]
+          }
+          create: {
+            args: Prisma.ExpiringDocumentHistoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload>
+          }
+          createMany: {
+            args: Prisma.ExpiringDocumentHistoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ExpiringDocumentHistoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload>[]
+          }
+          delete: {
+            args: Prisma.ExpiringDocumentHistoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload>
+          }
+          update: {
+            args: Prisma.ExpiringDocumentHistoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.ExpiringDocumentHistoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ExpiringDocumentHistoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ExpiringDocumentHistoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.ExpiringDocumentHistoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentHistoryPayload>
+          }
+          aggregate: {
+            args: Prisma.ExpiringDocumentHistoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateExpiringDocumentHistory>
+          }
+          groupBy: {
+            args: Prisma.ExpiringDocumentHistoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ExpiringDocumentHistoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ExpiringDocumentHistoryCountArgs<ExtArgs>
+            result: $Utils.Optional<ExpiringDocumentHistoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      ExpiringDocumentNotification: {
+        payload: Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>
+        fields: Prisma.ExpiringDocumentNotificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ExpiringDocumentNotificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ExpiringDocumentNotificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload>
+          }
+          findFirst: {
+            args: Prisma.ExpiringDocumentNotificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ExpiringDocumentNotificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload>
+          }
+          findMany: {
+            args: Prisma.ExpiringDocumentNotificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload>[]
+          }
+          create: {
+            args: Prisma.ExpiringDocumentNotificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload>
+          }
+          createMany: {
+            args: Prisma.ExpiringDocumentNotificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ExpiringDocumentNotificationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload>[]
+          }
+          delete: {
+            args: Prisma.ExpiringDocumentNotificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload>
+          }
+          update: {
+            args: Prisma.ExpiringDocumentNotificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.ExpiringDocumentNotificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ExpiringDocumentNotificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ExpiringDocumentNotificationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload>[]
+          }
+          upsert: {
+            args: Prisma.ExpiringDocumentNotificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpiringDocumentNotificationPayload>
+          }
+          aggregate: {
+            args: Prisma.ExpiringDocumentNotificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateExpiringDocumentNotification>
+          }
+          groupBy: {
+            args: Prisma.ExpiringDocumentNotificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ExpiringDocumentNotificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ExpiringDocumentNotificationCountArgs<ExtArgs>
+            result: $Utils.Optional<ExpiringDocumentNotificationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -5742,6 +6129,10 @@ export namespace Prisma {
     client?: ClientOmit
     quotation?: QuotationOmit
     quotationItem?: QuotationItemOmit
+    expiringDocumentCategory?: ExpiringDocumentCategoryOmit
+    expiringDocument?: ExpiringDocumentOmit
+    expiringDocumentHistory?: ExpiringDocumentHistoryOmit
+    expiringDocumentNotification?: ExpiringDocumentNotificationOmit
   }
 
   /* Types for Logging */
@@ -5837,6 +6228,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory: number
     projectInventoryResponsibilities: number
     performedInventoryMovements: number
+    createdExpiringDocuments: number
+    updatedExpiringDocuments: number
+    expiringDocumentHistory: number
     responsibleInventoryMovements: number
   }
 
@@ -5856,6 +6250,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: boolean | UserCountOutputTypeCountReceivedRequestsIntoInventoryArgs
     projectInventoryResponsibilities?: boolean | UserCountOutputTypeCountProjectInventoryResponsibilitiesArgs
     performedInventoryMovements?: boolean | UserCountOutputTypeCountPerformedInventoryMovementsArgs
+    createdExpiringDocuments?: boolean | UserCountOutputTypeCountCreatedExpiringDocumentsArgs
+    updatedExpiringDocuments?: boolean | UserCountOutputTypeCountUpdatedExpiringDocumentsArgs
+    expiringDocumentHistory?: boolean | UserCountOutputTypeCountExpiringDocumentHistoryArgs
     responsibleInventoryMovements?: boolean | UserCountOutputTypeCountResponsibleInventoryMovementsArgs
   }
 
@@ -5973,6 +6370,27 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPerformedInventoryMovementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InventoryMovementWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedExpiringDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpiringDocumentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUpdatedExpiringDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpiringDocumentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountExpiringDocumentHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpiringDocumentHistoryWhereInput
   }
 
   /**
@@ -7431,6 +7849,77 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ExpiringDocumentCategoryCountOutputType
+   */
+
+  export type ExpiringDocumentCategoryCountOutputType = {
+    documents: number
+  }
+
+  export type ExpiringDocumentCategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    documents?: boolean | ExpiringDocumentCategoryCountOutputTypeCountDocumentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ExpiringDocumentCategoryCountOutputType without action
+   */
+  export type ExpiringDocumentCategoryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategoryCountOutputType
+     */
+    select?: ExpiringDocumentCategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ExpiringDocumentCategoryCountOutputType without action
+   */
+  export type ExpiringDocumentCategoryCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpiringDocumentWhereInput
+  }
+
+
+  /**
+   * Count Type ExpiringDocumentCountOutputType
+   */
+
+  export type ExpiringDocumentCountOutputType = {
+    history: number
+    notifications: number
+  }
+
+  export type ExpiringDocumentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    history?: boolean | ExpiringDocumentCountOutputTypeCountHistoryArgs
+    notifications?: boolean | ExpiringDocumentCountOutputTypeCountNotificationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ExpiringDocumentCountOutputType without action
+   */
+  export type ExpiringDocumentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCountOutputType
+     */
+    select?: ExpiringDocumentCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ExpiringDocumentCountOutputType without action
+   */
+  export type ExpiringDocumentCountOutputTypeCountHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpiringDocumentHistoryWhereInput
+  }
+
+  /**
+   * ExpiringDocumentCountOutputType without action
+   */
+  export type ExpiringDocumentCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpiringDocumentNotificationWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -7679,6 +8168,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: boolean | User$receivedRequestsIntoInventoryArgs<ExtArgs>
     projectInventoryResponsibilities?: boolean | User$projectInventoryResponsibilitiesArgs<ExtArgs>
     performedInventoryMovements?: boolean | User$performedInventoryMovementsArgs<ExtArgs>
+    createdExpiringDocuments?: boolean | User$createdExpiringDocumentsArgs<ExtArgs>
+    updatedExpiringDocuments?: boolean | User$updatedExpiringDocumentsArgs<ExtArgs>
+    expiringDocumentHistory?: boolean | User$expiringDocumentHistoryArgs<ExtArgs>
     responsibleInventoryMovements?: boolean | User$responsibleInventoryMovementsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -7736,6 +8228,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: boolean | User$receivedRequestsIntoInventoryArgs<ExtArgs>
     projectInventoryResponsibilities?: boolean | User$projectInventoryResponsibilitiesArgs<ExtArgs>
     performedInventoryMovements?: boolean | User$performedInventoryMovementsArgs<ExtArgs>
+    createdExpiringDocuments?: boolean | User$createdExpiringDocumentsArgs<ExtArgs>
+    updatedExpiringDocuments?: boolean | User$updatedExpiringDocumentsArgs<ExtArgs>
+    expiringDocumentHistory?: boolean | User$expiringDocumentHistoryArgs<ExtArgs>
     responsibleInventoryMovements?: boolean | User$responsibleInventoryMovementsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -7760,6 +8255,9 @@ export namespace Prisma {
       receivedRequestsIntoInventory: Prisma.$RequestPayload<ExtArgs>[]
       projectInventoryResponsibilities: Prisma.$ProjectInventoryEntryPayload<ExtArgs>[]
       performedInventoryMovements: Prisma.$InventoryMovementPayload<ExtArgs>[]
+      createdExpiringDocuments: Prisma.$ExpiringDocumentPayload<ExtArgs>[]
+      updatedExpiringDocuments: Prisma.$ExpiringDocumentPayload<ExtArgs>[]
+      expiringDocumentHistory: Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>[]
       responsibleInventoryMovements: Prisma.$InventoryMovementPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -8181,6 +8679,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory<T extends User$receivedRequestsIntoInventoryArgs<ExtArgs> = {}>(args?: Subset<T, User$receivedRequestsIntoInventoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     projectInventoryResponsibilities<T extends User$projectInventoryResponsibilitiesArgs<ExtArgs> = {}>(args?: Subset<T, User$projectInventoryResponsibilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectInventoryEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     performedInventoryMovements<T extends User$performedInventoryMovementsArgs<ExtArgs> = {}>(args?: Subset<T, User$performedInventoryMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdExpiringDocuments<T extends User$createdExpiringDocumentsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdExpiringDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    updatedExpiringDocuments<T extends User$updatedExpiringDocumentsArgs<ExtArgs> = {}>(args?: Subset<T, User$updatedExpiringDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    expiringDocumentHistory<T extends User$expiringDocumentHistoryArgs<ExtArgs> = {}>(args?: Subset<T, User$expiringDocumentHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     responsibleInventoryMovements<T extends User$responsibleInventoryMovementsArgs<ExtArgs> = {}>(args?: Subset<T, User$responsibleInventoryMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8965,6 +9466,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InventoryMovementScalarFieldEnum | InventoryMovementScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdExpiringDocuments
+   */
+  export type User$createdExpiringDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    where?: ExpiringDocumentWhereInput
+    orderBy?: ExpiringDocumentOrderByWithRelationInput | ExpiringDocumentOrderByWithRelationInput[]
+    cursor?: ExpiringDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExpiringDocumentScalarFieldEnum | ExpiringDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * User.updatedExpiringDocuments
+   */
+  export type User$updatedExpiringDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    where?: ExpiringDocumentWhereInput
+    orderBy?: ExpiringDocumentOrderByWithRelationInput | ExpiringDocumentOrderByWithRelationInput[]
+    cursor?: ExpiringDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExpiringDocumentScalarFieldEnum | ExpiringDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * User.expiringDocumentHistory
+   */
+  export type User$expiringDocumentHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    where?: ExpiringDocumentHistoryWhereInput
+    orderBy?: ExpiringDocumentHistoryOrderByWithRelationInput | ExpiringDocumentHistoryOrderByWithRelationInput[]
+    cursor?: ExpiringDocumentHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExpiringDocumentHistoryScalarFieldEnum | ExpiringDocumentHistoryScalarFieldEnum[]
   }
 
   /**
@@ -70655,6 +71228,4752 @@ export namespace Prisma {
 
 
   /**
+   * Model ExpiringDocumentCategory
+   */
+
+  export type AggregateExpiringDocumentCategory = {
+    _count: ExpiringDocumentCategoryCountAggregateOutputType | null
+    _avg: ExpiringDocumentCategoryAvgAggregateOutputType | null
+    _sum: ExpiringDocumentCategorySumAggregateOutputType | null
+    _min: ExpiringDocumentCategoryMinAggregateOutputType | null
+    _max: ExpiringDocumentCategoryMaxAggregateOutputType | null
+  }
+
+  export type ExpiringDocumentCategoryAvgAggregateOutputType = {
+    expiringDocumentCategoryId: number | null
+    alertDaysFirst: number | null
+    alertDaysSecond: number | null
+    alertDaysThird: number | null
+  }
+
+  export type ExpiringDocumentCategorySumAggregateOutputType = {
+    expiringDocumentCategoryId: number | null
+    alertDaysFirst: number | null
+    alertDaysSecond: number | null
+    alertDaysThird: number | null
+  }
+
+  export type ExpiringDocumentCategoryMinAggregateOutputType = {
+    expiringDocumentCategoryId: number | null
+    name: string | null
+    description: string | null
+    alertDaysFirst: number | null
+    alertDaysSecond: number | null
+    alertDaysThird: number | null
+    emailNotificationsEnabled: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type ExpiringDocumentCategoryMaxAggregateOutputType = {
+    expiringDocumentCategoryId: number | null
+    name: string | null
+    description: string | null
+    alertDaysFirst: number | null
+    alertDaysSecond: number | null
+    alertDaysThird: number | null
+    emailNotificationsEnabled: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type ExpiringDocumentCategoryCountAggregateOutputType = {
+    expiringDocumentCategoryId: number
+    name: number
+    description: number
+    alertDaysFirst: number
+    alertDaysSecond: number
+    alertDaysThird: number
+    notificationEmails: number
+    emailNotificationsEnabled: number
+    createdAt: number
+    updatedAt: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type ExpiringDocumentCategoryAvgAggregateInputType = {
+    expiringDocumentCategoryId?: true
+    alertDaysFirst?: true
+    alertDaysSecond?: true
+    alertDaysThird?: true
+  }
+
+  export type ExpiringDocumentCategorySumAggregateInputType = {
+    expiringDocumentCategoryId?: true
+    alertDaysFirst?: true
+    alertDaysSecond?: true
+    alertDaysThird?: true
+  }
+
+  export type ExpiringDocumentCategoryMinAggregateInputType = {
+    expiringDocumentCategoryId?: true
+    name?: true
+    description?: true
+    alertDaysFirst?: true
+    alertDaysSecond?: true
+    alertDaysThird?: true
+    emailNotificationsEnabled?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type ExpiringDocumentCategoryMaxAggregateInputType = {
+    expiringDocumentCategoryId?: true
+    name?: true
+    description?: true
+    alertDaysFirst?: true
+    alertDaysSecond?: true
+    alertDaysThird?: true
+    emailNotificationsEnabled?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type ExpiringDocumentCategoryCountAggregateInputType = {
+    expiringDocumentCategoryId?: true
+    name?: true
+    description?: true
+    alertDaysFirst?: true
+    alertDaysSecond?: true
+    alertDaysThird?: true
+    notificationEmails?: true
+    emailNotificationsEnabled?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type ExpiringDocumentCategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExpiringDocumentCategory to aggregate.
+     */
+    where?: ExpiringDocumentCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentCategories to fetch.
+     */
+    orderBy?: ExpiringDocumentCategoryOrderByWithRelationInput | ExpiringDocumentCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ExpiringDocumentCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ExpiringDocumentCategories
+    **/
+    _count?: true | ExpiringDocumentCategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ExpiringDocumentCategoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ExpiringDocumentCategorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ExpiringDocumentCategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ExpiringDocumentCategoryMaxAggregateInputType
+  }
+
+  export type GetExpiringDocumentCategoryAggregateType<T extends ExpiringDocumentCategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateExpiringDocumentCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateExpiringDocumentCategory[P]>
+      : GetScalarType<T[P], AggregateExpiringDocumentCategory[P]>
+  }
+
+
+
+
+  export type ExpiringDocumentCategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpiringDocumentCategoryWhereInput
+    orderBy?: ExpiringDocumentCategoryOrderByWithAggregationInput | ExpiringDocumentCategoryOrderByWithAggregationInput[]
+    by: ExpiringDocumentCategoryScalarFieldEnum[] | ExpiringDocumentCategoryScalarFieldEnum
+    having?: ExpiringDocumentCategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ExpiringDocumentCategoryCountAggregateInputType | true
+    _avg?: ExpiringDocumentCategoryAvgAggregateInputType
+    _sum?: ExpiringDocumentCategorySumAggregateInputType
+    _min?: ExpiringDocumentCategoryMinAggregateInputType
+    _max?: ExpiringDocumentCategoryMaxAggregateInputType
+  }
+
+  export type ExpiringDocumentCategoryGroupByOutputType = {
+    expiringDocumentCategoryId: number
+    name: string
+    description: string | null
+    alertDaysFirst: number
+    alertDaysSecond: number
+    alertDaysThird: number
+    notificationEmails: string[]
+    emailNotificationsEnabled: boolean
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    _count: ExpiringDocumentCategoryCountAggregateOutputType | null
+    _avg: ExpiringDocumentCategoryAvgAggregateOutputType | null
+    _sum: ExpiringDocumentCategorySumAggregateOutputType | null
+    _min: ExpiringDocumentCategoryMinAggregateOutputType | null
+    _max: ExpiringDocumentCategoryMaxAggregateOutputType | null
+  }
+
+  type GetExpiringDocumentCategoryGroupByPayload<T extends ExpiringDocumentCategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ExpiringDocumentCategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ExpiringDocumentCategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ExpiringDocumentCategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], ExpiringDocumentCategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ExpiringDocumentCategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentCategoryId?: boolean
+    name?: boolean
+    description?: boolean
+    alertDaysFirst?: boolean
+    alertDaysSecond?: boolean
+    alertDaysThird?: boolean
+    notificationEmails?: boolean
+    emailNotificationsEnabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    documents?: boolean | ExpiringDocumentCategory$documentsArgs<ExtArgs>
+    _count?: boolean | ExpiringDocumentCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expiringDocumentCategory"]>
+
+  export type ExpiringDocumentCategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentCategoryId?: boolean
+    name?: boolean
+    description?: boolean
+    alertDaysFirst?: boolean
+    alertDaysSecond?: boolean
+    alertDaysThird?: boolean
+    notificationEmails?: boolean
+    emailNotificationsEnabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+  }, ExtArgs["result"]["expiringDocumentCategory"]>
+
+  export type ExpiringDocumentCategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentCategoryId?: boolean
+    name?: boolean
+    description?: boolean
+    alertDaysFirst?: boolean
+    alertDaysSecond?: boolean
+    alertDaysThird?: boolean
+    notificationEmails?: boolean
+    emailNotificationsEnabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+  }, ExtArgs["result"]["expiringDocumentCategory"]>
+
+  export type ExpiringDocumentCategorySelectScalar = {
+    expiringDocumentCategoryId?: boolean
+    name?: boolean
+    description?: boolean
+    alertDaysFirst?: boolean
+    alertDaysSecond?: boolean
+    alertDaysThird?: boolean
+    notificationEmails?: boolean
+    emailNotificationsEnabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+  }
+
+  export type ExpiringDocumentCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"expiringDocumentCategoryId" | "name" | "description" | "alertDaysFirst" | "alertDaysSecond" | "alertDaysThird" | "notificationEmails" | "emailNotificationsEnabled" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["expiringDocumentCategory"]>
+  export type ExpiringDocumentCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    documents?: boolean | ExpiringDocumentCategory$documentsArgs<ExtArgs>
+    _count?: boolean | ExpiringDocumentCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ExpiringDocumentCategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ExpiringDocumentCategoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ExpiringDocumentCategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ExpiringDocumentCategory"
+    objects: {
+      documents: Prisma.$ExpiringDocumentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      expiringDocumentCategoryId: number
+      name: string
+      description: string | null
+      alertDaysFirst: number
+      alertDaysSecond: number
+      alertDaysThird: number
+      notificationEmails: string[]
+      emailNotificationsEnabled: boolean
+      createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+    }, ExtArgs["result"]["expiringDocumentCategory"]>
+    composites: {}
+  }
+
+  type ExpiringDocumentCategoryGetPayload<S extends boolean | null | undefined | ExpiringDocumentCategoryDefaultArgs> = $Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload, S>
+
+  type ExpiringDocumentCategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ExpiringDocumentCategoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ExpiringDocumentCategoryCountAggregateInputType | true
+    }
+
+  export interface ExpiringDocumentCategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExpiringDocumentCategory'], meta: { name: 'ExpiringDocumentCategory' } }
+    /**
+     * Find zero or one ExpiringDocumentCategory that matches the filter.
+     * @param {ExpiringDocumentCategoryFindUniqueArgs} args - Arguments to find a ExpiringDocumentCategory
+     * @example
+     * // Get one ExpiringDocumentCategory
+     * const expiringDocumentCategory = await prisma.expiringDocumentCategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ExpiringDocumentCategoryFindUniqueArgs>(args: SelectSubset<T, ExpiringDocumentCategoryFindUniqueArgs<ExtArgs>>): Prisma__ExpiringDocumentCategoryClient<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ExpiringDocumentCategory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ExpiringDocumentCategoryFindUniqueOrThrowArgs} args - Arguments to find a ExpiringDocumentCategory
+     * @example
+     * // Get one ExpiringDocumentCategory
+     * const expiringDocumentCategory = await prisma.expiringDocumentCategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ExpiringDocumentCategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, ExpiringDocumentCategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ExpiringDocumentCategoryClient<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExpiringDocumentCategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentCategoryFindFirstArgs} args - Arguments to find a ExpiringDocumentCategory
+     * @example
+     * // Get one ExpiringDocumentCategory
+     * const expiringDocumentCategory = await prisma.expiringDocumentCategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ExpiringDocumentCategoryFindFirstArgs>(args?: SelectSubset<T, ExpiringDocumentCategoryFindFirstArgs<ExtArgs>>): Prisma__ExpiringDocumentCategoryClient<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExpiringDocumentCategory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentCategoryFindFirstOrThrowArgs} args - Arguments to find a ExpiringDocumentCategory
+     * @example
+     * // Get one ExpiringDocumentCategory
+     * const expiringDocumentCategory = await prisma.expiringDocumentCategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ExpiringDocumentCategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, ExpiringDocumentCategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__ExpiringDocumentCategoryClient<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ExpiringDocumentCategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentCategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ExpiringDocumentCategories
+     * const expiringDocumentCategories = await prisma.expiringDocumentCategory.findMany()
+     * 
+     * // Get first 10 ExpiringDocumentCategories
+     * const expiringDocumentCategories = await prisma.expiringDocumentCategory.findMany({ take: 10 })
+     * 
+     * // Only select the `expiringDocumentCategoryId`
+     * const expiringDocumentCategoryWithExpiringDocumentCategoryIdOnly = await prisma.expiringDocumentCategory.findMany({ select: { expiringDocumentCategoryId: true } })
+     * 
+     */
+    findMany<T extends ExpiringDocumentCategoryFindManyArgs>(args?: SelectSubset<T, ExpiringDocumentCategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ExpiringDocumentCategory.
+     * @param {ExpiringDocumentCategoryCreateArgs} args - Arguments to create a ExpiringDocumentCategory.
+     * @example
+     * // Create one ExpiringDocumentCategory
+     * const ExpiringDocumentCategory = await prisma.expiringDocumentCategory.create({
+     *   data: {
+     *     // ... data to create a ExpiringDocumentCategory
+     *   }
+     * })
+     * 
+     */
+    create<T extends ExpiringDocumentCategoryCreateArgs>(args: SelectSubset<T, ExpiringDocumentCategoryCreateArgs<ExtArgs>>): Prisma__ExpiringDocumentCategoryClient<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ExpiringDocumentCategories.
+     * @param {ExpiringDocumentCategoryCreateManyArgs} args - Arguments to create many ExpiringDocumentCategories.
+     * @example
+     * // Create many ExpiringDocumentCategories
+     * const expiringDocumentCategory = await prisma.expiringDocumentCategory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ExpiringDocumentCategoryCreateManyArgs>(args?: SelectSubset<T, ExpiringDocumentCategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ExpiringDocumentCategories and returns the data saved in the database.
+     * @param {ExpiringDocumentCategoryCreateManyAndReturnArgs} args - Arguments to create many ExpiringDocumentCategories.
+     * @example
+     * // Create many ExpiringDocumentCategories
+     * const expiringDocumentCategory = await prisma.expiringDocumentCategory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ExpiringDocumentCategories and only return the `expiringDocumentCategoryId`
+     * const expiringDocumentCategoryWithExpiringDocumentCategoryIdOnly = await prisma.expiringDocumentCategory.createManyAndReturn({
+     *   select: { expiringDocumentCategoryId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ExpiringDocumentCategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, ExpiringDocumentCategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ExpiringDocumentCategory.
+     * @param {ExpiringDocumentCategoryDeleteArgs} args - Arguments to delete one ExpiringDocumentCategory.
+     * @example
+     * // Delete one ExpiringDocumentCategory
+     * const ExpiringDocumentCategory = await prisma.expiringDocumentCategory.delete({
+     *   where: {
+     *     // ... filter to delete one ExpiringDocumentCategory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ExpiringDocumentCategoryDeleteArgs>(args: SelectSubset<T, ExpiringDocumentCategoryDeleteArgs<ExtArgs>>): Prisma__ExpiringDocumentCategoryClient<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ExpiringDocumentCategory.
+     * @param {ExpiringDocumentCategoryUpdateArgs} args - Arguments to update one ExpiringDocumentCategory.
+     * @example
+     * // Update one ExpiringDocumentCategory
+     * const expiringDocumentCategory = await prisma.expiringDocumentCategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ExpiringDocumentCategoryUpdateArgs>(args: SelectSubset<T, ExpiringDocumentCategoryUpdateArgs<ExtArgs>>): Prisma__ExpiringDocumentCategoryClient<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ExpiringDocumentCategories.
+     * @param {ExpiringDocumentCategoryDeleteManyArgs} args - Arguments to filter ExpiringDocumentCategories to delete.
+     * @example
+     * // Delete a few ExpiringDocumentCategories
+     * const { count } = await prisma.expiringDocumentCategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ExpiringDocumentCategoryDeleteManyArgs>(args?: SelectSubset<T, ExpiringDocumentCategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExpiringDocumentCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentCategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ExpiringDocumentCategories
+     * const expiringDocumentCategory = await prisma.expiringDocumentCategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ExpiringDocumentCategoryUpdateManyArgs>(args: SelectSubset<T, ExpiringDocumentCategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExpiringDocumentCategories and returns the data updated in the database.
+     * @param {ExpiringDocumentCategoryUpdateManyAndReturnArgs} args - Arguments to update many ExpiringDocumentCategories.
+     * @example
+     * // Update many ExpiringDocumentCategories
+     * const expiringDocumentCategory = await prisma.expiringDocumentCategory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ExpiringDocumentCategories and only return the `expiringDocumentCategoryId`
+     * const expiringDocumentCategoryWithExpiringDocumentCategoryIdOnly = await prisma.expiringDocumentCategory.updateManyAndReturn({
+     *   select: { expiringDocumentCategoryId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ExpiringDocumentCategoryUpdateManyAndReturnArgs>(args: SelectSubset<T, ExpiringDocumentCategoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ExpiringDocumentCategory.
+     * @param {ExpiringDocumentCategoryUpsertArgs} args - Arguments to update or create a ExpiringDocumentCategory.
+     * @example
+     * // Update or create a ExpiringDocumentCategory
+     * const expiringDocumentCategory = await prisma.expiringDocumentCategory.upsert({
+     *   create: {
+     *     // ... data to create a ExpiringDocumentCategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ExpiringDocumentCategory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ExpiringDocumentCategoryUpsertArgs>(args: SelectSubset<T, ExpiringDocumentCategoryUpsertArgs<ExtArgs>>): Prisma__ExpiringDocumentCategoryClient<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ExpiringDocumentCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentCategoryCountArgs} args - Arguments to filter ExpiringDocumentCategories to count.
+     * @example
+     * // Count the number of ExpiringDocumentCategories
+     * const count = await prisma.expiringDocumentCategory.count({
+     *   where: {
+     *     // ... the filter for the ExpiringDocumentCategories we want to count
+     *   }
+     * })
+    **/
+    count<T extends ExpiringDocumentCategoryCountArgs>(
+      args?: Subset<T, ExpiringDocumentCategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ExpiringDocumentCategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ExpiringDocumentCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentCategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ExpiringDocumentCategoryAggregateArgs>(args: Subset<T, ExpiringDocumentCategoryAggregateArgs>): Prisma.PrismaPromise<GetExpiringDocumentCategoryAggregateType<T>>
+
+    /**
+     * Group by ExpiringDocumentCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentCategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ExpiringDocumentCategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ExpiringDocumentCategoryGroupByArgs['orderBy'] }
+        : { orderBy?: ExpiringDocumentCategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ExpiringDocumentCategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExpiringDocumentCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ExpiringDocumentCategory model
+   */
+  readonly fields: ExpiringDocumentCategoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ExpiringDocumentCategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ExpiringDocumentCategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    documents<T extends ExpiringDocumentCategory$documentsArgs<ExtArgs> = {}>(args?: Subset<T, ExpiringDocumentCategory$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ExpiringDocumentCategory model
+   */
+  interface ExpiringDocumentCategoryFieldRefs {
+    readonly expiringDocumentCategoryId: FieldRef<"ExpiringDocumentCategory", 'Int'>
+    readonly name: FieldRef<"ExpiringDocumentCategory", 'String'>
+    readonly description: FieldRef<"ExpiringDocumentCategory", 'String'>
+    readonly alertDaysFirst: FieldRef<"ExpiringDocumentCategory", 'Int'>
+    readonly alertDaysSecond: FieldRef<"ExpiringDocumentCategory", 'Int'>
+    readonly alertDaysThird: FieldRef<"ExpiringDocumentCategory", 'Int'>
+    readonly notificationEmails: FieldRef<"ExpiringDocumentCategory", 'String[]'>
+    readonly emailNotificationsEnabled: FieldRef<"ExpiringDocumentCategory", 'Boolean'>
+    readonly createdAt: FieldRef<"ExpiringDocumentCategory", 'DateTime'>
+    readonly updatedAt: FieldRef<"ExpiringDocumentCategory", 'DateTime'>
+    readonly deletedAt: FieldRef<"ExpiringDocumentCategory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ExpiringDocumentCategory findUnique
+   */
+  export type ExpiringDocumentCategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentCategory to fetch.
+     */
+    where: ExpiringDocumentCategoryWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentCategory findUniqueOrThrow
+   */
+  export type ExpiringDocumentCategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentCategory to fetch.
+     */
+    where: ExpiringDocumentCategoryWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentCategory findFirst
+   */
+  export type ExpiringDocumentCategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentCategory to fetch.
+     */
+    where?: ExpiringDocumentCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentCategories to fetch.
+     */
+    orderBy?: ExpiringDocumentCategoryOrderByWithRelationInput | ExpiringDocumentCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExpiringDocumentCategories.
+     */
+    cursor?: ExpiringDocumentCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExpiringDocumentCategories.
+     */
+    distinct?: ExpiringDocumentCategoryScalarFieldEnum | ExpiringDocumentCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocumentCategory findFirstOrThrow
+   */
+  export type ExpiringDocumentCategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentCategory to fetch.
+     */
+    where?: ExpiringDocumentCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentCategories to fetch.
+     */
+    orderBy?: ExpiringDocumentCategoryOrderByWithRelationInput | ExpiringDocumentCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExpiringDocumentCategories.
+     */
+    cursor?: ExpiringDocumentCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExpiringDocumentCategories.
+     */
+    distinct?: ExpiringDocumentCategoryScalarFieldEnum | ExpiringDocumentCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocumentCategory findMany
+   */
+  export type ExpiringDocumentCategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentCategories to fetch.
+     */
+    where?: ExpiringDocumentCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentCategories to fetch.
+     */
+    orderBy?: ExpiringDocumentCategoryOrderByWithRelationInput | ExpiringDocumentCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ExpiringDocumentCategories.
+     */
+    cursor?: ExpiringDocumentCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentCategories.
+     */
+    skip?: number
+    distinct?: ExpiringDocumentCategoryScalarFieldEnum | ExpiringDocumentCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocumentCategory create
+   */
+  export type ExpiringDocumentCategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ExpiringDocumentCategory.
+     */
+    data: XOR<ExpiringDocumentCategoryCreateInput, ExpiringDocumentCategoryUncheckedCreateInput>
+  }
+
+  /**
+   * ExpiringDocumentCategory createMany
+   */
+  export type ExpiringDocumentCategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ExpiringDocumentCategories.
+     */
+    data: ExpiringDocumentCategoryCreateManyInput | ExpiringDocumentCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ExpiringDocumentCategory createManyAndReturn
+   */
+  export type ExpiringDocumentCategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many ExpiringDocumentCategories.
+     */
+    data: ExpiringDocumentCategoryCreateManyInput | ExpiringDocumentCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ExpiringDocumentCategory update
+   */
+  export type ExpiringDocumentCategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ExpiringDocumentCategory.
+     */
+    data: XOR<ExpiringDocumentCategoryUpdateInput, ExpiringDocumentCategoryUncheckedUpdateInput>
+    /**
+     * Choose, which ExpiringDocumentCategory to update.
+     */
+    where: ExpiringDocumentCategoryWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentCategory updateMany
+   */
+  export type ExpiringDocumentCategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ExpiringDocumentCategories.
+     */
+    data: XOR<ExpiringDocumentCategoryUpdateManyMutationInput, ExpiringDocumentCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which ExpiringDocumentCategories to update
+     */
+    where?: ExpiringDocumentCategoryWhereInput
+    /**
+     * Limit how many ExpiringDocumentCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpiringDocumentCategory updateManyAndReturn
+   */
+  export type ExpiringDocumentCategoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to update ExpiringDocumentCategories.
+     */
+    data: XOR<ExpiringDocumentCategoryUpdateManyMutationInput, ExpiringDocumentCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which ExpiringDocumentCategories to update
+     */
+    where?: ExpiringDocumentCategoryWhereInput
+    /**
+     * Limit how many ExpiringDocumentCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpiringDocumentCategory upsert
+   */
+  export type ExpiringDocumentCategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentCategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ExpiringDocumentCategory to update in case it exists.
+     */
+    where: ExpiringDocumentCategoryWhereUniqueInput
+    /**
+     * In case the ExpiringDocumentCategory found by the `where` argument doesn't exist, create a new ExpiringDocumentCategory with this data.
+     */
+    create: XOR<ExpiringDocumentCategoryCreateInput, ExpiringDocumentCategoryUncheckedCreateInput>
+    /**
+     * In case the ExpiringDocumentCategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ExpiringDocumentCategoryUpdateInput, ExpiringDocumentCategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * ExpiringDocumentCategory delete
+   */
+  export type ExpiringDocumentCategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentCategoryInclude<ExtArgs> | null
+    /**
+     * Filter which ExpiringDocumentCategory to delete.
+     */
+    where: ExpiringDocumentCategoryWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentCategory deleteMany
+   */
+  export type ExpiringDocumentCategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExpiringDocumentCategories to delete
+     */
+    where?: ExpiringDocumentCategoryWhereInput
+    /**
+     * Limit how many ExpiringDocumentCategories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpiringDocumentCategory.documents
+   */
+  export type ExpiringDocumentCategory$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    where?: ExpiringDocumentWhereInput
+    orderBy?: ExpiringDocumentOrderByWithRelationInput | ExpiringDocumentOrderByWithRelationInput[]
+    cursor?: ExpiringDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExpiringDocumentScalarFieldEnum | ExpiringDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocumentCategory without action
+   */
+  export type ExpiringDocumentCategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentCategory
+     */
+    select?: ExpiringDocumentCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentCategory
+     */
+    omit?: ExpiringDocumentCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentCategoryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ExpiringDocument
+   */
+
+  export type AggregateExpiringDocument = {
+    _count: ExpiringDocumentCountAggregateOutputType | null
+    _avg: ExpiringDocumentAvgAggregateOutputType | null
+    _sum: ExpiringDocumentSumAggregateOutputType | null
+    _min: ExpiringDocumentMinAggregateOutputType | null
+    _max: ExpiringDocumentMaxAggregateOutputType | null
+  }
+
+  export type ExpiringDocumentAvgAggregateOutputType = {
+    expiringDocumentId: number | null
+    categoryId: number | null
+    createdByUserId: number | null
+    updatedByUserId: number | null
+  }
+
+  export type ExpiringDocumentSumAggregateOutputType = {
+    expiringDocumentId: number | null
+    categoryId: number | null
+    createdByUserId: number | null
+    updatedByUserId: number | null
+  }
+
+  export type ExpiringDocumentMinAggregateOutputType = {
+    expiringDocumentId: number | null
+    categoryId: number | null
+    title: string | null
+    documentCode: string | null
+    referenceType: string | null
+    referenceDescription: string | null
+    storageSpace: string | null
+    storagePath: string | null
+    storageDescription: string | null
+    issueDate: Date | null
+    expirationDate: Date | null
+    notes: string | null
+    createdByUserId: number | null
+    updatedByUserId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type ExpiringDocumentMaxAggregateOutputType = {
+    expiringDocumentId: number | null
+    categoryId: number | null
+    title: string | null
+    documentCode: string | null
+    referenceType: string | null
+    referenceDescription: string | null
+    storageSpace: string | null
+    storagePath: string | null
+    storageDescription: string | null
+    issueDate: Date | null
+    expirationDate: Date | null
+    notes: string | null
+    createdByUserId: number | null
+    updatedByUserId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type ExpiringDocumentCountAggregateOutputType = {
+    expiringDocumentId: number
+    categoryId: number
+    title: number
+    documentCode: number
+    referenceType: number
+    referenceDescription: number
+    storageSpace: number
+    storagePath: number
+    storageDescription: number
+    issueDate: number
+    expirationDate: number
+    notes: number
+    createdByUserId: number
+    updatedByUserId: number
+    createdAt: number
+    updatedAt: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type ExpiringDocumentAvgAggregateInputType = {
+    expiringDocumentId?: true
+    categoryId?: true
+    createdByUserId?: true
+    updatedByUserId?: true
+  }
+
+  export type ExpiringDocumentSumAggregateInputType = {
+    expiringDocumentId?: true
+    categoryId?: true
+    createdByUserId?: true
+    updatedByUserId?: true
+  }
+
+  export type ExpiringDocumentMinAggregateInputType = {
+    expiringDocumentId?: true
+    categoryId?: true
+    title?: true
+    documentCode?: true
+    referenceType?: true
+    referenceDescription?: true
+    storageSpace?: true
+    storagePath?: true
+    storageDescription?: true
+    issueDate?: true
+    expirationDate?: true
+    notes?: true
+    createdByUserId?: true
+    updatedByUserId?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type ExpiringDocumentMaxAggregateInputType = {
+    expiringDocumentId?: true
+    categoryId?: true
+    title?: true
+    documentCode?: true
+    referenceType?: true
+    referenceDescription?: true
+    storageSpace?: true
+    storagePath?: true
+    storageDescription?: true
+    issueDate?: true
+    expirationDate?: true
+    notes?: true
+    createdByUserId?: true
+    updatedByUserId?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type ExpiringDocumentCountAggregateInputType = {
+    expiringDocumentId?: true
+    categoryId?: true
+    title?: true
+    documentCode?: true
+    referenceType?: true
+    referenceDescription?: true
+    storageSpace?: true
+    storagePath?: true
+    storageDescription?: true
+    issueDate?: true
+    expirationDate?: true
+    notes?: true
+    createdByUserId?: true
+    updatedByUserId?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type ExpiringDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExpiringDocument to aggregate.
+     */
+    where?: ExpiringDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocuments to fetch.
+     */
+    orderBy?: ExpiringDocumentOrderByWithRelationInput | ExpiringDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ExpiringDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ExpiringDocuments
+    **/
+    _count?: true | ExpiringDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ExpiringDocumentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ExpiringDocumentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ExpiringDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ExpiringDocumentMaxAggregateInputType
+  }
+
+  export type GetExpiringDocumentAggregateType<T extends ExpiringDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregateExpiringDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateExpiringDocument[P]>
+      : GetScalarType<T[P], AggregateExpiringDocument[P]>
+  }
+
+
+
+
+  export type ExpiringDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpiringDocumentWhereInput
+    orderBy?: ExpiringDocumentOrderByWithAggregationInput | ExpiringDocumentOrderByWithAggregationInput[]
+    by: ExpiringDocumentScalarFieldEnum[] | ExpiringDocumentScalarFieldEnum
+    having?: ExpiringDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ExpiringDocumentCountAggregateInputType | true
+    _avg?: ExpiringDocumentAvgAggregateInputType
+    _sum?: ExpiringDocumentSumAggregateInputType
+    _min?: ExpiringDocumentMinAggregateInputType
+    _max?: ExpiringDocumentMaxAggregateInputType
+  }
+
+  export type ExpiringDocumentGroupByOutputType = {
+    expiringDocumentId: number
+    categoryId: number
+    title: string
+    documentCode: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath: string | null
+    storageDescription: string | null
+    issueDate: Date | null
+    expirationDate: Date
+    notes: string | null
+    createdByUserId: number
+    updatedByUserId: number
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    _count: ExpiringDocumentCountAggregateOutputType | null
+    _avg: ExpiringDocumentAvgAggregateOutputType | null
+    _sum: ExpiringDocumentSumAggregateOutputType | null
+    _min: ExpiringDocumentMinAggregateOutputType | null
+    _max: ExpiringDocumentMaxAggregateOutputType | null
+  }
+
+  type GetExpiringDocumentGroupByPayload<T extends ExpiringDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ExpiringDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ExpiringDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ExpiringDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], ExpiringDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ExpiringDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentId?: boolean
+    categoryId?: boolean
+    title?: boolean
+    documentCode?: boolean
+    referenceType?: boolean
+    referenceDescription?: boolean
+    storageSpace?: boolean
+    storagePath?: boolean
+    storageDescription?: boolean
+    issueDate?: boolean
+    expirationDate?: boolean
+    notes?: boolean
+    createdByUserId?: boolean
+    updatedByUserId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    category?: boolean | ExpiringDocumentCategoryDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    updatedBy?: boolean | UserDefaultArgs<ExtArgs>
+    history?: boolean | ExpiringDocument$historyArgs<ExtArgs>
+    notifications?: boolean | ExpiringDocument$notificationsArgs<ExtArgs>
+    _count?: boolean | ExpiringDocumentCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expiringDocument"]>
+
+  export type ExpiringDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentId?: boolean
+    categoryId?: boolean
+    title?: boolean
+    documentCode?: boolean
+    referenceType?: boolean
+    referenceDescription?: boolean
+    storageSpace?: boolean
+    storagePath?: boolean
+    storageDescription?: boolean
+    issueDate?: boolean
+    expirationDate?: boolean
+    notes?: boolean
+    createdByUserId?: boolean
+    updatedByUserId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    category?: boolean | ExpiringDocumentCategoryDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    updatedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expiringDocument"]>
+
+  export type ExpiringDocumentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentId?: boolean
+    categoryId?: boolean
+    title?: boolean
+    documentCode?: boolean
+    referenceType?: boolean
+    referenceDescription?: boolean
+    storageSpace?: boolean
+    storagePath?: boolean
+    storageDescription?: boolean
+    issueDate?: boolean
+    expirationDate?: boolean
+    notes?: boolean
+    createdByUserId?: boolean
+    updatedByUserId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    category?: boolean | ExpiringDocumentCategoryDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    updatedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expiringDocument"]>
+
+  export type ExpiringDocumentSelectScalar = {
+    expiringDocumentId?: boolean
+    categoryId?: boolean
+    title?: boolean
+    documentCode?: boolean
+    referenceType?: boolean
+    referenceDescription?: boolean
+    storageSpace?: boolean
+    storagePath?: boolean
+    storageDescription?: boolean
+    issueDate?: boolean
+    expirationDate?: boolean
+    notes?: boolean
+    createdByUserId?: boolean
+    updatedByUserId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+  }
+
+  export type ExpiringDocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"expiringDocumentId" | "categoryId" | "title" | "documentCode" | "referenceType" | "referenceDescription" | "storageSpace" | "storagePath" | "storageDescription" | "issueDate" | "expirationDate" | "notes" | "createdByUserId" | "updatedByUserId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["expiringDocument"]>
+  export type ExpiringDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | ExpiringDocumentCategoryDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    updatedBy?: boolean | UserDefaultArgs<ExtArgs>
+    history?: boolean | ExpiringDocument$historyArgs<ExtArgs>
+    notifications?: boolean | ExpiringDocument$notificationsArgs<ExtArgs>
+    _count?: boolean | ExpiringDocumentCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ExpiringDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | ExpiringDocumentCategoryDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    updatedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ExpiringDocumentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | ExpiringDocumentCategoryDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    updatedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ExpiringDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ExpiringDocument"
+    objects: {
+      category: Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>
+      createdBy: Prisma.$UserPayload<ExtArgs>
+      updatedBy: Prisma.$UserPayload<ExtArgs>
+      history: Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>[]
+      notifications: Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      expiringDocumentId: number
+      categoryId: number
+      title: string
+      documentCode: string | null
+      referenceType: string
+      referenceDescription: string
+      storageSpace: string
+      storagePath: string | null
+      storageDescription: string | null
+      issueDate: Date | null
+      expirationDate: Date
+      notes: string | null
+      createdByUserId: number
+      updatedByUserId: number
+      createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+    }, ExtArgs["result"]["expiringDocument"]>
+    composites: {}
+  }
+
+  type ExpiringDocumentGetPayload<S extends boolean | null | undefined | ExpiringDocumentDefaultArgs> = $Result.GetResult<Prisma.$ExpiringDocumentPayload, S>
+
+  type ExpiringDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ExpiringDocumentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ExpiringDocumentCountAggregateInputType | true
+    }
+
+  export interface ExpiringDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExpiringDocument'], meta: { name: 'ExpiringDocument' } }
+    /**
+     * Find zero or one ExpiringDocument that matches the filter.
+     * @param {ExpiringDocumentFindUniqueArgs} args - Arguments to find a ExpiringDocument
+     * @example
+     * // Get one ExpiringDocument
+     * const expiringDocument = await prisma.expiringDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ExpiringDocumentFindUniqueArgs>(args: SelectSubset<T, ExpiringDocumentFindUniqueArgs<ExtArgs>>): Prisma__ExpiringDocumentClient<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ExpiringDocument that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ExpiringDocumentFindUniqueOrThrowArgs} args - Arguments to find a ExpiringDocument
+     * @example
+     * // Get one ExpiringDocument
+     * const expiringDocument = await prisma.expiringDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ExpiringDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, ExpiringDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ExpiringDocumentClient<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExpiringDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentFindFirstArgs} args - Arguments to find a ExpiringDocument
+     * @example
+     * // Get one ExpiringDocument
+     * const expiringDocument = await prisma.expiringDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ExpiringDocumentFindFirstArgs>(args?: SelectSubset<T, ExpiringDocumentFindFirstArgs<ExtArgs>>): Prisma__ExpiringDocumentClient<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExpiringDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentFindFirstOrThrowArgs} args - Arguments to find a ExpiringDocument
+     * @example
+     * // Get one ExpiringDocument
+     * const expiringDocument = await prisma.expiringDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ExpiringDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, ExpiringDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ExpiringDocumentClient<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ExpiringDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ExpiringDocuments
+     * const expiringDocuments = await prisma.expiringDocument.findMany()
+     * 
+     * // Get first 10 ExpiringDocuments
+     * const expiringDocuments = await prisma.expiringDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `expiringDocumentId`
+     * const expiringDocumentWithExpiringDocumentIdOnly = await prisma.expiringDocument.findMany({ select: { expiringDocumentId: true } })
+     * 
+     */
+    findMany<T extends ExpiringDocumentFindManyArgs>(args?: SelectSubset<T, ExpiringDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ExpiringDocument.
+     * @param {ExpiringDocumentCreateArgs} args - Arguments to create a ExpiringDocument.
+     * @example
+     * // Create one ExpiringDocument
+     * const ExpiringDocument = await prisma.expiringDocument.create({
+     *   data: {
+     *     // ... data to create a ExpiringDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends ExpiringDocumentCreateArgs>(args: SelectSubset<T, ExpiringDocumentCreateArgs<ExtArgs>>): Prisma__ExpiringDocumentClient<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ExpiringDocuments.
+     * @param {ExpiringDocumentCreateManyArgs} args - Arguments to create many ExpiringDocuments.
+     * @example
+     * // Create many ExpiringDocuments
+     * const expiringDocument = await prisma.expiringDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ExpiringDocumentCreateManyArgs>(args?: SelectSubset<T, ExpiringDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ExpiringDocuments and returns the data saved in the database.
+     * @param {ExpiringDocumentCreateManyAndReturnArgs} args - Arguments to create many ExpiringDocuments.
+     * @example
+     * // Create many ExpiringDocuments
+     * const expiringDocument = await prisma.expiringDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ExpiringDocuments and only return the `expiringDocumentId`
+     * const expiringDocumentWithExpiringDocumentIdOnly = await prisma.expiringDocument.createManyAndReturn({
+     *   select: { expiringDocumentId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ExpiringDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, ExpiringDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ExpiringDocument.
+     * @param {ExpiringDocumentDeleteArgs} args - Arguments to delete one ExpiringDocument.
+     * @example
+     * // Delete one ExpiringDocument
+     * const ExpiringDocument = await prisma.expiringDocument.delete({
+     *   where: {
+     *     // ... filter to delete one ExpiringDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ExpiringDocumentDeleteArgs>(args: SelectSubset<T, ExpiringDocumentDeleteArgs<ExtArgs>>): Prisma__ExpiringDocumentClient<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ExpiringDocument.
+     * @param {ExpiringDocumentUpdateArgs} args - Arguments to update one ExpiringDocument.
+     * @example
+     * // Update one ExpiringDocument
+     * const expiringDocument = await prisma.expiringDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ExpiringDocumentUpdateArgs>(args: SelectSubset<T, ExpiringDocumentUpdateArgs<ExtArgs>>): Prisma__ExpiringDocumentClient<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ExpiringDocuments.
+     * @param {ExpiringDocumentDeleteManyArgs} args - Arguments to filter ExpiringDocuments to delete.
+     * @example
+     * // Delete a few ExpiringDocuments
+     * const { count } = await prisma.expiringDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ExpiringDocumentDeleteManyArgs>(args?: SelectSubset<T, ExpiringDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExpiringDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ExpiringDocuments
+     * const expiringDocument = await prisma.expiringDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ExpiringDocumentUpdateManyArgs>(args: SelectSubset<T, ExpiringDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExpiringDocuments and returns the data updated in the database.
+     * @param {ExpiringDocumentUpdateManyAndReturnArgs} args - Arguments to update many ExpiringDocuments.
+     * @example
+     * // Update many ExpiringDocuments
+     * const expiringDocument = await prisma.expiringDocument.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ExpiringDocuments and only return the `expiringDocumentId`
+     * const expiringDocumentWithExpiringDocumentIdOnly = await prisma.expiringDocument.updateManyAndReturn({
+     *   select: { expiringDocumentId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ExpiringDocumentUpdateManyAndReturnArgs>(args: SelectSubset<T, ExpiringDocumentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ExpiringDocument.
+     * @param {ExpiringDocumentUpsertArgs} args - Arguments to update or create a ExpiringDocument.
+     * @example
+     * // Update or create a ExpiringDocument
+     * const expiringDocument = await prisma.expiringDocument.upsert({
+     *   create: {
+     *     // ... data to create a ExpiringDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ExpiringDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ExpiringDocumentUpsertArgs>(args: SelectSubset<T, ExpiringDocumentUpsertArgs<ExtArgs>>): Prisma__ExpiringDocumentClient<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ExpiringDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentCountArgs} args - Arguments to filter ExpiringDocuments to count.
+     * @example
+     * // Count the number of ExpiringDocuments
+     * const count = await prisma.expiringDocument.count({
+     *   where: {
+     *     // ... the filter for the ExpiringDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends ExpiringDocumentCountArgs>(
+      args?: Subset<T, ExpiringDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ExpiringDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ExpiringDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ExpiringDocumentAggregateArgs>(args: Subset<T, ExpiringDocumentAggregateArgs>): Prisma.PrismaPromise<GetExpiringDocumentAggregateType<T>>
+
+    /**
+     * Group by ExpiringDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ExpiringDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ExpiringDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: ExpiringDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ExpiringDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExpiringDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ExpiringDocument model
+   */
+  readonly fields: ExpiringDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ExpiringDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ExpiringDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    category<T extends ExpiringDocumentCategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExpiringDocumentCategoryDefaultArgs<ExtArgs>>): Prisma__ExpiringDocumentCategoryClient<$Result.GetResult<Prisma.$ExpiringDocumentCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    updatedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    history<T extends ExpiringDocument$historyArgs<ExtArgs> = {}>(args?: Subset<T, ExpiringDocument$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends ExpiringDocument$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, ExpiringDocument$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ExpiringDocument model
+   */
+  interface ExpiringDocumentFieldRefs {
+    readonly expiringDocumentId: FieldRef<"ExpiringDocument", 'Int'>
+    readonly categoryId: FieldRef<"ExpiringDocument", 'Int'>
+    readonly title: FieldRef<"ExpiringDocument", 'String'>
+    readonly documentCode: FieldRef<"ExpiringDocument", 'String'>
+    readonly referenceType: FieldRef<"ExpiringDocument", 'String'>
+    readonly referenceDescription: FieldRef<"ExpiringDocument", 'String'>
+    readonly storageSpace: FieldRef<"ExpiringDocument", 'String'>
+    readonly storagePath: FieldRef<"ExpiringDocument", 'String'>
+    readonly storageDescription: FieldRef<"ExpiringDocument", 'String'>
+    readonly issueDate: FieldRef<"ExpiringDocument", 'DateTime'>
+    readonly expirationDate: FieldRef<"ExpiringDocument", 'DateTime'>
+    readonly notes: FieldRef<"ExpiringDocument", 'String'>
+    readonly createdByUserId: FieldRef<"ExpiringDocument", 'Int'>
+    readonly updatedByUserId: FieldRef<"ExpiringDocument", 'Int'>
+    readonly createdAt: FieldRef<"ExpiringDocument", 'DateTime'>
+    readonly updatedAt: FieldRef<"ExpiringDocument", 'DateTime'>
+    readonly deletedAt: FieldRef<"ExpiringDocument", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ExpiringDocument findUnique
+   */
+  export type ExpiringDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocument to fetch.
+     */
+    where: ExpiringDocumentWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocument findUniqueOrThrow
+   */
+  export type ExpiringDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocument to fetch.
+     */
+    where: ExpiringDocumentWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocument findFirst
+   */
+  export type ExpiringDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocument to fetch.
+     */
+    where?: ExpiringDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocuments to fetch.
+     */
+    orderBy?: ExpiringDocumentOrderByWithRelationInput | ExpiringDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExpiringDocuments.
+     */
+    cursor?: ExpiringDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExpiringDocuments.
+     */
+    distinct?: ExpiringDocumentScalarFieldEnum | ExpiringDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocument findFirstOrThrow
+   */
+  export type ExpiringDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocument to fetch.
+     */
+    where?: ExpiringDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocuments to fetch.
+     */
+    orderBy?: ExpiringDocumentOrderByWithRelationInput | ExpiringDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExpiringDocuments.
+     */
+    cursor?: ExpiringDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExpiringDocuments.
+     */
+    distinct?: ExpiringDocumentScalarFieldEnum | ExpiringDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocument findMany
+   */
+  export type ExpiringDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocuments to fetch.
+     */
+    where?: ExpiringDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocuments to fetch.
+     */
+    orderBy?: ExpiringDocumentOrderByWithRelationInput | ExpiringDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ExpiringDocuments.
+     */
+    cursor?: ExpiringDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocuments.
+     */
+    skip?: number
+    distinct?: ExpiringDocumentScalarFieldEnum | ExpiringDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocument create
+   */
+  export type ExpiringDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ExpiringDocument.
+     */
+    data: XOR<ExpiringDocumentCreateInput, ExpiringDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * ExpiringDocument createMany
+   */
+  export type ExpiringDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ExpiringDocuments.
+     */
+    data: ExpiringDocumentCreateManyInput | ExpiringDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ExpiringDocument createManyAndReturn
+   */
+  export type ExpiringDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to create many ExpiringDocuments.
+     */
+    data: ExpiringDocumentCreateManyInput | ExpiringDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ExpiringDocument update
+   */
+  export type ExpiringDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ExpiringDocument.
+     */
+    data: XOR<ExpiringDocumentUpdateInput, ExpiringDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which ExpiringDocument to update.
+     */
+    where: ExpiringDocumentWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocument updateMany
+   */
+  export type ExpiringDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ExpiringDocuments.
+     */
+    data: XOR<ExpiringDocumentUpdateManyMutationInput, ExpiringDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which ExpiringDocuments to update
+     */
+    where?: ExpiringDocumentWhereInput
+    /**
+     * Limit how many ExpiringDocuments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpiringDocument updateManyAndReturn
+   */
+  export type ExpiringDocumentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to update ExpiringDocuments.
+     */
+    data: XOR<ExpiringDocumentUpdateManyMutationInput, ExpiringDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which ExpiringDocuments to update
+     */
+    where?: ExpiringDocumentWhereInput
+    /**
+     * Limit how many ExpiringDocuments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ExpiringDocument upsert
+   */
+  export type ExpiringDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ExpiringDocument to update in case it exists.
+     */
+    where: ExpiringDocumentWhereUniqueInput
+    /**
+     * In case the ExpiringDocument found by the `where` argument doesn't exist, create a new ExpiringDocument with this data.
+     */
+    create: XOR<ExpiringDocumentCreateInput, ExpiringDocumentUncheckedCreateInput>
+    /**
+     * In case the ExpiringDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ExpiringDocumentUpdateInput, ExpiringDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * ExpiringDocument delete
+   */
+  export type ExpiringDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+    /**
+     * Filter which ExpiringDocument to delete.
+     */
+    where: ExpiringDocumentWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocument deleteMany
+   */
+  export type ExpiringDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExpiringDocuments to delete
+     */
+    where?: ExpiringDocumentWhereInput
+    /**
+     * Limit how many ExpiringDocuments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpiringDocument.history
+   */
+  export type ExpiringDocument$historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    where?: ExpiringDocumentHistoryWhereInput
+    orderBy?: ExpiringDocumentHistoryOrderByWithRelationInput | ExpiringDocumentHistoryOrderByWithRelationInput[]
+    cursor?: ExpiringDocumentHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExpiringDocumentHistoryScalarFieldEnum | ExpiringDocumentHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocument.notifications
+   */
+  export type ExpiringDocument$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+    where?: ExpiringDocumentNotificationWhereInput
+    orderBy?: ExpiringDocumentNotificationOrderByWithRelationInput | ExpiringDocumentNotificationOrderByWithRelationInput[]
+    cursor?: ExpiringDocumentNotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExpiringDocumentNotificationScalarFieldEnum | ExpiringDocumentNotificationScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocument without action
+   */
+  export type ExpiringDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocument
+     */
+    select?: ExpiringDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocument
+     */
+    omit?: ExpiringDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ExpiringDocumentHistory
+   */
+
+  export type AggregateExpiringDocumentHistory = {
+    _count: ExpiringDocumentHistoryCountAggregateOutputType | null
+    _avg: ExpiringDocumentHistoryAvgAggregateOutputType | null
+    _sum: ExpiringDocumentHistorySumAggregateOutputType | null
+    _min: ExpiringDocumentHistoryMinAggregateOutputType | null
+    _max: ExpiringDocumentHistoryMaxAggregateOutputType | null
+  }
+
+  export type ExpiringDocumentHistoryAvgAggregateOutputType = {
+    expiringDocumentHistoryId: number | null
+    expiringDocumentId: number | null
+    changedByUserId: number | null
+  }
+
+  export type ExpiringDocumentHistorySumAggregateOutputType = {
+    expiringDocumentHistoryId: number | null
+    expiringDocumentId: number | null
+    changedByUserId: number | null
+  }
+
+  export type ExpiringDocumentHistoryMinAggregateOutputType = {
+    expiringDocumentHistoryId: number | null
+    expiringDocumentId: number | null
+    changedByUserId: number | null
+    action: $Enums.ExpiringDocumentHistoryAction | null
+    createdAt: Date | null
+  }
+
+  export type ExpiringDocumentHistoryMaxAggregateOutputType = {
+    expiringDocumentHistoryId: number | null
+    expiringDocumentId: number | null
+    changedByUserId: number | null
+    action: $Enums.ExpiringDocumentHistoryAction | null
+    createdAt: Date | null
+  }
+
+  export type ExpiringDocumentHistoryCountAggregateOutputType = {
+    expiringDocumentHistoryId: number
+    expiringDocumentId: number
+    changedByUserId: number
+    action: number
+    snapshot: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ExpiringDocumentHistoryAvgAggregateInputType = {
+    expiringDocumentHistoryId?: true
+    expiringDocumentId?: true
+    changedByUserId?: true
+  }
+
+  export type ExpiringDocumentHistorySumAggregateInputType = {
+    expiringDocumentHistoryId?: true
+    expiringDocumentId?: true
+    changedByUserId?: true
+  }
+
+  export type ExpiringDocumentHistoryMinAggregateInputType = {
+    expiringDocumentHistoryId?: true
+    expiringDocumentId?: true
+    changedByUserId?: true
+    action?: true
+    createdAt?: true
+  }
+
+  export type ExpiringDocumentHistoryMaxAggregateInputType = {
+    expiringDocumentHistoryId?: true
+    expiringDocumentId?: true
+    changedByUserId?: true
+    action?: true
+    createdAt?: true
+  }
+
+  export type ExpiringDocumentHistoryCountAggregateInputType = {
+    expiringDocumentHistoryId?: true
+    expiringDocumentId?: true
+    changedByUserId?: true
+    action?: true
+    snapshot?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ExpiringDocumentHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExpiringDocumentHistory to aggregate.
+     */
+    where?: ExpiringDocumentHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentHistories to fetch.
+     */
+    orderBy?: ExpiringDocumentHistoryOrderByWithRelationInput | ExpiringDocumentHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ExpiringDocumentHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ExpiringDocumentHistories
+    **/
+    _count?: true | ExpiringDocumentHistoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ExpiringDocumentHistoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ExpiringDocumentHistorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ExpiringDocumentHistoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ExpiringDocumentHistoryMaxAggregateInputType
+  }
+
+  export type GetExpiringDocumentHistoryAggregateType<T extends ExpiringDocumentHistoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateExpiringDocumentHistory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateExpiringDocumentHistory[P]>
+      : GetScalarType<T[P], AggregateExpiringDocumentHistory[P]>
+  }
+
+
+
+
+  export type ExpiringDocumentHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpiringDocumentHistoryWhereInput
+    orderBy?: ExpiringDocumentHistoryOrderByWithAggregationInput | ExpiringDocumentHistoryOrderByWithAggregationInput[]
+    by: ExpiringDocumentHistoryScalarFieldEnum[] | ExpiringDocumentHistoryScalarFieldEnum
+    having?: ExpiringDocumentHistoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ExpiringDocumentHistoryCountAggregateInputType | true
+    _avg?: ExpiringDocumentHistoryAvgAggregateInputType
+    _sum?: ExpiringDocumentHistorySumAggregateInputType
+    _min?: ExpiringDocumentHistoryMinAggregateInputType
+    _max?: ExpiringDocumentHistoryMaxAggregateInputType
+  }
+
+  export type ExpiringDocumentHistoryGroupByOutputType = {
+    expiringDocumentHistoryId: number
+    expiringDocumentId: number
+    changedByUserId: number
+    action: $Enums.ExpiringDocumentHistoryAction
+    snapshot: JsonValue
+    createdAt: Date
+    _count: ExpiringDocumentHistoryCountAggregateOutputType | null
+    _avg: ExpiringDocumentHistoryAvgAggregateOutputType | null
+    _sum: ExpiringDocumentHistorySumAggregateOutputType | null
+    _min: ExpiringDocumentHistoryMinAggregateOutputType | null
+    _max: ExpiringDocumentHistoryMaxAggregateOutputType | null
+  }
+
+  type GetExpiringDocumentHistoryGroupByPayload<T extends ExpiringDocumentHistoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ExpiringDocumentHistoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ExpiringDocumentHistoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ExpiringDocumentHistoryGroupByOutputType[P]>
+            : GetScalarType<T[P], ExpiringDocumentHistoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ExpiringDocumentHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentHistoryId?: boolean
+    expiringDocumentId?: boolean
+    changedByUserId?: boolean
+    action?: boolean
+    snapshot?: boolean
+    createdAt?: boolean
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+    changedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expiringDocumentHistory"]>
+
+  export type ExpiringDocumentHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentHistoryId?: boolean
+    expiringDocumentId?: boolean
+    changedByUserId?: boolean
+    action?: boolean
+    snapshot?: boolean
+    createdAt?: boolean
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+    changedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expiringDocumentHistory"]>
+
+  export type ExpiringDocumentHistorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentHistoryId?: boolean
+    expiringDocumentId?: boolean
+    changedByUserId?: boolean
+    action?: boolean
+    snapshot?: boolean
+    createdAt?: boolean
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+    changedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expiringDocumentHistory"]>
+
+  export type ExpiringDocumentHistorySelectScalar = {
+    expiringDocumentHistoryId?: boolean
+    expiringDocumentId?: boolean
+    changedByUserId?: boolean
+    action?: boolean
+    snapshot?: boolean
+    createdAt?: boolean
+  }
+
+  export type ExpiringDocumentHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"expiringDocumentHistoryId" | "expiringDocumentId" | "changedByUserId" | "action" | "snapshot" | "createdAt", ExtArgs["result"]["expiringDocumentHistory"]>
+  export type ExpiringDocumentHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+    changedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ExpiringDocumentHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+    changedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ExpiringDocumentHistoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+    changedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ExpiringDocumentHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ExpiringDocumentHistory"
+    objects: {
+      document: Prisma.$ExpiringDocumentPayload<ExtArgs>
+      changedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      expiringDocumentHistoryId: number
+      expiringDocumentId: number
+      changedByUserId: number
+      action: $Enums.ExpiringDocumentHistoryAction
+      snapshot: Prisma.JsonValue
+      createdAt: Date
+    }, ExtArgs["result"]["expiringDocumentHistory"]>
+    composites: {}
+  }
+
+  type ExpiringDocumentHistoryGetPayload<S extends boolean | null | undefined | ExpiringDocumentHistoryDefaultArgs> = $Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload, S>
+
+  type ExpiringDocumentHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ExpiringDocumentHistoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ExpiringDocumentHistoryCountAggregateInputType | true
+    }
+
+  export interface ExpiringDocumentHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExpiringDocumentHistory'], meta: { name: 'ExpiringDocumentHistory' } }
+    /**
+     * Find zero or one ExpiringDocumentHistory that matches the filter.
+     * @param {ExpiringDocumentHistoryFindUniqueArgs} args - Arguments to find a ExpiringDocumentHistory
+     * @example
+     * // Get one ExpiringDocumentHistory
+     * const expiringDocumentHistory = await prisma.expiringDocumentHistory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ExpiringDocumentHistoryFindUniqueArgs>(args: SelectSubset<T, ExpiringDocumentHistoryFindUniqueArgs<ExtArgs>>): Prisma__ExpiringDocumentHistoryClient<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ExpiringDocumentHistory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ExpiringDocumentHistoryFindUniqueOrThrowArgs} args - Arguments to find a ExpiringDocumentHistory
+     * @example
+     * // Get one ExpiringDocumentHistory
+     * const expiringDocumentHistory = await prisma.expiringDocumentHistory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ExpiringDocumentHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, ExpiringDocumentHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ExpiringDocumentHistoryClient<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExpiringDocumentHistory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentHistoryFindFirstArgs} args - Arguments to find a ExpiringDocumentHistory
+     * @example
+     * // Get one ExpiringDocumentHistory
+     * const expiringDocumentHistory = await prisma.expiringDocumentHistory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ExpiringDocumentHistoryFindFirstArgs>(args?: SelectSubset<T, ExpiringDocumentHistoryFindFirstArgs<ExtArgs>>): Prisma__ExpiringDocumentHistoryClient<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExpiringDocumentHistory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentHistoryFindFirstOrThrowArgs} args - Arguments to find a ExpiringDocumentHistory
+     * @example
+     * // Get one ExpiringDocumentHistory
+     * const expiringDocumentHistory = await prisma.expiringDocumentHistory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ExpiringDocumentHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, ExpiringDocumentHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__ExpiringDocumentHistoryClient<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ExpiringDocumentHistories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ExpiringDocumentHistories
+     * const expiringDocumentHistories = await prisma.expiringDocumentHistory.findMany()
+     * 
+     * // Get first 10 ExpiringDocumentHistories
+     * const expiringDocumentHistories = await prisma.expiringDocumentHistory.findMany({ take: 10 })
+     * 
+     * // Only select the `expiringDocumentHistoryId`
+     * const expiringDocumentHistoryWithExpiringDocumentHistoryIdOnly = await prisma.expiringDocumentHistory.findMany({ select: { expiringDocumentHistoryId: true } })
+     * 
+     */
+    findMany<T extends ExpiringDocumentHistoryFindManyArgs>(args?: SelectSubset<T, ExpiringDocumentHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ExpiringDocumentHistory.
+     * @param {ExpiringDocumentHistoryCreateArgs} args - Arguments to create a ExpiringDocumentHistory.
+     * @example
+     * // Create one ExpiringDocumentHistory
+     * const ExpiringDocumentHistory = await prisma.expiringDocumentHistory.create({
+     *   data: {
+     *     // ... data to create a ExpiringDocumentHistory
+     *   }
+     * })
+     * 
+     */
+    create<T extends ExpiringDocumentHistoryCreateArgs>(args: SelectSubset<T, ExpiringDocumentHistoryCreateArgs<ExtArgs>>): Prisma__ExpiringDocumentHistoryClient<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ExpiringDocumentHistories.
+     * @param {ExpiringDocumentHistoryCreateManyArgs} args - Arguments to create many ExpiringDocumentHistories.
+     * @example
+     * // Create many ExpiringDocumentHistories
+     * const expiringDocumentHistory = await prisma.expiringDocumentHistory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ExpiringDocumentHistoryCreateManyArgs>(args?: SelectSubset<T, ExpiringDocumentHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ExpiringDocumentHistories and returns the data saved in the database.
+     * @param {ExpiringDocumentHistoryCreateManyAndReturnArgs} args - Arguments to create many ExpiringDocumentHistories.
+     * @example
+     * // Create many ExpiringDocumentHistories
+     * const expiringDocumentHistory = await prisma.expiringDocumentHistory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ExpiringDocumentHistories and only return the `expiringDocumentHistoryId`
+     * const expiringDocumentHistoryWithExpiringDocumentHistoryIdOnly = await prisma.expiringDocumentHistory.createManyAndReturn({
+     *   select: { expiringDocumentHistoryId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ExpiringDocumentHistoryCreateManyAndReturnArgs>(args?: SelectSubset<T, ExpiringDocumentHistoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ExpiringDocumentHistory.
+     * @param {ExpiringDocumentHistoryDeleteArgs} args - Arguments to delete one ExpiringDocumentHistory.
+     * @example
+     * // Delete one ExpiringDocumentHistory
+     * const ExpiringDocumentHistory = await prisma.expiringDocumentHistory.delete({
+     *   where: {
+     *     // ... filter to delete one ExpiringDocumentHistory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ExpiringDocumentHistoryDeleteArgs>(args: SelectSubset<T, ExpiringDocumentHistoryDeleteArgs<ExtArgs>>): Prisma__ExpiringDocumentHistoryClient<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ExpiringDocumentHistory.
+     * @param {ExpiringDocumentHistoryUpdateArgs} args - Arguments to update one ExpiringDocumentHistory.
+     * @example
+     * // Update one ExpiringDocumentHistory
+     * const expiringDocumentHistory = await prisma.expiringDocumentHistory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ExpiringDocumentHistoryUpdateArgs>(args: SelectSubset<T, ExpiringDocumentHistoryUpdateArgs<ExtArgs>>): Prisma__ExpiringDocumentHistoryClient<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ExpiringDocumentHistories.
+     * @param {ExpiringDocumentHistoryDeleteManyArgs} args - Arguments to filter ExpiringDocumentHistories to delete.
+     * @example
+     * // Delete a few ExpiringDocumentHistories
+     * const { count } = await prisma.expiringDocumentHistory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ExpiringDocumentHistoryDeleteManyArgs>(args?: SelectSubset<T, ExpiringDocumentHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExpiringDocumentHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentHistoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ExpiringDocumentHistories
+     * const expiringDocumentHistory = await prisma.expiringDocumentHistory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ExpiringDocumentHistoryUpdateManyArgs>(args: SelectSubset<T, ExpiringDocumentHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExpiringDocumentHistories and returns the data updated in the database.
+     * @param {ExpiringDocumentHistoryUpdateManyAndReturnArgs} args - Arguments to update many ExpiringDocumentHistories.
+     * @example
+     * // Update many ExpiringDocumentHistories
+     * const expiringDocumentHistory = await prisma.expiringDocumentHistory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ExpiringDocumentHistories and only return the `expiringDocumentHistoryId`
+     * const expiringDocumentHistoryWithExpiringDocumentHistoryIdOnly = await prisma.expiringDocumentHistory.updateManyAndReturn({
+     *   select: { expiringDocumentHistoryId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ExpiringDocumentHistoryUpdateManyAndReturnArgs>(args: SelectSubset<T, ExpiringDocumentHistoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ExpiringDocumentHistory.
+     * @param {ExpiringDocumentHistoryUpsertArgs} args - Arguments to update or create a ExpiringDocumentHistory.
+     * @example
+     * // Update or create a ExpiringDocumentHistory
+     * const expiringDocumentHistory = await prisma.expiringDocumentHistory.upsert({
+     *   create: {
+     *     // ... data to create a ExpiringDocumentHistory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ExpiringDocumentHistory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ExpiringDocumentHistoryUpsertArgs>(args: SelectSubset<T, ExpiringDocumentHistoryUpsertArgs<ExtArgs>>): Prisma__ExpiringDocumentHistoryClient<$Result.GetResult<Prisma.$ExpiringDocumentHistoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ExpiringDocumentHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentHistoryCountArgs} args - Arguments to filter ExpiringDocumentHistories to count.
+     * @example
+     * // Count the number of ExpiringDocumentHistories
+     * const count = await prisma.expiringDocumentHistory.count({
+     *   where: {
+     *     // ... the filter for the ExpiringDocumentHistories we want to count
+     *   }
+     * })
+    **/
+    count<T extends ExpiringDocumentHistoryCountArgs>(
+      args?: Subset<T, ExpiringDocumentHistoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ExpiringDocumentHistoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ExpiringDocumentHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ExpiringDocumentHistoryAggregateArgs>(args: Subset<T, ExpiringDocumentHistoryAggregateArgs>): Prisma.PrismaPromise<GetExpiringDocumentHistoryAggregateType<T>>
+
+    /**
+     * Group by ExpiringDocumentHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentHistoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ExpiringDocumentHistoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ExpiringDocumentHistoryGroupByArgs['orderBy'] }
+        : { orderBy?: ExpiringDocumentHistoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ExpiringDocumentHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExpiringDocumentHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ExpiringDocumentHistory model
+   */
+  readonly fields: ExpiringDocumentHistoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ExpiringDocumentHistory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ExpiringDocumentHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    document<T extends ExpiringDocumentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExpiringDocumentDefaultArgs<ExtArgs>>): Prisma__ExpiringDocumentClient<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    changedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ExpiringDocumentHistory model
+   */
+  interface ExpiringDocumentHistoryFieldRefs {
+    readonly expiringDocumentHistoryId: FieldRef<"ExpiringDocumentHistory", 'Int'>
+    readonly expiringDocumentId: FieldRef<"ExpiringDocumentHistory", 'Int'>
+    readonly changedByUserId: FieldRef<"ExpiringDocumentHistory", 'Int'>
+    readonly action: FieldRef<"ExpiringDocumentHistory", 'ExpiringDocumentHistoryAction'>
+    readonly snapshot: FieldRef<"ExpiringDocumentHistory", 'Json'>
+    readonly createdAt: FieldRef<"ExpiringDocumentHistory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ExpiringDocumentHistory findUnique
+   */
+  export type ExpiringDocumentHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentHistory to fetch.
+     */
+    where: ExpiringDocumentHistoryWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentHistory findUniqueOrThrow
+   */
+  export type ExpiringDocumentHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentHistory to fetch.
+     */
+    where: ExpiringDocumentHistoryWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentHistory findFirst
+   */
+  export type ExpiringDocumentHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentHistory to fetch.
+     */
+    where?: ExpiringDocumentHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentHistories to fetch.
+     */
+    orderBy?: ExpiringDocumentHistoryOrderByWithRelationInput | ExpiringDocumentHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExpiringDocumentHistories.
+     */
+    cursor?: ExpiringDocumentHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExpiringDocumentHistories.
+     */
+    distinct?: ExpiringDocumentHistoryScalarFieldEnum | ExpiringDocumentHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocumentHistory findFirstOrThrow
+   */
+  export type ExpiringDocumentHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentHistory to fetch.
+     */
+    where?: ExpiringDocumentHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentHistories to fetch.
+     */
+    orderBy?: ExpiringDocumentHistoryOrderByWithRelationInput | ExpiringDocumentHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExpiringDocumentHistories.
+     */
+    cursor?: ExpiringDocumentHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExpiringDocumentHistories.
+     */
+    distinct?: ExpiringDocumentHistoryScalarFieldEnum | ExpiringDocumentHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocumentHistory findMany
+   */
+  export type ExpiringDocumentHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentHistories to fetch.
+     */
+    where?: ExpiringDocumentHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentHistories to fetch.
+     */
+    orderBy?: ExpiringDocumentHistoryOrderByWithRelationInput | ExpiringDocumentHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ExpiringDocumentHistories.
+     */
+    cursor?: ExpiringDocumentHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentHistories.
+     */
+    skip?: number
+    distinct?: ExpiringDocumentHistoryScalarFieldEnum | ExpiringDocumentHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocumentHistory create
+   */
+  export type ExpiringDocumentHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ExpiringDocumentHistory.
+     */
+    data: XOR<ExpiringDocumentHistoryCreateInput, ExpiringDocumentHistoryUncheckedCreateInput>
+  }
+
+  /**
+   * ExpiringDocumentHistory createMany
+   */
+  export type ExpiringDocumentHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ExpiringDocumentHistories.
+     */
+    data: ExpiringDocumentHistoryCreateManyInput | ExpiringDocumentHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ExpiringDocumentHistory createManyAndReturn
+   */
+  export type ExpiringDocumentHistoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many ExpiringDocumentHistories.
+     */
+    data: ExpiringDocumentHistoryCreateManyInput | ExpiringDocumentHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ExpiringDocumentHistory update
+   */
+  export type ExpiringDocumentHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ExpiringDocumentHistory.
+     */
+    data: XOR<ExpiringDocumentHistoryUpdateInput, ExpiringDocumentHistoryUncheckedUpdateInput>
+    /**
+     * Choose, which ExpiringDocumentHistory to update.
+     */
+    where: ExpiringDocumentHistoryWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentHistory updateMany
+   */
+  export type ExpiringDocumentHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ExpiringDocumentHistories.
+     */
+    data: XOR<ExpiringDocumentHistoryUpdateManyMutationInput, ExpiringDocumentHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which ExpiringDocumentHistories to update
+     */
+    where?: ExpiringDocumentHistoryWhereInput
+    /**
+     * Limit how many ExpiringDocumentHistories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpiringDocumentHistory updateManyAndReturn
+   */
+  export type ExpiringDocumentHistoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * The data used to update ExpiringDocumentHistories.
+     */
+    data: XOR<ExpiringDocumentHistoryUpdateManyMutationInput, ExpiringDocumentHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which ExpiringDocumentHistories to update
+     */
+    where?: ExpiringDocumentHistoryWhereInput
+    /**
+     * Limit how many ExpiringDocumentHistories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ExpiringDocumentHistory upsert
+   */
+  export type ExpiringDocumentHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ExpiringDocumentHistory to update in case it exists.
+     */
+    where: ExpiringDocumentHistoryWhereUniqueInput
+    /**
+     * In case the ExpiringDocumentHistory found by the `where` argument doesn't exist, create a new ExpiringDocumentHistory with this data.
+     */
+    create: XOR<ExpiringDocumentHistoryCreateInput, ExpiringDocumentHistoryUncheckedCreateInput>
+    /**
+     * In case the ExpiringDocumentHistory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ExpiringDocumentHistoryUpdateInput, ExpiringDocumentHistoryUncheckedUpdateInput>
+  }
+
+  /**
+   * ExpiringDocumentHistory delete
+   */
+  export type ExpiringDocumentHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+    /**
+     * Filter which ExpiringDocumentHistory to delete.
+     */
+    where: ExpiringDocumentHistoryWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentHistory deleteMany
+   */
+  export type ExpiringDocumentHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExpiringDocumentHistories to delete
+     */
+    where?: ExpiringDocumentHistoryWhereInput
+    /**
+     * Limit how many ExpiringDocumentHistories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpiringDocumentHistory without action
+   */
+  export type ExpiringDocumentHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentHistory
+     */
+    select?: ExpiringDocumentHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentHistory
+     */
+    omit?: ExpiringDocumentHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentHistoryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ExpiringDocumentNotification
+   */
+
+  export type AggregateExpiringDocumentNotification = {
+    _count: ExpiringDocumentNotificationCountAggregateOutputType | null
+    _avg: ExpiringDocumentNotificationAvgAggregateOutputType | null
+    _sum: ExpiringDocumentNotificationSumAggregateOutputType | null
+    _min: ExpiringDocumentNotificationMinAggregateOutputType | null
+    _max: ExpiringDocumentNotificationMaxAggregateOutputType | null
+  }
+
+  export type ExpiringDocumentNotificationAvgAggregateOutputType = {
+    expiringDocumentNotificationId: number | null
+    expiringDocumentId: number | null
+  }
+
+  export type ExpiringDocumentNotificationSumAggregateOutputType = {
+    expiringDocumentNotificationId: number | null
+    expiringDocumentId: number | null
+  }
+
+  export type ExpiringDocumentNotificationMinAggregateOutputType = {
+    expiringDocumentNotificationId: number | null
+    expiringDocumentId: number | null
+    alertLevel: $Enums.ExpiringDocumentAlertLevel | null
+    expirationDate: Date | null
+    sentAt: Date | null
+  }
+
+  export type ExpiringDocumentNotificationMaxAggregateOutputType = {
+    expiringDocumentNotificationId: number | null
+    expiringDocumentId: number | null
+    alertLevel: $Enums.ExpiringDocumentAlertLevel | null
+    expirationDate: Date | null
+    sentAt: Date | null
+  }
+
+  export type ExpiringDocumentNotificationCountAggregateOutputType = {
+    expiringDocumentNotificationId: number
+    expiringDocumentId: number
+    alertLevel: number
+    expirationDate: number
+    recipients: number
+    sentAt: number
+    _all: number
+  }
+
+
+  export type ExpiringDocumentNotificationAvgAggregateInputType = {
+    expiringDocumentNotificationId?: true
+    expiringDocumentId?: true
+  }
+
+  export type ExpiringDocumentNotificationSumAggregateInputType = {
+    expiringDocumentNotificationId?: true
+    expiringDocumentId?: true
+  }
+
+  export type ExpiringDocumentNotificationMinAggregateInputType = {
+    expiringDocumentNotificationId?: true
+    expiringDocumentId?: true
+    alertLevel?: true
+    expirationDate?: true
+    sentAt?: true
+  }
+
+  export type ExpiringDocumentNotificationMaxAggregateInputType = {
+    expiringDocumentNotificationId?: true
+    expiringDocumentId?: true
+    alertLevel?: true
+    expirationDate?: true
+    sentAt?: true
+  }
+
+  export type ExpiringDocumentNotificationCountAggregateInputType = {
+    expiringDocumentNotificationId?: true
+    expiringDocumentId?: true
+    alertLevel?: true
+    expirationDate?: true
+    recipients?: true
+    sentAt?: true
+    _all?: true
+  }
+
+  export type ExpiringDocumentNotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExpiringDocumentNotification to aggregate.
+     */
+    where?: ExpiringDocumentNotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentNotifications to fetch.
+     */
+    orderBy?: ExpiringDocumentNotificationOrderByWithRelationInput | ExpiringDocumentNotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ExpiringDocumentNotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentNotifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentNotifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ExpiringDocumentNotifications
+    **/
+    _count?: true | ExpiringDocumentNotificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ExpiringDocumentNotificationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ExpiringDocumentNotificationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ExpiringDocumentNotificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ExpiringDocumentNotificationMaxAggregateInputType
+  }
+
+  export type GetExpiringDocumentNotificationAggregateType<T extends ExpiringDocumentNotificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateExpiringDocumentNotification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateExpiringDocumentNotification[P]>
+      : GetScalarType<T[P], AggregateExpiringDocumentNotification[P]>
+  }
+
+
+
+
+  export type ExpiringDocumentNotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpiringDocumentNotificationWhereInput
+    orderBy?: ExpiringDocumentNotificationOrderByWithAggregationInput | ExpiringDocumentNotificationOrderByWithAggregationInput[]
+    by: ExpiringDocumentNotificationScalarFieldEnum[] | ExpiringDocumentNotificationScalarFieldEnum
+    having?: ExpiringDocumentNotificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ExpiringDocumentNotificationCountAggregateInputType | true
+    _avg?: ExpiringDocumentNotificationAvgAggregateInputType
+    _sum?: ExpiringDocumentNotificationSumAggregateInputType
+    _min?: ExpiringDocumentNotificationMinAggregateInputType
+    _max?: ExpiringDocumentNotificationMaxAggregateInputType
+  }
+
+  export type ExpiringDocumentNotificationGroupByOutputType = {
+    expiringDocumentNotificationId: number
+    expiringDocumentId: number
+    alertLevel: $Enums.ExpiringDocumentAlertLevel
+    expirationDate: Date
+    recipients: string[]
+    sentAt: Date
+    _count: ExpiringDocumentNotificationCountAggregateOutputType | null
+    _avg: ExpiringDocumentNotificationAvgAggregateOutputType | null
+    _sum: ExpiringDocumentNotificationSumAggregateOutputType | null
+    _min: ExpiringDocumentNotificationMinAggregateOutputType | null
+    _max: ExpiringDocumentNotificationMaxAggregateOutputType | null
+  }
+
+  type GetExpiringDocumentNotificationGroupByPayload<T extends ExpiringDocumentNotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ExpiringDocumentNotificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ExpiringDocumentNotificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ExpiringDocumentNotificationGroupByOutputType[P]>
+            : GetScalarType<T[P], ExpiringDocumentNotificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ExpiringDocumentNotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentNotificationId?: boolean
+    expiringDocumentId?: boolean
+    alertLevel?: boolean
+    expirationDate?: boolean
+    recipients?: boolean
+    sentAt?: boolean
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expiringDocumentNotification"]>
+
+  export type ExpiringDocumentNotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentNotificationId?: boolean
+    expiringDocumentId?: boolean
+    alertLevel?: boolean
+    expirationDate?: boolean
+    recipients?: boolean
+    sentAt?: boolean
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expiringDocumentNotification"]>
+
+  export type ExpiringDocumentNotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    expiringDocumentNotificationId?: boolean
+    expiringDocumentId?: boolean
+    alertLevel?: boolean
+    expirationDate?: boolean
+    recipients?: boolean
+    sentAt?: boolean
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expiringDocumentNotification"]>
+
+  export type ExpiringDocumentNotificationSelectScalar = {
+    expiringDocumentNotificationId?: boolean
+    expiringDocumentId?: boolean
+    alertLevel?: boolean
+    expirationDate?: boolean
+    recipients?: boolean
+    sentAt?: boolean
+  }
+
+  export type ExpiringDocumentNotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"expiringDocumentNotificationId" | "expiringDocumentId" | "alertLevel" | "expirationDate" | "recipients" | "sentAt", ExtArgs["result"]["expiringDocumentNotification"]>
+  export type ExpiringDocumentNotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+  }
+  export type ExpiringDocumentNotificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+  }
+  export type ExpiringDocumentNotificationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    document?: boolean | ExpiringDocumentDefaultArgs<ExtArgs>
+  }
+
+  export type $ExpiringDocumentNotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ExpiringDocumentNotification"
+    objects: {
+      document: Prisma.$ExpiringDocumentPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      expiringDocumentNotificationId: number
+      expiringDocumentId: number
+      alertLevel: $Enums.ExpiringDocumentAlertLevel
+      expirationDate: Date
+      recipients: string[]
+      sentAt: Date
+    }, ExtArgs["result"]["expiringDocumentNotification"]>
+    composites: {}
+  }
+
+  type ExpiringDocumentNotificationGetPayload<S extends boolean | null | undefined | ExpiringDocumentNotificationDefaultArgs> = $Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload, S>
+
+  type ExpiringDocumentNotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ExpiringDocumentNotificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ExpiringDocumentNotificationCountAggregateInputType | true
+    }
+
+  export interface ExpiringDocumentNotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExpiringDocumentNotification'], meta: { name: 'ExpiringDocumentNotification' } }
+    /**
+     * Find zero or one ExpiringDocumentNotification that matches the filter.
+     * @param {ExpiringDocumentNotificationFindUniqueArgs} args - Arguments to find a ExpiringDocumentNotification
+     * @example
+     * // Get one ExpiringDocumentNotification
+     * const expiringDocumentNotification = await prisma.expiringDocumentNotification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ExpiringDocumentNotificationFindUniqueArgs>(args: SelectSubset<T, ExpiringDocumentNotificationFindUniqueArgs<ExtArgs>>): Prisma__ExpiringDocumentNotificationClient<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ExpiringDocumentNotification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ExpiringDocumentNotificationFindUniqueOrThrowArgs} args - Arguments to find a ExpiringDocumentNotification
+     * @example
+     * // Get one ExpiringDocumentNotification
+     * const expiringDocumentNotification = await prisma.expiringDocumentNotification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ExpiringDocumentNotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, ExpiringDocumentNotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ExpiringDocumentNotificationClient<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExpiringDocumentNotification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentNotificationFindFirstArgs} args - Arguments to find a ExpiringDocumentNotification
+     * @example
+     * // Get one ExpiringDocumentNotification
+     * const expiringDocumentNotification = await prisma.expiringDocumentNotification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ExpiringDocumentNotificationFindFirstArgs>(args?: SelectSubset<T, ExpiringDocumentNotificationFindFirstArgs<ExtArgs>>): Prisma__ExpiringDocumentNotificationClient<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExpiringDocumentNotification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentNotificationFindFirstOrThrowArgs} args - Arguments to find a ExpiringDocumentNotification
+     * @example
+     * // Get one ExpiringDocumentNotification
+     * const expiringDocumentNotification = await prisma.expiringDocumentNotification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ExpiringDocumentNotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, ExpiringDocumentNotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__ExpiringDocumentNotificationClient<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ExpiringDocumentNotifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentNotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ExpiringDocumentNotifications
+     * const expiringDocumentNotifications = await prisma.expiringDocumentNotification.findMany()
+     * 
+     * // Get first 10 ExpiringDocumentNotifications
+     * const expiringDocumentNotifications = await prisma.expiringDocumentNotification.findMany({ take: 10 })
+     * 
+     * // Only select the `expiringDocumentNotificationId`
+     * const expiringDocumentNotificationWithExpiringDocumentNotificationIdOnly = await prisma.expiringDocumentNotification.findMany({ select: { expiringDocumentNotificationId: true } })
+     * 
+     */
+    findMany<T extends ExpiringDocumentNotificationFindManyArgs>(args?: SelectSubset<T, ExpiringDocumentNotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ExpiringDocumentNotification.
+     * @param {ExpiringDocumentNotificationCreateArgs} args - Arguments to create a ExpiringDocumentNotification.
+     * @example
+     * // Create one ExpiringDocumentNotification
+     * const ExpiringDocumentNotification = await prisma.expiringDocumentNotification.create({
+     *   data: {
+     *     // ... data to create a ExpiringDocumentNotification
+     *   }
+     * })
+     * 
+     */
+    create<T extends ExpiringDocumentNotificationCreateArgs>(args: SelectSubset<T, ExpiringDocumentNotificationCreateArgs<ExtArgs>>): Prisma__ExpiringDocumentNotificationClient<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ExpiringDocumentNotifications.
+     * @param {ExpiringDocumentNotificationCreateManyArgs} args - Arguments to create many ExpiringDocumentNotifications.
+     * @example
+     * // Create many ExpiringDocumentNotifications
+     * const expiringDocumentNotification = await prisma.expiringDocumentNotification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ExpiringDocumentNotificationCreateManyArgs>(args?: SelectSubset<T, ExpiringDocumentNotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ExpiringDocumentNotifications and returns the data saved in the database.
+     * @param {ExpiringDocumentNotificationCreateManyAndReturnArgs} args - Arguments to create many ExpiringDocumentNotifications.
+     * @example
+     * // Create many ExpiringDocumentNotifications
+     * const expiringDocumentNotification = await prisma.expiringDocumentNotification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ExpiringDocumentNotifications and only return the `expiringDocumentNotificationId`
+     * const expiringDocumentNotificationWithExpiringDocumentNotificationIdOnly = await prisma.expiringDocumentNotification.createManyAndReturn({
+     *   select: { expiringDocumentNotificationId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ExpiringDocumentNotificationCreateManyAndReturnArgs>(args?: SelectSubset<T, ExpiringDocumentNotificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ExpiringDocumentNotification.
+     * @param {ExpiringDocumentNotificationDeleteArgs} args - Arguments to delete one ExpiringDocumentNotification.
+     * @example
+     * // Delete one ExpiringDocumentNotification
+     * const ExpiringDocumentNotification = await prisma.expiringDocumentNotification.delete({
+     *   where: {
+     *     // ... filter to delete one ExpiringDocumentNotification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ExpiringDocumentNotificationDeleteArgs>(args: SelectSubset<T, ExpiringDocumentNotificationDeleteArgs<ExtArgs>>): Prisma__ExpiringDocumentNotificationClient<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ExpiringDocumentNotification.
+     * @param {ExpiringDocumentNotificationUpdateArgs} args - Arguments to update one ExpiringDocumentNotification.
+     * @example
+     * // Update one ExpiringDocumentNotification
+     * const expiringDocumentNotification = await prisma.expiringDocumentNotification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ExpiringDocumentNotificationUpdateArgs>(args: SelectSubset<T, ExpiringDocumentNotificationUpdateArgs<ExtArgs>>): Prisma__ExpiringDocumentNotificationClient<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ExpiringDocumentNotifications.
+     * @param {ExpiringDocumentNotificationDeleteManyArgs} args - Arguments to filter ExpiringDocumentNotifications to delete.
+     * @example
+     * // Delete a few ExpiringDocumentNotifications
+     * const { count } = await prisma.expiringDocumentNotification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ExpiringDocumentNotificationDeleteManyArgs>(args?: SelectSubset<T, ExpiringDocumentNotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExpiringDocumentNotifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentNotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ExpiringDocumentNotifications
+     * const expiringDocumentNotification = await prisma.expiringDocumentNotification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ExpiringDocumentNotificationUpdateManyArgs>(args: SelectSubset<T, ExpiringDocumentNotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExpiringDocumentNotifications and returns the data updated in the database.
+     * @param {ExpiringDocumentNotificationUpdateManyAndReturnArgs} args - Arguments to update many ExpiringDocumentNotifications.
+     * @example
+     * // Update many ExpiringDocumentNotifications
+     * const expiringDocumentNotification = await prisma.expiringDocumentNotification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ExpiringDocumentNotifications and only return the `expiringDocumentNotificationId`
+     * const expiringDocumentNotificationWithExpiringDocumentNotificationIdOnly = await prisma.expiringDocumentNotification.updateManyAndReturn({
+     *   select: { expiringDocumentNotificationId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ExpiringDocumentNotificationUpdateManyAndReturnArgs>(args: SelectSubset<T, ExpiringDocumentNotificationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ExpiringDocumentNotification.
+     * @param {ExpiringDocumentNotificationUpsertArgs} args - Arguments to update or create a ExpiringDocumentNotification.
+     * @example
+     * // Update or create a ExpiringDocumentNotification
+     * const expiringDocumentNotification = await prisma.expiringDocumentNotification.upsert({
+     *   create: {
+     *     // ... data to create a ExpiringDocumentNotification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ExpiringDocumentNotification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ExpiringDocumentNotificationUpsertArgs>(args: SelectSubset<T, ExpiringDocumentNotificationUpsertArgs<ExtArgs>>): Prisma__ExpiringDocumentNotificationClient<$Result.GetResult<Prisma.$ExpiringDocumentNotificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ExpiringDocumentNotifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentNotificationCountArgs} args - Arguments to filter ExpiringDocumentNotifications to count.
+     * @example
+     * // Count the number of ExpiringDocumentNotifications
+     * const count = await prisma.expiringDocumentNotification.count({
+     *   where: {
+     *     // ... the filter for the ExpiringDocumentNotifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends ExpiringDocumentNotificationCountArgs>(
+      args?: Subset<T, ExpiringDocumentNotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ExpiringDocumentNotificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ExpiringDocumentNotification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentNotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ExpiringDocumentNotificationAggregateArgs>(args: Subset<T, ExpiringDocumentNotificationAggregateArgs>): Prisma.PrismaPromise<GetExpiringDocumentNotificationAggregateType<T>>
+
+    /**
+     * Group by ExpiringDocumentNotification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpiringDocumentNotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ExpiringDocumentNotificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ExpiringDocumentNotificationGroupByArgs['orderBy'] }
+        : { orderBy?: ExpiringDocumentNotificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ExpiringDocumentNotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExpiringDocumentNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ExpiringDocumentNotification model
+   */
+  readonly fields: ExpiringDocumentNotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ExpiringDocumentNotification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ExpiringDocumentNotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    document<T extends ExpiringDocumentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExpiringDocumentDefaultArgs<ExtArgs>>): Prisma__ExpiringDocumentClient<$Result.GetResult<Prisma.$ExpiringDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ExpiringDocumentNotification model
+   */
+  interface ExpiringDocumentNotificationFieldRefs {
+    readonly expiringDocumentNotificationId: FieldRef<"ExpiringDocumentNotification", 'Int'>
+    readonly expiringDocumentId: FieldRef<"ExpiringDocumentNotification", 'Int'>
+    readonly alertLevel: FieldRef<"ExpiringDocumentNotification", 'ExpiringDocumentAlertLevel'>
+    readonly expirationDate: FieldRef<"ExpiringDocumentNotification", 'DateTime'>
+    readonly recipients: FieldRef<"ExpiringDocumentNotification", 'String[]'>
+    readonly sentAt: FieldRef<"ExpiringDocumentNotification", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ExpiringDocumentNotification findUnique
+   */
+  export type ExpiringDocumentNotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentNotification to fetch.
+     */
+    where: ExpiringDocumentNotificationWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentNotification findUniqueOrThrow
+   */
+  export type ExpiringDocumentNotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentNotification to fetch.
+     */
+    where: ExpiringDocumentNotificationWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentNotification findFirst
+   */
+  export type ExpiringDocumentNotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentNotification to fetch.
+     */
+    where?: ExpiringDocumentNotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentNotifications to fetch.
+     */
+    orderBy?: ExpiringDocumentNotificationOrderByWithRelationInput | ExpiringDocumentNotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExpiringDocumentNotifications.
+     */
+    cursor?: ExpiringDocumentNotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentNotifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentNotifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExpiringDocumentNotifications.
+     */
+    distinct?: ExpiringDocumentNotificationScalarFieldEnum | ExpiringDocumentNotificationScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocumentNotification findFirstOrThrow
+   */
+  export type ExpiringDocumentNotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentNotification to fetch.
+     */
+    where?: ExpiringDocumentNotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentNotifications to fetch.
+     */
+    orderBy?: ExpiringDocumentNotificationOrderByWithRelationInput | ExpiringDocumentNotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExpiringDocumentNotifications.
+     */
+    cursor?: ExpiringDocumentNotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentNotifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentNotifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExpiringDocumentNotifications.
+     */
+    distinct?: ExpiringDocumentNotificationScalarFieldEnum | ExpiringDocumentNotificationScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocumentNotification findMany
+   */
+  export type ExpiringDocumentNotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpiringDocumentNotifications to fetch.
+     */
+    where?: ExpiringDocumentNotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpiringDocumentNotifications to fetch.
+     */
+    orderBy?: ExpiringDocumentNotificationOrderByWithRelationInput | ExpiringDocumentNotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ExpiringDocumentNotifications.
+     */
+    cursor?: ExpiringDocumentNotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpiringDocumentNotifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpiringDocumentNotifications.
+     */
+    skip?: number
+    distinct?: ExpiringDocumentNotificationScalarFieldEnum | ExpiringDocumentNotificationScalarFieldEnum[]
+  }
+
+  /**
+   * ExpiringDocumentNotification create
+   */
+  export type ExpiringDocumentNotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ExpiringDocumentNotification.
+     */
+    data: XOR<ExpiringDocumentNotificationCreateInput, ExpiringDocumentNotificationUncheckedCreateInput>
+  }
+
+  /**
+   * ExpiringDocumentNotification createMany
+   */
+  export type ExpiringDocumentNotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ExpiringDocumentNotifications.
+     */
+    data: ExpiringDocumentNotificationCreateManyInput | ExpiringDocumentNotificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ExpiringDocumentNotification createManyAndReturn
+   */
+  export type ExpiringDocumentNotificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * The data used to create many ExpiringDocumentNotifications.
+     */
+    data: ExpiringDocumentNotificationCreateManyInput | ExpiringDocumentNotificationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ExpiringDocumentNotification update
+   */
+  export type ExpiringDocumentNotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ExpiringDocumentNotification.
+     */
+    data: XOR<ExpiringDocumentNotificationUpdateInput, ExpiringDocumentNotificationUncheckedUpdateInput>
+    /**
+     * Choose, which ExpiringDocumentNotification to update.
+     */
+    where: ExpiringDocumentNotificationWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentNotification updateMany
+   */
+  export type ExpiringDocumentNotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ExpiringDocumentNotifications.
+     */
+    data: XOR<ExpiringDocumentNotificationUpdateManyMutationInput, ExpiringDocumentNotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which ExpiringDocumentNotifications to update
+     */
+    where?: ExpiringDocumentNotificationWhereInput
+    /**
+     * Limit how many ExpiringDocumentNotifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpiringDocumentNotification updateManyAndReturn
+   */
+  export type ExpiringDocumentNotificationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * The data used to update ExpiringDocumentNotifications.
+     */
+    data: XOR<ExpiringDocumentNotificationUpdateManyMutationInput, ExpiringDocumentNotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which ExpiringDocumentNotifications to update
+     */
+    where?: ExpiringDocumentNotificationWhereInput
+    /**
+     * Limit how many ExpiringDocumentNotifications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ExpiringDocumentNotification upsert
+   */
+  export type ExpiringDocumentNotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ExpiringDocumentNotification to update in case it exists.
+     */
+    where: ExpiringDocumentNotificationWhereUniqueInput
+    /**
+     * In case the ExpiringDocumentNotification found by the `where` argument doesn't exist, create a new ExpiringDocumentNotification with this data.
+     */
+    create: XOR<ExpiringDocumentNotificationCreateInput, ExpiringDocumentNotificationUncheckedCreateInput>
+    /**
+     * In case the ExpiringDocumentNotification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ExpiringDocumentNotificationUpdateInput, ExpiringDocumentNotificationUncheckedUpdateInput>
+  }
+
+  /**
+   * ExpiringDocumentNotification delete
+   */
+  export type ExpiringDocumentNotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+    /**
+     * Filter which ExpiringDocumentNotification to delete.
+     */
+    where: ExpiringDocumentNotificationWhereUniqueInput
+  }
+
+  /**
+   * ExpiringDocumentNotification deleteMany
+   */
+  export type ExpiringDocumentNotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExpiringDocumentNotifications to delete
+     */
+    where?: ExpiringDocumentNotificationWhereInput
+    /**
+     * Limit how many ExpiringDocumentNotifications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpiringDocumentNotification without action
+   */
+  export type ExpiringDocumentNotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpiringDocumentNotification
+     */
+    select?: ExpiringDocumentNotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpiringDocumentNotification
+     */
+    omit?: ExpiringDocumentNotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpiringDocumentNotificationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -71458,6 +76777,70 @@ export namespace Prisma {
   export type QuotationItemScalarFieldEnum = (typeof QuotationItemScalarFieldEnum)[keyof typeof QuotationItemScalarFieldEnum]
 
 
+  export const ExpiringDocumentCategoryScalarFieldEnum: {
+    expiringDocumentCategoryId: 'expiringDocumentCategoryId',
+    name: 'name',
+    description: 'description',
+    alertDaysFirst: 'alertDaysFirst',
+    alertDaysSecond: 'alertDaysSecond',
+    alertDaysThird: 'alertDaysThird',
+    notificationEmails: 'notificationEmails',
+    emailNotificationsEnabled: 'emailNotificationsEnabled',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
+  };
+
+  export type ExpiringDocumentCategoryScalarFieldEnum = (typeof ExpiringDocumentCategoryScalarFieldEnum)[keyof typeof ExpiringDocumentCategoryScalarFieldEnum]
+
+
+  export const ExpiringDocumentScalarFieldEnum: {
+    expiringDocumentId: 'expiringDocumentId',
+    categoryId: 'categoryId',
+    title: 'title',
+    documentCode: 'documentCode',
+    referenceType: 'referenceType',
+    referenceDescription: 'referenceDescription',
+    storageSpace: 'storageSpace',
+    storagePath: 'storagePath',
+    storageDescription: 'storageDescription',
+    issueDate: 'issueDate',
+    expirationDate: 'expirationDate',
+    notes: 'notes',
+    createdByUserId: 'createdByUserId',
+    updatedByUserId: 'updatedByUserId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
+  };
+
+  export type ExpiringDocumentScalarFieldEnum = (typeof ExpiringDocumentScalarFieldEnum)[keyof typeof ExpiringDocumentScalarFieldEnum]
+
+
+  export const ExpiringDocumentHistoryScalarFieldEnum: {
+    expiringDocumentHistoryId: 'expiringDocumentHistoryId',
+    expiringDocumentId: 'expiringDocumentId',
+    changedByUserId: 'changedByUserId',
+    action: 'action',
+    snapshot: 'snapshot',
+    createdAt: 'createdAt'
+  };
+
+  export type ExpiringDocumentHistoryScalarFieldEnum = (typeof ExpiringDocumentHistoryScalarFieldEnum)[keyof typeof ExpiringDocumentHistoryScalarFieldEnum]
+
+
+  export const ExpiringDocumentNotificationScalarFieldEnum: {
+    expiringDocumentNotificationId: 'expiringDocumentNotificationId',
+    expiringDocumentId: 'expiringDocumentId',
+    alertLevel: 'alertLevel',
+    expirationDate: 'expirationDate',
+    recipients: 'recipients',
+    sentAt: 'sentAt'
+  };
+
+  export type ExpiringDocumentNotificationScalarFieldEnum = (typeof ExpiringDocumentNotificationScalarFieldEnum)[keyof typeof ExpiringDocumentNotificationScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -71472,6 +76855,13 @@ export namespace Prisma {
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -71988,6 +77378,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'ExpiringDocumentHistoryAction'
+   */
+  export type EnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpiringDocumentHistoryAction'>
+    
+
+
+  /**
+   * Reference to a field of type 'ExpiringDocumentHistoryAction[]'
+   */
+  export type ListEnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpiringDocumentHistoryAction[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ExpiringDocumentAlertLevel'
+   */
+  export type EnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpiringDocumentAlertLevel'>
+    
+
+
+  /**
+   * Reference to a field of type 'ExpiringDocumentAlertLevel[]'
+   */
+  export type ListEnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpiringDocumentAlertLevel[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -72032,6 +77450,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestListRelationFilter
     projectInventoryResponsibilities?: ProjectInventoryEntryListRelationFilter
     performedInventoryMovements?: InventoryMovementListRelationFilter
+    createdExpiringDocuments?: ExpiringDocumentListRelationFilter
+    updatedExpiringDocuments?: ExpiringDocumentListRelationFilter
+    expiringDocumentHistory?: ExpiringDocumentHistoryListRelationFilter
     responsibleInventoryMovements?: InventoryMovementListRelationFilter
   }
 
@@ -72060,6 +77481,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestOrderByRelationAggregateInput
     projectInventoryResponsibilities?: ProjectInventoryEntryOrderByRelationAggregateInput
     performedInventoryMovements?: InventoryMovementOrderByRelationAggregateInput
+    createdExpiringDocuments?: ExpiringDocumentOrderByRelationAggregateInput
+    updatedExpiringDocuments?: ExpiringDocumentOrderByRelationAggregateInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryOrderByRelationAggregateInput
     responsibleInventoryMovements?: InventoryMovementOrderByRelationAggregateInput
   }
 
@@ -72091,6 +77515,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestListRelationFilter
     projectInventoryResponsibilities?: ProjectInventoryEntryListRelationFilter
     performedInventoryMovements?: InventoryMovementListRelationFilter
+    createdExpiringDocuments?: ExpiringDocumentListRelationFilter
+    updatedExpiringDocuments?: ExpiringDocumentListRelationFilter
+    expiringDocumentHistory?: ExpiringDocumentHistoryListRelationFilter
     responsibleInventoryMovements?: InventoryMovementListRelationFilter
   }, "userId" | "email" | "phone">
 
@@ -76540,6 +81967,350 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"QuotationItem"> | Date | string
   }
 
+  export type ExpiringDocumentCategoryWhereInput = {
+    AND?: ExpiringDocumentCategoryWhereInput | ExpiringDocumentCategoryWhereInput[]
+    OR?: ExpiringDocumentCategoryWhereInput[]
+    NOT?: ExpiringDocumentCategoryWhereInput | ExpiringDocumentCategoryWhereInput[]
+    expiringDocumentCategoryId?: IntFilter<"ExpiringDocumentCategory"> | number
+    name?: StringFilter<"ExpiringDocumentCategory"> | string
+    description?: StringNullableFilter<"ExpiringDocumentCategory"> | string | null
+    alertDaysFirst?: IntFilter<"ExpiringDocumentCategory"> | number
+    alertDaysSecond?: IntFilter<"ExpiringDocumentCategory"> | number
+    alertDaysThird?: IntFilter<"ExpiringDocumentCategory"> | number
+    notificationEmails?: StringNullableListFilter<"ExpiringDocumentCategory">
+    emailNotificationsEnabled?: BoolFilter<"ExpiringDocumentCategory"> | boolean
+    createdAt?: DateTimeFilter<"ExpiringDocumentCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"ExpiringDocumentCategory"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ExpiringDocumentCategory"> | Date | string | null
+    documents?: ExpiringDocumentListRelationFilter
+  }
+
+  export type ExpiringDocumentCategoryOrderByWithRelationInput = {
+    expiringDocumentCategoryId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    alertDaysFirst?: SortOrder
+    alertDaysSecond?: SortOrder
+    alertDaysThird?: SortOrder
+    notificationEmails?: SortOrder
+    emailNotificationsEnabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    documents?: ExpiringDocumentOrderByRelationAggregateInput
+  }
+
+  export type ExpiringDocumentCategoryWhereUniqueInput = Prisma.AtLeast<{
+    expiringDocumentCategoryId?: number
+    name?: string
+    AND?: ExpiringDocumentCategoryWhereInput | ExpiringDocumentCategoryWhereInput[]
+    OR?: ExpiringDocumentCategoryWhereInput[]
+    NOT?: ExpiringDocumentCategoryWhereInput | ExpiringDocumentCategoryWhereInput[]
+    description?: StringNullableFilter<"ExpiringDocumentCategory"> | string | null
+    alertDaysFirst?: IntFilter<"ExpiringDocumentCategory"> | number
+    alertDaysSecond?: IntFilter<"ExpiringDocumentCategory"> | number
+    alertDaysThird?: IntFilter<"ExpiringDocumentCategory"> | number
+    notificationEmails?: StringNullableListFilter<"ExpiringDocumentCategory">
+    emailNotificationsEnabled?: BoolFilter<"ExpiringDocumentCategory"> | boolean
+    createdAt?: DateTimeFilter<"ExpiringDocumentCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"ExpiringDocumentCategory"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ExpiringDocumentCategory"> | Date | string | null
+    documents?: ExpiringDocumentListRelationFilter
+  }, "expiringDocumentCategoryId" | "name">
+
+  export type ExpiringDocumentCategoryOrderByWithAggregationInput = {
+    expiringDocumentCategoryId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    alertDaysFirst?: SortOrder
+    alertDaysSecond?: SortOrder
+    alertDaysThird?: SortOrder
+    notificationEmails?: SortOrder
+    emailNotificationsEnabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: ExpiringDocumentCategoryCountOrderByAggregateInput
+    _avg?: ExpiringDocumentCategoryAvgOrderByAggregateInput
+    _max?: ExpiringDocumentCategoryMaxOrderByAggregateInput
+    _min?: ExpiringDocumentCategoryMinOrderByAggregateInput
+    _sum?: ExpiringDocumentCategorySumOrderByAggregateInput
+  }
+
+  export type ExpiringDocumentCategoryScalarWhereWithAggregatesInput = {
+    AND?: ExpiringDocumentCategoryScalarWhereWithAggregatesInput | ExpiringDocumentCategoryScalarWhereWithAggregatesInput[]
+    OR?: ExpiringDocumentCategoryScalarWhereWithAggregatesInput[]
+    NOT?: ExpiringDocumentCategoryScalarWhereWithAggregatesInput | ExpiringDocumentCategoryScalarWhereWithAggregatesInput[]
+    expiringDocumentCategoryId?: IntWithAggregatesFilter<"ExpiringDocumentCategory"> | number
+    name?: StringWithAggregatesFilter<"ExpiringDocumentCategory"> | string
+    description?: StringNullableWithAggregatesFilter<"ExpiringDocumentCategory"> | string | null
+    alertDaysFirst?: IntWithAggregatesFilter<"ExpiringDocumentCategory"> | number
+    alertDaysSecond?: IntWithAggregatesFilter<"ExpiringDocumentCategory"> | number
+    alertDaysThird?: IntWithAggregatesFilter<"ExpiringDocumentCategory"> | number
+    notificationEmails?: StringNullableListFilter<"ExpiringDocumentCategory">
+    emailNotificationsEnabled?: BoolWithAggregatesFilter<"ExpiringDocumentCategory"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ExpiringDocumentCategory"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ExpiringDocumentCategory"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"ExpiringDocumentCategory"> | Date | string | null
+  }
+
+  export type ExpiringDocumentWhereInput = {
+    AND?: ExpiringDocumentWhereInput | ExpiringDocumentWhereInput[]
+    OR?: ExpiringDocumentWhereInput[]
+    NOT?: ExpiringDocumentWhereInput | ExpiringDocumentWhereInput[]
+    expiringDocumentId?: IntFilter<"ExpiringDocument"> | number
+    categoryId?: IntFilter<"ExpiringDocument"> | number
+    title?: StringFilter<"ExpiringDocument"> | string
+    documentCode?: StringNullableFilter<"ExpiringDocument"> | string | null
+    referenceType?: StringFilter<"ExpiringDocument"> | string
+    referenceDescription?: StringFilter<"ExpiringDocument"> | string
+    storageSpace?: StringFilter<"ExpiringDocument"> | string
+    storagePath?: StringNullableFilter<"ExpiringDocument"> | string | null
+    storageDescription?: StringNullableFilter<"ExpiringDocument"> | string | null
+    issueDate?: DateTimeNullableFilter<"ExpiringDocument"> | Date | string | null
+    expirationDate?: DateTimeFilter<"ExpiringDocument"> | Date | string
+    notes?: StringNullableFilter<"ExpiringDocument"> | string | null
+    createdByUserId?: IntFilter<"ExpiringDocument"> | number
+    updatedByUserId?: IntFilter<"ExpiringDocument"> | number
+    createdAt?: DateTimeFilter<"ExpiringDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"ExpiringDocument"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ExpiringDocument"> | Date | string | null
+    category?: XOR<ExpiringDocumentCategoryScalarRelationFilter, ExpiringDocumentCategoryWhereInput>
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    updatedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    history?: ExpiringDocumentHistoryListRelationFilter
+    notifications?: ExpiringDocumentNotificationListRelationFilter
+  }
+
+  export type ExpiringDocumentOrderByWithRelationInput = {
+    expiringDocumentId?: SortOrder
+    categoryId?: SortOrder
+    title?: SortOrder
+    documentCode?: SortOrderInput | SortOrder
+    referenceType?: SortOrder
+    referenceDescription?: SortOrder
+    storageSpace?: SortOrder
+    storagePath?: SortOrderInput | SortOrder
+    storageDescription?: SortOrderInput | SortOrder
+    issueDate?: SortOrderInput | SortOrder
+    expirationDate?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdByUserId?: SortOrder
+    updatedByUserId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    category?: ExpiringDocumentCategoryOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    updatedBy?: UserOrderByWithRelationInput
+    history?: ExpiringDocumentHistoryOrderByRelationAggregateInput
+    notifications?: ExpiringDocumentNotificationOrderByRelationAggregateInput
+  }
+
+  export type ExpiringDocumentWhereUniqueInput = Prisma.AtLeast<{
+    expiringDocumentId?: number
+    AND?: ExpiringDocumentWhereInput | ExpiringDocumentWhereInput[]
+    OR?: ExpiringDocumentWhereInput[]
+    NOT?: ExpiringDocumentWhereInput | ExpiringDocumentWhereInput[]
+    categoryId?: IntFilter<"ExpiringDocument"> | number
+    title?: StringFilter<"ExpiringDocument"> | string
+    documentCode?: StringNullableFilter<"ExpiringDocument"> | string | null
+    referenceType?: StringFilter<"ExpiringDocument"> | string
+    referenceDescription?: StringFilter<"ExpiringDocument"> | string
+    storageSpace?: StringFilter<"ExpiringDocument"> | string
+    storagePath?: StringNullableFilter<"ExpiringDocument"> | string | null
+    storageDescription?: StringNullableFilter<"ExpiringDocument"> | string | null
+    issueDate?: DateTimeNullableFilter<"ExpiringDocument"> | Date | string | null
+    expirationDate?: DateTimeFilter<"ExpiringDocument"> | Date | string
+    notes?: StringNullableFilter<"ExpiringDocument"> | string | null
+    createdByUserId?: IntFilter<"ExpiringDocument"> | number
+    updatedByUserId?: IntFilter<"ExpiringDocument"> | number
+    createdAt?: DateTimeFilter<"ExpiringDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"ExpiringDocument"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ExpiringDocument"> | Date | string | null
+    category?: XOR<ExpiringDocumentCategoryScalarRelationFilter, ExpiringDocumentCategoryWhereInput>
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    updatedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    history?: ExpiringDocumentHistoryListRelationFilter
+    notifications?: ExpiringDocumentNotificationListRelationFilter
+  }, "expiringDocumentId">
+
+  export type ExpiringDocumentOrderByWithAggregationInput = {
+    expiringDocumentId?: SortOrder
+    categoryId?: SortOrder
+    title?: SortOrder
+    documentCode?: SortOrderInput | SortOrder
+    referenceType?: SortOrder
+    referenceDescription?: SortOrder
+    storageSpace?: SortOrder
+    storagePath?: SortOrderInput | SortOrder
+    storageDescription?: SortOrderInput | SortOrder
+    issueDate?: SortOrderInput | SortOrder
+    expirationDate?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdByUserId?: SortOrder
+    updatedByUserId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: ExpiringDocumentCountOrderByAggregateInput
+    _avg?: ExpiringDocumentAvgOrderByAggregateInput
+    _max?: ExpiringDocumentMaxOrderByAggregateInput
+    _min?: ExpiringDocumentMinOrderByAggregateInput
+    _sum?: ExpiringDocumentSumOrderByAggregateInput
+  }
+
+  export type ExpiringDocumentScalarWhereWithAggregatesInput = {
+    AND?: ExpiringDocumentScalarWhereWithAggregatesInput | ExpiringDocumentScalarWhereWithAggregatesInput[]
+    OR?: ExpiringDocumentScalarWhereWithAggregatesInput[]
+    NOT?: ExpiringDocumentScalarWhereWithAggregatesInput | ExpiringDocumentScalarWhereWithAggregatesInput[]
+    expiringDocumentId?: IntWithAggregatesFilter<"ExpiringDocument"> | number
+    categoryId?: IntWithAggregatesFilter<"ExpiringDocument"> | number
+    title?: StringWithAggregatesFilter<"ExpiringDocument"> | string
+    documentCode?: StringNullableWithAggregatesFilter<"ExpiringDocument"> | string | null
+    referenceType?: StringWithAggregatesFilter<"ExpiringDocument"> | string
+    referenceDescription?: StringWithAggregatesFilter<"ExpiringDocument"> | string
+    storageSpace?: StringWithAggregatesFilter<"ExpiringDocument"> | string
+    storagePath?: StringNullableWithAggregatesFilter<"ExpiringDocument"> | string | null
+    storageDescription?: StringNullableWithAggregatesFilter<"ExpiringDocument"> | string | null
+    issueDate?: DateTimeNullableWithAggregatesFilter<"ExpiringDocument"> | Date | string | null
+    expirationDate?: DateTimeWithAggregatesFilter<"ExpiringDocument"> | Date | string
+    notes?: StringNullableWithAggregatesFilter<"ExpiringDocument"> | string | null
+    createdByUserId?: IntWithAggregatesFilter<"ExpiringDocument"> | number
+    updatedByUserId?: IntWithAggregatesFilter<"ExpiringDocument"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ExpiringDocument"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ExpiringDocument"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"ExpiringDocument"> | Date | string | null
+  }
+
+  export type ExpiringDocumentHistoryWhereInput = {
+    AND?: ExpiringDocumentHistoryWhereInput | ExpiringDocumentHistoryWhereInput[]
+    OR?: ExpiringDocumentHistoryWhereInput[]
+    NOT?: ExpiringDocumentHistoryWhereInput | ExpiringDocumentHistoryWhereInput[]
+    expiringDocumentHistoryId?: IntFilter<"ExpiringDocumentHistory"> | number
+    expiringDocumentId?: IntFilter<"ExpiringDocumentHistory"> | number
+    changedByUserId?: IntFilter<"ExpiringDocumentHistory"> | number
+    action?: EnumExpiringDocumentHistoryActionFilter<"ExpiringDocumentHistory"> | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonFilter<"ExpiringDocumentHistory">
+    createdAt?: DateTimeFilter<"ExpiringDocumentHistory"> | Date | string
+    document?: XOR<ExpiringDocumentScalarRelationFilter, ExpiringDocumentWhereInput>
+    changedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ExpiringDocumentHistoryOrderByWithRelationInput = {
+    expiringDocumentHistoryId?: SortOrder
+    expiringDocumentId?: SortOrder
+    changedByUserId?: SortOrder
+    action?: SortOrder
+    snapshot?: SortOrder
+    createdAt?: SortOrder
+    document?: ExpiringDocumentOrderByWithRelationInput
+    changedBy?: UserOrderByWithRelationInput
+  }
+
+  export type ExpiringDocumentHistoryWhereUniqueInput = Prisma.AtLeast<{
+    expiringDocumentHistoryId?: number
+    AND?: ExpiringDocumentHistoryWhereInput | ExpiringDocumentHistoryWhereInput[]
+    OR?: ExpiringDocumentHistoryWhereInput[]
+    NOT?: ExpiringDocumentHistoryWhereInput | ExpiringDocumentHistoryWhereInput[]
+    expiringDocumentId?: IntFilter<"ExpiringDocumentHistory"> | number
+    changedByUserId?: IntFilter<"ExpiringDocumentHistory"> | number
+    action?: EnumExpiringDocumentHistoryActionFilter<"ExpiringDocumentHistory"> | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonFilter<"ExpiringDocumentHistory">
+    createdAt?: DateTimeFilter<"ExpiringDocumentHistory"> | Date | string
+    document?: XOR<ExpiringDocumentScalarRelationFilter, ExpiringDocumentWhereInput>
+    changedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "expiringDocumentHistoryId">
+
+  export type ExpiringDocumentHistoryOrderByWithAggregationInput = {
+    expiringDocumentHistoryId?: SortOrder
+    expiringDocumentId?: SortOrder
+    changedByUserId?: SortOrder
+    action?: SortOrder
+    snapshot?: SortOrder
+    createdAt?: SortOrder
+    _count?: ExpiringDocumentHistoryCountOrderByAggregateInput
+    _avg?: ExpiringDocumentHistoryAvgOrderByAggregateInput
+    _max?: ExpiringDocumentHistoryMaxOrderByAggregateInput
+    _min?: ExpiringDocumentHistoryMinOrderByAggregateInput
+    _sum?: ExpiringDocumentHistorySumOrderByAggregateInput
+  }
+
+  export type ExpiringDocumentHistoryScalarWhereWithAggregatesInput = {
+    AND?: ExpiringDocumentHistoryScalarWhereWithAggregatesInput | ExpiringDocumentHistoryScalarWhereWithAggregatesInput[]
+    OR?: ExpiringDocumentHistoryScalarWhereWithAggregatesInput[]
+    NOT?: ExpiringDocumentHistoryScalarWhereWithAggregatesInput | ExpiringDocumentHistoryScalarWhereWithAggregatesInput[]
+    expiringDocumentHistoryId?: IntWithAggregatesFilter<"ExpiringDocumentHistory"> | number
+    expiringDocumentId?: IntWithAggregatesFilter<"ExpiringDocumentHistory"> | number
+    changedByUserId?: IntWithAggregatesFilter<"ExpiringDocumentHistory"> | number
+    action?: EnumExpiringDocumentHistoryActionWithAggregatesFilter<"ExpiringDocumentHistory"> | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonWithAggregatesFilter<"ExpiringDocumentHistory">
+    createdAt?: DateTimeWithAggregatesFilter<"ExpiringDocumentHistory"> | Date | string
+  }
+
+  export type ExpiringDocumentNotificationWhereInput = {
+    AND?: ExpiringDocumentNotificationWhereInput | ExpiringDocumentNotificationWhereInput[]
+    OR?: ExpiringDocumentNotificationWhereInput[]
+    NOT?: ExpiringDocumentNotificationWhereInput | ExpiringDocumentNotificationWhereInput[]
+    expiringDocumentNotificationId?: IntFilter<"ExpiringDocumentNotification"> | number
+    expiringDocumentId?: IntFilter<"ExpiringDocumentNotification"> | number
+    alertLevel?: EnumExpiringDocumentAlertLevelFilter<"ExpiringDocumentNotification"> | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeFilter<"ExpiringDocumentNotification"> | Date | string
+    recipients?: StringNullableListFilter<"ExpiringDocumentNotification">
+    sentAt?: DateTimeFilter<"ExpiringDocumentNotification"> | Date | string
+    document?: XOR<ExpiringDocumentScalarRelationFilter, ExpiringDocumentWhereInput>
+  }
+
+  export type ExpiringDocumentNotificationOrderByWithRelationInput = {
+    expiringDocumentNotificationId?: SortOrder
+    expiringDocumentId?: SortOrder
+    alertLevel?: SortOrder
+    expirationDate?: SortOrder
+    recipients?: SortOrder
+    sentAt?: SortOrder
+    document?: ExpiringDocumentOrderByWithRelationInput
+  }
+
+  export type ExpiringDocumentNotificationWhereUniqueInput = Prisma.AtLeast<{
+    expiringDocumentNotificationId?: number
+    expiringDocumentId_alertLevel_expirationDate?: ExpiringDocumentNotificationExpiringDocumentIdAlertLevelExpirationDateCompoundUniqueInput
+    AND?: ExpiringDocumentNotificationWhereInput | ExpiringDocumentNotificationWhereInput[]
+    OR?: ExpiringDocumentNotificationWhereInput[]
+    NOT?: ExpiringDocumentNotificationWhereInput | ExpiringDocumentNotificationWhereInput[]
+    expiringDocumentId?: IntFilter<"ExpiringDocumentNotification"> | number
+    alertLevel?: EnumExpiringDocumentAlertLevelFilter<"ExpiringDocumentNotification"> | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeFilter<"ExpiringDocumentNotification"> | Date | string
+    recipients?: StringNullableListFilter<"ExpiringDocumentNotification">
+    sentAt?: DateTimeFilter<"ExpiringDocumentNotification"> | Date | string
+    document?: XOR<ExpiringDocumentScalarRelationFilter, ExpiringDocumentWhereInput>
+  }, "expiringDocumentNotificationId" | "expiringDocumentId_alertLevel_expirationDate">
+
+  export type ExpiringDocumentNotificationOrderByWithAggregationInput = {
+    expiringDocumentNotificationId?: SortOrder
+    expiringDocumentId?: SortOrder
+    alertLevel?: SortOrder
+    expirationDate?: SortOrder
+    recipients?: SortOrder
+    sentAt?: SortOrder
+    _count?: ExpiringDocumentNotificationCountOrderByAggregateInput
+    _avg?: ExpiringDocumentNotificationAvgOrderByAggregateInput
+    _max?: ExpiringDocumentNotificationMaxOrderByAggregateInput
+    _min?: ExpiringDocumentNotificationMinOrderByAggregateInput
+    _sum?: ExpiringDocumentNotificationSumOrderByAggregateInput
+  }
+
+  export type ExpiringDocumentNotificationScalarWhereWithAggregatesInput = {
+    AND?: ExpiringDocumentNotificationScalarWhereWithAggregatesInput | ExpiringDocumentNotificationScalarWhereWithAggregatesInput[]
+    OR?: ExpiringDocumentNotificationScalarWhereWithAggregatesInput[]
+    NOT?: ExpiringDocumentNotificationScalarWhereWithAggregatesInput | ExpiringDocumentNotificationScalarWhereWithAggregatesInput[]
+    expiringDocumentNotificationId?: IntWithAggregatesFilter<"ExpiringDocumentNotification"> | number
+    expiringDocumentId?: IntWithAggregatesFilter<"ExpiringDocumentNotification"> | number
+    alertLevel?: EnumExpiringDocumentAlertLevelWithAggregatesFilter<"ExpiringDocumentNotification"> | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeWithAggregatesFilter<"ExpiringDocumentNotification"> | Date | string
+    recipients?: StringNullableListFilter<"ExpiringDocumentNotification">
+    sentAt?: DateTimeWithAggregatesFilter<"ExpiringDocumentNotification"> | Date | string
+  }
+
   export type UserCreateInput = {
     name: string
     lastName: string
@@ -76564,6 +82335,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -76592,6 +82366,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -76619,6 +82396,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -76647,6 +82427,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -81156,6 +86939,364 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ExpiringDocumentCategoryCreateInput = {
+    name: string
+    description?: string | null
+    alertDaysFirst?: number
+    alertDaysSecond?: number
+    alertDaysThird?: number
+    notificationEmails?: ExpiringDocumentCategoryCreatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    documents?: ExpiringDocumentCreateNestedManyWithoutCategoryInput
+  }
+
+  export type ExpiringDocumentCategoryUncheckedCreateInput = {
+    expiringDocumentCategoryId?: number
+    name: string
+    description?: string | null
+    alertDaysFirst?: number
+    alertDaysSecond?: number
+    alertDaysThird?: number
+    notificationEmails?: ExpiringDocumentCategoryCreatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    documents?: ExpiringDocumentUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type ExpiringDocumentCategoryUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    alertDaysFirst?: IntFieldUpdateOperationsInput | number
+    alertDaysSecond?: IntFieldUpdateOperationsInput | number
+    alertDaysThird?: IntFieldUpdateOperationsInput | number
+    notificationEmails?: ExpiringDocumentCategoryUpdatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    documents?: ExpiringDocumentUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type ExpiringDocumentCategoryUncheckedUpdateInput = {
+    expiringDocumentCategoryId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    alertDaysFirst?: IntFieldUpdateOperationsInput | number
+    alertDaysSecond?: IntFieldUpdateOperationsInput | number
+    alertDaysThird?: IntFieldUpdateOperationsInput | number
+    notificationEmails?: ExpiringDocumentCategoryUpdatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    documents?: ExpiringDocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type ExpiringDocumentCategoryCreateManyInput = {
+    expiringDocumentCategoryId?: number
+    name: string
+    description?: string | null
+    alertDaysFirst?: number
+    alertDaysSecond?: number
+    alertDaysThird?: number
+    notificationEmails?: ExpiringDocumentCategoryCreatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ExpiringDocumentCategoryUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    alertDaysFirst?: IntFieldUpdateOperationsInput | number
+    alertDaysSecond?: IntFieldUpdateOperationsInput | number
+    alertDaysThird?: IntFieldUpdateOperationsInput | number
+    notificationEmails?: ExpiringDocumentCategoryUpdatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ExpiringDocumentCategoryUncheckedUpdateManyInput = {
+    expiringDocumentCategoryId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    alertDaysFirst?: IntFieldUpdateOperationsInput | number
+    alertDaysSecond?: IntFieldUpdateOperationsInput | number
+    alertDaysThird?: IntFieldUpdateOperationsInput | number
+    notificationEmails?: ExpiringDocumentCategoryUpdatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ExpiringDocumentCreateInput = {
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    category: ExpiringDocumentCategoryCreateNestedOneWithoutDocumentsInput
+    createdBy: UserCreateNestedOneWithoutCreatedExpiringDocumentsInput
+    updatedBy: UserCreateNestedOneWithoutUpdatedExpiringDocumentsInput
+    history?: ExpiringDocumentHistoryCreateNestedManyWithoutDocumentInput
+    notifications?: ExpiringDocumentNotificationCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentUncheckedCreateInput = {
+    expiringDocumentId?: number
+    categoryId: number
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdByUserId: number
+    updatedByUserId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    history?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutDocumentInput
+    notifications?: ExpiringDocumentNotificationUncheckedCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    category?: ExpiringDocumentCategoryUpdateOneRequiredWithoutDocumentsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedExpiringDocumentsNestedInput
+    updatedBy?: UserUpdateOneRequiredWithoutUpdatedExpiringDocumentsNestedInput
+    history?: ExpiringDocumentHistoryUpdateManyWithoutDocumentNestedInput
+    notifications?: ExpiringDocumentNotificationUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type ExpiringDocumentUncheckedUpdateInput = {
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByUserId?: IntFieldUpdateOperationsInput | number
+    updatedByUserId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    history?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutDocumentNestedInput
+    notifications?: ExpiringDocumentNotificationUncheckedUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type ExpiringDocumentCreateManyInput = {
+    expiringDocumentId?: number
+    categoryId: number
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdByUserId: number
+    updatedByUserId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ExpiringDocumentUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ExpiringDocumentUncheckedUpdateManyInput = {
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByUserId?: IntFieldUpdateOperationsInput | number
+    updatedByUserId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ExpiringDocumentHistoryCreateInput = {
+    action: $Enums.ExpiringDocumentHistoryAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    document: ExpiringDocumentCreateNestedOneWithoutHistoryInput
+    changedBy: UserCreateNestedOneWithoutExpiringDocumentHistoryInput
+  }
+
+  export type ExpiringDocumentHistoryUncheckedCreateInput = {
+    expiringDocumentHistoryId?: number
+    expiringDocumentId: number
+    changedByUserId: number
+    action: $Enums.ExpiringDocumentHistoryAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type ExpiringDocumentHistoryUpdateInput = {
+    action?: EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    document?: ExpiringDocumentUpdateOneRequiredWithoutHistoryNestedInput
+    changedBy?: UserUpdateOneRequiredWithoutExpiringDocumentHistoryNestedInput
+  }
+
+  export type ExpiringDocumentHistoryUncheckedUpdateInput = {
+    expiringDocumentHistoryId?: IntFieldUpdateOperationsInput | number
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    changedByUserId?: IntFieldUpdateOperationsInput | number
+    action?: EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentHistoryCreateManyInput = {
+    expiringDocumentHistoryId?: number
+    expiringDocumentId: number
+    changedByUserId: number
+    action: $Enums.ExpiringDocumentHistoryAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type ExpiringDocumentHistoryUpdateManyMutationInput = {
+    action?: EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentHistoryUncheckedUpdateManyInput = {
+    expiringDocumentHistoryId?: IntFieldUpdateOperationsInput | number
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    changedByUserId?: IntFieldUpdateOperationsInput | number
+    action?: EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentNotificationCreateInput = {
+    alertLevel: $Enums.ExpiringDocumentAlertLevel
+    expirationDate: Date | string
+    recipients?: ExpiringDocumentNotificationCreaterecipientsInput | string[]
+    sentAt?: Date | string
+    document: ExpiringDocumentCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type ExpiringDocumentNotificationUncheckedCreateInput = {
+    expiringDocumentNotificationId?: number
+    expiringDocumentId: number
+    alertLevel: $Enums.ExpiringDocumentAlertLevel
+    expirationDate: Date | string
+    recipients?: ExpiringDocumentNotificationCreaterecipientsInput | string[]
+    sentAt?: Date | string
+  }
+
+  export type ExpiringDocumentNotificationUpdateInput = {
+    alertLevel?: EnumExpiringDocumentAlertLevelFieldUpdateOperationsInput | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipients?: ExpiringDocumentNotificationUpdaterecipientsInput | string[]
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    document?: ExpiringDocumentUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type ExpiringDocumentNotificationUncheckedUpdateInput = {
+    expiringDocumentNotificationId?: IntFieldUpdateOperationsInput | number
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    alertLevel?: EnumExpiringDocumentAlertLevelFieldUpdateOperationsInput | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipients?: ExpiringDocumentNotificationUpdaterecipientsInput | string[]
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentNotificationCreateManyInput = {
+    expiringDocumentNotificationId?: number
+    expiringDocumentId: number
+    alertLevel: $Enums.ExpiringDocumentAlertLevel
+    expirationDate: Date | string
+    recipients?: ExpiringDocumentNotificationCreaterecipientsInput | string[]
+    sentAt?: Date | string
+  }
+
+  export type ExpiringDocumentNotificationUpdateManyMutationInput = {
+    alertLevel?: EnumExpiringDocumentAlertLevelFieldUpdateOperationsInput | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipients?: ExpiringDocumentNotificationUpdaterecipientsInput | string[]
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentNotificationUncheckedUpdateManyInput = {
+    expiringDocumentNotificationId?: IntFieldUpdateOperationsInput | number
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    alertLevel?: EnumExpiringDocumentAlertLevelFieldUpdateOperationsInput | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipients?: ExpiringDocumentNotificationUpdaterecipientsInput | string[]
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -81291,6 +87432,18 @@ export namespace Prisma {
     none?: InventoryMovementWhereInput
   }
 
+  export type ExpiringDocumentListRelationFilter = {
+    every?: ExpiringDocumentWhereInput
+    some?: ExpiringDocumentWhereInput
+    none?: ExpiringDocumentWhereInput
+  }
+
+  export type ExpiringDocumentHistoryListRelationFilter = {
+    every?: ExpiringDocumentHistoryWhereInput
+    some?: ExpiringDocumentHistoryWhereInput
+    none?: ExpiringDocumentHistoryWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -81341,6 +87494,14 @@ export namespace Prisma {
   }
 
   export type InventoryMovementOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ExpiringDocumentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ExpiringDocumentHistoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -85250,6 +91411,323 @@ export namespace Prisma {
     lineTotal?: SortOrder
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type ExpiringDocumentCategoryCountOrderByAggregateInput = {
+    expiringDocumentCategoryId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    alertDaysFirst?: SortOrder
+    alertDaysSecond?: SortOrder
+    alertDaysThird?: SortOrder
+    notificationEmails?: SortOrder
+    emailNotificationsEnabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ExpiringDocumentCategoryAvgOrderByAggregateInput = {
+    expiringDocumentCategoryId?: SortOrder
+    alertDaysFirst?: SortOrder
+    alertDaysSecond?: SortOrder
+    alertDaysThird?: SortOrder
+  }
+
+  export type ExpiringDocumentCategoryMaxOrderByAggregateInput = {
+    expiringDocumentCategoryId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    alertDaysFirst?: SortOrder
+    alertDaysSecond?: SortOrder
+    alertDaysThird?: SortOrder
+    emailNotificationsEnabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ExpiringDocumentCategoryMinOrderByAggregateInput = {
+    expiringDocumentCategoryId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    alertDaysFirst?: SortOrder
+    alertDaysSecond?: SortOrder
+    alertDaysThird?: SortOrder
+    emailNotificationsEnabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ExpiringDocumentCategorySumOrderByAggregateInput = {
+    expiringDocumentCategoryId?: SortOrder
+    alertDaysFirst?: SortOrder
+    alertDaysSecond?: SortOrder
+    alertDaysThird?: SortOrder
+  }
+
+  export type ExpiringDocumentCategoryScalarRelationFilter = {
+    is?: ExpiringDocumentCategoryWhereInput
+    isNot?: ExpiringDocumentCategoryWhereInput
+  }
+
+  export type ExpiringDocumentNotificationListRelationFilter = {
+    every?: ExpiringDocumentNotificationWhereInput
+    some?: ExpiringDocumentNotificationWhereInput
+    none?: ExpiringDocumentNotificationWhereInput
+  }
+
+  export type ExpiringDocumentNotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ExpiringDocumentCountOrderByAggregateInput = {
+    expiringDocumentId?: SortOrder
+    categoryId?: SortOrder
+    title?: SortOrder
+    documentCode?: SortOrder
+    referenceType?: SortOrder
+    referenceDescription?: SortOrder
+    storageSpace?: SortOrder
+    storagePath?: SortOrder
+    storageDescription?: SortOrder
+    issueDate?: SortOrder
+    expirationDate?: SortOrder
+    notes?: SortOrder
+    createdByUserId?: SortOrder
+    updatedByUserId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ExpiringDocumentAvgOrderByAggregateInput = {
+    expiringDocumentId?: SortOrder
+    categoryId?: SortOrder
+    createdByUserId?: SortOrder
+    updatedByUserId?: SortOrder
+  }
+
+  export type ExpiringDocumentMaxOrderByAggregateInput = {
+    expiringDocumentId?: SortOrder
+    categoryId?: SortOrder
+    title?: SortOrder
+    documentCode?: SortOrder
+    referenceType?: SortOrder
+    referenceDescription?: SortOrder
+    storageSpace?: SortOrder
+    storagePath?: SortOrder
+    storageDescription?: SortOrder
+    issueDate?: SortOrder
+    expirationDate?: SortOrder
+    notes?: SortOrder
+    createdByUserId?: SortOrder
+    updatedByUserId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ExpiringDocumentMinOrderByAggregateInput = {
+    expiringDocumentId?: SortOrder
+    categoryId?: SortOrder
+    title?: SortOrder
+    documentCode?: SortOrder
+    referenceType?: SortOrder
+    referenceDescription?: SortOrder
+    storageSpace?: SortOrder
+    storagePath?: SortOrder
+    storageDescription?: SortOrder
+    issueDate?: SortOrder
+    expirationDate?: SortOrder
+    notes?: SortOrder
+    createdByUserId?: SortOrder
+    updatedByUserId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ExpiringDocumentSumOrderByAggregateInput = {
+    expiringDocumentId?: SortOrder
+    categoryId?: SortOrder
+    createdByUserId?: SortOrder
+    updatedByUserId?: SortOrder
+  }
+
+  export type EnumExpiringDocumentHistoryActionFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpiringDocumentHistoryAction | EnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    in?: $Enums.ExpiringDocumentHistoryAction[] | ListEnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ExpiringDocumentHistoryAction[] | ListEnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel> | $Enums.ExpiringDocumentHistoryAction
+  }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type ExpiringDocumentScalarRelationFilter = {
+    is?: ExpiringDocumentWhereInput
+    isNot?: ExpiringDocumentWhereInput
+  }
+
+  export type ExpiringDocumentHistoryCountOrderByAggregateInput = {
+    expiringDocumentHistoryId?: SortOrder
+    expiringDocumentId?: SortOrder
+    changedByUserId?: SortOrder
+    action?: SortOrder
+    snapshot?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ExpiringDocumentHistoryAvgOrderByAggregateInput = {
+    expiringDocumentHistoryId?: SortOrder
+    expiringDocumentId?: SortOrder
+    changedByUserId?: SortOrder
+  }
+
+  export type ExpiringDocumentHistoryMaxOrderByAggregateInput = {
+    expiringDocumentHistoryId?: SortOrder
+    expiringDocumentId?: SortOrder
+    changedByUserId?: SortOrder
+    action?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ExpiringDocumentHistoryMinOrderByAggregateInput = {
+    expiringDocumentHistoryId?: SortOrder
+    expiringDocumentId?: SortOrder
+    changedByUserId?: SortOrder
+    action?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ExpiringDocumentHistorySumOrderByAggregateInput = {
+    expiringDocumentHistoryId?: SortOrder
+    expiringDocumentId?: SortOrder
+    changedByUserId?: SortOrder
+  }
+
+  export type EnumExpiringDocumentHistoryActionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpiringDocumentHistoryAction | EnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    in?: $Enums.ExpiringDocumentHistoryAction[] | ListEnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ExpiringDocumentHistoryAction[] | ListEnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumExpiringDocumentHistoryActionWithAggregatesFilter<$PrismaModel> | $Enums.ExpiringDocumentHistoryAction
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel>
+    _max?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel>
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type EnumExpiringDocumentAlertLevelFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpiringDocumentAlertLevel | EnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    in?: $Enums.ExpiringDocumentAlertLevel[] | ListEnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ExpiringDocumentAlertLevel[] | ListEnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    not?: NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel> | $Enums.ExpiringDocumentAlertLevel
+  }
+
+  export type ExpiringDocumentNotificationExpiringDocumentIdAlertLevelExpirationDateCompoundUniqueInput = {
+    expiringDocumentId: number
+    alertLevel: $Enums.ExpiringDocumentAlertLevel
+    expirationDate: Date | string
+  }
+
+  export type ExpiringDocumentNotificationCountOrderByAggregateInput = {
+    expiringDocumentNotificationId?: SortOrder
+    expiringDocumentId?: SortOrder
+    alertLevel?: SortOrder
+    expirationDate?: SortOrder
+    recipients?: SortOrder
+    sentAt?: SortOrder
+  }
+
+  export type ExpiringDocumentNotificationAvgOrderByAggregateInput = {
+    expiringDocumentNotificationId?: SortOrder
+    expiringDocumentId?: SortOrder
+  }
+
+  export type ExpiringDocumentNotificationMaxOrderByAggregateInput = {
+    expiringDocumentNotificationId?: SortOrder
+    expiringDocumentId?: SortOrder
+    alertLevel?: SortOrder
+    expirationDate?: SortOrder
+    sentAt?: SortOrder
+  }
+
+  export type ExpiringDocumentNotificationMinOrderByAggregateInput = {
+    expiringDocumentNotificationId?: SortOrder
+    expiringDocumentId?: SortOrder
+    alertLevel?: SortOrder
+    expirationDate?: SortOrder
+    sentAt?: SortOrder
+  }
+
+  export type ExpiringDocumentNotificationSumOrderByAggregateInput = {
+    expiringDocumentNotificationId?: SortOrder
+    expiringDocumentId?: SortOrder
+  }
+
+  export type EnumExpiringDocumentAlertLevelWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpiringDocumentAlertLevel | EnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    in?: $Enums.ExpiringDocumentAlertLevel[] | ListEnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ExpiringDocumentAlertLevel[] | ListEnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    not?: NestedEnumExpiringDocumentAlertLevelWithAggregatesFilter<$PrismaModel> | $Enums.ExpiringDocumentAlertLevel
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel>
+    _max?: NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel>
+  }
+
   export type BlacklistedTokenCreateNestedManyWithoutUserInput = {
     create?: XOR<BlacklistedTokenCreateWithoutUserInput, BlacklistedTokenUncheckedCreateWithoutUserInput> | BlacklistedTokenCreateWithoutUserInput[] | BlacklistedTokenUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BlacklistedTokenCreateOrConnectWithoutUserInput | BlacklistedTokenCreateOrConnectWithoutUserInput[]
@@ -85353,6 +91831,27 @@ export namespace Prisma {
     connectOrCreate?: InventoryMovementCreateOrConnectWithoutPerformedByUserInput | InventoryMovementCreateOrConnectWithoutPerformedByUserInput[]
     createMany?: InventoryMovementCreateManyPerformedByUserInputEnvelope
     connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutCreatedByInput, ExpiringDocumentUncheckedCreateWithoutCreatedByInput> | ExpiringDocumentCreateWithoutCreatedByInput[] | ExpiringDocumentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutCreatedByInput | ExpiringDocumentCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ExpiringDocumentCreateManyCreatedByInputEnvelope
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutUpdatedByInput, ExpiringDocumentUncheckedCreateWithoutUpdatedByInput> | ExpiringDocumentCreateWithoutUpdatedByInput[] | ExpiringDocumentUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutUpdatedByInput | ExpiringDocumentCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: ExpiringDocumentCreateManyUpdatedByInputEnvelope
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput = {
+    create?: XOR<ExpiringDocumentHistoryCreateWithoutChangedByInput, ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput> | ExpiringDocumentHistoryCreateWithoutChangedByInput[] | ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput[]
+    connectOrCreate?: ExpiringDocumentHistoryCreateOrConnectWithoutChangedByInput | ExpiringDocumentHistoryCreateOrConnectWithoutChangedByInput[]
+    createMany?: ExpiringDocumentHistoryCreateManyChangedByInputEnvelope
+    connect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
   }
 
   export type InventoryMovementCreateNestedManyWithoutResponsibleUserInput = {
@@ -85465,6 +91964,27 @@ export namespace Prisma {
     connectOrCreate?: InventoryMovementCreateOrConnectWithoutPerformedByUserInput | InventoryMovementCreateOrConnectWithoutPerformedByUserInput[]
     createMany?: InventoryMovementCreateManyPerformedByUserInputEnvelope
     connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutCreatedByInput, ExpiringDocumentUncheckedCreateWithoutCreatedByInput> | ExpiringDocumentCreateWithoutCreatedByInput[] | ExpiringDocumentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutCreatedByInput | ExpiringDocumentCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ExpiringDocumentCreateManyCreatedByInputEnvelope
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutUpdatedByInput, ExpiringDocumentUncheckedCreateWithoutUpdatedByInput> | ExpiringDocumentCreateWithoutUpdatedByInput[] | ExpiringDocumentUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutUpdatedByInput | ExpiringDocumentCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: ExpiringDocumentCreateManyUpdatedByInputEnvelope
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput = {
+    create?: XOR<ExpiringDocumentHistoryCreateWithoutChangedByInput, ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput> | ExpiringDocumentHistoryCreateWithoutChangedByInput[] | ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput[]
+    connectOrCreate?: ExpiringDocumentHistoryCreateOrConnectWithoutChangedByInput | ExpiringDocumentHistoryCreateOrConnectWithoutChangedByInput[]
+    createMany?: ExpiringDocumentHistoryCreateManyChangedByInputEnvelope
+    connect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
   }
 
   export type InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput = {
@@ -85700,6 +92220,48 @@ export namespace Prisma {
     deleteMany?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
   }
 
+  export type ExpiringDocumentUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutCreatedByInput, ExpiringDocumentUncheckedCreateWithoutCreatedByInput> | ExpiringDocumentCreateWithoutCreatedByInput[] | ExpiringDocumentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutCreatedByInput | ExpiringDocumentCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ExpiringDocumentUpsertWithWhereUniqueWithoutCreatedByInput | ExpiringDocumentUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ExpiringDocumentCreateManyCreatedByInputEnvelope
+    set?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    disconnect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    delete?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    update?: ExpiringDocumentUpdateWithWhereUniqueWithoutCreatedByInput | ExpiringDocumentUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ExpiringDocumentUpdateManyWithWhereWithoutCreatedByInput | ExpiringDocumentUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ExpiringDocumentScalarWhereInput | ExpiringDocumentScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutUpdatedByInput, ExpiringDocumentUncheckedCreateWithoutUpdatedByInput> | ExpiringDocumentCreateWithoutUpdatedByInput[] | ExpiringDocumentUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutUpdatedByInput | ExpiringDocumentCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: ExpiringDocumentUpsertWithWhereUniqueWithoutUpdatedByInput | ExpiringDocumentUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: ExpiringDocumentCreateManyUpdatedByInputEnvelope
+    set?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    disconnect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    delete?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    update?: ExpiringDocumentUpdateWithWhereUniqueWithoutUpdatedByInput | ExpiringDocumentUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: ExpiringDocumentUpdateManyWithWhereWithoutUpdatedByInput | ExpiringDocumentUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: ExpiringDocumentScalarWhereInput | ExpiringDocumentScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput = {
+    create?: XOR<ExpiringDocumentHistoryCreateWithoutChangedByInput, ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput> | ExpiringDocumentHistoryCreateWithoutChangedByInput[] | ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput[]
+    connectOrCreate?: ExpiringDocumentHistoryCreateOrConnectWithoutChangedByInput | ExpiringDocumentHistoryCreateOrConnectWithoutChangedByInput[]
+    upsert?: ExpiringDocumentHistoryUpsertWithWhereUniqueWithoutChangedByInput | ExpiringDocumentHistoryUpsertWithWhereUniqueWithoutChangedByInput[]
+    createMany?: ExpiringDocumentHistoryCreateManyChangedByInputEnvelope
+    set?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    disconnect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    delete?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    connect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    update?: ExpiringDocumentHistoryUpdateWithWhereUniqueWithoutChangedByInput | ExpiringDocumentHistoryUpdateWithWhereUniqueWithoutChangedByInput[]
+    updateMany?: ExpiringDocumentHistoryUpdateManyWithWhereWithoutChangedByInput | ExpiringDocumentHistoryUpdateManyWithWhereWithoutChangedByInput[]
+    deleteMany?: ExpiringDocumentHistoryScalarWhereInput | ExpiringDocumentHistoryScalarWhereInput[]
+  }
+
   export type InventoryMovementUpdateManyWithoutResponsibleUserNestedInput = {
     create?: XOR<InventoryMovementCreateWithoutResponsibleUserInput, InventoryMovementUncheckedCreateWithoutResponsibleUserInput> | InventoryMovementCreateWithoutResponsibleUserInput[] | InventoryMovementUncheckedCreateWithoutResponsibleUserInput[]
     connectOrCreate?: InventoryMovementCreateOrConnectWithoutResponsibleUserInput | InventoryMovementCreateOrConnectWithoutResponsibleUserInput[]
@@ -85930,6 +92492,48 @@ export namespace Prisma {
     update?: InventoryMovementUpdateWithWhereUniqueWithoutPerformedByUserInput | InventoryMovementUpdateWithWhereUniqueWithoutPerformedByUserInput[]
     updateMany?: InventoryMovementUpdateManyWithWhereWithoutPerformedByUserInput | InventoryMovementUpdateManyWithWhereWithoutPerformedByUserInput[]
     deleteMany?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutCreatedByInput, ExpiringDocumentUncheckedCreateWithoutCreatedByInput> | ExpiringDocumentCreateWithoutCreatedByInput[] | ExpiringDocumentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutCreatedByInput | ExpiringDocumentCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ExpiringDocumentUpsertWithWhereUniqueWithoutCreatedByInput | ExpiringDocumentUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ExpiringDocumentCreateManyCreatedByInputEnvelope
+    set?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    disconnect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    delete?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    update?: ExpiringDocumentUpdateWithWhereUniqueWithoutCreatedByInput | ExpiringDocumentUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ExpiringDocumentUpdateManyWithWhereWithoutCreatedByInput | ExpiringDocumentUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ExpiringDocumentScalarWhereInput | ExpiringDocumentScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutUpdatedByInput, ExpiringDocumentUncheckedCreateWithoutUpdatedByInput> | ExpiringDocumentCreateWithoutUpdatedByInput[] | ExpiringDocumentUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutUpdatedByInput | ExpiringDocumentCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: ExpiringDocumentUpsertWithWhereUniqueWithoutUpdatedByInput | ExpiringDocumentUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: ExpiringDocumentCreateManyUpdatedByInputEnvelope
+    set?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    disconnect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    delete?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    update?: ExpiringDocumentUpdateWithWhereUniqueWithoutUpdatedByInput | ExpiringDocumentUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: ExpiringDocumentUpdateManyWithWhereWithoutUpdatedByInput | ExpiringDocumentUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: ExpiringDocumentScalarWhereInput | ExpiringDocumentScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput = {
+    create?: XOR<ExpiringDocumentHistoryCreateWithoutChangedByInput, ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput> | ExpiringDocumentHistoryCreateWithoutChangedByInput[] | ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput[]
+    connectOrCreate?: ExpiringDocumentHistoryCreateOrConnectWithoutChangedByInput | ExpiringDocumentHistoryCreateOrConnectWithoutChangedByInput[]
+    upsert?: ExpiringDocumentHistoryUpsertWithWhereUniqueWithoutChangedByInput | ExpiringDocumentHistoryUpsertWithWhereUniqueWithoutChangedByInput[]
+    createMany?: ExpiringDocumentHistoryCreateManyChangedByInputEnvelope
+    set?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    disconnect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    delete?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    connect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    update?: ExpiringDocumentHistoryUpdateWithWhereUniqueWithoutChangedByInput | ExpiringDocumentHistoryUpdateWithWhereUniqueWithoutChangedByInput[]
+    updateMany?: ExpiringDocumentHistoryUpdateManyWithWhereWithoutChangedByInput | ExpiringDocumentHistoryUpdateManyWithWhereWithoutChangedByInput[]
+    deleteMany?: ExpiringDocumentHistoryScalarWhereInput | ExpiringDocumentHistoryScalarWhereInput[]
   }
 
   export type InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput = {
@@ -91241,6 +97845,242 @@ export namespace Prisma {
     update?: XOR<XOR<QuotationUpdateToOneWithWhereWithoutItemsInput, QuotationUpdateWithoutItemsInput>, QuotationUncheckedUpdateWithoutItemsInput>
   }
 
+  export type ExpiringDocumentCategoryCreatenotificationEmailsInput = {
+    set: string[]
+  }
+
+  export type ExpiringDocumentCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutCategoryInput, ExpiringDocumentUncheckedCreateWithoutCategoryInput> | ExpiringDocumentCreateWithoutCategoryInput[] | ExpiringDocumentUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutCategoryInput | ExpiringDocumentCreateOrConnectWithoutCategoryInput[]
+    createMany?: ExpiringDocumentCreateManyCategoryInputEnvelope
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentUncheckedCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutCategoryInput, ExpiringDocumentUncheckedCreateWithoutCategoryInput> | ExpiringDocumentCreateWithoutCategoryInput[] | ExpiringDocumentUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutCategoryInput | ExpiringDocumentCreateOrConnectWithoutCategoryInput[]
+    createMany?: ExpiringDocumentCreateManyCategoryInputEnvelope
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentCategoryUpdatenotificationEmailsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ExpiringDocumentUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutCategoryInput, ExpiringDocumentUncheckedCreateWithoutCategoryInput> | ExpiringDocumentCreateWithoutCategoryInput[] | ExpiringDocumentUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutCategoryInput | ExpiringDocumentCreateOrConnectWithoutCategoryInput[]
+    upsert?: ExpiringDocumentUpsertWithWhereUniqueWithoutCategoryInput | ExpiringDocumentUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: ExpiringDocumentCreateManyCategoryInputEnvelope
+    set?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    disconnect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    delete?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    update?: ExpiringDocumentUpdateWithWhereUniqueWithoutCategoryInput | ExpiringDocumentUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: ExpiringDocumentUpdateManyWithWhereWithoutCategoryInput | ExpiringDocumentUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: ExpiringDocumentScalarWhereInput | ExpiringDocumentScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutCategoryInput, ExpiringDocumentUncheckedCreateWithoutCategoryInput> | ExpiringDocumentCreateWithoutCategoryInput[] | ExpiringDocumentUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutCategoryInput | ExpiringDocumentCreateOrConnectWithoutCategoryInput[]
+    upsert?: ExpiringDocumentUpsertWithWhereUniqueWithoutCategoryInput | ExpiringDocumentUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: ExpiringDocumentCreateManyCategoryInputEnvelope
+    set?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    disconnect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    delete?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    connect?: ExpiringDocumentWhereUniqueInput | ExpiringDocumentWhereUniqueInput[]
+    update?: ExpiringDocumentUpdateWithWhereUniqueWithoutCategoryInput | ExpiringDocumentUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: ExpiringDocumentUpdateManyWithWhereWithoutCategoryInput | ExpiringDocumentUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: ExpiringDocumentScalarWhereInput | ExpiringDocumentScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentCategoryCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<ExpiringDocumentCategoryCreateWithoutDocumentsInput, ExpiringDocumentCategoryUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: ExpiringDocumentCategoryCreateOrConnectWithoutDocumentsInput
+    connect?: ExpiringDocumentCategoryWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCreatedExpiringDocumentsInput = {
+    create?: XOR<UserCreateWithoutCreatedExpiringDocumentsInput, UserUncheckedCreateWithoutCreatedExpiringDocumentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedExpiringDocumentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutUpdatedExpiringDocumentsInput = {
+    create?: XOR<UserCreateWithoutUpdatedExpiringDocumentsInput, UserUncheckedCreateWithoutUpdatedExpiringDocumentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUpdatedExpiringDocumentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ExpiringDocumentHistoryCreateNestedManyWithoutDocumentInput = {
+    create?: XOR<ExpiringDocumentHistoryCreateWithoutDocumentInput, ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput> | ExpiringDocumentHistoryCreateWithoutDocumentInput[] | ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ExpiringDocumentHistoryCreateOrConnectWithoutDocumentInput | ExpiringDocumentHistoryCreateOrConnectWithoutDocumentInput[]
+    createMany?: ExpiringDocumentHistoryCreateManyDocumentInputEnvelope
+    connect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentNotificationCreateNestedManyWithoutDocumentInput = {
+    create?: XOR<ExpiringDocumentNotificationCreateWithoutDocumentInput, ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput> | ExpiringDocumentNotificationCreateWithoutDocumentInput[] | ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ExpiringDocumentNotificationCreateOrConnectWithoutDocumentInput | ExpiringDocumentNotificationCreateOrConnectWithoutDocumentInput[]
+    createMany?: ExpiringDocumentNotificationCreateManyDocumentInputEnvelope
+    connect?: ExpiringDocumentNotificationWhereUniqueInput | ExpiringDocumentNotificationWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutDocumentInput = {
+    create?: XOR<ExpiringDocumentHistoryCreateWithoutDocumentInput, ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput> | ExpiringDocumentHistoryCreateWithoutDocumentInput[] | ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ExpiringDocumentHistoryCreateOrConnectWithoutDocumentInput | ExpiringDocumentHistoryCreateOrConnectWithoutDocumentInput[]
+    createMany?: ExpiringDocumentHistoryCreateManyDocumentInputEnvelope
+    connect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentNotificationUncheckedCreateNestedManyWithoutDocumentInput = {
+    create?: XOR<ExpiringDocumentNotificationCreateWithoutDocumentInput, ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput> | ExpiringDocumentNotificationCreateWithoutDocumentInput[] | ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ExpiringDocumentNotificationCreateOrConnectWithoutDocumentInput | ExpiringDocumentNotificationCreateOrConnectWithoutDocumentInput[]
+    createMany?: ExpiringDocumentNotificationCreateManyDocumentInputEnvelope
+    connect?: ExpiringDocumentNotificationWhereUniqueInput | ExpiringDocumentNotificationWhereUniqueInput[]
+  }
+
+  export type ExpiringDocumentCategoryUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<ExpiringDocumentCategoryCreateWithoutDocumentsInput, ExpiringDocumentCategoryUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: ExpiringDocumentCategoryCreateOrConnectWithoutDocumentsInput
+    upsert?: ExpiringDocumentCategoryUpsertWithoutDocumentsInput
+    connect?: ExpiringDocumentCategoryWhereUniqueInput
+    update?: XOR<XOR<ExpiringDocumentCategoryUpdateToOneWithWhereWithoutDocumentsInput, ExpiringDocumentCategoryUpdateWithoutDocumentsInput>, ExpiringDocumentCategoryUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCreatedExpiringDocumentsNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedExpiringDocumentsInput, UserUncheckedCreateWithoutCreatedExpiringDocumentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedExpiringDocumentsInput
+    upsert?: UserUpsertWithoutCreatedExpiringDocumentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedExpiringDocumentsInput, UserUpdateWithoutCreatedExpiringDocumentsInput>, UserUncheckedUpdateWithoutCreatedExpiringDocumentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutUpdatedExpiringDocumentsNestedInput = {
+    create?: XOR<UserCreateWithoutUpdatedExpiringDocumentsInput, UserUncheckedCreateWithoutUpdatedExpiringDocumentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUpdatedExpiringDocumentsInput
+    upsert?: UserUpsertWithoutUpdatedExpiringDocumentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUpdatedExpiringDocumentsInput, UserUpdateWithoutUpdatedExpiringDocumentsInput>, UserUncheckedUpdateWithoutUpdatedExpiringDocumentsInput>
+  }
+
+  export type ExpiringDocumentHistoryUpdateManyWithoutDocumentNestedInput = {
+    create?: XOR<ExpiringDocumentHistoryCreateWithoutDocumentInput, ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput> | ExpiringDocumentHistoryCreateWithoutDocumentInput[] | ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ExpiringDocumentHistoryCreateOrConnectWithoutDocumentInput | ExpiringDocumentHistoryCreateOrConnectWithoutDocumentInput[]
+    upsert?: ExpiringDocumentHistoryUpsertWithWhereUniqueWithoutDocumentInput | ExpiringDocumentHistoryUpsertWithWhereUniqueWithoutDocumentInput[]
+    createMany?: ExpiringDocumentHistoryCreateManyDocumentInputEnvelope
+    set?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    disconnect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    delete?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    connect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    update?: ExpiringDocumentHistoryUpdateWithWhereUniqueWithoutDocumentInput | ExpiringDocumentHistoryUpdateWithWhereUniqueWithoutDocumentInput[]
+    updateMany?: ExpiringDocumentHistoryUpdateManyWithWhereWithoutDocumentInput | ExpiringDocumentHistoryUpdateManyWithWhereWithoutDocumentInput[]
+    deleteMany?: ExpiringDocumentHistoryScalarWhereInput | ExpiringDocumentHistoryScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentNotificationUpdateManyWithoutDocumentNestedInput = {
+    create?: XOR<ExpiringDocumentNotificationCreateWithoutDocumentInput, ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput> | ExpiringDocumentNotificationCreateWithoutDocumentInput[] | ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ExpiringDocumentNotificationCreateOrConnectWithoutDocumentInput | ExpiringDocumentNotificationCreateOrConnectWithoutDocumentInput[]
+    upsert?: ExpiringDocumentNotificationUpsertWithWhereUniqueWithoutDocumentInput | ExpiringDocumentNotificationUpsertWithWhereUniqueWithoutDocumentInput[]
+    createMany?: ExpiringDocumentNotificationCreateManyDocumentInputEnvelope
+    set?: ExpiringDocumentNotificationWhereUniqueInput | ExpiringDocumentNotificationWhereUniqueInput[]
+    disconnect?: ExpiringDocumentNotificationWhereUniqueInput | ExpiringDocumentNotificationWhereUniqueInput[]
+    delete?: ExpiringDocumentNotificationWhereUniqueInput | ExpiringDocumentNotificationWhereUniqueInput[]
+    connect?: ExpiringDocumentNotificationWhereUniqueInput | ExpiringDocumentNotificationWhereUniqueInput[]
+    update?: ExpiringDocumentNotificationUpdateWithWhereUniqueWithoutDocumentInput | ExpiringDocumentNotificationUpdateWithWhereUniqueWithoutDocumentInput[]
+    updateMany?: ExpiringDocumentNotificationUpdateManyWithWhereWithoutDocumentInput | ExpiringDocumentNotificationUpdateManyWithWhereWithoutDocumentInput[]
+    deleteMany?: ExpiringDocumentNotificationScalarWhereInput | ExpiringDocumentNotificationScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentHistoryUncheckedUpdateManyWithoutDocumentNestedInput = {
+    create?: XOR<ExpiringDocumentHistoryCreateWithoutDocumentInput, ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput> | ExpiringDocumentHistoryCreateWithoutDocumentInput[] | ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ExpiringDocumentHistoryCreateOrConnectWithoutDocumentInput | ExpiringDocumentHistoryCreateOrConnectWithoutDocumentInput[]
+    upsert?: ExpiringDocumentHistoryUpsertWithWhereUniqueWithoutDocumentInput | ExpiringDocumentHistoryUpsertWithWhereUniqueWithoutDocumentInput[]
+    createMany?: ExpiringDocumentHistoryCreateManyDocumentInputEnvelope
+    set?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    disconnect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    delete?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    connect?: ExpiringDocumentHistoryWhereUniqueInput | ExpiringDocumentHistoryWhereUniqueInput[]
+    update?: ExpiringDocumentHistoryUpdateWithWhereUniqueWithoutDocumentInput | ExpiringDocumentHistoryUpdateWithWhereUniqueWithoutDocumentInput[]
+    updateMany?: ExpiringDocumentHistoryUpdateManyWithWhereWithoutDocumentInput | ExpiringDocumentHistoryUpdateManyWithWhereWithoutDocumentInput[]
+    deleteMany?: ExpiringDocumentHistoryScalarWhereInput | ExpiringDocumentHistoryScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentNotificationUncheckedUpdateManyWithoutDocumentNestedInput = {
+    create?: XOR<ExpiringDocumentNotificationCreateWithoutDocumentInput, ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput> | ExpiringDocumentNotificationCreateWithoutDocumentInput[] | ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ExpiringDocumentNotificationCreateOrConnectWithoutDocumentInput | ExpiringDocumentNotificationCreateOrConnectWithoutDocumentInput[]
+    upsert?: ExpiringDocumentNotificationUpsertWithWhereUniqueWithoutDocumentInput | ExpiringDocumentNotificationUpsertWithWhereUniqueWithoutDocumentInput[]
+    createMany?: ExpiringDocumentNotificationCreateManyDocumentInputEnvelope
+    set?: ExpiringDocumentNotificationWhereUniqueInput | ExpiringDocumentNotificationWhereUniqueInput[]
+    disconnect?: ExpiringDocumentNotificationWhereUniqueInput | ExpiringDocumentNotificationWhereUniqueInput[]
+    delete?: ExpiringDocumentNotificationWhereUniqueInput | ExpiringDocumentNotificationWhereUniqueInput[]
+    connect?: ExpiringDocumentNotificationWhereUniqueInput | ExpiringDocumentNotificationWhereUniqueInput[]
+    update?: ExpiringDocumentNotificationUpdateWithWhereUniqueWithoutDocumentInput | ExpiringDocumentNotificationUpdateWithWhereUniqueWithoutDocumentInput[]
+    updateMany?: ExpiringDocumentNotificationUpdateManyWithWhereWithoutDocumentInput | ExpiringDocumentNotificationUpdateManyWithWhereWithoutDocumentInput[]
+    deleteMany?: ExpiringDocumentNotificationScalarWhereInput | ExpiringDocumentNotificationScalarWhereInput[]
+  }
+
+  export type ExpiringDocumentCreateNestedOneWithoutHistoryInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutHistoryInput, ExpiringDocumentUncheckedCreateWithoutHistoryInput>
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutHistoryInput
+    connect?: ExpiringDocumentWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutExpiringDocumentHistoryInput = {
+    create?: XOR<UserCreateWithoutExpiringDocumentHistoryInput, UserUncheckedCreateWithoutExpiringDocumentHistoryInput>
+    connectOrCreate?: UserCreateOrConnectWithoutExpiringDocumentHistoryInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput = {
+    set?: $Enums.ExpiringDocumentHistoryAction
+  }
+
+  export type ExpiringDocumentUpdateOneRequiredWithoutHistoryNestedInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutHistoryInput, ExpiringDocumentUncheckedCreateWithoutHistoryInput>
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutHistoryInput
+    upsert?: ExpiringDocumentUpsertWithoutHistoryInput
+    connect?: ExpiringDocumentWhereUniqueInput
+    update?: XOR<XOR<ExpiringDocumentUpdateToOneWithWhereWithoutHistoryInput, ExpiringDocumentUpdateWithoutHistoryInput>, ExpiringDocumentUncheckedUpdateWithoutHistoryInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutExpiringDocumentHistoryNestedInput = {
+    create?: XOR<UserCreateWithoutExpiringDocumentHistoryInput, UserUncheckedCreateWithoutExpiringDocumentHistoryInput>
+    connectOrCreate?: UserCreateOrConnectWithoutExpiringDocumentHistoryInput
+    upsert?: UserUpsertWithoutExpiringDocumentHistoryInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutExpiringDocumentHistoryInput, UserUpdateWithoutExpiringDocumentHistoryInput>, UserUncheckedUpdateWithoutExpiringDocumentHistoryInput>
+  }
+
+  export type ExpiringDocumentNotificationCreaterecipientsInput = {
+    set: string[]
+  }
+
+  export type ExpiringDocumentCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutNotificationsInput, ExpiringDocumentUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutNotificationsInput
+    connect?: ExpiringDocumentWhereUniqueInput
+  }
+
+  export type EnumExpiringDocumentAlertLevelFieldUpdateOperationsInput = {
+    set?: $Enums.ExpiringDocumentAlertLevel
+  }
+
+  export type ExpiringDocumentNotificationUpdaterecipientsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ExpiringDocumentUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<ExpiringDocumentCreateWithoutNotificationsInput, ExpiringDocumentUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: ExpiringDocumentCreateOrConnectWithoutNotificationsInput
+    upsert?: ExpiringDocumentUpsertWithoutNotificationsInput
+    connect?: ExpiringDocumentWhereUniqueInput
+    update?: XOR<XOR<ExpiringDocumentUpdateToOneWithWhereWithoutNotificationsInput, ExpiringDocumentUpdateWithoutNotificationsInput>, ExpiringDocumentUncheckedUpdateWithoutNotificationsInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -91985,6 +98825,63 @@ export namespace Prisma {
     _max?: NestedEnumQuotationStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpiringDocumentHistoryAction | EnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    in?: $Enums.ExpiringDocumentHistoryAction[] | ListEnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ExpiringDocumentHistoryAction[] | ListEnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel> | $Enums.ExpiringDocumentHistoryAction
+  }
+
+  export type NestedEnumExpiringDocumentHistoryActionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpiringDocumentHistoryAction | EnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    in?: $Enums.ExpiringDocumentHistoryAction[] | ListEnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ExpiringDocumentHistoryAction[] | ListEnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumExpiringDocumentHistoryActionWithAggregatesFilter<$PrismaModel> | $Enums.ExpiringDocumentHistoryAction
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel>
+    _max?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel>
+  }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpiringDocumentAlertLevel | EnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    in?: $Enums.ExpiringDocumentAlertLevel[] | ListEnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ExpiringDocumentAlertLevel[] | ListEnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    not?: NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel> | $Enums.ExpiringDocumentAlertLevel
+  }
+
+  export type NestedEnumExpiringDocumentAlertLevelWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpiringDocumentAlertLevel | EnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    in?: $Enums.ExpiringDocumentAlertLevel[] | ListEnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ExpiringDocumentAlertLevel[] | ListEnumExpiringDocumentAlertLevelFieldRefInput<$PrismaModel>
+    not?: NestedEnumExpiringDocumentAlertLevelWithAggregatesFilter<$PrismaModel> | $Enums.ExpiringDocumentAlertLevel
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel>
+    _max?: NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel>
+  }
+
   export type BlacklistedTokenCreateWithoutUserInput = {
     token: string
     expiresAt: Date | string
@@ -92556,6 +99453,133 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ExpiringDocumentCreateWithoutCreatedByInput = {
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    category: ExpiringDocumentCategoryCreateNestedOneWithoutDocumentsInput
+    updatedBy: UserCreateNestedOneWithoutUpdatedExpiringDocumentsInput
+    history?: ExpiringDocumentHistoryCreateNestedManyWithoutDocumentInput
+    notifications?: ExpiringDocumentNotificationCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentUncheckedCreateWithoutCreatedByInput = {
+    expiringDocumentId?: number
+    categoryId: number
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    updatedByUserId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    history?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutDocumentInput
+    notifications?: ExpiringDocumentNotificationUncheckedCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentCreateOrConnectWithoutCreatedByInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    create: XOR<ExpiringDocumentCreateWithoutCreatedByInput, ExpiringDocumentUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ExpiringDocumentCreateManyCreatedByInputEnvelope = {
+    data: ExpiringDocumentCreateManyCreatedByInput | ExpiringDocumentCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ExpiringDocumentCreateWithoutUpdatedByInput = {
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    category: ExpiringDocumentCategoryCreateNestedOneWithoutDocumentsInput
+    createdBy: UserCreateNestedOneWithoutCreatedExpiringDocumentsInput
+    history?: ExpiringDocumentHistoryCreateNestedManyWithoutDocumentInput
+    notifications?: ExpiringDocumentNotificationCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentUncheckedCreateWithoutUpdatedByInput = {
+    expiringDocumentId?: number
+    categoryId: number
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdByUserId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    history?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutDocumentInput
+    notifications?: ExpiringDocumentNotificationUncheckedCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentCreateOrConnectWithoutUpdatedByInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    create: XOR<ExpiringDocumentCreateWithoutUpdatedByInput, ExpiringDocumentUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type ExpiringDocumentCreateManyUpdatedByInputEnvelope = {
+    data: ExpiringDocumentCreateManyUpdatedByInput | ExpiringDocumentCreateManyUpdatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ExpiringDocumentHistoryCreateWithoutChangedByInput = {
+    action: $Enums.ExpiringDocumentHistoryAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    document: ExpiringDocumentCreateNestedOneWithoutHistoryInput
+  }
+
+  export type ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput = {
+    expiringDocumentHistoryId?: number
+    expiringDocumentId: number
+    action: $Enums.ExpiringDocumentHistoryAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type ExpiringDocumentHistoryCreateOrConnectWithoutChangedByInput = {
+    where: ExpiringDocumentHistoryWhereUniqueInput
+    create: XOR<ExpiringDocumentHistoryCreateWithoutChangedByInput, ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput>
+  }
+
+  export type ExpiringDocumentHistoryCreateManyChangedByInputEnvelope = {
+    data: ExpiringDocumentHistoryCreateManyChangedByInput | ExpiringDocumentHistoryCreateManyChangedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type InventoryMovementCreateWithoutResponsibleUserInput = {
     movementType: $Enums.InventoryMovementType
     fromLocation: $Enums.InventoryLocation
@@ -93037,6 +100061,89 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"InventoryMovement"> | Date | string
   }
 
+  export type ExpiringDocumentUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    update: XOR<ExpiringDocumentUpdateWithoutCreatedByInput, ExpiringDocumentUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<ExpiringDocumentCreateWithoutCreatedByInput, ExpiringDocumentUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ExpiringDocumentUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    data: XOR<ExpiringDocumentUpdateWithoutCreatedByInput, ExpiringDocumentUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type ExpiringDocumentUpdateManyWithWhereWithoutCreatedByInput = {
+    where: ExpiringDocumentScalarWhereInput
+    data: XOR<ExpiringDocumentUpdateManyMutationInput, ExpiringDocumentUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type ExpiringDocumentScalarWhereInput = {
+    AND?: ExpiringDocumentScalarWhereInput | ExpiringDocumentScalarWhereInput[]
+    OR?: ExpiringDocumentScalarWhereInput[]
+    NOT?: ExpiringDocumentScalarWhereInput | ExpiringDocumentScalarWhereInput[]
+    expiringDocumentId?: IntFilter<"ExpiringDocument"> | number
+    categoryId?: IntFilter<"ExpiringDocument"> | number
+    title?: StringFilter<"ExpiringDocument"> | string
+    documentCode?: StringNullableFilter<"ExpiringDocument"> | string | null
+    referenceType?: StringFilter<"ExpiringDocument"> | string
+    referenceDescription?: StringFilter<"ExpiringDocument"> | string
+    storageSpace?: StringFilter<"ExpiringDocument"> | string
+    storagePath?: StringNullableFilter<"ExpiringDocument"> | string | null
+    storageDescription?: StringNullableFilter<"ExpiringDocument"> | string | null
+    issueDate?: DateTimeNullableFilter<"ExpiringDocument"> | Date | string | null
+    expirationDate?: DateTimeFilter<"ExpiringDocument"> | Date | string
+    notes?: StringNullableFilter<"ExpiringDocument"> | string | null
+    createdByUserId?: IntFilter<"ExpiringDocument"> | number
+    updatedByUserId?: IntFilter<"ExpiringDocument"> | number
+    createdAt?: DateTimeFilter<"ExpiringDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"ExpiringDocument"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ExpiringDocument"> | Date | string | null
+  }
+
+  export type ExpiringDocumentUpsertWithWhereUniqueWithoutUpdatedByInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    update: XOR<ExpiringDocumentUpdateWithoutUpdatedByInput, ExpiringDocumentUncheckedUpdateWithoutUpdatedByInput>
+    create: XOR<ExpiringDocumentCreateWithoutUpdatedByInput, ExpiringDocumentUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type ExpiringDocumentUpdateWithWhereUniqueWithoutUpdatedByInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    data: XOR<ExpiringDocumentUpdateWithoutUpdatedByInput, ExpiringDocumentUncheckedUpdateWithoutUpdatedByInput>
+  }
+
+  export type ExpiringDocumentUpdateManyWithWhereWithoutUpdatedByInput = {
+    where: ExpiringDocumentScalarWhereInput
+    data: XOR<ExpiringDocumentUpdateManyMutationInput, ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByInput>
+  }
+
+  export type ExpiringDocumentHistoryUpsertWithWhereUniqueWithoutChangedByInput = {
+    where: ExpiringDocumentHistoryWhereUniqueInput
+    update: XOR<ExpiringDocumentHistoryUpdateWithoutChangedByInput, ExpiringDocumentHistoryUncheckedUpdateWithoutChangedByInput>
+    create: XOR<ExpiringDocumentHistoryCreateWithoutChangedByInput, ExpiringDocumentHistoryUncheckedCreateWithoutChangedByInput>
+  }
+
+  export type ExpiringDocumentHistoryUpdateWithWhereUniqueWithoutChangedByInput = {
+    where: ExpiringDocumentHistoryWhereUniqueInput
+    data: XOR<ExpiringDocumentHistoryUpdateWithoutChangedByInput, ExpiringDocumentHistoryUncheckedUpdateWithoutChangedByInput>
+  }
+
+  export type ExpiringDocumentHistoryUpdateManyWithWhereWithoutChangedByInput = {
+    where: ExpiringDocumentHistoryScalarWhereInput
+    data: XOR<ExpiringDocumentHistoryUpdateManyMutationInput, ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByInput>
+  }
+
+  export type ExpiringDocumentHistoryScalarWhereInput = {
+    AND?: ExpiringDocumentHistoryScalarWhereInput | ExpiringDocumentHistoryScalarWhereInput[]
+    OR?: ExpiringDocumentHistoryScalarWhereInput[]
+    NOT?: ExpiringDocumentHistoryScalarWhereInput | ExpiringDocumentHistoryScalarWhereInput[]
+    expiringDocumentHistoryId?: IntFilter<"ExpiringDocumentHistory"> | number
+    expiringDocumentId?: IntFilter<"ExpiringDocumentHistory"> | number
+    changedByUserId?: IntFilter<"ExpiringDocumentHistory"> | number
+    action?: EnumExpiringDocumentHistoryActionFilter<"ExpiringDocumentHistory"> | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonFilter<"ExpiringDocumentHistory">
+    createdAt?: DateTimeFilter<"ExpiringDocumentHistory"> | Date | string
+  }
+
   export type InventoryMovementUpsertWithWhereUniqueWithoutResponsibleUserInput = {
     where: InventoryMovementWhereUniqueInput
     update: XOR<InventoryMovementUpdateWithoutResponsibleUserInput, InventoryMovementUncheckedUpdateWithoutResponsibleUserInput>
@@ -93111,6 +100218,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -93138,6 +100248,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -93194,6 +100307,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -93221,6 +100337,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -96547,6 +103666,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -96574,6 +103696,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -96605,6 +103730,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -96632,6 +103760,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -96976,6 +104107,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -97003,6 +104137,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -97040,6 +104177,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -97067,6 +104207,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -98260,6 +105403,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -98287,6 +105433,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -98451,6 +105600,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -98478,6 +105630,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -98840,6 +105995,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -98867,6 +106025,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -99345,6 +106506,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -99372,6 +106536,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -99834,6 +107001,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -99861,6 +107031,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -99893,6 +107066,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutResponsibleInventoryMovementsInput = {
@@ -99920,6 +107096,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutResponsibleInventoryMovementsInput = {
@@ -100419,6 +107598,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -100446,6 +107628,9 @@ export namespace Prisma {
     closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -100484,6 +107669,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResponsibleInventoryMovementsInput = {
@@ -100511,6 +107699,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type ElementCreateWithoutOfficeInventoryEntriesInput = {
@@ -102202,6 +109393,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -102229,6 +109423,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -102366,6 +109563,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -102393,6 +109593,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -103633,6 +110836,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -103660,6 +110866,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -103739,6 +110948,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -103766,6 +110978,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -104331,6 +111546,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -104358,6 +111576,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -104389,6 +111610,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -104416,6 +111640,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -104447,6 +111674,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -104474,6 +111704,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -104633,6 +111866,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -104660,6 +111896,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -104697,6 +111936,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -104724,6 +111966,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -104761,6 +112006,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -104788,6 +112036,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -106140,6 +113391,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -106167,6 +113421,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -106209,6 +113466,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -106236,6 +113496,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -106262,6 +113525,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -106289,6 +113555,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -106331,6 +113600,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -106358,6 +113630,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -107371,6 +114646,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -107398,6 +114676,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -107486,6 +114767,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -107513,6 +114797,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -107539,6 +114826,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -107566,6 +114856,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
     performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
     responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
   }
 
@@ -107832,6 +115125,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -107859,6 +115155,9 @@ export namespace Prisma {
     receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
     projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
     performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
@@ -108390,6 +115689,835 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ExpiringDocumentCreateWithoutCategoryInput = {
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    createdBy: UserCreateNestedOneWithoutCreatedExpiringDocumentsInput
+    updatedBy: UserCreateNestedOneWithoutUpdatedExpiringDocumentsInput
+    history?: ExpiringDocumentHistoryCreateNestedManyWithoutDocumentInput
+    notifications?: ExpiringDocumentNotificationCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentUncheckedCreateWithoutCategoryInput = {
+    expiringDocumentId?: number
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdByUserId: number
+    updatedByUserId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    history?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutDocumentInput
+    notifications?: ExpiringDocumentNotificationUncheckedCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentCreateOrConnectWithoutCategoryInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    create: XOR<ExpiringDocumentCreateWithoutCategoryInput, ExpiringDocumentUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type ExpiringDocumentCreateManyCategoryInputEnvelope = {
+    data: ExpiringDocumentCreateManyCategoryInput | ExpiringDocumentCreateManyCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ExpiringDocumentUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    update: XOR<ExpiringDocumentUpdateWithoutCategoryInput, ExpiringDocumentUncheckedUpdateWithoutCategoryInput>
+    create: XOR<ExpiringDocumentCreateWithoutCategoryInput, ExpiringDocumentUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type ExpiringDocumentUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    data: XOR<ExpiringDocumentUpdateWithoutCategoryInput, ExpiringDocumentUncheckedUpdateWithoutCategoryInput>
+  }
+
+  export type ExpiringDocumentUpdateManyWithWhereWithoutCategoryInput = {
+    where: ExpiringDocumentScalarWhereInput
+    data: XOR<ExpiringDocumentUpdateManyMutationInput, ExpiringDocumentUncheckedUpdateManyWithoutCategoryInput>
+  }
+
+  export type ExpiringDocumentCategoryCreateWithoutDocumentsInput = {
+    name: string
+    description?: string | null
+    alertDaysFirst?: number
+    alertDaysSecond?: number
+    alertDaysThird?: number
+    notificationEmails?: ExpiringDocumentCategoryCreatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ExpiringDocumentCategoryUncheckedCreateWithoutDocumentsInput = {
+    expiringDocumentCategoryId?: number
+    name: string
+    description?: string | null
+    alertDaysFirst?: number
+    alertDaysSecond?: number
+    alertDaysThird?: number
+    notificationEmails?: ExpiringDocumentCategoryCreatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ExpiringDocumentCategoryCreateOrConnectWithoutDocumentsInput = {
+    where: ExpiringDocumentCategoryWhereUniqueInput
+    create: XOR<ExpiringDocumentCategoryCreateWithoutDocumentsInput, ExpiringDocumentCategoryUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type UserCreateWithoutCreatedExpiringDocumentsInput = {
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
+    responses?: RequestResponseCreateNestedManyWithoutResponderInput
+    requests?: RequestCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
+    responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedExpiringDocumentsInput = {
+    userId?: number
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
+    responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
+    requests?: RequestUncheckedCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedExpiringDocumentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedExpiringDocumentsInput, UserUncheckedCreateWithoutCreatedExpiringDocumentsInput>
+  }
+
+  export type UserCreateWithoutUpdatedExpiringDocumentsInput = {
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
+    responses?: RequestResponseCreateNestedManyWithoutResponderInput
+    requests?: RequestCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
+    responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserUncheckedCreateWithoutUpdatedExpiringDocumentsInput = {
+    userId?: number
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
+    responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
+    requests?: RequestUncheckedCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserCreateOrConnectWithoutUpdatedExpiringDocumentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUpdatedExpiringDocumentsInput, UserUncheckedCreateWithoutUpdatedExpiringDocumentsInput>
+  }
+
+  export type ExpiringDocumentHistoryCreateWithoutDocumentInput = {
+    action: $Enums.ExpiringDocumentHistoryAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    changedBy: UserCreateNestedOneWithoutExpiringDocumentHistoryInput
+  }
+
+  export type ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput = {
+    expiringDocumentHistoryId?: number
+    changedByUserId: number
+    action: $Enums.ExpiringDocumentHistoryAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type ExpiringDocumentHistoryCreateOrConnectWithoutDocumentInput = {
+    where: ExpiringDocumentHistoryWhereUniqueInput
+    create: XOR<ExpiringDocumentHistoryCreateWithoutDocumentInput, ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput>
+  }
+
+  export type ExpiringDocumentHistoryCreateManyDocumentInputEnvelope = {
+    data: ExpiringDocumentHistoryCreateManyDocumentInput | ExpiringDocumentHistoryCreateManyDocumentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ExpiringDocumentNotificationCreateWithoutDocumentInput = {
+    alertLevel: $Enums.ExpiringDocumentAlertLevel
+    expirationDate: Date | string
+    recipients?: ExpiringDocumentNotificationCreaterecipientsInput | string[]
+    sentAt?: Date | string
+  }
+
+  export type ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput = {
+    expiringDocumentNotificationId?: number
+    alertLevel: $Enums.ExpiringDocumentAlertLevel
+    expirationDate: Date | string
+    recipients?: ExpiringDocumentNotificationCreaterecipientsInput | string[]
+    sentAt?: Date | string
+  }
+
+  export type ExpiringDocumentNotificationCreateOrConnectWithoutDocumentInput = {
+    where: ExpiringDocumentNotificationWhereUniqueInput
+    create: XOR<ExpiringDocumentNotificationCreateWithoutDocumentInput, ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput>
+  }
+
+  export type ExpiringDocumentNotificationCreateManyDocumentInputEnvelope = {
+    data: ExpiringDocumentNotificationCreateManyDocumentInput | ExpiringDocumentNotificationCreateManyDocumentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ExpiringDocumentCategoryUpsertWithoutDocumentsInput = {
+    update: XOR<ExpiringDocumentCategoryUpdateWithoutDocumentsInput, ExpiringDocumentCategoryUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<ExpiringDocumentCategoryCreateWithoutDocumentsInput, ExpiringDocumentCategoryUncheckedCreateWithoutDocumentsInput>
+    where?: ExpiringDocumentCategoryWhereInput
+  }
+
+  export type ExpiringDocumentCategoryUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: ExpiringDocumentCategoryWhereInput
+    data: XOR<ExpiringDocumentCategoryUpdateWithoutDocumentsInput, ExpiringDocumentCategoryUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type ExpiringDocumentCategoryUpdateWithoutDocumentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    alertDaysFirst?: IntFieldUpdateOperationsInput | number
+    alertDaysSecond?: IntFieldUpdateOperationsInput | number
+    alertDaysThird?: IntFieldUpdateOperationsInput | number
+    notificationEmails?: ExpiringDocumentCategoryUpdatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ExpiringDocumentCategoryUncheckedUpdateWithoutDocumentsInput = {
+    expiringDocumentCategoryId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    alertDaysFirst?: IntFieldUpdateOperationsInput | number
+    alertDaysSecond?: IntFieldUpdateOperationsInput | number
+    alertDaysThird?: IntFieldUpdateOperationsInput | number
+    notificationEmails?: ExpiringDocumentCategoryUpdatenotificationEmailsInput | string[]
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UserUpsertWithoutCreatedExpiringDocumentsInput = {
+    update: XOR<UserUpdateWithoutCreatedExpiringDocumentsInput, UserUncheckedUpdateWithoutCreatedExpiringDocumentsInput>
+    create: XOR<UserCreateWithoutCreatedExpiringDocumentsInput, UserUncheckedCreateWithoutCreatedExpiringDocumentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedExpiringDocumentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedExpiringDocumentsInput, UserUncheckedUpdateWithoutCreatedExpiringDocumentsInput>
+  }
+
+  export type UserUpdateWithoutCreatedExpiringDocumentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUpdateManyWithoutResponderNestedInput
+    requests?: RequestUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedExpiringDocumentsInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
+    requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type UserUpsertWithoutUpdatedExpiringDocumentsInput = {
+    update: XOR<UserUpdateWithoutUpdatedExpiringDocumentsInput, UserUncheckedUpdateWithoutUpdatedExpiringDocumentsInput>
+    create: XOR<UserCreateWithoutUpdatedExpiringDocumentsInput, UserUncheckedCreateWithoutUpdatedExpiringDocumentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUpdatedExpiringDocumentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUpdatedExpiringDocumentsInput, UserUncheckedUpdateWithoutUpdatedExpiringDocumentsInput>
+  }
+
+  export type UserUpdateWithoutUpdatedExpiringDocumentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUpdateManyWithoutResponderNestedInput
+    requests?: RequestUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUpdatedExpiringDocumentsInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
+    requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type ExpiringDocumentHistoryUpsertWithWhereUniqueWithoutDocumentInput = {
+    where: ExpiringDocumentHistoryWhereUniqueInput
+    update: XOR<ExpiringDocumentHistoryUpdateWithoutDocumentInput, ExpiringDocumentHistoryUncheckedUpdateWithoutDocumentInput>
+    create: XOR<ExpiringDocumentHistoryCreateWithoutDocumentInput, ExpiringDocumentHistoryUncheckedCreateWithoutDocumentInput>
+  }
+
+  export type ExpiringDocumentHistoryUpdateWithWhereUniqueWithoutDocumentInput = {
+    where: ExpiringDocumentHistoryWhereUniqueInput
+    data: XOR<ExpiringDocumentHistoryUpdateWithoutDocumentInput, ExpiringDocumentHistoryUncheckedUpdateWithoutDocumentInput>
+  }
+
+  export type ExpiringDocumentHistoryUpdateManyWithWhereWithoutDocumentInput = {
+    where: ExpiringDocumentHistoryScalarWhereInput
+    data: XOR<ExpiringDocumentHistoryUpdateManyMutationInput, ExpiringDocumentHistoryUncheckedUpdateManyWithoutDocumentInput>
+  }
+
+  export type ExpiringDocumentNotificationUpsertWithWhereUniqueWithoutDocumentInput = {
+    where: ExpiringDocumentNotificationWhereUniqueInput
+    update: XOR<ExpiringDocumentNotificationUpdateWithoutDocumentInput, ExpiringDocumentNotificationUncheckedUpdateWithoutDocumentInput>
+    create: XOR<ExpiringDocumentNotificationCreateWithoutDocumentInput, ExpiringDocumentNotificationUncheckedCreateWithoutDocumentInput>
+  }
+
+  export type ExpiringDocumentNotificationUpdateWithWhereUniqueWithoutDocumentInput = {
+    where: ExpiringDocumentNotificationWhereUniqueInput
+    data: XOR<ExpiringDocumentNotificationUpdateWithoutDocumentInput, ExpiringDocumentNotificationUncheckedUpdateWithoutDocumentInput>
+  }
+
+  export type ExpiringDocumentNotificationUpdateManyWithWhereWithoutDocumentInput = {
+    where: ExpiringDocumentNotificationScalarWhereInput
+    data: XOR<ExpiringDocumentNotificationUpdateManyMutationInput, ExpiringDocumentNotificationUncheckedUpdateManyWithoutDocumentInput>
+  }
+
+  export type ExpiringDocumentNotificationScalarWhereInput = {
+    AND?: ExpiringDocumentNotificationScalarWhereInput | ExpiringDocumentNotificationScalarWhereInput[]
+    OR?: ExpiringDocumentNotificationScalarWhereInput[]
+    NOT?: ExpiringDocumentNotificationScalarWhereInput | ExpiringDocumentNotificationScalarWhereInput[]
+    expiringDocumentNotificationId?: IntFilter<"ExpiringDocumentNotification"> | number
+    expiringDocumentId?: IntFilter<"ExpiringDocumentNotification"> | number
+    alertLevel?: EnumExpiringDocumentAlertLevelFilter<"ExpiringDocumentNotification"> | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeFilter<"ExpiringDocumentNotification"> | Date | string
+    recipients?: StringNullableListFilter<"ExpiringDocumentNotification">
+    sentAt?: DateTimeFilter<"ExpiringDocumentNotification"> | Date | string
+  }
+
+  export type ExpiringDocumentCreateWithoutHistoryInput = {
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    category: ExpiringDocumentCategoryCreateNestedOneWithoutDocumentsInput
+    createdBy: UserCreateNestedOneWithoutCreatedExpiringDocumentsInput
+    updatedBy: UserCreateNestedOneWithoutUpdatedExpiringDocumentsInput
+    notifications?: ExpiringDocumentNotificationCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentUncheckedCreateWithoutHistoryInput = {
+    expiringDocumentId?: number
+    categoryId: number
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdByUserId: number
+    updatedByUserId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    notifications?: ExpiringDocumentNotificationUncheckedCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentCreateOrConnectWithoutHistoryInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    create: XOR<ExpiringDocumentCreateWithoutHistoryInput, ExpiringDocumentUncheckedCreateWithoutHistoryInput>
+  }
+
+  export type UserCreateWithoutExpiringDocumentHistoryInput = {
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
+    responses?: RequestResponseCreateNestedManyWithoutResponderInput
+    requests?: RequestCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserUncheckedCreateWithoutExpiringDocumentHistoryInput = {
+    userId?: number
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
+    responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
+    requests?: RequestUncheckedCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserCreateOrConnectWithoutExpiringDocumentHistoryInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutExpiringDocumentHistoryInput, UserUncheckedCreateWithoutExpiringDocumentHistoryInput>
+  }
+
+  export type ExpiringDocumentUpsertWithoutHistoryInput = {
+    update: XOR<ExpiringDocumentUpdateWithoutHistoryInput, ExpiringDocumentUncheckedUpdateWithoutHistoryInput>
+    create: XOR<ExpiringDocumentCreateWithoutHistoryInput, ExpiringDocumentUncheckedCreateWithoutHistoryInput>
+    where?: ExpiringDocumentWhereInput
+  }
+
+  export type ExpiringDocumentUpdateToOneWithWhereWithoutHistoryInput = {
+    where?: ExpiringDocumentWhereInput
+    data: XOR<ExpiringDocumentUpdateWithoutHistoryInput, ExpiringDocumentUncheckedUpdateWithoutHistoryInput>
+  }
+
+  export type ExpiringDocumentUpdateWithoutHistoryInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    category?: ExpiringDocumentCategoryUpdateOneRequiredWithoutDocumentsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedExpiringDocumentsNestedInput
+    updatedBy?: UserUpdateOneRequiredWithoutUpdatedExpiringDocumentsNestedInput
+    notifications?: ExpiringDocumentNotificationUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type ExpiringDocumentUncheckedUpdateWithoutHistoryInput = {
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByUserId?: IntFieldUpdateOperationsInput | number
+    updatedByUserId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifications?: ExpiringDocumentNotificationUncheckedUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type UserUpsertWithoutExpiringDocumentHistoryInput = {
+    update: XOR<UserUpdateWithoutExpiringDocumentHistoryInput, UserUncheckedUpdateWithoutExpiringDocumentHistoryInput>
+    create: XOR<UserCreateWithoutExpiringDocumentHistoryInput, UserUncheckedCreateWithoutExpiringDocumentHistoryInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutExpiringDocumentHistoryInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutExpiringDocumentHistoryInput, UserUncheckedUpdateWithoutExpiringDocumentHistoryInput>
+  }
+
+  export type UserUpdateWithoutExpiringDocumentHistoryInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUpdateManyWithoutResponderNestedInput
+    requests?: RequestUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutExpiringDocumentHistoryInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
+    requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type ExpiringDocumentCreateWithoutNotificationsInput = {
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    category: ExpiringDocumentCategoryCreateNestedOneWithoutDocumentsInput
+    createdBy: UserCreateNestedOneWithoutCreatedExpiringDocumentsInput
+    updatedBy: UserCreateNestedOneWithoutUpdatedExpiringDocumentsInput
+    history?: ExpiringDocumentHistoryCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentUncheckedCreateWithoutNotificationsInput = {
+    expiringDocumentId?: number
+    categoryId: number
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdByUserId: number
+    updatedByUserId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    history?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutDocumentInput
+  }
+
+  export type ExpiringDocumentCreateOrConnectWithoutNotificationsInput = {
+    where: ExpiringDocumentWhereUniqueInput
+    create: XOR<ExpiringDocumentCreateWithoutNotificationsInput, ExpiringDocumentUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type ExpiringDocumentUpsertWithoutNotificationsInput = {
+    update: XOR<ExpiringDocumentUpdateWithoutNotificationsInput, ExpiringDocumentUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<ExpiringDocumentCreateWithoutNotificationsInput, ExpiringDocumentUncheckedCreateWithoutNotificationsInput>
+    where?: ExpiringDocumentWhereInput
+  }
+
+  export type ExpiringDocumentUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: ExpiringDocumentWhereInput
+    data: XOR<ExpiringDocumentUpdateWithoutNotificationsInput, ExpiringDocumentUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type ExpiringDocumentUpdateWithoutNotificationsInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    category?: ExpiringDocumentCategoryUpdateOneRequiredWithoutDocumentsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedExpiringDocumentsNestedInput
+    updatedBy?: UserUpdateOneRequiredWithoutUpdatedExpiringDocumentsNestedInput
+    history?: ExpiringDocumentHistoryUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type ExpiringDocumentUncheckedUpdateWithoutNotificationsInput = {
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByUserId?: IntFieldUpdateOperationsInput | number
+    updatedByUserId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    history?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutDocumentNestedInput
+  }
+
   export type BlacklistedTokenCreateManyUserInput = {
     id?: number
     token: string
@@ -108584,6 +116712,52 @@ export namespace Prisma {
     quantity: Decimal | DecimalJsLike | number | string
     responsibleUserId?: number | null
     notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ExpiringDocumentCreateManyCreatedByInput = {
+    expiringDocumentId?: number
+    categoryId: number
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    updatedByUserId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ExpiringDocumentCreateManyUpdatedByInput = {
+    expiringDocumentId?: number
+    categoryId: number
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdByUserId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ExpiringDocumentHistoryCreateManyChangedByInput = {
+    expiringDocumentHistoryId?: number
+    expiringDocumentId: number
+    action: $Enums.ExpiringDocumentHistoryAction
+    snapshot: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
   }
 
@@ -109222,6 +117396,149 @@ export namespace Prisma {
     quantity?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     responsibleUserId?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentUpdateWithoutCreatedByInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    category?: ExpiringDocumentCategoryUpdateOneRequiredWithoutDocumentsNestedInput
+    updatedBy?: UserUpdateOneRequiredWithoutUpdatedExpiringDocumentsNestedInput
+    history?: ExpiringDocumentHistoryUpdateManyWithoutDocumentNestedInput
+    notifications?: ExpiringDocumentNotificationUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type ExpiringDocumentUncheckedUpdateWithoutCreatedByInput = {
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedByUserId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    history?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutDocumentNestedInput
+    notifications?: ExpiringDocumentNotificationUncheckedUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type ExpiringDocumentUncheckedUpdateManyWithoutCreatedByInput = {
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedByUserId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ExpiringDocumentUpdateWithoutUpdatedByInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    category?: ExpiringDocumentCategoryUpdateOneRequiredWithoutDocumentsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedExpiringDocumentsNestedInput
+    history?: ExpiringDocumentHistoryUpdateManyWithoutDocumentNestedInput
+    notifications?: ExpiringDocumentNotificationUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type ExpiringDocumentUncheckedUpdateWithoutUpdatedByInput = {
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByUserId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    history?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutDocumentNestedInput
+    notifications?: ExpiringDocumentNotificationUncheckedUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByInput = {
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByUserId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ExpiringDocumentHistoryUpdateWithoutChangedByInput = {
+    action?: EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    document?: ExpiringDocumentUpdateOneRequiredWithoutHistoryNestedInput
+  }
+
+  export type ExpiringDocumentHistoryUncheckedUpdateWithoutChangedByInput = {
+    expiringDocumentHistoryId?: IntFieldUpdateOperationsInput | number
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    action?: EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByInput = {
+    expiringDocumentHistoryId?: IntFieldUpdateOperationsInput | number
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    action?: EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -114039,6 +122356,147 @@ export namespace Prisma {
     lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentCreateManyCategoryInput = {
+    expiringDocumentId?: number
+    title: string
+    documentCode?: string | null
+    referenceType: string
+    referenceDescription: string
+    storageSpace: string
+    storagePath?: string | null
+    storageDescription?: string | null
+    issueDate?: Date | string | null
+    expirationDate: Date | string
+    notes?: string | null
+    createdByUserId: number
+    updatedByUserId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ExpiringDocumentUpdateWithoutCategoryInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdBy?: UserUpdateOneRequiredWithoutCreatedExpiringDocumentsNestedInput
+    updatedBy?: UserUpdateOneRequiredWithoutUpdatedExpiringDocumentsNestedInput
+    history?: ExpiringDocumentHistoryUpdateManyWithoutDocumentNestedInput
+    notifications?: ExpiringDocumentNotificationUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type ExpiringDocumentUncheckedUpdateWithoutCategoryInput = {
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByUserId?: IntFieldUpdateOperationsInput | number
+    updatedByUserId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    history?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutDocumentNestedInput
+    notifications?: ExpiringDocumentNotificationUncheckedUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type ExpiringDocumentUncheckedUpdateManyWithoutCategoryInput = {
+    expiringDocumentId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    documentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referenceType?: StringFieldUpdateOperationsInput | string
+    referenceDescription?: StringFieldUpdateOperationsInput | string
+    storageSpace?: StringFieldUpdateOperationsInput | string
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    storageDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdByUserId?: IntFieldUpdateOperationsInput | number
+    updatedByUserId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ExpiringDocumentHistoryCreateManyDocumentInput = {
+    expiringDocumentHistoryId?: number
+    changedByUserId: number
+    action: $Enums.ExpiringDocumentHistoryAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type ExpiringDocumentNotificationCreateManyDocumentInput = {
+    expiringDocumentNotificationId?: number
+    alertLevel: $Enums.ExpiringDocumentAlertLevel
+    expirationDate: Date | string
+    recipients?: ExpiringDocumentNotificationCreaterecipientsInput | string[]
+    sentAt?: Date | string
+  }
+
+  export type ExpiringDocumentHistoryUpdateWithoutDocumentInput = {
+    action?: EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    changedBy?: UserUpdateOneRequiredWithoutExpiringDocumentHistoryNestedInput
+  }
+
+  export type ExpiringDocumentHistoryUncheckedUpdateWithoutDocumentInput = {
+    expiringDocumentHistoryId?: IntFieldUpdateOperationsInput | number
+    changedByUserId?: IntFieldUpdateOperationsInput | number
+    action?: EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentHistoryUncheckedUpdateManyWithoutDocumentInput = {
+    expiringDocumentHistoryId?: IntFieldUpdateOperationsInput | number
+    changedByUserId?: IntFieldUpdateOperationsInput | number
+    action?: EnumExpiringDocumentHistoryActionFieldUpdateOperationsInput | $Enums.ExpiringDocumentHistoryAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentNotificationUpdateWithoutDocumentInput = {
+    alertLevel?: EnumExpiringDocumentAlertLevelFieldUpdateOperationsInput | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipients?: ExpiringDocumentNotificationUpdaterecipientsInput | string[]
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentNotificationUncheckedUpdateWithoutDocumentInput = {
+    expiringDocumentNotificationId?: IntFieldUpdateOperationsInput | number
+    alertLevel?: EnumExpiringDocumentAlertLevelFieldUpdateOperationsInput | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipients?: ExpiringDocumentNotificationUpdaterecipientsInput | string[]
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpiringDocumentNotificationUncheckedUpdateManyWithoutDocumentInput = {
+    expiringDocumentNotificationId?: IntFieldUpdateOperationsInput | number
+    alertLevel?: EnumExpiringDocumentAlertLevelFieldUpdateOperationsInput | $Enums.ExpiringDocumentAlertLevel
+    expirationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipients?: ExpiringDocumentNotificationUpdaterecipientsInput | string[]
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

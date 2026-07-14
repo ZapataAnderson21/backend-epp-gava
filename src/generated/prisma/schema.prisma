@@ -33,6 +33,9 @@ model User {
   receivedRequestsIntoInventory     Request[]                   @relation("RequestInventoryReceivedBy")
   projectInventoryResponsibilities  ProjectInventoryEntry[]     @relation("ProjectInventoryResponsibleUser")
   performedInventoryMovements       InventoryMovement[]         @relation("InventoryMovementPerformedBy")
+  createdExpiringDocuments          ExpiringDocument[]          @relation("ExpiringDocumentCreatedBy")
+  updatedExpiringDocuments          ExpiringDocument[]          @relation("ExpiringDocumentUpdatedBy")
+  expiringDocumentHistory           ExpiringDocumentHistory[]
   responsibleInventoryMovements     InventoryMovement[]         @relation("InventoryMovementResponsibleUser")
 
   @@index([name])
@@ -1363,4 +1366,97 @@ model QuotationItem {
   @@unique([quotationId, orderNumber])
   @@index([quotationId])
   @@index([orderNumber])
+}
+
+enum ExpiringDocumentHistoryAction {
+  created
+  updated
+  deleted
+  restored
+}
+
+enum ExpiringDocumentAlertLevel {
+  first
+  second
+  third
+}
+
+model ExpiringDocumentCategory {
+  expiringDocumentCategoryId Int       @id @default(autoincrement())
+  name                       String    @unique
+  description                String?   @db.Text
+  alertDaysFirst             Int       @default(30)
+  alertDaysSecond            Int       @default(15)
+  alertDaysThird             Int       @default(7)
+  notificationEmails         String[]  @default([])
+  emailNotificationsEnabled  Boolean   @default(true)
+  createdAt                  DateTime  @default(now())
+  updatedAt                  DateTime  @updatedAt
+  deletedAt                  DateTime?
+
+  documents ExpiringDocument[]
+
+  @@index([deletedAt])
+  @@index([name])
+}
+
+model ExpiringDocument {
+  expiringDocumentId   Int       @id @default(autoincrement())
+  categoryId           Int
+  title                String
+  documentCode         String?
+  referenceType        String
+  referenceDescription String    @db.Text
+  storageSpace         String
+  storagePath          String?   @db.Text
+  storageDescription   String?   @db.Text
+  issueDate            DateTime? @db.Date
+  expirationDate       DateTime  @db.Date
+  notes                String?   @db.Text
+  createdByUserId      Int
+  updatedByUserId      Int
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  deletedAt            DateTime?
+
+  category      ExpiringDocumentCategory       @relation(fields: [categoryId], references: [expiringDocumentCategoryId], onDelete: Restrict, onUpdate: Cascade)
+  createdBy     User                           @relation("ExpiringDocumentCreatedBy", fields: [createdByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  updatedBy     User                           @relation("ExpiringDocumentUpdatedBy", fields: [updatedByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  history       ExpiringDocumentHistory[]
+  notifications ExpiringDocumentNotification[]
+
+  @@index([categoryId])
+  @@index([expirationDate])
+  @@index([deletedAt])
+  @@index([referenceType])
+  @@index([categoryId, expirationDate])
+}
+
+model ExpiringDocumentHistory {
+  expiringDocumentHistoryId Int                           @id @default(autoincrement())
+  expiringDocumentId        Int
+  changedByUserId           Int
+  action                    ExpiringDocumentHistoryAction
+  snapshot                  Json
+  createdAt                 DateTime                      @default(now())
+
+  document  ExpiringDocument @relation(fields: [expiringDocumentId], references: [expiringDocumentId], onDelete: Cascade, onUpdate: Cascade)
+  changedBy User             @relation(fields: [changedByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@index([expiringDocumentId, createdAt])
+  @@index([changedByUserId])
+}
+
+model ExpiringDocumentNotification {
+  expiringDocumentNotificationId Int                        @id @default(autoincrement())
+  expiringDocumentId             Int
+  alertLevel                     ExpiringDocumentAlertLevel
+  expirationDate                 DateTime                   @db.Date
+  recipients                     String[]
+  sentAt                         DateTime                   @default(now())
+
+  document ExpiringDocument @relation(fields: [expiringDocumentId], references: [expiringDocumentId], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([expiringDocumentId, alertLevel, expirationDate])
+  @@index([sentAt])
 }

@@ -757,6 +757,58 @@ exports.Prisma.QuotationItemScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ExpiringDocumentCategoryScalarFieldEnum = {
+  expiringDocumentCategoryId: 'expiringDocumentCategoryId',
+  name: 'name',
+  description: 'description',
+  alertDaysFirst: 'alertDaysFirst',
+  alertDaysSecond: 'alertDaysSecond',
+  alertDaysThird: 'alertDaysThird',
+  notificationEmails: 'notificationEmails',
+  emailNotificationsEnabled: 'emailNotificationsEnabled',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.ExpiringDocumentScalarFieldEnum = {
+  expiringDocumentId: 'expiringDocumentId',
+  categoryId: 'categoryId',
+  title: 'title',
+  documentCode: 'documentCode',
+  referenceType: 'referenceType',
+  referenceDescription: 'referenceDescription',
+  storageSpace: 'storageSpace',
+  storagePath: 'storagePath',
+  storageDescription: 'storageDescription',
+  issueDate: 'issueDate',
+  expirationDate: 'expirationDate',
+  notes: 'notes',
+  createdByUserId: 'createdByUserId',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.ExpiringDocumentHistoryScalarFieldEnum = {
+  expiringDocumentHistoryId: 'expiringDocumentHistoryId',
+  expiringDocumentId: 'expiringDocumentId',
+  changedByUserId: 'changedByUserId',
+  action: 'action',
+  snapshot: 'snapshot',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ExpiringDocumentNotificationScalarFieldEnum = {
+  expiringDocumentNotificationId: 'expiringDocumentNotificationId',
+  expiringDocumentId: 'expiringDocumentId',
+  alertLevel: 'alertLevel',
+  expirationDate: 'expirationDate',
+  recipients: 'recipients',
+  sentAt: 'sentAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -764,6 +816,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -1000,6 +1056,19 @@ exports.QuotationStatus = exports.$Enums.QuotationStatus = {
   accepted: 'accepted'
 };
 
+exports.ExpiringDocumentHistoryAction = exports.$Enums.ExpiringDocumentHistoryAction = {
+  created: 'created',
+  updated: 'updated',
+  deleted: 'deleted',
+  restored: 'restored'
+};
+
+exports.ExpiringDocumentAlertLevel = exports.$Enums.ExpiringDocumentAlertLevel = {
+  first: 'first',
+  second: 'second',
+  third: 'third'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   UserType: 'UserType',
@@ -1051,7 +1120,11 @@ exports.Prisma.ModelName = {
   Notification: 'Notification',
   Client: 'Client',
   Quotation: 'Quotation',
-  QuotationItem: 'QuotationItem'
+  QuotationItem: 'QuotationItem',
+  ExpiringDocumentCategory: 'ExpiringDocumentCategory',
+  ExpiringDocument: 'ExpiringDocument',
+  ExpiringDocumentHistory: 'ExpiringDocumentHistory',
+  ExpiringDocumentNotification: 'ExpiringDocumentNotification'
 };
 
 /**

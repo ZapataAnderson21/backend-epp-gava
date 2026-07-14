@@ -35,6 +35,7 @@ import { ClientModule } from './client/client.module';
 import { WorkerMonthlyEvaluationModule } from './worker-monthly-evaluation/worker-monthly-evaluation.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { ElementRequestWorkerPlanModule } from './element_request_worker_plan/element_request_worker_plan.module';
+import { ExpiringDocumentModule } from './expiring-document/expiring-document.module';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { ElementRequestWorkerPlanModule } from './element_request_worker_plan/el
     WorkerMonthlyEvaluationModule,
     InventoryModule,
     ElementRequestWorkerPlanModule,
+    ExpiringDocumentModule,
   ],
   controllers: [],
   providers: [
