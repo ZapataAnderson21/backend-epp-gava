@@ -8,16 +8,22 @@ import {
   Delete,
   Logger,
   ParseIntPipe,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { ResourceService } from './resource.service';
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
+import { ExcelService } from 'src/excel/excel.service';
 
 @Controller('resource')
 export class ResourceController {
   private readonly logger = new Logger('ResourceController');
 
-  constructor(private readonly resourceService: ResourceService) {}
+  constructor(
+    private readonly resourceService: ResourceService,
+    private readonly excelService: ExcelService,
+  ) {}
 
   @Post()
   create(@Body() createResourceDto: CreateResourceDto) {
@@ -29,6 +35,22 @@ export class ResourceController {
   findAll() {
     this.logger.log(`Finding all resources`);
     return this.resourceService.findAll();
+  }
+
+  @Get('export/excel')
+  async downloadExcel(@Res() res: Response) {
+    this.logger.log('Exporting purchase order resources to Excel');
+    const buffer = await this.excelService.generateResourcesExcel();
+
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    );
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename=recursos_ordenes_compra.xlsx',
+    );
+    res.send(buffer);
   }
 
   @Get(':id')

@@ -78,16 +78,33 @@ export class PurchaseOrderService {
     };
   }
 
-  async formatedCode(purchaseOrderId: number, code: string) {
+  async formatedCode(
+    purchaseOrderId: number,
+    code: string,
+    supplierId?: number,
+  ) {
     const year = new Date().getFullYear();
     const yearMarker = `-${year}/`;
-    const sequencePattern = /^No\s+(\d+)-\d{4}\/.+\/GAVA$/;
+    const sequencePattern = /^No\s+(\d+)-\d{4}\/.+\/[^/]+$/;
 
     // Si la OC ya tenía un correlativo válido, lo conservamos (por ejemplo, en updates).
     const currentPurchaseOrder = await this.prisma.purchaseOrder.findUnique({
       where: { purchaseOrderId },
-      select: { code: true },
+      select: { code: true, supplier: { select: { name: true } } },
     });
+
+    const supplier = supplierId
+      ? await this.prisma.supplier.findUnique({
+          where: { supplierId },
+          select: { name: true },
+        })
+      : currentPurchaseOrder?.supplier;
+
+    if (!supplier?.name) {
+      throw new BadRequestException(
+        'No se pudo obtener el proveedor para generar el código.',
+      );
+    }
 
     const currentMatch = currentPurchaseOrder?.code?.match(sequencePattern);
     const existingSequence = currentMatch ? Number(currentMatch[1]) : null;
@@ -121,8 +138,47 @@ export class PurchaseOrderService {
     }
 
     const formattedSequence = sequenceToUse.toString().padStart(3, '0');
-    const formattedCode = `No ${formattedSequence}-${year}/${code}/GAVA`;
+    const supplierAbbreviation = this.abbreviateSupplierName(supplier.name);
+    const formattedCode = `No ${formattedSequence}-${year}/${code}/${supplierAbbreviation}`;
     return formattedCode;
+  }
+
+  private abbreviateSupplierName(name: string): string {
+    const ignoredWords = new Set([
+      'DE',
+      'DEL',
+      'LA',
+      'LAS',
+      'LOS',
+      'Y',
+      'E',
+      'SA',
+      'SAC',
+      'SRL',
+      'EIRL',
+      'SAA',
+    ]);
+    const words = name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toUpperCase()
+      .replace(/\./g, '')
+      .replace(/[^A-Z0-9\s]/g, ' ')
+      .split(/\s+/)
+      .filter((word) => word && !ignoredWords.has(word));
+
+    if (words.length === 0) {
+      return 'PROV';
+    }
+
+    if (words.length === 1) {
+      return words[0].slice(0, 8);
+    }
+
+    return words
+      .map((word) => word[0])
+      .join('')
+      .slice(0, 8);
   }
 
   async findAllByProjectId(projectId: number) {
@@ -347,6 +403,7 @@ export class PurchaseOrderService {
       const code = await this.formatedCode(
         purchaseOrderId,
         updatePurchaseOrderDto.code,
+        updatePurchaseOrderDto.supplierId,
       );
       updatePurchaseOrderDto.code = code;
       this.logger.log(`Formatted code for purchase order: ${code}`);
