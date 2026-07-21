@@ -1,11 +1,23 @@
-const { readdirSync, readFileSync } = require('node:fs');
+const { existsSync, readdirSync, readFileSync } = require('node:fs');
 const { join, resolve } = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const projectRoot = resolve(__dirname, '..');
 const sqlDirectory = join(projectRoot, 'prisma', 'sql');
 const idempotentMarker = '-- @idempotent';
-const prismaCommand = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+const prismaCommand = join(
+  projectRoot,
+  'node_modules',
+  '.bin',
+  process.platform === 'win32' ? 'prisma.cmd' : 'prisma',
+);
+
+if (!existsSync(prismaCommand)) {
+  console.error(
+    'No se encontró la CLI local de Prisma. Ejecuta npm ci antes de aplicar los scripts SQL.',
+  );
+  process.exit(1);
+}
 
 const sqlFiles = readdirSync(sqlDirectory)
   .filter((fileName) => fileName.endsWith('.sql'))
@@ -41,7 +53,7 @@ for (const fileName of idempotentFiles) {
 
   const result = spawnSync(
     prismaCommand,
-    ['prisma', 'db', 'execute', '--file', relativeFile],
+    ['db', 'execute', '--file', relativeFile],
     {
       cwd: projectRoot,
       env: process.env,
@@ -62,3 +74,4 @@ for (const fileName of idempotentFiles) {
 }
 
 console.log('\nTodos los scripts SQL idempotentes finalizaron correctamente.');
+
