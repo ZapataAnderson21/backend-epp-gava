@@ -125,25 +125,25 @@ El proyecto usa Prisma ORM con PostgreSQL. La configuracion de Prisma se encuent
 Generar el cliente Prisma:
 
 ```bash
-npx prisma generate
+npm run prisma:generate
 ```
 
 Ejecutar migraciones en desarrollo:
 
 ```bash
-npx prisma migrate dev
+npm run prisma:migrate:dev
 ```
 
 Aplicar migraciones en produccion:
 
 ```bash
-npx prisma migrate deploy
+npm run prisma:migrate:deploy
 ```
 
 Abrir Prisma Studio para revisar datos:
 
 ```bash
-npx prisma studio
+npm run prisma:studio
 ```
 
 ## 9. Ejecucion del backend
@@ -253,13 +253,14 @@ Los endpoints se organizan por modulo. Algunos endpoints base son:
 Proceso general de despliegue en servidor:
 
 ```bash
-git pull origin main
-npm install
-npx prisma generate
-npx prisma migrate deploy
+git pull --ff-only origin main
+npm ci
+npm run prisma:migrate:deploy
 npm run db:apply-idempotent
+# Este comando genera Prisma Client y luego compila NestJS.
 npm run build
-npm run start:prod
+# Reiniciar el proceso existente solo despues de completar los pasos anteriores.
+pm2 restart backend-epp-gava --update-env
 ```
 
 En un VPS se recomienda usar PM2:
@@ -273,12 +274,34 @@ Consideraciones de despliegue:
 
 - Configurar `DATABASE_URL` y `JWT_SECRET` en el servidor.
 - Configurar el secret `VPS_BACKEND_PATH` en GitHub con la ruta absoluta del backend en el VPS.
+- El workflow delega todo el despliegue a `/opt/deploy/deploy-backend-epp.sh`. Ese archivo no pertenece al repositorio y debe usar `BACKEND_PATH`, ejecutar una sola vez y en el orden mostrado arriba la actualizacion, `npm ci`, las migraciones, el SQL idempotente, la generacion, el build y el reinicio. No se deben repetir esos pasos en `deploy.yml`.
+- Los comandos `npm run prisma:*` y `npm run db:apply-idempotent` usan exclusivamente la CLI instalada en `node_modules`; el despliegue no debe usar `npx prisma`.
 - Ejecutar migraciones antes de iniciar la aplicacion.
 - Los SQL manuales que sean seguros para repetirse deben comenzar con `-- @idempotent`; el deploy ejecuta todos los archivos marcados en orden alfabetico.
 - Configurar proxy inverso con Nginx o servicio equivalente.
 - Habilitar HTTPS.
 - Restringir origenes permitidos mediante `CORS_ORIGINS`.
 - No subir archivos `.env` al repositorio.
+
+### Cambio manual requerido en el VPS
+
+`/opt/deploy/deploy-backend-epp.sh` no forma parte de este repositorio. Hay que
+editarlo una vez en el VPS para que, despues de su paso actual de actualizacion
+del codigo, contenga una unica secuencia equivalente a esta:
+
+```bash
+cd "$BACKEND_PATH"
+npm ci
+npm run prisma:migrate:deploy
+npm run db:apply-idempotent
+npm run build
+pm2 restart backend-epp-gava --update-env
+```
+
+Se deben retirar de ese archivo cualquier `npm install` duplicado, cualquier
+`npx prisma ...`, y cualquier build o reinicio anterior a las migraciones. Si el
+proceso de PM2 tiene otro nombre, se conserva su comando de reinicio actual pero
+se mueve al final de la secuencia.
 
 ## 16. Flujo de trabajo con Git
 
@@ -323,3 +346,4 @@ npm run build
 ## 18. Evidencia para el informe
 
 Este README forma parte de la documentacion tecnica en Markdown solicitada para el proyecto. Documenta instalacion, arquitectura, configuracion de base de datos, endpoints, despliegue y manual basico para desarrolladores.
+
