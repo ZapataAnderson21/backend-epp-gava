@@ -36,6 +36,7 @@ import { WorkerMonthlyEvaluationModule } from './worker-monthly-evaluation/worke
 import { InventoryModule } from './inventory/inventory.module';
 import { ElementRequestWorkerPlanModule } from './element_request_worker_plan/element_request_worker_plan.module';
 import { ExpiringDocumentModule } from './expiring-document/expiring-document.module';
+import { ComplaintModule } from './complaint/complaint.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { ExpiringDocumentModule } from './expiring-document/expiring-document.mo
     InventoryModule,
     ElementRequestWorkerPlanModule,
     ExpiringDocumentModule,
+    ComplaintModule,
   ],
   controllers: [],
   providers: [
