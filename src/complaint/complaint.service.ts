@@ -1,4 +1,9 @@
-import { HttpStatus, Injectable, Logger } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpStatus,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateComplaintDto } from './dto/create-complaint.dto';
 
@@ -8,7 +13,25 @@ export class ComplaintService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
+  private async isSystemsUser(userId: number) {
+    const systemsUserType = await this.prismaService.userUserType.findFirst({
+      where: {
+        userId,
+        userType: { name: 'SISTEMAS' },
+      },
+      select: { userUserTypeId: true },
+    });
+
+    return systemsUserType !== null;
+  }
+
   async create(createComplaintDto: CreateComplaintDto, userId: number) {
+    if (await this.isSystemsUser(userId)) {
+      throw new ForbiddenException(
+        'Los usuarios de SISTEMAS solo pueden consultar reclamos.',
+      );
+    }
+
     const complaint = await this.prismaService.complaint.create({
       data: {
         claim: createComplaintDto.claim.trim(),
@@ -28,9 +51,21 @@ export class ComplaintService {
     };
   }
 
-  async findByUser(userId: number) {
+  async findVisibleToUser(userId: number) {
+    const canViewAll = await this.isSystemsUser(userId);
+
     const complaints = await this.prismaService.complaint.findMany({
-      where: { userId },
+      where: canViewAll ? undefined : { userId },
+      include: {
+        user: {
+          select: {
+            userId: true,
+            name: true,
+            lastName: true,
+            email: true,
+          },
+        },
+      },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -38,7 +73,9 @@ export class ComplaintService {
       statusCode: HttpStatus.OK,
       message: complaints.length
         ? 'Reclamos encontrados exitosamente.'
-        : 'Aún no has registrado reclamos.',
+        : canViewAll
+          ? 'Aún no se han registrado reclamos.'
+          : 'Aún no has registrado reclamos.',
       data: complaints,
     };
   }

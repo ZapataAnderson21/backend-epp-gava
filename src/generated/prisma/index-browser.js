@@ -416,6 +416,15 @@ exports.Prisma.EmergencyScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ComplaintScalarFieldEnum = {
+  complaintId: 'complaintId',
+  claim: 'claim',
+  description: 'description',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.WorkerScalarFieldEnum = {
   workerId: 'workerId',
   fullName: 'fullName',
@@ -1094,6 +1103,7 @@ exports.Prisma.ModelName = {
   MeasurementAssetProfile: 'MeasurementAssetProfile',
   ElementRequestResponse: 'ElementRequestResponse',
   Emergency: 'Emergency',
+  Complaint: 'Complaint',
   Worker: 'Worker',
   WorkerInventoryAssignment: 'WorkerInventoryAssignment',
   MonthlyEvaluationTemplate: 'MonthlyEvaluationTemplate',

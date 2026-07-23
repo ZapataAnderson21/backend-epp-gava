@@ -17,7 +17,7 @@ export class ComplaintController {
   }
 
   @Get()
-  findMine(@Req() req: Request) {
-    return this.complaintService.findByUser(this.userId(req));
+  findVisible(@Req() req: Request) {
+    return this.complaintService.findVisibleToUser(this.userId(req));
   }
 }

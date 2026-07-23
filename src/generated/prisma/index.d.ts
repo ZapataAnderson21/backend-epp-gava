@@ -134,6 +134,11 @@ export type ElementRequestResponse = $Result.DefaultSelection<Prisma.$ElementReq
  */
 export type Emergency = $Result.DefaultSelection<Prisma.$EmergencyPayload>
 /**
+ * Model Complaint
+ * 
+ */
+export type Complaint = $Result.DefaultSelection<Prisma.$ComplaintPayload>
+/**
  * Model Worker
  * 
  */
@@ -1100,6 +1105,16 @@ export class PrismaClient<
   get emergency(): Prisma.EmergencyDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.complaint`: Exposes CRUD operations for the **Complaint** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Complaints
+    * const complaints = await prisma.complaint.findMany()
+    * ```
+    */
+  get complaint(): Prisma.ComplaintDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.worker`: Exposes CRUD operations for the **Worker** model.
     * Example usage:
     * ```ts
@@ -1866,6 +1881,7 @@ export namespace Prisma {
     MeasurementAssetProfile: 'MeasurementAssetProfile',
     ElementRequestResponse: 'ElementRequestResponse',
     Emergency: 'Emergency',
+    Complaint: 'Complaint',
     Worker: 'Worker',
     WorkerInventoryAssignment: 'WorkerInventoryAssignment',
     MonthlyEvaluationTemplate: 'MonthlyEvaluationTemplate',
@@ -1912,7 +1928,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userType" | "userUserType" | "project" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "week" | "dailyWage" | "weeklyWage" | "attendance" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem" | "expiringDocumentCategory" | "expiringDocument" | "expiringDocumentHistory" | "expiringDocumentNotification"
+      modelProps: "user" | "userType" | "userUserType" | "project" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "complaint" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "week" | "dailyWage" | "weeklyWage" | "attendance" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem" | "expiringDocumentCategory" | "expiringDocument" | "expiringDocumentHistory" | "expiringDocumentNotification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3689,6 +3705,80 @@ export namespace Prisma {
           count: {
             args: Prisma.EmergencyCountArgs<ExtArgs>
             result: $Utils.Optional<EmergencyCountAggregateOutputType> | number
+          }
+        }
+      }
+      Complaint: {
+        payload: Prisma.$ComplaintPayload<ExtArgs>
+        fields: Prisma.ComplaintFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ComplaintFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ComplaintFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload>
+          }
+          findFirst: {
+            args: Prisma.ComplaintFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ComplaintFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload>
+          }
+          findMany: {
+            args: Prisma.ComplaintFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload>[]
+          }
+          create: {
+            args: Prisma.ComplaintCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload>
+          }
+          createMany: {
+            args: Prisma.ComplaintCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ComplaintCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload>[]
+          }
+          delete: {
+            args: Prisma.ComplaintDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload>
+          }
+          update: {
+            args: Prisma.ComplaintUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload>
+          }
+          deleteMany: {
+            args: Prisma.ComplaintDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ComplaintUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ComplaintUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload>[]
+          }
+          upsert: {
+            args: Prisma.ComplaintUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ComplaintPayload>
+          }
+          aggregate: {
+            args: Prisma.ComplaintAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateComplaint>
+          }
+          groupBy: {
+            args: Prisma.ComplaintGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ComplaintGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ComplaintCountArgs<ExtArgs>
+            result: $Utils.Optional<ComplaintCountAggregateOutputType> | number
           }
         }
       }
@@ -6102,6 +6192,7 @@ export namespace Prisma {
     measurementAssetProfile?: MeasurementAssetProfileOmit
     elementRequestResponse?: ElementRequestResponseOmit
     emergency?: EmergencyOmit
+    complaint?: ComplaintOmit
     worker?: WorkerOmit
     workerInventoryAssignment?: WorkerInventoryAssignmentOmit
     monthlyEvaluationTemplate?: MonthlyEvaluationTemplateOmit
@@ -6219,6 +6310,7 @@ export namespace Prisma {
     userUserTypes: number
     passwordResetTokens: number
     emergencies: number
+    complaints: number
     taskAssignments: number
     notifications: number
     createdMonthlyEvaluationTemplates: number
@@ -6241,6 +6333,7 @@ export namespace Prisma {
     userUserTypes?: boolean | UserCountOutputTypeCountUserUserTypesArgs
     passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
     emergencies?: boolean | UserCountOutputTypeCountEmergenciesArgs
+    complaints?: boolean | UserCountOutputTypeCountComplaintsArgs
     taskAssignments?: boolean | UserCountOutputTypeCountTaskAssignmentsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     createdMonthlyEvaluationTemplates?: boolean | UserCountOutputTypeCountCreatedMonthlyEvaluationTemplatesArgs
@@ -6307,6 +6400,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountEmergenciesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EmergencyWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountComplaintsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ComplaintWhereInput
   }
 
   /**
@@ -8159,6 +8259,7 @@ export namespace Prisma {
     userUserTypes?: boolean | User$userUserTypesArgs<ExtArgs>
     passwordResetTokens?: boolean | User$passwordResetTokensArgs<ExtArgs>
     emergencies?: boolean | User$emergenciesArgs<ExtArgs>
+    complaints?: boolean | User$complaintsArgs<ExtArgs>
     taskAssignments?: boolean | User$taskAssignmentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     createdMonthlyEvaluationTemplates?: boolean | User$createdMonthlyEvaluationTemplatesArgs<ExtArgs>
@@ -8219,6 +8320,7 @@ export namespace Prisma {
     userUserTypes?: boolean | User$userUserTypesArgs<ExtArgs>
     passwordResetTokens?: boolean | User$passwordResetTokensArgs<ExtArgs>
     emergencies?: boolean | User$emergenciesArgs<ExtArgs>
+    complaints?: boolean | User$complaintsArgs<ExtArgs>
     taskAssignments?: boolean | User$taskAssignmentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     createdMonthlyEvaluationTemplates?: boolean | User$createdMonthlyEvaluationTemplatesArgs<ExtArgs>
@@ -8246,6 +8348,7 @@ export namespace Prisma {
       userUserTypes: Prisma.$UserUserTypePayload<ExtArgs>[]
       passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
       emergencies: Prisma.$EmergencyPayload<ExtArgs>[]
+      complaints: Prisma.$ComplaintPayload<ExtArgs>[]
       taskAssignments: Prisma.$TaskAssignmentPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       createdMonthlyEvaluationTemplates: Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>[]
@@ -8670,6 +8773,7 @@ export namespace Prisma {
     userUserTypes<T extends User$userUserTypesArgs<ExtArgs> = {}>(args?: Subset<T, User$userUserTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserUserTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     passwordResetTokens<T extends User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     emergencies<T extends User$emergenciesArgs<ExtArgs> = {}>(args?: Subset<T, User$emergenciesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmergencyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    complaints<T extends User$complaintsArgs<ExtArgs> = {}>(args?: Subset<T, User$complaintsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     taskAssignments<T extends User$taskAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$taskAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdMonthlyEvaluationTemplates<T extends User$createdMonthlyEvaluationTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdMonthlyEvaluationTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyEvaluationTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9250,6 +9354,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EmergencyScalarFieldEnum | EmergencyScalarFieldEnum[]
+  }
+
+  /**
+   * User.complaints
+   */
+  export type User$complaintsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
+    where?: ComplaintWhereInput
+    orderBy?: ComplaintOrderByWithRelationInput | ComplaintOrderByWithRelationInput[]
+    cursor?: ComplaintWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ComplaintScalarFieldEnum | ComplaintScalarFieldEnum[]
   }
 
   /**
@@ -38587,6 +38715,1115 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EmergencyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Complaint
+   */
+
+  export type AggregateComplaint = {
+    _count: ComplaintCountAggregateOutputType | null
+    _avg: ComplaintAvgAggregateOutputType | null
+    _sum: ComplaintSumAggregateOutputType | null
+    _min: ComplaintMinAggregateOutputType | null
+    _max: ComplaintMaxAggregateOutputType | null
+  }
+
+  export type ComplaintAvgAggregateOutputType = {
+    complaintId: number | null
+    userId: number | null
+  }
+
+  export type ComplaintSumAggregateOutputType = {
+    complaintId: number | null
+    userId: number | null
+  }
+
+  export type ComplaintMinAggregateOutputType = {
+    complaintId: number | null
+    claim: string | null
+    description: string | null
+    userId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ComplaintMaxAggregateOutputType = {
+    complaintId: number | null
+    claim: string | null
+    description: string | null
+    userId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ComplaintCountAggregateOutputType = {
+    complaintId: number
+    claim: number
+    description: number
+    userId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ComplaintAvgAggregateInputType = {
+    complaintId?: true
+    userId?: true
+  }
+
+  export type ComplaintSumAggregateInputType = {
+    complaintId?: true
+    userId?: true
+  }
+
+  export type ComplaintMinAggregateInputType = {
+    complaintId?: true
+    claim?: true
+    description?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ComplaintMaxAggregateInputType = {
+    complaintId?: true
+    claim?: true
+    description?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ComplaintCountAggregateInputType = {
+    complaintId?: true
+    claim?: true
+    description?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ComplaintAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Complaint to aggregate.
+     */
+    where?: ComplaintWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Complaints to fetch.
+     */
+    orderBy?: ComplaintOrderByWithRelationInput | ComplaintOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ComplaintWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Complaints from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Complaints.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Complaints
+    **/
+    _count?: true | ComplaintCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ComplaintAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ComplaintSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ComplaintMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ComplaintMaxAggregateInputType
+  }
+
+  export type GetComplaintAggregateType<T extends ComplaintAggregateArgs> = {
+        [P in keyof T & keyof AggregateComplaint]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateComplaint[P]>
+      : GetScalarType<T[P], AggregateComplaint[P]>
+  }
+
+
+
+
+  export type ComplaintGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ComplaintWhereInput
+    orderBy?: ComplaintOrderByWithAggregationInput | ComplaintOrderByWithAggregationInput[]
+    by: ComplaintScalarFieldEnum[] | ComplaintScalarFieldEnum
+    having?: ComplaintScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ComplaintCountAggregateInputType | true
+    _avg?: ComplaintAvgAggregateInputType
+    _sum?: ComplaintSumAggregateInputType
+    _min?: ComplaintMinAggregateInputType
+    _max?: ComplaintMaxAggregateInputType
+  }
+
+  export type ComplaintGroupByOutputType = {
+    complaintId: number
+    claim: string
+    description: string
+    userId: number
+    createdAt: Date
+    updatedAt: Date
+    _count: ComplaintCountAggregateOutputType | null
+    _avg: ComplaintAvgAggregateOutputType | null
+    _sum: ComplaintSumAggregateOutputType | null
+    _min: ComplaintMinAggregateOutputType | null
+    _max: ComplaintMaxAggregateOutputType | null
+  }
+
+  type GetComplaintGroupByPayload<T extends ComplaintGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ComplaintGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ComplaintGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ComplaintGroupByOutputType[P]>
+            : GetScalarType<T[P], ComplaintGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ComplaintSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    complaintId?: boolean
+    claim?: boolean
+    description?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["complaint"]>
+
+  export type ComplaintSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    complaintId?: boolean
+    claim?: boolean
+    description?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["complaint"]>
+
+  export type ComplaintSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    complaintId?: boolean
+    claim?: boolean
+    description?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["complaint"]>
+
+  export type ComplaintSelectScalar = {
+    complaintId?: boolean
+    claim?: boolean
+    description?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ComplaintOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"complaintId" | "claim" | "description" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["complaint"]>
+  export type ComplaintInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ComplaintIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ComplaintIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ComplaintPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Complaint"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      complaintId: number
+      claim: string
+      description: string
+      userId: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["complaint"]>
+    composites: {}
+  }
+
+  type ComplaintGetPayload<S extends boolean | null | undefined | ComplaintDefaultArgs> = $Result.GetResult<Prisma.$ComplaintPayload, S>
+
+  type ComplaintCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ComplaintFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ComplaintCountAggregateInputType | true
+    }
+
+  export interface ComplaintDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Complaint'], meta: { name: 'Complaint' } }
+    /**
+     * Find zero or one Complaint that matches the filter.
+     * @param {ComplaintFindUniqueArgs} args - Arguments to find a Complaint
+     * @example
+     * // Get one Complaint
+     * const complaint = await prisma.complaint.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ComplaintFindUniqueArgs>(args: SelectSubset<T, ComplaintFindUniqueArgs<ExtArgs>>): Prisma__ComplaintClient<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Complaint that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ComplaintFindUniqueOrThrowArgs} args - Arguments to find a Complaint
+     * @example
+     * // Get one Complaint
+     * const complaint = await prisma.complaint.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ComplaintFindUniqueOrThrowArgs>(args: SelectSubset<T, ComplaintFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ComplaintClient<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Complaint that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ComplaintFindFirstArgs} args - Arguments to find a Complaint
+     * @example
+     * // Get one Complaint
+     * const complaint = await prisma.complaint.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ComplaintFindFirstArgs>(args?: SelectSubset<T, ComplaintFindFirstArgs<ExtArgs>>): Prisma__ComplaintClient<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Complaint that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ComplaintFindFirstOrThrowArgs} args - Arguments to find a Complaint
+     * @example
+     * // Get one Complaint
+     * const complaint = await prisma.complaint.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ComplaintFindFirstOrThrowArgs>(args?: SelectSubset<T, ComplaintFindFirstOrThrowArgs<ExtArgs>>): Prisma__ComplaintClient<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Complaints that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ComplaintFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Complaints
+     * const complaints = await prisma.complaint.findMany()
+     * 
+     * // Get first 10 Complaints
+     * const complaints = await prisma.complaint.findMany({ take: 10 })
+     * 
+     * // Only select the `complaintId`
+     * const complaintWithComplaintIdOnly = await prisma.complaint.findMany({ select: { complaintId: true } })
+     * 
+     */
+    findMany<T extends ComplaintFindManyArgs>(args?: SelectSubset<T, ComplaintFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Complaint.
+     * @param {ComplaintCreateArgs} args - Arguments to create a Complaint.
+     * @example
+     * // Create one Complaint
+     * const Complaint = await prisma.complaint.create({
+     *   data: {
+     *     // ... data to create a Complaint
+     *   }
+     * })
+     * 
+     */
+    create<T extends ComplaintCreateArgs>(args: SelectSubset<T, ComplaintCreateArgs<ExtArgs>>): Prisma__ComplaintClient<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Complaints.
+     * @param {ComplaintCreateManyArgs} args - Arguments to create many Complaints.
+     * @example
+     * // Create many Complaints
+     * const complaint = await prisma.complaint.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ComplaintCreateManyArgs>(args?: SelectSubset<T, ComplaintCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Complaints and returns the data saved in the database.
+     * @param {ComplaintCreateManyAndReturnArgs} args - Arguments to create many Complaints.
+     * @example
+     * // Create many Complaints
+     * const complaint = await prisma.complaint.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Complaints and only return the `complaintId`
+     * const complaintWithComplaintIdOnly = await prisma.complaint.createManyAndReturn({
+     *   select: { complaintId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ComplaintCreateManyAndReturnArgs>(args?: SelectSubset<T, ComplaintCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Complaint.
+     * @param {ComplaintDeleteArgs} args - Arguments to delete one Complaint.
+     * @example
+     * // Delete one Complaint
+     * const Complaint = await prisma.complaint.delete({
+     *   where: {
+     *     // ... filter to delete one Complaint
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ComplaintDeleteArgs>(args: SelectSubset<T, ComplaintDeleteArgs<ExtArgs>>): Prisma__ComplaintClient<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Complaint.
+     * @param {ComplaintUpdateArgs} args - Arguments to update one Complaint.
+     * @example
+     * // Update one Complaint
+     * const complaint = await prisma.complaint.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ComplaintUpdateArgs>(args: SelectSubset<T, ComplaintUpdateArgs<ExtArgs>>): Prisma__ComplaintClient<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Complaints.
+     * @param {ComplaintDeleteManyArgs} args - Arguments to filter Complaints to delete.
+     * @example
+     * // Delete a few Complaints
+     * const { count } = await prisma.complaint.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ComplaintDeleteManyArgs>(args?: SelectSubset<T, ComplaintDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Complaints.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ComplaintUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Complaints
+     * const complaint = await prisma.complaint.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ComplaintUpdateManyArgs>(args: SelectSubset<T, ComplaintUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Complaints and returns the data updated in the database.
+     * @param {ComplaintUpdateManyAndReturnArgs} args - Arguments to update many Complaints.
+     * @example
+     * // Update many Complaints
+     * const complaint = await prisma.complaint.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Complaints and only return the `complaintId`
+     * const complaintWithComplaintIdOnly = await prisma.complaint.updateManyAndReturn({
+     *   select: { complaintId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ComplaintUpdateManyAndReturnArgs>(args: SelectSubset<T, ComplaintUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Complaint.
+     * @param {ComplaintUpsertArgs} args - Arguments to update or create a Complaint.
+     * @example
+     * // Update or create a Complaint
+     * const complaint = await prisma.complaint.upsert({
+     *   create: {
+     *     // ... data to create a Complaint
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Complaint we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ComplaintUpsertArgs>(args: SelectSubset<T, ComplaintUpsertArgs<ExtArgs>>): Prisma__ComplaintClient<$Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Complaints.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ComplaintCountArgs} args - Arguments to filter Complaints to count.
+     * @example
+     * // Count the number of Complaints
+     * const count = await prisma.complaint.count({
+     *   where: {
+     *     // ... the filter for the Complaints we want to count
+     *   }
+     * })
+    **/
+    count<T extends ComplaintCountArgs>(
+      args?: Subset<T, ComplaintCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ComplaintCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Complaint.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ComplaintAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ComplaintAggregateArgs>(args: Subset<T, ComplaintAggregateArgs>): Prisma.PrismaPromise<GetComplaintAggregateType<T>>
+
+    /**
+     * Group by Complaint.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ComplaintGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ComplaintGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ComplaintGroupByArgs['orderBy'] }
+        : { orderBy?: ComplaintGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ComplaintGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetComplaintGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Complaint model
+   */
+  readonly fields: ComplaintFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Complaint.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ComplaintClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Complaint model
+   */
+  interface ComplaintFieldRefs {
+    readonly complaintId: FieldRef<"Complaint", 'Int'>
+    readonly claim: FieldRef<"Complaint", 'String'>
+    readonly description: FieldRef<"Complaint", 'String'>
+    readonly userId: FieldRef<"Complaint", 'Int'>
+    readonly createdAt: FieldRef<"Complaint", 'DateTime'>
+    readonly updatedAt: FieldRef<"Complaint", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Complaint findUnique
+   */
+  export type ComplaintFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
+    /**
+     * Filter, which Complaint to fetch.
+     */
+    where: ComplaintWhereUniqueInput
+  }
+
+  /**
+   * Complaint findUniqueOrThrow
+   */
+  export type ComplaintFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
+    /**
+     * Filter, which Complaint to fetch.
+     */
+    where: ComplaintWhereUniqueInput
+  }
+
+  /**
+   * Complaint findFirst
+   */
+  export type ComplaintFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
+    /**
+     * Filter, which Complaint to fetch.
+     */
+    where?: ComplaintWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Complaints to fetch.
+     */
+    orderBy?: ComplaintOrderByWithRelationInput | ComplaintOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Complaints.
+     */
+    cursor?: ComplaintWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Complaints from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Complaints.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Complaints.
+     */
+    distinct?: ComplaintScalarFieldEnum | ComplaintScalarFieldEnum[]
+  }
+
+  /**
+   * Complaint findFirstOrThrow
+   */
+  export type ComplaintFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
+    /**
+     * Filter, which Complaint to fetch.
+     */
+    where?: ComplaintWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Complaints to fetch.
+     */
+    orderBy?: ComplaintOrderByWithRelationInput | ComplaintOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Complaints.
+     */
+    cursor?: ComplaintWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Complaints from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Complaints.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Complaints.
+     */
+    distinct?: ComplaintScalarFieldEnum | ComplaintScalarFieldEnum[]
+  }
+
+  /**
+   * Complaint findMany
+   */
+  export type ComplaintFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
+    /**
+     * Filter, which Complaints to fetch.
+     */
+    where?: ComplaintWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Complaints to fetch.
+     */
+    orderBy?: ComplaintOrderByWithRelationInput | ComplaintOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Complaints.
+     */
+    cursor?: ComplaintWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Complaints from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Complaints.
+     */
+    skip?: number
+    distinct?: ComplaintScalarFieldEnum | ComplaintScalarFieldEnum[]
+  }
+
+  /**
+   * Complaint create
+   */
+  export type ComplaintCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Complaint.
+     */
+    data: XOR<ComplaintCreateInput, ComplaintUncheckedCreateInput>
+  }
+
+  /**
+   * Complaint createMany
+   */
+  export type ComplaintCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Complaints.
+     */
+    data: ComplaintCreateManyInput | ComplaintCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Complaint createManyAndReturn
+   */
+  export type ComplaintCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * The data used to create many Complaints.
+     */
+    data: ComplaintCreateManyInput | ComplaintCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Complaint update
+   */
+  export type ComplaintUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Complaint.
+     */
+    data: XOR<ComplaintUpdateInput, ComplaintUncheckedUpdateInput>
+    /**
+     * Choose, which Complaint to update.
+     */
+    where: ComplaintWhereUniqueInput
+  }
+
+  /**
+   * Complaint updateMany
+   */
+  export type ComplaintUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Complaints.
+     */
+    data: XOR<ComplaintUpdateManyMutationInput, ComplaintUncheckedUpdateManyInput>
+    /**
+     * Filter which Complaints to update
+     */
+    where?: ComplaintWhereInput
+    /**
+     * Limit how many Complaints to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Complaint updateManyAndReturn
+   */
+  export type ComplaintUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * The data used to update Complaints.
+     */
+    data: XOR<ComplaintUpdateManyMutationInput, ComplaintUncheckedUpdateManyInput>
+    /**
+     * Filter which Complaints to update
+     */
+    where?: ComplaintWhereInput
+    /**
+     * Limit how many Complaints to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Complaint upsert
+   */
+  export type ComplaintUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Complaint to update in case it exists.
+     */
+    where: ComplaintWhereUniqueInput
+    /**
+     * In case the Complaint found by the `where` argument doesn't exist, create a new Complaint with this data.
+     */
+    create: XOR<ComplaintCreateInput, ComplaintUncheckedCreateInput>
+    /**
+     * In case the Complaint was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ComplaintUpdateInput, ComplaintUncheckedUpdateInput>
+  }
+
+  /**
+   * Complaint delete
+   */
+  export type ComplaintDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
+    /**
+     * Filter which Complaint to delete.
+     */
+    where: ComplaintWhereUniqueInput
+  }
+
+  /**
+   * Complaint deleteMany
+   */
+  export type ComplaintDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Complaints to delete
+     */
+    where?: ComplaintWhereInput
+    /**
+     * Limit how many Complaints to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Complaint without action
+   */
+  export type ComplaintDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Complaint
+     */
+    select?: ComplaintSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Complaint
+     */
+    omit?: ComplaintOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ComplaintInclude<ExtArgs> | null
   }
 
 
@@ -76355,6 +77592,18 @@ export namespace Prisma {
   export type EmergencyScalarFieldEnum = (typeof EmergencyScalarFieldEnum)[keyof typeof EmergencyScalarFieldEnum]
 
 
+  export const ComplaintScalarFieldEnum: {
+    complaintId: 'complaintId',
+    claim: 'claim',
+    description: 'description',
+    userId: 'userId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ComplaintScalarFieldEnum = (typeof ComplaintScalarFieldEnum)[keyof typeof ComplaintScalarFieldEnum]
+
+
   export const WorkerScalarFieldEnum: {
     workerId: 'workerId',
     fullName: 'fullName',
@@ -77441,6 +78690,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeListRelationFilter
     passwordResetTokens?: PasswordResetTokenListRelationFilter
     emergencies?: EmergencyListRelationFilter
+    complaints?: ComplaintListRelationFilter
     taskAssignments?: TaskAssignmentListRelationFilter
     notifications?: NotificationListRelationFilter
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateListRelationFilter
@@ -77472,6 +78722,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeOrderByRelationAggregateInput
     passwordResetTokens?: PasswordResetTokenOrderByRelationAggregateInput
     emergencies?: EmergencyOrderByRelationAggregateInput
+    complaints?: ComplaintOrderByRelationAggregateInput
     taskAssignments?: TaskAssignmentOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateOrderByRelationAggregateInput
@@ -77506,6 +78757,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeListRelationFilter
     passwordResetTokens?: PasswordResetTokenListRelationFilter
     emergencies?: EmergencyListRelationFilter
+    complaints?: ComplaintListRelationFilter
     taskAssignments?: TaskAssignmentListRelationFilter
     notifications?: NotificationListRelationFilter
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateListRelationFilter
@@ -79647,6 +80899,68 @@ export namespace Prisma {
     status?: EnumEmergencyStatusWithAggregatesFilter<"Emergency"> | $Enums.EmergencyStatus
     createdAt?: DateTimeWithAggregatesFilter<"Emergency"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Emergency"> | Date | string
+  }
+
+  export type ComplaintWhereInput = {
+    AND?: ComplaintWhereInput | ComplaintWhereInput[]
+    OR?: ComplaintWhereInput[]
+    NOT?: ComplaintWhereInput | ComplaintWhereInput[]
+    complaintId?: IntFilter<"Complaint"> | number
+    claim?: StringFilter<"Complaint"> | string
+    description?: StringFilter<"Complaint"> | string
+    userId?: IntFilter<"Complaint"> | number
+    createdAt?: DateTimeFilter<"Complaint"> | Date | string
+    updatedAt?: DateTimeFilter<"Complaint"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ComplaintOrderByWithRelationInput = {
+    complaintId?: SortOrder
+    claim?: SortOrder
+    description?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ComplaintWhereUniqueInput = Prisma.AtLeast<{
+    complaintId?: number
+    AND?: ComplaintWhereInput | ComplaintWhereInput[]
+    OR?: ComplaintWhereInput[]
+    NOT?: ComplaintWhereInput | ComplaintWhereInput[]
+    claim?: StringFilter<"Complaint"> | string
+    description?: StringFilter<"Complaint"> | string
+    userId?: IntFilter<"Complaint"> | number
+    createdAt?: DateTimeFilter<"Complaint"> | Date | string
+    updatedAt?: DateTimeFilter<"Complaint"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "complaintId">
+
+  export type ComplaintOrderByWithAggregationInput = {
+    complaintId?: SortOrder
+    claim?: SortOrder
+    description?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ComplaintCountOrderByAggregateInput
+    _avg?: ComplaintAvgOrderByAggregateInput
+    _max?: ComplaintMaxOrderByAggregateInput
+    _min?: ComplaintMinOrderByAggregateInput
+    _sum?: ComplaintSumOrderByAggregateInput
+  }
+
+  export type ComplaintScalarWhereWithAggregatesInput = {
+    AND?: ComplaintScalarWhereWithAggregatesInput | ComplaintScalarWhereWithAggregatesInput[]
+    OR?: ComplaintScalarWhereWithAggregatesInput[]
+    NOT?: ComplaintScalarWhereWithAggregatesInput | ComplaintScalarWhereWithAggregatesInput[]
+    complaintId?: IntWithAggregatesFilter<"Complaint"> | number
+    claim?: StringWithAggregatesFilter<"Complaint"> | string
+    description?: StringWithAggregatesFilter<"Complaint"> | string
+    userId?: IntWithAggregatesFilter<"Complaint"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Complaint"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Complaint"> | Date | string
   }
 
   export type WorkerWhereInput = {
@@ -82326,6 +83640,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -82357,6 +83672,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -82387,6 +83703,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -82418,6 +83735,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -84558,6 +85876,65 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
     status?: EnumEmergencyStatusFieldUpdateOperationsInput | $Enums.EmergencyStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ComplaintCreateInput = {
+    claim: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutComplaintsInput
+  }
+
+  export type ComplaintUncheckedCreateInput = {
+    complaintId?: number
+    claim: string
+    description: string
+    userId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ComplaintUpdateInput = {
+    claim?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutComplaintsNestedInput
+  }
+
+  export type ComplaintUncheckedUpdateInput = {
+    complaintId?: IntFieldUpdateOperationsInput | number
+    claim?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ComplaintCreateManyInput = {
+    complaintId?: number
+    claim: string
+    description: string
+    userId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ComplaintUpdateManyMutationInput = {
+    claim?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ComplaintUncheckedUpdateManyInput = {
+    complaintId?: IntFieldUpdateOperationsInput | number
+    claim?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -87396,6 +88773,12 @@ export namespace Prisma {
     none?: EmergencyWhereInput
   }
 
+  export type ComplaintListRelationFilter = {
+    every?: ComplaintWhereInput
+    some?: ComplaintWhereInput
+    none?: ComplaintWhereInput
+  }
+
   export type TaskAssignmentListRelationFilter = {
     every?: TaskAssignmentWhereInput
     some?: TaskAssignmentWhereInput
@@ -87470,6 +88853,10 @@ export namespace Prisma {
   }
 
   export type EmergencyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ComplaintOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -89455,6 +90842,43 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEmergencyStatusFilter<$PrismaModel>
     _max?: NestedEnumEmergencyStatusFilter<$PrismaModel>
+  }
+
+  export type ComplaintCountOrderByAggregateInput = {
+    complaintId?: SortOrder
+    claim?: SortOrder
+    description?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ComplaintAvgOrderByAggregateInput = {
+    complaintId?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type ComplaintMaxOrderByAggregateInput = {
+    complaintId?: SortOrder
+    claim?: SortOrder
+    description?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ComplaintMinOrderByAggregateInput = {
+    complaintId?: SortOrder
+    claim?: SortOrder
+    description?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ComplaintSumOrderByAggregateInput = {
+    complaintId?: SortOrder
+    userId?: SortOrder
   }
 
   export type EnumWorkerTypeFilter<$PrismaModel = never> = {
@@ -91770,6 +93194,13 @@ export namespace Prisma {
     connect?: EmergencyWhereUniqueInput | EmergencyWhereUniqueInput[]
   }
 
+  export type ComplaintCreateNestedManyWithoutUserInput = {
+    create?: XOR<ComplaintCreateWithoutUserInput, ComplaintUncheckedCreateWithoutUserInput> | ComplaintCreateWithoutUserInput[] | ComplaintUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ComplaintCreateOrConnectWithoutUserInput | ComplaintCreateOrConnectWithoutUserInput[]
+    createMany?: ComplaintCreateManyUserInputEnvelope
+    connect?: ComplaintWhereUniqueInput | ComplaintWhereUniqueInput[]
+  }
+
   export type TaskAssignmentCreateNestedManyWithoutUserInput = {
     create?: XOR<TaskAssignmentCreateWithoutUserInput, TaskAssignmentUncheckedCreateWithoutUserInput> | TaskAssignmentCreateWithoutUserInput[] | TaskAssignmentUncheckedCreateWithoutUserInput[]
     connectOrCreate?: TaskAssignmentCreateOrConnectWithoutUserInput | TaskAssignmentCreateOrConnectWithoutUserInput[]
@@ -91901,6 +93332,13 @@ export namespace Prisma {
     connectOrCreate?: EmergencyCreateOrConnectWithoutUserInput | EmergencyCreateOrConnectWithoutUserInput[]
     createMany?: EmergencyCreateManyUserInputEnvelope
     connect?: EmergencyWhereUniqueInput | EmergencyWhereUniqueInput[]
+  }
+
+  export type ComplaintUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ComplaintCreateWithoutUserInput, ComplaintUncheckedCreateWithoutUserInput> | ComplaintCreateWithoutUserInput[] | ComplaintUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ComplaintCreateOrConnectWithoutUserInput | ComplaintCreateOrConnectWithoutUserInput[]
+    createMany?: ComplaintCreateManyUserInputEnvelope
+    connect?: ComplaintWhereUniqueInput | ComplaintWhereUniqueInput[]
   }
 
   export type TaskAssignmentUncheckedCreateNestedManyWithoutUserInput = {
@@ -92092,6 +93530,20 @@ export namespace Prisma {
     update?: EmergencyUpdateWithWhereUniqueWithoutUserInput | EmergencyUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: EmergencyUpdateManyWithWhereWithoutUserInput | EmergencyUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: EmergencyScalarWhereInput | EmergencyScalarWhereInput[]
+  }
+
+  export type ComplaintUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ComplaintCreateWithoutUserInput, ComplaintUncheckedCreateWithoutUserInput> | ComplaintCreateWithoutUserInput[] | ComplaintUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ComplaintCreateOrConnectWithoutUserInput | ComplaintCreateOrConnectWithoutUserInput[]
+    upsert?: ComplaintUpsertWithWhereUniqueWithoutUserInput | ComplaintUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ComplaintCreateManyUserInputEnvelope
+    set?: ComplaintWhereUniqueInput | ComplaintWhereUniqueInput[]
+    disconnect?: ComplaintWhereUniqueInput | ComplaintWhereUniqueInput[]
+    delete?: ComplaintWhereUniqueInput | ComplaintWhereUniqueInput[]
+    connect?: ComplaintWhereUniqueInput | ComplaintWhereUniqueInput[]
+    update?: ComplaintUpdateWithWhereUniqueWithoutUserInput | ComplaintUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ComplaintUpdateManyWithWhereWithoutUserInput | ComplaintUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ComplaintScalarWhereInput | ComplaintScalarWhereInput[]
   }
 
   export type TaskAssignmentUpdateManyWithoutUserNestedInput = {
@@ -92366,6 +93818,20 @@ export namespace Prisma {
     update?: EmergencyUpdateWithWhereUniqueWithoutUserInput | EmergencyUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: EmergencyUpdateManyWithWhereWithoutUserInput | EmergencyUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: EmergencyScalarWhereInput | EmergencyScalarWhereInput[]
+  }
+
+  export type ComplaintUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ComplaintCreateWithoutUserInput, ComplaintUncheckedCreateWithoutUserInput> | ComplaintCreateWithoutUserInput[] | ComplaintUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ComplaintCreateOrConnectWithoutUserInput | ComplaintCreateOrConnectWithoutUserInput[]
+    upsert?: ComplaintUpsertWithWhereUniqueWithoutUserInput | ComplaintUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ComplaintCreateManyUserInputEnvelope
+    set?: ComplaintWhereUniqueInput | ComplaintWhereUniqueInput[]
+    disconnect?: ComplaintWhereUniqueInput | ComplaintWhereUniqueInput[]
+    delete?: ComplaintWhereUniqueInput | ComplaintWhereUniqueInput[]
+    connect?: ComplaintWhereUniqueInput | ComplaintWhereUniqueInput[]
+    update?: ComplaintUpdateWithWhereUniqueWithoutUserInput | ComplaintUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ComplaintUpdateManyWithWhereWithoutUserInput | ComplaintUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ComplaintScalarWhereInput | ComplaintScalarWhereInput[]
   }
 
   export type TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput = {
@@ -95909,6 +97375,20 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type UserCreateNestedOneWithoutComplaintsInput = {
+    create?: XOR<UserCreateWithoutComplaintsInput, UserUncheckedCreateWithoutComplaintsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutComplaintsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutComplaintsNestedInput = {
+    create?: XOR<UserCreateWithoutComplaintsInput, UserUncheckedCreateWithoutComplaintsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutComplaintsInput
+    upsert?: UserUpsertWithoutComplaintsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutComplaintsInput, UserUpdateWithoutComplaintsInput>, UserUncheckedUpdateWithoutComplaintsInput>
+  }
+
   export type RequestWorkerCreateNestedManyWithoutWorkerInput = {
     create?: XOR<RequestWorkerCreateWithoutWorkerInput, RequestWorkerUncheckedCreateWithoutWorkerInput> | RequestWorkerCreateWithoutWorkerInput[] | RequestWorkerUncheckedCreateWithoutWorkerInput[]
     connectOrCreate?: RequestWorkerCreateOrConnectWithoutWorkerInput | RequestWorkerCreateOrConnectWithoutWorkerInput[]
@@ -99064,6 +100544,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ComplaintCreateWithoutUserInput = {
+    claim: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ComplaintUncheckedCreateWithoutUserInput = {
+    complaintId?: number
+    claim: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ComplaintCreateOrConnectWithoutUserInput = {
+    where: ComplaintWhereUniqueInput
+    create: XOR<ComplaintCreateWithoutUserInput, ComplaintUncheckedCreateWithoutUserInput>
+  }
+
+  export type ComplaintCreateManyUserInputEnvelope = {
+    data: ComplaintCreateManyUserInput | ComplaintCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type TaskAssignmentCreateWithoutUserInput = {
     assignedAt?: Date | string
     task: TaskCreateNestedOneWithoutAssignmentsInput
@@ -99804,6 +101309,34 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Emergency"> | Date | string
   }
 
+  export type ComplaintUpsertWithWhereUniqueWithoutUserInput = {
+    where: ComplaintWhereUniqueInput
+    update: XOR<ComplaintUpdateWithoutUserInput, ComplaintUncheckedUpdateWithoutUserInput>
+    create: XOR<ComplaintCreateWithoutUserInput, ComplaintUncheckedCreateWithoutUserInput>
+  }
+
+  export type ComplaintUpdateWithWhereUniqueWithoutUserInput = {
+    where: ComplaintWhereUniqueInput
+    data: XOR<ComplaintUpdateWithoutUserInput, ComplaintUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ComplaintUpdateManyWithWhereWithoutUserInput = {
+    where: ComplaintScalarWhereInput
+    data: XOR<ComplaintUpdateManyMutationInput, ComplaintUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ComplaintScalarWhereInput = {
+    AND?: ComplaintScalarWhereInput | ComplaintScalarWhereInput[]
+    OR?: ComplaintScalarWhereInput[]
+    NOT?: ComplaintScalarWhereInput | ComplaintScalarWhereInput[]
+    complaintId?: IntFilter<"Complaint"> | number
+    claim?: StringFilter<"Complaint"> | string
+    description?: StringFilter<"Complaint"> | string
+    userId?: IntFilter<"Complaint"> | number
+    createdAt?: DateTimeFilter<"Complaint"> | Date | string
+    updatedAt?: DateTimeFilter<"Complaint"> | Date | string
+  }
+
   export type TaskAssignmentUpsertWithWhereUniqueWithoutUserInput = {
     where: TaskAssignmentWhereUniqueInput
     update: XOR<TaskAssignmentUpdateWithoutUserInput, TaskAssignmentUncheckedUpdateWithoutUserInput>
@@ -100209,6 +101742,7 @@ export namespace Prisma {
     requests?: RequestCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -100239,6 +101773,7 @@ export namespace Prisma {
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -100298,6 +101833,7 @@ export namespace Prisma {
     requests?: RequestUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -100328,6 +101864,7 @@ export namespace Prisma {
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -103657,6 +105194,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -103687,6 +105225,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -103722,6 +105261,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -103752,6 +105292,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -104098,6 +105639,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -104128,6 +105670,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -104169,6 +105712,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -104199,6 +105743,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -105394,6 +106939,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -105424,6 +106970,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -105591,6 +107138,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -105621,6 +107169,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -105987,6 +107536,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -106017,6 +107567,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -106498,6 +108049,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -106528,6 +108080,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -106993,6 +108546,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -107023,6 +108577,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -107057,6 +108612,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -107087,6 +108643,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -107590,6 +109147,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -107620,6 +109178,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -107660,6 +109219,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -107690,6 +109250,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -109384,6 +110945,7 @@ export namespace Prisma {
     requests?: RequestCreateNestedManyWithoutUserInput
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -109414,6 +110976,7 @@ export namespace Prisma {
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -109554,6 +111117,7 @@ export namespace Prisma {
     requests?: RequestUpdateManyWithoutUserNestedInput
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -109584,6 +111148,7 @@ export namespace Prisma {
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -109673,6 +111238,144 @@ export namespace Prisma {
   export type NotificationUpdateManyWithWhereWithoutEmergencyInput = {
     where: NotificationScalarWhereInput
     data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutEmergencyInput>
+  }
+
+  export type UserCreateWithoutComplaintsInput = {
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
+    responses?: RequestResponseCreateNestedManyWithoutResponderInput
+    requests?: RequestCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
+    responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserUncheckedCreateWithoutComplaintsInput = {
+    userId?: number
+    name: string
+    lastName: string
+    email: string
+    password: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
+    responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
+    requests?: RequestUncheckedCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserCreateOrConnectWithoutComplaintsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutComplaintsInput, UserUncheckedCreateWithoutComplaintsInput>
+  }
+
+  export type UserUpsertWithoutComplaintsInput = {
+    update: XOR<UserUpdateWithoutComplaintsInput, UserUncheckedUpdateWithoutComplaintsInput>
+    create: XOR<UserCreateWithoutComplaintsInput, UserUncheckedCreateWithoutComplaintsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutComplaintsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutComplaintsInput, UserUncheckedUpdateWithoutComplaintsInput>
+  }
+
+  export type UserUpdateWithoutComplaintsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUpdateManyWithoutResponderNestedInput
+    requests?: RequestUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutComplaintsInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
+    requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
   export type RequestWorkerCreateWithoutWorkerInput = {
@@ -110828,6 +112531,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
@@ -110858,6 +112562,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
@@ -110940,6 +112645,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
@@ -110970,6 +112676,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
@@ -111538,6 +113245,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -111568,6 +113276,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -111602,6 +113311,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -111632,6 +113342,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -111666,6 +113377,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -111696,6 +113408,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -111858,6 +113571,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -111888,6 +113602,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -111928,6 +113643,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -111958,6 +113674,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -111998,6 +113715,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -112028,6 +113746,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -113382,6 +115101,7 @@ export namespace Prisma {
     requests?: RequestCreateNestedManyWithoutUserInput
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -113412,6 +115132,7 @@ export namespace Prisma {
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -113457,6 +115178,7 @@ export namespace Prisma {
     requests?: RequestUpdateManyWithoutUserNestedInput
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -113487,6 +115209,7 @@ export namespace Prisma {
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -113516,6 +115239,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -113546,6 +115270,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -113591,6 +115316,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -113621,6 +115347,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -114638,6 +116365,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
@@ -114668,6 +116396,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
@@ -114759,6 +116488,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
@@ -114789,6 +116519,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
@@ -114818,6 +116549,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
@@ -114848,6 +116580,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
@@ -115117,6 +116850,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
@@ -115147,6 +116881,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
     evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
@@ -115803,6 +117538,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -115833,6 +117569,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -115867,6 +117604,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -115897,6 +117635,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -116030,6 +117769,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -116060,6 +117800,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -116100,6 +117841,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -116130,6 +117872,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -116249,6 +117992,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
     emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
@@ -116279,6 +118023,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
     taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
@@ -116376,6 +118121,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
@@ -116406,6 +118152,7 @@ export namespace Prisma {
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
     taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
@@ -116569,6 +118316,14 @@ export namespace Prisma {
     description: string
     projectId: number
     status?: $Enums.EmergencyStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ComplaintCreateManyUserInput = {
+    complaintId?: number
+    claim: string
+    description: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -116954,6 +118709,29 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     projectId?: IntFieldUpdateOperationsInput | number
     status?: EnumEmergencyStatusFieldUpdateOperationsInput | $Enums.EmergencyStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ComplaintUpdateWithoutUserInput = {
+    claim?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ComplaintUncheckedUpdateWithoutUserInput = {
+    complaintId?: IntFieldUpdateOperationsInput | number
+    claim?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ComplaintUncheckedUpdateManyWithoutUserInput = {
+    complaintId?: IntFieldUpdateOperationsInput | number
+    claim?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
