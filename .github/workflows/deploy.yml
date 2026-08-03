@@ -6,30 +6,86 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: deploy-backend-epp
   cancel-in-progress: false
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
-      - name: Deploy backend on VPS
-        uses: appleboy/ssh-action@v1
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci --no-audit --no-fund
+
+      - name: Compilar backend
+        env:
+          DATABASE_URL: postgresql://build:build@localhost:5432/build
+        run: npm run build
+
+      - name: Validar artefacto
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -s dist/main.js || {
+            echo "Error: no se generó dist/main.js."
+            exit 1
+          }
+
+          test -d dist/generated/prisma || {
+            echo "Error: no se incluyó Prisma Client en el build."
+            exit 1
+          }
+
+      - name: Enviar artefacto al VPS
+        uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
+          source: "dist"
+          target: "/tmp/backend-epp-${{ github.sha }}"
+          strip_components: 1
+          rm: true
+          command_timeout: 10m
+
+      - name: Publicar backend en el VPS
+        uses: appleboy/ssh-action@v1
+        env:
+          BACKEND_PATH: ${{ secrets.VPS_BACKEND_PATH }}
+          DEPLOY_COMMIT: ${{ github.sha }}
+          STAGING_DIR: /tmp/backend-epp-${{ github.sha }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          envs: BACKEND_PATH,DEPLOY_COMMIT,STAGING_DIR
+          command_timeout: 30m
           script: |
-            set -eu
-            BACKEND_PATH="${{ secrets.VPS_BACKEND_PATH }}"
+            set -euo pipefail
+
             if [ -z "$BACKEND_PATH" ]; then
-              echo "Falta configurar el secret VPS_BACKEND_PATH con la ruta del backend en el VPS."
+              echo "Falta configurar VPS_BACKEND_PATH."
               exit 1
             fi
 
             export BACKEND_PATH
-            bash /opt/deploy/deploy-backend-epp.sh
 
+            bash /opt/deploy/publish-backend-epp.sh \
+              "$STAGING_DIR" \
+              "$DEPLOY_COMMIT"
