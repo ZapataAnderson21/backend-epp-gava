@@ -79,10 +79,8 @@ export class PdfService {
       }).format(n);
     const roundMoney = (value: number) =>
       Math.round((value + Number.EPSILON) * 100) / 100;
-    const lineAmount = (
-      quantity: unknown,
-      unitPrice: unknown,
-    ) => roundMoney((Number(quantity) || 0) * (Number(unitPrice) || 0));
+    const lineAmount = (quantity: unknown, unitPrice: unknown) =>
+      roundMoney((Number(quantity) || 0) * (Number(unitPrice) || 0));
     const formatDate = (d: Date | string | number) => {
       const date = new Date(d);
       const dd = date.getDate().toString().padStart(2, '0');
@@ -102,8 +100,7 @@ export class PdfService {
         const bOrder = b.orderNumber ?? Number.MAX_SAFE_INTEGER;
         if (aOrder !== bOrder) return aOrder - bOrder;
         return (
-          (a.resourcePurchaseOrderId ?? 0) -
-          (b.resourcePurchaseOrderId ?? 0)
+          (a.resourcePurchaseOrderId ?? 0) - (b.resourcePurchaseOrderId ?? 0)
         );
       },
     );
@@ -224,273 +221,162 @@ export class PdfService {
       },
     ];
 
-    // Bloque: Datos del proveedor
-    const proveedorBlock = [
-      {
-        table: {
-          widths: ['*'],
-          body: [
-            [
-              {
-                text: 'DATOS DEL PROVEEDOR',
-                style: 'sectionHeader',
-                color: 'white',
-              },
-            ],
-          ],
-        },
-        layout: {
-          fillColor: () => headingBlue,
-          hLineWidth: () => 0,
-          vLineWidth: () => 0,
-          paddingLeft: () => 8,
-          paddingRight: () => 8,
-          paddingTop: () => 8,
-          paddingBottom: () => 8,
-        },
-        margin: [0, 0, 0, 0],
-      },
-      // ⬇️ CONTENIDO CON BORDE
-      {
-        table: {
-          widths: ['*'],
-          body: [
-            [
-              {
-                stack: [
-                  {
-                    text: [
-                      { text: 'Proveedor: ', bold: true },
-                      purchaseOrder.supplier?.name || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'RUC: ', bold: true },
-                      purchaseOrder.supplier?.ruc || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'Contacto: ', bold: true },
-                      purchaseOrder.supplier?.contactName || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'Correo: ', bold: true },
-                      purchaseOrder.supplier?.email || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'Teléfono: ', bold: true },
-                      purchaseOrder.supplier?.phone || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'Cotización: ', bold: true },
-                      purchaseOrder.quotation || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                ],
-                margin: [4, 4, 4, 4],
-              },
-            ],
-          ],
-        },
-        layout: {
-          // borde “caja”: solo líneas exteriores
-          hLineWidth: (i, node) =>
-            i === 0 || i === node.table.body.length ? 1 : 0,
-          vLineWidth: (i, node) =>
-            i === 0 || i === node.table.widths.length ? 1 : 0,
-          hLineColor: () => borderColor,
-          vLineColor: () => borderColor,
-          paddingLeft: () => 8,
-          paddingRight: () => 8,
-          paddingTop: () => 6,
-          paddingBottom: () => 6,
-        },
-      },
-    ];
+    const infoHeaderCell = (text: string) => ({
+      text,
+      style: 'sectionHeader',
+      color: 'white',
+      fillColor: headingBlue,
+      border: [false, false, false, false],
+    });
 
-    // Bloque: Datos de entrega/envío
-    const envioBlock = [
-      {
-        table: {
-          widths: ['*'],
-          body: [
-            [
-              {
-                text: 'DATOS DE ENTREGA O ENVÍO',
-                style: 'sectionHeader',
-                color: 'white',
-              },
-            ],
-          ],
-        },
-        layout: {
-          fillColor: () => headingBlue,
-          hLineWidth: () => 0,
-          vLineWidth: () => 0,
-          paddingLeft: () => 8,
-          paddingRight: () => 8,
-          paddingTop: () => 8,
-          paddingBottom: () => 8,
-        },
-        margin: [0, 0, 0, 0],
-      },
-      // ⬇️ CONTENIDO CON BORDE
-      {
-        table: {
-          widths: ['*'],
-          body: [
-            [
-              {
-                stack: [
-                  {
-                    text: [
-                      { text: 'Lugar de entrega: ', bold: true },
-                      purchaseOrder.deliveryLocation || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'Destino: ', bold: true },
-                      purchaseOrder.destination || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'Atención: ', bold: true },
-                      purchaseOrder.carePerson || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'DNI: ', bold: true },
-                      purchaseOrder.dniCarePerson || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'Observación: ', bold: true },
-                      purchaseOrder.observations || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  { text: ' ', lineHeight: 1.75 },
-                ],
-                margin: [4, 4, 4, 4],
-              },
-            ],
-          ],
-        },
-        layout: {
-          hLineWidth: (i, node) =>
-            i === 0 || i === node.table.body.length ? 1 : 0,
-          vLineWidth: (i, node) =>
-            i === 0 || i === node.table.widths.length ? 1 : 0,
-          hLineColor: () => borderColor,
-          vLineColor: () => borderColor,
-          paddingLeft: () => 8,
-          paddingRight: () => 8,
-          paddingTop: () => 6,
-          paddingBottom: () => 6,
-        },
-      },
-    ];
+    const infoBodyCell = (stack: any[]) => ({
+      stack,
+      border: [true, false, true, true],
+      margin: [4, 4, 4, 4],
+    });
 
-    // Bloque: Condiciones de pago
-    const pagoBlock = [
-      {
-        table: {
-          widths: ['*'],
-          body: [
-            [
-              {
-                text: 'CONDICIONES DE PAGO',
-                style: 'sectionHeader',
-                color: 'white',
-              },
-            ],
+    const infoGapCell = () => ({
+      text: '',
+      border: [false, false, false, false],
+    });
+
+    // Una sola tabla mantiene los tres bloques con exactamente la misma altura,
+    // incluso cuando algún dato se divide en más de una línea.
+    const purchaseOrderInfoTable = {
+      table: {
+        widths: ['*', 8, '*', 8, '*'],
+        body: [
+          [
+            infoHeaderCell('DATOS DEL PROVEEDOR'),
+            infoGapCell(),
+            infoHeaderCell('DATOS DE ENTREGA O ENVÍO'),
+            infoGapCell(),
+            infoHeaderCell('CONDICIONES DE PAGO'),
           ],
-        },
-        layout: {
-          fillColor: () => headingBlue,
-          hLineWidth: () => 0,
-          vLineWidth: () => 0,
-          paddingLeft: () => 8,
-          paddingRight: () => 8,
-          paddingTop: () => 8,
-          paddingBottom: () => 8,
-        },
-        margin: [0, 0, 0, 0],
-      },
-      // Contenido en columna
-      {
-        table: {
-          widths: ['*'],
-          body: [
-            [
+          [
+            infoBodyCell([
               {
-                stack: [
-                  {
-                    text: [
-                      { text: 'Crédito: ', bold: true },
-                      purchaseOrder.paymentConditions || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'Método de pago: ', bold: true },
-                      PaymentMethodLabelEs[purchaseOrder.paymentMethod] || '',
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  {
-                    text: [
-                      { text: 'Cta. cte: ', bold: true },
-                      `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}`,
-                    ],
-                    lineHeight: 1.75,
-                  },
-                  { text: ' ', lineHeight: 1.75 },
-                  { text: ' ', lineHeight: 1.75 },
-                  { text: ' ', lineHeight: 1.75 },
+                text: [
+                  { text: 'Proveedor: ', bold: true },
+                  purchaseOrder.supplier?.name || '',
                 ],
-                margin: [4, 4, 4, 4],
+                lineHeight: 1.75,
               },
-            ],
+              {
+                text: [
+                  { text: 'RUC: ', bold: true },
+                  purchaseOrder.supplier?.ruc || '',
+                ],
+                lineHeight: 1.75,
+              },
+              {
+                text: [
+                  { text: 'Contacto: ', bold: true },
+                  purchaseOrder.supplier?.contactName || '',
+                ],
+                lineHeight: 1.75,
+              },
+              {
+                text: [
+                  { text: 'Correo: ', bold: true },
+                  purchaseOrder.supplier?.email || '',
+                ],
+                lineHeight: 1.75,
+              },
+              {
+                text: [
+                  { text: 'Teléfono: ', bold: true },
+                  purchaseOrder.supplier?.phone || '',
+                ],
+                lineHeight: 1.75,
+              },
+              {
+                text: [
+                  { text: 'Cotización: ', bold: true },
+                  purchaseOrder.quotation || '',
+                ],
+                lineHeight: 1.75,
+              },
+            ]),
+            infoGapCell(),
+            infoBodyCell([
+              {
+                text: [
+                  { text: 'Lugar de entrega: ', bold: true },
+                  purchaseOrder.deliveryLocation || '',
+                ],
+                lineHeight: 1.75,
+              },
+              {
+                text: [
+                  { text: 'Destino: ', bold: true },
+                  purchaseOrder.destination || '',
+                ],
+                lineHeight: 1.75,
+              },
+              {
+                text: [
+                  { text: 'Atención: ', bold: true },
+                  purchaseOrder.carePerson || '',
+                ],
+                lineHeight: 1.75,
+              },
+              {
+                text: [
+                  { text: 'DNI: ', bold: true },
+                  purchaseOrder.dniCarePerson || '',
+                ],
+                lineHeight: 1.75,
+              },
+              {
+                text: [
+                  { text: 'Observación: ', bold: true },
+                  purchaseOrder.observations || '',
+                ],
+                lineHeight: 1.75,
+              },
+            ]),
+            infoGapCell(),
+            infoBodyCell([
+              {
+                text: [
+                  { text: 'Crédito: ', bold: true },
+                  purchaseOrder.paymentConditions || '',
+                ],
+                lineHeight: 1.75,
+              },
+              {
+                text: [
+                  { text: 'Método de pago: ', bold: true },
+                  PaymentMethodLabelEs[purchaseOrder.paymentMethod] || '',
+                ],
+                lineHeight: 1.75,
+              },
+              {
+                text: [
+                  { text: 'Cta. cte: ', bold: true },
+                  `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}`,
+                ],
+                lineHeight: 1.75,
+              },
+            ]),
           ],
-        },
-        layout: {
-          hLineWidth: (i, node) =>
-            i === 0 || i === node.table.body.length ? 1 : 0,
-          vLineWidth: (i, node) =>
-            i === 0 || i === node.table.widths.length ? 1 : 0,
-          hLineColor: () => borderColor,
-          vLineColor: () => borderColor,
-          paddingLeft: () => 8,
-          paddingRight: () => 8,
-          paddingTop: () => 6,
-          paddingBottom: () => 6,
-        },
+        ],
       },
-    ];
+      layout: {
+        hLineWidth: () => 1,
+        vLineWidth: () => 1,
+        hLineColor: () => borderColor,
+        vLineColor: () => borderColor,
+        paddingLeft: (columnIndex: number) =>
+          columnIndex === 1 || columnIndex === 3 ? 0 : 8,
+        paddingRight: (columnIndex: number) =>
+          columnIndex === 1 || columnIndex === 3 ? 0 : 8,
+        paddingTop: (rowIndex: number) => (rowIndex === 0 ? 8 : 6),
+        paddingBottom: (rowIndex: number) => (rowIndex === 0 ? 8 : 6),
+      },
+      margin: [0, 10, 0, 0],
+    };
 
     // Texto introductorio antes de la tabla
     const introRecursos = [
@@ -728,7 +614,7 @@ export class PdfService {
           margin: [0, 8, 0, 3],
           fontSize: 8,
         },
-        { ol: generalConditions, margin: [0, 0, 0, 4], fontSize: 7 },
+        { ol: generalConditions, margin: [0, 0, 0, 4] },
       );
     }
     if (qualityConditions.length > 0) {
@@ -739,7 +625,7 @@ export class PdfService {
           margin: [0, 4, 0, 3],
           fontSize: 8,
         },
-        { ol: qualityConditions, fontSize: 7 },
+        { ol: qualityConditions },
       );
     }
 
@@ -770,16 +656,7 @@ export class PdfService {
       compress: true,
       content: [
         ...headerBlock,
-        // Tres columnas para "Datos del proveedor", "Datos de entrega" y "Condiciones de pago"
-        {
-          columns: [
-            { width: '33.33%', stack: proveedorBlock },
-            { width: '33.33%', stack: envioBlock },
-            { width: '33.33%', stack: pagoBlock },
-          ],
-          columnGap: 8,
-          margin: [0, 10, 0, 0],
-        },
+        purchaseOrderInfoTable,
         ...introRecursos,
         ...recursosTable,
         ...totalesTable,
@@ -1362,7 +1239,8 @@ export class PdfService {
           line.fallProtectionGroup ||
           line.fallProtectionGroupId ||
           family === 'harness' ||
-          (elementType === RequestType.Operative && controlType === 'individual')
+          (elementType === RequestType.Operative &&
+            controlType === 'individual')
         );
       })
       .map((line) => line.elementId);
@@ -1376,7 +1254,9 @@ export class PdfService {
                 { harnessElementId: { in: fallProtectionElementIds } },
                 { anchorBandElementId: { in: fallProtectionElementIds } },
                 { lifelineElementId: { in: fallProtectionElementIds } },
-                { positioningLanyardElementId: { in: fallProtectionElementIds } },
+                {
+                  positioningLanyardElementId: { in: fallProtectionElementIds },
+                },
               ],
             },
             include: {
@@ -1487,7 +1367,7 @@ export class PdfService {
 
       return line.element?.code
         ? `${line.element.name} - ${line.element.code}`
-        : line.element?.name ?? `Elemento ${line.elementId}`;
+        : (line.element?.name ?? `Elemento ${line.elementId}`);
     };
 
     const getFallProtectionParts = (line: any) => {
