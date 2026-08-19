@@ -572,6 +572,15 @@ exports.Prisma.ResourceScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.PurchaseOrderConditionScalarFieldEnum = {
+  purchaseOrderConditionId: 'purchaseOrderConditionId',
+  type: 'type',
+  content: 'content',
+  normalizedContent: 'normalizedContent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.PurchaseOrderScalarFieldEnum = {
   purchaseOrderId: 'purchaseOrderId',
   code: 'code',
@@ -991,6 +1000,11 @@ exports.Currency = exports.$Enums.Currency = {
   PEN: 'PEN'
 };
 
+exports.PurchaseOrderConditionType = exports.$Enums.PurchaseOrderConditionType = {
+  commercial: 'commercial',
+  quality: 'quality'
+};
+
 exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   deposit: 'deposit',
   transfer: 'transfer'
@@ -1115,6 +1129,7 @@ exports.Prisma.ModelName = {
   Supplier: 'Supplier',
   CategoryResource: 'CategoryResource',
   Resource: 'Resource',
+  PurchaseOrderCondition: 'PurchaseOrderCondition',
   PurchaseOrder: 'PurchaseOrder',
   ResourcePurchaseOrder: 'ResourcePurchaseOrder',
   PettyCash: 'PettyCash',

@@ -1001,6 +1001,24 @@ enum PurchaseOrderStatus {
   cancelled
 }
 
+enum PurchaseOrderConditionType {
+  commercial
+  quality
+}
+
+model PurchaseOrderCondition {
+  purchaseOrderConditionId Int                        @id @default(autoincrement())
+  type                     PurchaseOrderConditionType
+  content                  String                     @db.VarChar(500)
+  normalizedContent        String                     @db.VarChar(500)
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+
+  @@unique([type, normalizedContent])
+  @@index([type, content])
+  @@index([updatedAt])
+}
+
 model PurchaseOrder {
   purchaseOrderId         Int                     @id @default(autoincrement())
   code                    String                  @unique
