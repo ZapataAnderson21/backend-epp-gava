@@ -390,6 +390,11 @@ export class ElementService {
 
   async createFallProtectionGroup(dto: CreateFallProtectionGroupDto) {
     const normalizedCode = dto.code.trim();
+
+    if (!normalizedCode) {
+      throw new BadRequestException('Ingresa el código del Grupo EPA.');
+    }
+
     const components = this.getFallProtectionGroupComponents(dto);
     const componentsByRole = new Map<
       FallProtectionComponentRole,
@@ -410,9 +415,30 @@ export class ElementService {
       'positioningLanyard',
     ];
 
-    if (requiredRoles.some((role) => !componentsByRole.get(role)?.length)) {
-      throw new BadRequestException(
-        'El grupo EPA debe tener codigo y al menos un elemento de cada categoria.',
+    const missingRoleMessages: Record<FallProtectionComponentRole, string> = {
+      harness: 'Selecciona al menos un arnés.',
+      anchorBand: 'Selecciona al menos una banda de anclaje.',
+      lifeline: 'Selecciona al menos una línea de vida.',
+      positioningLanyard:
+        'Selecciona al menos una eslinga de posicionamiento.',
+    };
+    const missingRole = requiredRoles.find(
+      (role) => !componentsByRole.get(role)?.length,
+    );
+
+    if (missingRole) {
+      throw new BadRequestException(missingRoleMessages[missingRole]);
+    }
+
+    const existingGroup =
+      await this.prismaService.fallProtectionGroup.findUnique({
+        where: { code: normalizedCode },
+        select: { fallProtectionGroupId: true },
+      });
+
+    if (existingGroup) {
+      throw new ConflictException(
+        `Ya existe un Grupo EPA con el código ${normalizedCode}.`,
       );
     }
 
@@ -426,7 +452,10 @@ export class ElementService {
     );
 
     const firstByRole = Object.fromEntries(
-      requiredRoles.map((role) => [role, componentsByRole.get(role)![0].elementId]),
+      requiredRoles.map((role) => [
+        role,
+        componentsByRole.get(role)![0].elementId,
+      ]),
     ) as Record<FallProtectionComponentRole, number>;
 
     const group = await this.prismaService.fallProtectionGroup.create({
