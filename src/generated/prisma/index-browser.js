@@ -667,6 +667,16 @@ exports.Prisma.WeekScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ProjectWeeklyPayrollScalarFieldEnum = {
+  projectWeeklyPayrollId: 'projectWeeklyPayrollId',
+  projectId: 'projectId',
+  weekId: 'weekId',
+  amount: 'amount',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.DailyWageScalarFieldEnum = {
   dailyWageId: 'dailyWageId',
   workerId: 'workerId',
@@ -1137,6 +1147,7 @@ exports.Prisma.ModelName = {
   PasswordResetToken: 'PasswordResetToken',
   BlacklistedToken: 'BlacklistedToken',
   Week: 'Week',
+  ProjectWeeklyPayroll: 'ProjectWeeklyPayroll',
   DailyWage: 'DailyWage',
   WeeklyWage: 'WeeklyWage',
   Attendance: 'Attendance',

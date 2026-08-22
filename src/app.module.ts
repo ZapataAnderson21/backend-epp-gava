@@ -37,6 +37,7 @@ import { InventoryModule } from './inventory/inventory.module';
 import { ElementRequestWorkerPlanModule } from './element_request_worker_plan/element_request_worker_plan.module';
 import { ExpiringDocumentModule } from './expiring-document/expiring-document.module';
 import { PurchaseOrderConditionModule } from './purchase-order-condition/purchase-order-condition.module';
+import { ProjectWeeklyPayrollModule } from './project-weekly-payroll/project-weekly-payroll.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { PurchaseOrderConditionModule } from './purchase-order-condition/purchas
     ElementRequestWorkerPlanModule,
     ExpiringDocumentModule,
     PurchaseOrderConditionModule,
+    ProjectWeeklyPayrollModule,
   ],
   controllers: [],
   providers: [

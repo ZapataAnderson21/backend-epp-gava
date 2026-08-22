@@ -88,6 +88,7 @@ model Project {
   pettyCashes     PettyCash[]
   serviceSales    ServiceSale[]
   attendances     Attendance[]
+  weeklyPayrolls  ProjectWeeklyPayroll[]
   tasks           Task[]
   notifications   Notification[]
   inventoryEntries ProjectInventoryEntry[]
@@ -1153,9 +1154,27 @@ model Week {
 
   weeklyWages WeeklyWage[]
   attendances  Attendance[]
+  projectWeeklyPayrolls ProjectWeeklyPayroll[]
 
   @@index([startDate])
   @@index([endDate])
+}
+
+model ProjectWeeklyPayroll {
+  projectWeeklyPayrollId Int      @id @default(autoincrement())
+  projectId              Int
+  weekId                 Int
+  amount                 Decimal  @db.Decimal(18,2)
+  notes                  String?  @db.Text
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [projectId], onDelete: Cascade, onUpdate: Cascade)
+  week    Week    @relation(fields: [weekId], references: [weekId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([projectId, weekId])
+  @@index([projectId])
+  @@index([weekId])
 }
 
 model DailyWage {
