@@ -17,6 +17,8 @@ import { CreateUserUserTypeDto } from 'src/user_user_type/dto/create-user_user_t
 import { LoginDto } from './dto/login.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
+import { ListUsersQueryDto } from './dto/list-users-query.dto';
 
 @Injectable()
 export class UserService {
@@ -293,6 +295,48 @@ export class UserService {
       statusCode: HttpStatus.OK,
       message: 'Los usuarios han sido encontrados exitosamente.',
       data: usersWithTypes,
+    };
+  }
+
+  async findPaginated(query: ListUsersQueryDto) {
+    const search = query.search?.trim();
+    const where = {
+      deletedAt: query.includeInactive ? { not: null } : null,
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' as const } },
+              { lastName: { contains: search, mode: 'insensitive' as const } },
+              { email: { contains: search, mode: 'insensitive' as const } },
+              { phone: { contains: search, mode: 'insensitive' as const } },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [users, totalItems] = await Promise.all([
+      this.prisma.user.findMany({
+        where,
+        include: {
+          userUserTypes: { include: { userType: true } },
+        },
+        orderBy: [
+          query.includeInactive
+            ? { deletedAt: 'desc' as const }
+            : { name: query.order },
+          { userId: 'asc' },
+        ],
+        skip,
+        take,
+      }),
+      this.prisma.user.count({ where }),
+    ]);
+    const items = users.map((user) => this.toUserResponse(user));
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Usuarios obtenidos exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 

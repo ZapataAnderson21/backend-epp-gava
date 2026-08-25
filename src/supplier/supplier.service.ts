@@ -10,6 +10,11 @@ import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CurrencyLabelEs } from './enum/currency.enum';
 import { SupplierDocumentType } from './enum/document-type.enum';
+import {
+  buildPaginatedData,
+  getPaginationArgs,
+  SearchPaginationQueryDto,
+} from 'src/common/pagination';
 
 @Injectable()
 export class SupplierService {
@@ -121,6 +126,45 @@ export class SupplierService {
       statusCode: HttpStatus.OK,
       message: 'Proveedores obtenidos exitosamente.',
       data: processedSuppliers,
+    };
+  }
+
+  async findPaginated(query: SearchPaginationQueryDto) {
+    const search = query.search?.trim();
+    const where = {
+      deletedAt: null,
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' as const } },
+              { contactName: { contains: search, mode: 'insensitive' as const } },
+              { ruc: { contains: search, mode: 'insensitive' as const } },
+              { dni: { contains: search, mode: 'insensitive' as const } },
+              { phone: { contains: search, mode: 'insensitive' as const } },
+              { email: { contains: search, mode: 'insensitive' as const } },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [suppliers, totalItems] = await Promise.all([
+      this.prismaService.supplier.findMany({
+        where,
+        orderBy: [{ name: query.order }, { supplierId: 'asc' }],
+        skip,
+        take,
+      }),
+      this.prismaService.supplier.count({ where }),
+    ]);
+    const items = suppliers.map((supplier) => ({
+      ...supplier,
+      currency: CurrencyLabelEs[supplier.currency] || supplier.currency,
+    }));
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Proveedores obtenidos exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 

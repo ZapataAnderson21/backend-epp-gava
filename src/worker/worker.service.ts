@@ -10,6 +10,11 @@ import { UpdateWorkerDto } from './dto/update-worker.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { emptyToNull } from 'src/common/util/strings.util';
 import { WorkerTypeLabelEs, type WorkerType } from './enum/worker-type.enum';
+import {
+  buildPaginatedData,
+  getPaginationArgs,
+} from 'src/common/pagination';
+import { ListWorkersQueryDto } from './dto/list-workers-query.dto';
 
 @Injectable()
 export class WorkerService {
@@ -113,6 +118,63 @@ export class WorkerService {
       statusCode: HttpStatus.OK,
       data: proccessedList,
       message: 'Trabajadores recuperados con éxito.',
+    };
+  }
+
+  async findPaginated(query: ListWorkersQueryDto) {
+    const search = query.search?.trim();
+    const where = {
+      deletedAt: null,
+      ...(query.workerType ? { workerType: query.workerType } : {}),
+      ...(search
+        ? {
+            OR: [
+              { fullName: { contains: search, mode: 'insensitive' as const } },
+              { dni: { contains: search, mode: 'insensitive' as const } },
+              { phone: { contains: search, mode: 'insensitive' as const } },
+              {
+                personalEmail: {
+                  contains: search,
+                  mode: 'insensitive' as const,
+                },
+              },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [workers, totalItems, groupedCounts] = await Promise.all([
+      this.prismaService.worker.findMany({
+        where,
+        orderBy: [{ fullName: query.order }, { workerId: 'asc' }],
+        skip,
+        take,
+      }),
+      this.prismaService.worker.count({ where }),
+      this.prismaService.worker.groupBy({
+        by: ['workerType'],
+        where: { deletedAt: null },
+        _count: { _all: true },
+      }),
+    ]);
+    const items = workers.map((worker) => ({
+      ...worker,
+      workerType:
+        WorkerTypeLabelEs[
+          worker.workerType as keyof typeof WorkerTypeLabelEs
+        ] || worker.workerType,
+    }));
+    const workerTypeCounts = Object.fromEntries(
+      groupedCounts.map((group) => [group.workerType, group._count._all]),
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Trabajadores recuperados con éxito.',
+      data: {
+        ...buildPaginatedData(items, totalItems, query),
+        workerTypeCounts,
+      },
     };
   }
 

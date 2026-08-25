@@ -9,6 +9,8 @@ import { CreateEmergencyDto } from './dto/create-emergency.dto';
 import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { NotificationService } from 'src/notification/notification.service';
+import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
+import { ListEmergenciesQueryDto } from './dto/list-emergencies-query.dto';
 
 @Injectable()
 export class EmergencyService {
@@ -96,6 +98,56 @@ export class EmergencyService {
       statusCode: HttpStatus.OK,
       data: returnEmergencies,
       message: 'Emergencies retrieved successfully.',
+    };
+  }
+
+  async findPaginated(query: ListEmergenciesQueryDto) {
+    const search = query.search?.trim();
+    const where = {
+      projectId: query.projectId,
+      userId: query.userId,
+      ...(search
+        ? {
+            OR: [
+              { title: { contains: search, mode: 'insensitive' as const } },
+              { description: { contains: search, mode: 'insensitive' as const } },
+              { project: { name: { contains: search, mode: 'insensitive' as const } } },
+              { user: { name: { contains: search, mode: 'insensitive' as const } } },
+              { user: { lastName: { contains: search, mode: 'insensitive' as const } } },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const include = {
+      project: true,
+      user: { include: { userUserTypes: { include: { userType: true } } } },
+    } as const;
+    const [emergencies, totalItems] = await Promise.all([
+      this.prismaService.emergency.findMany({
+        where,
+        include,
+        orderBy: [{ createdAt: 'desc' }, { emergencyId: 'desc' }],
+        skip,
+        take,
+      }),
+      this.prismaService.emergency.count({ where }),
+    ]);
+    const items = emergencies.map((emergency) => ({
+      ...emergency,
+      user: {
+        userId: emergency.user.userId,
+        name: emergency.user.name,
+        lastName: emergency.user.lastName,
+        email: emergency.user.email,
+        userType: emergency.user.userUserTypes[0]?.userType?.name || null,
+      },
+    }));
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Emergencias obtenidas exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 

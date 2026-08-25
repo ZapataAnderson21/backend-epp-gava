@@ -9,6 +9,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePettyCashDto } from './dto/create-petty-cash.dto';
 import { UpdatePettyCashDto } from './dto/update-petty-cash.dto';
 import { PettyCashLabelEs, PettyCashType } from './enum';
+import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
+import { ListPettyCashesQueryDto } from './dto/list-petty-cashes-query.dto';
 
 @Injectable()
 export class PettyCashService {
@@ -95,6 +97,51 @@ export class PettyCashService {
       statusCode: HttpStatus.OK,
       message: 'Cajas chicas obtenidas exitosamente.',
       data: proccessedList,
+    };
+  }
+
+  async findPaginatedByProject(
+    projectId: number,
+    query: ListPettyCashesQueryDto,
+  ) {
+    const search = query.search?.trim();
+    const where = {
+      projectId,
+      ...(query.expenseType ? { expenseType: query.expenseType } : {}),
+      ...(search
+        ? {
+            OR: [
+              { description: { contains: search, mode: 'insensitive' as const } },
+              { invoiceNumber: { contains: search, mode: 'insensitive' as const } },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [pettyCashes, totalItems] = await Promise.all([
+      this.prisma.pettyCash.findMany({
+        where,
+        orderBy: [{ expenseDate: 'desc' }, { pettyCashId: 'desc' }],
+        skip,
+        take,
+      }),
+      this.prisma.pettyCash.count({ where }),
+    ]);
+    const items = pettyCashes.map((item) => ({
+      ...item,
+      expenseDate: new Date(item.expenseDate).toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        timeZone: 'America/Lima',
+      }),
+      expenseType: PettyCashLabelEs[item.expenseType],
+    }));
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Cajas chicas obtenidas exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 

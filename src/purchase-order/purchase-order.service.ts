@@ -11,6 +11,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Currency } from 'src/supplier/enum/currency.enum';
 import { PurchaseOrderStatusLabelEs, PurchaseOrderStatus } from './enum';
 import { NotificationService } from 'src/notification/notification.service';
+import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
+import { ListPurchaseOrdersQueryDto } from './dto/list-purchase-orders-query.dto';
 
 @Injectable()
 export class PurchaseOrderService {
@@ -214,6 +216,51 @@ export class PurchaseOrderService {
       statusCode: HttpStatus.OK,
       message: 'Órdenes de compra obtenidas exitosamente.',
       data: processedPurchaseOrder,
+    };
+  }
+
+  async findPaginatedByProject(
+    projectId: number,
+    query: ListPurchaseOrdersQueryDto,
+  ) {
+    const search = query.search?.trim();
+    const where = {
+      projectId,
+      ...(query.status ? { status: query.status } : {}),
+      ...(search
+        ? {
+            OR: [
+              { code: { contains: search, mode: 'insensitive' as const } },
+              { destination: { contains: search, mode: 'insensitive' as const } },
+              { carePerson: { contains: search, mode: 'insensitive' as const } },
+              { supplier: { name: { contains: search, mode: 'insensitive' as const } } },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [purchaseOrders, totalItems] = await Promise.all([
+      this.prisma.purchaseOrder.findMany({
+        where,
+        include: { project: true, supplier: true },
+        orderBy: [{ createdAt: 'desc' }, { purchaseOrderId: 'desc' }],
+        skip,
+        take,
+      }),
+      this.prisma.purchaseOrder.count({ where }),
+    ]);
+    const items = purchaseOrders.map((purchaseOrder) => ({
+      ...purchaseOrder,
+      status:
+        PurchaseOrderStatusLabelEs[
+          purchaseOrder.status as keyof typeof PurchaseOrderStatusLabelEs
+        ] || 'Desconocido',
+    }));
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Órdenes de compra obtenidas exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 

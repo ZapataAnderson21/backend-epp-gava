@@ -20,6 +20,7 @@ import { UpdateEmergencyDto } from './dto/update-emergency.dto';
 import { Response } from 'express';
 import * as fs from 'fs';
 import 'dotenv/config';
+import { ListEmergenciesQueryDto } from './dto/list-emergencies-query.dto';
 
 const EMERGENCIES_UPLOAD_DIR =
   process.env.EMERGENCIES_UPLOAD_DIR || './uploads/emergencies';
@@ -61,6 +62,11 @@ export class EmergencyController {
     @Query('userId', new ParseIntPipe({ optional: true })) userId?: number,
   ) {
     return await this.emergencyService.findAll(projectId, userId);
+  }
+
+  @Get('paginated')
+  async findPaginated(@Query() query: ListEmergenciesQueryDto) {
+    return await this.emergencyService.findPaginated(query);
   }
 
   @Get(':id')

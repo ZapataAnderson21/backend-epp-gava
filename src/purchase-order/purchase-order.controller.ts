@@ -19,6 +19,7 @@ import { Response } from 'express';
 import { UserTypes } from 'src/decorators/user-types.decorator';
 import { PdfService } from 'src/pdf/pdf.service';
 import { createReadStream } from 'fs';
+import { ListPurchaseOrdersQueryDto } from './dto/list-purchase-orders-query.dto';
 
 @Controller('purchase-order')
 export class PurchaseOrderController {
@@ -54,6 +55,15 @@ export class PurchaseOrderController {
   findAllByProjectId(@Param('projectId', ParseIntPipe) projectId: number) {
     this.logger.log(`Finding all purchase orders for Project ID: ${projectId}`);
     return this.purchaseOrderService.findAllByProjectId(projectId);
+  }
+
+  @Get('project/:projectId/paginated')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
+  findPaginatedByProject(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query() query: ListPurchaseOrdersQueryDto,
+  ) {
+    return this.purchaseOrderService.findPaginatedByProject(projectId, query);
   }
 
   @Get(':id')

@@ -11,6 +11,7 @@ import {
   Res,
   HttpException,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { PettyCashService } from './petty-cash.service';
@@ -18,6 +19,7 @@ import { CreatePettyCashDto } from './dto/create-petty-cash.dto';
 import { UpdatePettyCashDto } from './dto/update-petty-cash.dto';
 import { PettyCashType } from './enum';
 import { ExcelService } from 'src/excel/excel.service';
+import { ListPettyCashesQueryDto } from './dto/list-petty-cashes-query.dto';
 
 @Controller('petty-cash')
 export class PettyCashController {
@@ -42,6 +44,14 @@ export class PettyCashController {
       `Fetching all petty cash entries for project ID: ${projectId}`,
     );
     return this.pettyCashService.findAllByProject(projectId);
+  }
+
+  @Get('project/:projectId/paginated')
+  findPaginatedByProject(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query() query: ListPettyCashesQueryDto,
+  ) {
+    return this.pettyCashService.findPaginatedByProject(projectId, query);
   }
 
   @Get('project/:projectId/excel')

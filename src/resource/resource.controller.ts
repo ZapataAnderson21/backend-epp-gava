@@ -9,12 +9,14 @@ import {
   Logger,
   ParseIntPipe,
   Res,
+  Query,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ResourceService } from './resource.service';
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
 import { ExcelService } from 'src/excel/excel.service';
+import { SearchPaginationQueryDto } from 'src/common/pagination';
 
 @Controller('resource')
 export class ResourceController {
@@ -35,6 +37,11 @@ export class ResourceController {
   findAll() {
     this.logger.log(`Finding all resources`);
     return this.resourceService.findAll();
+  }
+
+  @Get('paginated')
+  findPaginated(@Query() query: SearchPaginationQueryDto) {
+    return this.resourceService.findPaginated(query);
   }
 
   @Get('export/excel')

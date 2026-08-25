@@ -25,6 +25,7 @@ import * as path from 'path';
 import { RequestStatus } from './enum';
 import { NotificationGateway } from 'src/notification/notification.gateway';
 import { GetUser } from 'src/decorators/get-user.decorator';
+import { ListRequestsQueryDto } from './dto/list-requests-query.dto';
 
 @Controller('request')
 export class RequestController {
@@ -55,6 +56,11 @@ export class RequestController {
       status,
       viewerId,
     );
+  }
+
+  @Get('paginated')
+  async findPaginated(@Query() query: ListRequestsQueryDto) {
+    return await this.requestService.findPaginated(query);
   }
 
   @Get(':id')

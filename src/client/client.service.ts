@@ -9,6 +9,11 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import {
+  buildPaginatedData,
+  getPaginationArgs,
+  SearchPaginationQueryDto,
+} from 'src/common/pagination';
 
 @Injectable()
 export class ClientService {
@@ -97,6 +102,37 @@ export class ClientService {
       statusCode: HttpStatus.OK,
       message: 'Clientes obtenidos exitosamente.',
       data: clients,
+    };
+  }
+
+  async findPaginated(query: SearchPaginationQueryDto) {
+    const search = query.search?.trim();
+    const where = search
+      ? {
+          OR: [
+            { name: { contains: search, mode: 'insensitive' as const } },
+            { contactName: { contains: search, mode: 'insensitive' as const } },
+            { ruc: { contains: search, mode: 'insensitive' as const } },
+            { phone: { contains: search, mode: 'insensitive' as const } },
+            { email: { contains: search, mode: 'insensitive' as const } },
+          ],
+        }
+      : {};
+    const { skip, take } = getPaginationArgs(query);
+    const [items, totalItems] = await Promise.all([
+      this.prismaService.client.findMany({
+        where,
+        orderBy: [{ name: query.order }, { clientId: 'asc' }],
+        skip,
+        take,
+      }),
+      this.prismaService.client.count({ where }),
+    ]);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Clientes obtenidos exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 

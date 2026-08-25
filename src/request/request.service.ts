@@ -11,6 +11,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { RequestStatus, RequestStatusLabelEs } from './enum';
 import { NotificationService } from 'src/notification/notification.service';
 import { InventoryService } from 'src/inventory/inventory.service';
+import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
+import { ListRequestsQueryDto } from './dto/list-requests-query.dto';
 
 const REQUEST_STATUS_MANAGERS = ['ADMINISTRADORA', 'GERENTE'];
 
@@ -225,6 +227,69 @@ export class RequestService {
         ? 'Solicitudes encontradas exitosamente.'
         : 'No se han encontrado solicitudes.',
       data: processed,
+    };
+  }
+
+  async findPaginated(query: ListRequestsQueryDto) {
+    const viewerUserId = query.userId || query.viewerId;
+    const search = query.search?.trim();
+    const visibility =
+      query.status === RequestStatus.draft
+        ? {
+            status: RequestStatus.draft,
+            ...(viewerUserId ? { userId: viewerUserId } : {}),
+          }
+        : query.status
+          ? { status: query.status }
+          : {
+              OR: [
+                { status: { not: RequestStatus.draft } },
+                ...(viewerUserId
+                  ? [{ status: RequestStatus.draft, userId: viewerUserId }]
+                  : []),
+              ],
+            };
+    const where = {
+      projectId: query.projectId,
+      ...visibility,
+      ...(search
+        ? {
+            AND: [
+              {
+                OR: [
+                  { description: { contains: search, mode: 'insensitive' as const } },
+                  { project: { name: { contains: search, mode: 'insensitive' as const } } },
+                  { user: { name: { contains: search, mode: 'insensitive' as const } } },
+                  { user: { lastName: { contains: search, mode: 'insensitive' as const } } },
+                ],
+              },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [requests, totalItems] = await Promise.all([
+      this.prismaService.request.findMany({
+        where,
+        include: { project: true, user: true },
+        orderBy: [{ requestId: 'desc' }],
+        skip,
+        take,
+      }),
+      this.prismaService.request.count({ where }),
+    ]);
+    const items = requests.map((request) => ({
+      ...request,
+      status:
+        RequestStatusLabelEs[
+          request.status as keyof typeof RequestStatusLabelEs
+        ] || request.status,
+    }));
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Solicitudes encontradas exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 

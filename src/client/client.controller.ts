@@ -8,10 +8,12 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { SearchPaginationQueryDto } from 'src/common/pagination';
 
 @Controller('client')
 export class ClientController {
@@ -29,6 +31,11 @@ export class ClientController {
   findAll() {
     this.logger.log('Finding all clients');
     return this.clientService.findAll();
+  }
+
+  @Get('paginated')
+  findPaginated(@Query() query: SearchPaginationQueryDto) {
+    return this.clientService.findPaginated(query);
   }
 
   @Get(':id')

@@ -11,6 +11,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -23,6 +24,7 @@ import { JwtAuthGuard } from './jwt/jwt.auth.guard';
 import { Request } from 'express';
 import { RateLimit } from 'src/decorators/rate-limit.decorator';
 import { RateLimitGuard } from 'src/guards/rate-limit.guard';
+import { ListUsersQueryDto } from './dto/list-users-query.dto';
 
 @Controller('user')
 export class UserController {
@@ -70,6 +72,11 @@ export class UserController {
   async findAll() {
     this.logger.log('Fetching all users');
     return await this.userService.findAll();
+  }
+
+  @Get('paginated')
+  async findPaginated(@Query() query: ListUsersQueryDto) {
+    return await this.userService.findPaginated(query);
   }
 
   @Get('inactive')

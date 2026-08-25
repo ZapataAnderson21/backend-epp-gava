@@ -14,6 +14,7 @@ import { WorkerService } from './worker.service';
 import { CreateWorkerDto } from './dto/create-worker.dto';
 import { UpdateWorkerDto } from './dto/update-worker.dto';
 import { WorkerType } from './enum/worker-type.enum';
+import { ListWorkersQueryDto } from './dto/list-workers-query.dto';
 
 @Controller('worker')
 export class WorkerController {
@@ -31,6 +32,11 @@ export class WorkerController {
   findAll() {
     this.logger.log(`Finding all workers`);
     return this.workerService.findAll();
+  }
+
+  @Get('paginated')
+  findPaginated(@Query() query: ListWorkersQueryDto) {
+    return this.workerService.findPaginated(query);
   }
 
   @Get('type/:workerType')

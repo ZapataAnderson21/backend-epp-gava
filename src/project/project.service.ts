@@ -16,6 +16,8 @@ import {
 import { TaskService } from 'src/task/task.service';
 import { NotificationService } from 'src/notification/notification.service';
 import { InventoryService } from 'src/inventory/inventory.service';
+import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
+import { ListProjectsQueryDto } from './dto/list-projects-query.dto';
 
 @Injectable()
 export class ProjectService {
@@ -107,6 +109,47 @@ export class ProjectService {
       statusCode: HttpStatus.OK,
       message: 'Projects retrieved successfully',
       data: processedProjects,
+    };
+  }
+
+  async findPaginated(query: ListProjectsQueryDto) {
+    const search = query.search?.trim();
+    const where = {
+      deletedAt: null,
+      ...(query.status ? { status: query.status } : {}),
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' as const } },
+              { code: { contains: search, mode: 'insensitive' as const } },
+              { description: { contains: search, mode: 'insensitive' as const } },
+              { location: { contains: search, mode: 'insensitive' as const } },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [projects, totalItems] = await Promise.all([
+      this.prismaService.project.findMany({
+        where,
+        orderBy: [{ projectId: query.order === 'asc' ? 'asc' : 'desc' }],
+        skip,
+        take,
+      }),
+      this.prismaService.project.count({ where }),
+    ]);
+    const items = projects.map((project) => ({
+      ...project,
+      status:
+        ProjectStatusLabelEs[
+          project.status as keyof typeof ProjectStatusLabelEs
+        ] || project.status,
+    }));
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Proyectos obtenidos exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 

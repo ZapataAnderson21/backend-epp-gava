@@ -9,6 +9,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateQuotationDto } from './dto/create-quotation.dto';
 import { UpdateQuotationDto } from './dto/update-quotation.dto';
 import { QuotationStatus } from './enum';
+import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
+import { ListQuotationsQueryDto } from './dto/list-quotations-query.dto';
 
 @Injectable()
 export class QuotationService {
@@ -176,6 +178,52 @@ export class QuotationService {
       statusCode: HttpStatus.OK,
       message: 'Cotizaciones obtenidas exitosamente.',
       data: quotations,
+    };
+  }
+
+  async findPaginated(query: ListQuotationsQueryDto) {
+    const search = query.search?.trim();
+    const where = {
+      ...(query.clientId ? { clientId: query.clientId } : {}),
+      ...(query.status ? { status: query.status } : {}),
+      ...(search
+        ? {
+            OR: [
+              { code: { contains: search, mode: 'insensitive' as const } },
+              {
+                serviceDescription: {
+                  contains: search,
+                  mode: 'insensitive' as const,
+                },
+              },
+              {
+                client: {
+                  name: { contains: search, mode: 'insensitive' as const },
+                },
+              },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [items, totalItems] = await Promise.all([
+      this.prisma.quotation.findMany({
+        where,
+        include: {
+          client: true,
+          items: { orderBy: [{ orderNumber: 'asc' }, { createdAt: 'desc' }] },
+        },
+        orderBy: [{ createdAt: 'desc' }, { quotationId: 'desc' }],
+        skip,
+        take,
+      }),
+      this.prisma.quotation.count({ where }),
+    ]);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Cotizaciones obtenidas exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 

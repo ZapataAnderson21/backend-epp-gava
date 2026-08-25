@@ -17,6 +17,7 @@ import { UpdateQuotationDto } from './dto/update-quotation.dto';
 import { PdfService } from 'src/pdf/pdf.service';
 import { Response } from 'express';
 import { createReadStream } from 'fs';
+import { ListQuotationsQueryDto } from './dto/list-quotations-query.dto';
 
 @Controller('quotation')
 export class QuotationController {
@@ -42,6 +43,11 @@ export class QuotationController {
   ) {
     this.logger.log('Fetching all quotations');
     return this.quotationService.findAll({ clientId, status });
+  }
+
+  @Get('paginated')
+  findPaginated(@Query() query: ListQuotationsQueryDto) {
+    return this.quotationService.findPaginated(query);
   }
 
   @Get('pdf/:id')

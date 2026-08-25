@@ -8,10 +8,12 @@ import {
   Delete,
   Logger,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { SupplierService } from './supplier.service';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
+import { SearchPaginationQueryDto } from 'src/common/pagination';
 
 @Controller('supplier')
 export class SupplierController {
@@ -29,6 +31,11 @@ export class SupplierController {
   findAll() {
     this.logger.log(`Finding all suppliers`);
     return this.supplierService.findAll();
+  }
+
+  @Get('paginated')
+  findPaginated(@Query() query: SearchPaginationQueryDto) {
+    return this.supplierService.findPaginated(query);
   }
 
   @Get(':id')

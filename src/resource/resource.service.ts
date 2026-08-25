@@ -9,6 +9,11 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
+import {
+  buildPaginatedData,
+  getPaginationArgs,
+  SearchPaginationQueryDto,
+} from 'src/common/pagination';
 
 @Injectable()
 export class ResourceService {
@@ -80,6 +85,44 @@ export class ResourceService {
       statusCode: HttpStatus.OK,
       message: 'Recursos obtenidos exitosamente.',
       data: list,
+    };
+  }
+
+  async findPaginated(query: SearchPaginationQueryDto) {
+    const search = query.search?.trim();
+    const where = {
+      deletedAt: null,
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' as const } },
+              { description: { contains: search, mode: 'insensitive' as const } },
+              { unit: { contains: search, mode: 'insensitive' as const } },
+              {
+                categoryResource: {
+                  name: { contains: search, mode: 'insensitive' as const },
+                },
+              },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [items, totalItems] = await Promise.all([
+      this.prisma.resource.findMany({
+        where,
+        include: { categoryResource: true },
+        orderBy: [{ name: query.order }, { resourceId: 'asc' }],
+        skip,
+        take,
+      }),
+      this.prisma.resource.count({ where }),
+    ]);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Recursos obtenidos exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 

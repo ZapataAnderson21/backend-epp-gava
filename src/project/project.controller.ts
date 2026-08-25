@@ -8,12 +8,14 @@ import {
   Delete,
   ParseIntPipe,
   Logger,
+  Query,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { UserTypes } from 'src/decorators/user-types.decorator';
 import { ProjectStatus } from './enum/project-status.enum';
+import { ListProjectsQueryDto } from './dto/list-projects-query.dto';
 
 @Controller('project')
 export class ProjectController {
@@ -32,6 +34,11 @@ export class ProjectController {
   async findAll() {
     this.logger.log('Fetching all projects');
     return await this.projectService.findAll();
+  }
+
+  @Get('paginated')
+  async findPaginated(@Query() query: ListProjectsQueryDto) {
+    return await this.projectService.findPaginated(query);
   }
 
   @Get(':id')
