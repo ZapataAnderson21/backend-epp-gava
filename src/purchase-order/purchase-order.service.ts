@@ -13,6 +13,7 @@ import { PurchaseOrderStatusLabelEs, PurchaseOrderStatus } from './enum';
 import { NotificationService } from 'src/notification/notification.service';
 import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
 import { ListPurchaseOrdersQueryDto } from './dto/list-purchase-orders-query.dto';
+import { PurchaseOrderDashboardQueryDto } from './dto/purchase-order-dashboard-query.dto';
 
 @Injectable()
 export class PurchaseOrderService {
@@ -181,6 +182,220 @@ export class PurchaseOrderService {
       .map((word) => word[0])
       .join('')
       .slice(0, 8);
+  }
+
+  async findDashboard(query: PurchaseOrderDashboardQueryDto) {
+    const today = new Date();
+    const month = query.month ?? today.getMonth() + 1;
+    const year = query.year ?? today.getFullYear();
+    const from = new Date(Date.UTC(year, month - 1, 1));
+    const to = new Date(Date.UTC(year, month, 1));
+
+    const where = {
+      createdAt: { gte: from, lt: to },
+      ...(query.status ? { status: query.status } : {}),
+      ...(query.projectId ? { projectId: query.projectId } : {}),
+      ...(query.purchaseOrderType
+        ? { purchaseOrderType: query.purchaseOrderType }
+        : {}),
+      ...(query.currency ? { supplier: { currency: query.currency } } : {}),
+    };
+
+    const [purchaseOrders, projects] = await Promise.all([
+      this.prisma.purchaseOrder.findMany({
+        where,
+        select: {
+          purchaseOrderId: true,
+          code: true,
+          purchaseOrderType: true,
+          purchaseAmount: true,
+          saleAmount: true,
+          status: true,
+          createdAt: true,
+          projectId: true,
+          supplierId: true,
+          project: {
+            select: { projectId: true, name: true },
+          },
+          supplier: {
+            select: { supplierId: true, name: true, currency: true },
+          },
+        },
+        orderBy: [{ createdAt: 'desc' }, { purchaseOrderId: 'desc' }],
+      }),
+      this.prisma.project.findMany({
+        where: { deletedAt: null },
+        select: { projectId: true, name: true },
+        orderBy: { name: 'asc' },
+      }),
+    ]);
+
+    const orders = purchaseOrders.map((purchaseOrder) => ({
+      purchaseOrderId: purchaseOrder.purchaseOrderId,
+      code: purchaseOrder.code,
+      purchaseOrderType: purchaseOrder.purchaseOrderType,
+      purchaseAmount: Number(purchaseOrder.purchaseAmount),
+      saleAmount: Number(purchaseOrder.saleAmount),
+      margin:
+        Number(purchaseOrder.saleAmount) - Number(purchaseOrder.purchaseAmount),
+      status: purchaseOrder.status,
+      createdAt: purchaseOrder.createdAt,
+      projectId: purchaseOrder.projectId,
+      projectName: purchaseOrder.project.name,
+      supplierId: purchaseOrder.supplierId,
+      supplierName: purchaseOrder.supplier.name,
+      currency: purchaseOrder.supplier.currency,
+    }));
+
+    const nonCancelledOrders = orders.filter(
+      (purchaseOrder) => purchaseOrder.status !== PurchaseOrderStatus.Cancelled,
+    );
+    const purchaseAmount = nonCancelledOrders.reduce(
+      (total, purchaseOrder) => total + purchaseOrder.purchaseAmount,
+      0,
+    );
+    const saleAmount = nonCancelledOrders.reduce(
+      (total, purchaseOrder) => total + purchaseOrder.saleAmount,
+      0,
+    );
+    const margin = saleAmount - purchaseAmount;
+
+    const statusDistribution = Object.values(PurchaseOrderStatus).map(
+      (status) => {
+        const statusOrders = orders.filter(
+          (purchaseOrder) => purchaseOrder.status === status,
+        );
+        return {
+          status,
+          label: PurchaseOrderStatusLabelEs[status],
+          count: statusOrders.length,
+          purchaseAmount: statusOrders.reduce(
+            (total, purchaseOrder) => total + purchaseOrder.purchaseAmount,
+            0,
+          ),
+        };
+      },
+    );
+
+    const weeksInMonth = Math.ceil(
+      new Date(Date.UTC(year, month, 0)).getUTCDate() / 7,
+    );
+    const weeklyTrend = Array.from({ length: weeksInMonth }, (_, index) => {
+      const week = index + 1;
+      const startDay = index * 7 + 1;
+      const endDay = Math.min(
+        startDay + 6,
+        new Date(Date.UTC(year, month, 0)).getUTCDate(),
+      );
+      const weekOrders = orders.filter(
+        (purchaseOrder) =>
+          Math.floor((purchaseOrder.createdAt.getUTCDate() - 1) / 7) + 1 ===
+          week,
+      );
+      const activeWeekOrders = weekOrders.filter(
+        (purchaseOrder) =>
+          purchaseOrder.status !== PurchaseOrderStatus.Cancelled,
+      );
+
+      return {
+        week,
+        label: `${startDay}-${endDay}`,
+        count: weekOrders.length,
+        purchaseAmount: activeWeekOrders.reduce(
+          (total, purchaseOrder) => total + purchaseOrder.purchaseAmount,
+          0,
+        ),
+        saleAmount: activeWeekOrders.reduce(
+          (total, purchaseOrder) => total + purchaseOrder.saleAmount,
+          0,
+        ),
+      };
+    });
+
+    const buildRanking = (
+      key: 'projectId' | 'supplierId',
+      nameKey: 'projectName' | 'supplierName',
+    ) => {
+      const ranking = new Map<
+        number,
+        { id: number; name: string; count: number; purchaseAmount: number }
+      >();
+
+      for (const purchaseOrder of nonCancelledOrders) {
+        const id = purchaseOrder[key];
+        const current = ranking.get(id) ?? {
+          id,
+          name: purchaseOrder[nameKey],
+          count: 0,
+          purchaseAmount: 0,
+        };
+        current.count += 1;
+        current.purchaseAmount += purchaseOrder.purchaseAmount;
+        ranking.set(id, current);
+      }
+
+      return [...ranking.values()]
+        .sort(
+          (first, second) =>
+            second.purchaseAmount - first.purchaseAmount ||
+            second.count - first.count,
+        )
+        .slice(0, 5);
+    };
+
+    const now = Date.now();
+    const oldestPendingOrders = orders
+      .filter(
+        (purchaseOrder) => purchaseOrder.status === PurchaseOrderStatus.Pending,
+      )
+      .sort(
+        (first, second) =>
+          first.createdAt.getTime() - second.createdAt.getTime(),
+      )
+      .slice(0, 5)
+      .map((purchaseOrder) => ({
+        ...purchaseOrder,
+        daysPending: Math.max(
+          0,
+          Math.floor((now - purchaseOrder.createdAt.getTime()) / 86_400_000),
+        ),
+      }));
+
+    const countByStatus = (status: PurchaseOrderStatus) =>
+      orders.filter((purchaseOrder) => purchaseOrder.status === status).length;
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Dashboard de órdenes de compra obtenido exitosamente.',
+      data: {
+        period: { month, year },
+        appliedFilters: {
+          currency: query.currency ?? null,
+          status: query.status ?? null,
+          projectId: query.projectId ?? null,
+          purchaseOrderType: query.purchaseOrderType ?? null,
+        },
+        filterOptions: { projects },
+        totals: {
+          totalOrders: orders.length,
+          pendingOrders: countByStatus(PurchaseOrderStatus.Pending),
+          authorizedOrders: countByStatus(PurchaseOrderStatus.Authorized),
+          deliveredOrders: countByStatus(PurchaseOrderStatus.Delivered),
+          cancelledOrders: countByStatus(PurchaseOrderStatus.Cancelled),
+          purchaseAmount,
+          saleAmount,
+          margin,
+          marginPercent:
+            purchaseAmount === 0 ? 0 : (margin / purchaseAmount) * 100,
+        },
+        statusDistribution,
+        weeklyTrend,
+        topProjects: buildRanking('projectId', 'projectName'),
+        topSuppliers: buildRanking('supplierId', 'supplierName'),
+        oldestPendingOrders,
+        latestOrders: orders.slice(0, 10),
+      },
+    };
   }
 
   async findAllByProjectId(projectId: number) {

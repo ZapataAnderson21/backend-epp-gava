@@ -20,6 +20,7 @@ import { UserTypes } from 'src/decorators/user-types.decorator';
 import { PdfService } from 'src/pdf/pdf.service';
 import { createReadStream } from 'fs';
 import { ListPurchaseOrdersQueryDto } from './dto/list-purchase-orders-query.dto';
+import { PurchaseOrderDashboardQueryDto } from './dto/purchase-order-dashboard-query.dto';
 
 @Controller('purchase-order')
 export class PurchaseOrderController {
@@ -37,6 +38,12 @@ export class PurchaseOrderController {
       `Creating purchase order: ${JSON.stringify(createPurchaseOrderDto)}`,
     );
     return this.purchaseOrderService.create(createPurchaseOrderDto);
+  }
+
+  @Get('dashboard')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
+  findDashboard(@Query() query: PurchaseOrderDashboardQueryDto) {
+    return this.purchaseOrderService.findDashboard(query);
   }
 
   @Get('project/:projectId/unit-values')
