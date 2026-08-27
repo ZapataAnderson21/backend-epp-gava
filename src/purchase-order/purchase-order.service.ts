@@ -9,7 +9,11 @@ import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Currency } from 'src/supplier/enum/currency.enum';
-import { PurchaseOrderStatusLabelEs, PurchaseOrderStatus } from './enum';
+import {
+  PurchaseOrderStatusLabelEs,
+  PurchaseOrderStatus,
+  PurchaseOrderType,
+} from './enum';
 import { NotificationService } from 'src/notification/notification.service';
 import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
 import { ListPurchaseOrdersQueryDto } from './dto/list-purchase-orders-query.dto';
@@ -563,86 +567,74 @@ export class PurchaseOrderService {
     };
   }
 
-  async sumAllPurchaseAmountsByProject(projectId: number) {
+  private async sumAmountsByProject(
+    projectId: number,
+    amountField: 'purchaseAmount' | 'saleAmount',
+  ) {
     this.logger.log(
       `Calculating total amount of all purchase orders for project id: ${projectId}`,
     );
-    const totalPEN = await this.prisma.purchaseOrder.aggregate({
+
+    const purchaseOrders = await this.prisma.purchaseOrder.findMany({
       where: {
-        supplier: { currency: Currency.PEN },
         projectId,
+        status: { not: PurchaseOrderStatus.Cancelled },
       },
-      _sum: { purchaseAmount: true },
+      select: {
+        purchaseOrderType: true,
+        purchaseAmount: true,
+        saleAmount: true,
+        supplier: { select: { currency: true } },
+      },
     });
 
-    const totalUSD = await this.prisma.purchaseOrder.aggregate({
-      where: {
-        supplier: { currency: Currency.USD },
-        projectId,
-      },
-      _sum: { purchaseAmount: true },
+    const emptyTotals = () => ({
+      [Currency.PEN]: 0,
+      [Currency.USD]: 0,
+      [Currency.EUR]: 0,
     });
-
-    const totalEUR = await this.prisma.purchaseOrder.aggregate({
-      where: {
-        supplier: { currency: Currency.EUR },
-        projectId,
-      },
-      _sum: { purchaseAmount: true },
-    });
-
-    const data = {
-      totalPEN: Number(totalPEN._sum.purchaseAmount),
-      totalUSD: Number(totalUSD._sum.purchaseAmount),
-      totalEUR: Number(totalEUR._sum.purchaseAmount),
+    const totals = emptyTotals();
+    const byType = {
+      [PurchaseOrderType.Materials]: emptyTotals(),
+      [PurchaseOrderType.Services]: emptyTotals(),
     };
+
+    for (const purchaseOrder of purchaseOrders) {
+      const currency = purchaseOrder.supplier.currency;
+      const amount = Number(purchaseOrder[amountField] ?? 0);
+      totals[currency] += amount;
+      byType[purchaseOrder.purchaseOrderType][currency] += amount;
+    }
+
+    const serializeTotals = (amounts: Record<Currency, number>) => ({
+      totalPEN: amounts[Currency.PEN],
+      totalUSD: amounts[Currency.USD],
+      totalEUR: amounts[Currency.EUR],
+    });
 
     return {
       statusCode: HttpStatus.OK,
       message: 'Total amounts calculated successfully.',
-      data,
+      data: {
+        ...serializeTotals(totals),
+        byType: {
+          [PurchaseOrderType.Materials]: serializeTotals(
+            byType[PurchaseOrderType.Materials],
+          ),
+          [PurchaseOrderType.Services]: serializeTotals(
+            byType[PurchaseOrderType.Services],
+          ),
+        },
+      },
     };
   }
 
+  async sumAllPurchaseAmountsByProject(projectId: number) {
+    return this.sumAmountsByProject(projectId, 'purchaseAmount');
+  }
+
   async sumAllSalesAmountsByProject(projectId: number) {
-    this.logger.log(
-      `Calculating total amount of all purchase orders for project id: ${projectId}`,
-    );
-    const totalPEN = await this.prisma.purchaseOrder.aggregate({
-      where: {
-        supplier: { currency: Currency.PEN },
-        projectId,
-      },
-      _sum: { saleAmount: true },
-    });
-
-    const totalUSD = await this.prisma.purchaseOrder.aggregate({
-      where: {
-        supplier: { currency: Currency.USD },
-        projectId,
-      },
-      _sum: { saleAmount: true },
-    });
-
-    const totalEUR = await this.prisma.purchaseOrder.aggregate({
-      where: {
-        supplier: { currency: Currency.EUR },
-        projectId,
-      },
-      _sum: { saleAmount: true },
-    });
-
-    const data = {
-      totalPEN: Number(totalPEN._sum.saleAmount),
-      totalUSD: Number(totalUSD._sum.saleAmount),
-      totalEUR: Number(totalEUR._sum.saleAmount),
-    };
-
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Total amounts calculated successfully.',
-      data,
-    };
+    return this.sumAmountsByProject(projectId, 'saleAmount');
   }
 
   async update(

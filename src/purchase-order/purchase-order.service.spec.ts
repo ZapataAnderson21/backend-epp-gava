@@ -116,4 +116,57 @@ describe('PurchaseOrderService dashboard', () => {
       expect.objectContaining({ purchaseOrderId: 1 }),
     );
   });
+
+  it('separa los ingresos y gastos por materiales y servicios', async () => {
+    purchaseOrder.findMany.mockResolvedValue([
+      {
+        purchaseOrderType: PurchaseOrderType.Materials,
+        purchaseAmount: 100,
+        saleAmount: 150,
+        supplier: { currency: Currency.PEN },
+      },
+      {
+        purchaseOrderType: PurchaseOrderType.Services,
+        purchaseAmount: 200,
+        saleAmount: 260,
+        supplier: { currency: Currency.PEN },
+      },
+      {
+        purchaseOrderType: PurchaseOrderType.Services,
+        purchaseAmount: 80,
+        saleAmount: 120,
+        supplier: { currency: Currency.USD },
+      },
+    ]);
+
+    const purchaseResult = await service.sumAllPurchaseAmountsByProject(1);
+    const saleResult = await service.sumAllSalesAmountsByProject(1);
+
+    expect(purchaseOrder.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          projectId: 1,
+          status: { not: PurchaseOrderStatus.Cancelled },
+        },
+      }),
+    );
+    expect(purchaseResult.data).toEqual({
+      totalPEN: 300,
+      totalUSD: 80,
+      totalEUR: 0,
+      byType: {
+        materials: { totalPEN: 100, totalUSD: 0, totalEUR: 0 },
+        services: { totalPEN: 200, totalUSD: 80, totalEUR: 0 },
+      },
+    });
+    expect(saleResult.data).toEqual({
+      totalPEN: 410,
+      totalUSD: 120,
+      totalEUR: 0,
+      byType: {
+        materials: { totalPEN: 150, totalUSD: 0, totalEUR: 0 },
+        services: { totalPEN: 260, totalUSD: 120, totalEUR: 0 },
+      },
+    });
+  });
 });
