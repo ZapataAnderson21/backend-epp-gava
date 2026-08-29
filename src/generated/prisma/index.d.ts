@@ -57389,6 +57389,7 @@ export namespace Prisma {
     pettyCashId: number | null
     projectId: number | null
     amount: Decimal | null
+    includesIgv: boolean | null
     description: string | null
     expenseDate: Date | null
     expenseType: $Enums.PettyCashType | null
@@ -57401,6 +57402,7 @@ export namespace Prisma {
     pettyCashId: number | null
     projectId: number | null
     amount: Decimal | null
+    includesIgv: boolean | null
     description: string | null
     expenseDate: Date | null
     expenseType: $Enums.PettyCashType | null
@@ -57413,6 +57415,7 @@ export namespace Prisma {
     pettyCashId: number
     projectId: number
     amount: number
+    includesIgv: number
     description: number
     expenseDate: number
     expenseType: number
@@ -57439,6 +57442,7 @@ export namespace Prisma {
     pettyCashId?: true
     projectId?: true
     amount?: true
+    includesIgv?: true
     description?: true
     expenseDate?: true
     expenseType?: true
@@ -57451,6 +57455,7 @@ export namespace Prisma {
     pettyCashId?: true
     projectId?: true
     amount?: true
+    includesIgv?: true
     description?: true
     expenseDate?: true
     expenseType?: true
@@ -57463,6 +57468,7 @@ export namespace Prisma {
     pettyCashId?: true
     projectId?: true
     amount?: true
+    includesIgv?: true
     description?: true
     expenseDate?: true
     expenseType?: true
@@ -57562,6 +57568,7 @@ export namespace Prisma {
     pettyCashId: number
     projectId: number
     amount: Decimal
+    includesIgv: boolean
     description: string
     expenseDate: Date
     expenseType: $Enums.PettyCashType
@@ -57593,6 +57600,7 @@ export namespace Prisma {
     pettyCashId?: boolean
     projectId?: boolean
     amount?: boolean
+    includesIgv?: boolean
     description?: boolean
     expenseDate?: boolean
     expenseType?: boolean
@@ -57606,6 +57614,7 @@ export namespace Prisma {
     pettyCashId?: boolean
     projectId?: boolean
     amount?: boolean
+    includesIgv?: boolean
     description?: boolean
     expenseDate?: boolean
     expenseType?: boolean
@@ -57619,6 +57628,7 @@ export namespace Prisma {
     pettyCashId?: boolean
     projectId?: boolean
     amount?: boolean
+    includesIgv?: boolean
     description?: boolean
     expenseDate?: boolean
     expenseType?: boolean
@@ -57632,6 +57642,7 @@ export namespace Prisma {
     pettyCashId?: boolean
     projectId?: boolean
     amount?: boolean
+    includesIgv?: boolean
     description?: boolean
     expenseDate?: boolean
     expenseType?: boolean
@@ -57640,7 +57651,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type PettyCashOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"pettyCashId" | "projectId" | "amount" | "description" | "expenseDate" | "expenseType" | "invoiceNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["pettyCash"]>
+  export type PettyCashOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"pettyCashId" | "projectId" | "amount" | "includesIgv" | "description" | "expenseDate" | "expenseType" | "invoiceNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["pettyCash"]>
   export type PettyCashInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }
@@ -57660,6 +57671,7 @@ export namespace Prisma {
       pettyCashId: number
       projectId: number
       amount: Prisma.Decimal
+      includesIgv: boolean
       description: string
       expenseDate: Date
       expenseType: $Enums.PettyCashType
@@ -58093,6 +58105,7 @@ export namespace Prisma {
     readonly pettyCashId: FieldRef<"PettyCash", 'Int'>
     readonly projectId: FieldRef<"PettyCash", 'Int'>
     readonly amount: FieldRef<"PettyCash", 'Decimal'>
+    readonly includesIgv: FieldRef<"PettyCash", 'Boolean'>
     readonly description: FieldRef<"PettyCash", 'String'>
     readonly expenseDate: FieldRef<"PettyCash", 'DateTime'>
     readonly expenseType: FieldRef<"PettyCash", 'PettyCashType'>
@@ -80292,6 +80305,7 @@ export namespace Prisma {
     pettyCashId: 'pettyCashId',
     projectId: 'projectId',
     amount: 'amount',
+    includesIgv: 'includesIgv',
     description: 'description',
     expenseDate: 'expenseDate',
     expenseType: 'expenseType',
@@ -84770,6 +84784,7 @@ export namespace Prisma {
     pettyCashId?: IntFilter<"PettyCash"> | number
     projectId?: IntFilter<"PettyCash"> | number
     amount?: DecimalFilter<"PettyCash"> | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolFilter<"PettyCash"> | boolean
     description?: StringFilter<"PettyCash"> | string
     expenseDate?: DateTimeFilter<"PettyCash"> | Date | string
     expenseType?: EnumPettyCashTypeFilter<"PettyCash"> | $Enums.PettyCashType
@@ -84783,6 +84798,7 @@ export namespace Prisma {
     pettyCashId?: SortOrder
     projectId?: SortOrder
     amount?: SortOrder
+    includesIgv?: SortOrder
     description?: SortOrder
     expenseDate?: SortOrder
     expenseType?: SortOrder
@@ -84799,6 +84815,7 @@ export namespace Prisma {
     NOT?: PettyCashWhereInput | PettyCashWhereInput[]
     projectId?: IntFilter<"PettyCash"> | number
     amount?: DecimalFilter<"PettyCash"> | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolFilter<"PettyCash"> | boolean
     description?: StringFilter<"PettyCash"> | string
     expenseDate?: DateTimeFilter<"PettyCash"> | Date | string
     expenseType?: EnumPettyCashTypeFilter<"PettyCash"> | $Enums.PettyCashType
@@ -84812,6 +84829,7 @@ export namespace Prisma {
     pettyCashId?: SortOrder
     projectId?: SortOrder
     amount?: SortOrder
+    includesIgv?: SortOrder
     description?: SortOrder
     expenseDate?: SortOrder
     expenseType?: SortOrder
@@ -84832,6 +84850,7 @@ export namespace Prisma {
     pettyCashId?: IntWithAggregatesFilter<"PettyCash"> | number
     projectId?: IntWithAggregatesFilter<"PettyCash"> | number
     amount?: DecimalWithAggregatesFilter<"PettyCash"> | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolWithAggregatesFilter<"PettyCash"> | boolean
     description?: StringWithAggregatesFilter<"PettyCash"> | string
     expenseDate?: DateTimeWithAggregatesFilter<"PettyCash"> | Date | string
     expenseType?: EnumPettyCashTypeWithAggregatesFilter<"PettyCash"> | $Enums.PettyCashType
@@ -89950,6 +89969,7 @@ export namespace Prisma {
 
   export type PettyCashCreateInput = {
     amount: Decimal | DecimalJsLike | number | string
+    includesIgv?: boolean
     description?: string
     expenseDate?: Date | string
     expenseType?: $Enums.PettyCashType
@@ -89963,6 +89983,7 @@ export namespace Prisma {
     pettyCashId?: number
     projectId: number
     amount: Decimal | DecimalJsLike | number | string
+    includesIgv?: boolean
     description?: string
     expenseDate?: Date | string
     expenseType?: $Enums.PettyCashType
@@ -89973,6 +89994,7 @@ export namespace Prisma {
 
   export type PettyCashUpdateInput = {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolFieldUpdateOperationsInput | boolean
     description?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expenseType?: EnumPettyCashTypeFieldUpdateOperationsInput | $Enums.PettyCashType
@@ -89986,6 +90008,7 @@ export namespace Prisma {
     pettyCashId?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolFieldUpdateOperationsInput | boolean
     description?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expenseType?: EnumPettyCashTypeFieldUpdateOperationsInput | $Enums.PettyCashType
@@ -89998,6 +90021,7 @@ export namespace Prisma {
     pettyCashId?: number
     projectId: number
     amount: Decimal | DecimalJsLike | number | string
+    includesIgv?: boolean
     description?: string
     expenseDate?: Date | string
     expenseType?: $Enums.PettyCashType
@@ -90008,6 +90032,7 @@ export namespace Prisma {
 
   export type PettyCashUpdateManyMutationInput = {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolFieldUpdateOperationsInput | boolean
     description?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expenseType?: EnumPettyCashTypeFieldUpdateOperationsInput | $Enums.PettyCashType
@@ -90020,6 +90045,7 @@ export namespace Prisma {
     pettyCashId?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolFieldUpdateOperationsInput | boolean
     description?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expenseType?: EnumPettyCashTypeFieldUpdateOperationsInput | $Enums.PettyCashType
@@ -94858,6 +94884,7 @@ export namespace Prisma {
     pettyCashId?: SortOrder
     projectId?: SortOrder
     amount?: SortOrder
+    includesIgv?: SortOrder
     description?: SortOrder
     expenseDate?: SortOrder
     expenseType?: SortOrder
@@ -94876,6 +94903,7 @@ export namespace Prisma {
     pettyCashId?: SortOrder
     projectId?: SortOrder
     amount?: SortOrder
+    includesIgv?: SortOrder
     description?: SortOrder
     expenseDate?: SortOrder
     expenseType?: SortOrder
@@ -94888,6 +94916,7 @@ export namespace Prisma {
     pettyCashId?: SortOrder
     projectId?: SortOrder
     amount?: SortOrder
+    includesIgv?: SortOrder
     description?: SortOrder
     expenseDate?: SortOrder
     expenseType?: SortOrder
@@ -105053,6 +105082,7 @@ export namespace Prisma {
 
   export type PettyCashCreateWithoutProjectInput = {
     amount: Decimal | DecimalJsLike | number | string
+    includesIgv?: boolean
     description?: string
     expenseDate?: Date | string
     expenseType?: $Enums.PettyCashType
@@ -105064,6 +105094,7 @@ export namespace Prisma {
   export type PettyCashUncheckedCreateWithoutProjectInput = {
     pettyCashId?: number
     amount: Decimal | DecimalJsLike | number | string
+    includesIgv?: boolean
     description?: string
     expenseDate?: Date | string
     expenseType?: $Enums.PettyCashType
@@ -105531,6 +105562,7 @@ export namespace Prisma {
     pettyCashId?: IntFilter<"PettyCash"> | number
     projectId?: IntFilter<"PettyCash"> | number
     amount?: DecimalFilter<"PettyCash"> | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolFilter<"PettyCash"> | boolean
     description?: StringFilter<"PettyCash"> | string
     expenseDate?: DateTimeFilter<"PettyCash"> | Date | string
     expenseType?: EnumPettyCashTypeFilter<"PettyCash"> | $Enums.PettyCashType
@@ -122783,6 +122815,7 @@ export namespace Prisma {
   export type PettyCashCreateManyProjectInput = {
     pettyCashId?: number
     amount: Decimal | DecimalJsLike | number | string
+    includesIgv?: boolean
     description?: string
     expenseDate?: Date | string
     expenseType?: $Enums.PettyCashType
@@ -123081,6 +123114,7 @@ export namespace Prisma {
 
   export type PettyCashUpdateWithoutProjectInput = {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolFieldUpdateOperationsInput | boolean
     description?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expenseType?: EnumPettyCashTypeFieldUpdateOperationsInput | $Enums.PettyCashType
@@ -123092,6 +123126,7 @@ export namespace Prisma {
   export type PettyCashUncheckedUpdateWithoutProjectInput = {
     pettyCashId?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolFieldUpdateOperationsInput | boolean
     description?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expenseType?: EnumPettyCashTypeFieldUpdateOperationsInput | $Enums.PettyCashType
@@ -123103,6 +123138,7 @@ export namespace Prisma {
   export type PettyCashUncheckedUpdateManyWithoutProjectInput = {
     pettyCashId?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    includesIgv?: BoolFieldUpdateOperationsInput | boolean
     description?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expenseType?: EnumPettyCashTypeFieldUpdateOperationsInput | $Enums.PettyCashType

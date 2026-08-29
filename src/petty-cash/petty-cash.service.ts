@@ -15,6 +15,7 @@ import { ListPettyCashesQueryDto } from './dto/list-petty-cashes-query.dto';
 @Injectable()
 export class PettyCashService {
   private readonly logger = new Logger('PettyCashService');
+  private readonly igvMultiplier = 1.18;
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -30,6 +31,27 @@ export class PettyCashService {
         data: null,
       });
     }
+  }
+
+  private amountIncludingIgv(amount: unknown, includesIgv: boolean) {
+    const numericAmount = Number(amount ?? 0);
+    const amountWithIgv = includesIgv
+      ? numericAmount
+      : numericAmount * this.igvMultiplier;
+
+    return Math.round((amountWithIgv + Number.EPSILON) * 100) / 100;
+  }
+
+  private sumAmountsIncludingIgv(
+    pettyCashes: Array<{ amount: unknown; includesIgv: boolean }>,
+  ) {
+    const total = pettyCashes.reduce(
+      (sum, pettyCash) =>
+        sum + this.amountIncludingIgv(pettyCash.amount, pettyCash.includesIgv),
+      0,
+    );
+
+    return Math.round((total + Number.EPSILON) * 100) / 100;
   }
 
   /* ---------- CREATE ---------- */
@@ -111,8 +133,15 @@ export class PettyCashService {
       ...(search
         ? {
             OR: [
-              { description: { contains: search, mode: 'insensitive' as const } },
-              { invoiceNumber: { contains: search, mode: 'insensitive' as const } },
+              {
+                description: { contains: search, mode: 'insensitive' as const },
+              },
+              {
+                invoiceNumber: {
+                  contains: search,
+                  mode: 'insensitive' as const,
+                },
+              },
             ],
           }
         : {}),
@@ -172,12 +201,12 @@ export class PettyCashService {
     this.logger.log(
       `Calculating total amount of all petty cash entries for project ID: ${projectId}`,
     );
-    const result = await this.prisma.pettyCash.aggregate({
+    const pettyCashes = await this.prisma.pettyCash.findMany({
       where: { projectId },
-      _sum: { amount: true },
+      select: { amount: true, includesIgv: true },
     });
 
-    const total = result._sum.amount || 0;
+    const total = this.sumAmountsIncludingIgv(pettyCashes);
 
     return {
       statusCode: HttpStatus.OK,
@@ -193,12 +222,12 @@ export class PettyCashService {
     this.logger.log(
       `Calculating total amount of petty cash entries for project ID: ${projectId} and type: ${pettyCashType}`,
     );
-    const result = await this.prisma.pettyCash.aggregate({
+    const pettyCashes = await this.prisma.pettyCash.findMany({
       where: { projectId, expenseType: pettyCashType },
-      _sum: { amount: true },
+      select: { amount: true, includesIgv: true },
     });
 
-    const total = result._sum.amount || 0;
+    const total = this.sumAmountsIncludingIgv(pettyCashes);
 
     return {
       statusCode: HttpStatus.OK,

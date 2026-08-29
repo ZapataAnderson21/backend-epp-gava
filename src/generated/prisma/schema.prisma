@@ -1090,6 +1090,7 @@ model PettyCash {
   pettyCashId   Int           @id @default(autoincrement())
   projectId     Int
   amount        Decimal       @db.Decimal(18, 2)
+  includesIgv   Boolean       @default(true)
   description   String        @default("Sin descripción") @db.Text
   expenseDate   DateTime      @default(now())
   expenseType   PettyCashType @default(other)

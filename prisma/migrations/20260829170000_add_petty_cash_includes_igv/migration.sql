@@ -1,0 +1,2 @@
+ALTER TABLE "PettyCash"
+ADD COLUMN "includesIgv" BOOLEAN NOT NULL DEFAULT true;

@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsBoolean,
   IsDateString,
   IsEnum,
   IsInt,
@@ -27,6 +28,15 @@ export class CreatePettyCashDto {
   @Min(0, { message: 'El monto debe ser mayor o igual a 0' })
   @IsNotEmpty({ message: 'El monto es obligatorio' })
   amount!: number;
+
+  @ApiPropertyOptional({
+    example: true,
+    default: true,
+    description: 'Indica si el monto registrado ya incluye IGV.',
+  })
+  @IsOptional()
+  @IsBoolean()
+  includesIgv?: boolean;
 
   @ApiPropertyOptional({ example: 'No description provided' })
   @IsOptional()

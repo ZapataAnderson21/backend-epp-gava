@@ -623,6 +623,7 @@ exports.Prisma.PettyCashScalarFieldEnum = {
   pettyCashId: 'pettyCashId',
   projectId: 'projectId',
   amount: 'amount',
+  includesIgv: 'includesIgv',
   description: 'description',
   expenseDate: 'expenseDate',
   expenseType: 'expenseType',
