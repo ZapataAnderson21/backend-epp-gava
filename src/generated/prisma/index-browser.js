@@ -668,12 +668,50 @@ exports.Prisma.WeekScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ProjectWeeklyPayrollScalarFieldEnum = {
-  projectWeeklyPayrollId: 'projectWeeklyPayrollId',
-  projectId: 'projectId',
+exports.Prisma.GeneralPayrollScalarFieldEnum = {
+  generalPayrollId: 'generalPayrollId',
   weekId: 'weekId',
-  amount: 'amount',
-  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GeneralPayrollProjectScalarFieldEnum = {
+  generalPayrollProjectId: 'generalPayrollProjectId',
+  generalPayrollId: 'generalPayrollId',
+  projectId: 'projectId',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GeneralPayrollWorkerScalarFieldEnum = {
+  generalPayrollWorkerId: 'generalPayrollWorkerId',
+  generalPayrollId: 'generalPayrollId',
+  workerId: 'workerId',
+  group: 'group',
+  dailyWage: 'dailyWage',
+  additionalAmount: 'additionalAmount',
+  liquidationAmount: 'liquidationAmount',
+  sundayDinnerAmount: 'sundayDinnerAmount',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GeneralPayrollEntryScalarFieldEnum = {
+  generalPayrollEntryId: 'generalPayrollEntryId',
+  generalPayrollProjectId: 'generalPayrollProjectId',
+  generalPayrollWorkerId: 'generalPayrollWorkerId',
+  monday: 'monday',
+  tuesday: 'tuesday',
+  wednesday: 'wednesday',
+  thursday: 'thursday',
+  friday: 'friday',
+  saturday: 'saturday',
+  dominical: 'dominical',
+  overtimeAmount: 'overtimeAmount',
+  afpDiscount: 'afpDiscount',
+  advanceDiscount: 'advanceDiscount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -685,25 +723,6 @@ exports.Prisma.DailyWageScalarFieldEnum = {
   validFromDate: 'validFromDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-};
-
-exports.Prisma.WeeklyWageScalarFieldEnum = {
-  weeklyWageId: 'weeklyWageId',
-  workerId: 'workerId',
-  weekId: 'weekId',
-  grossAmount: 'grossAmount',
-  totalAmount: 'totalAmount',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.AttendanceScalarFieldEnum = {
-  attendanceId: 'attendanceId',
-  workerId: 'workerId',
-  projectId: 'projectId',
-  date: 'date',
-  weekId: 'weekId',
-  createdAt: 'createdAt'
 };
 
 exports.Prisma.TaskScalarFieldEnum = {
@@ -1043,6 +1062,11 @@ exports.PettyCashType = exports.$Enums.PettyCashType = {
   other: 'other'
 };
 
+exports.GeneralPayrollWorkerGroup = exports.$Enums.GeneralPayrollWorkerGroup = {
+  laborer: 'laborer',
+  technician: 'technician'
+};
+
 exports.TaskStatus = exports.$Enums.TaskStatus = {
   pending: 'pending',
   in_progress: 'in_progress',
@@ -1148,10 +1172,11 @@ exports.Prisma.ModelName = {
   PasswordResetToken: 'PasswordResetToken',
   BlacklistedToken: 'BlacklistedToken',
   Week: 'Week',
-  ProjectWeeklyPayroll: 'ProjectWeeklyPayroll',
+  GeneralPayroll: 'GeneralPayroll',
+  GeneralPayrollProject: 'GeneralPayrollProject',
+  GeneralPayrollWorker: 'GeneralPayrollWorker',
+  GeneralPayrollEntry: 'GeneralPayrollEntry',
   DailyWage: 'DailyWage',
-  WeeklyWage: 'WeeklyWage',
-  Attendance: 'Attendance',
   Task: 'Task',
   TaskAssignment: 'TaskAssignment',
   Notification: 'Notification',

@@ -87,8 +87,7 @@ model Project {
   purchaseOrders             PurchaseOrder[]
   pettyCashes                PettyCash[]
   serviceSales               ServiceSale[]
-  attendances                Attendance[]
-  weeklyPayrolls             ProjectWeeklyPayroll[]
+  generalPayrollProjects     GeneralPayrollProject[]
   tasks                      Task[]
   notifications              Notification[]
   inventoryEntries           ProjectInventoryEntry[]
@@ -715,9 +714,8 @@ model Worker {
   deletedAt     DateTime?
 
   requestWorkers             RequestWorker[]
-  weeklyWages                WeeklyWage[]
-  attendances                Attendance[]
   dailyWages                 DailyWage[]
+  generalPayrollWorkers      GeneralPayrollWorker[]
   monthlyEvaluations         WorkerMonthlyEvaluation[]
   inventoryMovements         InventoryMovement[]         @relation("InventoryMovementWorker")
   currentInventoryAssets     InventoryAsset[]            @relation("InventoryAssetCurrentWorker")
@@ -1153,29 +1151,92 @@ model Week {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  weeklyWages           WeeklyWage[]
-  attendances           Attendance[]
-  projectWeeklyPayrolls ProjectWeeklyPayroll[]
+  generalPayroll GeneralPayroll?
 
   @@index([startDate])
   @@index([endDate])
 }
 
-model ProjectWeeklyPayroll {
-  projectWeeklyPayrollId Int      @id @default(autoincrement())
-  projectId              Int
-  weekId                 Int
-  amount                 Decimal  @db.Decimal(18, 2)
-  notes                  String?  @db.Text
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+enum GeneralPayrollWorkerGroup {
+  laborer
+  technician
+}
 
-  project Project @relation(fields: [projectId], references: [projectId], onDelete: Cascade, onUpdate: Cascade)
-  week    Week    @relation(fields: [weekId], references: [weekId], onDelete: Restrict, onUpdate: Cascade)
+model GeneralPayroll {
+  generalPayrollId Int      @id @default(autoincrement())
+  weekId           Int      @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  @@unique([projectId, weekId])
+  week     Week                    @relation(fields: [weekId], references: [weekId], onDelete: Cascade, onUpdate: Cascade)
+  projects GeneralPayrollProject[]
+  workers  GeneralPayrollWorker[]
+
+  @@index([createdAt])
+}
+
+model GeneralPayrollProject {
+  generalPayrollProjectId Int      @id @default(autoincrement())
+  generalPayrollId        Int
+  projectId               Int
+  displayOrder            Int      @default(0)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  generalPayroll GeneralPayroll        @relation(fields: [generalPayrollId], references: [generalPayrollId], onDelete: Cascade, onUpdate: Cascade)
+  project        Project               @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  entries        GeneralPayrollEntry[]
+
+  @@unique([generalPayrollId, projectId])
+  @@index([generalPayrollId, displayOrder])
   @@index([projectId])
-  @@index([weekId])
+}
+
+model GeneralPayrollWorker {
+  generalPayrollWorkerId Int                       @id @default(autoincrement())
+  generalPayrollId       Int
+  workerId               Int
+  group                  GeneralPayrollWorkerGroup
+  dailyWage              Decimal                   @default(0) @db.Decimal(18, 2)
+  additionalAmount       Decimal                   @default(0) @db.Decimal(18, 2)
+  liquidationAmount      Decimal                   @default(0) @db.Decimal(18, 2)
+  sundayDinnerAmount     Decimal                   @default(0) @db.Decimal(18, 2)
+  displayOrder           Int                       @default(0)
+  createdAt              DateTime                  @default(now())
+  updatedAt              DateTime                  @updatedAt
+
+  generalPayroll GeneralPayroll        @relation(fields: [generalPayrollId], references: [generalPayrollId], onDelete: Cascade, onUpdate: Cascade)
+  worker         Worker                @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  entries        GeneralPayrollEntry[]
+
+  @@unique([generalPayrollId, workerId])
+  @@index([generalPayrollId, group, displayOrder])
+  @@index([workerId])
+}
+
+model GeneralPayrollEntry {
+  generalPayrollEntryId   Int      @id @default(autoincrement())
+  generalPayrollProjectId Int
+  generalPayrollWorkerId  Int
+  monday                  Decimal  @default(0) @db.Decimal(6, 2)
+  tuesday                 Decimal  @default(0) @db.Decimal(6, 2)
+  wednesday               Decimal  @default(0) @db.Decimal(6, 2)
+  thursday                Decimal  @default(0) @db.Decimal(6, 2)
+  friday                  Decimal  @default(0) @db.Decimal(6, 2)
+  saturday                Decimal  @default(0) @db.Decimal(6, 2)
+  dominical               Decimal  @default(0) @db.Decimal(6, 2)
+  overtimeAmount          Decimal  @default(0) @db.Decimal(18, 2)
+  afpDiscount             Decimal  @default(0) @db.Decimal(18, 2)
+  advanceDiscount         Decimal  @default(0) @db.Decimal(18, 2)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  payrollProject GeneralPayrollProject @relation(fields: [generalPayrollProjectId], references: [generalPayrollProjectId], onDelete: Cascade, onUpdate: Cascade)
+  payrollWorker  GeneralPayrollWorker  @relation(fields: [generalPayrollWorkerId], references: [generalPayrollWorkerId], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([generalPayrollProjectId, generalPayrollWorkerId])
+  @@index([generalPayrollProjectId])
+  @@index([generalPayrollWorkerId])
 }
 
 model DailyWage {
@@ -1194,40 +1255,6 @@ model DailyWage {
   @@unique([workerId, validFromDate])
   @@index([workerId])
   @@index([validFromDate])
-}
-
-model WeeklyWage {
-  weeklyWageId Int      @id @default(autoincrement())
-  workerId     Int
-  weekId       Int
-  grossAmount  Decimal  @db.Decimal(18, 2)
-  totalAmount  Decimal  @db.Decimal(18, 2)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  worker Worker @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
-  week   Week   @relation(fields: [weekId], references: [weekId], onDelete: Cascade, onUpdate: Cascade)
-
-  @@unique([workerId, weekId])
-  @@index([weekId])
-  @@index([workerId])
-}
-
-model Attendance {
-  attendanceId Int      @id @default(autoincrement())
-  workerId     Int
-  projectId    Int
-  date         DateTime @db.Date
-  weekId       Int
-  createdAt    DateTime @default(now())
-
-  worker  Worker  @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
-  project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  week    Week    @relation(fields: [weekId], references: [weekId], onDelete: Cascade, onUpdate: Cascade)
-
-  @@unique([workerId, date])
-  @@index([workerId])
-  @@index([projectId])
 }
 
 // ==================== GESTIÓN DE TAREAS ====================

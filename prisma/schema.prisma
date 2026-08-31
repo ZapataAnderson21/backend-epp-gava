@@ -8,25 +8,25 @@ datasource db {
 }
 
 model User {
-  userId              Int                  @id @default(autoincrement())
-  name                String
-  lastName            String
-  email               String               @db.Citext @unique
-  password            String
-  phone               String?              @unique
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  deletedAt           DateTime?
-  
-  blacklistedTokens   BlacklistedToken[]
-  responses           RequestResponse[]     @relation("UserResponses")
-  requests            Request[]
-  userUserTypes       UserUserType[]
-  passwordResetTokens PasswordResetToken[]
-  emergencies         Emergency[]
-  complaints          Complaint[]
-  taskAssignments     TaskAssignment[]
-  notifications       Notification[]
+  userId    Int       @id @default(autoincrement())
+  name      String
+  lastName  String
+  email     String    @unique @db.Citext
+  password  String
+  phone     String?   @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  blacklistedTokens                 BlacklistedToken[]
+  responses                         RequestResponse[]           @relation("UserResponses")
+  requests                          Request[]
+  userUserTypes                     UserUserType[]
+  passwordResetTokens               PasswordResetToken[]
+  emergencies                       Emergency[]
+  complaints                        Complaint[]
+  taskAssignments                   TaskAssignment[]
+  notifications                     Notification[]
   createdMonthlyEvaluationTemplates MonthlyEvaluationTemplate[] @relation("MonthlyEvaluationTemplateCreator")
   evaluatedMonthlyEvaluations       WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationEvaluator")
   openedMonthlyEvaluations          WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationOpenedBy")
@@ -34,8 +34,8 @@ model User {
   receivedRequestsIntoInventory     Request[]                   @relation("RequestInventoryReceivedBy")
   projectInventoryResponsibilities  ProjectInventoryEntry[]     @relation("ProjectInventoryResponsibleUser")
   performedInventoryMovements       InventoryMovement[]         @relation("InventoryMovementPerformedBy")
-  createdExpiringDocuments          ExpiringDocument[]           @relation("ExpiringDocumentCreatedBy")
-  updatedExpiringDocuments          ExpiringDocument[]           @relation("ExpiringDocumentUpdatedBy")
+  createdExpiringDocuments          ExpiringDocument[]          @relation("ExpiringDocumentCreatedBy")
+  updatedExpiringDocuments          ExpiringDocument[]          @relation("ExpiringDocumentUpdatedBy")
   expiringDocumentHistory           ExpiringDocumentHistory[]
   responsibleInventoryMovements     InventoryMovement[]         @relation("InventoryMovementResponsibleUser")
 
@@ -45,19 +45,19 @@ model User {
 }
 
 model UserType {
-  userTypeId    Int      @id @default(autoincrement())
-  name          String   @unique
+  userTypeId Int    @id @default(autoincrement())
+  name       String @unique
 
   userUserTypes UserUserType[]
 }
 
 model UserUserType {
-  userUserTypeId Int     @id @default(autoincrement())
+  userUserTypeId Int @id @default(autoincrement())
   userId         Int
   userTypeId     Int
 
-  user          User     @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  userType      UserType @relation(fields: [userTypeId], references: [userTypeId], onDelete: Restrict, onUpdate: Cascade)
+  user     User     @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  userType UserType @relation(fields: [userTypeId], references: [userTypeId], onDelete: Restrict, onUpdate: Cascade)
 
   @@unique([userId, userTypeId])
   @@index([userTypeId])
@@ -70,30 +70,29 @@ enum ProjectStatus {
 }
 
 model Project {
-  projectId       Int             @id @default(autoincrement())
-  name            String
-  code            String          @unique
-  description     String          @db.Text @default("Sin descripción.")
-  status          ProjectStatus   @default(active)
-  location        String
-  startDate       DateTime?
-  endDate         DateTime?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  deletedAt       DateTime?
+  projectId   Int           @id @default(autoincrement())
+  name        String
+  code        String        @unique
+  description String        @default("Sin descripción.") @db.Text
+  status      ProjectStatus @default(active)
+  location    String
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
 
-  requests        Request[]
-  emergencies     Emergency[]
-  purchaseOrders  PurchaseOrder[]
-  pettyCashes     PettyCash[]
-  serviceSales    ServiceSale[]
-  attendances     Attendance[]
-  weeklyPayrolls  ProjectWeeklyPayroll[]
-  tasks           Task[]
-  notifications   Notification[]
-  inventoryEntries ProjectInventoryEntry[]
-  inventoryMovements InventoryMovement[]
-  currentInventoryAssets InventoryAsset[] @relation("InventoryAssetCurrentProject")
+  requests                   Request[]
+  emergencies                Emergency[]
+  purchaseOrders             PurchaseOrder[]
+  pettyCashes                PettyCash[]
+  serviceSales               ServiceSale[]
+  generalPayrollProjects     GeneralPayrollProject[]
+  tasks                      Task[]
+  notifications              Notification[]
+  inventoryEntries           ProjectInventoryEntry[]
+  inventoryMovements         InventoryMovement[]
+  currentInventoryAssets     InventoryAsset[]            @relation("InventoryAssetCurrentProject")
   workerInventoryAssignments WorkerInventoryAssignment[]
 
   @@index([status])
@@ -132,46 +131,46 @@ model ElementCategory {
   updatedAt         DateTime  @updatedAt
   deletedAt         DateTime?
 
-  elements          Element[]
+  elements Element[]
 
   @@index([deletedAt])
 }
 
 model Element {
-  elementId       Int               @id @default(autoincrement())
-  name            String
-  code            String?           @unique
-  description     String            @db.Text @default("Sin descripción.")
-  brand           String?
-  model           String?
-  size            String?
-  serialNumber    String?
+  elementId          Int                @id @default(autoincrement())
+  name               String
+  code               String?            @unique
+  description        String             @default("Sin descripción.") @db.Text
+  brand              String?
+  model              String?
+  size               String?
+  serialNumber       String?
   technicalSheetLink String?
-  operationalStatus String?
-  manufactureDate DateTime?
-  expirationDate  DateTime?
-  type            ElementType
-  family          ElementFamily?
-  controlType     ElementControlType @default(returnable)
-  elementCategoryId Int?
-  stockMinimum    Decimal            @db.Decimal(18,4) @default(0)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  deletedAt       DateTime?
+  operationalStatus  String?
+  manufactureDate    DateTime?
+  expirationDate     DateTime?
+  type               ElementType
+  family             ElementFamily?
+  controlType        ElementControlType @default(returnable)
+  elementCategoryId  Int?
+  stockMinimum       Decimal            @default(0) @db.Decimal(18, 4)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  deletedAt          DateTime?
 
-  category        ElementCategory?  @relation(fields: [elementCategoryId], references: [elementCategoryId], onDelete: SetNull, onUpdate: Cascade)
-  elementRequests ElementRequest[]
-  projectInventoryEntries ProjectInventoryEntry[]
-  officeInventoryEntries OfficeInventoryEntry[]
-  inventoryMovements InventoryMovement[]
-  variants        ElementVariant[]
-  inventoryAssets InventoryAsset[]
-  workerInventoryAssignments WorkerInventoryAssignment[]
-  fallProtectionHarnessGroups FallProtectionGroup[] @relation("FallProtectionHarness")
-  fallProtectionAnchorBandGroups FallProtectionGroup[] @relation("FallProtectionAnchorBand")
-  fallProtectionLifelineGroups FallProtectionGroup[] @relation("FallProtectionLifeline")
-  fallProtectionPositioningLanyardGroups FallProtectionGroup[] @relation("FallProtectionPositioningLanyard")
-  fallProtectionGroupComponents FallProtectionGroupComponent[]
+  category                               ElementCategory?               @relation(fields: [elementCategoryId], references: [elementCategoryId], onDelete: SetNull, onUpdate: Cascade)
+  elementRequests                        ElementRequest[]
+  projectInventoryEntries                ProjectInventoryEntry[]
+  officeInventoryEntries                 OfficeInventoryEntry[]
+  inventoryMovements                     InventoryMovement[]
+  variants                               ElementVariant[]
+  inventoryAssets                        InventoryAsset[]
+  workerInventoryAssignments             WorkerInventoryAssignment[]
+  fallProtectionHarnessGroups            FallProtectionGroup[]          @relation("FallProtectionHarness")
+  fallProtectionAnchorBandGroups         FallProtectionGroup[]          @relation("FallProtectionAnchorBand")
+  fallProtectionLifelineGroups           FallProtectionGroup[]          @relation("FallProtectionLifeline")
+  fallProtectionPositioningLanyardGroups FallProtectionGroup[]          @relation("FallProtectionPositioningLanyard")
+  fallProtectionGroupComponents          FallProtectionGroupComponent[]
 
   @@index([type])
   @@index([family])
@@ -181,24 +180,24 @@ model Element {
 }
 
 model FallProtectionGroup {
-  fallProtectionGroupId Int      @id @default(autoincrement())
-  code                  String   @unique
-  description           String?  @db.Text
-  harnessElementId      Int
-  anchorBandElementId   Int
-  lifelineElementId     Int
+  fallProtectionGroupId       Int       @id @default(autoincrement())
+  code                        String    @unique
+  description                 String?   @db.Text
+  harnessElementId            Int
+  anchorBandElementId         Int
+  lifelineElementId           Int
   positioningLanyardElementId Int
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-  deletedAt             DateTime?
+  createdAt                   DateTime  @default(now())
+  updatedAt                   DateTime  @updatedAt
+  deletedAt                   DateTime?
 
-  harnessElement             Element @relation("FallProtectionHarness", fields: [harnessElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  anchorBandElement          Element @relation("FallProtectionAnchorBand", fields: [anchorBandElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  lifelineElement            Element @relation("FallProtectionLifeline", fields: [lifelineElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  positioningLanyardElement  Element @relation("FallProtectionPositioningLanyard", fields: [positioningLanyardElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  components                  FallProtectionGroupComponent[]
-  elementRequests            ElementRequest[]
-  projectInventoryEntries    ProjectInventoryEntry[]
+  harnessElement            Element                        @relation("FallProtectionHarness", fields: [harnessElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  anchorBandElement         Element                        @relation("FallProtectionAnchorBand", fields: [anchorBandElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  lifelineElement           Element                        @relation("FallProtectionLifeline", fields: [lifelineElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  positioningLanyardElement Element                        @relation("FallProtectionPositioningLanyard", fields: [positioningLanyardElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  components                FallProtectionGroupComponent[]
+  elementRequests           ElementRequest[]
+  projectInventoryEntries   ProjectInventoryEntry[]
 
   @@index([harnessElementId])
   @@index([anchorBandElementId])
@@ -241,12 +240,12 @@ model ElementVariant {
   updatedAt        DateTime  @updatedAt
   deletedAt        DateTime?
 
-  element                Element                   @relation(fields: [elementId], references: [elementId], onDelete: Cascade, onUpdate: Cascade)
-  elementRequests        ElementRequest[]
-  projectInventoryEntries ProjectInventoryEntry[]
-  officeInventoryEntries OfficeInventoryEntry[]
-  inventoryMovements     InventoryMovement[]
-  requestWorkerPlans     ElementRequestWorkerPlan[]
+  element                    Element                     @relation(fields: [elementId], references: [elementId], onDelete: Cascade, onUpdate: Cascade)
+  elementRequests            ElementRequest[]
+  projectInventoryEntries    ProjectInventoryEntry[]
+  officeInventoryEntries     OfficeInventoryEntry[]
+  inventoryMovements         InventoryMovement[]
+  requestWorkerPlans         ElementRequestWorkerPlan[]
   workerInventoryAssignments WorkerInventoryAssignment[]
 
   @@unique([elementId, normalizedLabel])
@@ -271,27 +270,27 @@ enum RequestType {
 }
 
 model Request {
-  requestId        Int                @id @default(autoincrement())
-  deliveryDueDate  DateTime
-  status           RequestStatus      @default(draft)
-  description      String             @db.Text @default("Sin descripción.")
-  userId           Int
-  projectId        Int
-  type             RequestType
-  inventoryLoadedAt DateTime?
+  requestId                 Int           @id @default(autoincrement())
+  deliveryDueDate           DateTime
+  status                    RequestStatus @default(draft)
+  description               String        @default("Sin descripción.") @db.Text
+  userId                    Int
+  projectId                 Int
+  type                      RequestType
+  inventoryLoadedAt         DateTime?
   inventoryReceivedByUserId Int?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  createdAt                 DateTime      @default(now())
+  updatedAt                 DateTime      @updatedAt
 
-  project          Project            @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  user             User               @relation(fields: [userId], references: [userId],     onDelete: Restrict, onUpdate: Cascade)
-  inventoryReceivedByUser User?       @relation("RequestInventoryReceivedBy", fields: [inventoryReceivedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
-  elementRequests  ElementRequest[]
-  requestWorkers   RequestWorker[]
-  responses        RequestResponse[]
-  notifications    Notification[]
+  project                 Project                 @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  user                    User                    @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  inventoryReceivedByUser User?                   @relation("RequestInventoryReceivedBy", fields: [inventoryReceivedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  elementRequests         ElementRequest[]
+  requestWorkers          RequestWorker[]
+  responses               RequestResponse[]
+  notifications           Notification[]
   projectInventoryEntries ProjectInventoryEntry[]
-  inventoryMovements InventoryMovement[]
+  inventoryMovements      InventoryMovement[]
 
   @@index([status])
   @@index([type])
@@ -304,17 +303,17 @@ model Request {
 }
 
 model RequestWorker {
-  requestWorkerId Int       @id @default(autoincrement())
+  requestWorkerId Int      @id @default(autoincrement())
   requestId       Int
   shoeSize        String?
   pantsSize       String?
   shirtSize       String?
   workerId        Int
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  request         Request   @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
-  worker          Worker    @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  request                   Request                    @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
+  worker                    Worker                     @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
   elementRequestWorkerPlans ElementRequestWorkerPlan[]
 
   @@unique([requestId, workerId])
@@ -323,22 +322,22 @@ model RequestWorker {
 }
 
 model ElementRequest {
-  elementRequestId        Int                       @id @default(autoincrement())
-  quantityRequested       Decimal                   @db.Decimal(18,4)
-  unit                    String
-  elementId               Int
-  elementVariantId        Int?
-  fallProtectionGroupId   Int?
-  requestId               Int
-  lineItemOrder           Int                       @default(0)
-  notes                   String?                   @db.Text
-  createdAt               DateTime                  @default(now())
-  updatedAt               DateTime                  @updatedAt
+  elementRequestId      Int      @id @default(autoincrement())
+  quantityRequested     Decimal  @db.Decimal(18, 4)
+  unit                  String
+  elementId             Int
+  elementVariantId      Int?
+  fallProtectionGroupId Int?
+  requestId             Int
+  lineItemOrder         Int      @default(0)
+  notes                 String?  @db.Text
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
-  element                 Element                   @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  elementVariant          ElementVariant?           @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
-  fallProtectionGroup     FallProtectionGroup?      @relation(fields: [fallProtectionGroupId], references: [fallProtectionGroupId], onDelete: SetNull, onUpdate: Cascade)
-  request                 Request                   @relation(fields: [requestId], references: [requestId], onDelete: Cascade,  onUpdate: Cascade)
+  element                 Element                    @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant          ElementVariant?            @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
+  fallProtectionGroup     FallProtectionGroup?       @relation(fields: [fallProtectionGroupId], references: [fallProtectionGroupId], onDelete: SetNull, onUpdate: Cascade)
+  request                 Request                    @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
   elementRequestResponses ElementRequestResponse[]
   projectInventoryEntries ProjectInventoryEntry[]
   epiPlans                ElementRequestWorkerPlan[]
@@ -352,19 +351,19 @@ model ElementRequest {
 }
 
 model ElementRequestWorkerPlan {
-  elementRequestWorkerPlanId Int       @id @default(autoincrement())
+  elementRequestWorkerPlanId Int      @id @default(autoincrement())
   elementRequestId           Int
   requestWorkerId            Int
   elementVariantId           Int?
-  plannedQuantity            Decimal   @db.Decimal(18,4)
+  plannedQuantity            Decimal  @db.Decimal(18, 4)
   size                       String?
-  notes                      String?   @db.Text
-  createdAt                  DateTime  @default(now())
-  updatedAt                  DateTime  @updatedAt
+  notes                      String?  @db.Text
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
 
-  elementRequest             ElementRequest @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Cascade, onUpdate: Cascade)
-  elementVariant             ElementVariant? @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
-  requestWorker              RequestWorker  @relation(fields: [requestWorkerId], references: [requestWorkerId], onDelete: Cascade, onUpdate: Cascade)
+  elementRequest ElementRequest  @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Cascade, onUpdate: Cascade)
+  elementVariant ElementVariant? @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
+  requestWorker  RequestWorker   @relation(fields: [requestWorkerId], references: [requestWorkerId], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([elementRequestId, requestWorkerId])
   @@index([elementRequestId])
@@ -373,17 +372,17 @@ model ElementRequestWorkerPlan {
 }
 
 model RequestResponse {
-  requestResponseId       Int                        @id @default(autoincrement())
-  responderUserId         Int
-  requestId               Int                        @unique
-  managementDescription   String?                    @db.Text
-  logisticsDescription    String?                    @db.Text
-  adminDescription        String?                    @db.Text
-  createdAt               DateTime                   @default(now())
-  updatedAt               DateTime                   @updatedAt
+  requestResponseId     Int      @id @default(autoincrement())
+  responderUserId       Int
+  requestId             Int      @unique
+  managementDescription String?  @db.Text
+  logisticsDescription  String?  @db.Text
+  adminDescription      String?  @db.Text
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
-  request                 Request                    @relation(fields: [requestId], references: [requestId], onDelete: Cascade,  onUpdate: Cascade)
-  responder               User                       @relation("UserResponses", fields: [responderUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  request                 Request                  @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
+  responder               User                     @relation("UserResponses", fields: [responderUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
   elementRequestResponses ElementRequestResponse[]
   projectInventoryEntries ProjectInventoryEntry[]
 
@@ -391,7 +390,7 @@ model RequestResponse {
 }
 
 model ProjectInventoryEntry {
-  projectInventoryEntryId Int             @id @default(autoincrement())
+  projectInventoryEntryId Int      @id @default(autoincrement())
   projectId               Int
   elementId               Int
   elementVariantId        Int?
@@ -401,21 +400,21 @@ model ProjectInventoryEntry {
   elementRequestId        Int
   responsibleUserId       Int
   unit                    String
-  quantityReceived        Decimal         @db.Decimal(18,4)
-  quantityReturned        Decimal         @db.Decimal(18,4) @default(0)
-  notes                   String?         @db.Text
-  createdAt               DateTime        @default(now())
-  updatedAt               DateTime        @updatedAt
+  quantityReceived        Decimal  @db.Decimal(18, 4)
+  quantityReturned        Decimal  @default(0) @db.Decimal(18, 4)
+  notes                   String?  @db.Text
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
-  project                 Project         @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  element                 Element         @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  elementVariant          ElementVariant? @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
-  fallProtectionGroup     FallProtectionGroup? @relation(fields: [fallProtectionGroupId], references: [fallProtectionGroupId], onDelete: SetNull, onUpdate: Cascade)
-  request                 Request         @relation(fields: [requestId], references: [requestId], onDelete: Restrict, onUpdate: Cascade)
-  requestResponse         RequestResponse? @relation(fields: [requestResponseId], references: [requestResponseId], onDelete: SetNull, onUpdate: Cascade)
-  elementRequest          ElementRequest  @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Restrict, onUpdate: Cascade)
-  responsibleUser         User            @relation("ProjectInventoryResponsibleUser", fields: [responsibleUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  movements               InventoryMovement[]
+  project                    Project                     @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  element                    Element                     @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant             ElementVariant?             @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
+  fallProtectionGroup        FallProtectionGroup?        @relation(fields: [fallProtectionGroupId], references: [fallProtectionGroupId], onDelete: SetNull, onUpdate: Cascade)
+  request                    Request                     @relation(fields: [requestId], references: [requestId], onDelete: Restrict, onUpdate: Cascade)
+  requestResponse            RequestResponse?            @relation(fields: [requestResponseId], references: [requestResponseId], onDelete: SetNull, onUpdate: Cascade)
+  elementRequest             ElementRequest              @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Restrict, onUpdate: Cascade)
+  responsibleUser            User                        @relation("ProjectInventoryResponsibleUser", fields: [responsibleUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  movements                  InventoryMovement[]
   workerInventoryAssignments WorkerInventoryAssignment[]
 
   @@index([projectId])
@@ -463,36 +462,36 @@ enum InventoryAssetStatus {
 }
 
 model InventoryMovement {
-  inventoryMovementId     Int                   @id @default(autoincrement())
-  projectInventoryEntryId Int?
-  officeInventoryEntryId  Int?
+  inventoryMovementId         Int                   @id @default(autoincrement())
+  projectInventoryEntryId     Int?
+  officeInventoryEntryId      Int?
   workerInventoryAssignmentId Int?
-  inventoryAssetId        Int?
-  projectId               Int?
-  workerId                Int?
-  elementId               Int
-  elementVariantId        Int?
-  requestId               Int?
-  movementType            InventoryMovementType
-  fromLocation            InventoryLocation
-  toLocation              InventoryLocation
-  quantity                Decimal               @db.Decimal(18,4)
-  performedByUserId       Int?
-  responsibleUserId       Int?
-  notes                   String?               @db.Text
-  createdAt               DateTime              @default(now())
+  inventoryAssetId            Int?
+  projectId                   Int?
+  workerId                    Int?
+  elementId                   Int
+  elementVariantId            Int?
+  requestId                   Int?
+  movementType                InventoryMovementType
+  fromLocation                InventoryLocation
+  toLocation                  InventoryLocation
+  quantity                    Decimal               @db.Decimal(18, 4)
+  performedByUserId           Int?
+  responsibleUserId           Int?
+  notes                       String?               @db.Text
+  createdAt                   DateTime              @default(now())
 
-  projectInventoryEntry   ProjectInventoryEntry? @relation(fields: [projectInventoryEntryId], references: [projectInventoryEntryId], onDelete: Cascade, onUpdate: Cascade)
-  officeInventoryEntry    OfficeInventoryEntry?  @relation(fields: [officeInventoryEntryId], references: [officeInventoryEntryId], onDelete: Cascade, onUpdate: Cascade)
+  projectInventoryEntry     ProjectInventoryEntry?     @relation(fields: [projectInventoryEntryId], references: [projectInventoryEntryId], onDelete: Cascade, onUpdate: Cascade)
+  officeInventoryEntry      OfficeInventoryEntry?      @relation(fields: [officeInventoryEntryId], references: [officeInventoryEntryId], onDelete: Cascade, onUpdate: Cascade)
   workerInventoryAssignment WorkerInventoryAssignment? @relation(fields: [workerInventoryAssignmentId], references: [workerInventoryAssignmentId], onDelete: SetNull, onUpdate: Cascade)
-  inventoryAsset          InventoryAsset?       @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: SetNull, onUpdate: Cascade)
-  project                 Project?              @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  worker                  Worker?               @relation("InventoryMovementWorker", fields: [workerId], references: [workerId], onDelete: SetNull, onUpdate: Cascade)
-  element                 Element               @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  elementVariant          ElementVariant?       @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
-  request                 Request?              @relation(fields: [requestId], references: [requestId], onDelete: SetNull, onUpdate: Cascade)
-  performedByUser         User?                 @relation("InventoryMovementPerformedBy", fields: [performedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
-  responsibleUser         User?                 @relation("InventoryMovementResponsibleUser", fields: [responsibleUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  inventoryAsset            InventoryAsset?            @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: SetNull, onUpdate: Cascade)
+  project                   Project?                   @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  worker                    Worker?                    @relation("InventoryMovementWorker", fields: [workerId], references: [workerId], onDelete: SetNull, onUpdate: Cascade)
+  element                   Element                    @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant            ElementVariant?            @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
+  request                   Request?                   @relation(fields: [requestId], references: [requestId], onDelete: SetNull, onUpdate: Cascade)
+  performedByUser           User?                      @relation("InventoryMovementPerformedBy", fields: [performedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  responsibleUser           User?                      @relation("InventoryMovementResponsibleUser", fields: [responsibleUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
 
   @@index([projectInventoryEntryId])
   @@index([officeInventoryEntryId])
@@ -508,22 +507,22 @@ model InventoryMovement {
 }
 
 model OfficeInventoryEntry {
-  officeInventoryEntryId Int                    @id @default(autoincrement())
+  officeInventoryEntryId Int                   @id @default(autoincrement())
   elementId              Int
   elementVariantId       Int?
   unit                   String
-  currentStock           Decimal                @db.Decimal(18,4) @default(0)
-  status                 OfficeInventoryStatus  @default(available)
+  currentStock           Decimal               @default(0) @db.Decimal(18, 4)
+  status                 OfficeInventoryStatus @default(available)
   purchaseOrderId        Int?
-  notes                  String?                @db.Text
-  createdAt              DateTime               @default(now())
-  updatedAt              DateTime               @updatedAt
+  notes                  String?               @db.Text
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
 
-  element                Element                @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  elementVariant         ElementVariant?        @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
-  purchaseOrder          PurchaseOrder?         @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: SetNull, onUpdate: Cascade)
-  movements              InventoryMovement[]
-  inventoryAssets        InventoryAsset[]
+  element         Element             @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant  ElementVariant?     @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
+  purchaseOrder   PurchaseOrder?      @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: SetNull, onUpdate: Cascade)
+  movements       InventoryMovement[]
+  inventoryAssets InventoryAsset[]
 
   @@index([elementId])
   @@index([elementVariantId])
@@ -534,28 +533,28 @@ model OfficeInventoryEntry {
 }
 
 model InventoryAsset {
-  inventoryAssetId    Int                  @id @default(autoincrement())
-  elementId           Int
+  inventoryAssetId       Int                  @id @default(autoincrement())
+  elementId              Int
   officeInventoryEntryId Int?
-  currentProjectId    Int?
-  currentWorkerId     Int?
-  currentLocation     InventoryLocation    @default(office)
-  status              InventoryAssetStatus @default(available)
-  assetCode           String               @unique
-  serialNumber        String?              @unique
-  notes               String?              @db.Text
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  deletedAt           DateTime?
+  currentProjectId       Int?
+  currentWorkerId        Int?
+  currentLocation        InventoryLocation    @default(office)
+  status                 InventoryAssetStatus @default(available)
+  assetCode              String               @unique
+  serialNumber           String?              @unique
+  notes                  String?              @db.Text
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  deletedAt              DateTime?
 
-  element             Element              @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  officeInventoryEntry OfficeInventoryEntry? @relation(fields: [officeInventoryEntryId], references: [officeInventoryEntryId], onDelete: SetNull, onUpdate: Cascade)
-  currentProject      Project?             @relation("InventoryAssetCurrentProject", fields: [currentProjectId], references: [projectId], onDelete: SetNull, onUpdate: Cascade)
-  currentWorker       Worker?              @relation("InventoryAssetCurrentWorker", fields: [currentWorkerId], references: [workerId], onDelete: SetNull, onUpdate: Cascade)
-  movements           InventoryMovement[]
+  element                    Element                     @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  officeInventoryEntry       OfficeInventoryEntry?       @relation(fields: [officeInventoryEntryId], references: [officeInventoryEntryId], onDelete: SetNull, onUpdate: Cascade)
+  currentProject             Project?                    @relation("InventoryAssetCurrentProject", fields: [currentProjectId], references: [projectId], onDelete: SetNull, onUpdate: Cascade)
+  currentWorker              Worker?                     @relation("InventoryAssetCurrentWorker", fields: [currentWorkerId], references: [workerId], onDelete: SetNull, onUpdate: Cascade)
+  movements                  InventoryMovement[]
   workerInventoryAssignments WorkerInventoryAssignment[]
-  harnessProfile      HarnessAssetProfile?
-  measurementProfile  MeasurementAssetProfile?
+  harnessProfile             HarnessAssetProfile?
+  measurementProfile         MeasurementAssetProfile?
 
   @@index([elementId])
   @@index([officeInventoryEntryId])
@@ -574,25 +573,25 @@ enum HarnessComponentType {
 }
 
 model HarnessAssetProfile {
-  harnessAssetProfileId Int       @id @default(autoincrement())
-  inventoryAssetId      Int       @unique
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  harnessAssetProfileId Int      @id @default(autoincrement())
+  inventoryAssetId      Int      @unique
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
-  inventoryAsset        InventoryAsset              @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: Cascade, onUpdate: Cascade)
-  componentAssignments  HarnessComponentAssignment[]
+  inventoryAsset       InventoryAsset               @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: Cascade, onUpdate: Cascade)
+  componentAssignments HarnessComponentAssignment[]
 }
 
 model HarnessComponent {
-  harnessComponentId Int                @id @default(autoincrement())
+  harnessComponentId Int                  @id @default(autoincrement())
   componentType      HarnessComponentType
-  code               String?            @unique
-  description        String?            @db.Text
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
+  code               String?              @unique
+  description        String?              @db.Text
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
   deletedAt          DateTime?
 
-  assignments        HarnessComponentAssignment[]
+  assignments HarnessComponentAssignment[]
 
   @@index([componentType])
   @@index([deletedAt])
@@ -606,8 +605,8 @@ model HarnessComponentAssignment {
   removedAt                    DateTime?
   notes                        String?   @db.Text
 
-  harnessAssetProfile          HarnessAssetProfile @relation(fields: [harnessAssetProfileId], references: [harnessAssetProfileId], onDelete: Cascade, onUpdate: Cascade)
-  harnessComponent             HarnessComponent    @relation(fields: [harnessComponentId], references: [harnessComponentId], onDelete: Restrict, onUpdate: Cascade)
+  harnessAssetProfile HarnessAssetProfile @relation(fields: [harnessAssetProfileId], references: [harnessAssetProfileId], onDelete: Cascade, onUpdate: Cascade)
+  harnessComponent    HarnessComponent    @relation(fields: [harnessComponentId], references: [harnessComponentId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([harnessAssetProfileId])
   @@index([harnessComponentId])
@@ -640,24 +639,24 @@ model MeasurementAssetProfile {
   createdAt                 DateTime                     @default(now())
   updatedAt                 DateTime                     @updatedAt
 
-  inventoryAsset            InventoryAsset @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: Cascade, onUpdate: Cascade)
+  inventoryAsset InventoryAsset @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ElementRequestResponse {
-  elementRequestResponseId Int               @id @default(autoincrement())
+  elementRequestResponseId Int      @id @default(autoincrement())
   elementRequestId         Int
   requestResponseId        Int
-  quantityAccepted         Decimal           @db.Decimal(18,4)
-  selectedElementIds       Int[]             @default([])
-  createdAt                DateTime          @default(now())
-  updatedAt                DateTime          @updatedAt
+  quantityAccepted         Decimal  @db.Decimal(18, 4)
+  selectedElementIds       Int[]    @default([])
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
 
-  elementRequest           ElementRequest    @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Cascade, onUpdate: Cascade)
-  requestResponse          RequestResponse   @relation(fields: [requestResponseId], references: [requestResponseId], onDelete: Cascade, onUpdate: Cascade)
+  elementRequest  ElementRequest  @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: Cascade, onUpdate: Cascade)
+  requestResponse RequestResponse @relation(fields: [requestResponseId], references: [requestResponseId], onDelete: Cascade, onUpdate: Cascade)
 
+  @@unique([elementRequestId, requestResponseId])
   @@index([elementRequestId])
   @@index([requestResponseId])
-  @@unique([elementRequestId, requestResponseId])
 }
 
 enum EmergencyStatus {
@@ -667,18 +666,18 @@ enum EmergencyStatus {
 }
 
 model Emergency {
-  emergencyId Int              @id @default(autoincrement())
+  emergencyId Int             @id @default(autoincrement())
   image       String
   title       String
-  description String           @db.Text
+  description String          @db.Text
   userId      Int
   projectId   Int
-  status      EmergencyStatus  @default(pending)
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  status      EmergencyStatus @default(pending)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
-  user          User             @relation(fields: [userId],    references: [userId],    onDelete: Restrict, onUpdate: Cascade)
-  project       Project          @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  user          User           @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  project       Project        @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
   notifications Notification[]
 
   @@index([status])
@@ -695,32 +694,31 @@ model Complaint {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user        User     @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([userId])
   @@index([createdAt])
 }
 
 model Worker {
-  workerId       Int              @id @default(autoincrement())
-  fullName       String
-  dni            String           @db.VarChar(8) @unique
-  phone          String?          @unique
-  personalEmail  String?          @db.Citext @unique
-  address        String?          @default("Sin dirección especificada.")
-  birthDate      DateTime?
-  workerType     WorkerType       @default(unspecified)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  deletedAt      DateTime?
+  workerId      Int        @id @default(autoincrement())
+  fullName      String
+  dni           String     @unique @db.VarChar(8)
+  phone         String?    @unique
+  personalEmail String?    @unique @db.Citext
+  address       String?    @default("Sin dirección especificada.")
+  birthDate     DateTime?
+  workerType    WorkerType @default(unspecified)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  deletedAt     DateTime?
 
-  requestWorkers RequestWorker[]
-  weeklyWages    WeeklyWage[]
-  attendances    Attendance[]
-  dailyWages     DailyWage[]
-  monthlyEvaluations WorkerMonthlyEvaluation[]
-  inventoryMovements InventoryMovement[] @relation("InventoryMovementWorker")
-  currentInventoryAssets InventoryAsset[] @relation("InventoryAssetCurrentWorker")
+  requestWorkers             RequestWorker[]
+  dailyWages                 DailyWage[]
+  generalPayrollWorkers      GeneralPayrollWorker[]
+  monthlyEvaluations         WorkerMonthlyEvaluation[]
+  inventoryMovements         InventoryMovement[]         @relation("InventoryMovementWorker")
+  currentInventoryAssets     InventoryAsset[]            @relation("InventoryAssetCurrentWorker")
   workerInventoryAssignments WorkerInventoryAssignment[]
 
   @@index([dni])
@@ -735,26 +733,26 @@ enum WorkerInventoryAssignmentStatus {
 }
 
 model WorkerInventoryAssignment {
-  workerInventoryAssignmentId Int                           @id @default(autoincrement())
-  workerId                    Int
-  projectId                   Int
-  elementId                   Int
-  elementVariantId            Int?
-  inventoryAssetId            Int?
+  workerInventoryAssignmentId   Int                             @id @default(autoincrement())
+  workerId                      Int
+  projectId                     Int
+  elementId                     Int
+  elementVariantId              Int?
+  inventoryAssetId              Int?
   sourceProjectInventoryEntryId Int?
-  quantityAssigned            Decimal                       @db.Decimal(18,4) @default(1)
-  quantityReturned            Decimal                       @db.Decimal(18,4) @default(0)
-  status                      WorkerInventoryAssignmentStatus @default(active)
-  assignedAt                  DateTime                      @default(now())
-  returnedAt                  DateTime?
-  notes                       String?                       @db.Text
+  quantityAssigned              Decimal                         @default(1) @db.Decimal(18, 4)
+  quantityReturned              Decimal                         @default(0) @db.Decimal(18, 4)
+  status                        WorkerInventoryAssignmentStatus @default(active)
+  assignedAt                    DateTime                        @default(now())
+  returnedAt                    DateTime?
+  notes                         String?                         @db.Text
 
-  worker                      Worker                         @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
-  project                     Project                        @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  element                     Element                        @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  elementVariant              ElementVariant?                @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
-  inventoryAsset              InventoryAsset?                @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: SetNull, onUpdate: Cascade)
-  sourceProjectInventoryEntry ProjectInventoryEntry?         @relation(fields: [sourceProjectInventoryEntryId], references: [projectInventoryEntryId], onDelete: SetNull, onUpdate: Cascade)
+  worker                      Worker                 @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  project                     Project                @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  element                     Element                @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant              ElementVariant?        @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
+  inventoryAsset              InventoryAsset?        @relation(fields: [inventoryAssetId], references: [inventoryAssetId], onDelete: SetNull, onUpdate: Cascade)
+  sourceProjectInventoryEntry ProjectInventoryEntry? @relation(fields: [sourceProjectInventoryEntryId], references: [projectInventoryEntryId], onDelete: SetNull, onUpdate: Cascade)
   movements                   InventoryMovement[]
 
   @@index([workerId])
@@ -787,16 +785,16 @@ enum MonthlyEvaluationStatus {
 }
 
 model MonthlyEvaluationTemplate {
-  monthlyEvaluationTemplateId Int      @id @default(autoincrement())
+  monthlyEvaluationTemplateId Int       @id @default(autoincrement())
   name                        String
-  description                 String?  @db.Text
-  isActive                    Boolean  @default(true)
+  description                 String?   @db.Text
+  isActive                    Boolean   @default(true)
   createdByUserId             Int?
-  createdAt                   DateTime @default(now())
-  updatedAt                   DateTime @updatedAt
+  createdAt                   DateTime  @default(now())
+  updatedAt                   DateTime  @updatedAt
   deletedAt                   DateTime?
 
-  createdByUser User?                             @relation("MonthlyEvaluationTemplateCreator", fields: [createdByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  createdByUser User?                              @relation("MonthlyEvaluationTemplateCreator", fields: [createdByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
   versions      MonthlyEvaluationTemplateVersion[]
 
   @@index([name])
@@ -816,8 +814,8 @@ model MonthlyEvaluationTemplateVersion {
   publishedAt                        DateTime @default(now())
   createdAt                          DateTime @default(now())
 
-  template   MonthlyEvaluationTemplate  @relation(fields: [monthlyEvaluationTemplateId], references: [monthlyEvaluationTemplateId], onDelete: Cascade, onUpdate: Cascade)
-  sections   MonthlyEvaluationSection[]
+  template    MonthlyEvaluationTemplate  @relation(fields: [monthlyEvaluationTemplateId], references: [monthlyEvaluationTemplateId], onDelete: Cascade, onUpdate: Cascade)
+  sections    MonthlyEvaluationSection[]
   evaluations WorkerMonthlyEvaluation[]
 
   @@unique([monthlyEvaluationTemplateId, versionNumber])
@@ -835,56 +833,56 @@ model MonthlyEvaluationSection {
   templateVersion MonthlyEvaluationTemplateVersion @relation(fields: [monthlyEvaluationTemplateVersionId], references: [monthlyEvaluationTemplateVersionId], onDelete: Cascade, onUpdate: Cascade)
   questions       MonthlyEvaluationQuestion[]
 
-  @@index([monthlyEvaluationTemplateVersionId])
   @@unique([monthlyEvaluationTemplateVersionId, displayOrder])
+  @@index([monthlyEvaluationTemplateVersionId])
 }
 
 model MonthlyEvaluationQuestion {
-  monthlyEvaluationQuestionId Int                         @id @default(autoincrement())
+  monthlyEvaluationQuestionId Int                           @id @default(autoincrement())
   monthlyEvaluationSectionId  Int
-  displayOrder                Int                         @default(0)
-  prompt                      String                      @db.Text
+  displayOrder                Int                           @default(0)
+  prompt                      String                        @db.Text
   questionType                MonthlyEvaluationQuestionType @default(score)
-  isRequired                  Boolean                     @default(true)
-  isScored                    Boolean                     @default(true)
-  minScore                    Int                         @default(0)
-  maxScore                    Int                         @default(3)
+  isRequired                  Boolean                       @default(true)
+  isScored                    Boolean                       @default(true)
+  minScore                    Int                           @default(0)
+  maxScore                    Int                           @default(3)
   metadata                    Json?
-  createdAt                   DateTime                    @default(now())
-  updatedAt                   DateTime                    @updatedAt
+  createdAt                   DateTime                      @default(now())
+  updatedAt                   DateTime                      @updatedAt
 
-  section   MonthlyEvaluationSection         @relation(fields: [monthlyEvaluationSectionId], references: [monthlyEvaluationSectionId], onDelete: Cascade, onUpdate: Cascade)
+  section   MonthlyEvaluationSection          @relation(fields: [monthlyEvaluationSectionId], references: [monthlyEvaluationSectionId], onDelete: Cascade, onUpdate: Cascade)
   responses WorkerMonthlyEvaluationResponse[]
 
-  @@index([monthlyEvaluationSectionId])
   @@unique([monthlyEvaluationSectionId, displayOrder])
+  @@index([monthlyEvaluationSectionId])
 }
 
 model WorkerMonthlyEvaluation {
-  workerMonthlyEvaluationId          Int                    @id @default(autoincrement())
+  workerMonthlyEvaluationId          Int                     @id @default(autoincrement())
   workerId                           Int
   monthlyEvaluationTemplateVersionId Int
   year                               Int
   month                              Int
-  sequence                           Int                    @default(1)
+  sequence                           Int                     @default(1)
   status                             MonthlyEvaluationStatus @default(open)
   evaluatorUserId                    Int
   openedByUserId                     Int?
   closedByUserId                     Int?
   openedAt                           DateTime?
   closedAt                           DateTime?
-  generalComment                     String?                @db.Text
-  totalScore                         Int                    @default(0)
-  maxScore                           Int                    @default(0)
+  generalComment                     String?                 @db.Text
+  totalScore                         Int                     @default(0)
+  maxScore                           Int                     @default(0)
   performanceLabel                   String?
-  createdAt                          DateTime               @default(now())
-  updatedAt                          DateTime               @updatedAt
+  createdAt                          DateTime                @default(now())
+  updatedAt                          DateTime                @updatedAt
 
-  worker          Worker                           @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
-  templateVersion MonthlyEvaluationTemplateVersion @relation(fields: [monthlyEvaluationTemplateVersionId], references: [monthlyEvaluationTemplateVersionId], onDelete: Restrict, onUpdate: Cascade)
-  evaluatorUser   User                             @relation("MonthlyEvaluationEvaluator", fields: [evaluatorUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  openedByUser    User?                            @relation("MonthlyEvaluationOpenedBy", fields: [openedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
-  closedByUser    User?                            @relation("MonthlyEvaluationClosedBy", fields: [closedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  worker          Worker                            @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  templateVersion MonthlyEvaluationTemplateVersion  @relation(fields: [monthlyEvaluationTemplateVersionId], references: [monthlyEvaluationTemplateVersionId], onDelete: Restrict, onUpdate: Cascade)
+  evaluatorUser   User                              @relation("MonthlyEvaluationEvaluator", fields: [evaluatorUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  openedByUser    User?                             @relation("MonthlyEvaluationOpenedBy", fields: [openedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  closedByUser    User?                             @relation("MonthlyEvaluationClosedBy", fields: [closedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
   responses       WorkerMonthlyEvaluationResponse[]
 
   @@unique([workerId, year, month, sequence])
@@ -903,7 +901,7 @@ model WorkerMonthlyEvaluationResponse {
   createdAt                         DateTime @default(now())
   updatedAt                         DateTime @updatedAt
 
-  evaluation WorkerMonthlyEvaluation @relation(fields: [workerMonthlyEvaluationId], references: [workerMonthlyEvaluationId], onDelete: Cascade, onUpdate: Cascade)
+  evaluation WorkerMonthlyEvaluation   @relation(fields: [workerMonthlyEvaluationId], references: [workerMonthlyEvaluationId], onDelete: Cascade, onUpdate: Cascade)
   question   MonthlyEvaluationQuestion @relation(fields: [monthlyEvaluationQuestionId], references: [monthlyEvaluationQuestionId], onDelete: Restrict, onUpdate: Cascade)
 
   @@unique([workerMonthlyEvaluationId, monthlyEvaluationQuestionId])
@@ -917,21 +915,21 @@ enum SupplierDocumentType {
 }
 
 model Supplier {
-  supplierId     Int              @id @default(autoincrement())
-  name           String           @unique
-  contactName    String
-  phone          String
-  email          String?          @db.Citext
-  address        String?
-  documentType   SupplierDocumentType @default(ruc)
-  ruc            String?          @unique @db.VarChar(11)
-  dni            String?          @unique @db.VarChar(8)
-  accountNumber  String
-  bank           String
-  currency       Currency         @default(PEN)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  deletedAt      DateTime?
+  supplierId    Int                  @id @default(autoincrement())
+  name          String               @unique
+  contactName   String
+  phone         String
+  email         String?              @db.Citext
+  address       String?
+  documentType  SupplierDocumentType @default(ruc)
+  ruc           String?              @unique @db.VarChar(11)
+  dni           String?              @unique @db.VarChar(8)
+  accountNumber String
+  bank          String
+  currency      Currency             @default(PEN)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  deletedAt     DateTime?
 
   purchaseOrders PurchaseOrder[]
 
@@ -944,16 +942,16 @@ model Supplier {
 }
 
 model CategoryResource {
-  categoryResourceId Int                @id @default(autoincrement())
+  categoryResourceId Int      @id @default(autoincrement())
   name               String
-  description        String?            @db.Text
+  description        String?  @db.Text
   parentCategoryId   Int?
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  parentCategory     CategoryResource?  @relation("CategoryResourceToCategoryResource", fields: [parentCategoryId], references: [categoryResourceId], onDelete: Restrict, onUpdate: Cascade)
-  subCategories      CategoryResource[] @relation("CategoryResourceToCategoryResource")
-  resources          Resource[]
+  parentCategory CategoryResource?  @relation("CategoryResourceToCategoryResource", fields: [parentCategoryId], references: [categoryResourceId], onDelete: Restrict, onUpdate: Cascade)
+  subCategories  CategoryResource[] @relation("CategoryResourceToCategoryResource")
+  resources      Resource[]
 
   @@unique([parentCategoryId, name])
   @@index([parentCategoryId])
@@ -961,16 +959,16 @@ model CategoryResource {
 }
 
 model Resource {
-  resourceId             Int                      @id @default(autoincrement())
-  name                   String
-  description            String?                  @db.Text
-  categoryResourceId     Int
-  unit                   String
-  createdAt              DateTime                 @default(now())
-  updatedAt              DateTime                 @updatedAt
-  deletedAt              DateTime?
+  resourceId         Int       @id @default(autoincrement())
+  name               String
+  description        String?   @db.Text
+  categoryResourceId Int
+  unit               String
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  deletedAt          DateTime?
 
-  categoryResource       CategoryResource         @relation(fields: [categoryResourceId], references: [categoryResourceId], onDelete: Restrict, onUpdate: Cascade)
+  categoryResource       CategoryResource        @relation(fields: [categoryResourceId], references: [categoryResourceId], onDelete: Restrict, onUpdate: Cascade)
   resourcePurchaseOrders ResourcePurchaseOrder[]
 
   @@unique([categoryResourceId, name])
@@ -1021,35 +1019,35 @@ model PurchaseOrderCondition {
 }
 
 model PurchaseOrder {
-  purchaseOrderId         Int                     @id @default(autoincrement())
-  code                    String                  @unique
-  deliveryLocation        String
-  destination             String
-  paymentConditions       String
-  generalConditions       String?                 @db.Text @default("No se especifican condiciones generales.")
-  qualityConditions       String?                 @db.Text @default("No se especifican condiciones de calidad.")
-  paymentMethod           PaymentMethod
-  saleAmount              Decimal                 @db.Decimal(18,2)
-  purchaseAmount          Decimal                 @db.Decimal(18,2)
-  status                  PurchaseOrderStatus     @default(pending)
-  carePerson              String
-  dniCarePerson           String                  @db.VarChar(8)
-  observations            String                  @db.Text @default("Sin observaciones.")
-  projectId               Int
-  supplierId              Int
-  logisticsManager        String?                 @default("Morayma Lloja Fernandez")
-  authorizer              String?                 @default("Henrry Gayoso Valdera")
-  administrativeManager   String?                 @default("Angi Gonzales Cotrina")
-  quotation               String                  @default("No se especifica cotización.")
-  purchaseOrderType       PurchaseOrderType       @default(materials)
-  createdAt               DateTime                @default(now())
-  updatedAt               DateTime                @updatedAt
+  purchaseOrderId       Int                 @id @default(autoincrement())
+  code                  String              @unique
+  deliveryLocation      String
+  destination           String
+  paymentConditions     String
+  generalConditions     String?             @default("No se especifican condiciones generales.") @db.Text
+  qualityConditions     String?             @default("No se especifican condiciones de calidad.") @db.Text
+  paymentMethod         PaymentMethod
+  saleAmount            Decimal             @db.Decimal(18, 2)
+  purchaseAmount        Decimal             @db.Decimal(18, 2)
+  status                PurchaseOrderStatus @default(pending)
+  carePerson            String
+  dniCarePerson         String              @db.VarChar(8)
+  observations          String              @default("Sin observaciones.") @db.Text
+  projectId             Int
+  supplierId            Int
+  logisticsManager      String?             @default("Morayma Lloja Fernandez")
+  authorizer            String?             @default("Henrry Gayoso Valdera")
+  administrativeManager String?             @default("Angi Gonzales Cotrina")
+  quotation             String              @default("No se especifica cotización.")
+  purchaseOrderType     PurchaseOrderType   @default(materials)
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
 
-  project                 Project                 @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  supplier                Supplier                @relation(fields: [supplierId], references: [supplierId], onDelete: Restrict, onUpdate: Cascade)
-  resources               ResourcePurchaseOrder[]
-  notifications           Notification[]
-  officeInventoryEntries  OfficeInventoryEntry[]
+  project                Project                 @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  supplier               Supplier                @relation(fields: [supplierId], references: [supplierId], onDelete: Restrict, onUpdate: Cascade)
+  resources              ResourcePurchaseOrder[]
+  notifications          Notification[]
+  officeInventoryEntries OfficeInventoryEntry[]
 
   @@index([status])
   @@index([projectId])
@@ -1058,18 +1056,18 @@ model PurchaseOrder {
 }
 
 model ResourcePurchaseOrder {
-  resourcePurchaseOrderId Int           @id @default(autoincrement())
+  resourcePurchaseOrderId Int      @id @default(autoincrement())
   purchaseOrderId         Int
   resourceId              Int
-  orderNumber             Int           @default(0)
-  quantity                Decimal       @db.Decimal(18,4)
-  unitSalesPrice          Decimal       @db.Decimal(18,4)
-  unitPurchasePrice       Decimal       @db.Decimal(18,6)
-  createdAt               DateTime      @default(now())
-  updatedAt               DateTime      @updatedAt
+  orderNumber             Int      @default(0)
+  quantity                Decimal  @db.Decimal(18, 4)
+  unitSalesPrice          Decimal  @db.Decimal(18, 4)
+  unitPurchasePrice       Decimal  @db.Decimal(18, 6)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
-  resource                Resource      @relation(fields: [resourceId], references: [resourceId],           onDelete: Restrict, onUpdate: Cascade)
-  purchaseOrder           PurchaseOrder @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: Cascade,  onUpdate: Cascade)
+  resource      Resource      @relation(fields: [resourceId], references: [resourceId], onDelete: Restrict, onUpdate: Cascade)
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([purchaseOrderId, resourceId])
   @@index([resourceId])
@@ -1087,147 +1085,176 @@ enum PettyCashType {
 }
 
 model PettyCash {
-  pettyCashId     Int             @id @default(autoincrement())
-  projectId       Int
-  amount          Decimal         @db.Decimal(18,2)
-  includesIgv     Boolean         @default(true)
-  description     String          @db.Text @default("Sin descripción")
-  expenseDate     DateTime        @default(now())
-  expenseType     PettyCashType   @default(other)
-  invoiceNumber   String?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  pettyCashId   Int           @id @default(autoincrement())
+  projectId     Int
+  amount        Decimal       @db.Decimal(18, 2)
+  includesIgv   Boolean       @default(true)
+  description   String        @default("Sin descripción") @db.Text
+  expenseDate   DateTime      @default(now())
+  expenseType   PettyCashType @default(other)
+  invoiceNumber String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-  project         Project         @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([projectId])
   @@index([expenseDate])
 }
 
 model ServiceSale {
-  serviceSaleId Int       @id @default(autoincrement())
+  serviceSaleId Int      @id @default(autoincrement())
   projectId     Int
   serviceName   String
-  amount        Decimal   @db.Decimal(18,2)
-  description   String    @db.Text @default("Sin descripción")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  amount        Decimal  @db.Decimal(18, 2)
+  description   String   @default("Sin descripción") @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  project       Project   @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([projectId])
   @@index([createdAt])
 }
 
 model PasswordResetToken {
-  id         Int        @id @default(autoincrement())
-  userId     Int
-  token      String     @unique
-  expiresAt  DateTime
-  used       Boolean    @default(false)
-  createdAt  DateTime   @default(now())
-  usedAt     DateTime?
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  token     String    @unique
+  expiresAt DateTime
+  used      Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  usedAt    DateTime?
 
-  user       User       @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([expiresAt])
   @@index([userId])
 }
 
 model BlacklistedToken {
-  id        Int       @id @default(autoincrement())
-  token     String    @unique
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
   expiresAt DateTime
   userId    Int?
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 
-  user      User?     @relation(fields: [userId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  user User? @relation(fields: [userId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
 
   @@index([expiresAt])
 }
 
 model Week {
-  weekId     Int      @id @default(autoincrement())
-  startDate  DateTime @unique
-  endDate    DateTime 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  weekId    Int      @id @default(autoincrement())
+  startDate DateTime @unique
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  weeklyWages WeeklyWage[]
-  attendances  Attendance[]
-  projectWeeklyPayrolls ProjectWeeklyPayroll[]
+  generalPayroll GeneralPayroll?
 
   @@index([startDate])
   @@index([endDate])
 }
 
-model ProjectWeeklyPayroll {
-  projectWeeklyPayrollId Int      @id @default(autoincrement())
-  projectId              Int
-  weekId                 Int
-  amount                 Decimal  @db.Decimal(18,2)
-  notes                  String?  @db.Text
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+enum GeneralPayrollWorkerGroup {
+  laborer
+  technician
+}
 
-  project Project @relation(fields: [projectId], references: [projectId], onDelete: Cascade, onUpdate: Cascade)
-  week    Week    @relation(fields: [weekId], references: [weekId], onDelete: Restrict, onUpdate: Cascade)
+model GeneralPayroll {
+  generalPayrollId Int      @id @default(autoincrement())
+  weekId           Int      @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  @@unique([projectId, weekId])
+  week     Week                    @relation(fields: [weekId], references: [weekId], onDelete: Cascade, onUpdate: Cascade)
+  projects GeneralPayrollProject[]
+  workers  GeneralPayrollWorker[]
+
+  @@index([createdAt])
+}
+
+model GeneralPayrollProject {
+  generalPayrollProjectId Int      @id @default(autoincrement())
+  generalPayrollId        Int
+  projectId               Int
+  displayOrder            Int      @default(0)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  generalPayroll GeneralPayroll        @relation(fields: [generalPayrollId], references: [generalPayrollId], onDelete: Cascade, onUpdate: Cascade)
+  project        Project               @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  entries        GeneralPayrollEntry[]
+
+  @@unique([generalPayrollId, projectId])
+  @@index([generalPayrollId, displayOrder])
   @@index([projectId])
-  @@index([weekId])
+}
+
+model GeneralPayrollWorker {
+  generalPayrollWorkerId Int                       @id @default(autoincrement())
+  generalPayrollId       Int
+  workerId               Int
+  group                  GeneralPayrollWorkerGroup
+  dailyWage              Decimal                   @default(0) @db.Decimal(18, 2)
+  additionalAmount       Decimal                   @default(0) @db.Decimal(18, 2)
+  liquidationAmount      Decimal                   @default(0) @db.Decimal(18, 2)
+  sundayDinnerAmount     Decimal                   @default(0) @db.Decimal(18, 2)
+  displayOrder           Int                       @default(0)
+  createdAt              DateTime                  @default(now())
+  updatedAt              DateTime                  @updatedAt
+
+  generalPayroll GeneralPayroll        @relation(fields: [generalPayrollId], references: [generalPayrollId], onDelete: Cascade, onUpdate: Cascade)
+  worker         Worker                @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  entries        GeneralPayrollEntry[]
+
+  @@unique([generalPayrollId, workerId])
+  @@index([generalPayrollId, group, displayOrder])
+  @@index([workerId])
+}
+
+model GeneralPayrollEntry {
+  generalPayrollEntryId   Int      @id @default(autoincrement())
+  generalPayrollProjectId Int
+  generalPayrollWorkerId  Int
+  monday                  Decimal  @default(0) @db.Decimal(6, 2)
+  tuesday                 Decimal  @default(0) @db.Decimal(6, 2)
+  wednesday               Decimal  @default(0) @db.Decimal(6, 2)
+  thursday                Decimal  @default(0) @db.Decimal(6, 2)
+  friday                  Decimal  @default(0) @db.Decimal(6, 2)
+  saturday                Decimal  @default(0) @db.Decimal(6, 2)
+  dominical               Decimal  @default(0) @db.Decimal(6, 2)
+  overtimeAmount          Decimal  @default(0) @db.Decimal(18, 2)
+  afpDiscount             Decimal  @default(0) @db.Decimal(18, 2)
+  advanceDiscount         Decimal  @default(0) @db.Decimal(18, 2)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  payrollProject GeneralPayrollProject @relation(fields: [generalPayrollProjectId], references: [generalPayrollProjectId], onDelete: Cascade, onUpdate: Cascade)
+  payrollWorker  GeneralPayrollWorker  @relation(fields: [generalPayrollWorkerId], references: [generalPayrollWorkerId], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([generalPayrollProjectId, generalPayrollWorkerId])
+  @@index([generalPayrollProjectId])
+  @@index([generalPayrollWorkerId])
 }
 
 model DailyWage {
-  dailyWageId       Int      @id @default(autoincrement())
-  workerId          Int
-  amount            Decimal  @db.Decimal(18,2)
+  dailyWageId Int     @id @default(autoincrement())
+  workerId    Int
+  amount      Decimal @db.Decimal(18, 2)
 
   // Vigencia desde una fecha específica (startDate de la semana)
-  validFromDate     DateTime @db.Date
+  validFromDate DateTime @db.Date
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
-  worker            Worker   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  worker Worker @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
 
   @@unique([workerId, validFromDate])
   @@index([workerId])
   @@index([validFromDate])
-}
-
-model WeeklyWage {
-  weeklyWageId    Int      @id @default(autoincrement())
-  workerId        Int
-  weekId          Int
-  grossAmount     Decimal  @db.Decimal(18,2)
-  totalAmount     Decimal  @db.Decimal(18,2)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  worker          Worker   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
-  week            Week     @relation(fields: [weekId], references: [weekId], onDelete: Cascade, onUpdate: Cascade)
-
-  @@unique([workerId, weekId])
-  @@index([weekId])
-  @@index([workerId])
-}
-
-model Attendance {
-  attendanceId Int      @id @default(autoincrement())
-  workerId     Int
-  projectId    Int
-  date         DateTime @db.Date
-  weekId       Int
-  createdAt    DateTime @default(now())
-
-  worker       Worker   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
-  project      Project  @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  week         Week     @relation(fields: [weekId], references: [weekId], onDelete: Cascade, onUpdate: Cascade)
-
-  @@unique([workerId, date])
-  @@index([workerId])
-  @@index([projectId])
 }
 
 // ==================== GESTIÓN DE TAREAS ====================
@@ -1247,23 +1274,23 @@ enum TaskPriority {
 }
 
 model Task {
-  taskId        Int            @id @default(autoincrement())
-  title         String
-  description   String?        @db.Text
-  status        TaskStatus     @default(pending)
-  priority      TaskPriority   @default(medium)
-  projectId     Int
-  parentTaskId  Int?           // Para subtareas
-  displayOrder  Int            @default(0) // Orden visual en el Gantt
-  startDate     DateTime?      // Fecha de inicio planificada (para Gantt)
-  dueDate       DateTime?      // Fecha de fin planificada
-  completedAt   DateTime?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  taskId       Int          @id @default(autoincrement())
+  title        String
+  description  String?      @db.Text
+  status       TaskStatus   @default(pending)
+  priority     TaskPriority @default(medium)
+  projectId    Int
+  parentTaskId Int? // Para subtareas
+  displayOrder Int          @default(0) // Orden visual en el Gantt
+  startDate    DateTime? // Fecha de inicio planificada (para Gantt)
+  dueDate      DateTime? // Fecha de fin planificada
+  completedAt  DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
-  project       Project        @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  parentTask    Task?          @relation("TaskSubtasks", fields: [parentTaskId], references: [taskId], onDelete: Cascade, onUpdate: Cascade)
-  subtasks      Task[]         @relation("TaskSubtasks")
+  project       Project          @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  parentTask    Task?            @relation("TaskSubtasks", fields: [parentTaskId], references: [taskId], onDelete: Cascade, onUpdate: Cascade)
+  subtasks      Task[]           @relation("TaskSubtasks")
   assignments   TaskAssignment[]
   notifications Notification[]
 
@@ -1276,13 +1303,13 @@ model Task {
 }
 
 model TaskAssignment {
-  taskAssignmentId Int       @id @default(autoincrement())
+  taskAssignmentId Int      @id @default(autoincrement())
   taskId           Int
   userId           Int
-  assignedAt       DateTime  @default(now())
+  assignedAt       DateTime @default(now())
 
-  task             Task      @relation(fields: [taskId], references: [taskId], onDelete: Cascade, onUpdate: Cascade)
-  user             User      @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  task Task @relation(fields: [taskId], references: [taskId], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
 
   @@unique([taskId, userId])
   @@index([taskId])
@@ -1300,59 +1327,59 @@ enum NotificationType {
   task_status_changed
   task_completed
   subtask_completed
-  
+
   // Solicitudes
   request_created
   request_approved
   request_rejected
   request_responded
   request_due_soon
-  
+
   // Emergencias
   emergency_created
   emergency_addressed
   emergency_rejected
-  
+
   // Órdenes de Compra
   purchase_order_pending
   purchase_order_authorized
   purchase_order_delivered
   purchase_order_cancelled
-  
+
   // Proyectos
   project_created
   project_completed
   project_inactivated
-  
+
   // Sistema
   system_reminder
 }
 
 model Notification {
-  notificationId  Int              @id @default(autoincrement())
-  userId          Int
-  type            NotificationType
-  title           String
-  message         String           @db.Text
-  url             String?          // URL para navegación directa
-  isRead          Boolean          @default(false)
-  readAt          DateTime?
-  
+  notificationId Int              @id @default(autoincrement())
+  userId         Int
+  type           NotificationType
+  title          String
+  message        String           @db.Text
+  url            String? // URL para navegación directa
+  isRead         Boolean          @default(false)
+  readAt         DateTime?
+
   // Referencias opcionales para navegación
   taskId          Int?
   requestId       Int?
   emergencyId     Int?
   purchaseOrderId Int?
   projectId       Int?
-  
-  createdAt       DateTime         @default(now())
 
-  user            User             @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  task            Task?            @relation(fields: [taskId], references: [taskId], onDelete: SetNull)
-  request         Request?         @relation(fields: [requestId], references: [requestId], onDelete: SetNull)
-  emergency       Emergency?       @relation(fields: [emergencyId], references: [emergencyId], onDelete: SetNull)
-  purchaseOrder   PurchaseOrder?   @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: SetNull)
-  project         Project?         @relation(fields: [projectId], references: [projectId], onDelete: SetNull)
+  createdAt DateTime @default(now())
+
+  user          User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  task          Task?          @relation(fields: [taskId], references: [taskId], onDelete: SetNull)
+  request       Request?       @relation(fields: [requestId], references: [requestId], onDelete: SetNull)
+  emergency     Emergency?     @relation(fields: [emergencyId], references: [emergencyId], onDelete: SetNull)
+  purchaseOrder PurchaseOrder? @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: SetNull)
+  project       Project?       @relation(fields: [projectId], references: [projectId], onDelete: SetNull)
 
   @@index([userId])
   @@index([isRead])
@@ -1365,13 +1392,13 @@ model Client {
   name        String
   contactName String
   phone       String?  @unique
-  email       String?  @db.Citext @unique
+  email       String?  @unique @db.Citext
   address     String?
   ruc         String   @unique @db.VarChar(11)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  quotations  Quotation[]
+  quotations Quotation[]
 }
 
 enum QuotationStatus {
@@ -1382,21 +1409,21 @@ enum QuotationStatus {
 }
 
 model Quotation {
-  quotationId         Int             @id @default(autoincrement())
-  code                String          @unique
-  serviceDescription  String          @db.Text @default("Sin descripción del servicio.")
-  clientId            Int
-  status              QuotationStatus @default(draft)
-  commercialTerms     String?         @db.Text
-  costDirectAmount    Decimal         @db.Decimal(18,2)
-  igvRate             Decimal         @db.Decimal(5,4) @default(0.18)
-  igvAmount           Decimal         @db.Decimal(18,2)
-  totalAmount         Decimal         @db.Decimal(18,2)
-  createdAt           DateTime        @default(now())
-  updatedAt           DateTime        @updatedAt
+  quotationId        Int             @id @default(autoincrement())
+  code               String          @unique
+  serviceDescription String          @default("Sin descripción del servicio.") @db.Text
+  clientId           Int
+  status             QuotationStatus @default(draft)
+  commercialTerms    String?         @db.Text
+  costDirectAmount   Decimal         @db.Decimal(18, 2)
+  igvRate            Decimal         @default(0.18) @db.Decimal(5, 4)
+  igvAmount          Decimal         @db.Decimal(18, 2)
+  totalAmount        Decimal         @db.Decimal(18, 2)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 
-  client              Client          @relation(fields: [clientId], references: [clientId], onDelete: Restrict, onUpdate: Cascade)
-  items               QuotationItem[]
+  client Client          @relation(fields: [clientId], references: [clientId], onDelete: Restrict, onUpdate: Cascade)
+  items  QuotationItem[]
 
   @@index([clientId])
   @@index([status])
@@ -1408,17 +1435,17 @@ model QuotationItem {
   orderNumber     Int      @default(0)
   description     String
   unit            String
-  quantity        Decimal  @db.Decimal(18,4)
-  unitPrice       Decimal  @db.Decimal(18,2)
-  lineTotal       Decimal  @db.Decimal(18,2)
+  quantity        Decimal  @db.Decimal(18, 4)
+  unitPrice       Decimal  @db.Decimal(18, 2)
+  lineTotal       Decimal  @db.Decimal(18, 2)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  quotation       Quotation @relation(fields: [quotationId], references: [quotationId], onDelete: Cascade, onUpdate: Cascade)
+  quotation Quotation @relation(fields: [quotationId], references: [quotationId], onDelete: Cascade, onUpdate: Cascade)
 
+  @@unique([quotationId, orderNumber])
   @@index([quotationId])
   @@index([orderNumber])
-  @@unique([quotationId, orderNumber])
 }
 
 enum ExpiringDocumentHistoryAction {
@@ -1435,48 +1462,48 @@ enum ExpiringDocumentAlertLevel {
 }
 
 model ExpiringDocumentCategory {
-  expiringDocumentCategoryId Int      @id @default(autoincrement())
-  name                       String   @unique
-  description                String?  @db.Text
-  alertDaysFirst             Int      @default(30)
-  alertDaysSecond            Int      @default(15)
-  alertDaysThird             Int      @default(7)
-  notificationEmails         String[] @default([])
-  emailNotificationsEnabled  Boolean  @default(true)
-  createdAt                  DateTime @default(now())
-  updatedAt                  DateTime @updatedAt
+  expiringDocumentCategoryId Int       @id @default(autoincrement())
+  name                       String    @unique
+  description                String?   @db.Text
+  alertDaysFirst             Int       @default(30)
+  alertDaysSecond            Int       @default(15)
+  alertDaysThird             Int       @default(7)
+  notificationEmails         String[]  @default([])
+  emailNotificationsEnabled  Boolean   @default(true)
+  createdAt                  DateTime  @default(now())
+  updatedAt                  DateTime  @updatedAt
   deletedAt                  DateTime?
 
-  documents                  ExpiringDocument[]
+  documents ExpiringDocument[]
 
   @@index([deletedAt])
   @@index([name])
 }
 
 model ExpiringDocument {
-  expiringDocumentId         Int      @id @default(autoincrement())
-  categoryId                 Int
-  title                      String
-  documentCode               String?
-  referenceType              String
-  referenceDescription       String   @db.Text
-  storageSpace               String
-  storagePath                String?  @db.Text
-  storageDescription         String?  @db.Text
-  issueDate                  DateTime? @db.Date
-  expirationDate             DateTime  @db.Date
-  notes                      String?  @db.Text
-  createdByUserId            Int
-  updatedByUserId            Int
-  createdAt                  DateTime @default(now())
-  updatedAt                  DateTime @updatedAt
-  deletedAt                  DateTime?
+  expiringDocumentId   Int       @id @default(autoincrement())
+  categoryId           Int
+  title                String
+  documentCode         String?
+  referenceType        String
+  referenceDescription String    @db.Text
+  storageSpace         String
+  storagePath          String?   @db.Text
+  storageDescription   String?   @db.Text
+  issueDate            DateTime? @db.Date
+  expirationDate       DateTime  @db.Date
+  notes                String?   @db.Text
+  createdByUserId      Int
+  updatedByUserId      Int
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  deletedAt            DateTime?
 
-  category                   ExpiringDocumentCategory @relation(fields: [categoryId], references: [expiringDocumentCategoryId], onDelete: Restrict, onUpdate: Cascade)
-  createdBy                  User @relation("ExpiringDocumentCreatedBy", fields: [createdByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  updatedBy                  User @relation("ExpiringDocumentUpdatedBy", fields: [updatedByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  history                    ExpiringDocumentHistory[]
-  notifications              ExpiringDocumentNotification[]
+  category      ExpiringDocumentCategory       @relation(fields: [categoryId], references: [expiringDocumentCategoryId], onDelete: Restrict, onUpdate: Cascade)
+  createdBy     User                           @relation("ExpiringDocumentCreatedBy", fields: [createdByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  updatedBy     User                           @relation("ExpiringDocumentUpdatedBy", fields: [updatedByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  history       ExpiringDocumentHistory[]
+  notifications ExpiringDocumentNotification[]
 
   @@index([categoryId])
   @@index([expirationDate])
@@ -1486,15 +1513,15 @@ model ExpiringDocument {
 }
 
 model ExpiringDocumentHistory {
-  expiringDocumentHistoryId Int                            @id @default(autoincrement())
+  expiringDocumentHistoryId Int                           @id @default(autoincrement())
   expiringDocumentId        Int
   changedByUserId           Int
   action                    ExpiringDocumentHistoryAction
   snapshot                  Json
-  createdAt                 DateTime                       @default(now())
+  createdAt                 DateTime                      @default(now())
 
-  document                  ExpiringDocument @relation(fields: [expiringDocumentId], references: [expiringDocumentId], onDelete: Cascade, onUpdate: Cascade)
-  changedBy                 User @relation(fields: [changedByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  document  ExpiringDocument @relation(fields: [expiringDocumentId], references: [expiringDocumentId], onDelete: Cascade, onUpdate: Cascade)
+  changedBy User             @relation(fields: [changedByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([expiringDocumentId, createdAt])
   @@index([changedByUserId])
@@ -1508,7 +1535,7 @@ model ExpiringDocumentNotification {
   recipients                     String[]
   sentAt                         DateTime                   @default(now())
 
-  document                       ExpiringDocument @relation(fields: [expiringDocumentId], references: [expiringDocumentId], onDelete: Cascade, onUpdate: Cascade)
+  document ExpiringDocument @relation(fields: [expiringDocumentId], references: [expiringDocumentId], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([expiringDocumentId, alertLevel, expirationDate])
   @@index([sentAt])

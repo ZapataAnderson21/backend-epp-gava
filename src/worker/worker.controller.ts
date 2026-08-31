@@ -51,11 +51,6 @@ export class WorkerController {
     return this.workerService.findOne(id);
   }
 
-  @Get('totals/:projectId')
-  getTotals(@Param('projectId', ParseIntPipe) projectId: number) {
-    return this.workerService.getProjectPayrollTotals(projectId);
-  }
-
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,

@@ -23,11 +23,9 @@ import { ServiceSaleModule } from './service-sale/service-sale.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './user/jwt/jwt.auth.guard';
 import { UserTypesGuard } from './guards/user-types.guard';
-import { AttendanceModule } from './attendance/attendance.module';
 import { WeekModule } from './week/week.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DailyWageModule } from './daily-wage/daily-wage.module';
-import { WeeklyWageModule } from './weekly-wage/weekly-wage.module';
 import { TaskModule } from './task/task.module';
 import { NotificationModule } from './notification/notification.module';
 import { QuotationModule } from './quotation/quotation.module';
@@ -37,7 +35,7 @@ import { InventoryModule } from './inventory/inventory.module';
 import { ElementRequestWorkerPlanModule } from './element_request_worker_plan/element_request_worker_plan.module';
 import { ExpiringDocumentModule } from './expiring-document/expiring-document.module';
 import { PurchaseOrderConditionModule } from './purchase-order-condition/purchase-order-condition.module';
-import { ProjectWeeklyPayrollModule } from './project-weekly-payroll/project-weekly-payroll.module';
+import { GeneralPayrollModule } from './general-payroll/general-payroll.module';
 
 @Module({
   imports: [
@@ -60,11 +58,9 @@ import { ProjectWeeklyPayrollModule } from './project-weekly-payroll/project-wee
     ResourcePurchaseOrderModule,
     PettyCashModule,
     ServiceSaleModule,
-    AttendanceModule,
     ScheduleModule.forRoot(),
     WeekModule,
     DailyWageModule,
-    WeeklyWageModule,
     TaskModule,
     NotificationModule,
     QuotationModule,
@@ -74,7 +70,7 @@ import { ProjectWeeklyPayrollModule } from './project-weekly-payroll/project-wee
     ElementRequestWorkerPlanModule,
     ExpiringDocumentModule,
     PurchaseOrderConditionModule,
-    ProjectWeeklyPayrollModule,
+    GeneralPayrollModule,
   ],
   controllers: [],
   providers: [

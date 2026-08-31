@@ -10,10 +10,7 @@ import { UpdateWorkerDto } from './dto/update-worker.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { emptyToNull } from 'src/common/util/strings.util';
 import { WorkerTypeLabelEs, type WorkerType } from './enum/worker-type.enum';
-import {
-  buildPaginatedData,
-  getPaginationArgs,
-} from 'src/common/pagination';
+import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
 import { ListWorkersQueryDto } from './dto/list-workers-query.dto';
 
 @Injectable()
@@ -88,9 +85,6 @@ export class WorkerService {
       },
       orderBy: {
         fullName: 'asc',
-      },
-      include: {
-        attendances: true,
       },
     });
 
@@ -188,9 +182,6 @@ export class WorkerService {
       },
       orderBy: {
         fullName: 'asc',
-      },
-      include: {
-        attendances: true,
       },
     });
 
@@ -342,95 +333,5 @@ export class WorkerService {
 
     this.logger.log(`Worker found successfully: ${JSON.stringify(worker)}`);
     return worker;
-  }
-
-  async getProjectPayrollTotals(projectId: number) {
-    this.logger.log(
-      `Calculando totales de planilla para projectId=${projectId}`,
-    );
-
-    // 1) Contar asistencias por trabajador en el proyecto
-    const attendanceByWorker = await this.prismaService.attendance.groupBy({
-      by: ['workerId'],
-      where: { projectId },
-      _count: { attendanceId: true },
-    });
-
-    if (attendanceByWorker.length === 0) {
-      this.logger.warn(`No hay asistencias en el proyecto ${projectId}`);
-      return {
-        message: 'No hay asistencias registradas para este proyecto.',
-        statusCode: HttpStatus.OK,
-        data: {
-          laborerAmount: 0,
-          technicianAmount: 0,
-          totalAmount: 0,
-        },
-      };
-    }
-
-    const workerIds = attendanceByWorker.map((a) => a.workerId);
-
-    // 2) Traer tipo de trabajador y su dailyWage vigente (último validFromDate <= hoy)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const workers = await this.prismaService.worker.findMany({
-      where: {
-        workerId: { in: workerIds },
-        deletedAt: null,
-      },
-      select: {
-        workerId: true,
-        workerType: true,
-        dailyWages: {
-          where: {
-            validFromDate: { lte: today },
-          },
-          orderBy: { validFromDate: 'desc' },
-          take: 1,
-          select: { amount: true },
-        },
-      },
-    });
-
-    // 3) Indexar worker -> {type, wage}
-    const byId = new Map<number, { type: string; wage: number }>();
-    for (const w of workers) {
-      const wage = w.dailyWages[0]?.amount ?? 0; // Prisma Decimal o undefined
-      const wageNum = typeof wage === 'number' ? wage : Number(wage);
-      byId.set(w.workerId, { type: w.workerType, wage: wageNum || 0 });
-    }
-
-    // 4) Acumular montos por tipo
-    let laborerAmount = 0;
-    let technicianAmount = 0;
-
-    for (const row of attendanceByWorker) {
-      const info = byId.get(row.workerId);
-      if (!info) continue; // trabajador borrado o sin wage vigente
-
-      const count = row._count.attendanceId;
-      const subtotal = count * info.wage;
-
-      if (info.type === 'laborer') {
-        laborerAmount += subtotal;
-      } else if (info.type === 'technician') {
-        technicianAmount += subtotal;
-      }
-      // Si quieres considerar otros tipos (engineer, etc.), agrega más ramas aquí.
-    }
-
-    const totalAmount = laborerAmount + technicianAmount;
-
-    return {
-      message: 'Totales de planilla calculados correctamente.',
-      statusCode: HttpStatus.OK,
-      data: {
-        laborerAmount: Number(laborerAmount.toFixed(2)),
-        technicianAmount: Number(technicianAmount.toFixed(2)),
-        totalAmount: Number(totalAmount.toFixed(2)),
-      },
-    };
   }
 }

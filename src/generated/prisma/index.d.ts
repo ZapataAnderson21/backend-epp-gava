@@ -234,25 +234,30 @@ export type BlacklistedToken = $Result.DefaultSelection<Prisma.$BlacklistedToken
  */
 export type Week = $Result.DefaultSelection<Prisma.$WeekPayload>
 /**
- * Model ProjectWeeklyPayroll
+ * Model GeneralPayroll
  * 
  */
-export type ProjectWeeklyPayroll = $Result.DefaultSelection<Prisma.$ProjectWeeklyPayrollPayload>
+export type GeneralPayroll = $Result.DefaultSelection<Prisma.$GeneralPayrollPayload>
+/**
+ * Model GeneralPayrollProject
+ * 
+ */
+export type GeneralPayrollProject = $Result.DefaultSelection<Prisma.$GeneralPayrollProjectPayload>
+/**
+ * Model GeneralPayrollWorker
+ * 
+ */
+export type GeneralPayrollWorker = $Result.DefaultSelection<Prisma.$GeneralPayrollWorkerPayload>
+/**
+ * Model GeneralPayrollEntry
+ * 
+ */
+export type GeneralPayrollEntry = $Result.DefaultSelection<Prisma.$GeneralPayrollEntryPayload>
 /**
  * Model DailyWage
  * 
  */
 export type DailyWage = $Result.DefaultSelection<Prisma.$DailyWagePayload>
-/**
- * Model WeeklyWage
- * 
- */
-export type WeeklyWage = $Result.DefaultSelection<Prisma.$WeeklyWagePayload>
-/**
- * Model Attendance
- * 
- */
-export type Attendance = $Result.DefaultSelection<Prisma.$AttendancePayload>
 /**
  * Model Task
  * 
@@ -562,6 +567,14 @@ export const PettyCashType: {
 export type PettyCashType = (typeof PettyCashType)[keyof typeof PettyCashType]
 
 
+export const GeneralPayrollWorkerGroup: {
+  laborer: 'laborer',
+  technician: 'technician'
+};
+
+export type GeneralPayrollWorkerGroup = (typeof GeneralPayrollWorkerGroup)[keyof typeof GeneralPayrollWorkerGroup]
+
+
 export const TaskStatus: {
   pending: 'pending',
   in_progress: 'in_progress',
@@ -744,6 +757,10 @@ export const PurchaseOrderConditionType: typeof $Enums.PurchaseOrderConditionTyp
 export type PettyCashType = $Enums.PettyCashType
 
 export const PettyCashType: typeof $Enums.PettyCashType
+
+export type GeneralPayrollWorkerGroup = $Enums.GeneralPayrollWorkerGroup
+
+export const GeneralPayrollWorkerGroup: typeof $Enums.GeneralPayrollWorkerGroup
 
 export type TaskStatus = $Enums.TaskStatus
 
@@ -1327,14 +1344,44 @@ export class PrismaClient<
   get week(): Prisma.WeekDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.projectWeeklyPayroll`: Exposes CRUD operations for the **ProjectWeeklyPayroll** model.
+   * `prisma.generalPayroll`: Exposes CRUD operations for the **GeneralPayroll** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more ProjectWeeklyPayrolls
-    * const projectWeeklyPayrolls = await prisma.projectWeeklyPayroll.findMany()
+    * // Fetch zero or more GeneralPayrolls
+    * const generalPayrolls = await prisma.generalPayroll.findMany()
     * ```
     */
-  get projectWeeklyPayroll(): Prisma.ProjectWeeklyPayrollDelegate<ExtArgs, ClientOptions>;
+  get generalPayroll(): Prisma.GeneralPayrollDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.generalPayrollProject`: Exposes CRUD operations for the **GeneralPayrollProject** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GeneralPayrollProjects
+    * const generalPayrollProjects = await prisma.generalPayrollProject.findMany()
+    * ```
+    */
+  get generalPayrollProject(): Prisma.GeneralPayrollProjectDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.generalPayrollWorker`: Exposes CRUD operations for the **GeneralPayrollWorker** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GeneralPayrollWorkers
+    * const generalPayrollWorkers = await prisma.generalPayrollWorker.findMany()
+    * ```
+    */
+  get generalPayrollWorker(): Prisma.GeneralPayrollWorkerDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.generalPayrollEntry`: Exposes CRUD operations for the **GeneralPayrollEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GeneralPayrollEntries
+    * const generalPayrollEntries = await prisma.generalPayrollEntry.findMany()
+    * ```
+    */
+  get generalPayrollEntry(): Prisma.GeneralPayrollEntryDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.dailyWage`: Exposes CRUD operations for the **DailyWage** model.
@@ -1345,26 +1392,6 @@ export class PrismaClient<
     * ```
     */
   get dailyWage(): Prisma.DailyWageDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.weeklyWage`: Exposes CRUD operations for the **WeeklyWage** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more WeeklyWages
-    * const weeklyWages = await prisma.weeklyWage.findMany()
-    * ```
-    */
-  get weeklyWage(): Prisma.WeeklyWageDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.attendance`: Exposes CRUD operations for the **Attendance** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Attendances
-    * const attendances = await prisma.attendance.findMany()
-    * ```
-    */
-  get attendance(): Prisma.AttendanceDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.task`: Exposes CRUD operations for the **Task** model.
@@ -1943,10 +1970,11 @@ export namespace Prisma {
     PasswordResetToken: 'PasswordResetToken',
     BlacklistedToken: 'BlacklistedToken',
     Week: 'Week',
-    ProjectWeeklyPayroll: 'ProjectWeeklyPayroll',
+    GeneralPayroll: 'GeneralPayroll',
+    GeneralPayrollProject: 'GeneralPayrollProject',
+    GeneralPayrollWorker: 'GeneralPayrollWorker',
+    GeneralPayrollEntry: 'GeneralPayrollEntry',
     DailyWage: 'DailyWage',
-    WeeklyWage: 'WeeklyWage',
-    Attendance: 'Attendance',
     Task: 'Task',
     TaskAssignment: 'TaskAssignment',
     Notification: 'Notification',
@@ -1972,7 +2000,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userType" | "userUserType" | "project" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "complaint" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrderCondition" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "week" | "projectWeeklyPayroll" | "dailyWage" | "weeklyWage" | "attendance" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem" | "expiringDocumentCategory" | "expiringDocument" | "expiringDocumentHistory" | "expiringDocumentNotification"
+      modelProps: "user" | "userType" | "userUserType" | "project" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "complaint" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrderCondition" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "week" | "generalPayroll" | "generalPayrollProject" | "generalPayrollWorker" | "generalPayrollEntry" | "dailyWage" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem" | "expiringDocumentCategory" | "expiringDocument" | "expiringDocumentHistory" | "expiringDocumentNotification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5232,77 +5260,299 @@ export namespace Prisma {
           }
         }
       }
-      ProjectWeeklyPayroll: {
-        payload: Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>
-        fields: Prisma.ProjectWeeklyPayrollFieldRefs
+      GeneralPayroll: {
+        payload: Prisma.$GeneralPayrollPayload<ExtArgs>
+        fields: Prisma.GeneralPayrollFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.ProjectWeeklyPayrollFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload> | null
+            args: Prisma.GeneralPayrollFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.ProjectWeeklyPayrollFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload>
+            args: Prisma.GeneralPayrollFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload>
           }
           findFirst: {
-            args: Prisma.ProjectWeeklyPayrollFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload> | null
+            args: Prisma.GeneralPayrollFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.ProjectWeeklyPayrollFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload>
+            args: Prisma.GeneralPayrollFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload>
           }
           findMany: {
-            args: Prisma.ProjectWeeklyPayrollFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload>[]
+            args: Prisma.GeneralPayrollFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload>[]
           }
           create: {
-            args: Prisma.ProjectWeeklyPayrollCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload>
+            args: Prisma.GeneralPayrollCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload>
           }
           createMany: {
-            args: Prisma.ProjectWeeklyPayrollCreateManyArgs<ExtArgs>
+            args: Prisma.GeneralPayrollCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.ProjectWeeklyPayrollCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload>[]
+            args: Prisma.GeneralPayrollCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload>[]
           }
           delete: {
-            args: Prisma.ProjectWeeklyPayrollDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload>
+            args: Prisma.GeneralPayrollDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload>
           }
           update: {
-            args: Prisma.ProjectWeeklyPayrollUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload>
+            args: Prisma.GeneralPayrollUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload>
           }
           deleteMany: {
-            args: Prisma.ProjectWeeklyPayrollDeleteManyArgs<ExtArgs>
+            args: Prisma.GeneralPayrollDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.ProjectWeeklyPayrollUpdateManyArgs<ExtArgs>
+            args: Prisma.GeneralPayrollUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.ProjectWeeklyPayrollUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload>[]
+            args: Prisma.GeneralPayrollUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload>[]
           }
           upsert: {
-            args: Prisma.ProjectWeeklyPayrollUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProjectWeeklyPayrollPayload>
+            args: Prisma.GeneralPayrollUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollPayload>
           }
           aggregate: {
-            args: Prisma.ProjectWeeklyPayrollAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateProjectWeeklyPayroll>
+            args: Prisma.GeneralPayrollAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGeneralPayroll>
           }
           groupBy: {
-            args: Prisma.ProjectWeeklyPayrollGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ProjectWeeklyPayrollGroupByOutputType>[]
+            args: Prisma.GeneralPayrollGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GeneralPayrollGroupByOutputType>[]
           }
           count: {
-            args: Prisma.ProjectWeeklyPayrollCountArgs<ExtArgs>
-            result: $Utils.Optional<ProjectWeeklyPayrollCountAggregateOutputType> | number
+            args: Prisma.GeneralPayrollCountArgs<ExtArgs>
+            result: $Utils.Optional<GeneralPayrollCountAggregateOutputType> | number
+          }
+        }
+      }
+      GeneralPayrollProject: {
+        payload: Prisma.$GeneralPayrollProjectPayload<ExtArgs>
+        fields: Prisma.GeneralPayrollProjectFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GeneralPayrollProjectFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GeneralPayrollProjectFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload>
+          }
+          findFirst: {
+            args: Prisma.GeneralPayrollProjectFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GeneralPayrollProjectFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload>
+          }
+          findMany: {
+            args: Prisma.GeneralPayrollProjectFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload>[]
+          }
+          create: {
+            args: Prisma.GeneralPayrollProjectCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload>
+          }
+          createMany: {
+            args: Prisma.GeneralPayrollProjectCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GeneralPayrollProjectCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload>[]
+          }
+          delete: {
+            args: Prisma.GeneralPayrollProjectDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload>
+          }
+          update: {
+            args: Prisma.GeneralPayrollProjectUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload>
+          }
+          deleteMany: {
+            args: Prisma.GeneralPayrollProjectDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GeneralPayrollProjectUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GeneralPayrollProjectUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload>[]
+          }
+          upsert: {
+            args: Prisma.GeneralPayrollProjectUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollProjectPayload>
+          }
+          aggregate: {
+            args: Prisma.GeneralPayrollProjectAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGeneralPayrollProject>
+          }
+          groupBy: {
+            args: Prisma.GeneralPayrollProjectGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GeneralPayrollProjectGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GeneralPayrollProjectCountArgs<ExtArgs>
+            result: $Utils.Optional<GeneralPayrollProjectCountAggregateOutputType> | number
+          }
+        }
+      }
+      GeneralPayrollWorker: {
+        payload: Prisma.$GeneralPayrollWorkerPayload<ExtArgs>
+        fields: Prisma.GeneralPayrollWorkerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GeneralPayrollWorkerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GeneralPayrollWorkerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload>
+          }
+          findFirst: {
+            args: Prisma.GeneralPayrollWorkerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GeneralPayrollWorkerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload>
+          }
+          findMany: {
+            args: Prisma.GeneralPayrollWorkerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload>[]
+          }
+          create: {
+            args: Prisma.GeneralPayrollWorkerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload>
+          }
+          createMany: {
+            args: Prisma.GeneralPayrollWorkerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GeneralPayrollWorkerCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload>[]
+          }
+          delete: {
+            args: Prisma.GeneralPayrollWorkerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload>
+          }
+          update: {
+            args: Prisma.GeneralPayrollWorkerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload>
+          }
+          deleteMany: {
+            args: Prisma.GeneralPayrollWorkerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GeneralPayrollWorkerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GeneralPayrollWorkerUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload>[]
+          }
+          upsert: {
+            args: Prisma.GeneralPayrollWorkerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollWorkerPayload>
+          }
+          aggregate: {
+            args: Prisma.GeneralPayrollWorkerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGeneralPayrollWorker>
+          }
+          groupBy: {
+            args: Prisma.GeneralPayrollWorkerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GeneralPayrollWorkerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GeneralPayrollWorkerCountArgs<ExtArgs>
+            result: $Utils.Optional<GeneralPayrollWorkerCountAggregateOutputType> | number
+          }
+        }
+      }
+      GeneralPayrollEntry: {
+        payload: Prisma.$GeneralPayrollEntryPayload<ExtArgs>
+        fields: Prisma.GeneralPayrollEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GeneralPayrollEntryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GeneralPayrollEntryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.GeneralPayrollEntryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GeneralPayrollEntryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload>
+          }
+          findMany: {
+            args: Prisma.GeneralPayrollEntryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload>[]
+          }
+          create: {
+            args: Prisma.GeneralPayrollEntryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload>
+          }
+          createMany: {
+            args: Prisma.GeneralPayrollEntryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GeneralPayrollEntryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload>[]
+          }
+          delete: {
+            args: Prisma.GeneralPayrollEntryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload>
+          }
+          update: {
+            args: Prisma.GeneralPayrollEntryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.GeneralPayrollEntryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GeneralPayrollEntryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GeneralPayrollEntryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload>[]
+          }
+          upsert: {
+            args: Prisma.GeneralPayrollEntryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GeneralPayrollEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.GeneralPayrollEntryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGeneralPayrollEntry>
+          }
+          groupBy: {
+            args: Prisma.GeneralPayrollEntryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GeneralPayrollEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GeneralPayrollEntryCountArgs<ExtArgs>
+            result: $Utils.Optional<GeneralPayrollEntryCountAggregateOutputType> | number
           }
         }
       }
@@ -5377,154 +5627,6 @@ export namespace Prisma {
           count: {
             args: Prisma.DailyWageCountArgs<ExtArgs>
             result: $Utils.Optional<DailyWageCountAggregateOutputType> | number
-          }
-        }
-      }
-      WeeklyWage: {
-        payload: Prisma.$WeeklyWagePayload<ExtArgs>
-        fields: Prisma.WeeklyWageFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.WeeklyWageFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.WeeklyWageFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload>
-          }
-          findFirst: {
-            args: Prisma.WeeklyWageFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.WeeklyWageFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload>
-          }
-          findMany: {
-            args: Prisma.WeeklyWageFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload>[]
-          }
-          create: {
-            args: Prisma.WeeklyWageCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload>
-          }
-          createMany: {
-            args: Prisma.WeeklyWageCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.WeeklyWageCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload>[]
-          }
-          delete: {
-            args: Prisma.WeeklyWageDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload>
-          }
-          update: {
-            args: Prisma.WeeklyWageUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload>
-          }
-          deleteMany: {
-            args: Prisma.WeeklyWageDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.WeeklyWageUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.WeeklyWageUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload>[]
-          }
-          upsert: {
-            args: Prisma.WeeklyWageUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WeeklyWagePayload>
-          }
-          aggregate: {
-            args: Prisma.WeeklyWageAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateWeeklyWage>
-          }
-          groupBy: {
-            args: Prisma.WeeklyWageGroupByArgs<ExtArgs>
-            result: $Utils.Optional<WeeklyWageGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.WeeklyWageCountArgs<ExtArgs>
-            result: $Utils.Optional<WeeklyWageCountAggregateOutputType> | number
-          }
-        }
-      }
-      Attendance: {
-        payload: Prisma.$AttendancePayload<ExtArgs>
-        fields: Prisma.AttendanceFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.AttendanceFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.AttendanceFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
-          }
-          findFirst: {
-            args: Prisma.AttendanceFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.AttendanceFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
-          }
-          findMany: {
-            args: Prisma.AttendanceFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>[]
-          }
-          create: {
-            args: Prisma.AttendanceCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
-          }
-          createMany: {
-            args: Prisma.AttendanceCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.AttendanceCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>[]
-          }
-          delete: {
-            args: Prisma.AttendanceDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
-          }
-          update: {
-            args: Prisma.AttendanceUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
-          }
-          deleteMany: {
-            args: Prisma.AttendanceDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.AttendanceUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.AttendanceUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>[]
-          }
-          upsert: {
-            args: Prisma.AttendanceUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
-          }
-          aggregate: {
-            args: Prisma.AttendanceAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateAttendance>
-          }
-          groupBy: {
-            args: Prisma.AttendanceGroupByArgs<ExtArgs>
-            result: $Utils.Optional<AttendanceGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.AttendanceCountArgs<ExtArgs>
-            result: $Utils.Optional<AttendanceCountAggregateOutputType> | number
           }
         }
       }
@@ -6404,10 +6506,11 @@ export namespace Prisma {
     passwordResetToken?: PasswordResetTokenOmit
     blacklistedToken?: BlacklistedTokenOmit
     week?: WeekOmit
-    projectWeeklyPayroll?: ProjectWeeklyPayrollOmit
+    generalPayroll?: GeneralPayrollOmit
+    generalPayrollProject?: GeneralPayrollProjectOmit
+    generalPayrollWorker?: GeneralPayrollWorkerOmit
+    generalPayrollEntry?: GeneralPayrollEntryOmit
     dailyWage?: DailyWageOmit
-    weeklyWage?: WeeklyWageOmit
-    attendance?: AttendanceOmit
     task?: TaskOmit
     taskAssignment?: TaskAssignmentOmit
     notification?: NotificationOmit
@@ -6736,8 +6839,7 @@ export namespace Prisma {
     purchaseOrders: number
     pettyCashes: number
     serviceSales: number
-    attendances: number
-    weeklyPayrolls: number
+    generalPayrollProjects: number
     tasks: number
     notifications: number
     inventoryEntries: number
@@ -6752,8 +6854,7 @@ export namespace Prisma {
     purchaseOrders?: boolean | ProjectCountOutputTypeCountPurchaseOrdersArgs
     pettyCashes?: boolean | ProjectCountOutputTypeCountPettyCashesArgs
     serviceSales?: boolean | ProjectCountOutputTypeCountServiceSalesArgs
-    attendances?: boolean | ProjectCountOutputTypeCountAttendancesArgs
-    weeklyPayrolls?: boolean | ProjectCountOutputTypeCountWeeklyPayrollsArgs
+    generalPayrollProjects?: boolean | ProjectCountOutputTypeCountGeneralPayrollProjectsArgs
     tasks?: boolean | ProjectCountOutputTypeCountTasksArgs
     notifications?: boolean | ProjectCountOutputTypeCountNotificationsArgs
     inventoryEntries?: boolean | ProjectCountOutputTypeCountInventoryEntriesArgs
@@ -6811,15 +6912,8 @@ export namespace Prisma {
   /**
    * ProjectCountOutputType without action
    */
-  export type ProjectCountOutputTypeCountAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttendanceWhereInput
-  }
-
-  /**
-   * ProjectCountOutputType without action
-   */
-  export type ProjectCountOutputTypeCountWeeklyPayrollsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProjectWeeklyPayrollWhereInput
+  export type ProjectCountOutputTypeCountGeneralPayrollProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GeneralPayrollProjectWhereInput
   }
 
   /**
@@ -7566,9 +7660,8 @@ export namespace Prisma {
 
   export type WorkerCountOutputType = {
     requestWorkers: number
-    weeklyWages: number
-    attendances: number
     dailyWages: number
+    generalPayrollWorkers: number
     monthlyEvaluations: number
     inventoryMovements: number
     currentInventoryAssets: number
@@ -7577,9 +7670,8 @@ export namespace Prisma {
 
   export type WorkerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     requestWorkers?: boolean | WorkerCountOutputTypeCountRequestWorkersArgs
-    weeklyWages?: boolean | WorkerCountOutputTypeCountWeeklyWagesArgs
-    attendances?: boolean | WorkerCountOutputTypeCountAttendancesArgs
     dailyWages?: boolean | WorkerCountOutputTypeCountDailyWagesArgs
+    generalPayrollWorkers?: boolean | WorkerCountOutputTypeCountGeneralPayrollWorkersArgs
     monthlyEvaluations?: boolean | WorkerCountOutputTypeCountMonthlyEvaluationsArgs
     inventoryMovements?: boolean | WorkerCountOutputTypeCountInventoryMovementsArgs
     currentInventoryAssets?: boolean | WorkerCountOutputTypeCountCurrentInventoryAssetsArgs
@@ -7607,22 +7699,15 @@ export namespace Prisma {
   /**
    * WorkerCountOutputType without action
    */
-  export type WorkerCountOutputTypeCountWeeklyWagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: WeeklyWageWhereInput
-  }
-
-  /**
-   * WorkerCountOutputType without action
-   */
-  export type WorkerCountOutputTypeCountAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttendanceWhereInput
-  }
-
-  /**
-   * WorkerCountOutputType without action
-   */
   export type WorkerCountOutputTypeCountDailyWagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DailyWageWhereInput
+  }
+
+  /**
+   * WorkerCountOutputType without action
+   */
+  export type WorkerCountOutputTypeCountGeneralPayrollWorkersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GeneralPayrollWorkerWhereInput
   }
 
   /**
@@ -8001,51 +8086,104 @@ export namespace Prisma {
 
 
   /**
-   * Count Type WeekCountOutputType
+   * Count Type GeneralPayrollCountOutputType
    */
 
-  export type WeekCountOutputType = {
-    weeklyWages: number
-    attendances: number
-    projectWeeklyPayrolls: number
+  export type GeneralPayrollCountOutputType = {
+    projects: number
+    workers: number
   }
 
-  export type WeekCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    weeklyWages?: boolean | WeekCountOutputTypeCountWeeklyWagesArgs
-    attendances?: boolean | WeekCountOutputTypeCountAttendancesArgs
-    projectWeeklyPayrolls?: boolean | WeekCountOutputTypeCountProjectWeeklyPayrollsArgs
+  export type GeneralPayrollCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    projects?: boolean | GeneralPayrollCountOutputTypeCountProjectsArgs
+    workers?: boolean | GeneralPayrollCountOutputTypeCountWorkersArgs
   }
 
   // Custom InputTypes
   /**
-   * WeekCountOutputType without action
+   * GeneralPayrollCountOutputType without action
    */
-  export type WeekCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WeekCountOutputType
+     * Select specific fields to fetch from the GeneralPayrollCountOutputType
      */
-    select?: WeekCountOutputTypeSelect<ExtArgs> | null
+    select?: GeneralPayrollCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * WeekCountOutputType without action
+   * GeneralPayrollCountOutputType without action
    */
-  export type WeekCountOutputTypeCountWeeklyWagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: WeeklyWageWhereInput
+  export type GeneralPayrollCountOutputTypeCountProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GeneralPayrollProjectWhereInput
   }
 
   /**
-   * WeekCountOutputType without action
+   * GeneralPayrollCountOutputType without action
    */
-  export type WeekCountOutputTypeCountAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttendanceWhereInput
+  export type GeneralPayrollCountOutputTypeCountWorkersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GeneralPayrollWorkerWhereInput
+  }
+
+
+  /**
+   * Count Type GeneralPayrollProjectCountOutputType
+   */
+
+  export type GeneralPayrollProjectCountOutputType = {
+    entries: number
+  }
+
+  export type GeneralPayrollProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    entries?: boolean | GeneralPayrollProjectCountOutputTypeCountEntriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * GeneralPayrollProjectCountOutputType without action
+   */
+  export type GeneralPayrollProjectCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProjectCountOutputType
+     */
+    select?: GeneralPayrollProjectCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * WeekCountOutputType without action
+   * GeneralPayrollProjectCountOutputType without action
    */
-  export type WeekCountOutputTypeCountProjectWeeklyPayrollsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProjectWeeklyPayrollWhereInput
+  export type GeneralPayrollProjectCountOutputTypeCountEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GeneralPayrollEntryWhereInput
+  }
+
+
+  /**
+   * Count Type GeneralPayrollWorkerCountOutputType
+   */
+
+  export type GeneralPayrollWorkerCountOutputType = {
+    entries: number
+  }
+
+  export type GeneralPayrollWorkerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    entries?: boolean | GeneralPayrollWorkerCountOutputTypeCountEntriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * GeneralPayrollWorkerCountOutputType without action
+   */
+  export type GeneralPayrollWorkerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorkerCountOutputType
+     */
+    select?: GeneralPayrollWorkerCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * GeneralPayrollWorkerCountOutputType without action
+   */
+  export type GeneralPayrollWorkerCountOutputTypeCountEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GeneralPayrollEntryWhereInput
   }
 
 
@@ -12321,8 +12459,7 @@ export namespace Prisma {
     purchaseOrders?: boolean | Project$purchaseOrdersArgs<ExtArgs>
     pettyCashes?: boolean | Project$pettyCashesArgs<ExtArgs>
     serviceSales?: boolean | Project$serviceSalesArgs<ExtArgs>
-    attendances?: boolean | Project$attendancesArgs<ExtArgs>
-    weeklyPayrolls?: boolean | Project$weeklyPayrollsArgs<ExtArgs>
+    generalPayrollProjects?: boolean | Project$generalPayrollProjectsArgs<ExtArgs>
     tasks?: boolean | Project$tasksArgs<ExtArgs>
     notifications?: boolean | Project$notificationsArgs<ExtArgs>
     inventoryEntries?: boolean | Project$inventoryEntriesArgs<ExtArgs>
@@ -12381,8 +12518,7 @@ export namespace Prisma {
     purchaseOrders?: boolean | Project$purchaseOrdersArgs<ExtArgs>
     pettyCashes?: boolean | Project$pettyCashesArgs<ExtArgs>
     serviceSales?: boolean | Project$serviceSalesArgs<ExtArgs>
-    attendances?: boolean | Project$attendancesArgs<ExtArgs>
-    weeklyPayrolls?: boolean | Project$weeklyPayrollsArgs<ExtArgs>
+    generalPayrollProjects?: boolean | Project$generalPayrollProjectsArgs<ExtArgs>
     tasks?: boolean | Project$tasksArgs<ExtArgs>
     notifications?: boolean | Project$notificationsArgs<ExtArgs>
     inventoryEntries?: boolean | Project$inventoryEntriesArgs<ExtArgs>
@@ -12402,8 +12538,7 @@ export namespace Prisma {
       purchaseOrders: Prisma.$PurchaseOrderPayload<ExtArgs>[]
       pettyCashes: Prisma.$PettyCashPayload<ExtArgs>[]
       serviceSales: Prisma.$ServiceSalePayload<ExtArgs>[]
-      attendances: Prisma.$AttendancePayload<ExtArgs>[]
-      weeklyPayrolls: Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>[]
+      generalPayrollProjects: Prisma.$GeneralPayrollProjectPayload<ExtArgs>[]
       tasks: Prisma.$TaskPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       inventoryEntries: Prisma.$ProjectInventoryEntryPayload<ExtArgs>[]
@@ -12822,8 +12957,7 @@ export namespace Prisma {
     purchaseOrders<T extends Project$purchaseOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Project$purchaseOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pettyCashes<T extends Project$pettyCashesArgs<ExtArgs> = {}>(args?: Subset<T, Project$pettyCashesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PettyCashPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     serviceSales<T extends Project$serviceSalesArgs<ExtArgs> = {}>(args?: Subset<T, Project$serviceSalesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    attendances<T extends Project$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, Project$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    weeklyPayrolls<T extends Project$weeklyPayrollsArgs<ExtArgs> = {}>(args?: Subset<T, Project$weeklyPayrollsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    generalPayrollProjects<T extends Project$generalPayrollProjectsArgs<ExtArgs> = {}>(args?: Subset<T, Project$generalPayrollProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tasks<T extends Project$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Project$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends Project$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Project$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     inventoryEntries<T extends Project$inventoryEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Project$inventoryEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectInventoryEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -13378,51 +13512,27 @@ export namespace Prisma {
   }
 
   /**
-   * Project.attendances
+   * Project.generalPayrollProjects
    */
-  export type Project$attendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Project$generalPayrollProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Attendance
+     * Select specific fields to fetch from the GeneralPayrollProject
      */
-    select?: AttendanceSelect<ExtArgs> | null
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Attendance
+     * Omit specific fields from the GeneralPayrollProject
      */
-    omit?: AttendanceOmit<ExtArgs> | null
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AttendanceInclude<ExtArgs> | null
-    where?: AttendanceWhereInput
-    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
-    cursor?: AttendanceWhereUniqueInput
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    where?: GeneralPayrollProjectWhereInput
+    orderBy?: GeneralPayrollProjectOrderByWithRelationInput | GeneralPayrollProjectOrderByWithRelationInput[]
+    cursor?: GeneralPayrollProjectWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
-  }
-
-  /**
-   * Project.weeklyPayrolls
-   */
-  export type Project$weeklyPayrollsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
-     */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProjectWeeklyPayroll
-     */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
-    where?: ProjectWeeklyPayrollWhereInput
-    orderBy?: ProjectWeeklyPayrollOrderByWithRelationInput | ProjectWeeklyPayrollOrderByWithRelationInput[]
-    cursor?: ProjectWeeklyPayrollWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProjectWeeklyPayrollScalarFieldEnum | ProjectWeeklyPayrollScalarFieldEnum[]
+    distinct?: GeneralPayrollProjectScalarFieldEnum | GeneralPayrollProjectScalarFieldEnum[]
   }
 
   /**
@@ -40314,9 +40424,8 @@ export namespace Prisma {
     updatedAt?: boolean
     deletedAt?: boolean
     requestWorkers?: boolean | Worker$requestWorkersArgs<ExtArgs>
-    weeklyWages?: boolean | Worker$weeklyWagesArgs<ExtArgs>
-    attendances?: boolean | Worker$attendancesArgs<ExtArgs>
     dailyWages?: boolean | Worker$dailyWagesArgs<ExtArgs>
+    generalPayrollWorkers?: boolean | Worker$generalPayrollWorkersArgs<ExtArgs>
     monthlyEvaluations?: boolean | Worker$monthlyEvaluationsArgs<ExtArgs>
     inventoryMovements?: boolean | Worker$inventoryMovementsArgs<ExtArgs>
     currentInventoryAssets?: boolean | Worker$currentInventoryAssetsArgs<ExtArgs>
@@ -40369,9 +40478,8 @@ export namespace Prisma {
   export type WorkerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"workerId" | "fullName" | "dni" | "phone" | "personalEmail" | "address" | "birthDate" | "workerType" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["worker"]>
   export type WorkerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     requestWorkers?: boolean | Worker$requestWorkersArgs<ExtArgs>
-    weeklyWages?: boolean | Worker$weeklyWagesArgs<ExtArgs>
-    attendances?: boolean | Worker$attendancesArgs<ExtArgs>
     dailyWages?: boolean | Worker$dailyWagesArgs<ExtArgs>
+    generalPayrollWorkers?: boolean | Worker$generalPayrollWorkersArgs<ExtArgs>
     monthlyEvaluations?: boolean | Worker$monthlyEvaluationsArgs<ExtArgs>
     inventoryMovements?: boolean | Worker$inventoryMovementsArgs<ExtArgs>
     currentInventoryAssets?: boolean | Worker$currentInventoryAssetsArgs<ExtArgs>
@@ -40385,9 +40493,8 @@ export namespace Prisma {
     name: "Worker"
     objects: {
       requestWorkers: Prisma.$RequestWorkerPayload<ExtArgs>[]
-      weeklyWages: Prisma.$WeeklyWagePayload<ExtArgs>[]
-      attendances: Prisma.$AttendancePayload<ExtArgs>[]
       dailyWages: Prisma.$DailyWagePayload<ExtArgs>[]
+      generalPayrollWorkers: Prisma.$GeneralPayrollWorkerPayload<ExtArgs>[]
       monthlyEvaluations: Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>[]
       inventoryMovements: Prisma.$InventoryMovementPayload<ExtArgs>[]
       currentInventoryAssets: Prisma.$InventoryAssetPayload<ExtArgs>[]
@@ -40800,9 +40907,8 @@ export namespace Prisma {
   export interface Prisma__WorkerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     requestWorkers<T extends Worker$requestWorkersArgs<ExtArgs> = {}>(args?: Subset<T, Worker$requestWorkersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestWorkerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    weeklyWages<T extends Worker$weeklyWagesArgs<ExtArgs> = {}>(args?: Subset<T, Worker$weeklyWagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    attendances<T extends Worker$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, Worker$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dailyWages<T extends Worker$dailyWagesArgs<ExtArgs> = {}>(args?: Subset<T, Worker$dailyWagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyWagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    generalPayrollWorkers<T extends Worker$generalPayrollWorkersArgs<ExtArgs> = {}>(args?: Subset<T, Worker$generalPayrollWorkersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     monthlyEvaluations<T extends Worker$monthlyEvaluationsArgs<ExtArgs> = {}>(args?: Subset<T, Worker$monthlyEvaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkerMonthlyEvaluationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     inventoryMovements<T extends Worker$inventoryMovementsArgs<ExtArgs> = {}>(args?: Subset<T, Worker$inventoryMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     currentInventoryAssets<T extends Worker$currentInventoryAssetsArgs<ExtArgs> = {}>(args?: Subset<T, Worker$currentInventoryAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -41259,54 +41365,6 @@ export namespace Prisma {
   }
 
   /**
-   * Worker.weeklyWages
-   */
-  export type Worker$weeklyWagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    where?: WeeklyWageWhereInput
-    orderBy?: WeeklyWageOrderByWithRelationInput | WeeklyWageOrderByWithRelationInput[]
-    cursor?: WeeklyWageWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: WeeklyWageScalarFieldEnum | WeeklyWageScalarFieldEnum[]
-  }
-
-  /**
-   * Worker.attendances
-   */
-  export type Worker$attendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    where?: AttendanceWhereInput
-    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
-    cursor?: AttendanceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
-  }
-
-  /**
    * Worker.dailyWages
    */
   export type Worker$dailyWagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -41328,6 +41386,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DailyWageScalarFieldEnum | DailyWageScalarFieldEnum[]
+  }
+
+  /**
+   * Worker.generalPayrollWorkers
+   */
+  export type Worker$generalPayrollWorkersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    where?: GeneralPayrollWorkerWhereInput
+    orderBy?: GeneralPayrollWorkerOrderByWithRelationInput | GeneralPayrollWorkerOrderByWithRelationInput[]
+    cursor?: GeneralPayrollWorkerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GeneralPayrollWorkerScalarFieldEnum | GeneralPayrollWorkerScalarFieldEnum[]
   }
 
   /**
@@ -62087,10 +62169,7 @@ export namespace Prisma {
     endDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    weeklyWages?: boolean | Week$weeklyWagesArgs<ExtArgs>
-    attendances?: boolean | Week$attendancesArgs<ExtArgs>
-    projectWeeklyPayrolls?: boolean | Week$projectWeeklyPayrollsArgs<ExtArgs>
-    _count?: boolean | WeekCountOutputTypeDefaultArgs<ExtArgs>
+    generalPayroll?: boolean | Week$generalPayrollArgs<ExtArgs>
   }, ExtArgs["result"]["week"]>
 
   export type WeekSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -62119,10 +62198,7 @@ export namespace Prisma {
 
   export type WeekOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"weekId" | "startDate" | "endDate" | "createdAt" | "updatedAt", ExtArgs["result"]["week"]>
   export type WeekInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    weeklyWages?: boolean | Week$weeklyWagesArgs<ExtArgs>
-    attendances?: boolean | Week$attendancesArgs<ExtArgs>
-    projectWeeklyPayrolls?: boolean | Week$projectWeeklyPayrollsArgs<ExtArgs>
-    _count?: boolean | WeekCountOutputTypeDefaultArgs<ExtArgs>
+    generalPayroll?: boolean | Week$generalPayrollArgs<ExtArgs>
   }
   export type WeekIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
   export type WeekIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -62130,9 +62206,7 @@ export namespace Prisma {
   export type $WeekPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Week"
     objects: {
-      weeklyWages: Prisma.$WeeklyWagePayload<ExtArgs>[]
-      attendances: Prisma.$AttendancePayload<ExtArgs>[]
-      projectWeeklyPayrolls: Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>[]
+      generalPayroll: Prisma.$GeneralPayrollPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       weekId: number
@@ -62534,9 +62608,7 @@ export namespace Prisma {
    */
   export interface Prisma__WeekClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    weeklyWages<T extends Week$weeklyWagesArgs<ExtArgs> = {}>(args?: Subset<T, Week$weeklyWagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    attendances<T extends Week$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, Week$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    projectWeeklyPayrolls<T extends Week$projectWeeklyPayrollsArgs<ExtArgs> = {}>(args?: Subset<T, Week$projectWeeklyPayrollsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    generalPayroll<T extends Week$generalPayrollArgs<ExtArgs> = {}>(args?: Subset<T, Week$generalPayrollArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -62959,75 +63031,22 @@ export namespace Prisma {
   }
 
   /**
-   * Week.weeklyWages
+   * Week.generalPayroll
    */
-  export type Week$weeklyWagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Week$generalPayrollArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the WeeklyWage
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: WeeklyWageSelect<ExtArgs> | null
+    select?: GeneralPayrollSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the WeeklyWage
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: WeeklyWageOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    where?: WeeklyWageWhereInput
-    orderBy?: WeeklyWageOrderByWithRelationInput | WeeklyWageOrderByWithRelationInput[]
-    cursor?: WeeklyWageWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: WeeklyWageScalarFieldEnum | WeeklyWageScalarFieldEnum[]
-  }
-
-  /**
-   * Week.attendances
-   */
-  export type Week$attendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    where?: AttendanceWhereInput
-    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
-    cursor?: AttendanceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
-  }
-
-  /**
-   * Week.projectWeeklyPayrolls
-   */
-  export type Week$projectWeeklyPayrollsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
-     */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProjectWeeklyPayroll
-     */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
-    where?: ProjectWeeklyPayrollWhereInput
-    orderBy?: ProjectWeeklyPayrollOrderByWithRelationInput | ProjectWeeklyPayrollOrderByWithRelationInput[]
-    cursor?: ProjectWeeklyPayrollWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProjectWeeklyPayrollScalarFieldEnum | ProjectWeeklyPayrollScalarFieldEnum[]
+    include?: GeneralPayrollInclude<ExtArgs> | null
+    where?: GeneralPayrollWhereInput
   }
 
   /**
@@ -63050,428 +63069,385 @@ export namespace Prisma {
 
 
   /**
-   * Model ProjectWeeklyPayroll
+   * Model GeneralPayroll
    */
 
-  export type AggregateProjectWeeklyPayroll = {
-    _count: ProjectWeeklyPayrollCountAggregateOutputType | null
-    _avg: ProjectWeeklyPayrollAvgAggregateOutputType | null
-    _sum: ProjectWeeklyPayrollSumAggregateOutputType | null
-    _min: ProjectWeeklyPayrollMinAggregateOutputType | null
-    _max: ProjectWeeklyPayrollMaxAggregateOutputType | null
+  export type AggregateGeneralPayroll = {
+    _count: GeneralPayrollCountAggregateOutputType | null
+    _avg: GeneralPayrollAvgAggregateOutputType | null
+    _sum: GeneralPayrollSumAggregateOutputType | null
+    _min: GeneralPayrollMinAggregateOutputType | null
+    _max: GeneralPayrollMaxAggregateOutputType | null
   }
 
-  export type ProjectWeeklyPayrollAvgAggregateOutputType = {
-    projectWeeklyPayrollId: number | null
-    projectId: number | null
+  export type GeneralPayrollAvgAggregateOutputType = {
+    generalPayrollId: number | null
     weekId: number | null
-    amount: Decimal | null
   }
 
-  export type ProjectWeeklyPayrollSumAggregateOutputType = {
-    projectWeeklyPayrollId: number | null
-    projectId: number | null
+  export type GeneralPayrollSumAggregateOutputType = {
+    generalPayrollId: number | null
     weekId: number | null
-    amount: Decimal | null
   }
 
-  export type ProjectWeeklyPayrollMinAggregateOutputType = {
-    projectWeeklyPayrollId: number | null
-    projectId: number | null
+  export type GeneralPayrollMinAggregateOutputType = {
+    generalPayrollId: number | null
     weekId: number | null
-    amount: Decimal | null
-    notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
-  export type ProjectWeeklyPayrollMaxAggregateOutputType = {
-    projectWeeklyPayrollId: number | null
-    projectId: number | null
+  export type GeneralPayrollMaxAggregateOutputType = {
+    generalPayrollId: number | null
     weekId: number | null
-    amount: Decimal | null
-    notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
-  export type ProjectWeeklyPayrollCountAggregateOutputType = {
-    projectWeeklyPayrollId: number
-    projectId: number
+  export type GeneralPayrollCountAggregateOutputType = {
+    generalPayrollId: number
     weekId: number
-    amount: number
-    notes: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
 
-  export type ProjectWeeklyPayrollAvgAggregateInputType = {
-    projectWeeklyPayrollId?: true
-    projectId?: true
+  export type GeneralPayrollAvgAggregateInputType = {
+    generalPayrollId?: true
     weekId?: true
-    amount?: true
   }
 
-  export type ProjectWeeklyPayrollSumAggregateInputType = {
-    projectWeeklyPayrollId?: true
-    projectId?: true
+  export type GeneralPayrollSumAggregateInputType = {
+    generalPayrollId?: true
     weekId?: true
-    amount?: true
   }
 
-  export type ProjectWeeklyPayrollMinAggregateInputType = {
-    projectWeeklyPayrollId?: true
-    projectId?: true
+  export type GeneralPayrollMinAggregateInputType = {
+    generalPayrollId?: true
     weekId?: true
-    amount?: true
-    notes?: true
     createdAt?: true
     updatedAt?: true
   }
 
-  export type ProjectWeeklyPayrollMaxAggregateInputType = {
-    projectWeeklyPayrollId?: true
-    projectId?: true
+  export type GeneralPayrollMaxAggregateInputType = {
+    generalPayrollId?: true
     weekId?: true
-    amount?: true
-    notes?: true
     createdAt?: true
     updatedAt?: true
   }
 
-  export type ProjectWeeklyPayrollCountAggregateInputType = {
-    projectWeeklyPayrollId?: true
-    projectId?: true
+  export type GeneralPayrollCountAggregateInputType = {
+    generalPayrollId?: true
     weekId?: true
-    amount?: true
-    notes?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
   }
 
-  export type ProjectWeeklyPayrollAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ProjectWeeklyPayroll to aggregate.
+     * Filter which GeneralPayroll to aggregate.
      */
-    where?: ProjectWeeklyPayrollWhereInput
+    where?: GeneralPayrollWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ProjectWeeklyPayrolls to fetch.
+     * Determine the order of GeneralPayrolls to fetch.
      */
-    orderBy?: ProjectWeeklyPayrollOrderByWithRelationInput | ProjectWeeklyPayrollOrderByWithRelationInput[]
+    orderBy?: GeneralPayrollOrderByWithRelationInput | GeneralPayrollOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ProjectWeeklyPayrollWhereUniqueInput
+    cursor?: GeneralPayrollWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ProjectWeeklyPayrolls from the position of the cursor.
+     * Take `±n` GeneralPayrolls from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ProjectWeeklyPayrolls.
+     * Skip the first `n` GeneralPayrolls.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned ProjectWeeklyPayrolls
+     * Count returned GeneralPayrolls
     **/
-    _count?: true | ProjectWeeklyPayrollCountAggregateInputType
+    _count?: true | GeneralPayrollCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: ProjectWeeklyPayrollAvgAggregateInputType
+    _avg?: GeneralPayrollAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: ProjectWeeklyPayrollSumAggregateInputType
+    _sum?: GeneralPayrollSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ProjectWeeklyPayrollMinAggregateInputType
+    _min?: GeneralPayrollMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ProjectWeeklyPayrollMaxAggregateInputType
+    _max?: GeneralPayrollMaxAggregateInputType
   }
 
-  export type GetProjectWeeklyPayrollAggregateType<T extends ProjectWeeklyPayrollAggregateArgs> = {
-        [P in keyof T & keyof AggregateProjectWeeklyPayroll]: P extends '_count' | 'count'
+  export type GetGeneralPayrollAggregateType<T extends GeneralPayrollAggregateArgs> = {
+        [P in keyof T & keyof AggregateGeneralPayroll]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateProjectWeeklyPayroll[P]>
-      : GetScalarType<T[P], AggregateProjectWeeklyPayroll[P]>
+        : GetScalarType<T[P], AggregateGeneralPayroll[P]>
+      : GetScalarType<T[P], AggregateGeneralPayroll[P]>
   }
 
 
 
 
-  export type ProjectWeeklyPayrollGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProjectWeeklyPayrollWhereInput
-    orderBy?: ProjectWeeklyPayrollOrderByWithAggregationInput | ProjectWeeklyPayrollOrderByWithAggregationInput[]
-    by: ProjectWeeklyPayrollScalarFieldEnum[] | ProjectWeeklyPayrollScalarFieldEnum
-    having?: ProjectWeeklyPayrollScalarWhereWithAggregatesInput
+  export type GeneralPayrollGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GeneralPayrollWhereInput
+    orderBy?: GeneralPayrollOrderByWithAggregationInput | GeneralPayrollOrderByWithAggregationInput[]
+    by: GeneralPayrollScalarFieldEnum[] | GeneralPayrollScalarFieldEnum
+    having?: GeneralPayrollScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ProjectWeeklyPayrollCountAggregateInputType | true
-    _avg?: ProjectWeeklyPayrollAvgAggregateInputType
-    _sum?: ProjectWeeklyPayrollSumAggregateInputType
-    _min?: ProjectWeeklyPayrollMinAggregateInputType
-    _max?: ProjectWeeklyPayrollMaxAggregateInputType
+    _count?: GeneralPayrollCountAggregateInputType | true
+    _avg?: GeneralPayrollAvgAggregateInputType
+    _sum?: GeneralPayrollSumAggregateInputType
+    _min?: GeneralPayrollMinAggregateInputType
+    _max?: GeneralPayrollMaxAggregateInputType
   }
 
-  export type ProjectWeeklyPayrollGroupByOutputType = {
-    projectWeeklyPayrollId: number
-    projectId: number
+  export type GeneralPayrollGroupByOutputType = {
+    generalPayrollId: number
     weekId: number
-    amount: Decimal
-    notes: string | null
     createdAt: Date
     updatedAt: Date
-    _count: ProjectWeeklyPayrollCountAggregateOutputType | null
-    _avg: ProjectWeeklyPayrollAvgAggregateOutputType | null
-    _sum: ProjectWeeklyPayrollSumAggregateOutputType | null
-    _min: ProjectWeeklyPayrollMinAggregateOutputType | null
-    _max: ProjectWeeklyPayrollMaxAggregateOutputType | null
+    _count: GeneralPayrollCountAggregateOutputType | null
+    _avg: GeneralPayrollAvgAggregateOutputType | null
+    _sum: GeneralPayrollSumAggregateOutputType | null
+    _min: GeneralPayrollMinAggregateOutputType | null
+    _max: GeneralPayrollMaxAggregateOutputType | null
   }
 
-  type GetProjectWeeklyPayrollGroupByPayload<T extends ProjectWeeklyPayrollGroupByArgs> = Prisma.PrismaPromise<
+  type GetGeneralPayrollGroupByPayload<T extends GeneralPayrollGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<ProjectWeeklyPayrollGroupByOutputType, T['by']> &
+      PickEnumerable<GeneralPayrollGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ProjectWeeklyPayrollGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof GeneralPayrollGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ProjectWeeklyPayrollGroupByOutputType[P]>
-            : GetScalarType<T[P], ProjectWeeklyPayrollGroupByOutputType[P]>
+              : GetScalarType<T[P], GeneralPayrollGroupByOutputType[P]>
+            : GetScalarType<T[P], GeneralPayrollGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ProjectWeeklyPayrollSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    projectWeeklyPayrollId?: boolean
-    projectId?: boolean
+  export type GeneralPayrollSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollId?: boolean
     weekId?: boolean
-    amount?: boolean
-    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
     week?: boolean | WeekDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["projectWeeklyPayroll"]>
+    projects?: boolean | GeneralPayroll$projectsArgs<ExtArgs>
+    workers?: boolean | GeneralPayroll$workersArgs<ExtArgs>
+    _count?: boolean | GeneralPayrollCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["generalPayroll"]>
 
-  export type ProjectWeeklyPayrollSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    projectWeeklyPayrollId?: boolean
-    projectId?: boolean
+  export type GeneralPayrollSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollId?: boolean
     weekId?: boolean
-    amount?: boolean
-    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
     week?: boolean | WeekDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["projectWeeklyPayroll"]>
+  }, ExtArgs["result"]["generalPayroll"]>
 
-  export type ProjectWeeklyPayrollSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    projectWeeklyPayrollId?: boolean
-    projectId?: boolean
+  export type GeneralPayrollSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollId?: boolean
     weekId?: boolean
-    amount?: boolean
-    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
     week?: boolean | WeekDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["projectWeeklyPayroll"]>
+  }, ExtArgs["result"]["generalPayroll"]>
 
-  export type ProjectWeeklyPayrollSelectScalar = {
-    projectWeeklyPayrollId?: boolean
-    projectId?: boolean
+  export type GeneralPayrollSelectScalar = {
+    generalPayrollId?: boolean
     weekId?: boolean
-    amount?: boolean
-    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProjectWeeklyPayrollOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"projectWeeklyPayrollId" | "projectId" | "weekId" | "amount" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["projectWeeklyPayroll"]>
-  export type ProjectWeeklyPayrollInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  export type GeneralPayrollOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"generalPayrollId" | "weekId" | "createdAt" | "updatedAt", ExtArgs["result"]["generalPayroll"]>
+  export type GeneralPayrollInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    week?: boolean | WeekDefaultArgs<ExtArgs>
+    projects?: boolean | GeneralPayroll$projectsArgs<ExtArgs>
+    workers?: boolean | GeneralPayroll$workersArgs<ExtArgs>
+    _count?: boolean | GeneralPayrollCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type GeneralPayrollIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     week?: boolean | WeekDefaultArgs<ExtArgs>
   }
-  export type ProjectWeeklyPayrollIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }
-  export type ProjectWeeklyPayrollIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  export type GeneralPayrollIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     week?: boolean | WeekDefaultArgs<ExtArgs>
   }
 
-  export type $ProjectWeeklyPayrollPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ProjectWeeklyPayroll"
+  export type $GeneralPayrollPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GeneralPayroll"
     objects: {
-      project: Prisma.$ProjectPayload<ExtArgs>
       week: Prisma.$WeekPayload<ExtArgs>
+      projects: Prisma.$GeneralPayrollProjectPayload<ExtArgs>[]
+      workers: Prisma.$GeneralPayrollWorkerPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      projectWeeklyPayrollId: number
-      projectId: number
+      generalPayrollId: number
       weekId: number
-      amount: Prisma.Decimal
-      notes: string | null
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["projectWeeklyPayroll"]>
+    }, ExtArgs["result"]["generalPayroll"]>
     composites: {}
   }
 
-  type ProjectWeeklyPayrollGetPayload<S extends boolean | null | undefined | ProjectWeeklyPayrollDefaultArgs> = $Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload, S>
+  type GeneralPayrollGetPayload<S extends boolean | null | undefined | GeneralPayrollDefaultArgs> = $Result.GetResult<Prisma.$GeneralPayrollPayload, S>
 
-  type ProjectWeeklyPayrollCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ProjectWeeklyPayrollFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ProjectWeeklyPayrollCountAggregateInputType | true
+  type GeneralPayrollCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GeneralPayrollFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GeneralPayrollCountAggregateInputType | true
     }
 
-  export interface ProjectWeeklyPayrollDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProjectWeeklyPayroll'], meta: { name: 'ProjectWeeklyPayroll' } }
+  export interface GeneralPayrollDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GeneralPayroll'], meta: { name: 'GeneralPayroll' } }
     /**
-     * Find zero or one ProjectWeeklyPayroll that matches the filter.
-     * @param {ProjectWeeklyPayrollFindUniqueArgs} args - Arguments to find a ProjectWeeklyPayroll
+     * Find zero or one GeneralPayroll that matches the filter.
+     * @param {GeneralPayrollFindUniqueArgs} args - Arguments to find a GeneralPayroll
      * @example
-     * // Get one ProjectWeeklyPayroll
-     * const projectWeeklyPayroll = await prisma.projectWeeklyPayroll.findUnique({
+     * // Get one GeneralPayroll
+     * const generalPayroll = await prisma.generalPayroll.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends ProjectWeeklyPayrollFindUniqueArgs>(args: SelectSubset<T, ProjectWeeklyPayrollFindUniqueArgs<ExtArgs>>): Prisma__ProjectWeeklyPayrollClient<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends GeneralPayrollFindUniqueArgs>(args: SelectSubset<T, GeneralPayrollFindUniqueArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one ProjectWeeklyPayroll that matches the filter or throw an error with `error.code='P2025'`
+     * Find one GeneralPayroll that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {ProjectWeeklyPayrollFindUniqueOrThrowArgs} args - Arguments to find a ProjectWeeklyPayroll
+     * @param {GeneralPayrollFindUniqueOrThrowArgs} args - Arguments to find a GeneralPayroll
      * @example
-     * // Get one ProjectWeeklyPayroll
-     * const projectWeeklyPayroll = await prisma.projectWeeklyPayroll.findUniqueOrThrow({
+     * // Get one GeneralPayroll
+     * const generalPayroll = await prisma.generalPayroll.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ProjectWeeklyPayrollFindUniqueOrThrowArgs>(args: SelectSubset<T, ProjectWeeklyPayrollFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProjectWeeklyPayrollClient<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends GeneralPayrollFindUniqueOrThrowArgs>(args: SelectSubset<T, GeneralPayrollFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first ProjectWeeklyPayroll that matches the filter.
+     * Find the first GeneralPayroll that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProjectWeeklyPayrollFindFirstArgs} args - Arguments to find a ProjectWeeklyPayroll
+     * @param {GeneralPayrollFindFirstArgs} args - Arguments to find a GeneralPayroll
      * @example
-     * // Get one ProjectWeeklyPayroll
-     * const projectWeeklyPayroll = await prisma.projectWeeklyPayroll.findFirst({
+     * // Get one GeneralPayroll
+     * const generalPayroll = await prisma.generalPayroll.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends ProjectWeeklyPayrollFindFirstArgs>(args?: SelectSubset<T, ProjectWeeklyPayrollFindFirstArgs<ExtArgs>>): Prisma__ProjectWeeklyPayrollClient<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends GeneralPayrollFindFirstArgs>(args?: SelectSubset<T, GeneralPayrollFindFirstArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first ProjectWeeklyPayroll that matches the filter or
+     * Find the first GeneralPayroll that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProjectWeeklyPayrollFindFirstOrThrowArgs} args - Arguments to find a ProjectWeeklyPayroll
+     * @param {GeneralPayrollFindFirstOrThrowArgs} args - Arguments to find a GeneralPayroll
      * @example
-     * // Get one ProjectWeeklyPayroll
-     * const projectWeeklyPayroll = await prisma.projectWeeklyPayroll.findFirstOrThrow({
+     * // Get one GeneralPayroll
+     * const generalPayroll = await prisma.generalPayroll.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends ProjectWeeklyPayrollFindFirstOrThrowArgs>(args?: SelectSubset<T, ProjectWeeklyPayrollFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProjectWeeklyPayrollClient<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends GeneralPayrollFindFirstOrThrowArgs>(args?: SelectSubset<T, GeneralPayrollFindFirstOrThrowArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more ProjectWeeklyPayrolls that matches the filter.
+     * Find zero or more GeneralPayrolls that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProjectWeeklyPayrollFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {GeneralPayrollFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all ProjectWeeklyPayrolls
-     * const projectWeeklyPayrolls = await prisma.projectWeeklyPayroll.findMany()
+     * // Get all GeneralPayrolls
+     * const generalPayrolls = await prisma.generalPayroll.findMany()
      * 
-     * // Get first 10 ProjectWeeklyPayrolls
-     * const projectWeeklyPayrolls = await prisma.projectWeeklyPayroll.findMany({ take: 10 })
+     * // Get first 10 GeneralPayrolls
+     * const generalPayrolls = await prisma.generalPayroll.findMany({ take: 10 })
      * 
-     * // Only select the `projectWeeklyPayrollId`
-     * const projectWeeklyPayrollWithProjectWeeklyPayrollIdOnly = await prisma.projectWeeklyPayroll.findMany({ select: { projectWeeklyPayrollId: true } })
+     * // Only select the `generalPayrollId`
+     * const generalPayrollWithGeneralPayrollIdOnly = await prisma.generalPayroll.findMany({ select: { generalPayrollId: true } })
      * 
      */
-    findMany<T extends ProjectWeeklyPayrollFindManyArgs>(args?: SelectSubset<T, ProjectWeeklyPayrollFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends GeneralPayrollFindManyArgs>(args?: SelectSubset<T, GeneralPayrollFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a ProjectWeeklyPayroll.
-     * @param {ProjectWeeklyPayrollCreateArgs} args - Arguments to create a ProjectWeeklyPayroll.
+     * Create a GeneralPayroll.
+     * @param {GeneralPayrollCreateArgs} args - Arguments to create a GeneralPayroll.
      * @example
-     * // Create one ProjectWeeklyPayroll
-     * const ProjectWeeklyPayroll = await prisma.projectWeeklyPayroll.create({
+     * // Create one GeneralPayroll
+     * const GeneralPayroll = await prisma.generalPayroll.create({
      *   data: {
-     *     // ... data to create a ProjectWeeklyPayroll
+     *     // ... data to create a GeneralPayroll
      *   }
      * })
      * 
      */
-    create<T extends ProjectWeeklyPayrollCreateArgs>(args: SelectSubset<T, ProjectWeeklyPayrollCreateArgs<ExtArgs>>): Prisma__ProjectWeeklyPayrollClient<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends GeneralPayrollCreateArgs>(args: SelectSubset<T, GeneralPayrollCreateArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many ProjectWeeklyPayrolls.
-     * @param {ProjectWeeklyPayrollCreateManyArgs} args - Arguments to create many ProjectWeeklyPayrolls.
+     * Create many GeneralPayrolls.
+     * @param {GeneralPayrollCreateManyArgs} args - Arguments to create many GeneralPayrolls.
      * @example
-     * // Create many ProjectWeeklyPayrolls
-     * const projectWeeklyPayroll = await prisma.projectWeeklyPayroll.createMany({
+     * // Create many GeneralPayrolls
+     * const generalPayroll = await prisma.generalPayroll.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends ProjectWeeklyPayrollCreateManyArgs>(args?: SelectSubset<T, ProjectWeeklyPayrollCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends GeneralPayrollCreateManyArgs>(args?: SelectSubset<T, GeneralPayrollCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many ProjectWeeklyPayrolls and returns the data saved in the database.
-     * @param {ProjectWeeklyPayrollCreateManyAndReturnArgs} args - Arguments to create many ProjectWeeklyPayrolls.
+     * Create many GeneralPayrolls and returns the data saved in the database.
+     * @param {GeneralPayrollCreateManyAndReturnArgs} args - Arguments to create many GeneralPayrolls.
      * @example
-     * // Create many ProjectWeeklyPayrolls
-     * const projectWeeklyPayroll = await prisma.projectWeeklyPayroll.createManyAndReturn({
+     * // Create many GeneralPayrolls
+     * const generalPayroll = await prisma.generalPayroll.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many ProjectWeeklyPayrolls and only return the `projectWeeklyPayrollId`
-     * const projectWeeklyPayrollWithProjectWeeklyPayrollIdOnly = await prisma.projectWeeklyPayroll.createManyAndReturn({
-     *   select: { projectWeeklyPayrollId: true },
+     * // Create many GeneralPayrolls and only return the `generalPayrollId`
+     * const generalPayrollWithGeneralPayrollIdOnly = await prisma.generalPayroll.createManyAndReturn({
+     *   select: { generalPayrollId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -63480,28 +63456,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ProjectWeeklyPayrollCreateManyAndReturnArgs>(args?: SelectSubset<T, ProjectWeeklyPayrollCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends GeneralPayrollCreateManyAndReturnArgs>(args?: SelectSubset<T, GeneralPayrollCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a ProjectWeeklyPayroll.
-     * @param {ProjectWeeklyPayrollDeleteArgs} args - Arguments to delete one ProjectWeeklyPayroll.
+     * Delete a GeneralPayroll.
+     * @param {GeneralPayrollDeleteArgs} args - Arguments to delete one GeneralPayroll.
      * @example
-     * // Delete one ProjectWeeklyPayroll
-     * const ProjectWeeklyPayroll = await prisma.projectWeeklyPayroll.delete({
+     * // Delete one GeneralPayroll
+     * const GeneralPayroll = await prisma.generalPayroll.delete({
      *   where: {
-     *     // ... filter to delete one ProjectWeeklyPayroll
+     *     // ... filter to delete one GeneralPayroll
      *   }
      * })
      * 
      */
-    delete<T extends ProjectWeeklyPayrollDeleteArgs>(args: SelectSubset<T, ProjectWeeklyPayrollDeleteArgs<ExtArgs>>): Prisma__ProjectWeeklyPayrollClient<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends GeneralPayrollDeleteArgs>(args: SelectSubset<T, GeneralPayrollDeleteArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one ProjectWeeklyPayroll.
-     * @param {ProjectWeeklyPayrollUpdateArgs} args - Arguments to update one ProjectWeeklyPayroll.
+     * Update one GeneralPayroll.
+     * @param {GeneralPayrollUpdateArgs} args - Arguments to update one GeneralPayroll.
      * @example
-     * // Update one ProjectWeeklyPayroll
-     * const projectWeeklyPayroll = await prisma.projectWeeklyPayroll.update({
+     * // Update one GeneralPayroll
+     * const generalPayroll = await prisma.generalPayroll.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -63511,30 +63487,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ProjectWeeklyPayrollUpdateArgs>(args: SelectSubset<T, ProjectWeeklyPayrollUpdateArgs<ExtArgs>>): Prisma__ProjectWeeklyPayrollClient<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends GeneralPayrollUpdateArgs>(args: SelectSubset<T, GeneralPayrollUpdateArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more ProjectWeeklyPayrolls.
-     * @param {ProjectWeeklyPayrollDeleteManyArgs} args - Arguments to filter ProjectWeeklyPayrolls to delete.
+     * Delete zero or more GeneralPayrolls.
+     * @param {GeneralPayrollDeleteManyArgs} args - Arguments to filter GeneralPayrolls to delete.
      * @example
-     * // Delete a few ProjectWeeklyPayrolls
-     * const { count } = await prisma.projectWeeklyPayroll.deleteMany({
+     * // Delete a few GeneralPayrolls
+     * const { count } = await prisma.generalPayroll.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends ProjectWeeklyPayrollDeleteManyArgs>(args?: SelectSubset<T, ProjectWeeklyPayrollDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends GeneralPayrollDeleteManyArgs>(args?: SelectSubset<T, GeneralPayrollDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ProjectWeeklyPayrolls.
+     * Update zero or more GeneralPayrolls.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProjectWeeklyPayrollUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {GeneralPayrollUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many ProjectWeeklyPayrolls
-     * const projectWeeklyPayroll = await prisma.projectWeeklyPayroll.updateMany({
+     * // Update many GeneralPayrolls
+     * const generalPayroll = await prisma.generalPayroll.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -63544,14 +63520,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends ProjectWeeklyPayrollUpdateManyArgs>(args: SelectSubset<T, ProjectWeeklyPayrollUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends GeneralPayrollUpdateManyArgs>(args: SelectSubset<T, GeneralPayrollUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ProjectWeeklyPayrolls and returns the data updated in the database.
-     * @param {ProjectWeeklyPayrollUpdateManyAndReturnArgs} args - Arguments to update many ProjectWeeklyPayrolls.
+     * Update zero or more GeneralPayrolls and returns the data updated in the database.
+     * @param {GeneralPayrollUpdateManyAndReturnArgs} args - Arguments to update many GeneralPayrolls.
      * @example
-     * // Update many ProjectWeeklyPayrolls
-     * const projectWeeklyPayroll = await prisma.projectWeeklyPayroll.updateManyAndReturn({
+     * // Update many GeneralPayrolls
+     * const generalPayroll = await prisma.generalPayroll.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -63560,9 +63536,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more ProjectWeeklyPayrolls and only return the `projectWeeklyPayrollId`
-     * const projectWeeklyPayrollWithProjectWeeklyPayrollIdOnly = await prisma.projectWeeklyPayroll.updateManyAndReturn({
-     *   select: { projectWeeklyPayrollId: true },
+     * // Update zero or more GeneralPayrolls and only return the `generalPayrollId`
+     * const generalPayrollWithGeneralPayrollIdOnly = await prisma.generalPayroll.updateManyAndReturn({
+     *   select: { generalPayrollId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -63574,56 +63550,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends ProjectWeeklyPayrollUpdateManyAndReturnArgs>(args: SelectSubset<T, ProjectWeeklyPayrollUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends GeneralPayrollUpdateManyAndReturnArgs>(args: SelectSubset<T, GeneralPayrollUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one ProjectWeeklyPayroll.
-     * @param {ProjectWeeklyPayrollUpsertArgs} args - Arguments to update or create a ProjectWeeklyPayroll.
+     * Create or update one GeneralPayroll.
+     * @param {GeneralPayrollUpsertArgs} args - Arguments to update or create a GeneralPayroll.
      * @example
-     * // Update or create a ProjectWeeklyPayroll
-     * const projectWeeklyPayroll = await prisma.projectWeeklyPayroll.upsert({
+     * // Update or create a GeneralPayroll
+     * const generalPayroll = await prisma.generalPayroll.upsert({
      *   create: {
-     *     // ... data to create a ProjectWeeklyPayroll
+     *     // ... data to create a GeneralPayroll
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the ProjectWeeklyPayroll we want to update
+     *     // ... the filter for the GeneralPayroll we want to update
      *   }
      * })
      */
-    upsert<T extends ProjectWeeklyPayrollUpsertArgs>(args: SelectSubset<T, ProjectWeeklyPayrollUpsertArgs<ExtArgs>>): Prisma__ProjectWeeklyPayrollClient<$Result.GetResult<Prisma.$ProjectWeeklyPayrollPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends GeneralPayrollUpsertArgs>(args: SelectSubset<T, GeneralPayrollUpsertArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of ProjectWeeklyPayrolls.
+     * Count the number of GeneralPayrolls.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProjectWeeklyPayrollCountArgs} args - Arguments to filter ProjectWeeklyPayrolls to count.
+     * @param {GeneralPayrollCountArgs} args - Arguments to filter GeneralPayrolls to count.
      * @example
-     * // Count the number of ProjectWeeklyPayrolls
-     * const count = await prisma.projectWeeklyPayroll.count({
+     * // Count the number of GeneralPayrolls
+     * const count = await prisma.generalPayroll.count({
      *   where: {
-     *     // ... the filter for the ProjectWeeklyPayrolls we want to count
+     *     // ... the filter for the GeneralPayrolls we want to count
      *   }
      * })
     **/
-    count<T extends ProjectWeeklyPayrollCountArgs>(
-      args?: Subset<T, ProjectWeeklyPayrollCountArgs>,
+    count<T extends GeneralPayrollCountArgs>(
+      args?: Subset<T, GeneralPayrollCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ProjectWeeklyPayrollCountAggregateOutputType>
+          : GetScalarType<T['select'], GeneralPayrollCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a ProjectWeeklyPayroll.
+     * Allows you to perform aggregations operations on a GeneralPayroll.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProjectWeeklyPayrollAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {GeneralPayrollAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -63643,13 +63619,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ProjectWeeklyPayrollAggregateArgs>(args: Subset<T, ProjectWeeklyPayrollAggregateArgs>): Prisma.PrismaPromise<GetProjectWeeklyPayrollAggregateType<T>>
+    aggregate<T extends GeneralPayrollAggregateArgs>(args: Subset<T, GeneralPayrollAggregateArgs>): Prisma.PrismaPromise<GetGeneralPayrollAggregateType<T>>
 
     /**
-     * Group by ProjectWeeklyPayroll.
+     * Group by GeneralPayroll.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProjectWeeklyPayrollGroupByArgs} args - Group by arguments.
+     * @param {GeneralPayrollGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -63664,14 +63640,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ProjectWeeklyPayrollGroupByArgs,
+      T extends GeneralPayrollGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ProjectWeeklyPayrollGroupByArgs['orderBy'] }
-        : { orderBy?: ProjectWeeklyPayrollGroupByArgs['orderBy'] },
+        ? { orderBy: GeneralPayrollGroupByArgs['orderBy'] }
+        : { orderBy?: GeneralPayrollGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -63720,23 +63696,24 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ProjectWeeklyPayrollGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProjectWeeklyPayrollGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, GeneralPayrollGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGeneralPayrollGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the ProjectWeeklyPayroll model
+   * Fields of the GeneralPayroll model
    */
-  readonly fields: ProjectWeeklyPayrollFieldRefs;
+  readonly fields: GeneralPayrollFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for ProjectWeeklyPayroll.
+   * The delegate class that acts as a "Promise-like" for GeneralPayroll.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ProjectWeeklyPayrollClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__GeneralPayrollClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     week<T extends WeekDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WeekDefaultArgs<ExtArgs>>): Prisma__WeekClient<$Result.GetResult<Prisma.$WeekPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    projects<T extends GeneralPayroll$projectsArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayroll$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    workers<T extends GeneralPayroll$workersArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayroll$workersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -63763,427 +63740,4141 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the ProjectWeeklyPayroll model
+   * Fields of the GeneralPayroll model
    */
-  interface ProjectWeeklyPayrollFieldRefs {
-    readonly projectWeeklyPayrollId: FieldRef<"ProjectWeeklyPayroll", 'Int'>
-    readonly projectId: FieldRef<"ProjectWeeklyPayroll", 'Int'>
-    readonly weekId: FieldRef<"ProjectWeeklyPayroll", 'Int'>
-    readonly amount: FieldRef<"ProjectWeeklyPayroll", 'Decimal'>
-    readonly notes: FieldRef<"ProjectWeeklyPayroll", 'String'>
-    readonly createdAt: FieldRef<"ProjectWeeklyPayroll", 'DateTime'>
-    readonly updatedAt: FieldRef<"ProjectWeeklyPayroll", 'DateTime'>
+  interface GeneralPayrollFieldRefs {
+    readonly generalPayrollId: FieldRef<"GeneralPayroll", 'Int'>
+    readonly weekId: FieldRef<"GeneralPayroll", 'Int'>
+    readonly createdAt: FieldRef<"GeneralPayroll", 'DateTime'>
+    readonly updatedAt: FieldRef<"GeneralPayroll", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * ProjectWeeklyPayroll findUnique
+   * GeneralPayroll findUnique
    */
-  export type ProjectWeeklyPayrollFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
+    select?: GeneralPayrollSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
+    include?: GeneralPayrollInclude<ExtArgs> | null
     /**
-     * Filter, which ProjectWeeklyPayroll to fetch.
+     * Filter, which GeneralPayroll to fetch.
      */
-    where: ProjectWeeklyPayrollWhereUniqueInput
+    where: GeneralPayrollWhereUniqueInput
   }
 
   /**
-   * ProjectWeeklyPayroll findUniqueOrThrow
+   * GeneralPayroll findUniqueOrThrow
    */
-  export type ProjectWeeklyPayrollFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
+    select?: GeneralPayrollSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
+    include?: GeneralPayrollInclude<ExtArgs> | null
     /**
-     * Filter, which ProjectWeeklyPayroll to fetch.
+     * Filter, which GeneralPayroll to fetch.
      */
-    where: ProjectWeeklyPayrollWhereUniqueInput
+    where: GeneralPayrollWhereUniqueInput
   }
 
   /**
-   * ProjectWeeklyPayroll findFirst
+   * GeneralPayroll findFirst
    */
-  export type ProjectWeeklyPayrollFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
+    select?: GeneralPayrollSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
+    include?: GeneralPayrollInclude<ExtArgs> | null
     /**
-     * Filter, which ProjectWeeklyPayroll to fetch.
+     * Filter, which GeneralPayroll to fetch.
      */
-    where?: ProjectWeeklyPayrollWhereInput
+    where?: GeneralPayrollWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ProjectWeeklyPayrolls to fetch.
+     * Determine the order of GeneralPayrolls to fetch.
      */
-    orderBy?: ProjectWeeklyPayrollOrderByWithRelationInput | ProjectWeeklyPayrollOrderByWithRelationInput[]
+    orderBy?: GeneralPayrollOrderByWithRelationInput | GeneralPayrollOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ProjectWeeklyPayrolls.
+     * Sets the position for searching for GeneralPayrolls.
      */
-    cursor?: ProjectWeeklyPayrollWhereUniqueInput
+    cursor?: GeneralPayrollWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ProjectWeeklyPayrolls from the position of the cursor.
+     * Take `±n` GeneralPayrolls from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ProjectWeeklyPayrolls.
+     * Skip the first `n` GeneralPayrolls.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ProjectWeeklyPayrolls.
+     * Filter by unique combinations of GeneralPayrolls.
      */
-    distinct?: ProjectWeeklyPayrollScalarFieldEnum | ProjectWeeklyPayrollScalarFieldEnum[]
+    distinct?: GeneralPayrollScalarFieldEnum | GeneralPayrollScalarFieldEnum[]
   }
 
   /**
-   * ProjectWeeklyPayroll findFirstOrThrow
+   * GeneralPayroll findFirstOrThrow
    */
-  export type ProjectWeeklyPayrollFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
+    select?: GeneralPayrollSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
+    include?: GeneralPayrollInclude<ExtArgs> | null
     /**
-     * Filter, which ProjectWeeklyPayroll to fetch.
+     * Filter, which GeneralPayroll to fetch.
      */
-    where?: ProjectWeeklyPayrollWhereInput
+    where?: GeneralPayrollWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ProjectWeeklyPayrolls to fetch.
+     * Determine the order of GeneralPayrolls to fetch.
      */
-    orderBy?: ProjectWeeklyPayrollOrderByWithRelationInput | ProjectWeeklyPayrollOrderByWithRelationInput[]
+    orderBy?: GeneralPayrollOrderByWithRelationInput | GeneralPayrollOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ProjectWeeklyPayrolls.
+     * Sets the position for searching for GeneralPayrolls.
      */
-    cursor?: ProjectWeeklyPayrollWhereUniqueInput
+    cursor?: GeneralPayrollWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ProjectWeeklyPayrolls from the position of the cursor.
+     * Take `±n` GeneralPayrolls from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ProjectWeeklyPayrolls.
+     * Skip the first `n` GeneralPayrolls.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ProjectWeeklyPayrolls.
+     * Filter by unique combinations of GeneralPayrolls.
      */
-    distinct?: ProjectWeeklyPayrollScalarFieldEnum | ProjectWeeklyPayrollScalarFieldEnum[]
+    distinct?: GeneralPayrollScalarFieldEnum | GeneralPayrollScalarFieldEnum[]
   }
 
   /**
-   * ProjectWeeklyPayroll findMany
+   * GeneralPayroll findMany
    */
-  export type ProjectWeeklyPayrollFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
+    select?: GeneralPayrollSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
+    include?: GeneralPayrollInclude<ExtArgs> | null
     /**
-     * Filter, which ProjectWeeklyPayrolls to fetch.
+     * Filter, which GeneralPayrolls to fetch.
      */
-    where?: ProjectWeeklyPayrollWhereInput
+    where?: GeneralPayrollWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ProjectWeeklyPayrolls to fetch.
+     * Determine the order of GeneralPayrolls to fetch.
      */
-    orderBy?: ProjectWeeklyPayrollOrderByWithRelationInput | ProjectWeeklyPayrollOrderByWithRelationInput[]
+    orderBy?: GeneralPayrollOrderByWithRelationInput | GeneralPayrollOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing ProjectWeeklyPayrolls.
+     * Sets the position for listing GeneralPayrolls.
      */
-    cursor?: ProjectWeeklyPayrollWhereUniqueInput
+    cursor?: GeneralPayrollWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ProjectWeeklyPayrolls from the position of the cursor.
+     * Take `±n` GeneralPayrolls from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ProjectWeeklyPayrolls.
+     * Skip the first `n` GeneralPayrolls.
      */
     skip?: number
-    distinct?: ProjectWeeklyPayrollScalarFieldEnum | ProjectWeeklyPayrollScalarFieldEnum[]
+    distinct?: GeneralPayrollScalarFieldEnum | GeneralPayrollScalarFieldEnum[]
   }
 
   /**
-   * ProjectWeeklyPayroll create
+   * GeneralPayroll create
    */
-  export type ProjectWeeklyPayrollCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
+    select?: GeneralPayrollSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
+    include?: GeneralPayrollInclude<ExtArgs> | null
     /**
-     * The data needed to create a ProjectWeeklyPayroll.
+     * The data needed to create a GeneralPayroll.
      */
-    data: XOR<ProjectWeeklyPayrollCreateInput, ProjectWeeklyPayrollUncheckedCreateInput>
+    data: XOR<GeneralPayrollCreateInput, GeneralPayrollUncheckedCreateInput>
   }
 
   /**
-   * ProjectWeeklyPayroll createMany
+   * GeneralPayroll createMany
    */
-  export type ProjectWeeklyPayrollCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many ProjectWeeklyPayrolls.
+     * The data used to create many GeneralPayrolls.
      */
-    data: ProjectWeeklyPayrollCreateManyInput | ProjectWeeklyPayrollCreateManyInput[]
+    data: GeneralPayrollCreateManyInput | GeneralPayrollCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * ProjectWeeklyPayroll createManyAndReturn
+   * GeneralPayroll createManyAndReturn
    */
-  export type ProjectWeeklyPayrollCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelectCreateManyAndReturn<ExtArgs> | null
+    select?: GeneralPayrollSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
-     * The data used to create many ProjectWeeklyPayrolls.
+     * The data used to create many GeneralPayrolls.
      */
-    data: ProjectWeeklyPayrollCreateManyInput | ProjectWeeklyPayrollCreateManyInput[]
+    data: GeneralPayrollCreateManyInput | GeneralPayrollCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: GeneralPayrollIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * ProjectWeeklyPayroll update
+   * GeneralPayroll update
    */
-  export type ProjectWeeklyPayrollUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
+    select?: GeneralPayrollSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
+    include?: GeneralPayrollInclude<ExtArgs> | null
     /**
-     * The data needed to update a ProjectWeeklyPayroll.
+     * The data needed to update a GeneralPayroll.
      */
-    data: XOR<ProjectWeeklyPayrollUpdateInput, ProjectWeeklyPayrollUncheckedUpdateInput>
+    data: XOR<GeneralPayrollUpdateInput, GeneralPayrollUncheckedUpdateInput>
     /**
-     * Choose, which ProjectWeeklyPayroll to update.
+     * Choose, which GeneralPayroll to update.
      */
-    where: ProjectWeeklyPayrollWhereUniqueInput
+    where: GeneralPayrollWhereUniqueInput
   }
 
   /**
-   * ProjectWeeklyPayroll updateMany
+   * GeneralPayroll updateMany
    */
-  export type ProjectWeeklyPayrollUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update ProjectWeeklyPayrolls.
+     * The data used to update GeneralPayrolls.
      */
-    data: XOR<ProjectWeeklyPayrollUpdateManyMutationInput, ProjectWeeklyPayrollUncheckedUpdateManyInput>
+    data: XOR<GeneralPayrollUpdateManyMutationInput, GeneralPayrollUncheckedUpdateManyInput>
     /**
-     * Filter which ProjectWeeklyPayrolls to update
+     * Filter which GeneralPayrolls to update
      */
-    where?: ProjectWeeklyPayrollWhereInput
+    where?: GeneralPayrollWhereInput
     /**
-     * Limit how many ProjectWeeklyPayrolls to update.
+     * Limit how many GeneralPayrolls to update.
      */
     limit?: number
   }
 
   /**
-   * ProjectWeeklyPayroll updateManyAndReturn
+   * GeneralPayroll updateManyAndReturn
    */
-  export type ProjectWeeklyPayrollUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: GeneralPayrollSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
-     * The data used to update ProjectWeeklyPayrolls.
+     * The data used to update GeneralPayrolls.
      */
-    data: XOR<ProjectWeeklyPayrollUpdateManyMutationInput, ProjectWeeklyPayrollUncheckedUpdateManyInput>
+    data: XOR<GeneralPayrollUpdateManyMutationInput, GeneralPayrollUncheckedUpdateManyInput>
     /**
-     * Filter which ProjectWeeklyPayrolls to update
+     * Filter which GeneralPayrolls to update
      */
-    where?: ProjectWeeklyPayrollWhereInput
+    where?: GeneralPayrollWhereInput
     /**
-     * Limit how many ProjectWeeklyPayrolls to update.
+     * Limit how many GeneralPayrolls to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: GeneralPayrollIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * ProjectWeeklyPayroll upsert
+   * GeneralPayroll upsert
    */
-  export type ProjectWeeklyPayrollUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
+    select?: GeneralPayrollSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
+    include?: GeneralPayrollInclude<ExtArgs> | null
     /**
-     * The filter to search for the ProjectWeeklyPayroll to update in case it exists.
+     * The filter to search for the GeneralPayroll to update in case it exists.
      */
-    where: ProjectWeeklyPayrollWhereUniqueInput
+    where: GeneralPayrollWhereUniqueInput
     /**
-     * In case the ProjectWeeklyPayroll found by the `where` argument doesn't exist, create a new ProjectWeeklyPayroll with this data.
+     * In case the GeneralPayroll found by the `where` argument doesn't exist, create a new GeneralPayroll with this data.
      */
-    create: XOR<ProjectWeeklyPayrollCreateInput, ProjectWeeklyPayrollUncheckedCreateInput>
+    create: XOR<GeneralPayrollCreateInput, GeneralPayrollUncheckedCreateInput>
     /**
-     * In case the ProjectWeeklyPayroll was found with the provided `where` argument, update it with this data.
+     * In case the GeneralPayroll was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<ProjectWeeklyPayrollUpdateInput, ProjectWeeklyPayrollUncheckedUpdateInput>
+    update: XOR<GeneralPayrollUpdateInput, GeneralPayrollUncheckedUpdateInput>
   }
 
   /**
-   * ProjectWeeklyPayroll delete
+   * GeneralPayroll delete
    */
-  export type ProjectWeeklyPayrollDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayroll
      */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
+    select?: GeneralPayrollSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayroll
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
+    include?: GeneralPayrollInclude<ExtArgs> | null
     /**
-     * Filter which ProjectWeeklyPayroll to delete.
+     * Filter which GeneralPayroll to delete.
      */
-    where: ProjectWeeklyPayrollWhereUniqueInput
+    where: GeneralPayrollWhereUniqueInput
   }
 
   /**
-   * ProjectWeeklyPayroll deleteMany
+   * GeneralPayroll deleteMany
    */
-  export type ProjectWeeklyPayrollDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayrollDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ProjectWeeklyPayrolls to delete
+     * Filter which GeneralPayrolls to delete
      */
-    where?: ProjectWeeklyPayrollWhereInput
+    where?: GeneralPayrollWhereInput
     /**
-     * Limit how many ProjectWeeklyPayrolls to delete.
+     * Limit how many GeneralPayrolls to delete.
      */
     limit?: number
   }
 
   /**
-   * ProjectWeeklyPayroll without action
+   * GeneralPayroll.projects
    */
-  export type ProjectWeeklyPayrollDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GeneralPayroll$projectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProjectWeeklyPayroll
+     * Select specific fields to fetch from the GeneralPayrollProject
      */
-    select?: ProjectWeeklyPayrollSelect<ExtArgs> | null
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProjectWeeklyPayroll
+     * Omit specific fields from the GeneralPayrollProject
      */
-    omit?: ProjectWeeklyPayrollOmit<ExtArgs> | null
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProjectWeeklyPayrollInclude<ExtArgs> | null
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    where?: GeneralPayrollProjectWhereInput
+    orderBy?: GeneralPayrollProjectOrderByWithRelationInput | GeneralPayrollProjectOrderByWithRelationInput[]
+    cursor?: GeneralPayrollProjectWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GeneralPayrollProjectScalarFieldEnum | GeneralPayrollProjectScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayroll.workers
+   */
+  export type GeneralPayroll$workersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    where?: GeneralPayrollWorkerWhereInput
+    orderBy?: GeneralPayrollWorkerOrderByWithRelationInput | GeneralPayrollWorkerOrderByWithRelationInput[]
+    cursor?: GeneralPayrollWorkerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GeneralPayrollWorkerScalarFieldEnum | GeneralPayrollWorkerScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayroll without action
+   */
+  export type GeneralPayrollDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayroll
+     */
+    select?: GeneralPayrollSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayroll
+     */
+    omit?: GeneralPayrollOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GeneralPayrollProject
+   */
+
+  export type AggregateGeneralPayrollProject = {
+    _count: GeneralPayrollProjectCountAggregateOutputType | null
+    _avg: GeneralPayrollProjectAvgAggregateOutputType | null
+    _sum: GeneralPayrollProjectSumAggregateOutputType | null
+    _min: GeneralPayrollProjectMinAggregateOutputType | null
+    _max: GeneralPayrollProjectMaxAggregateOutputType | null
+  }
+
+  export type GeneralPayrollProjectAvgAggregateOutputType = {
+    generalPayrollProjectId: number | null
+    generalPayrollId: number | null
+    projectId: number | null
+    displayOrder: number | null
+  }
+
+  export type GeneralPayrollProjectSumAggregateOutputType = {
+    generalPayrollProjectId: number | null
+    generalPayrollId: number | null
+    projectId: number | null
+    displayOrder: number | null
+  }
+
+  export type GeneralPayrollProjectMinAggregateOutputType = {
+    generalPayrollProjectId: number | null
+    generalPayrollId: number | null
+    projectId: number | null
+    displayOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GeneralPayrollProjectMaxAggregateOutputType = {
+    generalPayrollProjectId: number | null
+    generalPayrollId: number | null
+    projectId: number | null
+    displayOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GeneralPayrollProjectCountAggregateOutputType = {
+    generalPayrollProjectId: number
+    generalPayrollId: number
+    projectId: number
+    displayOrder: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GeneralPayrollProjectAvgAggregateInputType = {
+    generalPayrollProjectId?: true
+    generalPayrollId?: true
+    projectId?: true
+    displayOrder?: true
+  }
+
+  export type GeneralPayrollProjectSumAggregateInputType = {
+    generalPayrollProjectId?: true
+    generalPayrollId?: true
+    projectId?: true
+    displayOrder?: true
+  }
+
+  export type GeneralPayrollProjectMinAggregateInputType = {
+    generalPayrollProjectId?: true
+    generalPayrollId?: true
+    projectId?: true
+    displayOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GeneralPayrollProjectMaxAggregateInputType = {
+    generalPayrollProjectId?: true
+    generalPayrollId?: true
+    projectId?: true
+    displayOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GeneralPayrollProjectCountAggregateInputType = {
+    generalPayrollProjectId?: true
+    generalPayrollId?: true
+    projectId?: true
+    displayOrder?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GeneralPayrollProjectAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GeneralPayrollProject to aggregate.
+     */
+    where?: GeneralPayrollProjectWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollProjects to fetch.
+     */
+    orderBy?: GeneralPayrollProjectOrderByWithRelationInput | GeneralPayrollProjectOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GeneralPayrollProjectWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollProjects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollProjects.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GeneralPayrollProjects
+    **/
+    _count?: true | GeneralPayrollProjectCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GeneralPayrollProjectAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GeneralPayrollProjectSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GeneralPayrollProjectMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GeneralPayrollProjectMaxAggregateInputType
+  }
+
+  export type GetGeneralPayrollProjectAggregateType<T extends GeneralPayrollProjectAggregateArgs> = {
+        [P in keyof T & keyof AggregateGeneralPayrollProject]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGeneralPayrollProject[P]>
+      : GetScalarType<T[P], AggregateGeneralPayrollProject[P]>
+  }
+
+
+
+
+  export type GeneralPayrollProjectGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GeneralPayrollProjectWhereInput
+    orderBy?: GeneralPayrollProjectOrderByWithAggregationInput | GeneralPayrollProjectOrderByWithAggregationInput[]
+    by: GeneralPayrollProjectScalarFieldEnum[] | GeneralPayrollProjectScalarFieldEnum
+    having?: GeneralPayrollProjectScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GeneralPayrollProjectCountAggregateInputType | true
+    _avg?: GeneralPayrollProjectAvgAggregateInputType
+    _sum?: GeneralPayrollProjectSumAggregateInputType
+    _min?: GeneralPayrollProjectMinAggregateInputType
+    _max?: GeneralPayrollProjectMaxAggregateInputType
+  }
+
+  export type GeneralPayrollProjectGroupByOutputType = {
+    generalPayrollProjectId: number
+    generalPayrollId: number
+    projectId: number
+    displayOrder: number
+    createdAt: Date
+    updatedAt: Date
+    _count: GeneralPayrollProjectCountAggregateOutputType | null
+    _avg: GeneralPayrollProjectAvgAggregateOutputType | null
+    _sum: GeneralPayrollProjectSumAggregateOutputType | null
+    _min: GeneralPayrollProjectMinAggregateOutputType | null
+    _max: GeneralPayrollProjectMaxAggregateOutputType | null
+  }
+
+  type GetGeneralPayrollProjectGroupByPayload<T extends GeneralPayrollProjectGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GeneralPayrollProjectGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GeneralPayrollProjectGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GeneralPayrollProjectGroupByOutputType[P]>
+            : GetScalarType<T[P], GeneralPayrollProjectGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GeneralPayrollProjectSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollProjectId?: boolean
+    generalPayrollId?: boolean
+    projectId?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    entries?: boolean | GeneralPayrollProject$entriesArgs<ExtArgs>
+    _count?: boolean | GeneralPayrollProjectCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["generalPayrollProject"]>
+
+  export type GeneralPayrollProjectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollProjectId?: boolean
+    generalPayrollId?: boolean
+    projectId?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["generalPayrollProject"]>
+
+  export type GeneralPayrollProjectSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollProjectId?: boolean
+    generalPayrollId?: boolean
+    projectId?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["generalPayrollProject"]>
+
+  export type GeneralPayrollProjectSelectScalar = {
+    generalPayrollProjectId?: boolean
+    generalPayrollId?: boolean
+    projectId?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type GeneralPayrollProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"generalPayrollProjectId" | "generalPayrollId" | "projectId" | "displayOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["generalPayrollProject"]>
+  export type GeneralPayrollProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    entries?: boolean | GeneralPayrollProject$entriesArgs<ExtArgs>
+    _count?: boolean | GeneralPayrollProjectCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type GeneralPayrollProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+  export type GeneralPayrollProjectIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+
+  export type $GeneralPayrollProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GeneralPayrollProject"
+    objects: {
+      generalPayroll: Prisma.$GeneralPayrollPayload<ExtArgs>
+      project: Prisma.$ProjectPayload<ExtArgs>
+      entries: Prisma.$GeneralPayrollEntryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      generalPayrollProjectId: number
+      generalPayrollId: number
+      projectId: number
+      displayOrder: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["generalPayrollProject"]>
+    composites: {}
+  }
+
+  type GeneralPayrollProjectGetPayload<S extends boolean | null | undefined | GeneralPayrollProjectDefaultArgs> = $Result.GetResult<Prisma.$GeneralPayrollProjectPayload, S>
+
+  type GeneralPayrollProjectCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GeneralPayrollProjectFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GeneralPayrollProjectCountAggregateInputType | true
+    }
+
+  export interface GeneralPayrollProjectDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GeneralPayrollProject'], meta: { name: 'GeneralPayrollProject' } }
+    /**
+     * Find zero or one GeneralPayrollProject that matches the filter.
+     * @param {GeneralPayrollProjectFindUniqueArgs} args - Arguments to find a GeneralPayrollProject
+     * @example
+     * // Get one GeneralPayrollProject
+     * const generalPayrollProject = await prisma.generalPayrollProject.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GeneralPayrollProjectFindUniqueArgs>(args: SelectSubset<T, GeneralPayrollProjectFindUniqueArgs<ExtArgs>>): Prisma__GeneralPayrollProjectClient<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GeneralPayrollProject that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GeneralPayrollProjectFindUniqueOrThrowArgs} args - Arguments to find a GeneralPayrollProject
+     * @example
+     * // Get one GeneralPayrollProject
+     * const generalPayrollProject = await prisma.generalPayrollProject.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GeneralPayrollProjectFindUniqueOrThrowArgs>(args: SelectSubset<T, GeneralPayrollProjectFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GeneralPayrollProjectClient<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GeneralPayrollProject that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollProjectFindFirstArgs} args - Arguments to find a GeneralPayrollProject
+     * @example
+     * // Get one GeneralPayrollProject
+     * const generalPayrollProject = await prisma.generalPayrollProject.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GeneralPayrollProjectFindFirstArgs>(args?: SelectSubset<T, GeneralPayrollProjectFindFirstArgs<ExtArgs>>): Prisma__GeneralPayrollProjectClient<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GeneralPayrollProject that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollProjectFindFirstOrThrowArgs} args - Arguments to find a GeneralPayrollProject
+     * @example
+     * // Get one GeneralPayrollProject
+     * const generalPayrollProject = await prisma.generalPayrollProject.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GeneralPayrollProjectFindFirstOrThrowArgs>(args?: SelectSubset<T, GeneralPayrollProjectFindFirstOrThrowArgs<ExtArgs>>): Prisma__GeneralPayrollProjectClient<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GeneralPayrollProjects that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollProjectFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GeneralPayrollProjects
+     * const generalPayrollProjects = await prisma.generalPayrollProject.findMany()
+     * 
+     * // Get first 10 GeneralPayrollProjects
+     * const generalPayrollProjects = await prisma.generalPayrollProject.findMany({ take: 10 })
+     * 
+     * // Only select the `generalPayrollProjectId`
+     * const generalPayrollProjectWithGeneralPayrollProjectIdOnly = await prisma.generalPayrollProject.findMany({ select: { generalPayrollProjectId: true } })
+     * 
+     */
+    findMany<T extends GeneralPayrollProjectFindManyArgs>(args?: SelectSubset<T, GeneralPayrollProjectFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GeneralPayrollProject.
+     * @param {GeneralPayrollProjectCreateArgs} args - Arguments to create a GeneralPayrollProject.
+     * @example
+     * // Create one GeneralPayrollProject
+     * const GeneralPayrollProject = await prisma.generalPayrollProject.create({
+     *   data: {
+     *     // ... data to create a GeneralPayrollProject
+     *   }
+     * })
+     * 
+     */
+    create<T extends GeneralPayrollProjectCreateArgs>(args: SelectSubset<T, GeneralPayrollProjectCreateArgs<ExtArgs>>): Prisma__GeneralPayrollProjectClient<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GeneralPayrollProjects.
+     * @param {GeneralPayrollProjectCreateManyArgs} args - Arguments to create many GeneralPayrollProjects.
+     * @example
+     * // Create many GeneralPayrollProjects
+     * const generalPayrollProject = await prisma.generalPayrollProject.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GeneralPayrollProjectCreateManyArgs>(args?: SelectSubset<T, GeneralPayrollProjectCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GeneralPayrollProjects and returns the data saved in the database.
+     * @param {GeneralPayrollProjectCreateManyAndReturnArgs} args - Arguments to create many GeneralPayrollProjects.
+     * @example
+     * // Create many GeneralPayrollProjects
+     * const generalPayrollProject = await prisma.generalPayrollProject.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GeneralPayrollProjects and only return the `generalPayrollProjectId`
+     * const generalPayrollProjectWithGeneralPayrollProjectIdOnly = await prisma.generalPayrollProject.createManyAndReturn({
+     *   select: { generalPayrollProjectId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GeneralPayrollProjectCreateManyAndReturnArgs>(args?: SelectSubset<T, GeneralPayrollProjectCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GeneralPayrollProject.
+     * @param {GeneralPayrollProjectDeleteArgs} args - Arguments to delete one GeneralPayrollProject.
+     * @example
+     * // Delete one GeneralPayrollProject
+     * const GeneralPayrollProject = await prisma.generalPayrollProject.delete({
+     *   where: {
+     *     // ... filter to delete one GeneralPayrollProject
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GeneralPayrollProjectDeleteArgs>(args: SelectSubset<T, GeneralPayrollProjectDeleteArgs<ExtArgs>>): Prisma__GeneralPayrollProjectClient<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GeneralPayrollProject.
+     * @param {GeneralPayrollProjectUpdateArgs} args - Arguments to update one GeneralPayrollProject.
+     * @example
+     * // Update one GeneralPayrollProject
+     * const generalPayrollProject = await prisma.generalPayrollProject.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GeneralPayrollProjectUpdateArgs>(args: SelectSubset<T, GeneralPayrollProjectUpdateArgs<ExtArgs>>): Prisma__GeneralPayrollProjectClient<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GeneralPayrollProjects.
+     * @param {GeneralPayrollProjectDeleteManyArgs} args - Arguments to filter GeneralPayrollProjects to delete.
+     * @example
+     * // Delete a few GeneralPayrollProjects
+     * const { count } = await prisma.generalPayrollProject.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GeneralPayrollProjectDeleteManyArgs>(args?: SelectSubset<T, GeneralPayrollProjectDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GeneralPayrollProjects.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollProjectUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GeneralPayrollProjects
+     * const generalPayrollProject = await prisma.generalPayrollProject.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GeneralPayrollProjectUpdateManyArgs>(args: SelectSubset<T, GeneralPayrollProjectUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GeneralPayrollProjects and returns the data updated in the database.
+     * @param {GeneralPayrollProjectUpdateManyAndReturnArgs} args - Arguments to update many GeneralPayrollProjects.
+     * @example
+     * // Update many GeneralPayrollProjects
+     * const generalPayrollProject = await prisma.generalPayrollProject.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GeneralPayrollProjects and only return the `generalPayrollProjectId`
+     * const generalPayrollProjectWithGeneralPayrollProjectIdOnly = await prisma.generalPayrollProject.updateManyAndReturn({
+     *   select: { generalPayrollProjectId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GeneralPayrollProjectUpdateManyAndReturnArgs>(args: SelectSubset<T, GeneralPayrollProjectUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GeneralPayrollProject.
+     * @param {GeneralPayrollProjectUpsertArgs} args - Arguments to update or create a GeneralPayrollProject.
+     * @example
+     * // Update or create a GeneralPayrollProject
+     * const generalPayrollProject = await prisma.generalPayrollProject.upsert({
+     *   create: {
+     *     // ... data to create a GeneralPayrollProject
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GeneralPayrollProject we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GeneralPayrollProjectUpsertArgs>(args: SelectSubset<T, GeneralPayrollProjectUpsertArgs<ExtArgs>>): Prisma__GeneralPayrollProjectClient<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GeneralPayrollProjects.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollProjectCountArgs} args - Arguments to filter GeneralPayrollProjects to count.
+     * @example
+     * // Count the number of GeneralPayrollProjects
+     * const count = await prisma.generalPayrollProject.count({
+     *   where: {
+     *     // ... the filter for the GeneralPayrollProjects we want to count
+     *   }
+     * })
+    **/
+    count<T extends GeneralPayrollProjectCountArgs>(
+      args?: Subset<T, GeneralPayrollProjectCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GeneralPayrollProjectCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GeneralPayrollProject.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollProjectAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GeneralPayrollProjectAggregateArgs>(args: Subset<T, GeneralPayrollProjectAggregateArgs>): Prisma.PrismaPromise<GetGeneralPayrollProjectAggregateType<T>>
+
+    /**
+     * Group by GeneralPayrollProject.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollProjectGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GeneralPayrollProjectGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GeneralPayrollProjectGroupByArgs['orderBy'] }
+        : { orderBy?: GeneralPayrollProjectGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GeneralPayrollProjectGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGeneralPayrollProjectGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GeneralPayrollProject model
+   */
+  readonly fields: GeneralPayrollProjectFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GeneralPayrollProject.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GeneralPayrollProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    generalPayroll<T extends GeneralPayrollDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayrollDefaultArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    entries<T extends GeneralPayrollProject$entriesArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayrollProject$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GeneralPayrollProject model
+   */
+  interface GeneralPayrollProjectFieldRefs {
+    readonly generalPayrollProjectId: FieldRef<"GeneralPayrollProject", 'Int'>
+    readonly generalPayrollId: FieldRef<"GeneralPayrollProject", 'Int'>
+    readonly projectId: FieldRef<"GeneralPayrollProject", 'Int'>
+    readonly displayOrder: FieldRef<"GeneralPayrollProject", 'Int'>
+    readonly createdAt: FieldRef<"GeneralPayrollProject", 'DateTime'>
+    readonly updatedAt: FieldRef<"GeneralPayrollProject", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GeneralPayrollProject findUnique
+   */
+  export type GeneralPayrollProjectFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollProject to fetch.
+     */
+    where: GeneralPayrollProjectWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollProject findUniqueOrThrow
+   */
+  export type GeneralPayrollProjectFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollProject to fetch.
+     */
+    where: GeneralPayrollProjectWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollProject findFirst
+   */
+  export type GeneralPayrollProjectFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollProject to fetch.
+     */
+    where?: GeneralPayrollProjectWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollProjects to fetch.
+     */
+    orderBy?: GeneralPayrollProjectOrderByWithRelationInput | GeneralPayrollProjectOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GeneralPayrollProjects.
+     */
+    cursor?: GeneralPayrollProjectWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollProjects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollProjects.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GeneralPayrollProjects.
+     */
+    distinct?: GeneralPayrollProjectScalarFieldEnum | GeneralPayrollProjectScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollProject findFirstOrThrow
+   */
+  export type GeneralPayrollProjectFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollProject to fetch.
+     */
+    where?: GeneralPayrollProjectWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollProjects to fetch.
+     */
+    orderBy?: GeneralPayrollProjectOrderByWithRelationInput | GeneralPayrollProjectOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GeneralPayrollProjects.
+     */
+    cursor?: GeneralPayrollProjectWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollProjects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollProjects.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GeneralPayrollProjects.
+     */
+    distinct?: GeneralPayrollProjectScalarFieldEnum | GeneralPayrollProjectScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollProject findMany
+   */
+  export type GeneralPayrollProjectFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollProjects to fetch.
+     */
+    where?: GeneralPayrollProjectWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollProjects to fetch.
+     */
+    orderBy?: GeneralPayrollProjectOrderByWithRelationInput | GeneralPayrollProjectOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GeneralPayrollProjects.
+     */
+    cursor?: GeneralPayrollProjectWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollProjects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollProjects.
+     */
+    skip?: number
+    distinct?: GeneralPayrollProjectScalarFieldEnum | GeneralPayrollProjectScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollProject create
+   */
+  export type GeneralPayrollProjectCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GeneralPayrollProject.
+     */
+    data: XOR<GeneralPayrollProjectCreateInput, GeneralPayrollProjectUncheckedCreateInput>
+  }
+
+  /**
+   * GeneralPayrollProject createMany
+   */
+  export type GeneralPayrollProjectCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GeneralPayrollProjects.
+     */
+    data: GeneralPayrollProjectCreateManyInput | GeneralPayrollProjectCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GeneralPayrollProject createManyAndReturn
+   */
+  export type GeneralPayrollProjectCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * The data used to create many GeneralPayrollProjects.
+     */
+    data: GeneralPayrollProjectCreateManyInput | GeneralPayrollProjectCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GeneralPayrollProject update
+   */
+  export type GeneralPayrollProjectUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GeneralPayrollProject.
+     */
+    data: XOR<GeneralPayrollProjectUpdateInput, GeneralPayrollProjectUncheckedUpdateInput>
+    /**
+     * Choose, which GeneralPayrollProject to update.
+     */
+    where: GeneralPayrollProjectWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollProject updateMany
+   */
+  export type GeneralPayrollProjectUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GeneralPayrollProjects.
+     */
+    data: XOR<GeneralPayrollProjectUpdateManyMutationInput, GeneralPayrollProjectUncheckedUpdateManyInput>
+    /**
+     * Filter which GeneralPayrollProjects to update
+     */
+    where?: GeneralPayrollProjectWhereInput
+    /**
+     * Limit how many GeneralPayrollProjects to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GeneralPayrollProject updateManyAndReturn
+   */
+  export type GeneralPayrollProjectUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * The data used to update GeneralPayrollProjects.
+     */
+    data: XOR<GeneralPayrollProjectUpdateManyMutationInput, GeneralPayrollProjectUncheckedUpdateManyInput>
+    /**
+     * Filter which GeneralPayrollProjects to update
+     */
+    where?: GeneralPayrollProjectWhereInput
+    /**
+     * Limit how many GeneralPayrollProjects to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GeneralPayrollProject upsert
+   */
+  export type GeneralPayrollProjectUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GeneralPayrollProject to update in case it exists.
+     */
+    where: GeneralPayrollProjectWhereUniqueInput
+    /**
+     * In case the GeneralPayrollProject found by the `where` argument doesn't exist, create a new GeneralPayrollProject with this data.
+     */
+    create: XOR<GeneralPayrollProjectCreateInput, GeneralPayrollProjectUncheckedCreateInput>
+    /**
+     * In case the GeneralPayrollProject was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GeneralPayrollProjectUpdateInput, GeneralPayrollProjectUncheckedUpdateInput>
+  }
+
+  /**
+   * GeneralPayrollProject delete
+   */
+  export type GeneralPayrollProjectDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+    /**
+     * Filter which GeneralPayrollProject to delete.
+     */
+    where: GeneralPayrollProjectWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollProject deleteMany
+   */
+  export type GeneralPayrollProjectDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GeneralPayrollProjects to delete
+     */
+    where?: GeneralPayrollProjectWhereInput
+    /**
+     * Limit how many GeneralPayrollProjects to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GeneralPayrollProject.entries
+   */
+  export type GeneralPayrollProject$entriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    where?: GeneralPayrollEntryWhereInput
+    orderBy?: GeneralPayrollEntryOrderByWithRelationInput | GeneralPayrollEntryOrderByWithRelationInput[]
+    cursor?: GeneralPayrollEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GeneralPayrollEntryScalarFieldEnum | GeneralPayrollEntryScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollProject without action
+   */
+  export type GeneralPayrollProjectDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollProject
+     */
+    select?: GeneralPayrollProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollProject
+     */
+    omit?: GeneralPayrollProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollProjectInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GeneralPayrollWorker
+   */
+
+  export type AggregateGeneralPayrollWorker = {
+    _count: GeneralPayrollWorkerCountAggregateOutputType | null
+    _avg: GeneralPayrollWorkerAvgAggregateOutputType | null
+    _sum: GeneralPayrollWorkerSumAggregateOutputType | null
+    _min: GeneralPayrollWorkerMinAggregateOutputType | null
+    _max: GeneralPayrollWorkerMaxAggregateOutputType | null
+  }
+
+  export type GeneralPayrollWorkerAvgAggregateOutputType = {
+    generalPayrollWorkerId: number | null
+    generalPayrollId: number | null
+    workerId: number | null
+    dailyWage: Decimal | null
+    additionalAmount: Decimal | null
+    liquidationAmount: Decimal | null
+    sundayDinnerAmount: Decimal | null
+    displayOrder: number | null
+  }
+
+  export type GeneralPayrollWorkerSumAggregateOutputType = {
+    generalPayrollWorkerId: number | null
+    generalPayrollId: number | null
+    workerId: number | null
+    dailyWage: Decimal | null
+    additionalAmount: Decimal | null
+    liquidationAmount: Decimal | null
+    sundayDinnerAmount: Decimal | null
+    displayOrder: number | null
+  }
+
+  export type GeneralPayrollWorkerMinAggregateOutputType = {
+    generalPayrollWorkerId: number | null
+    generalPayrollId: number | null
+    workerId: number | null
+    group: $Enums.GeneralPayrollWorkerGroup | null
+    dailyWage: Decimal | null
+    additionalAmount: Decimal | null
+    liquidationAmount: Decimal | null
+    sundayDinnerAmount: Decimal | null
+    displayOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GeneralPayrollWorkerMaxAggregateOutputType = {
+    generalPayrollWorkerId: number | null
+    generalPayrollId: number | null
+    workerId: number | null
+    group: $Enums.GeneralPayrollWorkerGroup | null
+    dailyWage: Decimal | null
+    additionalAmount: Decimal | null
+    liquidationAmount: Decimal | null
+    sundayDinnerAmount: Decimal | null
+    displayOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GeneralPayrollWorkerCountAggregateOutputType = {
+    generalPayrollWorkerId: number
+    generalPayrollId: number
+    workerId: number
+    group: number
+    dailyWage: number
+    additionalAmount: number
+    liquidationAmount: number
+    sundayDinnerAmount: number
+    displayOrder: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GeneralPayrollWorkerAvgAggregateInputType = {
+    generalPayrollWorkerId?: true
+    generalPayrollId?: true
+    workerId?: true
+    dailyWage?: true
+    additionalAmount?: true
+    liquidationAmount?: true
+    sundayDinnerAmount?: true
+    displayOrder?: true
+  }
+
+  export type GeneralPayrollWorkerSumAggregateInputType = {
+    generalPayrollWorkerId?: true
+    generalPayrollId?: true
+    workerId?: true
+    dailyWage?: true
+    additionalAmount?: true
+    liquidationAmount?: true
+    sundayDinnerAmount?: true
+    displayOrder?: true
+  }
+
+  export type GeneralPayrollWorkerMinAggregateInputType = {
+    generalPayrollWorkerId?: true
+    generalPayrollId?: true
+    workerId?: true
+    group?: true
+    dailyWage?: true
+    additionalAmount?: true
+    liquidationAmount?: true
+    sundayDinnerAmount?: true
+    displayOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GeneralPayrollWorkerMaxAggregateInputType = {
+    generalPayrollWorkerId?: true
+    generalPayrollId?: true
+    workerId?: true
+    group?: true
+    dailyWage?: true
+    additionalAmount?: true
+    liquidationAmount?: true
+    sundayDinnerAmount?: true
+    displayOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GeneralPayrollWorkerCountAggregateInputType = {
+    generalPayrollWorkerId?: true
+    generalPayrollId?: true
+    workerId?: true
+    group?: true
+    dailyWage?: true
+    additionalAmount?: true
+    liquidationAmount?: true
+    sundayDinnerAmount?: true
+    displayOrder?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GeneralPayrollWorkerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GeneralPayrollWorker to aggregate.
+     */
+    where?: GeneralPayrollWorkerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollWorkers to fetch.
+     */
+    orderBy?: GeneralPayrollWorkerOrderByWithRelationInput | GeneralPayrollWorkerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GeneralPayrollWorkerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollWorkers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollWorkers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GeneralPayrollWorkers
+    **/
+    _count?: true | GeneralPayrollWorkerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GeneralPayrollWorkerAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GeneralPayrollWorkerSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GeneralPayrollWorkerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GeneralPayrollWorkerMaxAggregateInputType
+  }
+
+  export type GetGeneralPayrollWorkerAggregateType<T extends GeneralPayrollWorkerAggregateArgs> = {
+        [P in keyof T & keyof AggregateGeneralPayrollWorker]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGeneralPayrollWorker[P]>
+      : GetScalarType<T[P], AggregateGeneralPayrollWorker[P]>
+  }
+
+
+
+
+  export type GeneralPayrollWorkerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GeneralPayrollWorkerWhereInput
+    orderBy?: GeneralPayrollWorkerOrderByWithAggregationInput | GeneralPayrollWorkerOrderByWithAggregationInput[]
+    by: GeneralPayrollWorkerScalarFieldEnum[] | GeneralPayrollWorkerScalarFieldEnum
+    having?: GeneralPayrollWorkerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GeneralPayrollWorkerCountAggregateInputType | true
+    _avg?: GeneralPayrollWorkerAvgAggregateInputType
+    _sum?: GeneralPayrollWorkerSumAggregateInputType
+    _min?: GeneralPayrollWorkerMinAggregateInputType
+    _max?: GeneralPayrollWorkerMaxAggregateInputType
+  }
+
+  export type GeneralPayrollWorkerGroupByOutputType = {
+    generalPayrollWorkerId: number
+    generalPayrollId: number
+    workerId: number
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage: Decimal
+    additionalAmount: Decimal
+    liquidationAmount: Decimal
+    sundayDinnerAmount: Decimal
+    displayOrder: number
+    createdAt: Date
+    updatedAt: Date
+    _count: GeneralPayrollWorkerCountAggregateOutputType | null
+    _avg: GeneralPayrollWorkerAvgAggregateOutputType | null
+    _sum: GeneralPayrollWorkerSumAggregateOutputType | null
+    _min: GeneralPayrollWorkerMinAggregateOutputType | null
+    _max: GeneralPayrollWorkerMaxAggregateOutputType | null
+  }
+
+  type GetGeneralPayrollWorkerGroupByPayload<T extends GeneralPayrollWorkerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GeneralPayrollWorkerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GeneralPayrollWorkerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GeneralPayrollWorkerGroupByOutputType[P]>
+            : GetScalarType<T[P], GeneralPayrollWorkerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GeneralPayrollWorkerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollWorkerId?: boolean
+    generalPayrollId?: boolean
+    workerId?: boolean
+    group?: boolean
+    dailyWage?: boolean
+    additionalAmount?: boolean
+    liquidationAmount?: boolean
+    sundayDinnerAmount?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    entries?: boolean | GeneralPayrollWorker$entriesArgs<ExtArgs>
+    _count?: boolean | GeneralPayrollWorkerCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["generalPayrollWorker"]>
+
+  export type GeneralPayrollWorkerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollWorkerId?: boolean
+    generalPayrollId?: boolean
+    workerId?: boolean
+    group?: boolean
+    dailyWage?: boolean
+    additionalAmount?: boolean
+    liquidationAmount?: boolean
+    sundayDinnerAmount?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["generalPayrollWorker"]>
+
+  export type GeneralPayrollWorkerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollWorkerId?: boolean
+    generalPayrollId?: boolean
+    workerId?: boolean
+    group?: boolean
+    dailyWage?: boolean
+    additionalAmount?: boolean
+    liquidationAmount?: boolean
+    sundayDinnerAmount?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["generalPayrollWorker"]>
+
+  export type GeneralPayrollWorkerSelectScalar = {
+    generalPayrollWorkerId?: boolean
+    generalPayrollId?: boolean
+    workerId?: boolean
+    group?: boolean
+    dailyWage?: boolean
+    additionalAmount?: boolean
+    liquidationAmount?: boolean
+    sundayDinnerAmount?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type GeneralPayrollWorkerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"generalPayrollWorkerId" | "generalPayrollId" | "workerId" | "group" | "dailyWage" | "additionalAmount" | "liquidationAmount" | "sundayDinnerAmount" | "displayOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["generalPayrollWorker"]>
+  export type GeneralPayrollWorkerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    entries?: boolean | GeneralPayrollWorker$entriesArgs<ExtArgs>
+    _count?: boolean | GeneralPayrollWorkerCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type GeneralPayrollWorkerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+  }
+  export type GeneralPayrollWorkerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+  }
+
+  export type $GeneralPayrollWorkerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GeneralPayrollWorker"
+    objects: {
+      generalPayroll: Prisma.$GeneralPayrollPayload<ExtArgs>
+      worker: Prisma.$WorkerPayload<ExtArgs>
+      entries: Prisma.$GeneralPayrollEntryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      generalPayrollWorkerId: number
+      generalPayrollId: number
+      workerId: number
+      group: $Enums.GeneralPayrollWorkerGroup
+      dailyWage: Prisma.Decimal
+      additionalAmount: Prisma.Decimal
+      liquidationAmount: Prisma.Decimal
+      sundayDinnerAmount: Prisma.Decimal
+      displayOrder: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["generalPayrollWorker"]>
+    composites: {}
+  }
+
+  type GeneralPayrollWorkerGetPayload<S extends boolean | null | undefined | GeneralPayrollWorkerDefaultArgs> = $Result.GetResult<Prisma.$GeneralPayrollWorkerPayload, S>
+
+  type GeneralPayrollWorkerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GeneralPayrollWorkerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GeneralPayrollWorkerCountAggregateInputType | true
+    }
+
+  export interface GeneralPayrollWorkerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GeneralPayrollWorker'], meta: { name: 'GeneralPayrollWorker' } }
+    /**
+     * Find zero or one GeneralPayrollWorker that matches the filter.
+     * @param {GeneralPayrollWorkerFindUniqueArgs} args - Arguments to find a GeneralPayrollWorker
+     * @example
+     * // Get one GeneralPayrollWorker
+     * const generalPayrollWorker = await prisma.generalPayrollWorker.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GeneralPayrollWorkerFindUniqueArgs>(args: SelectSubset<T, GeneralPayrollWorkerFindUniqueArgs<ExtArgs>>): Prisma__GeneralPayrollWorkerClient<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GeneralPayrollWorker that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GeneralPayrollWorkerFindUniqueOrThrowArgs} args - Arguments to find a GeneralPayrollWorker
+     * @example
+     * // Get one GeneralPayrollWorker
+     * const generalPayrollWorker = await prisma.generalPayrollWorker.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GeneralPayrollWorkerFindUniqueOrThrowArgs>(args: SelectSubset<T, GeneralPayrollWorkerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GeneralPayrollWorkerClient<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GeneralPayrollWorker that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollWorkerFindFirstArgs} args - Arguments to find a GeneralPayrollWorker
+     * @example
+     * // Get one GeneralPayrollWorker
+     * const generalPayrollWorker = await prisma.generalPayrollWorker.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GeneralPayrollWorkerFindFirstArgs>(args?: SelectSubset<T, GeneralPayrollWorkerFindFirstArgs<ExtArgs>>): Prisma__GeneralPayrollWorkerClient<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GeneralPayrollWorker that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollWorkerFindFirstOrThrowArgs} args - Arguments to find a GeneralPayrollWorker
+     * @example
+     * // Get one GeneralPayrollWorker
+     * const generalPayrollWorker = await prisma.generalPayrollWorker.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GeneralPayrollWorkerFindFirstOrThrowArgs>(args?: SelectSubset<T, GeneralPayrollWorkerFindFirstOrThrowArgs<ExtArgs>>): Prisma__GeneralPayrollWorkerClient<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GeneralPayrollWorkers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollWorkerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GeneralPayrollWorkers
+     * const generalPayrollWorkers = await prisma.generalPayrollWorker.findMany()
+     * 
+     * // Get first 10 GeneralPayrollWorkers
+     * const generalPayrollWorkers = await prisma.generalPayrollWorker.findMany({ take: 10 })
+     * 
+     * // Only select the `generalPayrollWorkerId`
+     * const generalPayrollWorkerWithGeneralPayrollWorkerIdOnly = await prisma.generalPayrollWorker.findMany({ select: { generalPayrollWorkerId: true } })
+     * 
+     */
+    findMany<T extends GeneralPayrollWorkerFindManyArgs>(args?: SelectSubset<T, GeneralPayrollWorkerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GeneralPayrollWorker.
+     * @param {GeneralPayrollWorkerCreateArgs} args - Arguments to create a GeneralPayrollWorker.
+     * @example
+     * // Create one GeneralPayrollWorker
+     * const GeneralPayrollWorker = await prisma.generalPayrollWorker.create({
+     *   data: {
+     *     // ... data to create a GeneralPayrollWorker
+     *   }
+     * })
+     * 
+     */
+    create<T extends GeneralPayrollWorkerCreateArgs>(args: SelectSubset<T, GeneralPayrollWorkerCreateArgs<ExtArgs>>): Prisma__GeneralPayrollWorkerClient<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GeneralPayrollWorkers.
+     * @param {GeneralPayrollWorkerCreateManyArgs} args - Arguments to create many GeneralPayrollWorkers.
+     * @example
+     * // Create many GeneralPayrollWorkers
+     * const generalPayrollWorker = await prisma.generalPayrollWorker.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GeneralPayrollWorkerCreateManyArgs>(args?: SelectSubset<T, GeneralPayrollWorkerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GeneralPayrollWorkers and returns the data saved in the database.
+     * @param {GeneralPayrollWorkerCreateManyAndReturnArgs} args - Arguments to create many GeneralPayrollWorkers.
+     * @example
+     * // Create many GeneralPayrollWorkers
+     * const generalPayrollWorker = await prisma.generalPayrollWorker.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GeneralPayrollWorkers and only return the `generalPayrollWorkerId`
+     * const generalPayrollWorkerWithGeneralPayrollWorkerIdOnly = await prisma.generalPayrollWorker.createManyAndReturn({
+     *   select: { generalPayrollWorkerId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GeneralPayrollWorkerCreateManyAndReturnArgs>(args?: SelectSubset<T, GeneralPayrollWorkerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GeneralPayrollWorker.
+     * @param {GeneralPayrollWorkerDeleteArgs} args - Arguments to delete one GeneralPayrollWorker.
+     * @example
+     * // Delete one GeneralPayrollWorker
+     * const GeneralPayrollWorker = await prisma.generalPayrollWorker.delete({
+     *   where: {
+     *     // ... filter to delete one GeneralPayrollWorker
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GeneralPayrollWorkerDeleteArgs>(args: SelectSubset<T, GeneralPayrollWorkerDeleteArgs<ExtArgs>>): Prisma__GeneralPayrollWorkerClient<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GeneralPayrollWorker.
+     * @param {GeneralPayrollWorkerUpdateArgs} args - Arguments to update one GeneralPayrollWorker.
+     * @example
+     * // Update one GeneralPayrollWorker
+     * const generalPayrollWorker = await prisma.generalPayrollWorker.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GeneralPayrollWorkerUpdateArgs>(args: SelectSubset<T, GeneralPayrollWorkerUpdateArgs<ExtArgs>>): Prisma__GeneralPayrollWorkerClient<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GeneralPayrollWorkers.
+     * @param {GeneralPayrollWorkerDeleteManyArgs} args - Arguments to filter GeneralPayrollWorkers to delete.
+     * @example
+     * // Delete a few GeneralPayrollWorkers
+     * const { count } = await prisma.generalPayrollWorker.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GeneralPayrollWorkerDeleteManyArgs>(args?: SelectSubset<T, GeneralPayrollWorkerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GeneralPayrollWorkers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollWorkerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GeneralPayrollWorkers
+     * const generalPayrollWorker = await prisma.generalPayrollWorker.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GeneralPayrollWorkerUpdateManyArgs>(args: SelectSubset<T, GeneralPayrollWorkerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GeneralPayrollWorkers and returns the data updated in the database.
+     * @param {GeneralPayrollWorkerUpdateManyAndReturnArgs} args - Arguments to update many GeneralPayrollWorkers.
+     * @example
+     * // Update many GeneralPayrollWorkers
+     * const generalPayrollWorker = await prisma.generalPayrollWorker.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GeneralPayrollWorkers and only return the `generalPayrollWorkerId`
+     * const generalPayrollWorkerWithGeneralPayrollWorkerIdOnly = await prisma.generalPayrollWorker.updateManyAndReturn({
+     *   select: { generalPayrollWorkerId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GeneralPayrollWorkerUpdateManyAndReturnArgs>(args: SelectSubset<T, GeneralPayrollWorkerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GeneralPayrollWorker.
+     * @param {GeneralPayrollWorkerUpsertArgs} args - Arguments to update or create a GeneralPayrollWorker.
+     * @example
+     * // Update or create a GeneralPayrollWorker
+     * const generalPayrollWorker = await prisma.generalPayrollWorker.upsert({
+     *   create: {
+     *     // ... data to create a GeneralPayrollWorker
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GeneralPayrollWorker we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GeneralPayrollWorkerUpsertArgs>(args: SelectSubset<T, GeneralPayrollWorkerUpsertArgs<ExtArgs>>): Prisma__GeneralPayrollWorkerClient<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GeneralPayrollWorkers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollWorkerCountArgs} args - Arguments to filter GeneralPayrollWorkers to count.
+     * @example
+     * // Count the number of GeneralPayrollWorkers
+     * const count = await prisma.generalPayrollWorker.count({
+     *   where: {
+     *     // ... the filter for the GeneralPayrollWorkers we want to count
+     *   }
+     * })
+    **/
+    count<T extends GeneralPayrollWorkerCountArgs>(
+      args?: Subset<T, GeneralPayrollWorkerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GeneralPayrollWorkerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GeneralPayrollWorker.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollWorkerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GeneralPayrollWorkerAggregateArgs>(args: Subset<T, GeneralPayrollWorkerAggregateArgs>): Prisma.PrismaPromise<GetGeneralPayrollWorkerAggregateType<T>>
+
+    /**
+     * Group by GeneralPayrollWorker.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollWorkerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GeneralPayrollWorkerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GeneralPayrollWorkerGroupByArgs['orderBy'] }
+        : { orderBy?: GeneralPayrollWorkerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GeneralPayrollWorkerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGeneralPayrollWorkerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GeneralPayrollWorker model
+   */
+  readonly fields: GeneralPayrollWorkerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GeneralPayrollWorker.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GeneralPayrollWorkerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    generalPayroll<T extends GeneralPayrollDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayrollDefaultArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    worker<T extends WorkerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkerDefaultArgs<ExtArgs>>): Prisma__WorkerClient<$Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    entries<T extends GeneralPayrollWorker$entriesArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayrollWorker$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GeneralPayrollWorker model
+   */
+  interface GeneralPayrollWorkerFieldRefs {
+    readonly generalPayrollWorkerId: FieldRef<"GeneralPayrollWorker", 'Int'>
+    readonly generalPayrollId: FieldRef<"GeneralPayrollWorker", 'Int'>
+    readonly workerId: FieldRef<"GeneralPayrollWorker", 'Int'>
+    readonly group: FieldRef<"GeneralPayrollWorker", 'GeneralPayrollWorkerGroup'>
+    readonly dailyWage: FieldRef<"GeneralPayrollWorker", 'Decimal'>
+    readonly additionalAmount: FieldRef<"GeneralPayrollWorker", 'Decimal'>
+    readonly liquidationAmount: FieldRef<"GeneralPayrollWorker", 'Decimal'>
+    readonly sundayDinnerAmount: FieldRef<"GeneralPayrollWorker", 'Decimal'>
+    readonly displayOrder: FieldRef<"GeneralPayrollWorker", 'Int'>
+    readonly createdAt: FieldRef<"GeneralPayrollWorker", 'DateTime'>
+    readonly updatedAt: FieldRef<"GeneralPayrollWorker", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GeneralPayrollWorker findUnique
+   */
+  export type GeneralPayrollWorkerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollWorker to fetch.
+     */
+    where: GeneralPayrollWorkerWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollWorker findUniqueOrThrow
+   */
+  export type GeneralPayrollWorkerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollWorker to fetch.
+     */
+    where: GeneralPayrollWorkerWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollWorker findFirst
+   */
+  export type GeneralPayrollWorkerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollWorker to fetch.
+     */
+    where?: GeneralPayrollWorkerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollWorkers to fetch.
+     */
+    orderBy?: GeneralPayrollWorkerOrderByWithRelationInput | GeneralPayrollWorkerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GeneralPayrollWorkers.
+     */
+    cursor?: GeneralPayrollWorkerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollWorkers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollWorkers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GeneralPayrollWorkers.
+     */
+    distinct?: GeneralPayrollWorkerScalarFieldEnum | GeneralPayrollWorkerScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollWorker findFirstOrThrow
+   */
+  export type GeneralPayrollWorkerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollWorker to fetch.
+     */
+    where?: GeneralPayrollWorkerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollWorkers to fetch.
+     */
+    orderBy?: GeneralPayrollWorkerOrderByWithRelationInput | GeneralPayrollWorkerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GeneralPayrollWorkers.
+     */
+    cursor?: GeneralPayrollWorkerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollWorkers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollWorkers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GeneralPayrollWorkers.
+     */
+    distinct?: GeneralPayrollWorkerScalarFieldEnum | GeneralPayrollWorkerScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollWorker findMany
+   */
+  export type GeneralPayrollWorkerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollWorkers to fetch.
+     */
+    where?: GeneralPayrollWorkerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollWorkers to fetch.
+     */
+    orderBy?: GeneralPayrollWorkerOrderByWithRelationInput | GeneralPayrollWorkerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GeneralPayrollWorkers.
+     */
+    cursor?: GeneralPayrollWorkerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollWorkers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollWorkers.
+     */
+    skip?: number
+    distinct?: GeneralPayrollWorkerScalarFieldEnum | GeneralPayrollWorkerScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollWorker create
+   */
+  export type GeneralPayrollWorkerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GeneralPayrollWorker.
+     */
+    data: XOR<GeneralPayrollWorkerCreateInput, GeneralPayrollWorkerUncheckedCreateInput>
+  }
+
+  /**
+   * GeneralPayrollWorker createMany
+   */
+  export type GeneralPayrollWorkerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GeneralPayrollWorkers.
+     */
+    data: GeneralPayrollWorkerCreateManyInput | GeneralPayrollWorkerCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GeneralPayrollWorker createManyAndReturn
+   */
+  export type GeneralPayrollWorkerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * The data used to create many GeneralPayrollWorkers.
+     */
+    data: GeneralPayrollWorkerCreateManyInput | GeneralPayrollWorkerCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GeneralPayrollWorker update
+   */
+  export type GeneralPayrollWorkerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GeneralPayrollWorker.
+     */
+    data: XOR<GeneralPayrollWorkerUpdateInput, GeneralPayrollWorkerUncheckedUpdateInput>
+    /**
+     * Choose, which GeneralPayrollWorker to update.
+     */
+    where: GeneralPayrollWorkerWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollWorker updateMany
+   */
+  export type GeneralPayrollWorkerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GeneralPayrollWorkers.
+     */
+    data: XOR<GeneralPayrollWorkerUpdateManyMutationInput, GeneralPayrollWorkerUncheckedUpdateManyInput>
+    /**
+     * Filter which GeneralPayrollWorkers to update
+     */
+    where?: GeneralPayrollWorkerWhereInput
+    /**
+     * Limit how many GeneralPayrollWorkers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GeneralPayrollWorker updateManyAndReturn
+   */
+  export type GeneralPayrollWorkerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * The data used to update GeneralPayrollWorkers.
+     */
+    data: XOR<GeneralPayrollWorkerUpdateManyMutationInput, GeneralPayrollWorkerUncheckedUpdateManyInput>
+    /**
+     * Filter which GeneralPayrollWorkers to update
+     */
+    where?: GeneralPayrollWorkerWhereInput
+    /**
+     * Limit how many GeneralPayrollWorkers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GeneralPayrollWorker upsert
+   */
+  export type GeneralPayrollWorkerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GeneralPayrollWorker to update in case it exists.
+     */
+    where: GeneralPayrollWorkerWhereUniqueInput
+    /**
+     * In case the GeneralPayrollWorker found by the `where` argument doesn't exist, create a new GeneralPayrollWorker with this data.
+     */
+    create: XOR<GeneralPayrollWorkerCreateInput, GeneralPayrollWorkerUncheckedCreateInput>
+    /**
+     * In case the GeneralPayrollWorker was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GeneralPayrollWorkerUpdateInput, GeneralPayrollWorkerUncheckedUpdateInput>
+  }
+
+  /**
+   * GeneralPayrollWorker delete
+   */
+  export type GeneralPayrollWorkerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+    /**
+     * Filter which GeneralPayrollWorker to delete.
+     */
+    where: GeneralPayrollWorkerWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollWorker deleteMany
+   */
+  export type GeneralPayrollWorkerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GeneralPayrollWorkers to delete
+     */
+    where?: GeneralPayrollWorkerWhereInput
+    /**
+     * Limit how many GeneralPayrollWorkers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GeneralPayrollWorker.entries
+   */
+  export type GeneralPayrollWorker$entriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    where?: GeneralPayrollEntryWhereInput
+    orderBy?: GeneralPayrollEntryOrderByWithRelationInput | GeneralPayrollEntryOrderByWithRelationInput[]
+    cursor?: GeneralPayrollEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GeneralPayrollEntryScalarFieldEnum | GeneralPayrollEntryScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollWorker without action
+   */
+  export type GeneralPayrollWorkerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollWorker
+     */
+    select?: GeneralPayrollWorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollWorker
+     */
+    omit?: GeneralPayrollWorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollWorkerInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GeneralPayrollEntry
+   */
+
+  export type AggregateGeneralPayrollEntry = {
+    _count: GeneralPayrollEntryCountAggregateOutputType | null
+    _avg: GeneralPayrollEntryAvgAggregateOutputType | null
+    _sum: GeneralPayrollEntrySumAggregateOutputType | null
+    _min: GeneralPayrollEntryMinAggregateOutputType | null
+    _max: GeneralPayrollEntryMaxAggregateOutputType | null
+  }
+
+  export type GeneralPayrollEntryAvgAggregateOutputType = {
+    generalPayrollEntryId: number | null
+    generalPayrollProjectId: number | null
+    generalPayrollWorkerId: number | null
+    monday: Decimal | null
+    tuesday: Decimal | null
+    wednesday: Decimal | null
+    thursday: Decimal | null
+    friday: Decimal | null
+    saturday: Decimal | null
+    dominical: Decimal | null
+    overtimeAmount: Decimal | null
+    afpDiscount: Decimal | null
+    advanceDiscount: Decimal | null
+  }
+
+  export type GeneralPayrollEntrySumAggregateOutputType = {
+    generalPayrollEntryId: number | null
+    generalPayrollProjectId: number | null
+    generalPayrollWorkerId: number | null
+    monday: Decimal | null
+    tuesday: Decimal | null
+    wednesday: Decimal | null
+    thursday: Decimal | null
+    friday: Decimal | null
+    saturday: Decimal | null
+    dominical: Decimal | null
+    overtimeAmount: Decimal | null
+    afpDiscount: Decimal | null
+    advanceDiscount: Decimal | null
+  }
+
+  export type GeneralPayrollEntryMinAggregateOutputType = {
+    generalPayrollEntryId: number | null
+    generalPayrollProjectId: number | null
+    generalPayrollWorkerId: number | null
+    monday: Decimal | null
+    tuesday: Decimal | null
+    wednesday: Decimal | null
+    thursday: Decimal | null
+    friday: Decimal | null
+    saturday: Decimal | null
+    dominical: Decimal | null
+    overtimeAmount: Decimal | null
+    afpDiscount: Decimal | null
+    advanceDiscount: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GeneralPayrollEntryMaxAggregateOutputType = {
+    generalPayrollEntryId: number | null
+    generalPayrollProjectId: number | null
+    generalPayrollWorkerId: number | null
+    monday: Decimal | null
+    tuesday: Decimal | null
+    wednesday: Decimal | null
+    thursday: Decimal | null
+    friday: Decimal | null
+    saturday: Decimal | null
+    dominical: Decimal | null
+    overtimeAmount: Decimal | null
+    afpDiscount: Decimal | null
+    advanceDiscount: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GeneralPayrollEntryCountAggregateOutputType = {
+    generalPayrollEntryId: number
+    generalPayrollProjectId: number
+    generalPayrollWorkerId: number
+    monday: number
+    tuesday: number
+    wednesday: number
+    thursday: number
+    friday: number
+    saturday: number
+    dominical: number
+    overtimeAmount: number
+    afpDiscount: number
+    advanceDiscount: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GeneralPayrollEntryAvgAggregateInputType = {
+    generalPayrollEntryId?: true
+    generalPayrollProjectId?: true
+    generalPayrollWorkerId?: true
+    monday?: true
+    tuesday?: true
+    wednesday?: true
+    thursday?: true
+    friday?: true
+    saturday?: true
+    dominical?: true
+    overtimeAmount?: true
+    afpDiscount?: true
+    advanceDiscount?: true
+  }
+
+  export type GeneralPayrollEntrySumAggregateInputType = {
+    generalPayrollEntryId?: true
+    generalPayrollProjectId?: true
+    generalPayrollWorkerId?: true
+    monday?: true
+    tuesday?: true
+    wednesday?: true
+    thursday?: true
+    friday?: true
+    saturday?: true
+    dominical?: true
+    overtimeAmount?: true
+    afpDiscount?: true
+    advanceDiscount?: true
+  }
+
+  export type GeneralPayrollEntryMinAggregateInputType = {
+    generalPayrollEntryId?: true
+    generalPayrollProjectId?: true
+    generalPayrollWorkerId?: true
+    monday?: true
+    tuesday?: true
+    wednesday?: true
+    thursday?: true
+    friday?: true
+    saturday?: true
+    dominical?: true
+    overtimeAmount?: true
+    afpDiscount?: true
+    advanceDiscount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GeneralPayrollEntryMaxAggregateInputType = {
+    generalPayrollEntryId?: true
+    generalPayrollProjectId?: true
+    generalPayrollWorkerId?: true
+    monday?: true
+    tuesday?: true
+    wednesday?: true
+    thursday?: true
+    friday?: true
+    saturday?: true
+    dominical?: true
+    overtimeAmount?: true
+    afpDiscount?: true
+    advanceDiscount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GeneralPayrollEntryCountAggregateInputType = {
+    generalPayrollEntryId?: true
+    generalPayrollProjectId?: true
+    generalPayrollWorkerId?: true
+    monday?: true
+    tuesday?: true
+    wednesday?: true
+    thursday?: true
+    friday?: true
+    saturday?: true
+    dominical?: true
+    overtimeAmount?: true
+    afpDiscount?: true
+    advanceDiscount?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GeneralPayrollEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GeneralPayrollEntry to aggregate.
+     */
+    where?: GeneralPayrollEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollEntries to fetch.
+     */
+    orderBy?: GeneralPayrollEntryOrderByWithRelationInput | GeneralPayrollEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GeneralPayrollEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GeneralPayrollEntries
+    **/
+    _count?: true | GeneralPayrollEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GeneralPayrollEntryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GeneralPayrollEntrySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GeneralPayrollEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GeneralPayrollEntryMaxAggregateInputType
+  }
+
+  export type GetGeneralPayrollEntryAggregateType<T extends GeneralPayrollEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregateGeneralPayrollEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGeneralPayrollEntry[P]>
+      : GetScalarType<T[P], AggregateGeneralPayrollEntry[P]>
+  }
+
+
+
+
+  export type GeneralPayrollEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GeneralPayrollEntryWhereInput
+    orderBy?: GeneralPayrollEntryOrderByWithAggregationInput | GeneralPayrollEntryOrderByWithAggregationInput[]
+    by: GeneralPayrollEntryScalarFieldEnum[] | GeneralPayrollEntryScalarFieldEnum
+    having?: GeneralPayrollEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GeneralPayrollEntryCountAggregateInputType | true
+    _avg?: GeneralPayrollEntryAvgAggregateInputType
+    _sum?: GeneralPayrollEntrySumAggregateInputType
+    _min?: GeneralPayrollEntryMinAggregateInputType
+    _max?: GeneralPayrollEntryMaxAggregateInputType
+  }
+
+  export type GeneralPayrollEntryGroupByOutputType = {
+    generalPayrollEntryId: number
+    generalPayrollProjectId: number
+    generalPayrollWorkerId: number
+    monday: Decimal
+    tuesday: Decimal
+    wednesday: Decimal
+    thursday: Decimal
+    friday: Decimal
+    saturday: Decimal
+    dominical: Decimal
+    overtimeAmount: Decimal
+    afpDiscount: Decimal
+    advanceDiscount: Decimal
+    createdAt: Date
+    updatedAt: Date
+    _count: GeneralPayrollEntryCountAggregateOutputType | null
+    _avg: GeneralPayrollEntryAvgAggregateOutputType | null
+    _sum: GeneralPayrollEntrySumAggregateOutputType | null
+    _min: GeneralPayrollEntryMinAggregateOutputType | null
+    _max: GeneralPayrollEntryMaxAggregateOutputType | null
+  }
+
+  type GetGeneralPayrollEntryGroupByPayload<T extends GeneralPayrollEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GeneralPayrollEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GeneralPayrollEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GeneralPayrollEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], GeneralPayrollEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GeneralPayrollEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollEntryId?: boolean
+    generalPayrollProjectId?: boolean
+    generalPayrollWorkerId?: boolean
+    monday?: boolean
+    tuesday?: boolean
+    wednesday?: boolean
+    thursday?: boolean
+    friday?: boolean
+    saturday?: boolean
+    dominical?: boolean
+    overtimeAmount?: boolean
+    afpDiscount?: boolean
+    advanceDiscount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    payrollProject?: boolean | GeneralPayrollProjectDefaultArgs<ExtArgs>
+    payrollWorker?: boolean | GeneralPayrollWorkerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["generalPayrollEntry"]>
+
+  export type GeneralPayrollEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollEntryId?: boolean
+    generalPayrollProjectId?: boolean
+    generalPayrollWorkerId?: boolean
+    monday?: boolean
+    tuesday?: boolean
+    wednesday?: boolean
+    thursday?: boolean
+    friday?: boolean
+    saturday?: boolean
+    dominical?: boolean
+    overtimeAmount?: boolean
+    afpDiscount?: boolean
+    advanceDiscount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    payrollProject?: boolean | GeneralPayrollProjectDefaultArgs<ExtArgs>
+    payrollWorker?: boolean | GeneralPayrollWorkerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["generalPayrollEntry"]>
+
+  export type GeneralPayrollEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    generalPayrollEntryId?: boolean
+    generalPayrollProjectId?: boolean
+    generalPayrollWorkerId?: boolean
+    monday?: boolean
+    tuesday?: boolean
+    wednesday?: boolean
+    thursday?: boolean
+    friday?: boolean
+    saturday?: boolean
+    dominical?: boolean
+    overtimeAmount?: boolean
+    afpDiscount?: boolean
+    advanceDiscount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    payrollProject?: boolean | GeneralPayrollProjectDefaultArgs<ExtArgs>
+    payrollWorker?: boolean | GeneralPayrollWorkerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["generalPayrollEntry"]>
+
+  export type GeneralPayrollEntrySelectScalar = {
+    generalPayrollEntryId?: boolean
+    generalPayrollProjectId?: boolean
+    generalPayrollWorkerId?: boolean
+    monday?: boolean
+    tuesday?: boolean
+    wednesday?: boolean
+    thursday?: boolean
+    friday?: boolean
+    saturday?: boolean
+    dominical?: boolean
+    overtimeAmount?: boolean
+    afpDiscount?: boolean
+    advanceDiscount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type GeneralPayrollEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"generalPayrollEntryId" | "generalPayrollProjectId" | "generalPayrollWorkerId" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "dominical" | "overtimeAmount" | "afpDiscount" | "advanceDiscount" | "createdAt" | "updatedAt", ExtArgs["result"]["generalPayrollEntry"]>
+  export type GeneralPayrollEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payrollProject?: boolean | GeneralPayrollProjectDefaultArgs<ExtArgs>
+    payrollWorker?: boolean | GeneralPayrollWorkerDefaultArgs<ExtArgs>
+  }
+  export type GeneralPayrollEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payrollProject?: boolean | GeneralPayrollProjectDefaultArgs<ExtArgs>
+    payrollWorker?: boolean | GeneralPayrollWorkerDefaultArgs<ExtArgs>
+  }
+  export type GeneralPayrollEntryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payrollProject?: boolean | GeneralPayrollProjectDefaultArgs<ExtArgs>
+    payrollWorker?: boolean | GeneralPayrollWorkerDefaultArgs<ExtArgs>
+  }
+
+  export type $GeneralPayrollEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GeneralPayrollEntry"
+    objects: {
+      payrollProject: Prisma.$GeneralPayrollProjectPayload<ExtArgs>
+      payrollWorker: Prisma.$GeneralPayrollWorkerPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      generalPayrollEntryId: number
+      generalPayrollProjectId: number
+      generalPayrollWorkerId: number
+      monday: Prisma.Decimal
+      tuesday: Prisma.Decimal
+      wednesday: Prisma.Decimal
+      thursday: Prisma.Decimal
+      friday: Prisma.Decimal
+      saturday: Prisma.Decimal
+      dominical: Prisma.Decimal
+      overtimeAmount: Prisma.Decimal
+      afpDiscount: Prisma.Decimal
+      advanceDiscount: Prisma.Decimal
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["generalPayrollEntry"]>
+    composites: {}
+  }
+
+  type GeneralPayrollEntryGetPayload<S extends boolean | null | undefined | GeneralPayrollEntryDefaultArgs> = $Result.GetResult<Prisma.$GeneralPayrollEntryPayload, S>
+
+  type GeneralPayrollEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GeneralPayrollEntryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GeneralPayrollEntryCountAggregateInputType | true
+    }
+
+  export interface GeneralPayrollEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GeneralPayrollEntry'], meta: { name: 'GeneralPayrollEntry' } }
+    /**
+     * Find zero or one GeneralPayrollEntry that matches the filter.
+     * @param {GeneralPayrollEntryFindUniqueArgs} args - Arguments to find a GeneralPayrollEntry
+     * @example
+     * // Get one GeneralPayrollEntry
+     * const generalPayrollEntry = await prisma.generalPayrollEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GeneralPayrollEntryFindUniqueArgs>(args: SelectSubset<T, GeneralPayrollEntryFindUniqueArgs<ExtArgs>>): Prisma__GeneralPayrollEntryClient<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GeneralPayrollEntry that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GeneralPayrollEntryFindUniqueOrThrowArgs} args - Arguments to find a GeneralPayrollEntry
+     * @example
+     * // Get one GeneralPayrollEntry
+     * const generalPayrollEntry = await prisma.generalPayrollEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GeneralPayrollEntryFindUniqueOrThrowArgs>(args: SelectSubset<T, GeneralPayrollEntryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GeneralPayrollEntryClient<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GeneralPayrollEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollEntryFindFirstArgs} args - Arguments to find a GeneralPayrollEntry
+     * @example
+     * // Get one GeneralPayrollEntry
+     * const generalPayrollEntry = await prisma.generalPayrollEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GeneralPayrollEntryFindFirstArgs>(args?: SelectSubset<T, GeneralPayrollEntryFindFirstArgs<ExtArgs>>): Prisma__GeneralPayrollEntryClient<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GeneralPayrollEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollEntryFindFirstOrThrowArgs} args - Arguments to find a GeneralPayrollEntry
+     * @example
+     * // Get one GeneralPayrollEntry
+     * const generalPayrollEntry = await prisma.generalPayrollEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GeneralPayrollEntryFindFirstOrThrowArgs>(args?: SelectSubset<T, GeneralPayrollEntryFindFirstOrThrowArgs<ExtArgs>>): Prisma__GeneralPayrollEntryClient<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GeneralPayrollEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollEntryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GeneralPayrollEntries
+     * const generalPayrollEntries = await prisma.generalPayrollEntry.findMany()
+     * 
+     * // Get first 10 GeneralPayrollEntries
+     * const generalPayrollEntries = await prisma.generalPayrollEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `generalPayrollEntryId`
+     * const generalPayrollEntryWithGeneralPayrollEntryIdOnly = await prisma.generalPayrollEntry.findMany({ select: { generalPayrollEntryId: true } })
+     * 
+     */
+    findMany<T extends GeneralPayrollEntryFindManyArgs>(args?: SelectSubset<T, GeneralPayrollEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GeneralPayrollEntry.
+     * @param {GeneralPayrollEntryCreateArgs} args - Arguments to create a GeneralPayrollEntry.
+     * @example
+     * // Create one GeneralPayrollEntry
+     * const GeneralPayrollEntry = await prisma.generalPayrollEntry.create({
+     *   data: {
+     *     // ... data to create a GeneralPayrollEntry
+     *   }
+     * })
+     * 
+     */
+    create<T extends GeneralPayrollEntryCreateArgs>(args: SelectSubset<T, GeneralPayrollEntryCreateArgs<ExtArgs>>): Prisma__GeneralPayrollEntryClient<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GeneralPayrollEntries.
+     * @param {GeneralPayrollEntryCreateManyArgs} args - Arguments to create many GeneralPayrollEntries.
+     * @example
+     * // Create many GeneralPayrollEntries
+     * const generalPayrollEntry = await prisma.generalPayrollEntry.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GeneralPayrollEntryCreateManyArgs>(args?: SelectSubset<T, GeneralPayrollEntryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GeneralPayrollEntries and returns the data saved in the database.
+     * @param {GeneralPayrollEntryCreateManyAndReturnArgs} args - Arguments to create many GeneralPayrollEntries.
+     * @example
+     * // Create many GeneralPayrollEntries
+     * const generalPayrollEntry = await prisma.generalPayrollEntry.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GeneralPayrollEntries and only return the `generalPayrollEntryId`
+     * const generalPayrollEntryWithGeneralPayrollEntryIdOnly = await prisma.generalPayrollEntry.createManyAndReturn({
+     *   select: { generalPayrollEntryId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GeneralPayrollEntryCreateManyAndReturnArgs>(args?: SelectSubset<T, GeneralPayrollEntryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GeneralPayrollEntry.
+     * @param {GeneralPayrollEntryDeleteArgs} args - Arguments to delete one GeneralPayrollEntry.
+     * @example
+     * // Delete one GeneralPayrollEntry
+     * const GeneralPayrollEntry = await prisma.generalPayrollEntry.delete({
+     *   where: {
+     *     // ... filter to delete one GeneralPayrollEntry
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GeneralPayrollEntryDeleteArgs>(args: SelectSubset<T, GeneralPayrollEntryDeleteArgs<ExtArgs>>): Prisma__GeneralPayrollEntryClient<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GeneralPayrollEntry.
+     * @param {GeneralPayrollEntryUpdateArgs} args - Arguments to update one GeneralPayrollEntry.
+     * @example
+     * // Update one GeneralPayrollEntry
+     * const generalPayrollEntry = await prisma.generalPayrollEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GeneralPayrollEntryUpdateArgs>(args: SelectSubset<T, GeneralPayrollEntryUpdateArgs<ExtArgs>>): Prisma__GeneralPayrollEntryClient<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GeneralPayrollEntries.
+     * @param {GeneralPayrollEntryDeleteManyArgs} args - Arguments to filter GeneralPayrollEntries to delete.
+     * @example
+     * // Delete a few GeneralPayrollEntries
+     * const { count } = await prisma.generalPayrollEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GeneralPayrollEntryDeleteManyArgs>(args?: SelectSubset<T, GeneralPayrollEntryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GeneralPayrollEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GeneralPayrollEntries
+     * const generalPayrollEntry = await prisma.generalPayrollEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GeneralPayrollEntryUpdateManyArgs>(args: SelectSubset<T, GeneralPayrollEntryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GeneralPayrollEntries and returns the data updated in the database.
+     * @param {GeneralPayrollEntryUpdateManyAndReturnArgs} args - Arguments to update many GeneralPayrollEntries.
+     * @example
+     * // Update many GeneralPayrollEntries
+     * const generalPayrollEntry = await prisma.generalPayrollEntry.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GeneralPayrollEntries and only return the `generalPayrollEntryId`
+     * const generalPayrollEntryWithGeneralPayrollEntryIdOnly = await prisma.generalPayrollEntry.updateManyAndReturn({
+     *   select: { generalPayrollEntryId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GeneralPayrollEntryUpdateManyAndReturnArgs>(args: SelectSubset<T, GeneralPayrollEntryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GeneralPayrollEntry.
+     * @param {GeneralPayrollEntryUpsertArgs} args - Arguments to update or create a GeneralPayrollEntry.
+     * @example
+     * // Update or create a GeneralPayrollEntry
+     * const generalPayrollEntry = await prisma.generalPayrollEntry.upsert({
+     *   create: {
+     *     // ... data to create a GeneralPayrollEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GeneralPayrollEntry we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GeneralPayrollEntryUpsertArgs>(args: SelectSubset<T, GeneralPayrollEntryUpsertArgs<ExtArgs>>): Prisma__GeneralPayrollEntryClient<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GeneralPayrollEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollEntryCountArgs} args - Arguments to filter GeneralPayrollEntries to count.
+     * @example
+     * // Count the number of GeneralPayrollEntries
+     * const count = await prisma.generalPayrollEntry.count({
+     *   where: {
+     *     // ... the filter for the GeneralPayrollEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends GeneralPayrollEntryCountArgs>(
+      args?: Subset<T, GeneralPayrollEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GeneralPayrollEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GeneralPayrollEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GeneralPayrollEntryAggregateArgs>(args: Subset<T, GeneralPayrollEntryAggregateArgs>): Prisma.PrismaPromise<GetGeneralPayrollEntryAggregateType<T>>
+
+    /**
+     * Group by GeneralPayrollEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GeneralPayrollEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GeneralPayrollEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GeneralPayrollEntryGroupByArgs['orderBy'] }
+        : { orderBy?: GeneralPayrollEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GeneralPayrollEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGeneralPayrollEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GeneralPayrollEntry model
+   */
+  readonly fields: GeneralPayrollEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GeneralPayrollEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GeneralPayrollEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    payrollProject<T extends GeneralPayrollProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayrollProjectDefaultArgs<ExtArgs>>): Prisma__GeneralPayrollProjectClient<$Result.GetResult<Prisma.$GeneralPayrollProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    payrollWorker<T extends GeneralPayrollWorkerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayrollWorkerDefaultArgs<ExtArgs>>): Prisma__GeneralPayrollWorkerClient<$Result.GetResult<Prisma.$GeneralPayrollWorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GeneralPayrollEntry model
+   */
+  interface GeneralPayrollEntryFieldRefs {
+    readonly generalPayrollEntryId: FieldRef<"GeneralPayrollEntry", 'Int'>
+    readonly generalPayrollProjectId: FieldRef<"GeneralPayrollEntry", 'Int'>
+    readonly generalPayrollWorkerId: FieldRef<"GeneralPayrollEntry", 'Int'>
+    readonly monday: FieldRef<"GeneralPayrollEntry", 'Decimal'>
+    readonly tuesday: FieldRef<"GeneralPayrollEntry", 'Decimal'>
+    readonly wednesday: FieldRef<"GeneralPayrollEntry", 'Decimal'>
+    readonly thursday: FieldRef<"GeneralPayrollEntry", 'Decimal'>
+    readonly friday: FieldRef<"GeneralPayrollEntry", 'Decimal'>
+    readonly saturday: FieldRef<"GeneralPayrollEntry", 'Decimal'>
+    readonly dominical: FieldRef<"GeneralPayrollEntry", 'Decimal'>
+    readonly overtimeAmount: FieldRef<"GeneralPayrollEntry", 'Decimal'>
+    readonly afpDiscount: FieldRef<"GeneralPayrollEntry", 'Decimal'>
+    readonly advanceDiscount: FieldRef<"GeneralPayrollEntry", 'Decimal'>
+    readonly createdAt: FieldRef<"GeneralPayrollEntry", 'DateTime'>
+    readonly updatedAt: FieldRef<"GeneralPayrollEntry", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GeneralPayrollEntry findUnique
+   */
+  export type GeneralPayrollEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollEntry to fetch.
+     */
+    where: GeneralPayrollEntryWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollEntry findUniqueOrThrow
+   */
+  export type GeneralPayrollEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollEntry to fetch.
+     */
+    where: GeneralPayrollEntryWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollEntry findFirst
+   */
+  export type GeneralPayrollEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollEntry to fetch.
+     */
+    where?: GeneralPayrollEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollEntries to fetch.
+     */
+    orderBy?: GeneralPayrollEntryOrderByWithRelationInput | GeneralPayrollEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GeneralPayrollEntries.
+     */
+    cursor?: GeneralPayrollEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GeneralPayrollEntries.
+     */
+    distinct?: GeneralPayrollEntryScalarFieldEnum | GeneralPayrollEntryScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollEntry findFirstOrThrow
+   */
+  export type GeneralPayrollEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollEntry to fetch.
+     */
+    where?: GeneralPayrollEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollEntries to fetch.
+     */
+    orderBy?: GeneralPayrollEntryOrderByWithRelationInput | GeneralPayrollEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GeneralPayrollEntries.
+     */
+    cursor?: GeneralPayrollEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GeneralPayrollEntries.
+     */
+    distinct?: GeneralPayrollEntryScalarFieldEnum | GeneralPayrollEntryScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollEntry findMany
+   */
+  export type GeneralPayrollEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which GeneralPayrollEntries to fetch.
+     */
+    where?: GeneralPayrollEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GeneralPayrollEntries to fetch.
+     */
+    orderBy?: GeneralPayrollEntryOrderByWithRelationInput | GeneralPayrollEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GeneralPayrollEntries.
+     */
+    cursor?: GeneralPayrollEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GeneralPayrollEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GeneralPayrollEntries.
+     */
+    skip?: number
+    distinct?: GeneralPayrollEntryScalarFieldEnum | GeneralPayrollEntryScalarFieldEnum[]
+  }
+
+  /**
+   * GeneralPayrollEntry create
+   */
+  export type GeneralPayrollEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GeneralPayrollEntry.
+     */
+    data: XOR<GeneralPayrollEntryCreateInput, GeneralPayrollEntryUncheckedCreateInput>
+  }
+
+  /**
+   * GeneralPayrollEntry createMany
+   */
+  export type GeneralPayrollEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GeneralPayrollEntries.
+     */
+    data: GeneralPayrollEntryCreateManyInput | GeneralPayrollEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GeneralPayrollEntry createManyAndReturn
+   */
+  export type GeneralPayrollEntryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * The data used to create many GeneralPayrollEntries.
+     */
+    data: GeneralPayrollEntryCreateManyInput | GeneralPayrollEntryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GeneralPayrollEntry update
+   */
+  export type GeneralPayrollEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GeneralPayrollEntry.
+     */
+    data: XOR<GeneralPayrollEntryUpdateInput, GeneralPayrollEntryUncheckedUpdateInput>
+    /**
+     * Choose, which GeneralPayrollEntry to update.
+     */
+    where: GeneralPayrollEntryWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollEntry updateMany
+   */
+  export type GeneralPayrollEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GeneralPayrollEntries.
+     */
+    data: XOR<GeneralPayrollEntryUpdateManyMutationInput, GeneralPayrollEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which GeneralPayrollEntries to update
+     */
+    where?: GeneralPayrollEntryWhereInput
+    /**
+     * Limit how many GeneralPayrollEntries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GeneralPayrollEntry updateManyAndReturn
+   */
+  export type GeneralPayrollEntryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * The data used to update GeneralPayrollEntries.
+     */
+    data: XOR<GeneralPayrollEntryUpdateManyMutationInput, GeneralPayrollEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which GeneralPayrollEntries to update
+     */
+    where?: GeneralPayrollEntryWhereInput
+    /**
+     * Limit how many GeneralPayrollEntries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GeneralPayrollEntry upsert
+   */
+  export type GeneralPayrollEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GeneralPayrollEntry to update in case it exists.
+     */
+    where: GeneralPayrollEntryWhereUniqueInput
+    /**
+     * In case the GeneralPayrollEntry found by the `where` argument doesn't exist, create a new GeneralPayrollEntry with this data.
+     */
+    create: XOR<GeneralPayrollEntryCreateInput, GeneralPayrollEntryUncheckedCreateInput>
+    /**
+     * In case the GeneralPayrollEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GeneralPayrollEntryUpdateInput, GeneralPayrollEntryUncheckedUpdateInput>
+  }
+
+  /**
+   * GeneralPayrollEntry delete
+   */
+  export type GeneralPayrollEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
+    /**
+     * Filter which GeneralPayrollEntry to delete.
+     */
+    where: GeneralPayrollEntryWhereUniqueInput
+  }
+
+  /**
+   * GeneralPayrollEntry deleteMany
+   */
+  export type GeneralPayrollEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GeneralPayrollEntries to delete
+     */
+    where?: GeneralPayrollEntryWhereInput
+    /**
+     * Limit how many GeneralPayrollEntries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GeneralPayrollEntry without action
+   */
+  export type GeneralPayrollEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GeneralPayrollEntry
+     */
+    select?: GeneralPayrollEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GeneralPayrollEntry
+     */
+    omit?: GeneralPayrollEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GeneralPayrollEntryInclude<ExtArgs> | null
   }
 
 
@@ -65297,2281 +68988,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: DailyWageInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model WeeklyWage
-   */
-
-  export type AggregateWeeklyWage = {
-    _count: WeeklyWageCountAggregateOutputType | null
-    _avg: WeeklyWageAvgAggregateOutputType | null
-    _sum: WeeklyWageSumAggregateOutputType | null
-    _min: WeeklyWageMinAggregateOutputType | null
-    _max: WeeklyWageMaxAggregateOutputType | null
-  }
-
-  export type WeeklyWageAvgAggregateOutputType = {
-    weeklyWageId: number | null
-    workerId: number | null
-    weekId: number | null
-    grossAmount: Decimal | null
-    totalAmount: Decimal | null
-  }
-
-  export type WeeklyWageSumAggregateOutputType = {
-    weeklyWageId: number | null
-    workerId: number | null
-    weekId: number | null
-    grossAmount: Decimal | null
-    totalAmount: Decimal | null
-  }
-
-  export type WeeklyWageMinAggregateOutputType = {
-    weeklyWageId: number | null
-    workerId: number | null
-    weekId: number | null
-    grossAmount: Decimal | null
-    totalAmount: Decimal | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type WeeklyWageMaxAggregateOutputType = {
-    weeklyWageId: number | null
-    workerId: number | null
-    weekId: number | null
-    grossAmount: Decimal | null
-    totalAmount: Decimal | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type WeeklyWageCountAggregateOutputType = {
-    weeklyWageId: number
-    workerId: number
-    weekId: number
-    grossAmount: number
-    totalAmount: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type WeeklyWageAvgAggregateInputType = {
-    weeklyWageId?: true
-    workerId?: true
-    weekId?: true
-    grossAmount?: true
-    totalAmount?: true
-  }
-
-  export type WeeklyWageSumAggregateInputType = {
-    weeklyWageId?: true
-    workerId?: true
-    weekId?: true
-    grossAmount?: true
-    totalAmount?: true
-  }
-
-  export type WeeklyWageMinAggregateInputType = {
-    weeklyWageId?: true
-    workerId?: true
-    weekId?: true
-    grossAmount?: true
-    totalAmount?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type WeeklyWageMaxAggregateInputType = {
-    weeklyWageId?: true
-    workerId?: true
-    weekId?: true
-    grossAmount?: true
-    totalAmount?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type WeeklyWageCountAggregateInputType = {
-    weeklyWageId?: true
-    workerId?: true
-    weekId?: true
-    grossAmount?: true
-    totalAmount?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type WeeklyWageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which WeeklyWage to aggregate.
-     */
-    where?: WeeklyWageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of WeeklyWages to fetch.
-     */
-    orderBy?: WeeklyWageOrderByWithRelationInput | WeeklyWageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: WeeklyWageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` WeeklyWages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` WeeklyWages.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned WeeklyWages
-    **/
-    _count?: true | WeeklyWageCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: WeeklyWageAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: WeeklyWageSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: WeeklyWageMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: WeeklyWageMaxAggregateInputType
-  }
-
-  export type GetWeeklyWageAggregateType<T extends WeeklyWageAggregateArgs> = {
-        [P in keyof T & keyof AggregateWeeklyWage]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateWeeklyWage[P]>
-      : GetScalarType<T[P], AggregateWeeklyWage[P]>
-  }
-
-
-
-
-  export type WeeklyWageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: WeeklyWageWhereInput
-    orderBy?: WeeklyWageOrderByWithAggregationInput | WeeklyWageOrderByWithAggregationInput[]
-    by: WeeklyWageScalarFieldEnum[] | WeeklyWageScalarFieldEnum
-    having?: WeeklyWageScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: WeeklyWageCountAggregateInputType | true
-    _avg?: WeeklyWageAvgAggregateInputType
-    _sum?: WeeklyWageSumAggregateInputType
-    _min?: WeeklyWageMinAggregateInputType
-    _max?: WeeklyWageMaxAggregateInputType
-  }
-
-  export type WeeklyWageGroupByOutputType = {
-    weeklyWageId: number
-    workerId: number
-    weekId: number
-    grossAmount: Decimal
-    totalAmount: Decimal
-    createdAt: Date
-    updatedAt: Date
-    _count: WeeklyWageCountAggregateOutputType | null
-    _avg: WeeklyWageAvgAggregateOutputType | null
-    _sum: WeeklyWageSumAggregateOutputType | null
-    _min: WeeklyWageMinAggregateOutputType | null
-    _max: WeeklyWageMaxAggregateOutputType | null
-  }
-
-  type GetWeeklyWageGroupByPayload<T extends WeeklyWageGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<WeeklyWageGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof WeeklyWageGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], WeeklyWageGroupByOutputType[P]>
-            : GetScalarType<T[P], WeeklyWageGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type WeeklyWageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    weeklyWageId?: boolean
-    workerId?: boolean
-    weekId?: boolean
-    grossAmount?: boolean
-    totalAmount?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["weeklyWage"]>
-
-  export type WeeklyWageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    weeklyWageId?: boolean
-    workerId?: boolean
-    weekId?: boolean
-    grossAmount?: boolean
-    totalAmount?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["weeklyWage"]>
-
-  export type WeeklyWageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    weeklyWageId?: boolean
-    workerId?: boolean
-    weekId?: boolean
-    grossAmount?: boolean
-    totalAmount?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["weeklyWage"]>
-
-  export type WeeklyWageSelectScalar = {
-    weeklyWageId?: boolean
-    workerId?: boolean
-    weekId?: boolean
-    grossAmount?: boolean
-    totalAmount?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type WeeklyWageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"weeklyWageId" | "workerId" | "weekId" | "grossAmount" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["weeklyWage"]>
-  export type WeeklyWageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }
-  export type WeeklyWageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }
-  export type WeeklyWageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }
-
-  export type $WeeklyWagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "WeeklyWage"
-    objects: {
-      worker: Prisma.$WorkerPayload<ExtArgs>
-      week: Prisma.$WeekPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      weeklyWageId: number
-      workerId: number
-      weekId: number
-      grossAmount: Prisma.Decimal
-      totalAmount: Prisma.Decimal
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["weeklyWage"]>
-    composites: {}
-  }
-
-  type WeeklyWageGetPayload<S extends boolean | null | undefined | WeeklyWageDefaultArgs> = $Result.GetResult<Prisma.$WeeklyWagePayload, S>
-
-  type WeeklyWageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<WeeklyWageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: WeeklyWageCountAggregateInputType | true
-    }
-
-  export interface WeeklyWageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WeeklyWage'], meta: { name: 'WeeklyWage' } }
-    /**
-     * Find zero or one WeeklyWage that matches the filter.
-     * @param {WeeklyWageFindUniqueArgs} args - Arguments to find a WeeklyWage
-     * @example
-     * // Get one WeeklyWage
-     * const weeklyWage = await prisma.weeklyWage.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends WeeklyWageFindUniqueArgs>(args: SelectSubset<T, WeeklyWageFindUniqueArgs<ExtArgs>>): Prisma__WeeklyWageClient<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one WeeklyWage that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {WeeklyWageFindUniqueOrThrowArgs} args - Arguments to find a WeeklyWage
-     * @example
-     * // Get one WeeklyWage
-     * const weeklyWage = await prisma.weeklyWage.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends WeeklyWageFindUniqueOrThrowArgs>(args: SelectSubset<T, WeeklyWageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WeeklyWageClient<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first WeeklyWage that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WeeklyWageFindFirstArgs} args - Arguments to find a WeeklyWage
-     * @example
-     * // Get one WeeklyWage
-     * const weeklyWage = await prisma.weeklyWage.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends WeeklyWageFindFirstArgs>(args?: SelectSubset<T, WeeklyWageFindFirstArgs<ExtArgs>>): Prisma__WeeklyWageClient<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first WeeklyWage that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WeeklyWageFindFirstOrThrowArgs} args - Arguments to find a WeeklyWage
-     * @example
-     * // Get one WeeklyWage
-     * const weeklyWage = await prisma.weeklyWage.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends WeeklyWageFindFirstOrThrowArgs>(args?: SelectSubset<T, WeeklyWageFindFirstOrThrowArgs<ExtArgs>>): Prisma__WeeklyWageClient<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more WeeklyWages that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WeeklyWageFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all WeeklyWages
-     * const weeklyWages = await prisma.weeklyWage.findMany()
-     * 
-     * // Get first 10 WeeklyWages
-     * const weeklyWages = await prisma.weeklyWage.findMany({ take: 10 })
-     * 
-     * // Only select the `weeklyWageId`
-     * const weeklyWageWithWeeklyWageIdOnly = await prisma.weeklyWage.findMany({ select: { weeklyWageId: true } })
-     * 
-     */
-    findMany<T extends WeeklyWageFindManyArgs>(args?: SelectSubset<T, WeeklyWageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a WeeklyWage.
-     * @param {WeeklyWageCreateArgs} args - Arguments to create a WeeklyWage.
-     * @example
-     * // Create one WeeklyWage
-     * const WeeklyWage = await prisma.weeklyWage.create({
-     *   data: {
-     *     // ... data to create a WeeklyWage
-     *   }
-     * })
-     * 
-     */
-    create<T extends WeeklyWageCreateArgs>(args: SelectSubset<T, WeeklyWageCreateArgs<ExtArgs>>): Prisma__WeeklyWageClient<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many WeeklyWages.
-     * @param {WeeklyWageCreateManyArgs} args - Arguments to create many WeeklyWages.
-     * @example
-     * // Create many WeeklyWages
-     * const weeklyWage = await prisma.weeklyWage.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends WeeklyWageCreateManyArgs>(args?: SelectSubset<T, WeeklyWageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many WeeklyWages and returns the data saved in the database.
-     * @param {WeeklyWageCreateManyAndReturnArgs} args - Arguments to create many WeeklyWages.
-     * @example
-     * // Create many WeeklyWages
-     * const weeklyWage = await prisma.weeklyWage.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many WeeklyWages and only return the `weeklyWageId`
-     * const weeklyWageWithWeeklyWageIdOnly = await prisma.weeklyWage.createManyAndReturn({
-     *   select: { weeklyWageId: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends WeeklyWageCreateManyAndReturnArgs>(args?: SelectSubset<T, WeeklyWageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a WeeklyWage.
-     * @param {WeeklyWageDeleteArgs} args - Arguments to delete one WeeklyWage.
-     * @example
-     * // Delete one WeeklyWage
-     * const WeeklyWage = await prisma.weeklyWage.delete({
-     *   where: {
-     *     // ... filter to delete one WeeklyWage
-     *   }
-     * })
-     * 
-     */
-    delete<T extends WeeklyWageDeleteArgs>(args: SelectSubset<T, WeeklyWageDeleteArgs<ExtArgs>>): Prisma__WeeklyWageClient<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one WeeklyWage.
-     * @param {WeeklyWageUpdateArgs} args - Arguments to update one WeeklyWage.
-     * @example
-     * // Update one WeeklyWage
-     * const weeklyWage = await prisma.weeklyWage.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends WeeklyWageUpdateArgs>(args: SelectSubset<T, WeeklyWageUpdateArgs<ExtArgs>>): Prisma__WeeklyWageClient<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more WeeklyWages.
-     * @param {WeeklyWageDeleteManyArgs} args - Arguments to filter WeeklyWages to delete.
-     * @example
-     * // Delete a few WeeklyWages
-     * const { count } = await prisma.weeklyWage.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends WeeklyWageDeleteManyArgs>(args?: SelectSubset<T, WeeklyWageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more WeeklyWages.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WeeklyWageUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many WeeklyWages
-     * const weeklyWage = await prisma.weeklyWage.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends WeeklyWageUpdateManyArgs>(args: SelectSubset<T, WeeklyWageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more WeeklyWages and returns the data updated in the database.
-     * @param {WeeklyWageUpdateManyAndReturnArgs} args - Arguments to update many WeeklyWages.
-     * @example
-     * // Update many WeeklyWages
-     * const weeklyWage = await prisma.weeklyWage.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more WeeklyWages and only return the `weeklyWageId`
-     * const weeklyWageWithWeeklyWageIdOnly = await prisma.weeklyWage.updateManyAndReturn({
-     *   select: { weeklyWageId: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends WeeklyWageUpdateManyAndReturnArgs>(args: SelectSubset<T, WeeklyWageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one WeeklyWage.
-     * @param {WeeklyWageUpsertArgs} args - Arguments to update or create a WeeklyWage.
-     * @example
-     * // Update or create a WeeklyWage
-     * const weeklyWage = await prisma.weeklyWage.upsert({
-     *   create: {
-     *     // ... data to create a WeeklyWage
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the WeeklyWage we want to update
-     *   }
-     * })
-     */
-    upsert<T extends WeeklyWageUpsertArgs>(args: SelectSubset<T, WeeklyWageUpsertArgs<ExtArgs>>): Prisma__WeeklyWageClient<$Result.GetResult<Prisma.$WeeklyWagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of WeeklyWages.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WeeklyWageCountArgs} args - Arguments to filter WeeklyWages to count.
-     * @example
-     * // Count the number of WeeklyWages
-     * const count = await prisma.weeklyWage.count({
-     *   where: {
-     *     // ... the filter for the WeeklyWages we want to count
-     *   }
-     * })
-    **/
-    count<T extends WeeklyWageCountArgs>(
-      args?: Subset<T, WeeklyWageCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], WeeklyWageCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a WeeklyWage.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WeeklyWageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends WeeklyWageAggregateArgs>(args: Subset<T, WeeklyWageAggregateArgs>): Prisma.PrismaPromise<GetWeeklyWageAggregateType<T>>
-
-    /**
-     * Group by WeeklyWage.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WeeklyWageGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends WeeklyWageGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: WeeklyWageGroupByArgs['orderBy'] }
-        : { orderBy?: WeeklyWageGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, WeeklyWageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWeeklyWageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the WeeklyWage model
-   */
-  readonly fields: WeeklyWageFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for WeeklyWage.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__WeeklyWageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    worker<T extends WorkerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkerDefaultArgs<ExtArgs>>): Prisma__WorkerClient<$Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    week<T extends WeekDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WeekDefaultArgs<ExtArgs>>): Prisma__WeekClient<$Result.GetResult<Prisma.$WeekPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the WeeklyWage model
-   */
-  interface WeeklyWageFieldRefs {
-    readonly weeklyWageId: FieldRef<"WeeklyWage", 'Int'>
-    readonly workerId: FieldRef<"WeeklyWage", 'Int'>
-    readonly weekId: FieldRef<"WeeklyWage", 'Int'>
-    readonly grossAmount: FieldRef<"WeeklyWage", 'Decimal'>
-    readonly totalAmount: FieldRef<"WeeklyWage", 'Decimal'>
-    readonly createdAt: FieldRef<"WeeklyWage", 'DateTime'>
-    readonly updatedAt: FieldRef<"WeeklyWage", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * WeeklyWage findUnique
-   */
-  export type WeeklyWageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    /**
-     * Filter, which WeeklyWage to fetch.
-     */
-    where: WeeklyWageWhereUniqueInput
-  }
-
-  /**
-   * WeeklyWage findUniqueOrThrow
-   */
-  export type WeeklyWageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    /**
-     * Filter, which WeeklyWage to fetch.
-     */
-    where: WeeklyWageWhereUniqueInput
-  }
-
-  /**
-   * WeeklyWage findFirst
-   */
-  export type WeeklyWageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    /**
-     * Filter, which WeeklyWage to fetch.
-     */
-    where?: WeeklyWageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of WeeklyWages to fetch.
-     */
-    orderBy?: WeeklyWageOrderByWithRelationInput | WeeklyWageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for WeeklyWages.
-     */
-    cursor?: WeeklyWageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` WeeklyWages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` WeeklyWages.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of WeeklyWages.
-     */
-    distinct?: WeeklyWageScalarFieldEnum | WeeklyWageScalarFieldEnum[]
-  }
-
-  /**
-   * WeeklyWage findFirstOrThrow
-   */
-  export type WeeklyWageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    /**
-     * Filter, which WeeklyWage to fetch.
-     */
-    where?: WeeklyWageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of WeeklyWages to fetch.
-     */
-    orderBy?: WeeklyWageOrderByWithRelationInput | WeeklyWageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for WeeklyWages.
-     */
-    cursor?: WeeklyWageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` WeeklyWages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` WeeklyWages.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of WeeklyWages.
-     */
-    distinct?: WeeklyWageScalarFieldEnum | WeeklyWageScalarFieldEnum[]
-  }
-
-  /**
-   * WeeklyWage findMany
-   */
-  export type WeeklyWageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    /**
-     * Filter, which WeeklyWages to fetch.
-     */
-    where?: WeeklyWageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of WeeklyWages to fetch.
-     */
-    orderBy?: WeeklyWageOrderByWithRelationInput | WeeklyWageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing WeeklyWages.
-     */
-    cursor?: WeeklyWageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` WeeklyWages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` WeeklyWages.
-     */
-    skip?: number
-    distinct?: WeeklyWageScalarFieldEnum | WeeklyWageScalarFieldEnum[]
-  }
-
-  /**
-   * WeeklyWage create
-   */
-  export type WeeklyWageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    /**
-     * The data needed to create a WeeklyWage.
-     */
-    data: XOR<WeeklyWageCreateInput, WeeklyWageUncheckedCreateInput>
-  }
-
-  /**
-   * WeeklyWage createMany
-   */
-  export type WeeklyWageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many WeeklyWages.
-     */
-    data: WeeklyWageCreateManyInput | WeeklyWageCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * WeeklyWage createManyAndReturn
-   */
-  export type WeeklyWageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * The data used to create many WeeklyWages.
-     */
-    data: WeeklyWageCreateManyInput | WeeklyWageCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * WeeklyWage update
-   */
-  export type WeeklyWageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    /**
-     * The data needed to update a WeeklyWage.
-     */
-    data: XOR<WeeklyWageUpdateInput, WeeklyWageUncheckedUpdateInput>
-    /**
-     * Choose, which WeeklyWage to update.
-     */
-    where: WeeklyWageWhereUniqueInput
-  }
-
-  /**
-   * WeeklyWage updateMany
-   */
-  export type WeeklyWageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update WeeklyWages.
-     */
-    data: XOR<WeeklyWageUpdateManyMutationInput, WeeklyWageUncheckedUpdateManyInput>
-    /**
-     * Filter which WeeklyWages to update
-     */
-    where?: WeeklyWageWhereInput
-    /**
-     * Limit how many WeeklyWages to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * WeeklyWage updateManyAndReturn
-   */
-  export type WeeklyWageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * The data used to update WeeklyWages.
-     */
-    data: XOR<WeeklyWageUpdateManyMutationInput, WeeklyWageUncheckedUpdateManyInput>
-    /**
-     * Filter which WeeklyWages to update
-     */
-    where?: WeeklyWageWhereInput
-    /**
-     * Limit how many WeeklyWages to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * WeeklyWage upsert
-   */
-  export type WeeklyWageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    /**
-     * The filter to search for the WeeklyWage to update in case it exists.
-     */
-    where: WeeklyWageWhereUniqueInput
-    /**
-     * In case the WeeklyWage found by the `where` argument doesn't exist, create a new WeeklyWage with this data.
-     */
-    create: XOR<WeeklyWageCreateInput, WeeklyWageUncheckedCreateInput>
-    /**
-     * In case the WeeklyWage was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<WeeklyWageUpdateInput, WeeklyWageUncheckedUpdateInput>
-  }
-
-  /**
-   * WeeklyWage delete
-   */
-  export type WeeklyWageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-    /**
-     * Filter which WeeklyWage to delete.
-     */
-    where: WeeklyWageWhereUniqueInput
-  }
-
-  /**
-   * WeeklyWage deleteMany
-   */
-  export type WeeklyWageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which WeeklyWages to delete
-     */
-    where?: WeeklyWageWhereInput
-    /**
-     * Limit how many WeeklyWages to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * WeeklyWage without action
-   */
-  export type WeeklyWageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WeeklyWage
-     */
-    select?: WeeklyWageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WeeklyWage
-     */
-    omit?: WeeklyWageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WeeklyWageInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Attendance
-   */
-
-  export type AggregateAttendance = {
-    _count: AttendanceCountAggregateOutputType | null
-    _avg: AttendanceAvgAggregateOutputType | null
-    _sum: AttendanceSumAggregateOutputType | null
-    _min: AttendanceMinAggregateOutputType | null
-    _max: AttendanceMaxAggregateOutputType | null
-  }
-
-  export type AttendanceAvgAggregateOutputType = {
-    attendanceId: number | null
-    workerId: number | null
-    projectId: number | null
-    weekId: number | null
-  }
-
-  export type AttendanceSumAggregateOutputType = {
-    attendanceId: number | null
-    workerId: number | null
-    projectId: number | null
-    weekId: number | null
-  }
-
-  export type AttendanceMinAggregateOutputType = {
-    attendanceId: number | null
-    workerId: number | null
-    projectId: number | null
-    date: Date | null
-    weekId: number | null
-    createdAt: Date | null
-  }
-
-  export type AttendanceMaxAggregateOutputType = {
-    attendanceId: number | null
-    workerId: number | null
-    projectId: number | null
-    date: Date | null
-    weekId: number | null
-    createdAt: Date | null
-  }
-
-  export type AttendanceCountAggregateOutputType = {
-    attendanceId: number
-    workerId: number
-    projectId: number
-    date: number
-    weekId: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type AttendanceAvgAggregateInputType = {
-    attendanceId?: true
-    workerId?: true
-    projectId?: true
-    weekId?: true
-  }
-
-  export type AttendanceSumAggregateInputType = {
-    attendanceId?: true
-    workerId?: true
-    projectId?: true
-    weekId?: true
-  }
-
-  export type AttendanceMinAggregateInputType = {
-    attendanceId?: true
-    workerId?: true
-    projectId?: true
-    date?: true
-    weekId?: true
-    createdAt?: true
-  }
-
-  export type AttendanceMaxAggregateInputType = {
-    attendanceId?: true
-    workerId?: true
-    projectId?: true
-    date?: true
-    weekId?: true
-    createdAt?: true
-  }
-
-  export type AttendanceCountAggregateInputType = {
-    attendanceId?: true
-    workerId?: true
-    projectId?: true
-    date?: true
-    weekId?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type AttendanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Attendance to aggregate.
-     */
-    where?: AttendanceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Attendances to fetch.
-     */
-    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: AttendanceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Attendances from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Attendances.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Attendances
-    **/
-    _count?: true | AttendanceCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: AttendanceAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: AttendanceSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: AttendanceMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: AttendanceMaxAggregateInputType
-  }
-
-  export type GetAttendanceAggregateType<T extends AttendanceAggregateArgs> = {
-        [P in keyof T & keyof AggregateAttendance]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateAttendance[P]>
-      : GetScalarType<T[P], AggregateAttendance[P]>
-  }
-
-
-
-
-  export type AttendanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttendanceWhereInput
-    orderBy?: AttendanceOrderByWithAggregationInput | AttendanceOrderByWithAggregationInput[]
-    by: AttendanceScalarFieldEnum[] | AttendanceScalarFieldEnum
-    having?: AttendanceScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: AttendanceCountAggregateInputType | true
-    _avg?: AttendanceAvgAggregateInputType
-    _sum?: AttendanceSumAggregateInputType
-    _min?: AttendanceMinAggregateInputType
-    _max?: AttendanceMaxAggregateInputType
-  }
-
-  export type AttendanceGroupByOutputType = {
-    attendanceId: number
-    workerId: number
-    projectId: number
-    date: Date
-    weekId: number
-    createdAt: Date
-    _count: AttendanceCountAggregateOutputType | null
-    _avg: AttendanceAvgAggregateOutputType | null
-    _sum: AttendanceSumAggregateOutputType | null
-    _min: AttendanceMinAggregateOutputType | null
-    _max: AttendanceMaxAggregateOutputType | null
-  }
-
-  type GetAttendanceGroupByPayload<T extends AttendanceGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<AttendanceGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof AttendanceGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], AttendanceGroupByOutputType[P]>
-            : GetScalarType<T[P], AttendanceGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type AttendanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    attendanceId?: boolean
-    workerId?: boolean
-    projectId?: boolean
-    date?: boolean
-    weekId?: boolean
-    createdAt?: boolean
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["attendance"]>
-
-  export type AttendanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    attendanceId?: boolean
-    workerId?: boolean
-    projectId?: boolean
-    date?: boolean
-    weekId?: boolean
-    createdAt?: boolean
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["attendance"]>
-
-  export type AttendanceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    attendanceId?: boolean
-    workerId?: boolean
-    projectId?: boolean
-    date?: boolean
-    weekId?: boolean
-    createdAt?: boolean
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["attendance"]>
-
-  export type AttendanceSelectScalar = {
-    attendanceId?: boolean
-    workerId?: boolean
-    projectId?: boolean
-    date?: boolean
-    weekId?: boolean
-    createdAt?: boolean
-  }
-
-  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"attendanceId" | "workerId" | "projectId" | "date" | "weekId" | "createdAt", ExtArgs["result"]["attendance"]>
-  export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }
-  export type AttendanceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }
-  export type AttendanceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    worker?: boolean | WorkerDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    week?: boolean | WeekDefaultArgs<ExtArgs>
-  }
-
-  export type $AttendancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Attendance"
-    objects: {
-      worker: Prisma.$WorkerPayload<ExtArgs>
-      project: Prisma.$ProjectPayload<ExtArgs>
-      week: Prisma.$WeekPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      attendanceId: number
-      workerId: number
-      projectId: number
-      date: Date
-      weekId: number
-      createdAt: Date
-    }, ExtArgs["result"]["attendance"]>
-    composites: {}
-  }
-
-  type AttendanceGetPayload<S extends boolean | null | undefined | AttendanceDefaultArgs> = $Result.GetResult<Prisma.$AttendancePayload, S>
-
-  type AttendanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<AttendanceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: AttendanceCountAggregateInputType | true
-    }
-
-  export interface AttendanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Attendance'], meta: { name: 'Attendance' } }
-    /**
-     * Find zero or one Attendance that matches the filter.
-     * @param {AttendanceFindUniqueArgs} args - Arguments to find a Attendance
-     * @example
-     * // Get one Attendance
-     * const attendance = await prisma.attendance.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends AttendanceFindUniqueArgs>(args: SelectSubset<T, AttendanceFindUniqueArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Attendance that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {AttendanceFindUniqueOrThrowArgs} args - Arguments to find a Attendance
-     * @example
-     * // Get one Attendance
-     * const attendance = await prisma.attendance.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends AttendanceFindUniqueOrThrowArgs>(args: SelectSubset<T, AttendanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Attendance that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttendanceFindFirstArgs} args - Arguments to find a Attendance
-     * @example
-     * // Get one Attendance
-     * const attendance = await prisma.attendance.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends AttendanceFindFirstArgs>(args?: SelectSubset<T, AttendanceFindFirstArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Attendance that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttendanceFindFirstOrThrowArgs} args - Arguments to find a Attendance
-     * @example
-     * // Get one Attendance
-     * const attendance = await prisma.attendance.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends AttendanceFindFirstOrThrowArgs>(args?: SelectSubset<T, AttendanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Attendances that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttendanceFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Attendances
-     * const attendances = await prisma.attendance.findMany()
-     * 
-     * // Get first 10 Attendances
-     * const attendances = await prisma.attendance.findMany({ take: 10 })
-     * 
-     * // Only select the `attendanceId`
-     * const attendanceWithAttendanceIdOnly = await prisma.attendance.findMany({ select: { attendanceId: true } })
-     * 
-     */
-    findMany<T extends AttendanceFindManyArgs>(args?: SelectSubset<T, AttendanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Attendance.
-     * @param {AttendanceCreateArgs} args - Arguments to create a Attendance.
-     * @example
-     * // Create one Attendance
-     * const Attendance = await prisma.attendance.create({
-     *   data: {
-     *     // ... data to create a Attendance
-     *   }
-     * })
-     * 
-     */
-    create<T extends AttendanceCreateArgs>(args: SelectSubset<T, AttendanceCreateArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Attendances.
-     * @param {AttendanceCreateManyArgs} args - Arguments to create many Attendances.
-     * @example
-     * // Create many Attendances
-     * const attendance = await prisma.attendance.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends AttendanceCreateManyArgs>(args?: SelectSubset<T, AttendanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Attendances and returns the data saved in the database.
-     * @param {AttendanceCreateManyAndReturnArgs} args - Arguments to create many Attendances.
-     * @example
-     * // Create many Attendances
-     * const attendance = await prisma.attendance.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Attendances and only return the `attendanceId`
-     * const attendanceWithAttendanceIdOnly = await prisma.attendance.createManyAndReturn({
-     *   select: { attendanceId: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends AttendanceCreateManyAndReturnArgs>(args?: SelectSubset<T, AttendanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Attendance.
-     * @param {AttendanceDeleteArgs} args - Arguments to delete one Attendance.
-     * @example
-     * // Delete one Attendance
-     * const Attendance = await prisma.attendance.delete({
-     *   where: {
-     *     // ... filter to delete one Attendance
-     *   }
-     * })
-     * 
-     */
-    delete<T extends AttendanceDeleteArgs>(args: SelectSubset<T, AttendanceDeleteArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Attendance.
-     * @param {AttendanceUpdateArgs} args - Arguments to update one Attendance.
-     * @example
-     * // Update one Attendance
-     * const attendance = await prisma.attendance.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends AttendanceUpdateArgs>(args: SelectSubset<T, AttendanceUpdateArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Attendances.
-     * @param {AttendanceDeleteManyArgs} args - Arguments to filter Attendances to delete.
-     * @example
-     * // Delete a few Attendances
-     * const { count } = await prisma.attendance.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends AttendanceDeleteManyArgs>(args?: SelectSubset<T, AttendanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Attendances.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttendanceUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Attendances
-     * const attendance = await prisma.attendance.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends AttendanceUpdateManyArgs>(args: SelectSubset<T, AttendanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Attendances and returns the data updated in the database.
-     * @param {AttendanceUpdateManyAndReturnArgs} args - Arguments to update many Attendances.
-     * @example
-     * // Update many Attendances
-     * const attendance = await prisma.attendance.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Attendances and only return the `attendanceId`
-     * const attendanceWithAttendanceIdOnly = await prisma.attendance.updateManyAndReturn({
-     *   select: { attendanceId: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends AttendanceUpdateManyAndReturnArgs>(args: SelectSubset<T, AttendanceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Attendance.
-     * @param {AttendanceUpsertArgs} args - Arguments to update or create a Attendance.
-     * @example
-     * // Update or create a Attendance
-     * const attendance = await prisma.attendance.upsert({
-     *   create: {
-     *     // ... data to create a Attendance
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Attendance we want to update
-     *   }
-     * })
-     */
-    upsert<T extends AttendanceUpsertArgs>(args: SelectSubset<T, AttendanceUpsertArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Attendances.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttendanceCountArgs} args - Arguments to filter Attendances to count.
-     * @example
-     * // Count the number of Attendances
-     * const count = await prisma.attendance.count({
-     *   where: {
-     *     // ... the filter for the Attendances we want to count
-     *   }
-     * })
-    **/
-    count<T extends AttendanceCountArgs>(
-      args?: Subset<T, AttendanceCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], AttendanceCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Attendance.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttendanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends AttendanceAggregateArgs>(args: Subset<T, AttendanceAggregateArgs>): Prisma.PrismaPromise<GetAttendanceAggregateType<T>>
-
-    /**
-     * Group by Attendance.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AttendanceGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends AttendanceGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AttendanceGroupByArgs['orderBy'] }
-        : { orderBy?: AttendanceGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, AttendanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAttendanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Attendance model
-   */
-  readonly fields: AttendanceFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Attendance.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__AttendanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    worker<T extends WorkerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkerDefaultArgs<ExtArgs>>): Prisma__WorkerClient<$Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    week<T extends WeekDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WeekDefaultArgs<ExtArgs>>): Prisma__WeekClient<$Result.GetResult<Prisma.$WeekPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Attendance model
-   */
-  interface AttendanceFieldRefs {
-    readonly attendanceId: FieldRef<"Attendance", 'Int'>
-    readonly workerId: FieldRef<"Attendance", 'Int'>
-    readonly projectId: FieldRef<"Attendance", 'Int'>
-    readonly date: FieldRef<"Attendance", 'DateTime'>
-    readonly weekId: FieldRef<"Attendance", 'Int'>
-    readonly createdAt: FieldRef<"Attendance", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Attendance findUnique
-   */
-  export type AttendanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    /**
-     * Filter, which Attendance to fetch.
-     */
-    where: AttendanceWhereUniqueInput
-  }
-
-  /**
-   * Attendance findUniqueOrThrow
-   */
-  export type AttendanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    /**
-     * Filter, which Attendance to fetch.
-     */
-    where: AttendanceWhereUniqueInput
-  }
-
-  /**
-   * Attendance findFirst
-   */
-  export type AttendanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    /**
-     * Filter, which Attendance to fetch.
-     */
-    where?: AttendanceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Attendances to fetch.
-     */
-    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Attendances.
-     */
-    cursor?: AttendanceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Attendances from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Attendances.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Attendances.
-     */
-    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
-  }
-
-  /**
-   * Attendance findFirstOrThrow
-   */
-  export type AttendanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    /**
-     * Filter, which Attendance to fetch.
-     */
-    where?: AttendanceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Attendances to fetch.
-     */
-    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Attendances.
-     */
-    cursor?: AttendanceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Attendances from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Attendances.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Attendances.
-     */
-    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
-  }
-
-  /**
-   * Attendance findMany
-   */
-  export type AttendanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    /**
-     * Filter, which Attendances to fetch.
-     */
-    where?: AttendanceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Attendances to fetch.
-     */
-    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Attendances.
-     */
-    cursor?: AttendanceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Attendances from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Attendances.
-     */
-    skip?: number
-    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
-  }
-
-  /**
-   * Attendance create
-   */
-  export type AttendanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Attendance.
-     */
-    data: XOR<AttendanceCreateInput, AttendanceUncheckedCreateInput>
-  }
-
-  /**
-   * Attendance createMany
-   */
-  export type AttendanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Attendances.
-     */
-    data: AttendanceCreateManyInput | AttendanceCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Attendance createManyAndReturn
-   */
-  export type AttendanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * The data used to create many Attendances.
-     */
-    data: AttendanceCreateManyInput | AttendanceCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Attendance update
-   */
-  export type AttendanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Attendance.
-     */
-    data: XOR<AttendanceUpdateInput, AttendanceUncheckedUpdateInput>
-    /**
-     * Choose, which Attendance to update.
-     */
-    where: AttendanceWhereUniqueInput
-  }
-
-  /**
-   * Attendance updateMany
-   */
-  export type AttendanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Attendances.
-     */
-    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyInput>
-    /**
-     * Filter which Attendances to update
-     */
-    where?: AttendanceWhereInput
-    /**
-     * Limit how many Attendances to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Attendance updateManyAndReturn
-   */
-  export type AttendanceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * The data used to update Attendances.
-     */
-    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyInput>
-    /**
-     * Filter which Attendances to update
-     */
-    where?: AttendanceWhereInput
-    /**
-     * Limit how many Attendances to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Attendance upsert
-   */
-  export type AttendanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Attendance to update in case it exists.
-     */
-    where: AttendanceWhereUniqueInput
-    /**
-     * In case the Attendance found by the `where` argument doesn't exist, create a new Attendance with this data.
-     */
-    create: XOR<AttendanceCreateInput, AttendanceUncheckedCreateInput>
-    /**
-     * In case the Attendance was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<AttendanceUpdateInput, AttendanceUncheckedUpdateInput>
-  }
-
-  /**
-   * Attendance delete
-   */
-  export type AttendanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    /**
-     * Filter which Attendance to delete.
-     */
-    where: AttendanceWhereUniqueInput
-  }
-
-  /**
-   * Attendance deleteMany
-   */
-  export type AttendanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Attendances to delete
-     */
-    where?: AttendanceWhereInput
-    /**
-     * Limit how many Attendances to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Attendance without action
-   */
-  export type AttendanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
   }
 
 
@@ -80365,17 +81781,64 @@ export namespace Prisma {
   export type WeekScalarFieldEnum = (typeof WeekScalarFieldEnum)[keyof typeof WeekScalarFieldEnum]
 
 
-  export const ProjectWeeklyPayrollScalarFieldEnum: {
-    projectWeeklyPayrollId: 'projectWeeklyPayrollId',
-    projectId: 'projectId',
+  export const GeneralPayrollScalarFieldEnum: {
+    generalPayrollId: 'generalPayrollId',
     weekId: 'weekId',
-    amount: 'amount',
-    notes: 'notes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
-  export type ProjectWeeklyPayrollScalarFieldEnum = (typeof ProjectWeeklyPayrollScalarFieldEnum)[keyof typeof ProjectWeeklyPayrollScalarFieldEnum]
+  export type GeneralPayrollScalarFieldEnum = (typeof GeneralPayrollScalarFieldEnum)[keyof typeof GeneralPayrollScalarFieldEnum]
+
+
+  export const GeneralPayrollProjectScalarFieldEnum: {
+    generalPayrollProjectId: 'generalPayrollProjectId',
+    generalPayrollId: 'generalPayrollId',
+    projectId: 'projectId',
+    displayOrder: 'displayOrder',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GeneralPayrollProjectScalarFieldEnum = (typeof GeneralPayrollProjectScalarFieldEnum)[keyof typeof GeneralPayrollProjectScalarFieldEnum]
+
+
+  export const GeneralPayrollWorkerScalarFieldEnum: {
+    generalPayrollWorkerId: 'generalPayrollWorkerId',
+    generalPayrollId: 'generalPayrollId',
+    workerId: 'workerId',
+    group: 'group',
+    dailyWage: 'dailyWage',
+    additionalAmount: 'additionalAmount',
+    liquidationAmount: 'liquidationAmount',
+    sundayDinnerAmount: 'sundayDinnerAmount',
+    displayOrder: 'displayOrder',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GeneralPayrollWorkerScalarFieldEnum = (typeof GeneralPayrollWorkerScalarFieldEnum)[keyof typeof GeneralPayrollWorkerScalarFieldEnum]
+
+
+  export const GeneralPayrollEntryScalarFieldEnum: {
+    generalPayrollEntryId: 'generalPayrollEntryId',
+    generalPayrollProjectId: 'generalPayrollProjectId',
+    generalPayrollWorkerId: 'generalPayrollWorkerId',
+    monday: 'monday',
+    tuesday: 'tuesday',
+    wednesday: 'wednesday',
+    thursday: 'thursday',
+    friday: 'friday',
+    saturday: 'saturday',
+    dominical: 'dominical',
+    overtimeAmount: 'overtimeAmount',
+    afpDiscount: 'afpDiscount',
+    advanceDiscount: 'advanceDiscount',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GeneralPayrollEntryScalarFieldEnum = (typeof GeneralPayrollEntryScalarFieldEnum)[keyof typeof GeneralPayrollEntryScalarFieldEnum]
 
 
   export const DailyWageScalarFieldEnum: {
@@ -80388,31 +81851,6 @@ export namespace Prisma {
   };
 
   export type DailyWageScalarFieldEnum = (typeof DailyWageScalarFieldEnum)[keyof typeof DailyWageScalarFieldEnum]
-
-
-  export const WeeklyWageScalarFieldEnum: {
-    weeklyWageId: 'weeklyWageId',
-    workerId: 'workerId',
-    weekId: 'weekId',
-    grossAmount: 'grossAmount',
-    totalAmount: 'totalAmount',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type WeeklyWageScalarFieldEnum = (typeof WeeklyWageScalarFieldEnum)[keyof typeof WeeklyWageScalarFieldEnum]
-
-
-  export const AttendanceScalarFieldEnum: {
-    attendanceId: 'attendanceId',
-    workerId: 'workerId',
-    projectId: 'projectId',
-    date: 'date',
-    weekId: 'weekId',
-    createdAt: 'createdAt'
-  };
-
-  export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
 
 
   export const TaskScalarFieldEnum: {
@@ -81072,6 +82510,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'GeneralPayrollWorkerGroup'
+   */
+  export type EnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeneralPayrollWorkerGroup'>
+    
+
+
+  /**
+   * Reference to a field of type 'GeneralPayrollWorkerGroup[]'
+   */
+  export type ListEnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeneralPayrollWorkerGroup[]'>
+    
+
+
+  /**
    * Reference to a field of type 'TaskStatus'
    */
   export type EnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus'>
@@ -81419,8 +82871,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderListRelationFilter
     pettyCashes?: PettyCashListRelationFilter
     serviceSales?: ServiceSaleListRelationFilter
-    attendances?: AttendanceListRelationFilter
-    weeklyPayrolls?: ProjectWeeklyPayrollListRelationFilter
+    generalPayrollProjects?: GeneralPayrollProjectListRelationFilter
     tasks?: TaskListRelationFilter
     notifications?: NotificationListRelationFilter
     inventoryEntries?: ProjectInventoryEntryListRelationFilter
@@ -81446,8 +82897,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderOrderByRelationAggregateInput
     pettyCashes?: PettyCashOrderByRelationAggregateInput
     serviceSales?: ServiceSaleOrderByRelationAggregateInput
-    attendances?: AttendanceOrderByRelationAggregateInput
-    weeklyPayrolls?: ProjectWeeklyPayrollOrderByRelationAggregateInput
+    generalPayrollProjects?: GeneralPayrollProjectOrderByRelationAggregateInput
     tasks?: TaskOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     inventoryEntries?: ProjectInventoryEntryOrderByRelationAggregateInput
@@ -81476,8 +82926,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderListRelationFilter
     pettyCashes?: PettyCashListRelationFilter
     serviceSales?: ServiceSaleListRelationFilter
-    attendances?: AttendanceListRelationFilter
-    weeklyPayrolls?: ProjectWeeklyPayrollListRelationFilter
+    generalPayrollProjects?: GeneralPayrollProjectListRelationFilter
     tasks?: TaskListRelationFilter
     notifications?: NotificationListRelationFilter
     inventoryEntries?: ProjectInventoryEntryListRelationFilter
@@ -83483,9 +84932,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Worker"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Worker"> | Date | string | null
     requestWorkers?: RequestWorkerListRelationFilter
-    weeklyWages?: WeeklyWageListRelationFilter
-    attendances?: AttendanceListRelationFilter
     dailyWages?: DailyWageListRelationFilter
+    generalPayrollWorkers?: GeneralPayrollWorkerListRelationFilter
     monthlyEvaluations?: WorkerMonthlyEvaluationListRelationFilter
     inventoryMovements?: InventoryMovementListRelationFilter
     currentInventoryAssets?: InventoryAssetListRelationFilter
@@ -83505,9 +84953,8 @@ export namespace Prisma {
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
     requestWorkers?: RequestWorkerOrderByRelationAggregateInput
-    weeklyWages?: WeeklyWageOrderByRelationAggregateInput
-    attendances?: AttendanceOrderByRelationAggregateInput
     dailyWages?: DailyWageOrderByRelationAggregateInput
+    generalPayrollWorkers?: GeneralPayrollWorkerOrderByRelationAggregateInput
     monthlyEvaluations?: WorkerMonthlyEvaluationOrderByRelationAggregateInput
     inventoryMovements?: InventoryMovementOrderByRelationAggregateInput
     currentInventoryAssets?: InventoryAssetOrderByRelationAggregateInput
@@ -83530,9 +84977,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Worker"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Worker"> | Date | string | null
     requestWorkers?: RequestWorkerListRelationFilter
-    weeklyWages?: WeeklyWageListRelationFilter
-    attendances?: AttendanceListRelationFilter
     dailyWages?: DailyWageListRelationFilter
+    generalPayrollWorkers?: GeneralPayrollWorkerListRelationFilter
     monthlyEvaluations?: WorkerMonthlyEvaluationListRelationFilter
     inventoryMovements?: InventoryMovementListRelationFilter
     currentInventoryAssets?: InventoryAssetListRelationFilter
@@ -85059,9 +86505,7 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"Week"> | Date | string
     createdAt?: DateTimeFilter<"Week"> | Date | string
     updatedAt?: DateTimeFilter<"Week"> | Date | string
-    weeklyWages?: WeeklyWageListRelationFilter
-    attendances?: AttendanceListRelationFilter
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollListRelationFilter
+    generalPayroll?: XOR<GeneralPayrollNullableScalarRelationFilter, GeneralPayrollWhereInput> | null
   }
 
   export type WeekOrderByWithRelationInput = {
@@ -85070,9 +86514,7 @@ export namespace Prisma {
     endDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    weeklyWages?: WeeklyWageOrderByRelationAggregateInput
-    attendances?: AttendanceOrderByRelationAggregateInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollOrderByRelationAggregateInput
+    generalPayroll?: GeneralPayrollOrderByWithRelationInput
   }
 
   export type WeekWhereUniqueInput = Prisma.AtLeast<{
@@ -85084,9 +86526,7 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"Week"> | Date | string
     createdAt?: DateTimeFilter<"Week"> | Date | string
     updatedAt?: DateTimeFilter<"Week"> | Date | string
-    weeklyWages?: WeeklyWageListRelationFilter
-    attendances?: AttendanceListRelationFilter
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollListRelationFilter
+    generalPayroll?: XOR<GeneralPayrollNullableScalarRelationFilter, GeneralPayrollWhereInput> | null
   }, "weekId" | "startDate">
 
   export type WeekOrderByWithAggregationInput = {
@@ -85113,75 +86553,336 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Week"> | Date | string
   }
 
-  export type ProjectWeeklyPayrollWhereInput = {
-    AND?: ProjectWeeklyPayrollWhereInput | ProjectWeeklyPayrollWhereInput[]
-    OR?: ProjectWeeklyPayrollWhereInput[]
-    NOT?: ProjectWeeklyPayrollWhereInput | ProjectWeeklyPayrollWhereInput[]
-    projectWeeklyPayrollId?: IntFilter<"ProjectWeeklyPayroll"> | number
-    projectId?: IntFilter<"ProjectWeeklyPayroll"> | number
-    weekId?: IntFilter<"ProjectWeeklyPayroll"> | number
-    amount?: DecimalFilter<"ProjectWeeklyPayroll"> | Decimal | DecimalJsLike | number | string
-    notes?: StringNullableFilter<"ProjectWeeklyPayroll"> | string | null
-    createdAt?: DateTimeFilter<"ProjectWeeklyPayroll"> | Date | string
-    updatedAt?: DateTimeFilter<"ProjectWeeklyPayroll"> | Date | string
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  export type GeneralPayrollWhereInput = {
+    AND?: GeneralPayrollWhereInput | GeneralPayrollWhereInput[]
+    OR?: GeneralPayrollWhereInput[]
+    NOT?: GeneralPayrollWhereInput | GeneralPayrollWhereInput[]
+    generalPayrollId?: IntFilter<"GeneralPayroll"> | number
+    weekId?: IntFilter<"GeneralPayroll"> | number
+    createdAt?: DateTimeFilter<"GeneralPayroll"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayroll"> | Date | string
     week?: XOR<WeekScalarRelationFilter, WeekWhereInput>
+    projects?: GeneralPayrollProjectListRelationFilter
+    workers?: GeneralPayrollWorkerListRelationFilter
   }
 
-  export type ProjectWeeklyPayrollOrderByWithRelationInput = {
-    projectWeeklyPayrollId?: SortOrder
-    projectId?: SortOrder
+  export type GeneralPayrollOrderByWithRelationInput = {
+    generalPayrollId?: SortOrder
     weekId?: SortOrder
-    amount?: SortOrder
-    notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    project?: ProjectOrderByWithRelationInput
     week?: WeekOrderByWithRelationInput
+    projects?: GeneralPayrollProjectOrderByRelationAggregateInput
+    workers?: GeneralPayrollWorkerOrderByRelationAggregateInput
   }
 
-  export type ProjectWeeklyPayrollWhereUniqueInput = Prisma.AtLeast<{
-    projectWeeklyPayrollId?: number
-    projectId_weekId?: ProjectWeeklyPayrollProjectIdWeekIdCompoundUniqueInput
-    AND?: ProjectWeeklyPayrollWhereInput | ProjectWeeklyPayrollWhereInput[]
-    OR?: ProjectWeeklyPayrollWhereInput[]
-    NOT?: ProjectWeeklyPayrollWhereInput | ProjectWeeklyPayrollWhereInput[]
-    projectId?: IntFilter<"ProjectWeeklyPayroll"> | number
-    weekId?: IntFilter<"ProjectWeeklyPayroll"> | number
-    amount?: DecimalFilter<"ProjectWeeklyPayroll"> | Decimal | DecimalJsLike | number | string
-    notes?: StringNullableFilter<"ProjectWeeklyPayroll"> | string | null
-    createdAt?: DateTimeFilter<"ProjectWeeklyPayroll"> | Date | string
-    updatedAt?: DateTimeFilter<"ProjectWeeklyPayroll"> | Date | string
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  export type GeneralPayrollWhereUniqueInput = Prisma.AtLeast<{
+    generalPayrollId?: number
+    weekId?: number
+    AND?: GeneralPayrollWhereInput | GeneralPayrollWhereInput[]
+    OR?: GeneralPayrollWhereInput[]
+    NOT?: GeneralPayrollWhereInput | GeneralPayrollWhereInput[]
+    createdAt?: DateTimeFilter<"GeneralPayroll"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayroll"> | Date | string
     week?: XOR<WeekScalarRelationFilter, WeekWhereInput>
-  }, "projectWeeklyPayrollId" | "projectId_weekId">
+    projects?: GeneralPayrollProjectListRelationFilter
+    workers?: GeneralPayrollWorkerListRelationFilter
+  }, "generalPayrollId" | "weekId">
 
-  export type ProjectWeeklyPayrollOrderByWithAggregationInput = {
-    projectWeeklyPayrollId?: SortOrder
-    projectId?: SortOrder
+  export type GeneralPayrollOrderByWithAggregationInput = {
+    generalPayrollId?: SortOrder
     weekId?: SortOrder
-    amount?: SortOrder
-    notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: ProjectWeeklyPayrollCountOrderByAggregateInput
-    _avg?: ProjectWeeklyPayrollAvgOrderByAggregateInput
-    _max?: ProjectWeeklyPayrollMaxOrderByAggregateInput
-    _min?: ProjectWeeklyPayrollMinOrderByAggregateInput
-    _sum?: ProjectWeeklyPayrollSumOrderByAggregateInput
+    _count?: GeneralPayrollCountOrderByAggregateInput
+    _avg?: GeneralPayrollAvgOrderByAggregateInput
+    _max?: GeneralPayrollMaxOrderByAggregateInput
+    _min?: GeneralPayrollMinOrderByAggregateInput
+    _sum?: GeneralPayrollSumOrderByAggregateInput
   }
 
-  export type ProjectWeeklyPayrollScalarWhereWithAggregatesInput = {
-    AND?: ProjectWeeklyPayrollScalarWhereWithAggregatesInput | ProjectWeeklyPayrollScalarWhereWithAggregatesInput[]
-    OR?: ProjectWeeklyPayrollScalarWhereWithAggregatesInput[]
-    NOT?: ProjectWeeklyPayrollScalarWhereWithAggregatesInput | ProjectWeeklyPayrollScalarWhereWithAggregatesInput[]
-    projectWeeklyPayrollId?: IntWithAggregatesFilter<"ProjectWeeklyPayroll"> | number
-    projectId?: IntWithAggregatesFilter<"ProjectWeeklyPayroll"> | number
-    weekId?: IntWithAggregatesFilter<"ProjectWeeklyPayroll"> | number
-    amount?: DecimalWithAggregatesFilter<"ProjectWeeklyPayroll"> | Decimal | DecimalJsLike | number | string
-    notes?: StringNullableWithAggregatesFilter<"ProjectWeeklyPayroll"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"ProjectWeeklyPayroll"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"ProjectWeeklyPayroll"> | Date | string
+  export type GeneralPayrollScalarWhereWithAggregatesInput = {
+    AND?: GeneralPayrollScalarWhereWithAggregatesInput | GeneralPayrollScalarWhereWithAggregatesInput[]
+    OR?: GeneralPayrollScalarWhereWithAggregatesInput[]
+    NOT?: GeneralPayrollScalarWhereWithAggregatesInput | GeneralPayrollScalarWhereWithAggregatesInput[]
+    generalPayrollId?: IntWithAggregatesFilter<"GeneralPayroll"> | number
+    weekId?: IntWithAggregatesFilter<"GeneralPayroll"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"GeneralPayroll"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GeneralPayroll"> | Date | string
+  }
+
+  export type GeneralPayrollProjectWhereInput = {
+    AND?: GeneralPayrollProjectWhereInput | GeneralPayrollProjectWhereInput[]
+    OR?: GeneralPayrollProjectWhereInput[]
+    NOT?: GeneralPayrollProjectWhereInput | GeneralPayrollProjectWhereInput[]
+    generalPayrollProjectId?: IntFilter<"GeneralPayrollProject"> | number
+    generalPayrollId?: IntFilter<"GeneralPayrollProject"> | number
+    projectId?: IntFilter<"GeneralPayrollProject"> | number
+    displayOrder?: IntFilter<"GeneralPayrollProject"> | number
+    createdAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
+    generalPayroll?: XOR<GeneralPayrollScalarRelationFilter, GeneralPayrollWhereInput>
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    entries?: GeneralPayrollEntryListRelationFilter
+  }
+
+  export type GeneralPayrollProjectOrderByWithRelationInput = {
+    generalPayrollProjectId?: SortOrder
+    generalPayrollId?: SortOrder
+    projectId?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    generalPayroll?: GeneralPayrollOrderByWithRelationInput
+    project?: ProjectOrderByWithRelationInput
+    entries?: GeneralPayrollEntryOrderByRelationAggregateInput
+  }
+
+  export type GeneralPayrollProjectWhereUniqueInput = Prisma.AtLeast<{
+    generalPayrollProjectId?: number
+    generalPayrollId_projectId?: GeneralPayrollProjectGeneralPayrollIdProjectIdCompoundUniqueInput
+    AND?: GeneralPayrollProjectWhereInput | GeneralPayrollProjectWhereInput[]
+    OR?: GeneralPayrollProjectWhereInput[]
+    NOT?: GeneralPayrollProjectWhereInput | GeneralPayrollProjectWhereInput[]
+    generalPayrollId?: IntFilter<"GeneralPayrollProject"> | number
+    projectId?: IntFilter<"GeneralPayrollProject"> | number
+    displayOrder?: IntFilter<"GeneralPayrollProject"> | number
+    createdAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
+    generalPayroll?: XOR<GeneralPayrollScalarRelationFilter, GeneralPayrollWhereInput>
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    entries?: GeneralPayrollEntryListRelationFilter
+  }, "generalPayrollProjectId" | "generalPayrollId_projectId">
+
+  export type GeneralPayrollProjectOrderByWithAggregationInput = {
+    generalPayrollProjectId?: SortOrder
+    generalPayrollId?: SortOrder
+    projectId?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GeneralPayrollProjectCountOrderByAggregateInput
+    _avg?: GeneralPayrollProjectAvgOrderByAggregateInput
+    _max?: GeneralPayrollProjectMaxOrderByAggregateInput
+    _min?: GeneralPayrollProjectMinOrderByAggregateInput
+    _sum?: GeneralPayrollProjectSumOrderByAggregateInput
+  }
+
+  export type GeneralPayrollProjectScalarWhereWithAggregatesInput = {
+    AND?: GeneralPayrollProjectScalarWhereWithAggregatesInput | GeneralPayrollProjectScalarWhereWithAggregatesInput[]
+    OR?: GeneralPayrollProjectScalarWhereWithAggregatesInput[]
+    NOT?: GeneralPayrollProjectScalarWhereWithAggregatesInput | GeneralPayrollProjectScalarWhereWithAggregatesInput[]
+    generalPayrollProjectId?: IntWithAggregatesFilter<"GeneralPayrollProject"> | number
+    generalPayrollId?: IntWithAggregatesFilter<"GeneralPayrollProject"> | number
+    projectId?: IntWithAggregatesFilter<"GeneralPayrollProject"> | number
+    displayOrder?: IntWithAggregatesFilter<"GeneralPayrollProject"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"GeneralPayrollProject"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GeneralPayrollProject"> | Date | string
+  }
+
+  export type GeneralPayrollWorkerWhereInput = {
+    AND?: GeneralPayrollWorkerWhereInput | GeneralPayrollWorkerWhereInput[]
+    OR?: GeneralPayrollWorkerWhereInput[]
+    NOT?: GeneralPayrollWorkerWhereInput | GeneralPayrollWorkerWhereInput[]
+    generalPayrollWorkerId?: IntFilter<"GeneralPayrollWorker"> | number
+    generalPayrollId?: IntFilter<"GeneralPayrollWorker"> | number
+    workerId?: IntFilter<"GeneralPayrollWorker"> | number
+    group?: EnumGeneralPayrollWorkerGroupFilter<"GeneralPayrollWorker"> | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFilter<"GeneralPayrollWorker"> | number
+    createdAt?: DateTimeFilter<"GeneralPayrollWorker"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayrollWorker"> | Date | string
+    generalPayroll?: XOR<GeneralPayrollScalarRelationFilter, GeneralPayrollWhereInput>
+    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
+    entries?: GeneralPayrollEntryListRelationFilter
+  }
+
+  export type GeneralPayrollWorkerOrderByWithRelationInput = {
+    generalPayrollWorkerId?: SortOrder
+    generalPayrollId?: SortOrder
+    workerId?: SortOrder
+    group?: SortOrder
+    dailyWage?: SortOrder
+    additionalAmount?: SortOrder
+    liquidationAmount?: SortOrder
+    sundayDinnerAmount?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    generalPayroll?: GeneralPayrollOrderByWithRelationInput
+    worker?: WorkerOrderByWithRelationInput
+    entries?: GeneralPayrollEntryOrderByRelationAggregateInput
+  }
+
+  export type GeneralPayrollWorkerWhereUniqueInput = Prisma.AtLeast<{
+    generalPayrollWorkerId?: number
+    generalPayrollId_workerId?: GeneralPayrollWorkerGeneralPayrollIdWorkerIdCompoundUniqueInput
+    AND?: GeneralPayrollWorkerWhereInput | GeneralPayrollWorkerWhereInput[]
+    OR?: GeneralPayrollWorkerWhereInput[]
+    NOT?: GeneralPayrollWorkerWhereInput | GeneralPayrollWorkerWhereInput[]
+    generalPayrollId?: IntFilter<"GeneralPayrollWorker"> | number
+    workerId?: IntFilter<"GeneralPayrollWorker"> | number
+    group?: EnumGeneralPayrollWorkerGroupFilter<"GeneralPayrollWorker"> | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFilter<"GeneralPayrollWorker"> | number
+    createdAt?: DateTimeFilter<"GeneralPayrollWorker"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayrollWorker"> | Date | string
+    generalPayroll?: XOR<GeneralPayrollScalarRelationFilter, GeneralPayrollWhereInput>
+    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
+    entries?: GeneralPayrollEntryListRelationFilter
+  }, "generalPayrollWorkerId" | "generalPayrollId_workerId">
+
+  export type GeneralPayrollWorkerOrderByWithAggregationInput = {
+    generalPayrollWorkerId?: SortOrder
+    generalPayrollId?: SortOrder
+    workerId?: SortOrder
+    group?: SortOrder
+    dailyWage?: SortOrder
+    additionalAmount?: SortOrder
+    liquidationAmount?: SortOrder
+    sundayDinnerAmount?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GeneralPayrollWorkerCountOrderByAggregateInput
+    _avg?: GeneralPayrollWorkerAvgOrderByAggregateInput
+    _max?: GeneralPayrollWorkerMaxOrderByAggregateInput
+    _min?: GeneralPayrollWorkerMinOrderByAggregateInput
+    _sum?: GeneralPayrollWorkerSumOrderByAggregateInput
+  }
+
+  export type GeneralPayrollWorkerScalarWhereWithAggregatesInput = {
+    AND?: GeneralPayrollWorkerScalarWhereWithAggregatesInput | GeneralPayrollWorkerScalarWhereWithAggregatesInput[]
+    OR?: GeneralPayrollWorkerScalarWhereWithAggregatesInput[]
+    NOT?: GeneralPayrollWorkerScalarWhereWithAggregatesInput | GeneralPayrollWorkerScalarWhereWithAggregatesInput[]
+    generalPayrollWorkerId?: IntWithAggregatesFilter<"GeneralPayrollWorker"> | number
+    generalPayrollId?: IntWithAggregatesFilter<"GeneralPayrollWorker"> | number
+    workerId?: IntWithAggregatesFilter<"GeneralPayrollWorker"> | number
+    group?: EnumGeneralPayrollWorkerGroupWithAggregatesFilter<"GeneralPayrollWorker"> | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalWithAggregatesFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalWithAggregatesFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalWithAggregatesFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalWithAggregatesFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntWithAggregatesFilter<"GeneralPayrollWorker"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"GeneralPayrollWorker"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GeneralPayrollWorker"> | Date | string
+  }
+
+  export type GeneralPayrollEntryWhereInput = {
+    AND?: GeneralPayrollEntryWhereInput | GeneralPayrollEntryWhereInput[]
+    OR?: GeneralPayrollEntryWhereInput[]
+    NOT?: GeneralPayrollEntryWhereInput | GeneralPayrollEntryWhereInput[]
+    generalPayrollEntryId?: IntFilter<"GeneralPayrollEntry"> | number
+    generalPayrollProjectId?: IntFilter<"GeneralPayrollEntry"> | number
+    generalPayrollWorkerId?: IntFilter<"GeneralPayrollEntry"> | number
+    monday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"GeneralPayrollEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayrollEntry"> | Date | string
+    payrollProject?: XOR<GeneralPayrollProjectScalarRelationFilter, GeneralPayrollProjectWhereInput>
+    payrollWorker?: XOR<GeneralPayrollWorkerScalarRelationFilter, GeneralPayrollWorkerWhereInput>
+  }
+
+  export type GeneralPayrollEntryOrderByWithRelationInput = {
+    generalPayrollEntryId?: SortOrder
+    generalPayrollProjectId?: SortOrder
+    generalPayrollWorkerId?: SortOrder
+    monday?: SortOrder
+    tuesday?: SortOrder
+    wednesday?: SortOrder
+    thursday?: SortOrder
+    friday?: SortOrder
+    saturday?: SortOrder
+    dominical?: SortOrder
+    overtimeAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    payrollProject?: GeneralPayrollProjectOrderByWithRelationInput
+    payrollWorker?: GeneralPayrollWorkerOrderByWithRelationInput
+  }
+
+  export type GeneralPayrollEntryWhereUniqueInput = Prisma.AtLeast<{
+    generalPayrollEntryId?: number
+    generalPayrollProjectId_generalPayrollWorkerId?: GeneralPayrollEntryGeneralPayrollProjectIdGeneralPayrollWorkerIdCompoundUniqueInput
+    AND?: GeneralPayrollEntryWhereInput | GeneralPayrollEntryWhereInput[]
+    OR?: GeneralPayrollEntryWhereInput[]
+    NOT?: GeneralPayrollEntryWhereInput | GeneralPayrollEntryWhereInput[]
+    generalPayrollProjectId?: IntFilter<"GeneralPayrollEntry"> | number
+    generalPayrollWorkerId?: IntFilter<"GeneralPayrollEntry"> | number
+    monday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"GeneralPayrollEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayrollEntry"> | Date | string
+    payrollProject?: XOR<GeneralPayrollProjectScalarRelationFilter, GeneralPayrollProjectWhereInput>
+    payrollWorker?: XOR<GeneralPayrollWorkerScalarRelationFilter, GeneralPayrollWorkerWhereInput>
+  }, "generalPayrollEntryId" | "generalPayrollProjectId_generalPayrollWorkerId">
+
+  export type GeneralPayrollEntryOrderByWithAggregationInput = {
+    generalPayrollEntryId?: SortOrder
+    generalPayrollProjectId?: SortOrder
+    generalPayrollWorkerId?: SortOrder
+    monday?: SortOrder
+    tuesday?: SortOrder
+    wednesday?: SortOrder
+    thursday?: SortOrder
+    friday?: SortOrder
+    saturday?: SortOrder
+    dominical?: SortOrder
+    overtimeAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GeneralPayrollEntryCountOrderByAggregateInput
+    _avg?: GeneralPayrollEntryAvgOrderByAggregateInput
+    _max?: GeneralPayrollEntryMaxOrderByAggregateInput
+    _min?: GeneralPayrollEntryMinOrderByAggregateInput
+    _sum?: GeneralPayrollEntrySumOrderByAggregateInput
+  }
+
+  export type GeneralPayrollEntryScalarWhereWithAggregatesInput = {
+    AND?: GeneralPayrollEntryScalarWhereWithAggregatesInput | GeneralPayrollEntryScalarWhereWithAggregatesInput[]
+    OR?: GeneralPayrollEntryScalarWhereWithAggregatesInput[]
+    NOT?: GeneralPayrollEntryScalarWhereWithAggregatesInput | GeneralPayrollEntryScalarWhereWithAggregatesInput[]
+    generalPayrollEntryId?: IntWithAggregatesFilter<"GeneralPayrollEntry"> | number
+    generalPayrollProjectId?: IntWithAggregatesFilter<"GeneralPayrollEntry"> | number
+    generalPayrollWorkerId?: IntWithAggregatesFilter<"GeneralPayrollEntry"> | number
+    monday?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    friday?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeWithAggregatesFilter<"GeneralPayrollEntry"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GeneralPayrollEntry"> | Date | string
   }
 
   export type DailyWageWhereInput = {
@@ -85245,146 +86946,6 @@ export namespace Prisma {
     validFromDate?: DateTimeWithAggregatesFilter<"DailyWage"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"DailyWage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DailyWage"> | Date | string
-  }
-
-  export type WeeklyWageWhereInput = {
-    AND?: WeeklyWageWhereInput | WeeklyWageWhereInput[]
-    OR?: WeeklyWageWhereInput[]
-    NOT?: WeeklyWageWhereInput | WeeklyWageWhereInput[]
-    weeklyWageId?: IntFilter<"WeeklyWage"> | number
-    workerId?: IntFilter<"WeeklyWage"> | number
-    weekId?: IntFilter<"WeeklyWage"> | number
-    grossAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFilter<"WeeklyWage"> | Date | string
-    updatedAt?: DateTimeFilter<"WeeklyWage"> | Date | string
-    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
-    week?: XOR<WeekScalarRelationFilter, WeekWhereInput>
-  }
-
-  export type WeeklyWageOrderByWithRelationInput = {
-    weeklyWageId?: SortOrder
-    workerId?: SortOrder
-    weekId?: SortOrder
-    grossAmount?: SortOrder
-    totalAmount?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    worker?: WorkerOrderByWithRelationInput
-    week?: WeekOrderByWithRelationInput
-  }
-
-  export type WeeklyWageWhereUniqueInput = Prisma.AtLeast<{
-    weeklyWageId?: number
-    workerId_weekId?: WeeklyWageWorkerIdWeekIdCompoundUniqueInput
-    AND?: WeeklyWageWhereInput | WeeklyWageWhereInput[]
-    OR?: WeeklyWageWhereInput[]
-    NOT?: WeeklyWageWhereInput | WeeklyWageWhereInput[]
-    workerId?: IntFilter<"WeeklyWage"> | number
-    weekId?: IntFilter<"WeeklyWage"> | number
-    grossAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFilter<"WeeklyWage"> | Date | string
-    updatedAt?: DateTimeFilter<"WeeklyWage"> | Date | string
-    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
-    week?: XOR<WeekScalarRelationFilter, WeekWhereInput>
-  }, "weeklyWageId" | "workerId_weekId">
-
-  export type WeeklyWageOrderByWithAggregationInput = {
-    weeklyWageId?: SortOrder
-    workerId?: SortOrder
-    weekId?: SortOrder
-    grossAmount?: SortOrder
-    totalAmount?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: WeeklyWageCountOrderByAggregateInput
-    _avg?: WeeklyWageAvgOrderByAggregateInput
-    _max?: WeeklyWageMaxOrderByAggregateInput
-    _min?: WeeklyWageMinOrderByAggregateInput
-    _sum?: WeeklyWageSumOrderByAggregateInput
-  }
-
-  export type WeeklyWageScalarWhereWithAggregatesInput = {
-    AND?: WeeklyWageScalarWhereWithAggregatesInput | WeeklyWageScalarWhereWithAggregatesInput[]
-    OR?: WeeklyWageScalarWhereWithAggregatesInput[]
-    NOT?: WeeklyWageScalarWhereWithAggregatesInput | WeeklyWageScalarWhereWithAggregatesInput[]
-    weeklyWageId?: IntWithAggregatesFilter<"WeeklyWage"> | number
-    workerId?: IntWithAggregatesFilter<"WeeklyWage"> | number
-    weekId?: IntWithAggregatesFilter<"WeeklyWage"> | number
-    grossAmount?: DecimalWithAggregatesFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalWithAggregatesFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeWithAggregatesFilter<"WeeklyWage"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"WeeklyWage"> | Date | string
-  }
-
-  export type AttendanceWhereInput = {
-    AND?: AttendanceWhereInput | AttendanceWhereInput[]
-    OR?: AttendanceWhereInput[]
-    NOT?: AttendanceWhereInput | AttendanceWhereInput[]
-    attendanceId?: IntFilter<"Attendance"> | number
-    workerId?: IntFilter<"Attendance"> | number
-    projectId?: IntFilter<"Attendance"> | number
-    date?: DateTimeFilter<"Attendance"> | Date | string
-    weekId?: IntFilter<"Attendance"> | number
-    createdAt?: DateTimeFilter<"Attendance"> | Date | string
-    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
-    week?: XOR<WeekScalarRelationFilter, WeekWhereInput>
-  }
-
-  export type AttendanceOrderByWithRelationInput = {
-    attendanceId?: SortOrder
-    workerId?: SortOrder
-    projectId?: SortOrder
-    date?: SortOrder
-    weekId?: SortOrder
-    createdAt?: SortOrder
-    worker?: WorkerOrderByWithRelationInput
-    project?: ProjectOrderByWithRelationInput
-    week?: WeekOrderByWithRelationInput
-  }
-
-  export type AttendanceWhereUniqueInput = Prisma.AtLeast<{
-    attendanceId?: number
-    workerId_date?: AttendanceWorkerIdDateCompoundUniqueInput
-    AND?: AttendanceWhereInput | AttendanceWhereInput[]
-    OR?: AttendanceWhereInput[]
-    NOT?: AttendanceWhereInput | AttendanceWhereInput[]
-    workerId?: IntFilter<"Attendance"> | number
-    projectId?: IntFilter<"Attendance"> | number
-    date?: DateTimeFilter<"Attendance"> | Date | string
-    weekId?: IntFilter<"Attendance"> | number
-    createdAt?: DateTimeFilter<"Attendance"> | Date | string
-    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
-    week?: XOR<WeekScalarRelationFilter, WeekWhereInput>
-  }, "attendanceId" | "workerId_date">
-
-  export type AttendanceOrderByWithAggregationInput = {
-    attendanceId?: SortOrder
-    workerId?: SortOrder
-    projectId?: SortOrder
-    date?: SortOrder
-    weekId?: SortOrder
-    createdAt?: SortOrder
-    _count?: AttendanceCountOrderByAggregateInput
-    _avg?: AttendanceAvgOrderByAggregateInput
-    _max?: AttendanceMaxOrderByAggregateInput
-    _min?: AttendanceMinOrderByAggregateInput
-    _sum?: AttendanceSumOrderByAggregateInput
-  }
-
-  export type AttendanceScalarWhereWithAggregatesInput = {
-    AND?: AttendanceScalarWhereWithAggregatesInput | AttendanceScalarWhereWithAggregatesInput[]
-    OR?: AttendanceScalarWhereWithAggregatesInput[]
-    NOT?: AttendanceScalarWhereWithAggregatesInput | AttendanceScalarWhereWithAggregatesInput[]
-    attendanceId?: IntWithAggregatesFilter<"Attendance"> | number
-    workerId?: IntWithAggregatesFilter<"Attendance"> | number
-    projectId?: IntWithAggregatesFilter<"Attendance"> | number
-    date?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
-    weekId?: IntWithAggregatesFilter<"Attendance"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
   }
 
   export type TaskWhereInput = {
@@ -86519,8 +88080,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
@@ -86546,8 +88106,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
@@ -86572,8 +88131,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
@@ -86599,8 +88157,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
@@ -88598,9 +90155,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentWorkerInput
@@ -88620,9 +90176,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentWorkerInput
@@ -88641,9 +90196,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentWorkerNestedInput
@@ -88663,9 +90217,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentWorkerNestedInput
@@ -90243,9 +91796,7 @@ export namespace Prisma {
     endDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWeekInput
-    attendances?: AttendanceCreateNestedManyWithoutWeekInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutWeekInput
+    generalPayroll?: GeneralPayrollCreateNestedOneWithoutWeekInput
   }
 
   export type WeekUncheckedCreateInput = {
@@ -90254,9 +91805,7 @@ export namespace Prisma {
     endDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWeekInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWeekInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutWeekInput
+    generalPayroll?: GeneralPayrollUncheckedCreateNestedOneWithoutWeekInput
   }
 
   export type WeekUpdateInput = {
@@ -90264,9 +91813,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    weeklyWages?: WeeklyWageUpdateManyWithoutWeekNestedInput
-    attendances?: AttendanceUpdateManyWithoutWeekNestedInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutWeekNestedInput
+    generalPayroll?: GeneralPayrollUpdateOneWithoutWeekNestedInput
   }
 
   export type WeekUncheckedUpdateInput = {
@@ -90275,9 +91822,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWeekNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWeekNestedInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutWeekNestedInput
+    generalPayroll?: GeneralPayrollUncheckedUpdateOneWithoutWeekNestedInput
   }
 
   export type WeekCreateManyInput = {
@@ -90303,67 +91848,335 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProjectWeeklyPayrollCreateInput = {
-    amount: Decimal | DecimalJsLike | number | string
-    notes?: string | null
+  export type GeneralPayrollCreateInput = {
     createdAt?: Date | string
     updatedAt?: Date | string
-    project: ProjectCreateNestedOneWithoutWeeklyPayrollsInput
-    week: WeekCreateNestedOneWithoutProjectWeeklyPayrollsInput
+    week: WeekCreateNestedOneWithoutGeneralPayrollInput
+    projects?: GeneralPayrollProjectCreateNestedManyWithoutGeneralPayrollInput
+    workers?: GeneralPayrollWorkerCreateNestedManyWithoutGeneralPayrollInput
   }
 
-  export type ProjectWeeklyPayrollUncheckedCreateInput = {
-    projectWeeklyPayrollId?: number
-    projectId: number
+  export type GeneralPayrollUncheckedCreateInput = {
+    generalPayrollId?: number
     weekId: number
-    amount: Decimal | DecimalJsLike | number | string
-    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    projects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutGeneralPayrollInput
+    workers?: GeneralPayrollWorkerUncheckedCreateNestedManyWithoutGeneralPayrollInput
   }
 
-  export type ProjectWeeklyPayrollUpdateInput = {
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  export type GeneralPayrollUpdateInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutWeeklyPayrollsNestedInput
-    week?: WeekUpdateOneRequiredWithoutProjectWeeklyPayrollsNestedInput
+    week?: WeekUpdateOneRequiredWithoutGeneralPayrollNestedInput
+    projects?: GeneralPayrollProjectUpdateManyWithoutGeneralPayrollNestedInput
+    workers?: GeneralPayrollWorkerUpdateManyWithoutGeneralPayrollNestedInput
   }
 
-  export type ProjectWeeklyPayrollUncheckedUpdateInput = {
-    projectWeeklyPayrollId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
+  export type GeneralPayrollUncheckedUpdateInput = {
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: GeneralPayrollProjectUncheckedUpdateManyWithoutGeneralPayrollNestedInput
+    workers?: GeneralPayrollWorkerUncheckedUpdateManyWithoutGeneralPayrollNestedInput
   }
 
-  export type ProjectWeeklyPayrollCreateManyInput = {
-    projectWeeklyPayrollId?: number
-    projectId: number
+  export type GeneralPayrollCreateManyInput = {
+    generalPayrollId?: number
     weekId: number
-    amount: Decimal | DecimalJsLike | number | string
-    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type ProjectWeeklyPayrollUpdateManyMutationInput = {
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  export type GeneralPayrollUpdateManyMutationInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProjectWeeklyPayrollUncheckedUpdateManyInput = {
-    projectWeeklyPayrollId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
+  export type GeneralPayrollUncheckedUpdateManyInput = {
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollProjectCreateInput = {
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    generalPayroll: GeneralPayrollCreateNestedOneWithoutProjectsInput
+    project: ProjectCreateNestedOneWithoutGeneralPayrollProjectsInput
+    entries?: GeneralPayrollEntryCreateNestedManyWithoutPayrollProjectInput
+  }
+
+  export type GeneralPayrollProjectUncheckedCreateInput = {
+    generalPayrollProjectId?: number
+    generalPayrollId: number
+    projectId: number
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: GeneralPayrollEntryUncheckedCreateNestedManyWithoutPayrollProjectInput
+  }
+
+  export type GeneralPayrollProjectUpdateInput = {
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    generalPayroll?: GeneralPayrollUpdateOneRequiredWithoutProjectsNestedInput
+    project?: ProjectUpdateOneRequiredWithoutGeneralPayrollProjectsNestedInput
+    entries?: GeneralPayrollEntryUpdateManyWithoutPayrollProjectNestedInput
+  }
+
+  export type GeneralPayrollProjectUncheckedUpdateInput = {
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollProjectNestedInput
+  }
+
+  export type GeneralPayrollProjectCreateManyInput = {
+    generalPayrollProjectId?: number
+    generalPayrollId: number
+    projectId: number
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GeneralPayrollProjectUpdateManyMutationInput = {
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollProjectUncheckedUpdateManyInput = {
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollWorkerCreateInput = {
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    generalPayroll: GeneralPayrollCreateNestedOneWithoutWorkersInput
+    worker: WorkerCreateNestedOneWithoutGeneralPayrollWorkersInput
+    entries?: GeneralPayrollEntryCreateNestedManyWithoutPayrollWorkerInput
+  }
+
+  export type GeneralPayrollWorkerUncheckedCreateInput = {
+    generalPayrollWorkerId?: number
+    generalPayrollId: number
+    workerId: number
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: GeneralPayrollEntryUncheckedCreateNestedManyWithoutPayrollWorkerInput
+  }
+
+  export type GeneralPayrollWorkerUpdateInput = {
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    generalPayroll?: GeneralPayrollUpdateOneRequiredWithoutWorkersNestedInput
+    worker?: WorkerUpdateOneRequiredWithoutGeneralPayrollWorkersNestedInput
+    entries?: GeneralPayrollEntryUpdateManyWithoutPayrollWorkerNestedInput
+  }
+
+  export type GeneralPayrollWorkerUncheckedUpdateInput = {
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollWorkerNestedInput
+  }
+
+  export type GeneralPayrollWorkerCreateManyInput = {
+    generalPayrollWorkerId?: number
+    generalPayrollId: number
+    workerId: number
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GeneralPayrollWorkerUpdateManyMutationInput = {
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollWorkerUncheckedUpdateManyInput = {
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollEntryCreateInput = {
+    monday?: Decimal | DecimalJsLike | number | string
+    tuesday?: Decimal | DecimalJsLike | number | string
+    wednesday?: Decimal | DecimalJsLike | number | string
+    thursday?: Decimal | DecimalJsLike | number | string
+    friday?: Decimal | DecimalJsLike | number | string
+    saturday?: Decimal | DecimalJsLike | number | string
+    dominical?: Decimal | DecimalJsLike | number | string
+    overtimeAmount?: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    payrollProject: GeneralPayrollProjectCreateNestedOneWithoutEntriesInput
+    payrollWorker: GeneralPayrollWorkerCreateNestedOneWithoutEntriesInput
+  }
+
+  export type GeneralPayrollEntryUncheckedCreateInput = {
+    generalPayrollEntryId?: number
+    generalPayrollProjectId: number
+    generalPayrollWorkerId: number
+    monday?: Decimal | DecimalJsLike | number | string
+    tuesday?: Decimal | DecimalJsLike | number | string
+    wednesday?: Decimal | DecimalJsLike | number | string
+    thursday?: Decimal | DecimalJsLike | number | string
+    friday?: Decimal | DecimalJsLike | number | string
+    saturday?: Decimal | DecimalJsLike | number | string
+    dominical?: Decimal | DecimalJsLike | number | string
+    overtimeAmount?: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GeneralPayrollEntryUpdateInput = {
+    monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payrollProject?: GeneralPayrollProjectUpdateOneRequiredWithoutEntriesNestedInput
+    payrollWorker?: GeneralPayrollWorkerUpdateOneRequiredWithoutEntriesNestedInput
+  }
+
+  export type GeneralPayrollEntryUncheckedUpdateInput = {
+    generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollEntryCreateManyInput = {
+    generalPayrollEntryId?: number
+    generalPayrollProjectId: number
+    generalPayrollWorkerId: number
+    monday?: Decimal | DecimalJsLike | number | string
+    tuesday?: Decimal | DecimalJsLike | number | string
+    wednesday?: Decimal | DecimalJsLike | number | string
+    thursday?: Decimal | DecimalJsLike | number | string
+    friday?: Decimal | DecimalJsLike | number | string
+    saturday?: Decimal | DecimalJsLike | number | string
+    dominical?: Decimal | DecimalJsLike | number | string
+    overtimeAmount?: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GeneralPayrollEntryUpdateManyMutationInput = {
+    monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollEntryUncheckedUpdateManyInput = {
+    generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -90425,128 +92238,6 @@ export namespace Prisma {
     validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type WeeklyWageCreateInput = {
-    grossAmount: Decimal | DecimalJsLike | number | string
-    totalAmount: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    worker: WorkerCreateNestedOneWithoutWeeklyWagesInput
-    week: WeekCreateNestedOneWithoutWeeklyWagesInput
-  }
-
-  export type WeeklyWageUncheckedCreateInput = {
-    weeklyWageId?: number
-    workerId: number
-    weekId: number
-    grossAmount: Decimal | DecimalJsLike | number | string
-    totalAmount: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type WeeklyWageUpdateInput = {
-    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    worker?: WorkerUpdateOneRequiredWithoutWeeklyWagesNestedInput
-    week?: WeekUpdateOneRequiredWithoutWeeklyWagesNestedInput
-  }
-
-  export type WeeklyWageUncheckedUpdateInput = {
-    weeklyWageId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
-    weekId?: IntFieldUpdateOperationsInput | number
-    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type WeeklyWageCreateManyInput = {
-    weeklyWageId?: number
-    workerId: number
-    weekId: number
-    grossAmount: Decimal | DecimalJsLike | number | string
-    totalAmount: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type WeeklyWageUpdateManyMutationInput = {
-    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type WeeklyWageUncheckedUpdateManyInput = {
-    weeklyWageId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
-    weekId?: IntFieldUpdateOperationsInput | number
-    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AttendanceCreateInput = {
-    date: Date | string
-    createdAt?: Date | string
-    worker: WorkerCreateNestedOneWithoutAttendancesInput
-    project: ProjectCreateNestedOneWithoutAttendancesInput
-    week: WeekCreateNestedOneWithoutAttendancesInput
-  }
-
-  export type AttendanceUncheckedCreateInput = {
-    attendanceId?: number
-    workerId: number
-    projectId: number
-    date: Date | string
-    weekId: number
-    createdAt?: Date | string
-  }
-
-  export type AttendanceUpdateInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    worker?: WorkerUpdateOneRequiredWithoutAttendancesNestedInput
-    project?: ProjectUpdateOneRequiredWithoutAttendancesNestedInput
-    week?: WeekUpdateOneRequiredWithoutAttendancesNestedInput
-  }
-
-  export type AttendanceUncheckedUpdateInput = {
-    attendanceId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    weekId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AttendanceCreateManyInput = {
-    attendanceId?: number
-    workerId: number
-    projectId: number
-    date: Date | string
-    weekId: number
-    createdAt?: Date | string
-  }
-
-  export type AttendanceUpdateManyMutationInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AttendanceUncheckedUpdateManyInput = {
-    attendanceId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    weekId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TaskCreateInput = {
@@ -91892,16 +93583,10 @@ export namespace Prisma {
     none?: ServiceSaleWhereInput
   }
 
-  export type AttendanceListRelationFilter = {
-    every?: AttendanceWhereInput
-    some?: AttendanceWhereInput
-    none?: AttendanceWhereInput
-  }
-
-  export type ProjectWeeklyPayrollListRelationFilter = {
-    every?: ProjectWeeklyPayrollWhereInput
-    some?: ProjectWeeklyPayrollWhereInput
-    none?: ProjectWeeklyPayrollWhereInput
+  export type GeneralPayrollProjectListRelationFilter = {
+    every?: GeneralPayrollProjectWhereInput
+    some?: GeneralPayrollProjectWhereInput
+    none?: GeneralPayrollProjectWhereInput
   }
 
   export type TaskListRelationFilter = {
@@ -91934,11 +93619,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type AttendanceOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ProjectWeeklyPayrollOrderByRelationAggregateInput = {
+  export type GeneralPayrollProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -93681,23 +95362,23 @@ export namespace Prisma {
     not?: NestedEnumWorkerTypeFilter<$PrismaModel> | $Enums.WorkerType
   }
 
-  export type WeeklyWageListRelationFilter = {
-    every?: WeeklyWageWhereInput
-    some?: WeeklyWageWhereInput
-    none?: WeeklyWageWhereInput
-  }
-
   export type DailyWageListRelationFilter = {
     every?: DailyWageWhereInput
     some?: DailyWageWhereInput
     none?: DailyWageWhereInput
   }
 
-  export type WeeklyWageOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type GeneralPayrollWorkerListRelationFilter = {
+    every?: GeneralPayrollWorkerWhereInput
+    some?: GeneralPayrollWorkerWhereInput
+    none?: GeneralPayrollWorkerWhereInput
   }
 
   export type DailyWageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GeneralPayrollWorkerOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -95057,6 +96738,11 @@ export namespace Prisma {
     userId?: SortOrder
   }
 
+  export type GeneralPayrollNullableScalarRelationFilter = {
+    is?: GeneralPayrollWhereInput | null
+    isNot?: GeneralPayrollWhereInput | null
+  }
+
   export type WeekCountOrderByAggregateInput = {
     weekId?: SortOrder
     startDate?: SortOrder
@@ -95094,53 +96780,283 @@ export namespace Prisma {
     isNot?: WeekWhereInput
   }
 
-  export type ProjectWeeklyPayrollProjectIdWeekIdCompoundUniqueInput = {
+  export type GeneralPayrollCountOrderByAggregateInput = {
+    generalPayrollId?: SortOrder
+    weekId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GeneralPayrollAvgOrderByAggregateInput = {
+    generalPayrollId?: SortOrder
+    weekId?: SortOrder
+  }
+
+  export type GeneralPayrollMaxOrderByAggregateInput = {
+    generalPayrollId?: SortOrder
+    weekId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GeneralPayrollMinOrderByAggregateInput = {
+    generalPayrollId?: SortOrder
+    weekId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GeneralPayrollSumOrderByAggregateInput = {
+    generalPayrollId?: SortOrder
+    weekId?: SortOrder
+  }
+
+  export type GeneralPayrollScalarRelationFilter = {
+    is?: GeneralPayrollWhereInput
+    isNot?: GeneralPayrollWhereInput
+  }
+
+  export type GeneralPayrollEntryListRelationFilter = {
+    every?: GeneralPayrollEntryWhereInput
+    some?: GeneralPayrollEntryWhereInput
+    none?: GeneralPayrollEntryWhereInput
+  }
+
+  export type GeneralPayrollEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GeneralPayrollProjectGeneralPayrollIdProjectIdCompoundUniqueInput = {
+    generalPayrollId: number
     projectId: number
-    weekId: number
   }
 
-  export type ProjectWeeklyPayrollCountOrderByAggregateInput = {
-    projectWeeklyPayrollId?: SortOrder
+  export type GeneralPayrollProjectCountOrderByAggregateInput = {
+    generalPayrollProjectId?: SortOrder
+    generalPayrollId?: SortOrder
     projectId?: SortOrder
-    weekId?: SortOrder
-    amount?: SortOrder
-    notes?: SortOrder
+    displayOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type ProjectWeeklyPayrollAvgOrderByAggregateInput = {
-    projectWeeklyPayrollId?: SortOrder
+  export type GeneralPayrollProjectAvgOrderByAggregateInput = {
+    generalPayrollProjectId?: SortOrder
+    generalPayrollId?: SortOrder
     projectId?: SortOrder
-    weekId?: SortOrder
-    amount?: SortOrder
+    displayOrder?: SortOrder
   }
 
-  export type ProjectWeeklyPayrollMaxOrderByAggregateInput = {
-    projectWeeklyPayrollId?: SortOrder
+  export type GeneralPayrollProjectMaxOrderByAggregateInput = {
+    generalPayrollProjectId?: SortOrder
+    generalPayrollId?: SortOrder
     projectId?: SortOrder
-    weekId?: SortOrder
-    amount?: SortOrder
-    notes?: SortOrder
+    displayOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type ProjectWeeklyPayrollMinOrderByAggregateInput = {
-    projectWeeklyPayrollId?: SortOrder
+  export type GeneralPayrollProjectMinOrderByAggregateInput = {
+    generalPayrollProjectId?: SortOrder
+    generalPayrollId?: SortOrder
     projectId?: SortOrder
-    weekId?: SortOrder
-    amount?: SortOrder
-    notes?: SortOrder
+    displayOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type ProjectWeeklyPayrollSumOrderByAggregateInput = {
-    projectWeeklyPayrollId?: SortOrder
+  export type GeneralPayrollProjectSumOrderByAggregateInput = {
+    generalPayrollProjectId?: SortOrder
+    generalPayrollId?: SortOrder
     projectId?: SortOrder
-    weekId?: SortOrder
-    amount?: SortOrder
+    displayOrder?: SortOrder
+  }
+
+  export type EnumGeneralPayrollWorkerGroupFilter<$PrismaModel = never> = {
+    equals?: $Enums.GeneralPayrollWorkerGroup | EnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    in?: $Enums.GeneralPayrollWorkerGroup[] | ListEnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GeneralPayrollWorkerGroup[] | ListEnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    not?: NestedEnumGeneralPayrollWorkerGroupFilter<$PrismaModel> | $Enums.GeneralPayrollWorkerGroup
+  }
+
+  export type GeneralPayrollWorkerGeneralPayrollIdWorkerIdCompoundUniqueInput = {
+    generalPayrollId: number
+    workerId: number
+  }
+
+  export type GeneralPayrollWorkerCountOrderByAggregateInput = {
+    generalPayrollWorkerId?: SortOrder
+    generalPayrollId?: SortOrder
+    workerId?: SortOrder
+    group?: SortOrder
+    dailyWage?: SortOrder
+    additionalAmount?: SortOrder
+    liquidationAmount?: SortOrder
+    sundayDinnerAmount?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GeneralPayrollWorkerAvgOrderByAggregateInput = {
+    generalPayrollWorkerId?: SortOrder
+    generalPayrollId?: SortOrder
+    workerId?: SortOrder
+    dailyWage?: SortOrder
+    additionalAmount?: SortOrder
+    liquidationAmount?: SortOrder
+    sundayDinnerAmount?: SortOrder
+    displayOrder?: SortOrder
+  }
+
+  export type GeneralPayrollWorkerMaxOrderByAggregateInput = {
+    generalPayrollWorkerId?: SortOrder
+    generalPayrollId?: SortOrder
+    workerId?: SortOrder
+    group?: SortOrder
+    dailyWage?: SortOrder
+    additionalAmount?: SortOrder
+    liquidationAmount?: SortOrder
+    sundayDinnerAmount?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GeneralPayrollWorkerMinOrderByAggregateInput = {
+    generalPayrollWorkerId?: SortOrder
+    generalPayrollId?: SortOrder
+    workerId?: SortOrder
+    group?: SortOrder
+    dailyWage?: SortOrder
+    additionalAmount?: SortOrder
+    liquidationAmount?: SortOrder
+    sundayDinnerAmount?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GeneralPayrollWorkerSumOrderByAggregateInput = {
+    generalPayrollWorkerId?: SortOrder
+    generalPayrollId?: SortOrder
+    workerId?: SortOrder
+    dailyWage?: SortOrder
+    additionalAmount?: SortOrder
+    liquidationAmount?: SortOrder
+    sundayDinnerAmount?: SortOrder
+    displayOrder?: SortOrder
+  }
+
+  export type EnumGeneralPayrollWorkerGroupWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GeneralPayrollWorkerGroup | EnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    in?: $Enums.GeneralPayrollWorkerGroup[] | ListEnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GeneralPayrollWorkerGroup[] | ListEnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    not?: NestedEnumGeneralPayrollWorkerGroupWithAggregatesFilter<$PrismaModel> | $Enums.GeneralPayrollWorkerGroup
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGeneralPayrollWorkerGroupFilter<$PrismaModel>
+    _max?: NestedEnumGeneralPayrollWorkerGroupFilter<$PrismaModel>
+  }
+
+  export type GeneralPayrollProjectScalarRelationFilter = {
+    is?: GeneralPayrollProjectWhereInput
+    isNot?: GeneralPayrollProjectWhereInput
+  }
+
+  export type GeneralPayrollWorkerScalarRelationFilter = {
+    is?: GeneralPayrollWorkerWhereInput
+    isNot?: GeneralPayrollWorkerWhereInput
+  }
+
+  export type GeneralPayrollEntryGeneralPayrollProjectIdGeneralPayrollWorkerIdCompoundUniqueInput = {
+    generalPayrollProjectId: number
+    generalPayrollWorkerId: number
+  }
+
+  export type GeneralPayrollEntryCountOrderByAggregateInput = {
+    generalPayrollEntryId?: SortOrder
+    generalPayrollProjectId?: SortOrder
+    generalPayrollWorkerId?: SortOrder
+    monday?: SortOrder
+    tuesday?: SortOrder
+    wednesday?: SortOrder
+    thursday?: SortOrder
+    friday?: SortOrder
+    saturday?: SortOrder
+    dominical?: SortOrder
+    overtimeAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GeneralPayrollEntryAvgOrderByAggregateInput = {
+    generalPayrollEntryId?: SortOrder
+    generalPayrollProjectId?: SortOrder
+    generalPayrollWorkerId?: SortOrder
+    monday?: SortOrder
+    tuesday?: SortOrder
+    wednesday?: SortOrder
+    thursday?: SortOrder
+    friday?: SortOrder
+    saturday?: SortOrder
+    dominical?: SortOrder
+    overtimeAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
+  }
+
+  export type GeneralPayrollEntryMaxOrderByAggregateInput = {
+    generalPayrollEntryId?: SortOrder
+    generalPayrollProjectId?: SortOrder
+    generalPayrollWorkerId?: SortOrder
+    monday?: SortOrder
+    tuesday?: SortOrder
+    wednesday?: SortOrder
+    thursday?: SortOrder
+    friday?: SortOrder
+    saturday?: SortOrder
+    dominical?: SortOrder
+    overtimeAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GeneralPayrollEntryMinOrderByAggregateInput = {
+    generalPayrollEntryId?: SortOrder
+    generalPayrollProjectId?: SortOrder
+    generalPayrollWorkerId?: SortOrder
+    monday?: SortOrder
+    tuesday?: SortOrder
+    wednesday?: SortOrder
+    thursday?: SortOrder
+    friday?: SortOrder
+    saturday?: SortOrder
+    dominical?: SortOrder
+    overtimeAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GeneralPayrollEntrySumOrderByAggregateInput = {
+    generalPayrollEntryId?: SortOrder
+    generalPayrollProjectId?: SortOrder
+    generalPayrollWorkerId?: SortOrder
+    monday?: SortOrder
+    tuesday?: SortOrder
+    wednesday?: SortOrder
+    thursday?: SortOrder
+    friday?: SortOrder
+    saturday?: SortOrder
+    dominical?: SortOrder
+    overtimeAmount?: SortOrder
+    afpDiscount?: SortOrder
+    advanceDiscount?: SortOrder
   }
 
   export type DailyWageWorkerIdValidFromDateCompoundUniqueInput = {
@@ -95185,103 +97101,6 @@ export namespace Prisma {
     dailyWageId?: SortOrder
     workerId?: SortOrder
     amount?: SortOrder
-  }
-
-  export type WeeklyWageWorkerIdWeekIdCompoundUniqueInput = {
-    workerId: number
-    weekId: number
-  }
-
-  export type WeeklyWageCountOrderByAggregateInput = {
-    weeklyWageId?: SortOrder
-    workerId?: SortOrder
-    weekId?: SortOrder
-    grossAmount?: SortOrder
-    totalAmount?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type WeeklyWageAvgOrderByAggregateInput = {
-    weeklyWageId?: SortOrder
-    workerId?: SortOrder
-    weekId?: SortOrder
-    grossAmount?: SortOrder
-    totalAmount?: SortOrder
-  }
-
-  export type WeeklyWageMaxOrderByAggregateInput = {
-    weeklyWageId?: SortOrder
-    workerId?: SortOrder
-    weekId?: SortOrder
-    grossAmount?: SortOrder
-    totalAmount?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type WeeklyWageMinOrderByAggregateInput = {
-    weeklyWageId?: SortOrder
-    workerId?: SortOrder
-    weekId?: SortOrder
-    grossAmount?: SortOrder
-    totalAmount?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type WeeklyWageSumOrderByAggregateInput = {
-    weeklyWageId?: SortOrder
-    workerId?: SortOrder
-    weekId?: SortOrder
-    grossAmount?: SortOrder
-    totalAmount?: SortOrder
-  }
-
-  export type AttendanceWorkerIdDateCompoundUniqueInput = {
-    workerId: number
-    date: Date | string
-  }
-
-  export type AttendanceCountOrderByAggregateInput = {
-    attendanceId?: SortOrder
-    workerId?: SortOrder
-    projectId?: SortOrder
-    date?: SortOrder
-    weekId?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type AttendanceAvgOrderByAggregateInput = {
-    attendanceId?: SortOrder
-    workerId?: SortOrder
-    projectId?: SortOrder
-    weekId?: SortOrder
-  }
-
-  export type AttendanceMaxOrderByAggregateInput = {
-    attendanceId?: SortOrder
-    workerId?: SortOrder
-    projectId?: SortOrder
-    date?: SortOrder
-    weekId?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type AttendanceMinOrderByAggregateInput = {
-    attendanceId?: SortOrder
-    workerId?: SortOrder
-    projectId?: SortOrder
-    date?: SortOrder
-    weekId?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type AttendanceSumOrderByAggregateInput = {
-    attendanceId?: SortOrder
-    workerId?: SortOrder
-    projectId?: SortOrder
-    weekId?: SortOrder
   }
 
   export type EnumTaskStatusFilter<$PrismaModel = never> = {
@@ -97023,18 +98842,11 @@ export namespace Prisma {
     connect?: ServiceSaleWhereUniqueInput | ServiceSaleWhereUniqueInput[]
   }
 
-  export type AttendanceCreateNestedManyWithoutProjectInput = {
-    create?: XOR<AttendanceCreateWithoutProjectInput, AttendanceUncheckedCreateWithoutProjectInput> | AttendanceCreateWithoutProjectInput[] | AttendanceUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutProjectInput | AttendanceCreateOrConnectWithoutProjectInput[]
-    createMany?: AttendanceCreateManyProjectInputEnvelope
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-  }
-
-  export type ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput = {
-    create?: XOR<ProjectWeeklyPayrollCreateWithoutProjectInput, ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput> | ProjectWeeklyPayrollCreateWithoutProjectInput[] | ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: ProjectWeeklyPayrollCreateOrConnectWithoutProjectInput | ProjectWeeklyPayrollCreateOrConnectWithoutProjectInput[]
-    createMany?: ProjectWeeklyPayrollCreateManyProjectInputEnvelope
-    connect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
+  export type GeneralPayrollProjectCreateNestedManyWithoutProjectInput = {
+    create?: XOR<GeneralPayrollProjectCreateWithoutProjectInput, GeneralPayrollProjectUncheckedCreateWithoutProjectInput> | GeneralPayrollProjectCreateWithoutProjectInput[] | GeneralPayrollProjectUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: GeneralPayrollProjectCreateOrConnectWithoutProjectInput | GeneralPayrollProjectCreateOrConnectWithoutProjectInput[]
+    createMany?: GeneralPayrollProjectCreateManyProjectInputEnvelope
+    connect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
   }
 
   export type TaskCreateNestedManyWithoutProjectInput = {
@@ -97114,18 +98926,11 @@ export namespace Prisma {
     connect?: ServiceSaleWhereUniqueInput | ServiceSaleWhereUniqueInput[]
   }
 
-  export type AttendanceUncheckedCreateNestedManyWithoutProjectInput = {
-    create?: XOR<AttendanceCreateWithoutProjectInput, AttendanceUncheckedCreateWithoutProjectInput> | AttendanceCreateWithoutProjectInput[] | AttendanceUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutProjectInput | AttendanceCreateOrConnectWithoutProjectInput[]
-    createMany?: AttendanceCreateManyProjectInputEnvelope
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-  }
-
-  export type ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput = {
-    create?: XOR<ProjectWeeklyPayrollCreateWithoutProjectInput, ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput> | ProjectWeeklyPayrollCreateWithoutProjectInput[] | ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: ProjectWeeklyPayrollCreateOrConnectWithoutProjectInput | ProjectWeeklyPayrollCreateOrConnectWithoutProjectInput[]
-    createMany?: ProjectWeeklyPayrollCreateManyProjectInputEnvelope
-    connect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
+  export type GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<GeneralPayrollProjectCreateWithoutProjectInput, GeneralPayrollProjectUncheckedCreateWithoutProjectInput> | GeneralPayrollProjectCreateWithoutProjectInput[] | GeneralPayrollProjectUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: GeneralPayrollProjectCreateOrConnectWithoutProjectInput | GeneralPayrollProjectCreateOrConnectWithoutProjectInput[]
+    createMany?: GeneralPayrollProjectCreateManyProjectInputEnvelope
+    connect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
   }
 
   export type TaskUncheckedCreateNestedManyWithoutProjectInput = {
@@ -97244,32 +99049,18 @@ export namespace Prisma {
     deleteMany?: ServiceSaleScalarWhereInput | ServiceSaleScalarWhereInput[]
   }
 
-  export type AttendanceUpdateManyWithoutProjectNestedInput = {
-    create?: XOR<AttendanceCreateWithoutProjectInput, AttendanceUncheckedCreateWithoutProjectInput> | AttendanceCreateWithoutProjectInput[] | AttendanceUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutProjectInput | AttendanceCreateOrConnectWithoutProjectInput[]
-    upsert?: AttendanceUpsertWithWhereUniqueWithoutProjectInput | AttendanceUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: AttendanceCreateManyProjectInputEnvelope
-    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    update?: AttendanceUpdateWithWhereUniqueWithoutProjectInput | AttendanceUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?: AttendanceUpdateManyWithWhereWithoutProjectInput | AttendanceUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-  }
-
-  export type ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput = {
-    create?: XOR<ProjectWeeklyPayrollCreateWithoutProjectInput, ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput> | ProjectWeeklyPayrollCreateWithoutProjectInput[] | ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: ProjectWeeklyPayrollCreateOrConnectWithoutProjectInput | ProjectWeeklyPayrollCreateOrConnectWithoutProjectInput[]
-    upsert?: ProjectWeeklyPayrollUpsertWithWhereUniqueWithoutProjectInput | ProjectWeeklyPayrollUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: ProjectWeeklyPayrollCreateManyProjectInputEnvelope
-    set?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    disconnect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    delete?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    connect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    update?: ProjectWeeklyPayrollUpdateWithWhereUniqueWithoutProjectInput | ProjectWeeklyPayrollUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?: ProjectWeeklyPayrollUpdateManyWithWhereWithoutProjectInput | ProjectWeeklyPayrollUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: ProjectWeeklyPayrollScalarWhereInput | ProjectWeeklyPayrollScalarWhereInput[]
+  export type GeneralPayrollProjectUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<GeneralPayrollProjectCreateWithoutProjectInput, GeneralPayrollProjectUncheckedCreateWithoutProjectInput> | GeneralPayrollProjectCreateWithoutProjectInput[] | GeneralPayrollProjectUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: GeneralPayrollProjectCreateOrConnectWithoutProjectInput | GeneralPayrollProjectCreateOrConnectWithoutProjectInput[]
+    upsert?: GeneralPayrollProjectUpsertWithWhereUniqueWithoutProjectInput | GeneralPayrollProjectUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: GeneralPayrollProjectCreateManyProjectInputEnvelope
+    set?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    disconnect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    delete?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    connect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    update?: GeneralPayrollProjectUpdateWithWhereUniqueWithoutProjectInput | GeneralPayrollProjectUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: GeneralPayrollProjectUpdateManyWithWhereWithoutProjectInput | GeneralPayrollProjectUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: GeneralPayrollProjectScalarWhereInput | GeneralPayrollProjectScalarWhereInput[]
   }
 
   export type TaskUpdateManyWithoutProjectNestedInput = {
@@ -97426,32 +99217,18 @@ export namespace Prisma {
     deleteMany?: ServiceSaleScalarWhereInput | ServiceSaleScalarWhereInput[]
   }
 
-  export type AttendanceUncheckedUpdateManyWithoutProjectNestedInput = {
-    create?: XOR<AttendanceCreateWithoutProjectInput, AttendanceUncheckedCreateWithoutProjectInput> | AttendanceCreateWithoutProjectInput[] | AttendanceUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutProjectInput | AttendanceCreateOrConnectWithoutProjectInput[]
-    upsert?: AttendanceUpsertWithWhereUniqueWithoutProjectInput | AttendanceUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: AttendanceCreateManyProjectInputEnvelope
-    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    update?: AttendanceUpdateWithWhereUniqueWithoutProjectInput | AttendanceUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?: AttendanceUpdateManyWithWhereWithoutProjectInput | AttendanceUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-  }
-
-  export type ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput = {
-    create?: XOR<ProjectWeeklyPayrollCreateWithoutProjectInput, ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput> | ProjectWeeklyPayrollCreateWithoutProjectInput[] | ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: ProjectWeeklyPayrollCreateOrConnectWithoutProjectInput | ProjectWeeklyPayrollCreateOrConnectWithoutProjectInput[]
-    upsert?: ProjectWeeklyPayrollUpsertWithWhereUniqueWithoutProjectInput | ProjectWeeklyPayrollUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: ProjectWeeklyPayrollCreateManyProjectInputEnvelope
-    set?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    disconnect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    delete?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    connect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    update?: ProjectWeeklyPayrollUpdateWithWhereUniqueWithoutProjectInput | ProjectWeeklyPayrollUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?: ProjectWeeklyPayrollUpdateManyWithWhereWithoutProjectInput | ProjectWeeklyPayrollUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: ProjectWeeklyPayrollScalarWhereInput | ProjectWeeklyPayrollScalarWhereInput[]
+  export type GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<GeneralPayrollProjectCreateWithoutProjectInput, GeneralPayrollProjectUncheckedCreateWithoutProjectInput> | GeneralPayrollProjectCreateWithoutProjectInput[] | GeneralPayrollProjectUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: GeneralPayrollProjectCreateOrConnectWithoutProjectInput | GeneralPayrollProjectCreateOrConnectWithoutProjectInput[]
+    upsert?: GeneralPayrollProjectUpsertWithWhereUniqueWithoutProjectInput | GeneralPayrollProjectUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: GeneralPayrollProjectCreateManyProjectInputEnvelope
+    set?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    disconnect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    delete?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    connect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    update?: GeneralPayrollProjectUpdateWithWhereUniqueWithoutProjectInput | GeneralPayrollProjectUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: GeneralPayrollProjectUpdateManyWithWhereWithoutProjectInput | GeneralPayrollProjectUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: GeneralPayrollProjectScalarWhereInput | GeneralPayrollProjectScalarWhereInput[]
   }
 
   export type TaskUncheckedUpdateManyWithoutProjectNestedInput = {
@@ -100340,25 +102117,18 @@ export namespace Prisma {
     connect?: RequestWorkerWhereUniqueInput | RequestWorkerWhereUniqueInput[]
   }
 
-  export type WeeklyWageCreateNestedManyWithoutWorkerInput = {
-    create?: XOR<WeeklyWageCreateWithoutWorkerInput, WeeklyWageUncheckedCreateWithoutWorkerInput> | WeeklyWageCreateWithoutWorkerInput[] | WeeklyWageUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: WeeklyWageCreateOrConnectWithoutWorkerInput | WeeklyWageCreateOrConnectWithoutWorkerInput[]
-    createMany?: WeeklyWageCreateManyWorkerInputEnvelope
-    connect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-  }
-
-  export type AttendanceCreateNestedManyWithoutWorkerInput = {
-    create?: XOR<AttendanceCreateWithoutWorkerInput, AttendanceUncheckedCreateWithoutWorkerInput> | AttendanceCreateWithoutWorkerInput[] | AttendanceUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutWorkerInput | AttendanceCreateOrConnectWithoutWorkerInput[]
-    createMany?: AttendanceCreateManyWorkerInputEnvelope
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-  }
-
   export type DailyWageCreateNestedManyWithoutWorkerInput = {
     create?: XOR<DailyWageCreateWithoutWorkerInput, DailyWageUncheckedCreateWithoutWorkerInput> | DailyWageCreateWithoutWorkerInput[] | DailyWageUncheckedCreateWithoutWorkerInput[]
     connectOrCreate?: DailyWageCreateOrConnectWithoutWorkerInput | DailyWageCreateOrConnectWithoutWorkerInput[]
     createMany?: DailyWageCreateManyWorkerInputEnvelope
     connect?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
+  }
+
+  export type GeneralPayrollWorkerCreateNestedManyWithoutWorkerInput = {
+    create?: XOR<GeneralPayrollWorkerCreateWithoutWorkerInput, GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput> | GeneralPayrollWorkerCreateWithoutWorkerInput[] | GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: GeneralPayrollWorkerCreateOrConnectWithoutWorkerInput | GeneralPayrollWorkerCreateOrConnectWithoutWorkerInput[]
+    createMany?: GeneralPayrollWorkerCreateManyWorkerInputEnvelope
+    connect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
   }
 
   export type WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput = {
@@ -100396,25 +102166,18 @@ export namespace Prisma {
     connect?: RequestWorkerWhereUniqueInput | RequestWorkerWhereUniqueInput[]
   }
 
-  export type WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput = {
-    create?: XOR<WeeklyWageCreateWithoutWorkerInput, WeeklyWageUncheckedCreateWithoutWorkerInput> | WeeklyWageCreateWithoutWorkerInput[] | WeeklyWageUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: WeeklyWageCreateOrConnectWithoutWorkerInput | WeeklyWageCreateOrConnectWithoutWorkerInput[]
-    createMany?: WeeklyWageCreateManyWorkerInputEnvelope
-    connect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-  }
-
-  export type AttendanceUncheckedCreateNestedManyWithoutWorkerInput = {
-    create?: XOR<AttendanceCreateWithoutWorkerInput, AttendanceUncheckedCreateWithoutWorkerInput> | AttendanceCreateWithoutWorkerInput[] | AttendanceUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutWorkerInput | AttendanceCreateOrConnectWithoutWorkerInput[]
-    createMany?: AttendanceCreateManyWorkerInputEnvelope
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-  }
-
   export type DailyWageUncheckedCreateNestedManyWithoutWorkerInput = {
     create?: XOR<DailyWageCreateWithoutWorkerInput, DailyWageUncheckedCreateWithoutWorkerInput> | DailyWageCreateWithoutWorkerInput[] | DailyWageUncheckedCreateWithoutWorkerInput[]
     connectOrCreate?: DailyWageCreateOrConnectWithoutWorkerInput | DailyWageCreateOrConnectWithoutWorkerInput[]
     createMany?: DailyWageCreateManyWorkerInputEnvelope
     connect?: DailyWageWhereUniqueInput | DailyWageWhereUniqueInput[]
+  }
+
+  export type GeneralPayrollWorkerUncheckedCreateNestedManyWithoutWorkerInput = {
+    create?: XOR<GeneralPayrollWorkerCreateWithoutWorkerInput, GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput> | GeneralPayrollWorkerCreateWithoutWorkerInput[] | GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: GeneralPayrollWorkerCreateOrConnectWithoutWorkerInput | GeneralPayrollWorkerCreateOrConnectWithoutWorkerInput[]
+    createMany?: GeneralPayrollWorkerCreateManyWorkerInputEnvelope
+    connect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
   }
 
   export type WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput = {
@@ -100463,34 +102226,6 @@ export namespace Prisma {
     deleteMany?: RequestWorkerScalarWhereInput | RequestWorkerScalarWhereInput[]
   }
 
-  export type WeeklyWageUpdateManyWithoutWorkerNestedInput = {
-    create?: XOR<WeeklyWageCreateWithoutWorkerInput, WeeklyWageUncheckedCreateWithoutWorkerInput> | WeeklyWageCreateWithoutWorkerInput[] | WeeklyWageUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: WeeklyWageCreateOrConnectWithoutWorkerInput | WeeklyWageCreateOrConnectWithoutWorkerInput[]
-    upsert?: WeeklyWageUpsertWithWhereUniqueWithoutWorkerInput | WeeklyWageUpsertWithWhereUniqueWithoutWorkerInput[]
-    createMany?: WeeklyWageCreateManyWorkerInputEnvelope
-    set?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    disconnect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    delete?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    connect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    update?: WeeklyWageUpdateWithWhereUniqueWithoutWorkerInput | WeeklyWageUpdateWithWhereUniqueWithoutWorkerInput[]
-    updateMany?: WeeklyWageUpdateManyWithWhereWithoutWorkerInput | WeeklyWageUpdateManyWithWhereWithoutWorkerInput[]
-    deleteMany?: WeeklyWageScalarWhereInput | WeeklyWageScalarWhereInput[]
-  }
-
-  export type AttendanceUpdateManyWithoutWorkerNestedInput = {
-    create?: XOR<AttendanceCreateWithoutWorkerInput, AttendanceUncheckedCreateWithoutWorkerInput> | AttendanceCreateWithoutWorkerInput[] | AttendanceUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutWorkerInput | AttendanceCreateOrConnectWithoutWorkerInput[]
-    upsert?: AttendanceUpsertWithWhereUniqueWithoutWorkerInput | AttendanceUpsertWithWhereUniqueWithoutWorkerInput[]
-    createMany?: AttendanceCreateManyWorkerInputEnvelope
-    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    update?: AttendanceUpdateWithWhereUniqueWithoutWorkerInput | AttendanceUpdateWithWhereUniqueWithoutWorkerInput[]
-    updateMany?: AttendanceUpdateManyWithWhereWithoutWorkerInput | AttendanceUpdateManyWithWhereWithoutWorkerInput[]
-    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-  }
-
   export type DailyWageUpdateManyWithoutWorkerNestedInput = {
     create?: XOR<DailyWageCreateWithoutWorkerInput, DailyWageUncheckedCreateWithoutWorkerInput> | DailyWageCreateWithoutWorkerInput[] | DailyWageUncheckedCreateWithoutWorkerInput[]
     connectOrCreate?: DailyWageCreateOrConnectWithoutWorkerInput | DailyWageCreateOrConnectWithoutWorkerInput[]
@@ -100503,6 +102238,20 @@ export namespace Prisma {
     update?: DailyWageUpdateWithWhereUniqueWithoutWorkerInput | DailyWageUpdateWithWhereUniqueWithoutWorkerInput[]
     updateMany?: DailyWageUpdateManyWithWhereWithoutWorkerInput | DailyWageUpdateManyWithWhereWithoutWorkerInput[]
     deleteMany?: DailyWageScalarWhereInput | DailyWageScalarWhereInput[]
+  }
+
+  export type GeneralPayrollWorkerUpdateManyWithoutWorkerNestedInput = {
+    create?: XOR<GeneralPayrollWorkerCreateWithoutWorkerInput, GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput> | GeneralPayrollWorkerCreateWithoutWorkerInput[] | GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: GeneralPayrollWorkerCreateOrConnectWithoutWorkerInput | GeneralPayrollWorkerCreateOrConnectWithoutWorkerInput[]
+    upsert?: GeneralPayrollWorkerUpsertWithWhereUniqueWithoutWorkerInput | GeneralPayrollWorkerUpsertWithWhereUniqueWithoutWorkerInput[]
+    createMany?: GeneralPayrollWorkerCreateManyWorkerInputEnvelope
+    set?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    disconnect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    delete?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    connect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    update?: GeneralPayrollWorkerUpdateWithWhereUniqueWithoutWorkerInput | GeneralPayrollWorkerUpdateWithWhereUniqueWithoutWorkerInput[]
+    updateMany?: GeneralPayrollWorkerUpdateManyWithWhereWithoutWorkerInput | GeneralPayrollWorkerUpdateManyWithWhereWithoutWorkerInput[]
+    deleteMany?: GeneralPayrollWorkerScalarWhereInput | GeneralPayrollWorkerScalarWhereInput[]
   }
 
   export type WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput = {
@@ -100575,34 +102324,6 @@ export namespace Prisma {
     deleteMany?: RequestWorkerScalarWhereInput | RequestWorkerScalarWhereInput[]
   }
 
-  export type WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput = {
-    create?: XOR<WeeklyWageCreateWithoutWorkerInput, WeeklyWageUncheckedCreateWithoutWorkerInput> | WeeklyWageCreateWithoutWorkerInput[] | WeeklyWageUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: WeeklyWageCreateOrConnectWithoutWorkerInput | WeeklyWageCreateOrConnectWithoutWorkerInput[]
-    upsert?: WeeklyWageUpsertWithWhereUniqueWithoutWorkerInput | WeeklyWageUpsertWithWhereUniqueWithoutWorkerInput[]
-    createMany?: WeeklyWageCreateManyWorkerInputEnvelope
-    set?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    disconnect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    delete?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    connect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    update?: WeeklyWageUpdateWithWhereUniqueWithoutWorkerInput | WeeklyWageUpdateWithWhereUniqueWithoutWorkerInput[]
-    updateMany?: WeeklyWageUpdateManyWithWhereWithoutWorkerInput | WeeklyWageUpdateManyWithWhereWithoutWorkerInput[]
-    deleteMany?: WeeklyWageScalarWhereInput | WeeklyWageScalarWhereInput[]
-  }
-
-  export type AttendanceUncheckedUpdateManyWithoutWorkerNestedInput = {
-    create?: XOR<AttendanceCreateWithoutWorkerInput, AttendanceUncheckedCreateWithoutWorkerInput> | AttendanceCreateWithoutWorkerInput[] | AttendanceUncheckedCreateWithoutWorkerInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutWorkerInput | AttendanceCreateOrConnectWithoutWorkerInput[]
-    upsert?: AttendanceUpsertWithWhereUniqueWithoutWorkerInput | AttendanceUpsertWithWhereUniqueWithoutWorkerInput[]
-    createMany?: AttendanceCreateManyWorkerInputEnvelope
-    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    update?: AttendanceUpdateWithWhereUniqueWithoutWorkerInput | AttendanceUpdateWithWhereUniqueWithoutWorkerInput[]
-    updateMany?: AttendanceUpdateManyWithWhereWithoutWorkerInput | AttendanceUpdateManyWithWhereWithoutWorkerInput[]
-    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-  }
-
   export type DailyWageUncheckedUpdateManyWithoutWorkerNestedInput = {
     create?: XOR<DailyWageCreateWithoutWorkerInput, DailyWageUncheckedCreateWithoutWorkerInput> | DailyWageCreateWithoutWorkerInput[] | DailyWageUncheckedCreateWithoutWorkerInput[]
     connectOrCreate?: DailyWageCreateOrConnectWithoutWorkerInput | DailyWageCreateOrConnectWithoutWorkerInput[]
@@ -100615,6 +102336,20 @@ export namespace Prisma {
     update?: DailyWageUpdateWithWhereUniqueWithoutWorkerInput | DailyWageUpdateWithWhereUniqueWithoutWorkerInput[]
     updateMany?: DailyWageUpdateManyWithWhereWithoutWorkerInput | DailyWageUpdateManyWithWhereWithoutWorkerInput[]
     deleteMany?: DailyWageScalarWhereInput | DailyWageScalarWhereInput[]
+  }
+
+  export type GeneralPayrollWorkerUncheckedUpdateManyWithoutWorkerNestedInput = {
+    create?: XOR<GeneralPayrollWorkerCreateWithoutWorkerInput, GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput> | GeneralPayrollWorkerCreateWithoutWorkerInput[] | GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: GeneralPayrollWorkerCreateOrConnectWithoutWorkerInput | GeneralPayrollWorkerCreateOrConnectWithoutWorkerInput[]
+    upsert?: GeneralPayrollWorkerUpsertWithWhereUniqueWithoutWorkerInput | GeneralPayrollWorkerUpsertWithWhereUniqueWithoutWorkerInput[]
+    createMany?: GeneralPayrollWorkerCreateManyWorkerInputEnvelope
+    set?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    disconnect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    delete?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    connect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    update?: GeneralPayrollWorkerUpdateWithWhereUniqueWithoutWorkerInput | GeneralPayrollWorkerUpdateWithWhereUniqueWithoutWorkerInput[]
+    updateMany?: GeneralPayrollWorkerUpdateManyWithWhereWithoutWorkerInput | GeneralPayrollWorkerUpdateManyWithWhereWithoutWorkerInput[]
+    deleteMany?: GeneralPayrollWorkerScalarWhereInput | GeneralPayrollWorkerScalarWhereInput[]
   }
 
   export type WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput = {
@@ -101699,158 +103434,306 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBlacklistedTokensInput, UserUpdateWithoutBlacklistedTokensInput>, UserUncheckedUpdateWithoutBlacklistedTokensInput>
   }
 
-  export type WeeklyWageCreateNestedManyWithoutWeekInput = {
-    create?: XOR<WeeklyWageCreateWithoutWeekInput, WeeklyWageUncheckedCreateWithoutWeekInput> | WeeklyWageCreateWithoutWeekInput[] | WeeklyWageUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: WeeklyWageCreateOrConnectWithoutWeekInput | WeeklyWageCreateOrConnectWithoutWeekInput[]
-    createMany?: WeeklyWageCreateManyWeekInputEnvelope
-    connect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
+  export type GeneralPayrollCreateNestedOneWithoutWeekInput = {
+    create?: XOR<GeneralPayrollCreateWithoutWeekInput, GeneralPayrollUncheckedCreateWithoutWeekInput>
+    connectOrCreate?: GeneralPayrollCreateOrConnectWithoutWeekInput
+    connect?: GeneralPayrollWhereUniqueInput
   }
 
-  export type AttendanceCreateNestedManyWithoutWeekInput = {
-    create?: XOR<AttendanceCreateWithoutWeekInput, AttendanceUncheckedCreateWithoutWeekInput> | AttendanceCreateWithoutWeekInput[] | AttendanceUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutWeekInput | AttendanceCreateOrConnectWithoutWeekInput[]
-    createMany?: AttendanceCreateManyWeekInputEnvelope
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  export type GeneralPayrollUncheckedCreateNestedOneWithoutWeekInput = {
+    create?: XOR<GeneralPayrollCreateWithoutWeekInput, GeneralPayrollUncheckedCreateWithoutWeekInput>
+    connectOrCreate?: GeneralPayrollCreateOrConnectWithoutWeekInput
+    connect?: GeneralPayrollWhereUniqueInput
   }
 
-  export type ProjectWeeklyPayrollCreateNestedManyWithoutWeekInput = {
-    create?: XOR<ProjectWeeklyPayrollCreateWithoutWeekInput, ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput> | ProjectWeeklyPayrollCreateWithoutWeekInput[] | ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: ProjectWeeklyPayrollCreateOrConnectWithoutWeekInput | ProjectWeeklyPayrollCreateOrConnectWithoutWeekInput[]
-    createMany?: ProjectWeeklyPayrollCreateManyWeekInputEnvelope
-    connect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
+  export type GeneralPayrollUpdateOneWithoutWeekNestedInput = {
+    create?: XOR<GeneralPayrollCreateWithoutWeekInput, GeneralPayrollUncheckedCreateWithoutWeekInput>
+    connectOrCreate?: GeneralPayrollCreateOrConnectWithoutWeekInput
+    upsert?: GeneralPayrollUpsertWithoutWeekInput
+    disconnect?: GeneralPayrollWhereInput | boolean
+    delete?: GeneralPayrollWhereInput | boolean
+    connect?: GeneralPayrollWhereUniqueInput
+    update?: XOR<XOR<GeneralPayrollUpdateToOneWithWhereWithoutWeekInput, GeneralPayrollUpdateWithoutWeekInput>, GeneralPayrollUncheckedUpdateWithoutWeekInput>
   }
 
-  export type WeeklyWageUncheckedCreateNestedManyWithoutWeekInput = {
-    create?: XOR<WeeklyWageCreateWithoutWeekInput, WeeklyWageUncheckedCreateWithoutWeekInput> | WeeklyWageCreateWithoutWeekInput[] | WeeklyWageUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: WeeklyWageCreateOrConnectWithoutWeekInput | WeeklyWageCreateOrConnectWithoutWeekInput[]
-    createMany?: WeeklyWageCreateManyWeekInputEnvelope
-    connect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
+  export type GeneralPayrollUncheckedUpdateOneWithoutWeekNestedInput = {
+    create?: XOR<GeneralPayrollCreateWithoutWeekInput, GeneralPayrollUncheckedCreateWithoutWeekInput>
+    connectOrCreate?: GeneralPayrollCreateOrConnectWithoutWeekInput
+    upsert?: GeneralPayrollUpsertWithoutWeekInput
+    disconnect?: GeneralPayrollWhereInput | boolean
+    delete?: GeneralPayrollWhereInput | boolean
+    connect?: GeneralPayrollWhereUniqueInput
+    update?: XOR<XOR<GeneralPayrollUpdateToOneWithWhereWithoutWeekInput, GeneralPayrollUpdateWithoutWeekInput>, GeneralPayrollUncheckedUpdateWithoutWeekInput>
   }
 
-  export type AttendanceUncheckedCreateNestedManyWithoutWeekInput = {
-    create?: XOR<AttendanceCreateWithoutWeekInput, AttendanceUncheckedCreateWithoutWeekInput> | AttendanceCreateWithoutWeekInput[] | AttendanceUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutWeekInput | AttendanceCreateOrConnectWithoutWeekInput[]
-    createMany?: AttendanceCreateManyWeekInputEnvelope
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-  }
-
-  export type ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutWeekInput = {
-    create?: XOR<ProjectWeeklyPayrollCreateWithoutWeekInput, ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput> | ProjectWeeklyPayrollCreateWithoutWeekInput[] | ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: ProjectWeeklyPayrollCreateOrConnectWithoutWeekInput | ProjectWeeklyPayrollCreateOrConnectWithoutWeekInput[]
-    createMany?: ProjectWeeklyPayrollCreateManyWeekInputEnvelope
-    connect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-  }
-
-  export type WeeklyWageUpdateManyWithoutWeekNestedInput = {
-    create?: XOR<WeeklyWageCreateWithoutWeekInput, WeeklyWageUncheckedCreateWithoutWeekInput> | WeeklyWageCreateWithoutWeekInput[] | WeeklyWageUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: WeeklyWageCreateOrConnectWithoutWeekInput | WeeklyWageCreateOrConnectWithoutWeekInput[]
-    upsert?: WeeklyWageUpsertWithWhereUniqueWithoutWeekInput | WeeklyWageUpsertWithWhereUniqueWithoutWeekInput[]
-    createMany?: WeeklyWageCreateManyWeekInputEnvelope
-    set?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    disconnect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    delete?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    connect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    update?: WeeklyWageUpdateWithWhereUniqueWithoutWeekInput | WeeklyWageUpdateWithWhereUniqueWithoutWeekInput[]
-    updateMany?: WeeklyWageUpdateManyWithWhereWithoutWeekInput | WeeklyWageUpdateManyWithWhereWithoutWeekInput[]
-    deleteMany?: WeeklyWageScalarWhereInput | WeeklyWageScalarWhereInput[]
-  }
-
-  export type AttendanceUpdateManyWithoutWeekNestedInput = {
-    create?: XOR<AttendanceCreateWithoutWeekInput, AttendanceUncheckedCreateWithoutWeekInput> | AttendanceCreateWithoutWeekInput[] | AttendanceUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutWeekInput | AttendanceCreateOrConnectWithoutWeekInput[]
-    upsert?: AttendanceUpsertWithWhereUniqueWithoutWeekInput | AttendanceUpsertWithWhereUniqueWithoutWeekInput[]
-    createMany?: AttendanceCreateManyWeekInputEnvelope
-    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    update?: AttendanceUpdateWithWhereUniqueWithoutWeekInput | AttendanceUpdateWithWhereUniqueWithoutWeekInput[]
-    updateMany?: AttendanceUpdateManyWithWhereWithoutWeekInput | AttendanceUpdateManyWithWhereWithoutWeekInput[]
-    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-  }
-
-  export type ProjectWeeklyPayrollUpdateManyWithoutWeekNestedInput = {
-    create?: XOR<ProjectWeeklyPayrollCreateWithoutWeekInput, ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput> | ProjectWeeklyPayrollCreateWithoutWeekInput[] | ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: ProjectWeeklyPayrollCreateOrConnectWithoutWeekInput | ProjectWeeklyPayrollCreateOrConnectWithoutWeekInput[]
-    upsert?: ProjectWeeklyPayrollUpsertWithWhereUniqueWithoutWeekInput | ProjectWeeklyPayrollUpsertWithWhereUniqueWithoutWeekInput[]
-    createMany?: ProjectWeeklyPayrollCreateManyWeekInputEnvelope
-    set?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    disconnect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    delete?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    connect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    update?: ProjectWeeklyPayrollUpdateWithWhereUniqueWithoutWeekInput | ProjectWeeklyPayrollUpdateWithWhereUniqueWithoutWeekInput[]
-    updateMany?: ProjectWeeklyPayrollUpdateManyWithWhereWithoutWeekInput | ProjectWeeklyPayrollUpdateManyWithWhereWithoutWeekInput[]
-    deleteMany?: ProjectWeeklyPayrollScalarWhereInput | ProjectWeeklyPayrollScalarWhereInput[]
-  }
-
-  export type WeeklyWageUncheckedUpdateManyWithoutWeekNestedInput = {
-    create?: XOR<WeeklyWageCreateWithoutWeekInput, WeeklyWageUncheckedCreateWithoutWeekInput> | WeeklyWageCreateWithoutWeekInput[] | WeeklyWageUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: WeeklyWageCreateOrConnectWithoutWeekInput | WeeklyWageCreateOrConnectWithoutWeekInput[]
-    upsert?: WeeklyWageUpsertWithWhereUniqueWithoutWeekInput | WeeklyWageUpsertWithWhereUniqueWithoutWeekInput[]
-    createMany?: WeeklyWageCreateManyWeekInputEnvelope
-    set?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    disconnect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    delete?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    connect?: WeeklyWageWhereUniqueInput | WeeklyWageWhereUniqueInput[]
-    update?: WeeklyWageUpdateWithWhereUniqueWithoutWeekInput | WeeklyWageUpdateWithWhereUniqueWithoutWeekInput[]
-    updateMany?: WeeklyWageUpdateManyWithWhereWithoutWeekInput | WeeklyWageUpdateManyWithWhereWithoutWeekInput[]
-    deleteMany?: WeeklyWageScalarWhereInput | WeeklyWageScalarWhereInput[]
-  }
-
-  export type AttendanceUncheckedUpdateManyWithoutWeekNestedInput = {
-    create?: XOR<AttendanceCreateWithoutWeekInput, AttendanceUncheckedCreateWithoutWeekInput> | AttendanceCreateWithoutWeekInput[] | AttendanceUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutWeekInput | AttendanceCreateOrConnectWithoutWeekInput[]
-    upsert?: AttendanceUpsertWithWhereUniqueWithoutWeekInput | AttendanceUpsertWithWhereUniqueWithoutWeekInput[]
-    createMany?: AttendanceCreateManyWeekInputEnvelope
-    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    update?: AttendanceUpdateWithWhereUniqueWithoutWeekInput | AttendanceUpdateWithWhereUniqueWithoutWeekInput[]
-    updateMany?: AttendanceUpdateManyWithWhereWithoutWeekInput | AttendanceUpdateManyWithWhereWithoutWeekInput[]
-    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-  }
-
-  export type ProjectWeeklyPayrollUncheckedUpdateManyWithoutWeekNestedInput = {
-    create?: XOR<ProjectWeeklyPayrollCreateWithoutWeekInput, ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput> | ProjectWeeklyPayrollCreateWithoutWeekInput[] | ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput[]
-    connectOrCreate?: ProjectWeeklyPayrollCreateOrConnectWithoutWeekInput | ProjectWeeklyPayrollCreateOrConnectWithoutWeekInput[]
-    upsert?: ProjectWeeklyPayrollUpsertWithWhereUniqueWithoutWeekInput | ProjectWeeklyPayrollUpsertWithWhereUniqueWithoutWeekInput[]
-    createMany?: ProjectWeeklyPayrollCreateManyWeekInputEnvelope
-    set?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    disconnect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    delete?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    connect?: ProjectWeeklyPayrollWhereUniqueInput | ProjectWeeklyPayrollWhereUniqueInput[]
-    update?: ProjectWeeklyPayrollUpdateWithWhereUniqueWithoutWeekInput | ProjectWeeklyPayrollUpdateWithWhereUniqueWithoutWeekInput[]
-    updateMany?: ProjectWeeklyPayrollUpdateManyWithWhereWithoutWeekInput | ProjectWeeklyPayrollUpdateManyWithWhereWithoutWeekInput[]
-    deleteMany?: ProjectWeeklyPayrollScalarWhereInput | ProjectWeeklyPayrollScalarWhereInput[]
-  }
-
-  export type ProjectCreateNestedOneWithoutWeeklyPayrollsInput = {
-    create?: XOR<ProjectCreateWithoutWeeklyPayrollsInput, ProjectUncheckedCreateWithoutWeeklyPayrollsInput>
-    connectOrCreate?: ProjectCreateOrConnectWithoutWeeklyPayrollsInput
-    connect?: ProjectWhereUniqueInput
-  }
-
-  export type WeekCreateNestedOneWithoutProjectWeeklyPayrollsInput = {
-    create?: XOR<WeekCreateWithoutProjectWeeklyPayrollsInput, WeekUncheckedCreateWithoutProjectWeeklyPayrollsInput>
-    connectOrCreate?: WeekCreateOrConnectWithoutProjectWeeklyPayrollsInput
+  export type WeekCreateNestedOneWithoutGeneralPayrollInput = {
+    create?: XOR<WeekCreateWithoutGeneralPayrollInput, WeekUncheckedCreateWithoutGeneralPayrollInput>
+    connectOrCreate?: WeekCreateOrConnectWithoutGeneralPayrollInput
     connect?: WeekWhereUniqueInput
   }
 
-  export type ProjectUpdateOneRequiredWithoutWeeklyPayrollsNestedInput = {
-    create?: XOR<ProjectCreateWithoutWeeklyPayrollsInput, ProjectUncheckedCreateWithoutWeeklyPayrollsInput>
-    connectOrCreate?: ProjectCreateOrConnectWithoutWeeklyPayrollsInput
-    upsert?: ProjectUpsertWithoutWeeklyPayrollsInput
-    connect?: ProjectWhereUniqueInput
-    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutWeeklyPayrollsInput, ProjectUpdateWithoutWeeklyPayrollsInput>, ProjectUncheckedUpdateWithoutWeeklyPayrollsInput>
+  export type GeneralPayrollProjectCreateNestedManyWithoutGeneralPayrollInput = {
+    create?: XOR<GeneralPayrollProjectCreateWithoutGeneralPayrollInput, GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput> | GeneralPayrollProjectCreateWithoutGeneralPayrollInput[] | GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput[]
+    connectOrCreate?: GeneralPayrollProjectCreateOrConnectWithoutGeneralPayrollInput | GeneralPayrollProjectCreateOrConnectWithoutGeneralPayrollInput[]
+    createMany?: GeneralPayrollProjectCreateManyGeneralPayrollInputEnvelope
+    connect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
   }
 
-  export type WeekUpdateOneRequiredWithoutProjectWeeklyPayrollsNestedInput = {
-    create?: XOR<WeekCreateWithoutProjectWeeklyPayrollsInput, WeekUncheckedCreateWithoutProjectWeeklyPayrollsInput>
-    connectOrCreate?: WeekCreateOrConnectWithoutProjectWeeklyPayrollsInput
-    upsert?: WeekUpsertWithoutProjectWeeklyPayrollsInput
+  export type GeneralPayrollWorkerCreateNestedManyWithoutGeneralPayrollInput = {
+    create?: XOR<GeneralPayrollWorkerCreateWithoutGeneralPayrollInput, GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput> | GeneralPayrollWorkerCreateWithoutGeneralPayrollInput[] | GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput[]
+    connectOrCreate?: GeneralPayrollWorkerCreateOrConnectWithoutGeneralPayrollInput | GeneralPayrollWorkerCreateOrConnectWithoutGeneralPayrollInput[]
+    createMany?: GeneralPayrollWorkerCreateManyGeneralPayrollInputEnvelope
+    connect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+  }
+
+  export type GeneralPayrollProjectUncheckedCreateNestedManyWithoutGeneralPayrollInput = {
+    create?: XOR<GeneralPayrollProjectCreateWithoutGeneralPayrollInput, GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput> | GeneralPayrollProjectCreateWithoutGeneralPayrollInput[] | GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput[]
+    connectOrCreate?: GeneralPayrollProjectCreateOrConnectWithoutGeneralPayrollInput | GeneralPayrollProjectCreateOrConnectWithoutGeneralPayrollInput[]
+    createMany?: GeneralPayrollProjectCreateManyGeneralPayrollInputEnvelope
+    connect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+  }
+
+  export type GeneralPayrollWorkerUncheckedCreateNestedManyWithoutGeneralPayrollInput = {
+    create?: XOR<GeneralPayrollWorkerCreateWithoutGeneralPayrollInput, GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput> | GeneralPayrollWorkerCreateWithoutGeneralPayrollInput[] | GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput[]
+    connectOrCreate?: GeneralPayrollWorkerCreateOrConnectWithoutGeneralPayrollInput | GeneralPayrollWorkerCreateOrConnectWithoutGeneralPayrollInput[]
+    createMany?: GeneralPayrollWorkerCreateManyGeneralPayrollInputEnvelope
+    connect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+  }
+
+  export type WeekUpdateOneRequiredWithoutGeneralPayrollNestedInput = {
+    create?: XOR<WeekCreateWithoutGeneralPayrollInput, WeekUncheckedCreateWithoutGeneralPayrollInput>
+    connectOrCreate?: WeekCreateOrConnectWithoutGeneralPayrollInput
+    upsert?: WeekUpsertWithoutGeneralPayrollInput
     connect?: WeekWhereUniqueInput
-    update?: XOR<XOR<WeekUpdateToOneWithWhereWithoutProjectWeeklyPayrollsInput, WeekUpdateWithoutProjectWeeklyPayrollsInput>, WeekUncheckedUpdateWithoutProjectWeeklyPayrollsInput>
+    update?: XOR<XOR<WeekUpdateToOneWithWhereWithoutGeneralPayrollInput, WeekUpdateWithoutGeneralPayrollInput>, WeekUncheckedUpdateWithoutGeneralPayrollInput>
+  }
+
+  export type GeneralPayrollProjectUpdateManyWithoutGeneralPayrollNestedInput = {
+    create?: XOR<GeneralPayrollProjectCreateWithoutGeneralPayrollInput, GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput> | GeneralPayrollProjectCreateWithoutGeneralPayrollInput[] | GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput[]
+    connectOrCreate?: GeneralPayrollProjectCreateOrConnectWithoutGeneralPayrollInput | GeneralPayrollProjectCreateOrConnectWithoutGeneralPayrollInput[]
+    upsert?: GeneralPayrollProjectUpsertWithWhereUniqueWithoutGeneralPayrollInput | GeneralPayrollProjectUpsertWithWhereUniqueWithoutGeneralPayrollInput[]
+    createMany?: GeneralPayrollProjectCreateManyGeneralPayrollInputEnvelope
+    set?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    disconnect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    delete?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    connect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    update?: GeneralPayrollProjectUpdateWithWhereUniqueWithoutGeneralPayrollInput | GeneralPayrollProjectUpdateWithWhereUniqueWithoutGeneralPayrollInput[]
+    updateMany?: GeneralPayrollProjectUpdateManyWithWhereWithoutGeneralPayrollInput | GeneralPayrollProjectUpdateManyWithWhereWithoutGeneralPayrollInput[]
+    deleteMany?: GeneralPayrollProjectScalarWhereInput | GeneralPayrollProjectScalarWhereInput[]
+  }
+
+  export type GeneralPayrollWorkerUpdateManyWithoutGeneralPayrollNestedInput = {
+    create?: XOR<GeneralPayrollWorkerCreateWithoutGeneralPayrollInput, GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput> | GeneralPayrollWorkerCreateWithoutGeneralPayrollInput[] | GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput[]
+    connectOrCreate?: GeneralPayrollWorkerCreateOrConnectWithoutGeneralPayrollInput | GeneralPayrollWorkerCreateOrConnectWithoutGeneralPayrollInput[]
+    upsert?: GeneralPayrollWorkerUpsertWithWhereUniqueWithoutGeneralPayrollInput | GeneralPayrollWorkerUpsertWithWhereUniqueWithoutGeneralPayrollInput[]
+    createMany?: GeneralPayrollWorkerCreateManyGeneralPayrollInputEnvelope
+    set?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    disconnect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    delete?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    connect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    update?: GeneralPayrollWorkerUpdateWithWhereUniqueWithoutGeneralPayrollInput | GeneralPayrollWorkerUpdateWithWhereUniqueWithoutGeneralPayrollInput[]
+    updateMany?: GeneralPayrollWorkerUpdateManyWithWhereWithoutGeneralPayrollInput | GeneralPayrollWorkerUpdateManyWithWhereWithoutGeneralPayrollInput[]
+    deleteMany?: GeneralPayrollWorkerScalarWhereInput | GeneralPayrollWorkerScalarWhereInput[]
+  }
+
+  export type GeneralPayrollProjectUncheckedUpdateManyWithoutGeneralPayrollNestedInput = {
+    create?: XOR<GeneralPayrollProjectCreateWithoutGeneralPayrollInput, GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput> | GeneralPayrollProjectCreateWithoutGeneralPayrollInput[] | GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput[]
+    connectOrCreate?: GeneralPayrollProjectCreateOrConnectWithoutGeneralPayrollInput | GeneralPayrollProjectCreateOrConnectWithoutGeneralPayrollInput[]
+    upsert?: GeneralPayrollProjectUpsertWithWhereUniqueWithoutGeneralPayrollInput | GeneralPayrollProjectUpsertWithWhereUniqueWithoutGeneralPayrollInput[]
+    createMany?: GeneralPayrollProjectCreateManyGeneralPayrollInputEnvelope
+    set?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    disconnect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    delete?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    connect?: GeneralPayrollProjectWhereUniqueInput | GeneralPayrollProjectWhereUniqueInput[]
+    update?: GeneralPayrollProjectUpdateWithWhereUniqueWithoutGeneralPayrollInput | GeneralPayrollProjectUpdateWithWhereUniqueWithoutGeneralPayrollInput[]
+    updateMany?: GeneralPayrollProjectUpdateManyWithWhereWithoutGeneralPayrollInput | GeneralPayrollProjectUpdateManyWithWhereWithoutGeneralPayrollInput[]
+    deleteMany?: GeneralPayrollProjectScalarWhereInput | GeneralPayrollProjectScalarWhereInput[]
+  }
+
+  export type GeneralPayrollWorkerUncheckedUpdateManyWithoutGeneralPayrollNestedInput = {
+    create?: XOR<GeneralPayrollWorkerCreateWithoutGeneralPayrollInput, GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput> | GeneralPayrollWorkerCreateWithoutGeneralPayrollInput[] | GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput[]
+    connectOrCreate?: GeneralPayrollWorkerCreateOrConnectWithoutGeneralPayrollInput | GeneralPayrollWorkerCreateOrConnectWithoutGeneralPayrollInput[]
+    upsert?: GeneralPayrollWorkerUpsertWithWhereUniqueWithoutGeneralPayrollInput | GeneralPayrollWorkerUpsertWithWhereUniqueWithoutGeneralPayrollInput[]
+    createMany?: GeneralPayrollWorkerCreateManyGeneralPayrollInputEnvelope
+    set?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    disconnect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    delete?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    connect?: GeneralPayrollWorkerWhereUniqueInput | GeneralPayrollWorkerWhereUniqueInput[]
+    update?: GeneralPayrollWorkerUpdateWithWhereUniqueWithoutGeneralPayrollInput | GeneralPayrollWorkerUpdateWithWhereUniqueWithoutGeneralPayrollInput[]
+    updateMany?: GeneralPayrollWorkerUpdateManyWithWhereWithoutGeneralPayrollInput | GeneralPayrollWorkerUpdateManyWithWhereWithoutGeneralPayrollInput[]
+    deleteMany?: GeneralPayrollWorkerScalarWhereInput | GeneralPayrollWorkerScalarWhereInput[]
+  }
+
+  export type GeneralPayrollCreateNestedOneWithoutProjectsInput = {
+    create?: XOR<GeneralPayrollCreateWithoutProjectsInput, GeneralPayrollUncheckedCreateWithoutProjectsInput>
+    connectOrCreate?: GeneralPayrollCreateOrConnectWithoutProjectsInput
+    connect?: GeneralPayrollWhereUniqueInput
+  }
+
+  export type ProjectCreateNestedOneWithoutGeneralPayrollProjectsInput = {
+    create?: XOR<ProjectCreateWithoutGeneralPayrollProjectsInput, ProjectUncheckedCreateWithoutGeneralPayrollProjectsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutGeneralPayrollProjectsInput
+    connect?: ProjectWhereUniqueInput
+  }
+
+  export type GeneralPayrollEntryCreateNestedManyWithoutPayrollProjectInput = {
+    create?: XOR<GeneralPayrollEntryCreateWithoutPayrollProjectInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput> | GeneralPayrollEntryCreateWithoutPayrollProjectInput[] | GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput[]
+    connectOrCreate?: GeneralPayrollEntryCreateOrConnectWithoutPayrollProjectInput | GeneralPayrollEntryCreateOrConnectWithoutPayrollProjectInput[]
+    createMany?: GeneralPayrollEntryCreateManyPayrollProjectInputEnvelope
+    connect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+  }
+
+  export type GeneralPayrollEntryUncheckedCreateNestedManyWithoutPayrollProjectInput = {
+    create?: XOR<GeneralPayrollEntryCreateWithoutPayrollProjectInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput> | GeneralPayrollEntryCreateWithoutPayrollProjectInput[] | GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput[]
+    connectOrCreate?: GeneralPayrollEntryCreateOrConnectWithoutPayrollProjectInput | GeneralPayrollEntryCreateOrConnectWithoutPayrollProjectInput[]
+    createMany?: GeneralPayrollEntryCreateManyPayrollProjectInputEnvelope
+    connect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+  }
+
+  export type GeneralPayrollUpdateOneRequiredWithoutProjectsNestedInput = {
+    create?: XOR<GeneralPayrollCreateWithoutProjectsInput, GeneralPayrollUncheckedCreateWithoutProjectsInput>
+    connectOrCreate?: GeneralPayrollCreateOrConnectWithoutProjectsInput
+    upsert?: GeneralPayrollUpsertWithoutProjectsInput
+    connect?: GeneralPayrollWhereUniqueInput
+    update?: XOR<XOR<GeneralPayrollUpdateToOneWithWhereWithoutProjectsInput, GeneralPayrollUpdateWithoutProjectsInput>, GeneralPayrollUncheckedUpdateWithoutProjectsInput>
+  }
+
+  export type ProjectUpdateOneRequiredWithoutGeneralPayrollProjectsNestedInput = {
+    create?: XOR<ProjectCreateWithoutGeneralPayrollProjectsInput, ProjectUncheckedCreateWithoutGeneralPayrollProjectsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutGeneralPayrollProjectsInput
+    upsert?: ProjectUpsertWithoutGeneralPayrollProjectsInput
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutGeneralPayrollProjectsInput, ProjectUpdateWithoutGeneralPayrollProjectsInput>, ProjectUncheckedUpdateWithoutGeneralPayrollProjectsInput>
+  }
+
+  export type GeneralPayrollEntryUpdateManyWithoutPayrollProjectNestedInput = {
+    create?: XOR<GeneralPayrollEntryCreateWithoutPayrollProjectInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput> | GeneralPayrollEntryCreateWithoutPayrollProjectInput[] | GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput[]
+    connectOrCreate?: GeneralPayrollEntryCreateOrConnectWithoutPayrollProjectInput | GeneralPayrollEntryCreateOrConnectWithoutPayrollProjectInput[]
+    upsert?: GeneralPayrollEntryUpsertWithWhereUniqueWithoutPayrollProjectInput | GeneralPayrollEntryUpsertWithWhereUniqueWithoutPayrollProjectInput[]
+    createMany?: GeneralPayrollEntryCreateManyPayrollProjectInputEnvelope
+    set?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    disconnect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    delete?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    connect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    update?: GeneralPayrollEntryUpdateWithWhereUniqueWithoutPayrollProjectInput | GeneralPayrollEntryUpdateWithWhereUniqueWithoutPayrollProjectInput[]
+    updateMany?: GeneralPayrollEntryUpdateManyWithWhereWithoutPayrollProjectInput | GeneralPayrollEntryUpdateManyWithWhereWithoutPayrollProjectInput[]
+    deleteMany?: GeneralPayrollEntryScalarWhereInput | GeneralPayrollEntryScalarWhereInput[]
+  }
+
+  export type GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollProjectNestedInput = {
+    create?: XOR<GeneralPayrollEntryCreateWithoutPayrollProjectInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput> | GeneralPayrollEntryCreateWithoutPayrollProjectInput[] | GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput[]
+    connectOrCreate?: GeneralPayrollEntryCreateOrConnectWithoutPayrollProjectInput | GeneralPayrollEntryCreateOrConnectWithoutPayrollProjectInput[]
+    upsert?: GeneralPayrollEntryUpsertWithWhereUniqueWithoutPayrollProjectInput | GeneralPayrollEntryUpsertWithWhereUniqueWithoutPayrollProjectInput[]
+    createMany?: GeneralPayrollEntryCreateManyPayrollProjectInputEnvelope
+    set?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    disconnect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    delete?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    connect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    update?: GeneralPayrollEntryUpdateWithWhereUniqueWithoutPayrollProjectInput | GeneralPayrollEntryUpdateWithWhereUniqueWithoutPayrollProjectInput[]
+    updateMany?: GeneralPayrollEntryUpdateManyWithWhereWithoutPayrollProjectInput | GeneralPayrollEntryUpdateManyWithWhereWithoutPayrollProjectInput[]
+    deleteMany?: GeneralPayrollEntryScalarWhereInput | GeneralPayrollEntryScalarWhereInput[]
+  }
+
+  export type GeneralPayrollCreateNestedOneWithoutWorkersInput = {
+    create?: XOR<GeneralPayrollCreateWithoutWorkersInput, GeneralPayrollUncheckedCreateWithoutWorkersInput>
+    connectOrCreate?: GeneralPayrollCreateOrConnectWithoutWorkersInput
+    connect?: GeneralPayrollWhereUniqueInput
+  }
+
+  export type WorkerCreateNestedOneWithoutGeneralPayrollWorkersInput = {
+    create?: XOR<WorkerCreateWithoutGeneralPayrollWorkersInput, WorkerUncheckedCreateWithoutGeneralPayrollWorkersInput>
+    connectOrCreate?: WorkerCreateOrConnectWithoutGeneralPayrollWorkersInput
+    connect?: WorkerWhereUniqueInput
+  }
+
+  export type GeneralPayrollEntryCreateNestedManyWithoutPayrollWorkerInput = {
+    create?: XOR<GeneralPayrollEntryCreateWithoutPayrollWorkerInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput> | GeneralPayrollEntryCreateWithoutPayrollWorkerInput[] | GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput[]
+    connectOrCreate?: GeneralPayrollEntryCreateOrConnectWithoutPayrollWorkerInput | GeneralPayrollEntryCreateOrConnectWithoutPayrollWorkerInput[]
+    createMany?: GeneralPayrollEntryCreateManyPayrollWorkerInputEnvelope
+    connect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+  }
+
+  export type GeneralPayrollEntryUncheckedCreateNestedManyWithoutPayrollWorkerInput = {
+    create?: XOR<GeneralPayrollEntryCreateWithoutPayrollWorkerInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput> | GeneralPayrollEntryCreateWithoutPayrollWorkerInput[] | GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput[]
+    connectOrCreate?: GeneralPayrollEntryCreateOrConnectWithoutPayrollWorkerInput | GeneralPayrollEntryCreateOrConnectWithoutPayrollWorkerInput[]
+    createMany?: GeneralPayrollEntryCreateManyPayrollWorkerInputEnvelope
+    connect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+  }
+
+  export type EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput = {
+    set?: $Enums.GeneralPayrollWorkerGroup
+  }
+
+  export type GeneralPayrollUpdateOneRequiredWithoutWorkersNestedInput = {
+    create?: XOR<GeneralPayrollCreateWithoutWorkersInput, GeneralPayrollUncheckedCreateWithoutWorkersInput>
+    connectOrCreate?: GeneralPayrollCreateOrConnectWithoutWorkersInput
+    upsert?: GeneralPayrollUpsertWithoutWorkersInput
+    connect?: GeneralPayrollWhereUniqueInput
+    update?: XOR<XOR<GeneralPayrollUpdateToOneWithWhereWithoutWorkersInput, GeneralPayrollUpdateWithoutWorkersInput>, GeneralPayrollUncheckedUpdateWithoutWorkersInput>
+  }
+
+  export type WorkerUpdateOneRequiredWithoutGeneralPayrollWorkersNestedInput = {
+    create?: XOR<WorkerCreateWithoutGeneralPayrollWorkersInput, WorkerUncheckedCreateWithoutGeneralPayrollWorkersInput>
+    connectOrCreate?: WorkerCreateOrConnectWithoutGeneralPayrollWorkersInput
+    upsert?: WorkerUpsertWithoutGeneralPayrollWorkersInput
+    connect?: WorkerWhereUniqueInput
+    update?: XOR<XOR<WorkerUpdateToOneWithWhereWithoutGeneralPayrollWorkersInput, WorkerUpdateWithoutGeneralPayrollWorkersInput>, WorkerUncheckedUpdateWithoutGeneralPayrollWorkersInput>
+  }
+
+  export type GeneralPayrollEntryUpdateManyWithoutPayrollWorkerNestedInput = {
+    create?: XOR<GeneralPayrollEntryCreateWithoutPayrollWorkerInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput> | GeneralPayrollEntryCreateWithoutPayrollWorkerInput[] | GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput[]
+    connectOrCreate?: GeneralPayrollEntryCreateOrConnectWithoutPayrollWorkerInput | GeneralPayrollEntryCreateOrConnectWithoutPayrollWorkerInput[]
+    upsert?: GeneralPayrollEntryUpsertWithWhereUniqueWithoutPayrollWorkerInput | GeneralPayrollEntryUpsertWithWhereUniqueWithoutPayrollWorkerInput[]
+    createMany?: GeneralPayrollEntryCreateManyPayrollWorkerInputEnvelope
+    set?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    disconnect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    delete?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    connect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    update?: GeneralPayrollEntryUpdateWithWhereUniqueWithoutPayrollWorkerInput | GeneralPayrollEntryUpdateWithWhereUniqueWithoutPayrollWorkerInput[]
+    updateMany?: GeneralPayrollEntryUpdateManyWithWhereWithoutPayrollWorkerInput | GeneralPayrollEntryUpdateManyWithWhereWithoutPayrollWorkerInput[]
+    deleteMany?: GeneralPayrollEntryScalarWhereInput | GeneralPayrollEntryScalarWhereInput[]
+  }
+
+  export type GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollWorkerNestedInput = {
+    create?: XOR<GeneralPayrollEntryCreateWithoutPayrollWorkerInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput> | GeneralPayrollEntryCreateWithoutPayrollWorkerInput[] | GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput[]
+    connectOrCreate?: GeneralPayrollEntryCreateOrConnectWithoutPayrollWorkerInput | GeneralPayrollEntryCreateOrConnectWithoutPayrollWorkerInput[]
+    upsert?: GeneralPayrollEntryUpsertWithWhereUniqueWithoutPayrollWorkerInput | GeneralPayrollEntryUpsertWithWhereUniqueWithoutPayrollWorkerInput[]
+    createMany?: GeneralPayrollEntryCreateManyPayrollWorkerInputEnvelope
+    set?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    disconnect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    delete?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    connect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
+    update?: GeneralPayrollEntryUpdateWithWhereUniqueWithoutPayrollWorkerInput | GeneralPayrollEntryUpdateWithWhereUniqueWithoutPayrollWorkerInput[]
+    updateMany?: GeneralPayrollEntryUpdateManyWithWhereWithoutPayrollWorkerInput | GeneralPayrollEntryUpdateManyWithWhereWithoutPayrollWorkerInput[]
+    deleteMany?: GeneralPayrollEntryScalarWhereInput | GeneralPayrollEntryScalarWhereInput[]
+  }
+
+  export type GeneralPayrollProjectCreateNestedOneWithoutEntriesInput = {
+    create?: XOR<GeneralPayrollProjectCreateWithoutEntriesInput, GeneralPayrollProjectUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: GeneralPayrollProjectCreateOrConnectWithoutEntriesInput
+    connect?: GeneralPayrollProjectWhereUniqueInput
+  }
+
+  export type GeneralPayrollWorkerCreateNestedOneWithoutEntriesInput = {
+    create?: XOR<GeneralPayrollWorkerCreateWithoutEntriesInput, GeneralPayrollWorkerUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: GeneralPayrollWorkerCreateOrConnectWithoutEntriesInput
+    connect?: GeneralPayrollWorkerWhereUniqueInput
+  }
+
+  export type GeneralPayrollProjectUpdateOneRequiredWithoutEntriesNestedInput = {
+    create?: XOR<GeneralPayrollProjectCreateWithoutEntriesInput, GeneralPayrollProjectUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: GeneralPayrollProjectCreateOrConnectWithoutEntriesInput
+    upsert?: GeneralPayrollProjectUpsertWithoutEntriesInput
+    connect?: GeneralPayrollProjectWhereUniqueInput
+    update?: XOR<XOR<GeneralPayrollProjectUpdateToOneWithWhereWithoutEntriesInput, GeneralPayrollProjectUpdateWithoutEntriesInput>, GeneralPayrollProjectUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type GeneralPayrollWorkerUpdateOneRequiredWithoutEntriesNestedInput = {
+    create?: XOR<GeneralPayrollWorkerCreateWithoutEntriesInput, GeneralPayrollWorkerUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: GeneralPayrollWorkerCreateOrConnectWithoutEntriesInput
+    upsert?: GeneralPayrollWorkerUpsertWithoutEntriesInput
+    connect?: GeneralPayrollWorkerWhereUniqueInput
+    update?: XOR<XOR<GeneralPayrollWorkerUpdateToOneWithWhereWithoutEntriesInput, GeneralPayrollWorkerUpdateWithoutEntriesInput>, GeneralPayrollWorkerUncheckedUpdateWithoutEntriesInput>
   }
 
   export type WorkerCreateNestedOneWithoutDailyWagesInput = {
@@ -101865,76 +103748,6 @@ export namespace Prisma {
     upsert?: WorkerUpsertWithoutDailyWagesInput
     connect?: WorkerWhereUniqueInput
     update?: XOR<XOR<WorkerUpdateToOneWithWhereWithoutDailyWagesInput, WorkerUpdateWithoutDailyWagesInput>, WorkerUncheckedUpdateWithoutDailyWagesInput>
-  }
-
-  export type WorkerCreateNestedOneWithoutWeeklyWagesInput = {
-    create?: XOR<WorkerCreateWithoutWeeklyWagesInput, WorkerUncheckedCreateWithoutWeeklyWagesInput>
-    connectOrCreate?: WorkerCreateOrConnectWithoutWeeklyWagesInput
-    connect?: WorkerWhereUniqueInput
-  }
-
-  export type WeekCreateNestedOneWithoutWeeklyWagesInput = {
-    create?: XOR<WeekCreateWithoutWeeklyWagesInput, WeekUncheckedCreateWithoutWeeklyWagesInput>
-    connectOrCreate?: WeekCreateOrConnectWithoutWeeklyWagesInput
-    connect?: WeekWhereUniqueInput
-  }
-
-  export type WorkerUpdateOneRequiredWithoutWeeklyWagesNestedInput = {
-    create?: XOR<WorkerCreateWithoutWeeklyWagesInput, WorkerUncheckedCreateWithoutWeeklyWagesInput>
-    connectOrCreate?: WorkerCreateOrConnectWithoutWeeklyWagesInput
-    upsert?: WorkerUpsertWithoutWeeklyWagesInput
-    connect?: WorkerWhereUniqueInput
-    update?: XOR<XOR<WorkerUpdateToOneWithWhereWithoutWeeklyWagesInput, WorkerUpdateWithoutWeeklyWagesInput>, WorkerUncheckedUpdateWithoutWeeklyWagesInput>
-  }
-
-  export type WeekUpdateOneRequiredWithoutWeeklyWagesNestedInput = {
-    create?: XOR<WeekCreateWithoutWeeklyWagesInput, WeekUncheckedCreateWithoutWeeklyWagesInput>
-    connectOrCreate?: WeekCreateOrConnectWithoutWeeklyWagesInput
-    upsert?: WeekUpsertWithoutWeeklyWagesInput
-    connect?: WeekWhereUniqueInput
-    update?: XOR<XOR<WeekUpdateToOneWithWhereWithoutWeeklyWagesInput, WeekUpdateWithoutWeeklyWagesInput>, WeekUncheckedUpdateWithoutWeeklyWagesInput>
-  }
-
-  export type WorkerCreateNestedOneWithoutAttendancesInput = {
-    create?: XOR<WorkerCreateWithoutAttendancesInput, WorkerUncheckedCreateWithoutAttendancesInput>
-    connectOrCreate?: WorkerCreateOrConnectWithoutAttendancesInput
-    connect?: WorkerWhereUniqueInput
-  }
-
-  export type ProjectCreateNestedOneWithoutAttendancesInput = {
-    create?: XOR<ProjectCreateWithoutAttendancesInput, ProjectUncheckedCreateWithoutAttendancesInput>
-    connectOrCreate?: ProjectCreateOrConnectWithoutAttendancesInput
-    connect?: ProjectWhereUniqueInput
-  }
-
-  export type WeekCreateNestedOneWithoutAttendancesInput = {
-    create?: XOR<WeekCreateWithoutAttendancesInput, WeekUncheckedCreateWithoutAttendancesInput>
-    connectOrCreate?: WeekCreateOrConnectWithoutAttendancesInput
-    connect?: WeekWhereUniqueInput
-  }
-
-  export type WorkerUpdateOneRequiredWithoutAttendancesNestedInput = {
-    create?: XOR<WorkerCreateWithoutAttendancesInput, WorkerUncheckedCreateWithoutAttendancesInput>
-    connectOrCreate?: WorkerCreateOrConnectWithoutAttendancesInput
-    upsert?: WorkerUpsertWithoutAttendancesInput
-    connect?: WorkerWhereUniqueInput
-    update?: XOR<XOR<WorkerUpdateToOneWithWhereWithoutAttendancesInput, WorkerUpdateWithoutAttendancesInput>, WorkerUncheckedUpdateWithoutAttendancesInput>
-  }
-
-  export type ProjectUpdateOneRequiredWithoutAttendancesNestedInput = {
-    create?: XOR<ProjectCreateWithoutAttendancesInput, ProjectUncheckedCreateWithoutAttendancesInput>
-    connectOrCreate?: ProjectCreateOrConnectWithoutAttendancesInput
-    upsert?: ProjectUpsertWithoutAttendancesInput
-    connect?: ProjectWhereUniqueInput
-    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutAttendancesInput, ProjectUpdateWithoutAttendancesInput>, ProjectUncheckedUpdateWithoutAttendancesInput>
-  }
-
-  export type WeekUpdateOneRequiredWithoutAttendancesNestedInput = {
-    create?: XOR<WeekCreateWithoutAttendancesInput, WeekUncheckedCreateWithoutAttendancesInput>
-    connectOrCreate?: WeekCreateOrConnectWithoutAttendancesInput
-    upsert?: WeekUpsertWithoutAttendancesInput
-    connect?: WeekWhereUniqueInput
-    update?: XOR<XOR<WeekUpdateToOneWithWhereWithoutAttendancesInput, WeekUpdateWithoutAttendancesInput>, WeekUncheckedUpdateWithoutAttendancesInput>
   }
 
   export type ProjectCreateNestedOneWithoutTasksInput = {
@@ -103270,6 +105083,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPettyCashTypeFilter<$PrismaModel>
     _max?: NestedEnumPettyCashTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGeneralPayrollWorkerGroupFilter<$PrismaModel = never> = {
+    equals?: $Enums.GeneralPayrollWorkerGroup | EnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    in?: $Enums.GeneralPayrollWorkerGroup[] | ListEnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GeneralPayrollWorkerGroup[] | ListEnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    not?: NestedEnumGeneralPayrollWorkerGroupFilter<$PrismaModel> | $Enums.GeneralPayrollWorkerGroup
+  }
+
+  export type NestedEnumGeneralPayrollWorkerGroupWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GeneralPayrollWorkerGroup | EnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    in?: $Enums.GeneralPayrollWorkerGroup[] | ListEnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GeneralPayrollWorkerGroup[] | ListEnumGeneralPayrollWorkerGroupFieldRefInput<$PrismaModel>
+    not?: NestedEnumGeneralPayrollWorkerGroupWithAggregatesFilter<$PrismaModel> | $Enums.GeneralPayrollWorkerGroup
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGeneralPayrollWorkerGroupFilter<$PrismaModel>
+    _max?: NestedEnumGeneralPayrollWorkerGroupFilter<$PrismaModel>
   }
 
   export type NestedEnumTaskStatusFilter<$PrismaModel = never> = {
@@ -105140,55 +106970,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type AttendanceCreateWithoutProjectInput = {
-    date: Date | string
-    createdAt?: Date | string
-    worker: WorkerCreateNestedOneWithoutAttendancesInput
-    week: WeekCreateNestedOneWithoutAttendancesInput
-  }
-
-  export type AttendanceUncheckedCreateWithoutProjectInput = {
-    attendanceId?: number
-    workerId: number
-    date: Date | string
-    weekId: number
-    createdAt?: Date | string
-  }
-
-  export type AttendanceCreateOrConnectWithoutProjectInput = {
-    where: AttendanceWhereUniqueInput
-    create: XOR<AttendanceCreateWithoutProjectInput, AttendanceUncheckedCreateWithoutProjectInput>
-  }
-
-  export type AttendanceCreateManyProjectInputEnvelope = {
-    data: AttendanceCreateManyProjectInput | AttendanceCreateManyProjectInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ProjectWeeklyPayrollCreateWithoutProjectInput = {
-    amount: Decimal | DecimalJsLike | number | string
-    notes?: string | null
+  export type GeneralPayrollProjectCreateWithoutProjectInput = {
+    displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    week: WeekCreateNestedOneWithoutProjectWeeklyPayrollsInput
+    generalPayroll: GeneralPayrollCreateNestedOneWithoutProjectsInput
+    entries?: GeneralPayrollEntryCreateNestedManyWithoutPayrollProjectInput
   }
 
-  export type ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput = {
-    projectWeeklyPayrollId?: number
-    weekId: number
-    amount: Decimal | DecimalJsLike | number | string
-    notes?: string | null
+  export type GeneralPayrollProjectUncheckedCreateWithoutProjectInput = {
+    generalPayrollProjectId?: number
+    generalPayrollId: number
+    displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    entries?: GeneralPayrollEntryUncheckedCreateNestedManyWithoutPayrollProjectInput
   }
 
-  export type ProjectWeeklyPayrollCreateOrConnectWithoutProjectInput = {
-    where: ProjectWeeklyPayrollWhereUniqueInput
-    create: XOR<ProjectWeeklyPayrollCreateWithoutProjectInput, ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput>
+  export type GeneralPayrollProjectCreateOrConnectWithoutProjectInput = {
+    where: GeneralPayrollProjectWhereUniqueInput
+    create: XOR<GeneralPayrollProjectCreateWithoutProjectInput, GeneralPayrollProjectUncheckedCreateWithoutProjectInput>
   }
 
-  export type ProjectWeeklyPayrollCreateManyProjectInputEnvelope = {
-    data: ProjectWeeklyPayrollCreateManyProjectInput | ProjectWeeklyPayrollCreateManyProjectInput[]
+  export type GeneralPayrollProjectCreateManyProjectInputEnvelope = {
+    data: GeneralPayrollProjectCreateManyProjectInput | GeneralPayrollProjectCreateManyProjectInput[]
     skipDuplicates?: boolean
   }
 
@@ -105600,61 +107405,32 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ServiceSale"> | Date | string
   }
 
-  export type AttendanceUpsertWithWhereUniqueWithoutProjectInput = {
-    where: AttendanceWhereUniqueInput
-    update: XOR<AttendanceUpdateWithoutProjectInput, AttendanceUncheckedUpdateWithoutProjectInput>
-    create: XOR<AttendanceCreateWithoutProjectInput, AttendanceUncheckedCreateWithoutProjectInput>
+  export type GeneralPayrollProjectUpsertWithWhereUniqueWithoutProjectInput = {
+    where: GeneralPayrollProjectWhereUniqueInput
+    update: XOR<GeneralPayrollProjectUpdateWithoutProjectInput, GeneralPayrollProjectUncheckedUpdateWithoutProjectInput>
+    create: XOR<GeneralPayrollProjectCreateWithoutProjectInput, GeneralPayrollProjectUncheckedCreateWithoutProjectInput>
   }
 
-  export type AttendanceUpdateWithWhereUniqueWithoutProjectInput = {
-    where: AttendanceWhereUniqueInput
-    data: XOR<AttendanceUpdateWithoutProjectInput, AttendanceUncheckedUpdateWithoutProjectInput>
+  export type GeneralPayrollProjectUpdateWithWhereUniqueWithoutProjectInput = {
+    where: GeneralPayrollProjectWhereUniqueInput
+    data: XOR<GeneralPayrollProjectUpdateWithoutProjectInput, GeneralPayrollProjectUncheckedUpdateWithoutProjectInput>
   }
 
-  export type AttendanceUpdateManyWithWhereWithoutProjectInput = {
-    where: AttendanceScalarWhereInput
-    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutProjectInput>
+  export type GeneralPayrollProjectUpdateManyWithWhereWithoutProjectInput = {
+    where: GeneralPayrollProjectScalarWhereInput
+    data: XOR<GeneralPayrollProjectUpdateManyMutationInput, GeneralPayrollProjectUncheckedUpdateManyWithoutProjectInput>
   }
 
-  export type AttendanceScalarWhereInput = {
-    AND?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-    OR?: AttendanceScalarWhereInput[]
-    NOT?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-    attendanceId?: IntFilter<"Attendance"> | number
-    workerId?: IntFilter<"Attendance"> | number
-    projectId?: IntFilter<"Attendance"> | number
-    date?: DateTimeFilter<"Attendance"> | Date | string
-    weekId?: IntFilter<"Attendance"> | number
-    createdAt?: DateTimeFilter<"Attendance"> | Date | string
-  }
-
-  export type ProjectWeeklyPayrollUpsertWithWhereUniqueWithoutProjectInput = {
-    where: ProjectWeeklyPayrollWhereUniqueInput
-    update: XOR<ProjectWeeklyPayrollUpdateWithoutProjectInput, ProjectWeeklyPayrollUncheckedUpdateWithoutProjectInput>
-    create: XOR<ProjectWeeklyPayrollCreateWithoutProjectInput, ProjectWeeklyPayrollUncheckedCreateWithoutProjectInput>
-  }
-
-  export type ProjectWeeklyPayrollUpdateWithWhereUniqueWithoutProjectInput = {
-    where: ProjectWeeklyPayrollWhereUniqueInput
-    data: XOR<ProjectWeeklyPayrollUpdateWithoutProjectInput, ProjectWeeklyPayrollUncheckedUpdateWithoutProjectInput>
-  }
-
-  export type ProjectWeeklyPayrollUpdateManyWithWhereWithoutProjectInput = {
-    where: ProjectWeeklyPayrollScalarWhereInput
-    data: XOR<ProjectWeeklyPayrollUpdateManyMutationInput, ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectInput>
-  }
-
-  export type ProjectWeeklyPayrollScalarWhereInput = {
-    AND?: ProjectWeeklyPayrollScalarWhereInput | ProjectWeeklyPayrollScalarWhereInput[]
-    OR?: ProjectWeeklyPayrollScalarWhereInput[]
-    NOT?: ProjectWeeklyPayrollScalarWhereInput | ProjectWeeklyPayrollScalarWhereInput[]
-    projectWeeklyPayrollId?: IntFilter<"ProjectWeeklyPayroll"> | number
-    projectId?: IntFilter<"ProjectWeeklyPayroll"> | number
-    weekId?: IntFilter<"ProjectWeeklyPayroll"> | number
-    amount?: DecimalFilter<"ProjectWeeklyPayroll"> | Decimal | DecimalJsLike | number | string
-    notes?: StringNullableFilter<"ProjectWeeklyPayroll"> | string | null
-    createdAt?: DateTimeFilter<"ProjectWeeklyPayroll"> | Date | string
-    updatedAt?: DateTimeFilter<"ProjectWeeklyPayroll"> | Date | string
+  export type GeneralPayrollProjectScalarWhereInput = {
+    AND?: GeneralPayrollProjectScalarWhereInput | GeneralPayrollProjectScalarWhereInput[]
+    OR?: GeneralPayrollProjectScalarWhereInput[]
+    NOT?: GeneralPayrollProjectScalarWhereInput | GeneralPayrollProjectScalarWhereInput[]
+    generalPayrollProjectId?: IntFilter<"GeneralPayrollProject"> | number
+    generalPayrollId?: IntFilter<"GeneralPayrollProject"> | number
+    projectId?: IntFilter<"GeneralPayrollProject"> | number
+    displayOrder?: IntFilter<"GeneralPayrollProject"> | number
+    createdAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
   }
 
   export type TaskUpsertWithWhereUniqueWithoutProjectInput = {
@@ -108235,8 +110011,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
@@ -108261,8 +110036,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
@@ -108676,8 +110450,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
@@ -108702,8 +110475,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
@@ -109019,9 +110791,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentWorkerInput
@@ -109040,9 +110811,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentWorkerInput
@@ -109155,9 +110925,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentWorkerNestedInput
@@ -109176,9 +110945,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentWorkerNestedInput
@@ -110331,8 +112099,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutProjectInput
@@ -110357,8 +112124,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutProjectInput
@@ -110804,8 +112570,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutProjectNestedInput
@@ -110830,8 +112595,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutProjectNestedInput
@@ -111397,8 +113161,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
@@ -111423,8 +113186,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
@@ -111449,9 +113211,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentWorkerInput
     workerInventoryAssignments?: WorkerInventoryAssignmentCreateNestedManyWithoutWorkerInput
@@ -111470,9 +113231,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentWorkerInput
     workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedCreateNestedManyWithoutWorkerInput
@@ -111970,8 +113730,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
@@ -111996,8 +113755,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
@@ -112028,9 +113786,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentWorkerNestedInput
     workerInventoryAssignments?: WorkerInventoryAssignmentUpdateManyWithoutWorkerNestedInput
@@ -112049,9 +113806,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentWorkerNestedInput
     workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
@@ -112977,8 +114733,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
@@ -113003,8 +114758,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
@@ -113029,9 +114783,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutWorkerInput
     workerInventoryAssignments?: WorkerInventoryAssignmentCreateNestedManyWithoutWorkerInput
@@ -113050,9 +114803,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutWorkerInput
     workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedCreateNestedManyWithoutWorkerInput
@@ -113348,8 +115100,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
@@ -113374,8 +115125,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
@@ -113406,9 +115156,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutWorkerNestedInput
     workerInventoryAssignments?: WorkerInventoryAssignmentUpdateManyWithoutWorkerNestedInput
@@ -113427,9 +115176,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutWorkerNestedInput
     workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
@@ -114122,8 +115870,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
@@ -114148,8 +115895,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
@@ -114302,8 +116048,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
@@ -114328,8 +116073,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
@@ -114523,58 +116267,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type WeeklyWageCreateWithoutWorkerInput = {
-    grossAmount: Decimal | DecimalJsLike | number | string
-    totalAmount: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    week: WeekCreateNestedOneWithoutWeeklyWagesInput
-  }
-
-  export type WeeklyWageUncheckedCreateWithoutWorkerInput = {
-    weeklyWageId?: number
-    weekId: number
-    grossAmount: Decimal | DecimalJsLike | number | string
-    totalAmount: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type WeeklyWageCreateOrConnectWithoutWorkerInput = {
-    where: WeeklyWageWhereUniqueInput
-    create: XOR<WeeklyWageCreateWithoutWorkerInput, WeeklyWageUncheckedCreateWithoutWorkerInput>
-  }
-
-  export type WeeklyWageCreateManyWorkerInputEnvelope = {
-    data: WeeklyWageCreateManyWorkerInput | WeeklyWageCreateManyWorkerInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AttendanceCreateWithoutWorkerInput = {
-    date: Date | string
-    createdAt?: Date | string
-    project: ProjectCreateNestedOneWithoutAttendancesInput
-    week: WeekCreateNestedOneWithoutAttendancesInput
-  }
-
-  export type AttendanceUncheckedCreateWithoutWorkerInput = {
-    attendanceId?: number
-    projectId: number
-    date: Date | string
-    weekId: number
-    createdAt?: Date | string
-  }
-
-  export type AttendanceCreateOrConnectWithoutWorkerInput = {
-    where: AttendanceWhereUniqueInput
-    create: XOR<AttendanceCreateWithoutWorkerInput, AttendanceUncheckedCreateWithoutWorkerInput>
-  }
-
-  export type AttendanceCreateManyWorkerInputEnvelope = {
-    data: AttendanceCreateManyWorkerInput | AttendanceCreateManyWorkerInput[]
-    skipDuplicates?: boolean
-  }
-
   export type DailyWageCreateWithoutWorkerInput = {
     amount: Decimal | DecimalJsLike | number | string
     validFromDate: Date | string
@@ -114597,6 +116289,43 @@ export namespace Prisma {
 
   export type DailyWageCreateManyWorkerInputEnvelope = {
     data: DailyWageCreateManyWorkerInput | DailyWageCreateManyWorkerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GeneralPayrollWorkerCreateWithoutWorkerInput = {
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    generalPayroll: GeneralPayrollCreateNestedOneWithoutWorkersInput
+    entries?: GeneralPayrollEntryCreateNestedManyWithoutPayrollWorkerInput
+  }
+
+  export type GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput = {
+    generalPayrollWorkerId?: number
+    generalPayrollId: number
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: GeneralPayrollEntryUncheckedCreateNestedManyWithoutPayrollWorkerInput
+  }
+
+  export type GeneralPayrollWorkerCreateOrConnectWithoutWorkerInput = {
+    where: GeneralPayrollWorkerWhereUniqueInput
+    create: XOR<GeneralPayrollWorkerCreateWithoutWorkerInput, GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput>
+  }
+
+  export type GeneralPayrollWorkerCreateManyWorkerInputEnvelope = {
+    data: GeneralPayrollWorkerCreateManyWorkerInput | GeneralPayrollWorkerCreateManyWorkerInput[]
     skipDuplicates?: boolean
   }
 
@@ -114804,51 +116533,6 @@ export namespace Prisma {
     data: XOR<RequestWorkerUpdateManyMutationInput, RequestWorkerUncheckedUpdateManyWithoutWorkerInput>
   }
 
-  export type WeeklyWageUpsertWithWhereUniqueWithoutWorkerInput = {
-    where: WeeklyWageWhereUniqueInput
-    update: XOR<WeeklyWageUpdateWithoutWorkerInput, WeeklyWageUncheckedUpdateWithoutWorkerInput>
-    create: XOR<WeeklyWageCreateWithoutWorkerInput, WeeklyWageUncheckedCreateWithoutWorkerInput>
-  }
-
-  export type WeeklyWageUpdateWithWhereUniqueWithoutWorkerInput = {
-    where: WeeklyWageWhereUniqueInput
-    data: XOR<WeeklyWageUpdateWithoutWorkerInput, WeeklyWageUncheckedUpdateWithoutWorkerInput>
-  }
-
-  export type WeeklyWageUpdateManyWithWhereWithoutWorkerInput = {
-    where: WeeklyWageScalarWhereInput
-    data: XOR<WeeklyWageUpdateManyMutationInput, WeeklyWageUncheckedUpdateManyWithoutWorkerInput>
-  }
-
-  export type WeeklyWageScalarWhereInput = {
-    AND?: WeeklyWageScalarWhereInput | WeeklyWageScalarWhereInput[]
-    OR?: WeeklyWageScalarWhereInput[]
-    NOT?: WeeklyWageScalarWhereInput | WeeklyWageScalarWhereInput[]
-    weeklyWageId?: IntFilter<"WeeklyWage"> | number
-    workerId?: IntFilter<"WeeklyWage"> | number
-    weekId?: IntFilter<"WeeklyWage"> | number
-    grossAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFilter<"WeeklyWage"> | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFilter<"WeeklyWage"> | Date | string
-    updatedAt?: DateTimeFilter<"WeeklyWage"> | Date | string
-  }
-
-  export type AttendanceUpsertWithWhereUniqueWithoutWorkerInput = {
-    where: AttendanceWhereUniqueInput
-    update: XOR<AttendanceUpdateWithoutWorkerInput, AttendanceUncheckedUpdateWithoutWorkerInput>
-    create: XOR<AttendanceCreateWithoutWorkerInput, AttendanceUncheckedCreateWithoutWorkerInput>
-  }
-
-  export type AttendanceUpdateWithWhereUniqueWithoutWorkerInput = {
-    where: AttendanceWhereUniqueInput
-    data: XOR<AttendanceUpdateWithoutWorkerInput, AttendanceUncheckedUpdateWithoutWorkerInput>
-  }
-
-  export type AttendanceUpdateManyWithWhereWithoutWorkerInput = {
-    where: AttendanceScalarWhereInput
-    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutWorkerInput>
-  }
-
   export type DailyWageUpsertWithWhereUniqueWithoutWorkerInput = {
     where: DailyWageWhereUniqueInput
     update: XOR<DailyWageUpdateWithoutWorkerInput, DailyWageUncheckedUpdateWithoutWorkerInput>
@@ -114875,6 +116559,39 @@ export namespace Prisma {
     validFromDate?: DateTimeFilter<"DailyWage"> | Date | string
     createdAt?: DateTimeFilter<"DailyWage"> | Date | string
     updatedAt?: DateTimeFilter<"DailyWage"> | Date | string
+  }
+
+  export type GeneralPayrollWorkerUpsertWithWhereUniqueWithoutWorkerInput = {
+    where: GeneralPayrollWorkerWhereUniqueInput
+    update: XOR<GeneralPayrollWorkerUpdateWithoutWorkerInput, GeneralPayrollWorkerUncheckedUpdateWithoutWorkerInput>
+    create: XOR<GeneralPayrollWorkerCreateWithoutWorkerInput, GeneralPayrollWorkerUncheckedCreateWithoutWorkerInput>
+  }
+
+  export type GeneralPayrollWorkerUpdateWithWhereUniqueWithoutWorkerInput = {
+    where: GeneralPayrollWorkerWhereUniqueInput
+    data: XOR<GeneralPayrollWorkerUpdateWithoutWorkerInput, GeneralPayrollWorkerUncheckedUpdateWithoutWorkerInput>
+  }
+
+  export type GeneralPayrollWorkerUpdateManyWithWhereWithoutWorkerInput = {
+    where: GeneralPayrollWorkerScalarWhereInput
+    data: XOR<GeneralPayrollWorkerUpdateManyMutationInput, GeneralPayrollWorkerUncheckedUpdateManyWithoutWorkerInput>
+  }
+
+  export type GeneralPayrollWorkerScalarWhereInput = {
+    AND?: GeneralPayrollWorkerScalarWhereInput | GeneralPayrollWorkerScalarWhereInput[]
+    OR?: GeneralPayrollWorkerScalarWhereInput[]
+    NOT?: GeneralPayrollWorkerScalarWhereInput | GeneralPayrollWorkerScalarWhereInput[]
+    generalPayrollWorkerId?: IntFilter<"GeneralPayrollWorker"> | number
+    generalPayrollId?: IntFilter<"GeneralPayrollWorker"> | number
+    workerId?: IntFilter<"GeneralPayrollWorker"> | number
+    group?: EnumGeneralPayrollWorkerGroupFilter<"GeneralPayrollWorker"> | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFilter<"GeneralPayrollWorker"> | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFilter<"GeneralPayrollWorker"> | number
+    createdAt?: DateTimeFilter<"GeneralPayrollWorker"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayrollWorker"> | Date | string
   }
 
   export type WorkerMonthlyEvaluationUpsertWithWhereUniqueWithoutWorkerInput = {
@@ -114953,9 +116670,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentWorkerInput
@@ -114974,9 +116690,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentWorkerInput
@@ -115003,8 +116718,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
@@ -115029,8 +116743,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
@@ -115309,9 +117022,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentWorkerNestedInput
@@ -115330,9 +117042,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentWorkerNestedInput
@@ -115365,8 +117076,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
@@ -115391,8 +117101,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
@@ -116282,9 +117991,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentWorkerInput
     workerInventoryAssignments?: WorkerInventoryAssignmentCreateNestedManyWithoutWorkerInput
@@ -116303,9 +118011,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
     dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentWorkerInput
     workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedCreateNestedManyWithoutWorkerInput
@@ -116596,9 +118303,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentWorkerNestedInput
     workerInventoryAssignments?: WorkerInventoryAssignmentUpdateManyWithoutWorkerNestedInput
@@ -116617,9 +118323,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
     dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentWorkerNestedInput
     workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
@@ -117451,8 +119156,7 @@ export namespace Prisma {
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
@@ -117477,8 +119181,7 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
@@ -117667,8 +119370,7 @@ export namespace Prisma {
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
@@ -117693,8 +119395,7 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
@@ -117996,8 +119697,7 @@ export namespace Prisma {
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
@@ -118022,8 +119722,7 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
@@ -118063,8 +119762,7 @@ export namespace Prisma {
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
@@ -118089,8 +119787,7 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
@@ -118114,8 +119811,7 @@ export namespace Prisma {
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
@@ -118140,8 +119836,7 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
@@ -118181,8 +119876,7 @@ export namespace Prisma {
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
@@ -118207,8 +119901,7 @@ export namespace Prisma {
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
@@ -118493,134 +120186,215 @@ export namespace Prisma {
     responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
   }
 
-  export type WeeklyWageCreateWithoutWeekInput = {
-    grossAmount: Decimal | DecimalJsLike | number | string
-    totalAmount: Decimal | DecimalJsLike | number | string
+  export type GeneralPayrollCreateWithoutWeekInput = {
     createdAt?: Date | string
     updatedAt?: Date | string
-    worker: WorkerCreateNestedOneWithoutWeeklyWagesInput
+    projects?: GeneralPayrollProjectCreateNestedManyWithoutGeneralPayrollInput
+    workers?: GeneralPayrollWorkerCreateNestedManyWithoutGeneralPayrollInput
   }
 
-  export type WeeklyWageUncheckedCreateWithoutWeekInput = {
-    weeklyWageId?: number
-    workerId: number
-    grossAmount: Decimal | DecimalJsLike | number | string
-    totalAmount: Decimal | DecimalJsLike | number | string
+  export type GeneralPayrollUncheckedCreateWithoutWeekInput = {
+    generalPayrollId?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutGeneralPayrollInput
+    workers?: GeneralPayrollWorkerUncheckedCreateNestedManyWithoutGeneralPayrollInput
+  }
+
+  export type GeneralPayrollCreateOrConnectWithoutWeekInput = {
+    where: GeneralPayrollWhereUniqueInput
+    create: XOR<GeneralPayrollCreateWithoutWeekInput, GeneralPayrollUncheckedCreateWithoutWeekInput>
+  }
+
+  export type GeneralPayrollUpsertWithoutWeekInput = {
+    update: XOR<GeneralPayrollUpdateWithoutWeekInput, GeneralPayrollUncheckedUpdateWithoutWeekInput>
+    create: XOR<GeneralPayrollCreateWithoutWeekInput, GeneralPayrollUncheckedCreateWithoutWeekInput>
+    where?: GeneralPayrollWhereInput
+  }
+
+  export type GeneralPayrollUpdateToOneWithWhereWithoutWeekInput = {
+    where?: GeneralPayrollWhereInput
+    data: XOR<GeneralPayrollUpdateWithoutWeekInput, GeneralPayrollUncheckedUpdateWithoutWeekInput>
+  }
+
+  export type GeneralPayrollUpdateWithoutWeekInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: GeneralPayrollProjectUpdateManyWithoutGeneralPayrollNestedInput
+    workers?: GeneralPayrollWorkerUpdateManyWithoutGeneralPayrollNestedInput
+  }
+
+  export type GeneralPayrollUncheckedUpdateWithoutWeekInput = {
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: GeneralPayrollProjectUncheckedUpdateManyWithoutGeneralPayrollNestedInput
+    workers?: GeneralPayrollWorkerUncheckedUpdateManyWithoutGeneralPayrollNestedInput
+  }
+
+  export type WeekCreateWithoutGeneralPayrollInput = {
+    startDate: Date | string
+    endDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type WeeklyWageCreateOrConnectWithoutWeekInput = {
-    where: WeeklyWageWhereUniqueInput
-    create: XOR<WeeklyWageCreateWithoutWeekInput, WeeklyWageUncheckedCreateWithoutWeekInput>
-  }
-
-  export type WeeklyWageCreateManyWeekInputEnvelope = {
-    data: WeeklyWageCreateManyWeekInput | WeeklyWageCreateManyWeekInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AttendanceCreateWithoutWeekInput = {
-    date: Date | string
+  export type WeekUncheckedCreateWithoutGeneralPayrollInput = {
+    weekId?: number
+    startDate: Date | string
+    endDate: Date | string
     createdAt?: Date | string
-    worker: WorkerCreateNestedOneWithoutAttendancesInput
-    project: ProjectCreateNestedOneWithoutAttendancesInput
+    updatedAt?: Date | string
   }
 
-  export type AttendanceUncheckedCreateWithoutWeekInput = {
-    attendanceId?: number
-    workerId: number
+  export type WeekCreateOrConnectWithoutGeneralPayrollInput = {
+    where: WeekWhereUniqueInput
+    create: XOR<WeekCreateWithoutGeneralPayrollInput, WeekUncheckedCreateWithoutGeneralPayrollInput>
+  }
+
+  export type GeneralPayrollProjectCreateWithoutGeneralPayrollInput = {
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutGeneralPayrollProjectsInput
+    entries?: GeneralPayrollEntryCreateNestedManyWithoutPayrollProjectInput
+  }
+
+  export type GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput = {
+    generalPayrollProjectId?: number
     projectId: number
-    date: Date | string
+    displayOrder?: number
     createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: GeneralPayrollEntryUncheckedCreateNestedManyWithoutPayrollProjectInput
   }
 
-  export type AttendanceCreateOrConnectWithoutWeekInput = {
-    where: AttendanceWhereUniqueInput
-    create: XOR<AttendanceCreateWithoutWeekInput, AttendanceUncheckedCreateWithoutWeekInput>
+  export type GeneralPayrollProjectCreateOrConnectWithoutGeneralPayrollInput = {
+    where: GeneralPayrollProjectWhereUniqueInput
+    create: XOR<GeneralPayrollProjectCreateWithoutGeneralPayrollInput, GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput>
   }
 
-  export type AttendanceCreateManyWeekInputEnvelope = {
-    data: AttendanceCreateManyWeekInput | AttendanceCreateManyWeekInput[]
+  export type GeneralPayrollProjectCreateManyGeneralPayrollInputEnvelope = {
+    data: GeneralPayrollProjectCreateManyGeneralPayrollInput | GeneralPayrollProjectCreateManyGeneralPayrollInput[]
     skipDuplicates?: boolean
   }
 
-  export type ProjectWeeklyPayrollCreateWithoutWeekInput = {
-    amount: Decimal | DecimalJsLike | number | string
-    notes?: string | null
+  export type GeneralPayrollWorkerCreateWithoutGeneralPayrollInput = {
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    project: ProjectCreateNestedOneWithoutWeeklyPayrollsInput
+    worker: WorkerCreateNestedOneWithoutGeneralPayrollWorkersInput
+    entries?: GeneralPayrollEntryCreateNestedManyWithoutPayrollWorkerInput
   }
 
-  export type ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput = {
-    projectWeeklyPayrollId?: number
-    projectId: number
-    amount: Decimal | DecimalJsLike | number | string
-    notes?: string | null
+  export type GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput = {
+    generalPayrollWorkerId?: number
+    workerId: number
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    entries?: GeneralPayrollEntryUncheckedCreateNestedManyWithoutPayrollWorkerInput
   }
 
-  export type ProjectWeeklyPayrollCreateOrConnectWithoutWeekInput = {
-    where: ProjectWeeklyPayrollWhereUniqueInput
-    create: XOR<ProjectWeeklyPayrollCreateWithoutWeekInput, ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput>
+  export type GeneralPayrollWorkerCreateOrConnectWithoutGeneralPayrollInput = {
+    where: GeneralPayrollWorkerWhereUniqueInput
+    create: XOR<GeneralPayrollWorkerCreateWithoutGeneralPayrollInput, GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput>
   }
 
-  export type ProjectWeeklyPayrollCreateManyWeekInputEnvelope = {
-    data: ProjectWeeklyPayrollCreateManyWeekInput | ProjectWeeklyPayrollCreateManyWeekInput[]
+  export type GeneralPayrollWorkerCreateManyGeneralPayrollInputEnvelope = {
+    data: GeneralPayrollWorkerCreateManyGeneralPayrollInput | GeneralPayrollWorkerCreateManyGeneralPayrollInput[]
     skipDuplicates?: boolean
   }
 
-  export type WeeklyWageUpsertWithWhereUniqueWithoutWeekInput = {
-    where: WeeklyWageWhereUniqueInput
-    update: XOR<WeeklyWageUpdateWithoutWeekInput, WeeklyWageUncheckedUpdateWithoutWeekInput>
-    create: XOR<WeeklyWageCreateWithoutWeekInput, WeeklyWageUncheckedCreateWithoutWeekInput>
+  export type WeekUpsertWithoutGeneralPayrollInput = {
+    update: XOR<WeekUpdateWithoutGeneralPayrollInput, WeekUncheckedUpdateWithoutGeneralPayrollInput>
+    create: XOR<WeekCreateWithoutGeneralPayrollInput, WeekUncheckedCreateWithoutGeneralPayrollInput>
+    where?: WeekWhereInput
   }
 
-  export type WeeklyWageUpdateWithWhereUniqueWithoutWeekInput = {
-    where: WeeklyWageWhereUniqueInput
-    data: XOR<WeeklyWageUpdateWithoutWeekInput, WeeklyWageUncheckedUpdateWithoutWeekInput>
+  export type WeekUpdateToOneWithWhereWithoutGeneralPayrollInput = {
+    where?: WeekWhereInput
+    data: XOR<WeekUpdateWithoutGeneralPayrollInput, WeekUncheckedUpdateWithoutGeneralPayrollInput>
   }
 
-  export type WeeklyWageUpdateManyWithWhereWithoutWeekInput = {
-    where: WeeklyWageScalarWhereInput
-    data: XOR<WeeklyWageUpdateManyMutationInput, WeeklyWageUncheckedUpdateManyWithoutWeekInput>
+  export type WeekUpdateWithoutGeneralPayrollInput = {
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AttendanceUpsertWithWhereUniqueWithoutWeekInput = {
-    where: AttendanceWhereUniqueInput
-    update: XOR<AttendanceUpdateWithoutWeekInput, AttendanceUncheckedUpdateWithoutWeekInput>
-    create: XOR<AttendanceCreateWithoutWeekInput, AttendanceUncheckedCreateWithoutWeekInput>
+  export type WeekUncheckedUpdateWithoutGeneralPayrollInput = {
+    weekId?: IntFieldUpdateOperationsInput | number
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AttendanceUpdateWithWhereUniqueWithoutWeekInput = {
-    where: AttendanceWhereUniqueInput
-    data: XOR<AttendanceUpdateWithoutWeekInput, AttendanceUncheckedUpdateWithoutWeekInput>
+  export type GeneralPayrollProjectUpsertWithWhereUniqueWithoutGeneralPayrollInput = {
+    where: GeneralPayrollProjectWhereUniqueInput
+    update: XOR<GeneralPayrollProjectUpdateWithoutGeneralPayrollInput, GeneralPayrollProjectUncheckedUpdateWithoutGeneralPayrollInput>
+    create: XOR<GeneralPayrollProjectCreateWithoutGeneralPayrollInput, GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput>
   }
 
-  export type AttendanceUpdateManyWithWhereWithoutWeekInput = {
-    where: AttendanceScalarWhereInput
-    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutWeekInput>
+  export type GeneralPayrollProjectUpdateWithWhereUniqueWithoutGeneralPayrollInput = {
+    where: GeneralPayrollProjectWhereUniqueInput
+    data: XOR<GeneralPayrollProjectUpdateWithoutGeneralPayrollInput, GeneralPayrollProjectUncheckedUpdateWithoutGeneralPayrollInput>
   }
 
-  export type ProjectWeeklyPayrollUpsertWithWhereUniqueWithoutWeekInput = {
-    where: ProjectWeeklyPayrollWhereUniqueInput
-    update: XOR<ProjectWeeklyPayrollUpdateWithoutWeekInput, ProjectWeeklyPayrollUncheckedUpdateWithoutWeekInput>
-    create: XOR<ProjectWeeklyPayrollCreateWithoutWeekInput, ProjectWeeklyPayrollUncheckedCreateWithoutWeekInput>
+  export type GeneralPayrollProjectUpdateManyWithWhereWithoutGeneralPayrollInput = {
+    where: GeneralPayrollProjectScalarWhereInput
+    data: XOR<GeneralPayrollProjectUpdateManyMutationInput, GeneralPayrollProjectUncheckedUpdateManyWithoutGeneralPayrollInput>
   }
 
-  export type ProjectWeeklyPayrollUpdateWithWhereUniqueWithoutWeekInput = {
-    where: ProjectWeeklyPayrollWhereUniqueInput
-    data: XOR<ProjectWeeklyPayrollUpdateWithoutWeekInput, ProjectWeeklyPayrollUncheckedUpdateWithoutWeekInput>
+  export type GeneralPayrollWorkerUpsertWithWhereUniqueWithoutGeneralPayrollInput = {
+    where: GeneralPayrollWorkerWhereUniqueInput
+    update: XOR<GeneralPayrollWorkerUpdateWithoutGeneralPayrollInput, GeneralPayrollWorkerUncheckedUpdateWithoutGeneralPayrollInput>
+    create: XOR<GeneralPayrollWorkerCreateWithoutGeneralPayrollInput, GeneralPayrollWorkerUncheckedCreateWithoutGeneralPayrollInput>
   }
 
-  export type ProjectWeeklyPayrollUpdateManyWithWhereWithoutWeekInput = {
-    where: ProjectWeeklyPayrollScalarWhereInput
-    data: XOR<ProjectWeeklyPayrollUpdateManyMutationInput, ProjectWeeklyPayrollUncheckedUpdateManyWithoutWeekInput>
+  export type GeneralPayrollWorkerUpdateWithWhereUniqueWithoutGeneralPayrollInput = {
+    where: GeneralPayrollWorkerWhereUniqueInput
+    data: XOR<GeneralPayrollWorkerUpdateWithoutGeneralPayrollInput, GeneralPayrollWorkerUncheckedUpdateWithoutGeneralPayrollInput>
   }
 
-  export type ProjectCreateWithoutWeeklyPayrollsInput = {
+  export type GeneralPayrollWorkerUpdateManyWithWhereWithoutGeneralPayrollInput = {
+    where: GeneralPayrollWorkerScalarWhereInput
+    data: XOR<GeneralPayrollWorkerUpdateManyMutationInput, GeneralPayrollWorkerUncheckedUpdateManyWithoutGeneralPayrollInput>
+  }
+
+  export type GeneralPayrollCreateWithoutProjectsInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    week: WeekCreateNestedOneWithoutGeneralPayrollInput
+    workers?: GeneralPayrollWorkerCreateNestedManyWithoutGeneralPayrollInput
+  }
+
+  export type GeneralPayrollUncheckedCreateWithoutProjectsInput = {
+    generalPayrollId?: number
+    weekId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workers?: GeneralPayrollWorkerUncheckedCreateNestedManyWithoutGeneralPayrollInput
+  }
+
+  export type GeneralPayrollCreateOrConnectWithoutProjectsInput = {
+    where: GeneralPayrollWhereUniqueInput
+    create: XOR<GeneralPayrollCreateWithoutProjectsInput, GeneralPayrollUncheckedCreateWithoutProjectsInput>
+  }
+
+  export type ProjectCreateWithoutGeneralPayrollProjectsInput = {
     name: string
     code: string
     description?: string
@@ -118636,7 +120410,6 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
@@ -118645,7 +120418,7 @@ export namespace Prisma {
     workerInventoryAssignments?: WorkerInventoryAssignmentCreateNestedManyWithoutProjectInput
   }
 
-  export type ProjectUncheckedCreateWithoutWeeklyPayrollsInput = {
+  export type ProjectUncheckedCreateWithoutGeneralPayrollProjectsInput = {
     projectId?: number
     name: string
     code: string
@@ -118662,7 +120435,6 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
@@ -118671,47 +120443,92 @@ export namespace Prisma {
     workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedCreateNestedManyWithoutProjectInput
   }
 
-  export type ProjectCreateOrConnectWithoutWeeklyPayrollsInput = {
+  export type ProjectCreateOrConnectWithoutGeneralPayrollProjectsInput = {
     where: ProjectWhereUniqueInput
-    create: XOR<ProjectCreateWithoutWeeklyPayrollsInput, ProjectUncheckedCreateWithoutWeeklyPayrollsInput>
+    create: XOR<ProjectCreateWithoutGeneralPayrollProjectsInput, ProjectUncheckedCreateWithoutGeneralPayrollProjectsInput>
   }
 
-  export type WeekCreateWithoutProjectWeeklyPayrollsInput = {
-    startDate: Date | string
-    endDate: Date | string
+  export type GeneralPayrollEntryCreateWithoutPayrollProjectInput = {
+    monday?: Decimal | DecimalJsLike | number | string
+    tuesday?: Decimal | DecimalJsLike | number | string
+    wednesday?: Decimal | DecimalJsLike | number | string
+    thursday?: Decimal | DecimalJsLike | number | string
+    friday?: Decimal | DecimalJsLike | number | string
+    saturday?: Decimal | DecimalJsLike | number | string
+    dominical?: Decimal | DecimalJsLike | number | string
+    overtimeAmount?: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWeekInput
-    attendances?: AttendanceCreateNestedManyWithoutWeekInput
+    payrollWorker: GeneralPayrollWorkerCreateNestedOneWithoutEntriesInput
   }
 
-  export type WeekUncheckedCreateWithoutProjectWeeklyPayrollsInput = {
-    weekId?: number
-    startDate: Date | string
-    endDate: Date | string
+  export type GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput = {
+    generalPayrollEntryId?: number
+    generalPayrollWorkerId: number
+    monday?: Decimal | DecimalJsLike | number | string
+    tuesday?: Decimal | DecimalJsLike | number | string
+    wednesday?: Decimal | DecimalJsLike | number | string
+    thursday?: Decimal | DecimalJsLike | number | string
+    friday?: Decimal | DecimalJsLike | number | string
+    saturday?: Decimal | DecimalJsLike | number | string
+    dominical?: Decimal | DecimalJsLike | number | string
+    overtimeAmount?: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWeekInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWeekInput
   }
 
-  export type WeekCreateOrConnectWithoutProjectWeeklyPayrollsInput = {
-    where: WeekWhereUniqueInput
-    create: XOR<WeekCreateWithoutProjectWeeklyPayrollsInput, WeekUncheckedCreateWithoutProjectWeeklyPayrollsInput>
+  export type GeneralPayrollEntryCreateOrConnectWithoutPayrollProjectInput = {
+    where: GeneralPayrollEntryWhereUniqueInput
+    create: XOR<GeneralPayrollEntryCreateWithoutPayrollProjectInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput>
   }
 
-  export type ProjectUpsertWithoutWeeklyPayrollsInput = {
-    update: XOR<ProjectUpdateWithoutWeeklyPayrollsInput, ProjectUncheckedUpdateWithoutWeeklyPayrollsInput>
-    create: XOR<ProjectCreateWithoutWeeklyPayrollsInput, ProjectUncheckedCreateWithoutWeeklyPayrollsInput>
+  export type GeneralPayrollEntryCreateManyPayrollProjectInputEnvelope = {
+    data: GeneralPayrollEntryCreateManyPayrollProjectInput | GeneralPayrollEntryCreateManyPayrollProjectInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GeneralPayrollUpsertWithoutProjectsInput = {
+    update: XOR<GeneralPayrollUpdateWithoutProjectsInput, GeneralPayrollUncheckedUpdateWithoutProjectsInput>
+    create: XOR<GeneralPayrollCreateWithoutProjectsInput, GeneralPayrollUncheckedCreateWithoutProjectsInput>
+    where?: GeneralPayrollWhereInput
+  }
+
+  export type GeneralPayrollUpdateToOneWithWhereWithoutProjectsInput = {
+    where?: GeneralPayrollWhereInput
+    data: XOR<GeneralPayrollUpdateWithoutProjectsInput, GeneralPayrollUncheckedUpdateWithoutProjectsInput>
+  }
+
+  export type GeneralPayrollUpdateWithoutProjectsInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    week?: WeekUpdateOneRequiredWithoutGeneralPayrollNestedInput
+    workers?: GeneralPayrollWorkerUpdateManyWithoutGeneralPayrollNestedInput
+  }
+
+  export type GeneralPayrollUncheckedUpdateWithoutProjectsInput = {
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    weekId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workers?: GeneralPayrollWorkerUncheckedUpdateManyWithoutGeneralPayrollNestedInput
+  }
+
+  export type ProjectUpsertWithoutGeneralPayrollProjectsInput = {
+    update: XOR<ProjectUpdateWithoutGeneralPayrollProjectsInput, ProjectUncheckedUpdateWithoutGeneralPayrollProjectsInput>
+    create: XOR<ProjectCreateWithoutGeneralPayrollProjectsInput, ProjectUncheckedCreateWithoutGeneralPayrollProjectsInput>
     where?: ProjectWhereInput
   }
 
-  export type ProjectUpdateToOneWithWhereWithoutWeeklyPayrollsInput = {
+  export type ProjectUpdateToOneWithWhereWithoutGeneralPayrollProjectsInput = {
     where?: ProjectWhereInput
-    data: XOR<ProjectUpdateWithoutWeeklyPayrollsInput, ProjectUncheckedUpdateWithoutWeeklyPayrollsInput>
+    data: XOR<ProjectUpdateWithoutGeneralPayrollProjectsInput, ProjectUncheckedUpdateWithoutGeneralPayrollProjectsInput>
   }
 
-  export type ProjectUpdateWithoutWeeklyPayrollsInput = {
+  export type ProjectUpdateWithoutGeneralPayrollProjectsInput = {
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -118727,7 +120544,6 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
@@ -118736,7 +120552,7 @@ export namespace Prisma {
     workerInventoryAssignments?: WorkerInventoryAssignmentUpdateManyWithoutProjectNestedInput
   }
 
-  export type ProjectUncheckedUpdateWithoutWeeklyPayrollsInput = {
+  export type ProjectUncheckedUpdateWithoutGeneralPayrollProjectsInput = {
     projectId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
@@ -118753,7 +120569,6 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
@@ -118762,34 +120577,360 @@ export namespace Prisma {
     workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutProjectNestedInput
   }
 
-  export type WeekUpsertWithoutProjectWeeklyPayrollsInput = {
-    update: XOR<WeekUpdateWithoutProjectWeeklyPayrollsInput, WeekUncheckedUpdateWithoutProjectWeeklyPayrollsInput>
-    create: XOR<WeekCreateWithoutProjectWeeklyPayrollsInput, WeekUncheckedCreateWithoutProjectWeeklyPayrollsInput>
-    where?: WeekWhereInput
+  export type GeneralPayrollEntryUpsertWithWhereUniqueWithoutPayrollProjectInput = {
+    where: GeneralPayrollEntryWhereUniqueInput
+    update: XOR<GeneralPayrollEntryUpdateWithoutPayrollProjectInput, GeneralPayrollEntryUncheckedUpdateWithoutPayrollProjectInput>
+    create: XOR<GeneralPayrollEntryCreateWithoutPayrollProjectInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput>
   }
 
-  export type WeekUpdateToOneWithWhereWithoutProjectWeeklyPayrollsInput = {
-    where?: WeekWhereInput
-    data: XOR<WeekUpdateWithoutProjectWeeklyPayrollsInput, WeekUncheckedUpdateWithoutProjectWeeklyPayrollsInput>
+  export type GeneralPayrollEntryUpdateWithWhereUniqueWithoutPayrollProjectInput = {
+    where: GeneralPayrollEntryWhereUniqueInput
+    data: XOR<GeneralPayrollEntryUpdateWithoutPayrollProjectInput, GeneralPayrollEntryUncheckedUpdateWithoutPayrollProjectInput>
   }
 
-  export type WeekUpdateWithoutProjectWeeklyPayrollsInput = {
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type GeneralPayrollEntryUpdateManyWithWhereWithoutPayrollProjectInput = {
+    where: GeneralPayrollEntryScalarWhereInput
+    data: XOR<GeneralPayrollEntryUpdateManyMutationInput, GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollProjectInput>
+  }
+
+  export type GeneralPayrollEntryScalarWhereInput = {
+    AND?: GeneralPayrollEntryScalarWhereInput | GeneralPayrollEntryScalarWhereInput[]
+    OR?: GeneralPayrollEntryScalarWhereInput[]
+    NOT?: GeneralPayrollEntryScalarWhereInput | GeneralPayrollEntryScalarWhereInput[]
+    generalPayrollEntryId?: IntFilter<"GeneralPayrollEntry"> | number
+    generalPayrollProjectId?: IntFilter<"GeneralPayrollEntry"> | number
+    generalPayrollWorkerId?: IntFilter<"GeneralPayrollEntry"> | number
+    monday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"GeneralPayrollEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"GeneralPayrollEntry"> | Date | string
+  }
+
+  export type GeneralPayrollCreateWithoutWorkersInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    week: WeekCreateNestedOneWithoutGeneralPayrollInput
+    projects?: GeneralPayrollProjectCreateNestedManyWithoutGeneralPayrollInput
+  }
+
+  export type GeneralPayrollUncheckedCreateWithoutWorkersInput = {
+    generalPayrollId?: number
+    weekId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutGeneralPayrollInput
+  }
+
+  export type GeneralPayrollCreateOrConnectWithoutWorkersInput = {
+    where: GeneralPayrollWhereUniqueInput
+    create: XOR<GeneralPayrollCreateWithoutWorkersInput, GeneralPayrollUncheckedCreateWithoutWorkersInput>
+  }
+
+  export type WorkerCreateWithoutGeneralPayrollWorkersInput = {
+    fullName: string
+    dni: string
+    phone?: string | null
+    personalEmail?: string | null
+    address?: string | null
+    birthDate?: Date | string | null
+    workerType?: $Enums.WorkerType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
+    dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutWorkerInput
+    currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentWorkerInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentCreateNestedManyWithoutWorkerInput
+  }
+
+  export type WorkerUncheckedCreateWithoutGeneralPayrollWorkersInput = {
+    workerId?: number
+    fullName: string
+    dni: string
+    phone?: string | null
+    personalEmail?: string | null
+    address?: string | null
+    birthDate?: Date | string | null
+    workerType?: $Enums.WorkerType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
+    dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutWorkerInput
+    currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentWorkerInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedCreateNestedManyWithoutWorkerInput
+  }
+
+  export type WorkerCreateOrConnectWithoutGeneralPayrollWorkersInput = {
+    where: WorkerWhereUniqueInput
+    create: XOR<WorkerCreateWithoutGeneralPayrollWorkersInput, WorkerUncheckedCreateWithoutGeneralPayrollWorkersInput>
+  }
+
+  export type GeneralPayrollEntryCreateWithoutPayrollWorkerInput = {
+    monday?: Decimal | DecimalJsLike | number | string
+    tuesday?: Decimal | DecimalJsLike | number | string
+    wednesday?: Decimal | DecimalJsLike | number | string
+    thursday?: Decimal | DecimalJsLike | number | string
+    friday?: Decimal | DecimalJsLike | number | string
+    saturday?: Decimal | DecimalJsLike | number | string
+    dominical?: Decimal | DecimalJsLike | number | string
+    overtimeAmount?: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    payrollProject: GeneralPayrollProjectCreateNestedOneWithoutEntriesInput
+  }
+
+  export type GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput = {
+    generalPayrollEntryId?: number
+    generalPayrollProjectId: number
+    monday?: Decimal | DecimalJsLike | number | string
+    tuesday?: Decimal | DecimalJsLike | number | string
+    wednesday?: Decimal | DecimalJsLike | number | string
+    thursday?: Decimal | DecimalJsLike | number | string
+    friday?: Decimal | DecimalJsLike | number | string
+    saturday?: Decimal | DecimalJsLike | number | string
+    dominical?: Decimal | DecimalJsLike | number | string
+    overtimeAmount?: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GeneralPayrollEntryCreateOrConnectWithoutPayrollWorkerInput = {
+    where: GeneralPayrollEntryWhereUniqueInput
+    create: XOR<GeneralPayrollEntryCreateWithoutPayrollWorkerInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput>
+  }
+
+  export type GeneralPayrollEntryCreateManyPayrollWorkerInputEnvelope = {
+    data: GeneralPayrollEntryCreateManyPayrollWorkerInput | GeneralPayrollEntryCreateManyPayrollWorkerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GeneralPayrollUpsertWithoutWorkersInput = {
+    update: XOR<GeneralPayrollUpdateWithoutWorkersInput, GeneralPayrollUncheckedUpdateWithoutWorkersInput>
+    create: XOR<GeneralPayrollCreateWithoutWorkersInput, GeneralPayrollUncheckedCreateWithoutWorkersInput>
+    where?: GeneralPayrollWhereInput
+  }
+
+  export type GeneralPayrollUpdateToOneWithWhereWithoutWorkersInput = {
+    where?: GeneralPayrollWhereInput
+    data: XOR<GeneralPayrollUpdateWithoutWorkersInput, GeneralPayrollUncheckedUpdateWithoutWorkersInput>
+  }
+
+  export type GeneralPayrollUpdateWithoutWorkersInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    weeklyWages?: WeeklyWageUpdateManyWithoutWeekNestedInput
-    attendances?: AttendanceUpdateManyWithoutWeekNestedInput
+    week?: WeekUpdateOneRequiredWithoutGeneralPayrollNestedInput
+    projects?: GeneralPayrollProjectUpdateManyWithoutGeneralPayrollNestedInput
   }
 
-  export type WeekUncheckedUpdateWithoutProjectWeeklyPayrollsInput = {
+  export type GeneralPayrollUncheckedUpdateWithoutWorkersInput = {
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
     weekId?: IntFieldUpdateOperationsInput | number
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWeekNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWeekNestedInput
+    projects?: GeneralPayrollProjectUncheckedUpdateManyWithoutGeneralPayrollNestedInput
+  }
+
+  export type WorkerUpsertWithoutGeneralPayrollWorkersInput = {
+    update: XOR<WorkerUpdateWithoutGeneralPayrollWorkersInput, WorkerUncheckedUpdateWithoutGeneralPayrollWorkersInput>
+    create: XOR<WorkerCreateWithoutGeneralPayrollWorkersInput, WorkerUncheckedCreateWithoutGeneralPayrollWorkersInput>
+    where?: WorkerWhereInput
+  }
+
+  export type WorkerUpdateToOneWithWhereWithoutGeneralPayrollWorkersInput = {
+    where?: WorkerWhereInput
+    data: XOR<WorkerUpdateWithoutGeneralPayrollWorkersInput, WorkerUncheckedUpdateWithoutGeneralPayrollWorkersInput>
+  }
+
+  export type WorkerUpdateWithoutGeneralPayrollWorkersInput = {
+    fullName?: StringFieldUpdateOperationsInput | string
+    dni?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    personalEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    workerType?: EnumWorkerTypeFieldUpdateOperationsInput | $Enums.WorkerType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
+    dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutWorkerNestedInput
+    currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentWorkerNestedInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type WorkerUncheckedUpdateWithoutGeneralPayrollWorkersInput = {
+    workerId?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    dni?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    personalEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    workerType?: EnumWorkerTypeFieldUpdateOperationsInput | $Enums.WorkerType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
+    dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
+    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutWorkerNestedInput
+    currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentWorkerNestedInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type GeneralPayrollEntryUpsertWithWhereUniqueWithoutPayrollWorkerInput = {
+    where: GeneralPayrollEntryWhereUniqueInput
+    update: XOR<GeneralPayrollEntryUpdateWithoutPayrollWorkerInput, GeneralPayrollEntryUncheckedUpdateWithoutPayrollWorkerInput>
+    create: XOR<GeneralPayrollEntryCreateWithoutPayrollWorkerInput, GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput>
+  }
+
+  export type GeneralPayrollEntryUpdateWithWhereUniqueWithoutPayrollWorkerInput = {
+    where: GeneralPayrollEntryWhereUniqueInput
+    data: XOR<GeneralPayrollEntryUpdateWithoutPayrollWorkerInput, GeneralPayrollEntryUncheckedUpdateWithoutPayrollWorkerInput>
+  }
+
+  export type GeneralPayrollEntryUpdateManyWithWhereWithoutPayrollWorkerInput = {
+    where: GeneralPayrollEntryScalarWhereInput
+    data: XOR<GeneralPayrollEntryUpdateManyMutationInput, GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollWorkerInput>
+  }
+
+  export type GeneralPayrollProjectCreateWithoutEntriesInput = {
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    generalPayroll: GeneralPayrollCreateNestedOneWithoutProjectsInput
+    project: ProjectCreateNestedOneWithoutGeneralPayrollProjectsInput
+  }
+
+  export type GeneralPayrollProjectUncheckedCreateWithoutEntriesInput = {
+    generalPayrollProjectId?: number
+    generalPayrollId: number
+    projectId: number
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GeneralPayrollProjectCreateOrConnectWithoutEntriesInput = {
+    where: GeneralPayrollProjectWhereUniqueInput
+    create: XOR<GeneralPayrollProjectCreateWithoutEntriesInput, GeneralPayrollProjectUncheckedCreateWithoutEntriesInput>
+  }
+
+  export type GeneralPayrollWorkerCreateWithoutEntriesInput = {
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    generalPayroll: GeneralPayrollCreateNestedOneWithoutWorkersInput
+    worker: WorkerCreateNestedOneWithoutGeneralPayrollWorkersInput
+  }
+
+  export type GeneralPayrollWorkerUncheckedCreateWithoutEntriesInput = {
+    generalPayrollWorkerId?: number
+    generalPayrollId: number
+    workerId: number
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GeneralPayrollWorkerCreateOrConnectWithoutEntriesInput = {
+    where: GeneralPayrollWorkerWhereUniqueInput
+    create: XOR<GeneralPayrollWorkerCreateWithoutEntriesInput, GeneralPayrollWorkerUncheckedCreateWithoutEntriesInput>
+  }
+
+  export type GeneralPayrollProjectUpsertWithoutEntriesInput = {
+    update: XOR<GeneralPayrollProjectUpdateWithoutEntriesInput, GeneralPayrollProjectUncheckedUpdateWithoutEntriesInput>
+    create: XOR<GeneralPayrollProjectCreateWithoutEntriesInput, GeneralPayrollProjectUncheckedCreateWithoutEntriesInput>
+    where?: GeneralPayrollProjectWhereInput
+  }
+
+  export type GeneralPayrollProjectUpdateToOneWithWhereWithoutEntriesInput = {
+    where?: GeneralPayrollProjectWhereInput
+    data: XOR<GeneralPayrollProjectUpdateWithoutEntriesInput, GeneralPayrollProjectUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type GeneralPayrollProjectUpdateWithoutEntriesInput = {
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    generalPayroll?: GeneralPayrollUpdateOneRequiredWithoutProjectsNestedInput
+    project?: ProjectUpdateOneRequiredWithoutGeneralPayrollProjectsNestedInput
+  }
+
+  export type GeneralPayrollProjectUncheckedUpdateWithoutEntriesInput = {
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollWorkerUpsertWithoutEntriesInput = {
+    update: XOR<GeneralPayrollWorkerUpdateWithoutEntriesInput, GeneralPayrollWorkerUncheckedUpdateWithoutEntriesInput>
+    create: XOR<GeneralPayrollWorkerCreateWithoutEntriesInput, GeneralPayrollWorkerUncheckedCreateWithoutEntriesInput>
+    where?: GeneralPayrollWorkerWhereInput
+  }
+
+  export type GeneralPayrollWorkerUpdateToOneWithWhereWithoutEntriesInput = {
+    where?: GeneralPayrollWorkerWhereInput
+    data: XOR<GeneralPayrollWorkerUpdateWithoutEntriesInput, GeneralPayrollWorkerUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type GeneralPayrollWorkerUpdateWithoutEntriesInput = {
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    generalPayroll?: GeneralPayrollUpdateOneRequiredWithoutWorkersNestedInput
+    worker?: WorkerUpdateOneRequiredWithoutGeneralPayrollWorkersNestedInput
+  }
+
+  export type GeneralPayrollWorkerUncheckedUpdateWithoutEntriesInput = {
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WorkerCreateWithoutDailyWagesInput = {
@@ -118804,8 +120945,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentWorkerInput
@@ -118825,8 +120965,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedCreateNestedManyWithoutWorkerInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutWorkerInput
     currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentWorkerInput
@@ -118861,8 +121000,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentWorkerNestedInput
@@ -118882,434 +121020,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
+    generalPayrollWorkers?: GeneralPayrollWorkerUncheckedUpdateManyWithoutWorkerNestedInput
     monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutWorkerNestedInput
     currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentWorkerNestedInput
     workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
-  }
-
-  export type WorkerCreateWithoutWeeklyWagesInput = {
-    fullName: string
-    dni: string
-    phone?: string | null
-    personalEmail?: string | null
-    address?: string | null
-    birthDate?: Date | string | null
-    workerType?: $Enums.WorkerType
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    deletedAt?: Date | string | null
-    requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceCreateNestedManyWithoutWorkerInput
-    dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
-    monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
-    inventoryMovements?: InventoryMovementCreateNestedManyWithoutWorkerInput
-    currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentWorkerInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentCreateNestedManyWithoutWorkerInput
-  }
-
-  export type WorkerUncheckedCreateWithoutWeeklyWagesInput = {
-    workerId?: number
-    fullName: string
-    dni: string
-    phone?: string | null
-    personalEmail?: string | null
-    address?: string | null
-    birthDate?: Date | string | null
-    workerType?: $Enums.WorkerType
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    deletedAt?: Date | string | null
-    requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWorkerInput
-    dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
-    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
-    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutWorkerInput
-    currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentWorkerInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedCreateNestedManyWithoutWorkerInput
-  }
-
-  export type WorkerCreateOrConnectWithoutWeeklyWagesInput = {
-    where: WorkerWhereUniqueInput
-    create: XOR<WorkerCreateWithoutWeeklyWagesInput, WorkerUncheckedCreateWithoutWeeklyWagesInput>
-  }
-
-  export type WeekCreateWithoutWeeklyWagesInput = {
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    attendances?: AttendanceCreateNestedManyWithoutWeekInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutWeekInput
-  }
-
-  export type WeekUncheckedCreateWithoutWeeklyWagesInput = {
-    weekId?: number
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutWeekInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutWeekInput
-  }
-
-  export type WeekCreateOrConnectWithoutWeeklyWagesInput = {
-    where: WeekWhereUniqueInput
-    create: XOR<WeekCreateWithoutWeeklyWagesInput, WeekUncheckedCreateWithoutWeeklyWagesInput>
-  }
-
-  export type WorkerUpsertWithoutWeeklyWagesInput = {
-    update: XOR<WorkerUpdateWithoutWeeklyWagesInput, WorkerUncheckedUpdateWithoutWeeklyWagesInput>
-    create: XOR<WorkerCreateWithoutWeeklyWagesInput, WorkerUncheckedCreateWithoutWeeklyWagesInput>
-    where?: WorkerWhereInput
-  }
-
-  export type WorkerUpdateToOneWithWhereWithoutWeeklyWagesInput = {
-    where?: WorkerWhereInput
-    data: XOR<WorkerUpdateWithoutWeeklyWagesInput, WorkerUncheckedUpdateWithoutWeeklyWagesInput>
-  }
-
-  export type WorkerUpdateWithoutWeeklyWagesInput = {
-    fullName?: StringFieldUpdateOperationsInput | string
-    dni?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    personalEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    workerType?: EnumWorkerTypeFieldUpdateOperationsInput | $Enums.WorkerType
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUpdateManyWithoutWorkerNestedInput
-    dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
-    monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
-    inventoryMovements?: InventoryMovementUpdateManyWithoutWorkerNestedInput
-    currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentWorkerNestedInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentUpdateManyWithoutWorkerNestedInput
-  }
-
-  export type WorkerUncheckedUpdateWithoutWeeklyWagesInput = {
-    workerId?: IntFieldUpdateOperationsInput | number
-    fullName?: StringFieldUpdateOperationsInput | string
-    dni?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    personalEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    workerType?: EnumWorkerTypeFieldUpdateOperationsInput | $Enums.WorkerType
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutWorkerNestedInput
-    dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
-    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
-    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutWorkerNestedInput
-    currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentWorkerNestedInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
-  }
-
-  export type WeekUpsertWithoutWeeklyWagesInput = {
-    update: XOR<WeekUpdateWithoutWeeklyWagesInput, WeekUncheckedUpdateWithoutWeeklyWagesInput>
-    create: XOR<WeekCreateWithoutWeeklyWagesInput, WeekUncheckedCreateWithoutWeeklyWagesInput>
-    where?: WeekWhereInput
-  }
-
-  export type WeekUpdateToOneWithWhereWithoutWeeklyWagesInput = {
-    where?: WeekWhereInput
-    data: XOR<WeekUpdateWithoutWeeklyWagesInput, WeekUncheckedUpdateWithoutWeeklyWagesInput>
-  }
-
-  export type WeekUpdateWithoutWeeklyWagesInput = {
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attendances?: AttendanceUpdateManyWithoutWeekNestedInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutWeekNestedInput
-  }
-
-  export type WeekUncheckedUpdateWithoutWeeklyWagesInput = {
-    weekId?: IntFieldUpdateOperationsInput | number
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    attendances?: AttendanceUncheckedUpdateManyWithoutWeekNestedInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutWeekNestedInput
-  }
-
-  export type WorkerCreateWithoutAttendancesInput = {
-    fullName: string
-    dni: string
-    phone?: string | null
-    personalEmail?: string | null
-    address?: string | null
-    birthDate?: Date | string | null
-    workerType?: $Enums.WorkerType
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    deletedAt?: Date | string | null
-    requestWorkers?: RequestWorkerCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWorkerInput
-    dailyWages?: DailyWageCreateNestedManyWithoutWorkerInput
-    monthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutWorkerInput
-    inventoryMovements?: InventoryMovementCreateNestedManyWithoutWorkerInput
-    currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentWorkerInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentCreateNestedManyWithoutWorkerInput
-  }
-
-  export type WorkerUncheckedCreateWithoutAttendancesInput = {
-    workerId?: number
-    fullName: string
-    dni: string
-    phone?: string | null
-    personalEmail?: string | null
-    address?: string | null
-    birthDate?: Date | string | null
-    workerType?: $Enums.WorkerType
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    deletedAt?: Date | string | null
-    requestWorkers?: RequestWorkerUncheckedCreateNestedManyWithoutWorkerInput
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWorkerInput
-    dailyWages?: DailyWageUncheckedCreateNestedManyWithoutWorkerInput
-    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutWorkerInput
-    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutWorkerInput
-    currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentWorkerInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedCreateNestedManyWithoutWorkerInput
-  }
-
-  export type WorkerCreateOrConnectWithoutAttendancesInput = {
-    where: WorkerWhereUniqueInput
-    create: XOR<WorkerCreateWithoutAttendancesInput, WorkerUncheckedCreateWithoutAttendancesInput>
-  }
-
-  export type ProjectCreateWithoutAttendancesInput = {
-    name: string
-    code: string
-    description?: string
-    status?: $Enums.ProjectStatus
-    location: string
-    startDate?: Date | string | null
-    endDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    deletedAt?: Date | string | null
-    requests?: RequestCreateNestedManyWithoutProjectInput
-    emergencies?: EmergencyCreateNestedManyWithoutProjectInput
-    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
-    pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
-    serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
-    tasks?: TaskCreateNestedManyWithoutProjectInput
-    notifications?: NotificationCreateNestedManyWithoutProjectInput
-    inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
-    inventoryMovements?: InventoryMovementCreateNestedManyWithoutProjectInput
-    currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentProjectInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentCreateNestedManyWithoutProjectInput
-  }
-
-  export type ProjectUncheckedCreateWithoutAttendancesInput = {
-    projectId?: number
-    name: string
-    code: string
-    description?: string
-    status?: $Enums.ProjectStatus
-    location: string
-    startDate?: Date | string | null
-    endDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    deletedAt?: Date | string | null
-    requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
-    emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
-    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
-    pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
-    serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
-    tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
-    inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
-    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutProjectInput
-    currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentProjectInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedCreateNestedManyWithoutProjectInput
-  }
-
-  export type ProjectCreateOrConnectWithoutAttendancesInput = {
-    where: ProjectWhereUniqueInput
-    create: XOR<ProjectCreateWithoutAttendancesInput, ProjectUncheckedCreateWithoutAttendancesInput>
-  }
-
-  export type WeekCreateWithoutAttendancesInput = {
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    weeklyWages?: WeeklyWageCreateNestedManyWithoutWeekInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutWeekInput
-  }
-
-  export type WeekUncheckedCreateWithoutAttendancesInput = {
-    weekId?: number
-    startDate: Date | string
-    endDate: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    weeklyWages?: WeeklyWageUncheckedCreateNestedManyWithoutWeekInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutWeekInput
-  }
-
-  export type WeekCreateOrConnectWithoutAttendancesInput = {
-    where: WeekWhereUniqueInput
-    create: XOR<WeekCreateWithoutAttendancesInput, WeekUncheckedCreateWithoutAttendancesInput>
-  }
-
-  export type WorkerUpsertWithoutAttendancesInput = {
-    update: XOR<WorkerUpdateWithoutAttendancesInput, WorkerUncheckedUpdateWithoutAttendancesInput>
-    create: XOR<WorkerCreateWithoutAttendancesInput, WorkerUncheckedCreateWithoutAttendancesInput>
-    where?: WorkerWhereInput
-  }
-
-  export type WorkerUpdateToOneWithWhereWithoutAttendancesInput = {
-    where?: WorkerWhereInput
-    data: XOR<WorkerUpdateWithoutAttendancesInput, WorkerUncheckedUpdateWithoutAttendancesInput>
-  }
-
-  export type WorkerUpdateWithoutAttendancesInput = {
-    fullName?: StringFieldUpdateOperationsInput | string
-    dni?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    personalEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    workerType?: EnumWorkerTypeFieldUpdateOperationsInput | $Enums.WorkerType
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    requestWorkers?: RequestWorkerUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUpdateManyWithoutWorkerNestedInput
-    dailyWages?: DailyWageUpdateManyWithoutWorkerNestedInput
-    monthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutWorkerNestedInput
-    inventoryMovements?: InventoryMovementUpdateManyWithoutWorkerNestedInput
-    currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentWorkerNestedInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentUpdateManyWithoutWorkerNestedInput
-  }
-
-  export type WorkerUncheckedUpdateWithoutAttendancesInput = {
-    workerId?: IntFieldUpdateOperationsInput | number
-    fullName?: StringFieldUpdateOperationsInput | string
-    dni?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    personalEmail?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    workerType?: EnumWorkerTypeFieldUpdateOperationsInput | $Enums.WorkerType
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    requestWorkers?: RequestWorkerUncheckedUpdateManyWithoutWorkerNestedInput
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWorkerNestedInput
-    dailyWages?: DailyWageUncheckedUpdateManyWithoutWorkerNestedInput
-    monthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutWorkerNestedInput
-    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutWorkerNestedInput
-    currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentWorkerNestedInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
-  }
-
-  export type ProjectUpsertWithoutAttendancesInput = {
-    update: XOR<ProjectUpdateWithoutAttendancesInput, ProjectUncheckedUpdateWithoutAttendancesInput>
-    create: XOR<ProjectCreateWithoutAttendancesInput, ProjectUncheckedCreateWithoutAttendancesInput>
-    where?: ProjectWhereInput
-  }
-
-  export type ProjectUpdateToOneWithWhereWithoutAttendancesInput = {
-    where?: ProjectWhereInput
-    data: XOR<ProjectUpdateWithoutAttendancesInput, ProjectUncheckedUpdateWithoutAttendancesInput>
-  }
-
-  export type ProjectUpdateWithoutAttendancesInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
-    location?: StringFieldUpdateOperationsInput | string
-    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    requests?: RequestUpdateManyWithoutProjectNestedInput
-    emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
-    purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
-    pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
-    serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
-    tasks?: TaskUpdateManyWithoutProjectNestedInput
-    notifications?: NotificationUpdateManyWithoutProjectNestedInput
-    inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
-    inventoryMovements?: InventoryMovementUpdateManyWithoutProjectNestedInput
-    currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentProjectNestedInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentUpdateManyWithoutProjectNestedInput
-  }
-
-  export type ProjectUncheckedUpdateWithoutAttendancesInput = {
-    projectId?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
-    location?: StringFieldUpdateOperationsInput | string
-    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
-    emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
-    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
-    pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
-    serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
-    tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
-    inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
-    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutProjectNestedInput
-    currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentProjectNestedInput
-    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutProjectNestedInput
-  }
-
-  export type WeekUpsertWithoutAttendancesInput = {
-    update: XOR<WeekUpdateWithoutAttendancesInput, WeekUncheckedUpdateWithoutAttendancesInput>
-    create: XOR<WeekCreateWithoutAttendancesInput, WeekUncheckedCreateWithoutAttendancesInput>
-    where?: WeekWhereInput
-  }
-
-  export type WeekUpdateToOneWithWhereWithoutAttendancesInput = {
-    where?: WeekWhereInput
-    data: XOR<WeekUpdateWithoutAttendancesInput, WeekUncheckedUpdateWithoutAttendancesInput>
-  }
-
-  export type WeekUpdateWithoutAttendancesInput = {
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    weeklyWages?: WeeklyWageUpdateManyWithoutWeekNestedInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutWeekNestedInput
-  }
-
-  export type WeekUncheckedUpdateWithoutAttendancesInput = {
-    weekId?: IntFieldUpdateOperationsInput | number
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    weeklyWages?: WeeklyWageUncheckedUpdateManyWithoutWeekNestedInput
-    projectWeeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutWeekNestedInput
   }
 
   export type ProjectCreateWithoutTasksInput = {
@@ -119328,8 +121043,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutProjectInput
@@ -119354,8 +121068,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutProjectInput
@@ -119542,8 +121255,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutProjectNestedInput
@@ -119568,8 +121280,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutProjectNestedInput
@@ -120147,8 +121858,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutProjectInput
@@ -120173,8 +121883,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
     serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutProjectInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutProjectInput
@@ -120480,8 +122189,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
     inventoryMovements?: InventoryMovementUpdateManyWithoutProjectNestedInput
@@ -120506,8 +122214,7 @@ export namespace Prisma {
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
     serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutProjectNestedInput
-    weeklyPayrolls?: ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutProjectNestedInput
@@ -122833,19 +124540,10 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type AttendanceCreateManyProjectInput = {
-    attendanceId?: number
-    workerId: number
-    date: Date | string
-    weekId: number
-    createdAt?: Date | string
-  }
-
-  export type ProjectWeeklyPayrollCreateManyProjectInput = {
-    projectWeeklyPayrollId?: number
-    weekId: number
-    amount: Decimal | DecimalJsLike | number | string
-    notes?: string | null
+  export type GeneralPayrollProjectCreateManyProjectInput = {
+    generalPayrollProjectId?: number
+    generalPayrollId: number
+    displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -123173,51 +124871,27 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AttendanceUpdateWithoutProjectInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    worker?: WorkerUpdateOneRequiredWithoutAttendancesNestedInput
-    week?: WeekUpdateOneRequiredWithoutAttendancesNestedInput
-  }
-
-  export type AttendanceUncheckedUpdateWithoutProjectInput = {
-    attendanceId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    weekId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AttendanceUncheckedUpdateManyWithoutProjectInput = {
-    attendanceId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    weekId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProjectWeeklyPayrollUpdateWithoutProjectInput = {
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  export type GeneralPayrollProjectUpdateWithoutProjectInput = {
+    displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    week?: WeekUpdateOneRequiredWithoutProjectWeeklyPayrollsNestedInput
+    generalPayroll?: GeneralPayrollUpdateOneRequiredWithoutProjectsNestedInput
+    entries?: GeneralPayrollEntryUpdateManyWithoutPayrollProjectNestedInput
   }
 
-  export type ProjectWeeklyPayrollUncheckedUpdateWithoutProjectInput = {
-    projectWeeklyPayrollId?: IntFieldUpdateOperationsInput | number
-    weekId?: IntFieldUpdateOperationsInput | number
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  export type GeneralPayrollProjectUncheckedUpdateWithoutProjectInput = {
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollProjectNestedInput
   }
 
-  export type ProjectWeeklyPayrollUncheckedUpdateManyWithoutProjectInput = {
-    projectWeeklyPayrollId?: IntFieldUpdateOperationsInput | number
-    weekId?: IntFieldUpdateOperationsInput | number
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  export type GeneralPayrollProjectUncheckedUpdateManyWithoutProjectInput = {
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -126051,27 +127725,23 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type WeeklyWageCreateManyWorkerInput = {
-    weeklyWageId?: number
-    weekId: number
-    grossAmount: Decimal | DecimalJsLike | number | string
-    totalAmount: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AttendanceCreateManyWorkerInput = {
-    attendanceId?: number
-    projectId: number
-    date: Date | string
-    weekId: number
-    createdAt?: Date | string
-  }
-
   export type DailyWageCreateManyWorkerInput = {
     dailyWageId?: number
     amount: Decimal | DecimalJsLike | number | string
     validFromDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GeneralPayrollWorkerCreateManyWorkerInput = {
+    generalPayrollWorkerId?: number
+    generalPayrollId: number
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -126177,55 +127847,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type WeeklyWageUpdateWithoutWorkerInput = {
-    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    week?: WeekUpdateOneRequiredWithoutWeeklyWagesNestedInput
-  }
-
-  export type WeeklyWageUncheckedUpdateWithoutWorkerInput = {
-    weeklyWageId?: IntFieldUpdateOperationsInput | number
-    weekId?: IntFieldUpdateOperationsInput | number
-    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type WeeklyWageUncheckedUpdateManyWithoutWorkerInput = {
-    weeklyWageId?: IntFieldUpdateOperationsInput | number
-    weekId?: IntFieldUpdateOperationsInput | number
-    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AttendanceUpdateWithoutWorkerInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutAttendancesNestedInput
-    week?: WeekUpdateOneRequiredWithoutAttendancesNestedInput
-  }
-
-  export type AttendanceUncheckedUpdateWithoutWorkerInput = {
-    attendanceId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    weekId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AttendanceUncheckedUpdateManyWithoutWorkerInput = {
-    attendanceId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    weekId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type DailyWageUpdateWithoutWorkerInput = {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126245,6 +127866,46 @@ export namespace Prisma {
     dailyWageId?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     validFromDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollWorkerUpdateWithoutWorkerInput = {
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    generalPayroll?: GeneralPayrollUpdateOneRequiredWithoutWorkersNestedInput
+    entries?: GeneralPayrollEntryUpdateManyWithoutPayrollWorkerNestedInput
+  }
+
+  export type GeneralPayrollWorkerUncheckedUpdateWithoutWorkerInput = {
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollWorkerNestedInput
+  }
+
+  export type GeneralPayrollWorkerUncheckedUpdateManyWithoutWorkerInput = {
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    generalPayrollId?: IntFieldUpdateOperationsInput | number
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -127219,103 +128880,222 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type WeeklyWageCreateManyWeekInput = {
-    weeklyWageId?: number
-    workerId: number
-    grossAmount: Decimal | DecimalJsLike | number | string
-    totalAmount: Decimal | DecimalJsLike | number | string
+  export type GeneralPayrollProjectCreateManyGeneralPayrollInput = {
+    generalPayrollProjectId?: number
+    projectId: number
+    displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type AttendanceCreateManyWeekInput = {
-    attendanceId?: number
+  export type GeneralPayrollWorkerCreateManyGeneralPayrollInput = {
+    generalPayrollWorkerId?: number
     workerId: number
-    projectId: number
-    date: Date | string
-    createdAt?: Date | string
-  }
-
-  export type ProjectWeeklyPayrollCreateManyWeekInput = {
-    projectWeeklyPayrollId?: number
-    projectId: number
-    amount: Decimal | DecimalJsLike | number | string
-    notes?: string | null
+    group: $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: Decimal | DecimalJsLike | number | string
+    additionalAmount?: Decimal | DecimalJsLike | number | string
+    liquidationAmount?: Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: Decimal | DecimalJsLike | number | string
+    displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type WeeklyWageUpdateWithoutWeekInput = {
-    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  export type GeneralPayrollProjectUpdateWithoutGeneralPayrollInput = {
+    displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    worker?: WorkerUpdateOneRequiredWithoutWeeklyWagesNestedInput
+    project?: ProjectUpdateOneRequiredWithoutGeneralPayrollProjectsNestedInput
+    entries?: GeneralPayrollEntryUpdateManyWithoutPayrollProjectNestedInput
   }
 
-  export type WeeklyWageUncheckedUpdateWithoutWeekInput = {
-    weeklyWageId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
-    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type WeeklyWageUncheckedUpdateManyWithoutWeekInput = {
-    weeklyWageId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
-    grossAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AttendanceUpdateWithoutWeekInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    worker?: WorkerUpdateOneRequiredWithoutAttendancesNestedInput
-    project?: ProjectUpdateOneRequiredWithoutAttendancesNestedInput
-  }
-
-  export type AttendanceUncheckedUpdateWithoutWeekInput = {
-    attendanceId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
+  export type GeneralPayrollProjectUncheckedUpdateWithoutGeneralPayrollInput = {
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollProjectNestedInput
   }
 
-  export type AttendanceUncheckedUpdateManyWithoutWeekInput = {
-    attendanceId?: IntFieldUpdateOperationsInput | number
+  export type GeneralPayrollProjectUncheckedUpdateManyWithoutGeneralPayrollInput = {
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollWorkerUpdateWithoutGeneralPayrollInput = {
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker?: WorkerUpdateOneRequiredWithoutGeneralPayrollWorkersNestedInput
+    entries?: GeneralPayrollEntryUpdateManyWithoutPayrollWorkerNestedInput
+  }
+
+  export type GeneralPayrollWorkerUncheckedUpdateWithoutGeneralPayrollInput = {
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
     workerId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProjectWeeklyPayrollUpdateWithoutWeekInput = {
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutWeeklyPayrollsNestedInput
+    entries?: GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollWorkerNestedInput
   }
 
-  export type ProjectWeeklyPayrollUncheckedUpdateWithoutWeekInput = {
-    projectWeeklyPayrollId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  export type GeneralPayrollWorkerUncheckedUpdateManyWithoutGeneralPayrollInput = {
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    group?: EnumGeneralPayrollWorkerGroupFieldUpdateOperationsInput | $Enums.GeneralPayrollWorkerGroup
+    dailyWage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    additionalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    liquidationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sundayDinnerAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProjectWeeklyPayrollUncheckedUpdateManyWithoutWeekInput = {
-    projectWeeklyPayrollId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
-    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  export type GeneralPayrollEntryCreateManyPayrollProjectInput = {
+    generalPayrollEntryId?: number
+    generalPayrollWorkerId: number
+    monday?: Decimal | DecimalJsLike | number | string
+    tuesday?: Decimal | DecimalJsLike | number | string
+    wednesday?: Decimal | DecimalJsLike | number | string
+    thursday?: Decimal | DecimalJsLike | number | string
+    friday?: Decimal | DecimalJsLike | number | string
+    saturday?: Decimal | DecimalJsLike | number | string
+    dominical?: Decimal | DecimalJsLike | number | string
+    overtimeAmount?: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GeneralPayrollEntryUpdateWithoutPayrollProjectInput = {
+    monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payrollWorker?: GeneralPayrollWorkerUpdateOneRequiredWithoutEntriesNestedInput
+  }
+
+  export type GeneralPayrollEntryUncheckedUpdateWithoutPayrollProjectInput = {
+    generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollProjectInput = {
+    generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
+    generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollEntryCreateManyPayrollWorkerInput = {
+    generalPayrollEntryId?: number
+    generalPayrollProjectId: number
+    monday?: Decimal | DecimalJsLike | number | string
+    tuesday?: Decimal | DecimalJsLike | number | string
+    wednesday?: Decimal | DecimalJsLike | number | string
+    thursday?: Decimal | DecimalJsLike | number | string
+    friday?: Decimal | DecimalJsLike | number | string
+    saturday?: Decimal | DecimalJsLike | number | string
+    dominical?: Decimal | DecimalJsLike | number | string
+    overtimeAmount?: Decimal | DecimalJsLike | number | string
+    afpDiscount?: Decimal | DecimalJsLike | number | string
+    advanceDiscount?: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GeneralPayrollEntryUpdateWithoutPayrollWorkerInput = {
+    monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payrollProject?: GeneralPayrollProjectUpdateOneRequiredWithoutEntriesNestedInput
+  }
+
+  export type GeneralPayrollEntryUncheckedUpdateWithoutPayrollWorkerInput = {
+    generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollWorkerInput = {
+    generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
+    generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    thursday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    friday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saturday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dominical?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    overtimeAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    afpDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    advanceDiscount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
