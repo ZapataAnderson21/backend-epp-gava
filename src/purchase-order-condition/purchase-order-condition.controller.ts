@@ -17,7 +17,7 @@ export class PurchaseOrderConditionController {
   }
 
   @Post()
-  @UserTypes('GERENTE', 'ADMINISTRADORA')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
   create(@Body() dto: CreatePurchaseOrderConditionDto) {
     return this.purchaseOrderConditionService.create(dto);
   }

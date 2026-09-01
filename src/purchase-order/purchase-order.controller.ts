@@ -32,7 +32,7 @@ export class PurchaseOrderController {
   ) {}
 
   @Post()
-  @UserTypes('GERENTE', 'ADMINISTRADORA')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
   create(@Body() createPurchaseOrderDto: CreatePurchaseOrderDto) {
     this.logger.log(
       `Creating purchase order: ${JSON.stringify(createPurchaseOrderDto)}`,
@@ -48,9 +48,7 @@ export class PurchaseOrderController {
 
   @Get('project/:projectId/unit-values')
   @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
-  findUnitValuesByProject(
-    @Param('projectId', ParseIntPipe) projectId: number,
-  ) {
+  findUnitValuesByProject(@Param('projectId', ParseIntPipe) projectId: number) {
     this.logger.log(
       `Finding purchase order unit values for Project ID: ${projectId}`,
     );
@@ -115,7 +113,7 @@ export class PurchaseOrderController {
   }
 
   @Patch(':id')
-  @UserTypes('GERENTE', 'ADMINISTRADORA')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updatePurchaseOrderDto: UpdatePurchaseOrderDto,
@@ -125,7 +123,7 @@ export class PurchaseOrderController {
   }
 
   @Post(':id/duplicate')
-  @UserTypes('GERENTE', 'ADMINISTRADORA')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
   duplicate(
     @Param('id', ParseIntPipe) id: number,
     @Body() duplicatePurchaseOrderDto: DuplicatePurchaseOrderDto,
@@ -140,7 +138,7 @@ export class PurchaseOrderController {
   }
 
   @Delete(':id')
-  @UserTypes('GERENTE', 'ADMINISTRADORA')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
   remove(@Param('id', ParseIntPipe) id: number) {
     this.logger.log(`Removing purchase order with ID: ${id}`);
     return this.purchaseOrderService.remove(id);
