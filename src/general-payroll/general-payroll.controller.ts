@@ -14,30 +14,26 @@ import { SaveGeneralPayrollDto } from './dto/save-general-payroll.dto';
 import { GeneralPayrollService } from './general-payroll.service';
 
 @Controller('general-payroll')
-@UserTypes('GERENTE', 'ADMINISTRADOR', 'ADMINISTRADORA')
+@UserTypes('GERENTE', 'ADMINISTRADOR', 'ADMINISTRADORA', 'LOGISTICA')
 export class GeneralPayrollController {
   constructor(private readonly generalPayrollService: GeneralPayrollService) {}
 
   @Get('projects/:projectId/totals')
-  @UserTypes('GERENTE', 'ADMINISTRADOR', 'ADMINISTRADORA', 'LOGISTICA')
   findProjectTotals(@Param('projectId', ParseIntPipe) projectId: number) {
     return this.generalPayrollService.findProjectTotals(projectId);
   }
 
   @Get('projects/:projectId')
-  @UserTypes('GERENTE', 'ADMINISTRADOR', 'ADMINISTRADORA', 'LOGISTICA')
   findByProject(@Param('projectId', ParseIntPipe) projectId: number) {
     return this.generalPayrollService.findByProject(projectId);
   }
 
   @Get('weeks')
-  @UserTypes('GERENTE', 'ADMINISTRADOR', 'ADMINISTRADORA', 'LOGISTICA')
   findWeeks() {
     return this.generalPayrollService.findWeeks();
   }
 
   @Get('weeks/:weekId')
-  @UserTypes('GERENTE', 'ADMINISTRADOR', 'ADMINISTRADORA', 'LOGISTICA')
   findOne(@Param('weekId', ParseIntPipe) weekId: number) {
     return this.generalPayrollService.findOne(weekId);
   }
