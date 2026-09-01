@@ -5,15 +5,12 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
-  HttpStatus,
   ParseIntPipe,
   Logger,
 } from '@nestjs/common';
 import { ElementRequestResponseService } from './element_request_response.service';
 import { CreateElementRequestResponseDto } from './dto/create-element_request_response.dto';
 import { UpdateElementRequestResponseDto } from './dto/update-element_request_response.dto';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @Controller('element-request-response')
 export class ElementRequestResponseController {

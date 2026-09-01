@@ -8,7 +8,6 @@ import {
   IsString,
   Length,
   Matches,
-  Min,
   MinLength,
 } from 'class-validator';
 

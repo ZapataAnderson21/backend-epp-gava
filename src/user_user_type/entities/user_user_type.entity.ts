@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/user/entities/user.entity';
 import { UserType } from 'src/user_type/entities/user_type.entity';
 
 export class UserUserType {

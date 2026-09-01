@@ -58637,6 +58637,7 @@ export namespace Prisma {
     projectId: number | null
     serviceName: string | null
     amount: Decimal | null
+    currency: $Enums.Currency | null
     description: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -58647,6 +58648,7 @@ export namespace Prisma {
     projectId: number | null
     serviceName: string | null
     amount: Decimal | null
+    currency: $Enums.Currency | null
     description: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -58657,6 +58659,7 @@ export namespace Prisma {
     projectId: number
     serviceName: number
     amount: number
+    currency: number
     description: number
     createdAt: number
     updatedAt: number
@@ -58681,6 +58684,7 @@ export namespace Prisma {
     projectId?: true
     serviceName?: true
     amount?: true
+    currency?: true
     description?: true
     createdAt?: true
     updatedAt?: true
@@ -58691,6 +58695,7 @@ export namespace Prisma {
     projectId?: true
     serviceName?: true
     amount?: true
+    currency?: true
     description?: true
     createdAt?: true
     updatedAt?: true
@@ -58701,6 +58706,7 @@ export namespace Prisma {
     projectId?: true
     serviceName?: true
     amount?: true
+    currency?: true
     description?: true
     createdAt?: true
     updatedAt?: true
@@ -58798,6 +58804,7 @@ export namespace Prisma {
     projectId: number
     serviceName: string
     amount: Decimal
+    currency: $Enums.Currency
     description: string
     createdAt: Date
     updatedAt: Date
@@ -58827,6 +58834,7 @@ export namespace Prisma {
     projectId?: boolean
     serviceName?: boolean
     amount?: boolean
+    currency?: boolean
     description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -58838,6 +58846,7 @@ export namespace Prisma {
     projectId?: boolean
     serviceName?: boolean
     amount?: boolean
+    currency?: boolean
     description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -58849,6 +58858,7 @@ export namespace Prisma {
     projectId?: boolean
     serviceName?: boolean
     amount?: boolean
+    currency?: boolean
     description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -58860,12 +58870,13 @@ export namespace Prisma {
     projectId?: boolean
     serviceName?: boolean
     amount?: boolean
+    currency?: boolean
     description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ServiceSaleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"serviceSaleId" | "projectId" | "serviceName" | "amount" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["serviceSale"]>
+  export type ServiceSaleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"serviceSaleId" | "projectId" | "serviceName" | "amount" | "currency" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["serviceSale"]>
   export type ServiceSaleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }
@@ -58886,6 +58897,7 @@ export namespace Prisma {
       projectId: number
       serviceName: string
       amount: Prisma.Decimal
+      currency: $Enums.Currency
       description: string
       createdAt: Date
       updatedAt: Date
@@ -59317,6 +59329,7 @@ export namespace Prisma {
     readonly projectId: FieldRef<"ServiceSale", 'Int'>
     readonly serviceName: FieldRef<"ServiceSale", 'String'>
     readonly amount: FieldRef<"ServiceSale", 'Decimal'>
+    readonly currency: FieldRef<"ServiceSale", 'Currency'>
     readonly description: FieldRef<"ServiceSale", 'String'>
     readonly createdAt: FieldRef<"ServiceSale", 'DateTime'>
     readonly updatedAt: FieldRef<"ServiceSale", 'DateTime'>
@@ -81738,6 +81751,7 @@ export namespace Prisma {
     projectId: 'projectId',
     serviceName: 'serviceName',
     amount: 'amount',
+    currency: 'currency',
     description: 'description',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -86313,6 +86327,7 @@ export namespace Prisma {
     projectId?: IntFilter<"ServiceSale"> | number
     serviceName?: StringFilter<"ServiceSale"> | string
     amount?: DecimalFilter<"ServiceSale"> | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyFilter<"ServiceSale"> | $Enums.Currency
     description?: StringFilter<"ServiceSale"> | string
     createdAt?: DateTimeFilter<"ServiceSale"> | Date | string
     updatedAt?: DateTimeFilter<"ServiceSale"> | Date | string
@@ -86324,6 +86339,7 @@ export namespace Prisma {
     projectId?: SortOrder
     serviceName?: SortOrder
     amount?: SortOrder
+    currency?: SortOrder
     description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -86338,6 +86354,7 @@ export namespace Prisma {
     projectId?: IntFilter<"ServiceSale"> | number
     serviceName?: StringFilter<"ServiceSale"> | string
     amount?: DecimalFilter<"ServiceSale"> | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyFilter<"ServiceSale"> | $Enums.Currency
     description?: StringFilter<"ServiceSale"> | string
     createdAt?: DateTimeFilter<"ServiceSale"> | Date | string
     updatedAt?: DateTimeFilter<"ServiceSale"> | Date | string
@@ -86349,6 +86366,7 @@ export namespace Prisma {
     projectId?: SortOrder
     serviceName?: SortOrder
     amount?: SortOrder
+    currency?: SortOrder
     description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -86367,6 +86385,7 @@ export namespace Prisma {
     projectId?: IntWithAggregatesFilter<"ServiceSale"> | number
     serviceName?: StringWithAggregatesFilter<"ServiceSale"> | string
     amount?: DecimalWithAggregatesFilter<"ServiceSale"> | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyWithAggregatesFilter<"ServiceSale"> | $Enums.Currency
     description?: StringWithAggregatesFilter<"ServiceSale"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ServiceSale"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ServiceSale"> | Date | string
@@ -91610,6 +91629,7 @@ export namespace Prisma {
   export type ServiceSaleCreateInput = {
     serviceName: string
     amount: Decimal | DecimalJsLike | number | string
+    currency?: $Enums.Currency
     description?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -91621,6 +91641,7 @@ export namespace Prisma {
     projectId: number
     serviceName: string
     amount: Decimal | DecimalJsLike | number | string
+    currency?: $Enums.Currency
     description?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -91629,6 +91650,7 @@ export namespace Prisma {
   export type ServiceSaleUpdateInput = {
     serviceName?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -91640,6 +91662,7 @@ export namespace Prisma {
     projectId?: IntFieldUpdateOperationsInput | number
     serviceName?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -91650,6 +91673,7 @@ export namespace Prisma {
     projectId: number
     serviceName: string
     amount: Decimal | DecimalJsLike | number | string
+    currency?: $Enums.Currency
     description?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -91658,6 +91682,7 @@ export namespace Prisma {
   export type ServiceSaleUpdateManyMutationInput = {
     serviceName?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -91668,6 +91693,7 @@ export namespace Prisma {
     projectId?: IntFieldUpdateOperationsInput | number
     serviceName?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -96627,6 +96653,7 @@ export namespace Prisma {
     projectId?: SortOrder
     serviceName?: SortOrder
     amount?: SortOrder
+    currency?: SortOrder
     description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -96643,6 +96670,7 @@ export namespace Prisma {
     projectId?: SortOrder
     serviceName?: SortOrder
     amount?: SortOrder
+    currency?: SortOrder
     description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -96653,6 +96681,7 @@ export namespace Prisma {
     projectId?: SortOrder
     serviceName?: SortOrder
     amount?: SortOrder
+    currency?: SortOrder
     description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -106946,6 +106975,7 @@ export namespace Prisma {
   export type ServiceSaleCreateWithoutProjectInput = {
     serviceName: string
     amount: Decimal | DecimalJsLike | number | string
+    currency?: $Enums.Currency
     description?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -106955,6 +106985,7 @@ export namespace Prisma {
     serviceSaleId?: number
     serviceName: string
     amount: Decimal | DecimalJsLike | number | string
+    currency?: $Enums.Currency
     description?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -107400,6 +107431,7 @@ export namespace Prisma {
     projectId?: IntFilter<"ServiceSale"> | number
     serviceName?: StringFilter<"ServiceSale"> | string
     amount?: DecimalFilter<"ServiceSale"> | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyFilter<"ServiceSale"> | $Enums.Currency
     description?: StringFilter<"ServiceSale"> | string
     createdAt?: DateTimeFilter<"ServiceSale"> | Date | string
     updatedAt?: DateTimeFilter<"ServiceSale"> | Date | string
@@ -124535,6 +124567,7 @@ export namespace Prisma {
     serviceSaleId?: number
     serviceName: string
     amount: Decimal | DecimalJsLike | number | string
+    currency?: $Enums.Currency
     description?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -124848,6 +124881,7 @@ export namespace Prisma {
   export type ServiceSaleUpdateWithoutProjectInput = {
     serviceName?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124857,6 +124891,7 @@ export namespace Prisma {
     serviceSaleId?: IntFieldUpdateOperationsInput | number
     serviceName?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124866,6 +124901,7 @@ export namespace Prisma {
     serviceSaleId?: IntFieldUpdateOperationsInput | number
     serviceName?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

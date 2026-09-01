@@ -3,11 +3,16 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
-  Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { USER_TYPES_KEY } from '../decorators/user-types.decorator';
+import type { Request } from 'express';
+import type { AuthenticatedUser } from 'src/user/jwt/jwt-strategy';
+
+interface AuthenticatedRequest extends Request {
+  user?: AuthenticatedUser;
+}
 
 @Injectable()
 export class UserTypesGuard implements CanActivate {
@@ -28,7 +33,7 @@ export class UserTypesGuard implements CanActivate {
     }
 
     // 2. Obtener usuario desde la request (añadido por JwtAuthGuard/JwtStrategy)
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const user = request.user;
 
     if (!user) throw new ForbiddenException('No autenticado.');

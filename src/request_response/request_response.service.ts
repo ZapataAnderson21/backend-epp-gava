@@ -3,7 +3,6 @@ import {
   HttpStatus,
   Injectable,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
 import { CreateRequestResponseDto } from './dto/create-request_response.dto';
 import { UpdateRequestResponseDto } from './dto/update-request_response.dto';

@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   Logger,
 } from '@nestjs/common';
 import { CategoryResourceService } from './category-resource.service';

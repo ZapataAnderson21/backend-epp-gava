@@ -12,6 +12,7 @@ import { emptyToNull } from 'src/common/util/strings.util';
 import { WorkerTypeLabelEs, type WorkerType } from './enum/worker-type.enum';
 import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
 import { ListWorkersQueryDto } from './dto/list-workers-query.dto';
+import type { Prisma } from 'src/generated/prisma';
 
 @Injectable()
 export class WorkerService {
@@ -229,17 +230,15 @@ export class WorkerService {
     this.logger.log(`Updating worker with ID: ${workerId}`);
     await this.findOne(workerId);
 
-    const data: any = { ...dto };
+    const { birthDate, ...rest } = dto;
+    const data: Prisma.WorkerUncheckedUpdateInput = { ...rest };
 
-    if ('birthDate' in dto) {
-      const v = dto.birthDate as any;
-
-      if (v === undefined) {
-        delete data.birthDate;
-      } else if (v === null) {
-        data.birthDate = null;
-      } else if (typeof v === 'string') {
-        const iso = v.length === 10 ? `${v}T00:00:00.000Z` : v;
+    if (birthDate !== undefined) {
+      if (typeof birthDate === 'string') {
+        const iso =
+          birthDate.length === 10
+            ? `${birthDate}T00:00:00.000Z`
+            : birthDate;
         const d = new Date(iso);
         if (isNaN(d.getTime())) {
           throw new BadRequestException(
@@ -247,11 +246,6 @@ export class WorkerService {
           );
         }
         data.birthDate = d;
-      } else if (v instanceof Date) {
-        if (isNaN(v.getTime())) {
-          throw new BadRequestException('birthDate inválida.');
-        }
-        data.birthDate = v;
       } else {
         throw new BadRequestException('birthDate con tipo no soportado.');
       }

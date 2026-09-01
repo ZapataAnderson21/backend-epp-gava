@@ -25,6 +25,13 @@ import { ListEmergenciesQueryDto } from './dto/list-emergencies-query.dto';
 const EMERGENCIES_UPLOAD_DIR =
   process.env.EMERGENCIES_UPLOAD_DIR || './uploads/emergencies';
 
+interface CreateEmergencyBody {
+  title: string;
+  description: string;
+  userId: string | number;
+  projectId: string | number;
+}
+
 @Controller('emergency')
 export class EmergencyController {
   constructor(private readonly emergencyService: EmergencyService) {}
@@ -45,7 +52,10 @@ export class EmergencyController {
       },
     }),
   )
-  async create(@UploadedFile() file: any, @Body() body: any) {
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: CreateEmergencyBody,
+  ) {
     return await this.emergencyService.create({
       title: body.title,
       description: body.description,
@@ -83,7 +93,7 @@ export class EmergencyController {
   }
 
   @Get('image/:filename')
-  async getImage(@Param('filename') filename: string, @Res() res: Response) {
+  getImage(@Param('filename') filename: string, @Res() res: Response) {
     const filePath = resolve(join(EMERGENCIES_UPLOAD_DIR, filename));
 
     if (!fs.existsSync(filePath)) {

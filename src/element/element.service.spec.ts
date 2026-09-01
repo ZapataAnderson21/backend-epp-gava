@@ -27,7 +27,10 @@ describe('ElementService - Grupos EPA', () => {
     findUnique: jest.fn(),
     create: jest.fn<Promise<unknown>, [FallProtectionGroupCreateArgs]>(),
   };
-  const prisma = { element, fallProtectionGroup } as unknown as PrismaService;
+  const prisma = Object.assign(
+    Object.create(PrismaService.prototype) as PrismaService,
+    { element, fallProtectionGroup },
+  );
   const service = new ElementService(prisma);
 
   const validComponents: FallProtectionGroupComponentDto[] = [

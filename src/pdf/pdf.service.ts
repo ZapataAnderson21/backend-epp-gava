@@ -7,7 +7,13 @@ import {
 } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
-import PdfPrinter = require('pdfmake');
+import PdfPrinter from 'pdfmake/src/printer';
+import type {
+  Content,
+  CustomTableLayout,
+  TableCell,
+  TDocumentDefinitions,
+} from 'pdfmake/interfaces';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { logo, logoPO, sgs, iso9001, hodelpe } from './images';
 import {
@@ -229,7 +235,7 @@ export class PdfService {
       border: [false, false, false, false],
     });
 
-    const infoBodyCell = (stack: any[]) => ({
+    const infoBodyCell = (stack: Content[]) => ({
       stack,
       border: [true, false, true, true],
       margin: [4, 4, 4, 4],
@@ -435,11 +441,11 @@ export class PdfService {
     ];
 
     // Totales
-    const boxedLayout = {
+    const boxedLayout: CustomTableLayout = {
       hLineWidth: (i, node) =>
         i === 0 || i === node.table.body.length ? 1 : 0,
       vLineWidth: (i, node) =>
-        i === 0 || i === node.table.widths.length ? 1 : 0,
+        i === 0 || i === (node.table.widths?.length ?? 0) ? 1 : 0,
       hLineColor: () => '#9ca3af',
       vLineColor: () => '#9ca3af',
     };
@@ -528,7 +534,6 @@ export class PdfService {
         },
         // Sin bordes ni padding en la tabla exterior
         layout: {
-          ...((PdfPrinter as any) && {}), // noop, solo para claridad
           paddingLeft: () => 0,
           paddingRight: () => 0,
           paddingTop: () => 0,
@@ -605,7 +610,7 @@ export class PdfService {
       .map((s) => s?.trim())
       .filter(Boolean);
 
-    const condicionesBlock: any[] = [];
+    const condicionesBlock: Content[] = [];
     if (generalConditions.length > 0) {
       condicionesBlock.push(
         {
@@ -650,7 +655,7 @@ export class PdfService {
     const sectionHeaderSize = 10 * scaleFactor;
     const listTitleSize = 9 * scaleFactor;
 
-    const docDefinition: any = {
+    const docDefinition = {
       pageSize: 'LETTER',
       pageMargins: [30, 30, 30, 30],
       compress: true,
@@ -760,7 +765,6 @@ export class PdfService {
 
     const issuedAtStr = formatDate(quotation.createdAt || new Date());
     const headingRed = '#b00000';
-    const borderColor = '#d1d5db';
 
     const fonts = {
       Roboto: {
@@ -1117,7 +1121,7 @@ export class PdfService {
       margin: [0, 0, 0, 0],
     };
 
-    const docDefinition: any = {
+    const docDefinition = {
       pageSize: 'A4',
       pageMargins: [40, 30, 40, 170],
       compress: true,
@@ -1196,12 +1200,6 @@ export class PdfService {
       );
     }
 
-    if (!request.type) {
-      this.logger.error('Invalid request type');
-      this.logger.error(`Request type provided: ${request.type}`);
-      throw new BadRequestException('Invalid request type');
-    }
-
     const type = request.type;
 
     this.logger.log(`Request type: ${type}`);
@@ -1268,7 +1266,13 @@ export class PdfService {
           })
         : [];
 
-    const legacyFallProtectionGroupByElementId = new Map<number, any>();
+    type RequestLine = (typeof elementRequests)[number];
+    type LegacyFallProtectionGroup =
+      (typeof legacyFallProtectionGroups)[number];
+    const legacyFallProtectionGroupByElementId = new Map<
+      number,
+      LegacyFallProtectionGroup
+    >();
     legacyFallProtectionGroups.forEach((group) => {
       [
         group.harnessElementId,
@@ -1309,7 +1313,16 @@ export class PdfService {
     const description = request.description || 'Sin descripción.';
     const projectName = request.project.name;
 
-    const resolveLineFamily = (line: any) => {
+    type RequestLineFamily =
+      | 'epp'
+      | 'epi'
+      | 'uniform'
+      | 'ese'
+      | 'harness'
+      | 'officematerial'
+      | 'ssomasupply';
+
+    const resolveLineFamily = (line: RequestLine): RequestLineFamily => {
       if (
         line.fallProtectionGroup ||
         line.fallProtectionGroupId ||
@@ -1319,18 +1332,15 @@ export class PdfService {
       }
 
       const family = line.element?.family?.trim?.().toLowerCase?.();
-      if (
-        [
-          'epp',
-          'epi',
-          'uniform',
-          'ese',
-          'harness',
-          'officematerial',
-          'ssomasupply',
-        ].includes(family)
-      ) {
-        return family;
+      switch (family) {
+        case 'epp':
+        case 'epi':
+        case 'uniform':
+        case 'ese':
+        case 'harness':
+        case 'officematerial':
+        case 'ssomasupply':
+          return family;
       }
 
       const elementType = line.element?.type?.trim?.().toLowerCase?.();
@@ -1345,17 +1355,19 @@ export class PdfService {
       return 'epp';
     };
 
-    const formatElementNameWithCode = (element?: any) => {
+    const formatElementNameWithCode = (
+      element?: RequestLine['element'] | null,
+    ) => {
       if (!element) return 'Pendiente';
       return element.code ? `${element.name} - ${element.code}` : element.name;
     };
 
-    const getLineFallProtectionGroup = (line: any) =>
+    const getLineFallProtectionGroup = (line: RequestLine) =>
       line.fallProtectionGroup ??
       legacyFallProtectionGroupByElementId.get(line.elementId) ??
       null;
 
-    const getLineDescription = (line: any) => {
+    const getLineDescription = (line: RequestLine) => {
       const fallProtectionGroup = getLineFallProtectionGroup(line);
       if (fallProtectionGroup) {
         return fallProtectionGroup.code;
@@ -1370,7 +1382,7 @@ export class PdfService {
         : (line.element?.name ?? `Elemento ${line.elementId}`);
     };
 
-    const getFallProtectionParts = (line: any) => {
+    const getFallProtectionParts = (line: RequestLine) => {
       const group = getLineFallProtectionGroup(line);
       if (!group) return null;
 
@@ -1382,7 +1394,7 @@ export class PdfService {
       ].join('\n');
     };
 
-    const buildRequestTableRows = (lines: any[]) =>
+    const buildRequestTableRows = (lines: RequestLine[]): TableCell[][] =>
       lines.map((line, idx) => {
         const parts = getFallProtectionParts(line);
         const descriptionCell = parts
@@ -1439,7 +1451,7 @@ export class PdfService {
     const printer = new PdfPrinter(fonts);
 
     // 6) Contenido base
-    const docContent: any[] = [
+    const docContent: Content[] = [
       {
         columns: [
           { width: '*', text: '' },
@@ -1474,7 +1486,7 @@ export class PdfService {
       },
     ];
 
-    const addRequestSection = (sectionTitle: string, lines: any[]) => {
+    const addRequestSection = (sectionTitle: string, lines: RequestLine[]) => {
       if (lines.length === 0) return;
 
       docContent.push(
@@ -1535,87 +1547,6 @@ export class PdfService {
       );
     }
 
-    if (false && (elementRequests?.length ?? 0) > 0) {
-      if (type === RequestType.EppAndOperative) {
-        const operativeElements = elementRequests.filter(
-          (el) => el.element.type === RequestType.Operative,
-        );
-        const securityElements = elementRequests.filter(
-          (el) => el.element.type === RequestType.Epp,
-        );
-
-        if (operativeElements.length > 0) {
-          docContent.push(
-            {
-              text: 'DETALLE DEL REQUERIMIENTO OPERATIVO',
-              style: 'subheader',
-              margin: [0, 20, 0, 10],
-            },
-            {
-              table: {
-                widths: ['auto', '*', 'auto', 'auto'],
-                body: [
-                  ['N° ITEM', 'DESCRIPCIÓN', 'UNIDAD', 'CANTIDAD'],
-                  ...operativeElements.map((el, idx) => [
-                    idx + 1,
-                    el.element.name,
-                    el.unit,
-                    el.quantityRequested.toString(),
-                  ]),
-                ],
-              },
-            },
-          );
-        }
-
-        if (securityElements.length > 0) {
-          docContent.push(
-            {
-              text: 'DETALLE DEL REQUERIMIENTO EPP',
-              style: 'subheader',
-              margin: [0, 20, 0, 10],
-            },
-            {
-              table: {
-                widths: ['auto', '*', 'auto', 'auto'],
-                body: [
-                  ['N° ITEM', 'DESCRIPCIÓN', 'UNIDAD', 'CANTIDAD'],
-                  ...securityElements.map((el, idx) => [
-                    idx + 1,
-                    el.element.name,
-                    el.unit,
-                    el.quantityRequested.toString(),
-                  ]),
-                ],
-              },
-            },
-          );
-        }
-      } else {
-        docContent.push(
-          {
-            text: 'DETALLE DEL REQUERIMIENTO',
-            style: 'subheader',
-            margin: [0, 20, 0, 10],
-          },
-          {
-            table: {
-              widths: ['auto', '*', 'auto', 'auto'],
-              body: [
-                ['N° ITEM', 'DESCRIPCIÓN', 'UNIDAD', 'CANTIDAD'],
-                ...elementRequests.map((el, idx) => [
-                  idx + 1,
-                  el.element.name,
-                  el.unit,
-                  el.quantityRequested.toString(),
-                ]),
-              ],
-            },
-          },
-        );
-      }
-    }
-
     // 8) Tabla de TRABAJADORES (si hay)
     if ((requestWorkers?.length ?? 0) > 0) {
       docContent.push(
@@ -1657,7 +1588,7 @@ export class PdfService {
       },
     );
 
-    const docDefinition = {
+    const docDefinition: TDocumentDefinitions = {
       pageMargins: [60, 40, 60, 40],
       content: docContent,
       styles: {

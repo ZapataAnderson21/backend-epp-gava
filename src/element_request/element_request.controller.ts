@@ -6,8 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  HttpException,
-  HttpStatus,
   ParseIntPipe,
 } from '@nestjs/common';
 import { ElementRequestService } from './element_request.service';

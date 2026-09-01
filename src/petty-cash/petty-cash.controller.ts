@@ -75,9 +75,11 @@ export class PettyCashController {
       );
 
       res.send(buffer);
-    } catch (error) {
+    } catch (error: unknown) {
       throw new HttpException(
-        error.message || 'Error al generar el Excel',
+        error instanceof Error
+          ? error.message
+          : 'Error al generar el Excel',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

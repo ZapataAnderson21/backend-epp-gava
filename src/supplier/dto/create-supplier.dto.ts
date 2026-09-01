@@ -16,15 +16,16 @@ import { SupplierDocumentType } from '../enum/document-type.enum';
 import { Transform } from 'class-transformer';
 
 /** Helpers de transformación */
-const trim = (v: any) => (typeof v === 'string' ? v.trim() : v);
-const toNullIfEmpty = (v: any) => {
+const toNullIfEmpty = (v: unknown) => {
   if (v === undefined || v === null) return null;
-  const t = String(v).trim();
+  if (typeof v !== 'string') return v;
+  const t = v.trim();
   return t === '' ? null : t;
 };
-const toUndefIfEmpty = (v: any) => {
+const toUndefIfEmpty = (v: unknown) => {
   if (v === undefined || v === null) return undefined;
-  const t = String(v).trim();
+  if (typeof v !== 'string') return v;
+  const t = v.trim();
   return t === '' ? undefined : t;
 };
 
@@ -66,7 +67,7 @@ export class CreateSupplierDto {
   @ApiProperty({ example: '20123456789' })
   @Transform(({ value }) => toUndefIfEmpty(value))
   @ValidateIf(
-    (o) =>
+    (o: CreateSupplierDto) =>
       (o.documentType ?? SupplierDocumentType.ruc) === SupplierDocumentType.ruc,
   )
   @IsString()
@@ -81,7 +82,7 @@ export class CreateSupplierDto {
   @ApiPropertyOptional({ example: '12345678' })
   @Transform(({ value }) => toUndefIfEmpty(value))
   @ValidateIf(
-    (o) =>
+    (o: CreateSupplierDto) =>
       (o.documentType ?? SupplierDocumentType.ruc) === SupplierDocumentType.dni,
   )
   @IsString()

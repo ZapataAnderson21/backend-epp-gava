@@ -12,6 +12,29 @@ import { OfficeInventoryStatus } from 'src/generated/prisma';
 
 type ResponseLineFamily = 'protection' | 'safety' | 'fallProtection' | 'other';
 
+interface ResponseElement {
+  name?: string | null;
+  family?: string | null;
+  type?: string | null;
+  controlType?: string | null;
+  category?: { name?: string | null } | null;
+}
+
+interface FallProtectionPart {
+  operationalStatus?: string | null;
+}
+
+interface ResponseElementRequest {
+  fallProtectionGroupId?: number | null;
+  fallProtectionGroup?: {
+    harnessElement?: FallProtectionPart | null;
+    anchorBandElement?: FallProtectionPart | null;
+    lifelineElement?: FallProtectionPart | null;
+    positioningLanyardElement?: FallProtectionPart | null;
+  } | null;
+  element?: ResponseElement | null;
+}
+
 @Injectable()
 export class ElementRequestResponseService {
   private readonly logger = new Logger('ElementRequestResponseService');
@@ -23,11 +46,13 @@ export class ElementRequestResponseService {
     return Math.round(numberValue * 10000) / 10000;
   }
 
-  private getSafetyTypeName(element: any) {
+  private getSafetyTypeName(element?: ResponseElement | null) {
     return (element?.category?.name || element?.name || 'Sin tipo').trim();
   }
 
-  private getResponseLineFamily(elementRequest: any): ResponseLineFamily {
+  private getResponseLineFamily(
+    elementRequest: ResponseElementRequest,
+  ): ResponseLineFamily {
     if (elementRequest.fallProtectionGroupId || elementRequest.fallProtectionGroup) {
       return 'fallProtection';
     }
@@ -37,9 +62,8 @@ export class ElementRequestResponseService {
     const controlType = elementRequest.element?.controlType;
 
     if (
-      ['epp', 'epi', 'uniform', 'officeMaterial', 'ssomaSupply'].includes(
-        family,
-      )
+      typeof family === 'string' &&
+      ['epp', 'epi', 'uniform', 'officeMaterial', 'ssomaSupply'].includes(family)
     ) {
       return 'protection';
     }
@@ -96,9 +120,6 @@ export class ElementRequestResponseService {
     }
 
     const family = this.getResponseLineFamily(elementRequest);
-    const requestedQuantity = this.normalizeQuantity(
-      elementRequest.quantityRequested,
-    );
     const acceptedQuantity = this.normalizeQuantity(payload.quantityAccepted);
 
     if (family === 'protection') {
@@ -203,9 +224,9 @@ export class ElementRequestResponseService {
           elementRequest.fallProtectionGroup?.anchorBandElement,
           elementRequest.fallProtectionGroup?.lifelineElement,
           elementRequest.fallProtectionGroup?.positioningLanyardElement,
-        ].filter(Boolean);
+        ].filter((part) => part !== null && part !== undefined);
 
-        const inoperativePart = parts.find((part: any) =>
+        const inoperativePart = parts.find((part) =>
           ['inoperativo', 'inoperative'].includes(
             String(part.operationalStatus || '').toLowerCase(),
           ),

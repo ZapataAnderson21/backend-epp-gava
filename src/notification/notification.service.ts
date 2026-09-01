@@ -493,7 +493,7 @@ export class NotificationService {
       userId,
       type: NotificationType.request_approved,
       title: 'Solicitud aprobada',
-      message: `Tu solicitud #${requestId} fue aprobada`,
+      message: `Tu solicitud #${requestId} fue aprobada: ${requestDescription}`,
       requestId,
       url: this.buildUrl(`/admin/requests/${requestId}`),
     });
@@ -634,7 +634,9 @@ export class NotificationService {
       title: 'OC cancelada',
       message: `La orden de compra ${code} fue cancelada`,
       purchaseOrderId,
-      url: this.buildUrl(`/admin/purchase-orders/${purchaseOrderId}`),
+      url: this.buildUrl(
+        `/admin/projects/${projectId}/purchase-orders/${purchaseOrderId}`,
+      ),
     });
   }
 

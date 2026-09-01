@@ -637,6 +637,7 @@ exports.Prisma.ServiceSaleScalarFieldEnum = {
   projectId: 'projectId',
   serviceName: 'serviceName',
   amount: 'amount',
+  currency: 'currency',
   description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

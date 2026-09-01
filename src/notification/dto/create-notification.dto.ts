@@ -39,16 +39,16 @@ export enum NotificationType {
 
 export class CreateNotificationDto {
   @IsInt()
-  userId: number;
+  userId!: number;
 
   @IsEnum(NotificationType)
-  type: NotificationType;
+  type!: NotificationType;
 
   @IsString()
-  title: string;
+  title!: string;
 
   @IsString()
-  message: string;
+  message!: string;
 
   @IsOptional()
   @IsString()

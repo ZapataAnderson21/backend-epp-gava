@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  HttpException,
   HttpStatus,
   Injectable,
   Logger,

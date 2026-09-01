@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MailService } from './mail.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import * as nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer';
 import * as fs from 'fs';
 
 // Mock nodemailer
@@ -22,9 +22,19 @@ describe('MailService', () => {
     get: jest.fn(),
   };
 
+  interface TestedMailOptions {
+    subject: string;
+    to: string;
+    cc?: string[];
+    from: string;
+    html: string;
+    attachments: Array<{ filename: string }>;
+  }
+
   const mockTransporter = {
     verify: jest.fn(),
-    sendMail: jest.fn(),
+    sendMail: jest.fn<Promise<unknown>, [TestedMailOptions]>(),
+    close: jest.fn<void, []>(),
   };
 
   beforeEach(async () => {
@@ -61,7 +71,7 @@ describe('MailService', () => {
       },
     };
 
-    const defaultConfigValues = {
+    const defaultConfigValues: Record<string, string | number> = {
       MAIL_LOGISTICS_TO: 'logistica@test.com',
       MAIL_LOGISTICS_CC: 'copia1@test.com,copia2@test.com',
       MAIL_HOST: 'mail.test.com',
@@ -88,7 +98,9 @@ describe('MailService', () => {
 
       expect(result.statusCode).toBe(200);
       expect(result.message).toBe('Correo enviado correctamente.');
-      expect(result.data.messageId).toBe('<test-message-id>');
+      expect(result.data).toEqual(
+        expect.objectContaining({ messageId: '<test-message-id>' }),
+      );
       expect(mockTransporter.verify).toHaveBeenCalled();
       expect(mockTransporter.sendMail).toHaveBeenCalled();
 
@@ -142,40 +154,47 @@ describe('MailService', () => {
       expect(result.message).toContain('El archivo PDF no fue encontrado');
     });
 
-    it('should return 401 for SMTP authentication error', async () => {
-      const authError = new Error('Authentication failed');
-      (authError as any).code = 'EAUTH';
-      (authError as any).response = 'Invalid credentials';
+    it('should return 400 for SMTP authentication error', async () => {
+      const authError = Object.assign(new Error('Authentication failed'), {
+        code: 'EAUTH',
+        response: 'Invalid credentials',
+      });
       mockTransporter.verify.mockRejectedValue(authError);
 
       const result = await service.sendRequestToLogistics(1, 'wrongpassword');
 
-      expect(result.statusCode).toBe(401);
+      expect(result.statusCode).toBe(400);
       expect(result.message).toBe(
-        'Error de autenticacion SMTP: credenciales invalidas.',
+        'La contrasena del servidor de correos no es valida. Verifica la contrasena e intenta nuevamente.',
       );
     });
 
     it('should return 503 when SMTP server is not reachable (ENOTFOUND)', async () => {
-      const connectionError = new Error('Server not found');
-      (connectionError as any).code = 'ENOTFOUND';
+      const connectionError = Object.assign(new Error('Server not found'), {
+        code: 'ENOTFOUND',
+      });
       mockTransporter.verify.mockRejectedValue(connectionError);
 
       const result = await service.sendRequestToLogistics(1, 'password123');
 
       expect(result.statusCode).toBe(503);
-      expect(result.message).toBe('No se pudo conectar con el servidor SMTP.');
+      expect(result.message).toBe(
+        'No se pudo conectar con el servidor de correos. Verifique host, puerto, conexión del VPS o firewall.',
+      );
     });
 
     it('should return 503 when SMTP connection is refused (ECONNREFUSED)', async () => {
-      const connectionError = new Error('Connection refused');
-      (connectionError as any).code = 'ECONNREFUSED';
+      const connectionError = Object.assign(new Error('Connection refused'), {
+        code: 'ECONNREFUSED',
+      });
       mockTransporter.verify.mockRejectedValue(connectionError);
 
       const result = await service.sendRequestToLogistics(1, 'password123');
 
       expect(result.statusCode).toBe(503);
-      expect(result.message).toBe('No se pudo conectar con el servidor SMTP.');
+      expect(result.message).toBe(
+        'No se pudo conectar con el servidor de correos. Verifique host, puerto, conexión del VPS o firewall.',
+      );
     });
 
     it('should return 500 for unknown errors', async () => {

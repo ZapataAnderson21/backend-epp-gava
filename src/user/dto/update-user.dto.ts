@@ -6,7 +6,6 @@ import {
   MinLength,
   Matches,
   IsString,
-  IsNotEmpty,
 } from 'class-validator';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {

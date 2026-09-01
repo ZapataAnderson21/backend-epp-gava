@@ -1107,6 +1107,7 @@ model ServiceSale {
   projectId     Int
   serviceName   String
   amount        Decimal  @db.Decimal(18, 2)
+  currency      Currency @default(PEN)
   description   String   @default("Sin descripción") @db.Text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -1114,6 +1115,7 @@ model ServiceSale {
   project Project @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([projectId])
+  @@index([projectId, currency])
   @@index([createdAt])
 }
 

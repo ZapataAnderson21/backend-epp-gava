@@ -4,9 +4,11 @@ import { PettyCashType } from './enum';
 
 describe('PettyCashService', () => {
   const findMany = jest.fn();
-  const service = new PettyCashService({
-    pettyCash: { findMany },
-  } as unknown as PrismaService);
+  const prisma = Object.assign(
+    Object.create(PrismaService.prototype) as PrismaService,
+    { pettyCash: { findMany } },
+  );
+  const service = new PettyCashService(prisma);
 
   beforeEach(() => {
     findMany.mockReset();

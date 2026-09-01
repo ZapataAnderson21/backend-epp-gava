@@ -1,14 +1,14 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsInt,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsPositive,
   IsString,
-  Min,
 } from 'class-validator';
+import { Currency } from 'src/generated/prisma';
 
 export class CreateServiceSaleDto {
   @ApiProperty({ example: 10 })
@@ -26,12 +26,16 @@ export class CreateServiceSaleDto {
   @ApiProperty({ example: 5000.0, minimum: 0 })
   @Type(() => Number)
   @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(0, { message: 'El monto debe ser mayor o igual a 0' })
+  @IsPositive({ message: 'El monto debe ser mayor que 0' })
   @IsNotEmpty({ message: 'El monto es obligatorio' })
   amount!: number;
 
-  @ApiPropertyOptional({ example: 'No description provided' })
-  @IsOptional()
+  @ApiProperty({ enum: Currency, example: Currency.PEN })
+  @IsEnum(Currency, { message: 'La moneda debe ser PEN, USD o EUR.' })
+  currency!: Currency;
+
+  @ApiProperty({ example: 'Pago correspondiente al primer avance.' })
   @IsString()
-  description?: string;
+  @IsNotEmpty({ message: 'La descripción es obligatoria.' })
+  description!: string;
 }

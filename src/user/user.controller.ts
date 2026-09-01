@@ -22,6 +22,9 @@ import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from './jwt/jwt.auth.guard';
 import { Request } from 'express';
+import type { AuthenticatedUser } from './jwt/jwt-strategy';
+
+type AuthenticatedRequest = Request & { user: AuthenticatedUser };
 import { RateLimit } from 'src/decorators/rate-limit.decorator';
 import { RateLimitGuard } from 'src/guards/rate-limit.guard';
 import { ListUsersQueryDto } from './dto/list-users-query.dto';
@@ -87,17 +90,20 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async me(@Req() req: Request) {
+  async me(@Req() req: AuthenticatedRequest) {
     // JwtStrategy.validate devuelve { userId, email }
-    const { userId } = req.user as any;
+    const { userId } = req.user;
     const res = await this.userService.findOne(Number(userId));
     return res;
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch('me')
-  async updateMe(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
-    const { userId } = req.user as any;
+  async updateMe(
+    @Req() req: AuthenticatedRequest,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const { userId } = req.user;
     this.logger.log(`Updating self user with ID: ${userId}`);
     return await this.userService.updateMe(Number(userId), updateUserDto);
   }

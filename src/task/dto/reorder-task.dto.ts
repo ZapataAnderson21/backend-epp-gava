@@ -3,16 +3,16 @@ import { Type } from 'class-transformer';
 
 export class TaskOrderUpdate {
   @IsInt()
-  taskId: number;
+  taskId!: number;
 
   @IsInt()
   @Min(0)
-  displayOrder: number;
+  displayOrder!: number;
 }
 
 export class ReorderTaskDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => TaskOrderUpdate)
-  updates: TaskOrderUpdate[];
+  updates!: TaskOrderUpdate[];
 }

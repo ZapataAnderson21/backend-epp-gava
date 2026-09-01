@@ -135,7 +135,7 @@ export class RequestController {
         body.passwordCPanel,
       );
 
-    if (validationResult.statusCode !== HttpStatus.OK) {
+    if (validationResult.statusCode !== 200) {
       emitProgress('validate-smtp', 'error', validationResult.message, {
         data: validationResult.data,
       });
@@ -156,9 +156,9 @@ export class RequestController {
       );
       await this.pdfService.generateRequestPdf(requestId);
       emitProgress('generate-pdf', 'success', 'PDF generado correctamente.');
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message =
-        error?.message ||
+        (error instanceof Error ? error.message : '') ||
         'No se pudo generar el PDF del requerimiento antes del envio.';
       emitProgress('generate-pdf', 'error', message);
       return {
@@ -202,9 +202,9 @@ export class RequestController {
         'Requerimiento enviado y actualizado correctamente.',
       );
       return result;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message =
-        error?.message ||
+        (error instanceof Error ? error.message : '') ||
         'El correo fue enviado, pero no se pudo actualizar el estado.';
       emitProgress('update-status', 'error', message);
       return {
@@ -221,7 +221,7 @@ export class RequestController {
   }
 
   @Get('pdf/:id')
-  async getPdf(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
+  getPdf(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const outputDir =
       this.configService.get<string>('PDF_OUTPUT_DIR') ||
       path.resolve(__dirname, '..', '..', 'output');

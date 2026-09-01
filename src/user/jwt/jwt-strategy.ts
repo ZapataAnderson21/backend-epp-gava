@@ -6,6 +6,15 @@ import { Request } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 
+export interface AuthenticatedUser {
+  userId: number;
+  email: string;
+}
+
+interface JwtPayload extends AuthenticatedUser {
+  sub?: number;
+}
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -21,7 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(req: Request, payload: any) {
+  async validate(req: Request, payload: JwtPayload): Promise<AuthenticatedUser> {
     const token = req.headers.authorization?.replace('Bearer ', '').trim();
 
     const blacklistedToken = await this.prisma.blacklistedToken.findFirst({

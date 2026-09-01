@@ -3,18 +3,13 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
-  HttpException,
-  HttpStatus,
   Logger,
   ParseIntPipe,
 } from '@nestjs/common';
 import { UserTypeService } from './user_type.service';
 import { CreateUserTypeDto } from './dto/create-user_type.dto';
 import { Public } from 'src/user/jwt/public.decorator';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @Controller('user-type')
 export class UserTypeController {

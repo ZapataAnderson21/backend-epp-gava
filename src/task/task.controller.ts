@@ -21,7 +21,6 @@ import {
 import {
   TaskPermissionGuard,
   TaskOperation,
-  TASK_OPERATION_KEY,
 } from './guards';
 import { UserTypes } from 'src/decorators/user-types.decorator';
 

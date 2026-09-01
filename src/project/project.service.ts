@@ -255,7 +255,7 @@ export class ProjectService {
     this.logger.log(`Updating project with ID: ${projectId}`);
 
     this.logger.log(`Verifying existence of project with ID: ${projectId}`);
-    this.findOne(projectId);
+    await this.findOne(projectId);
 
     if (updateProjectDto.code) {
       this.logger.log(

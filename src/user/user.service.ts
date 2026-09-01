@@ -154,9 +154,8 @@ export class UserService {
 
     const hashedPassword = await hash(createUserDto.password, 10);
 
-    const createUserDtoWithoutUserTypeId = (({ userTypeId, ...o }) => o)(
-      createUserDto,
-    );
+    const { userTypeId, ...createUserDtoWithoutUserTypeId } = createUserDto;
+    void userTypeId;
 
     const data = {
       ...createUserDtoWithoutUserTypeId,
@@ -491,7 +490,8 @@ export class UserService {
   async updateMe(userId: number, updateUserDto: UpdateUserDto) {
     await this.findOne(userId);
 
-    const { userTypeId, ...rest } = updateUserDto as any;
+    const { userTypeId, ...rest } = updateUserDto;
+    void userTypeId;
     const data = { ...rest } as Partial<User>;
 
     await this.ensureUniqueIdentityIsAvailable(
@@ -677,14 +677,19 @@ export class UserService {
 
     const normalizedToken = token.replace(/^Bearer\s+/i, '').trim();
 
-    let decodedToken: any;
+    let decodedToken: unknown;
     try {
       decodedToken = this.jwtService.decode(normalizedToken);
     } catch {
       throw new BadRequestException('Invalid token');
     }
 
-    if (!decodedToken?.exp) {
+    if (
+      !decodedToken ||
+      typeof decodedToken !== 'object' ||
+      !('exp' in decodedToken) ||
+      typeof decodedToken.exp !== 'number'
+    ) {
       throw new BadRequestException('Invalid token');
     }
 

@@ -8,6 +8,9 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateServiceSaleDto } from './dto/create-service-sale.dto';
 import { UpdateServiceSaleDto } from './dto/update-service-sale.dto';
+import { ListServiceSalesQueryDto } from './dto/list-service-sales-query.dto';
+import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
+import { Currency, Prisma } from 'src/generated/prisma';
 
 @Injectable()
 export class ServiceSaleService {
@@ -16,10 +19,9 @@ export class ServiceSaleService {
   constructor(private readonly prisma: PrismaService) {}
 
   /* ---------- helpers ---------- */
-  private ensureNonNegative(val: unknown, fieldLabel: string) {
+  private ensureNonNegative(val: number | undefined, fieldLabel: string) {
     if (val === undefined || val === null) return;
-    const n = typeof val === 'string' ? Number(val) : (val as number);
-    if (Number.isNaN(n) || n < 0) {
+    if (!Number.isFinite(val) || val < 0) {
       this.logger.warn(`Validation failed: ${fieldLabel} must be >= 0`);
       throw new BadRequestException({
         statusCode: HttpStatus.BAD_REQUEST,
@@ -39,7 +41,7 @@ export class ServiceSaleService {
       this.logger.error('Failed to create service sale');
       throw new BadRequestException({
         statusCode: HttpStatus.BAD_REQUEST,
-        message: 'No se pudo crear la venta de servicio.',
+        message: 'No se pudo crear el ingreso.',
         data: null,
       });
     }
@@ -47,7 +49,7 @@ export class ServiceSaleService {
     this.logger.log(`ServiceSale created id=${sale.serviceSaleId}`);
     return {
       statusCode: HttpStatus.CREATED,
-      message: 'Venta de servicio creada exitosamente.',
+      message: 'Ingreso creado exitosamente.',
       data: sale,
     };
   }
@@ -63,15 +65,50 @@ export class ServiceSaleService {
       this.logger.warn(`No service sales found for project ID: ${projectId}`);
       throw new NotFoundException({
         statusCode: HttpStatus.NOT_FOUND,
-        message: 'No se encontraron servicios contratados.',
+        message: 'No se encontraron ingresos registrados.',
         data: null,
       });
     }
 
     return {
       statusCode: HttpStatus.OK,
-      message: 'Servicios contratados obtenidos exitosamente.',
+      message: 'Ingresos obtenidos exitosamente.',
       data: list,
+    };
+  }
+
+  async findPaginatedByProject(
+    projectId: number,
+    query: ListServiceSalesQueryDto,
+  ) {
+    const search = query.search?.trim();
+    const where: Prisma.ServiceSaleWhereInput = {
+      projectId,
+      ...(query.currency ? { currency: query.currency } : {}),
+      ...(search
+        ? {
+            OR: [
+              { serviceName: { contains: search, mode: 'insensitive' } },
+              { description: { contains: search, mode: 'insensitive' } },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [items, totalItems] = await Promise.all([
+      this.prisma.serviceSale.findMany({
+        where,
+        orderBy: [{ createdAt: 'desc' }, { serviceSaleId: 'desc' }],
+        skip,
+        take,
+      }),
+      this.prisma.serviceSale.count({ where }),
+    ]);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Ingresos obtenidos exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 
@@ -84,13 +121,13 @@ export class ServiceSaleService {
       this.logger.warn(`Service sale id=${serviceSaleId} not found`);
       throw new NotFoundException({
         statusCode: HttpStatus.NOT_FOUND,
-        message: 'Venta de servicio no encontrada.',
+        message: 'Ingreso no encontrado.',
         data: null,
       });
     }
     return {
       statusCode: HttpStatus.OK,
-      message: 'Venta de servicio obtenida exitosamente.',
+      message: 'Ingreso obtenido exitosamente.',
       data: row,
     };
   }
@@ -108,8 +145,30 @@ export class ServiceSaleService {
 
     return {
       statusCode: HttpStatus.OK,
-      message: 'Total de ventas de servicio calculado exitosamente.',
+      message: 'Total de ingresos calculado exitosamente.',
       data: total,
+    };
+  }
+
+  async sumAllAmountsByCurrency(projectId: number) {
+    const totals = await this.prisma.serviceSale.groupBy({
+      by: ['currency'],
+      where: { projectId },
+      _sum: { amount: true },
+    });
+    const amounts: Record<Currency, number> = {
+      PEN: 0,
+      USD: 0,
+      EUR: 0,
+    };
+    totals.forEach((total) => {
+      amounts[total.currency] = Number(total._sum.amount ?? 0);
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Totales de ingresos calculados exitosamente.',
+      data: amounts,
     };
   }
 
@@ -131,7 +190,7 @@ export class ServiceSaleService {
 
     return {
       statusCode: HttpStatus.OK,
-      message: 'Venta de servicio actualizada exitosamente.',
+      message: 'Ingreso actualizado exitosamente.',
       data: updated,
     };
   }
@@ -148,7 +207,7 @@ export class ServiceSaleService {
 
     return {
       statusCode: HttpStatus.OK,
-      message: 'Venta de servicio eliminada exitosamente.',
+      message: 'Ingreso eliminado exitosamente.',
       data: deleted,
     };
   }

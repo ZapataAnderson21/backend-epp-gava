@@ -35,7 +35,7 @@ export class RateLimitGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<Request>();
     const ip = this.getRequestIp(request);
-    const route = `${request.method}:${request.route?.path ?? request.path}`;
+    const route = `${request.method}:${request.path}`;
     const key = `${route}:${ip}`;
     const now = Date.now();
 

@@ -1,5 +1,6 @@
 export function emptyToNull(v?: unknown): string | null {
   if (v === undefined || v === null) return null;
-  const t = String(v).trim();
+  if (typeof v !== 'string') return null;
+  const t = v.trim();
   return t === '' ? null : t;
 }

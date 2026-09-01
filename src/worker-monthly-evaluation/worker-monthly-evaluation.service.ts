@@ -38,6 +38,15 @@ type QuestionSnapshot = {
   maxScore: number;
 };
 
+type EvaluationForOutput = {
+  maxScore: number;
+  templateVersion: {
+    observedMaxScore: number;
+    regularMaxScore: number;
+  };
+  [key: string]: unknown;
+};
+
 type EvaluationPeriodKpis = {
   averageScore: number | null;
   highestScore: number | null;
@@ -1349,7 +1358,7 @@ export class WorkerMonthlyEvaluationService {
     };
   }
 
-  private formatEvaluationOutput(evaluation: any) {
+  private formatEvaluationOutput(evaluation: EvaluationForOutput) {
     const observedMaxScore = evaluation.templateVersion.observedMaxScore;
     const regularMaxScore = evaluation.templateVersion.regularMaxScore;
     const excellentMaxScore = evaluation.maxScore;

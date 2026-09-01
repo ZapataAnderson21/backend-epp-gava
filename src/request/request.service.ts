@@ -598,7 +598,7 @@ export class RequestService {
       `Updating request ID ${requestId} with data: ${JSON.stringify(updateRequestDto)}`,
     );
 
-    if (!this.requestIsDraft(requestId)) {
+    if (!(await this.requestIsDraft(requestId))) {
       this.logger.error(
         `Cannot update request ID ${requestId} because its status is not 'draft'`,
       );

@@ -6,14 +6,12 @@ import {
   Patch,
   Param,
   Delete,
-  HttpStatus,
   Logger,
   ParseIntPipe,
 } from '@nestjs/common';
 import { RequestWorkerService } from './request-worker.service';
 import { CreateRequestWorkerDto } from './dto/create-request-worker.dto';
 import { UpdateRequestWorkerDto } from './dto/update-request-worker.dto';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @Controller('request-worker')
 export class RequestWorkerController {

@@ -7,6 +7,12 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PrismaService } from 'src/prisma/prisma.service';
+import type { Request } from 'express';
+
+interface AuthenticatedTaskRequest extends Request {
+  user: { userId: number };
+  params: Record<string, string>;
+}
 
 // Tipos de operación que requieren diferentes permisos
 export type TaskOperation =
@@ -19,8 +25,12 @@ export type TaskOperation =
 export const TASK_OPERATION_KEY = 'taskOperation';
 export const TaskOperation =
   (operation: TaskOperation) =>
-  (target: any, key: string, descriptor: PropertyDescriptor) => {
-    Reflect.defineMetadata(TASK_OPERATION_KEY, operation, descriptor.value);
+  (target: object, key: string | symbol, descriptor: PropertyDescriptor) => {
+    const handler: unknown = descriptor.value;
+    if (typeof handler !== 'function') {
+      throw new TypeError(`@TaskOperation solo puede decorar métodos (${String(key)}).`);
+    }
+    Reflect.defineMetadata(TASK_OPERATION_KEY, operation, handler);
     return descriptor;
   };
 
@@ -35,7 +45,9 @@ export class TaskPermissionGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context
+      .switchToHttp()
+      .getRequest<AuthenticatedTaskRequest>();
     const user = request.user;
 
     if (!user) {

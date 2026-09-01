@@ -1,12 +1,14 @@
-export enum RequestStatus {
-  draft = 'draft',
-  inProgress = 'inProgress',
-  reviewed = 'reviewed',
-  approved = 'approved',
-  rejected = 'rejected',
-  addressed = 'addressed',
-  completed = 'completed',
-}
+export const RequestStatus = {
+  draft: 'draft',
+  inProgress: 'inProgress',
+  reviewed: 'reviewed',
+  approved: 'approved',
+  rejected: 'rejected',
+  addressed: 'addressed',
+  completed: 'completed',
+} as const;
+
+export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus];
 export const RequestStatusLabelEs: Record<RequestStatus, string> = {
   [RequestStatus.draft]: 'Borrador',
   [RequestStatus.inProgress]: 'En progreso',

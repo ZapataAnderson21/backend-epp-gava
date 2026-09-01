@@ -1,8 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform, Type } from 'class-transformer';
+import { Transform, type TransformFnParams } from 'class-transformer';
 import {
   IsDateString,
-  IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -13,15 +12,17 @@ import {
 import { WorkerType } from '../enum/worker-type.enum';
 
 /** Helpers de transformación */
-const trim = (v: any) => (typeof v === 'string' ? v.trim() : v);
-const toNullIfEmpty = (v: any) => {
+const trim = (v: unknown) => (typeof v === 'string' ? v.trim() : v);
+const toNullIfEmpty = (v: unknown) => {
   if (v === undefined || v === null) return null;
-  const t = String(v).trim();
+  if (typeof v !== 'string') return v;
+  const t = v.trim();
   return t === '' ? null : t;
 };
-const toUndefIfEmpty = (v: any) => {
+const toUndefIfEmpty = (v: unknown) => {
   if (v === undefined || v === null) return undefined;
-  const t = String(v).trim();
+  if (typeof v !== 'string') return v;
+  const t = v.trim();
   return t === '' ? undefined : t;
 };
 
@@ -58,7 +59,9 @@ export class CreateWorkerDto {
   address?: string;
 
   @ApiPropertyOptional({ example: '1990-01-01' })
-  @Transform(({ value }) => (value === '' ? undefined : value))
+  @Transform(({ value }: TransformFnParams): unknown =>
+    value === '' ? undefined : value,
+  )
   @IsOptional()
   @IsDateString({}, { message: 'birthDate debe tener formato ISO: YYYY-MM-DD' })
   birthDate?: string;
@@ -102,7 +105,9 @@ export class UpdateWorkerDto {
   address?: string;
 
   @ApiPropertyOptional({ example: '1990-01-01' })
-  @Transform(({ value }) => (value === '' ? undefined : value))
+  @Transform(({ value }: TransformFnParams): unknown =>
+    value === '' ? undefined : value,
+  )
   @IsOptional()
   @IsDateString()
   birthDate?: string;

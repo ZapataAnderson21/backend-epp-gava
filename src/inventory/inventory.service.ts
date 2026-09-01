@@ -32,6 +32,7 @@ import {
   InventoryLocation,
   InventoryMovementType,
   OfficeInventoryStatus,
+  Prisma,
   WorkerInventoryAssignmentStatus,
 } from 'src/generated/prisma';
 
@@ -43,6 +44,94 @@ type ElementInventoryProfile = {
   requiresCode: boolean;
   usesDecimalQuantity: boolean;
   usesUniqueInventory: boolean;
+};
+
+const OFFICE_ENTRY_INCLUDE = {
+  element: { include: { category: true } },
+  elementVariant: true,
+  purchaseOrder: true,
+} satisfies Prisma.OfficeInventoryEntryInclude;
+
+const FALL_PROTECTION_GROUP_INCLUDE = {
+  harnessElement: { include: { category: true } },
+  anchorBandElement: { include: { category: true } },
+  lifelineElement: { include: { category: true } },
+  positioningLanyardElement: { include: { category: true } },
+  components: {
+    include: { element: { include: { category: true } } },
+    orderBy: [
+      { role: 'asc' as const },
+      { fallProtectionGroupComponentId: 'asc' as const },
+    ],
+  },
+} satisfies Prisma.FallProtectionGroupInclude;
+
+const PROJECT_ENTRY_INCLUDE = {
+  project: true,
+  request: true,
+  element: { include: { category: true } },
+  elementVariant: true,
+  fallProtectionGroup: { include: FALL_PROTECTION_GROUP_INCLUDE },
+  responsibleUser: true,
+  workerInventoryAssignments: {
+    include: { worker: true, inventoryAsset: true },
+    orderBy: [
+      { assignedAt: 'desc' as const },
+      { workerInventoryAssignmentId: 'desc' as const },
+    ],
+  },
+} satisfies Prisma.ProjectInventoryEntryInclude;
+
+const MOVEMENT_INCLUDE = {
+  project: true,
+  worker: true,
+  element: true,
+  elementVariant: true,
+  performedByUser: true,
+  responsibleUser: true,
+} satisfies Prisma.InventoryMovementInclude;
+
+const WORKER_ASSIGNMENT_INCLUDE = {
+  worker: true,
+  project: true,
+  element: { include: { category: true } },
+  elementVariant: true,
+  inventoryAsset: true,
+  sourceProjectInventoryEntry: true,
+} satisfies Prisma.WorkerInventoryAssignmentInclude;
+
+type OfficeEntryWithRelations = Prisma.OfficeInventoryEntryGetPayload<{
+  include: typeof OFFICE_ENTRY_INCLUDE;
+}>;
+type FallProtectionGroupWithRelations =
+  Prisma.FallProtectionGroupGetPayload<{
+    include: typeof FALL_PROTECTION_GROUP_INCLUDE;
+  }>;
+type ProjectEntryWithRelations = Prisma.ProjectInventoryEntryGetPayload<{
+  include: typeof PROJECT_ENTRY_INCLUDE;
+}>;
+type InventoryMovementWithRelations = Prisma.InventoryMovementGetPayload<{
+  include: typeof MOVEMENT_INCLUDE;
+}>;
+type WorkerAssignmentWithRelations =
+  Prisma.WorkerInventoryAssignmentGetPayload<{
+    include: typeof WORKER_ASSIGNMENT_INCLUDE;
+  }>;
+
+type FallProtectionGroupLike = Omit<
+  FallProtectionGroupWithRelations,
+  'components'
+> & {
+  components?: FallProtectionGroupWithRelations['components'];
+};
+
+type ProjectEntryForMapping = Omit<
+  ProjectEntryWithRelations,
+  'fallProtectionGroup' | 'quantityReceived' | 'quantityReturned'
+> & {
+  fallProtectionGroup: FallProtectionGroupLike | null;
+  quantityReceived: unknown;
+  quantityReturned: unknown;
 };
 
 @Injectable()
@@ -124,7 +213,9 @@ export class InventoryService {
     return element.code ? `${element.name} - ${element.code}` : element.name;
   }
 
-  private getFallProtectionGroupParts(group?: any) {
+  private getFallProtectionGroupParts(
+    group?: FallProtectionGroupLike | null,
+  ) {
     if (!group) return [];
 
     if (group.components?.length) {
@@ -135,7 +226,7 @@ export class InventoryService {
         positioningLanyard: 'Eslinga de posicionamiento',
       };
 
-      return group.components.map((component: any) => {
+      return group.components.map((component) => {
         const label = roleLabels[component.role] ?? 'Componente';
         return `${label}: ${this.getFallProtectionElementLabel(component.element)}`;
       });
@@ -162,13 +253,16 @@ export class InventoryService {
     );
   }
 
-  private getActiveAssignedPending(assignments?: any[]) {
+  private getActiveAssignedPending(
+    assignments?: ProjectEntryWithRelations['workerInventoryAssignments'],
+  ) {
     return this.normalizeQuantity(
       (assignments || []).reduce((total, assignment) => {
-        const isActive = [
+        const activeStatuses: WorkerInventoryAssignmentStatus[] = [
           WorkerInventoryAssignmentStatus.active,
           WorkerInventoryAssignmentStatus.partially_returned,
-        ].includes(assignment.status);
+        ];
+        const isActive = activeStatuses.includes(assignment.status);
 
         if (!isActive) return total;
 
@@ -183,7 +277,10 @@ export class InventoryService {
     );
   }
 
-  private mapProjectEntryAssignment(assignment: any, entry: any) {
+  private mapProjectEntryAssignment(
+    assignment: ProjectEntryWithRelations['workerInventoryAssignments'][number],
+    entry: ProjectEntryForMapping,
+  ) {
     const quantityAssigned = this.normalizeQuantity(
       assignment.quantityAssigned,
     );
@@ -233,7 +330,7 @@ export class InventoryService {
     };
   }
 
-  private mapInventoryEntry(entry: any) {
+  private mapInventoryEntry(entry: ProjectEntryForMapping) {
     const quantityReceived = this.normalizeQuantity(entry.quantityReceived);
     const quantityReturned = this.normalizeQuantity(entry.quantityReturned);
     const quantityPending = this.normalizeQuantity(
@@ -328,7 +425,12 @@ export class InventoryService {
     };
   }
 
-  private getProjectInventoryAggregateKey(entry: any) {
+  private getProjectInventoryAggregateKey(
+    entry: Pick<
+      ProjectEntryForMapping,
+      'fallProtectionGroupId' | 'projectId' | 'elementId' | 'elementVariantId'
+    >,
+  ) {
     if (entry.fallProtectionGroupId) {
       return `fall-protection:${entry.fallProtectionGroupId}`;
     }
@@ -341,8 +443,13 @@ export class InventoryService {
     ].join(':');
   }
 
-  private aggregateProjectInventoryEntries(entries: any[]) {
-    const grouped = new Map<string, any[]>();
+  private aggregateProjectInventoryEntries(
+    entries: Array<ReturnType<InventoryService['mapInventoryEntry']>>,
+  ) {
+    const grouped = new Map<
+      string,
+      Array<ReturnType<InventoryService['mapInventoryEntry']>>
+    >();
 
     for (const entry of entries) {
       const key = this.getProjectInventoryAggregateKey(entry);
@@ -436,13 +543,15 @@ export class InventoryService {
     });
   }
 
-  private mapFallProtectionGroupsByPart(groups: any[]) {
-    const byElementId = new Map<number, any>();
+  private mapFallProtectionGroupsByPart(
+    groups: FallProtectionGroupLike[],
+  ) {
+    const byElementId = new Map<number, FallProtectionGroupLike>();
 
     for (const group of groups) {
       if (group.components?.length) {
         group.components
-          .map((component: any) => component.elementId)
+          .map((component) => component.elementId)
           .filter(Boolean)
           .forEach((elementId: number) => byElementId.set(Number(elementId), group));
         continue;
@@ -462,8 +571,8 @@ export class InventoryService {
   }
 
   private normalizeProjectEntryFallProtectionGroup(
-    entry: any,
-    groupByPartElementId: Map<number, any>,
+    entry: ProjectEntryForMapping,
+    groupByPartElementId: Map<number, FallProtectionGroupLike>,
   ) {
     if (entry.fallProtectionGroupId || entry.element?.family !== ElementFamily.Harness) {
       return entry;
@@ -479,14 +588,14 @@ export class InventoryService {
     };
   }
 
-  private getProjectEntryQuantityPending(entry: any) {
+  private getProjectEntryQuantityPending(entry: ProjectEntryForMapping) {
     return this.normalizeQuantity(
       this.normalizeQuantity(entry.quantityReceived) -
         this.normalizeQuantity(entry.quantityReturned),
     );
   }
 
-  private getProjectEntryAvailableInProject(entry: any) {
+  private getProjectEntryAvailableInProject(entry: ProjectEntryForMapping) {
     const quantityPending = this.getProjectEntryQuantityPending(entry);
     const assignedPending = this.getActiveAssignedPending(
       entry.workerInventoryAssignments,
@@ -495,7 +604,7 @@ export class InventoryService {
     return this.normalizeQuantity(Math.max(quantityPending - assignedPending, 0));
   }
 
-  private getProjectEntryReturnsToOffice(entry: any) {
+  private getProjectEntryReturnsToOffice(entry: ProjectEntryForMapping) {
     if (entry.fallProtectionGroupId) return true;
     return this.getInventoryProfile(entry.element).returnsToOffice;
   }
@@ -552,7 +661,7 @@ export class InventoryService {
     };
   }
 
-  private mapOfficeInventoryEntry(entry: any) {
+  private mapOfficeInventoryEntry(entry: OfficeEntryWithRelations) {
     const profile = this.getInventoryProfile(entry.element);
     const rawCurrentStock = this.normalizeQuantity(entry.currentStock);
     const currentStock = profile.usesUniqueInventory
@@ -597,7 +706,7 @@ export class InventoryService {
     };
   }
 
-  private mapMovement(movement: any) {
+  private mapMovement(movement: InventoryMovementWithRelations) {
     return {
       inventoryMovementId: movement.inventoryMovementId,
       movementType: movement.movementType,
@@ -631,7 +740,9 @@ export class InventoryService {
     };
   }
 
-  private mapWorkerInventoryAssignment(assignment: any) {
+  private mapWorkerInventoryAssignment(
+    assignment: WorkerAssignmentWithRelations,
+  ) {
     const quantityAssigned = this.normalizeQuantity(assignment.quantityAssigned);
     const quantityReturned = this.normalizeQuantity(assignment.quantityReturned);
     const quantityPending = this.normalizeQuantity(
@@ -686,83 +797,18 @@ export class InventoryService {
     return { month: safeMonth, year: safeYear, from, to };
   }
 
-  private readonly officeEntryInclude = {
-    element: {
-      include: { category: true },
-    },
-    elementVariant: true,
-    purchaseOrder: true,
-  };
-
-  private readonly fallProtectionGroupInclude = {
-    harnessElement: { include: { category: true } },
-    anchorBandElement: { include: { category: true } },
-    lifelineElement: { include: { category: true } },
-    positioningLanyardElement: { include: { category: true } },
-    components: {
-      include: {
-        element: { include: { category: true } },
-      },
-      orderBy: [
-        { role: 'asc' as const },
-        { fallProtectionGroupComponentId: 'asc' as const },
-      ],
-    },
-  };
-
-  private readonly projectEntryInclude = {
-    project: true,
-    request: true,
-    element: {
-      include: {
-        category: true,
-      },
-      },
-      elementVariant: true,
-      fallProtectionGroup: {
-        include: this.fallProtectionGroupInclude,
-      },
-      responsibleUser: true,
-      workerInventoryAssignments: {
-        include: {
-          worker: true,
-          inventoryAsset: true,
-        },
-        orderBy: [
-          { assignedAt: 'desc' as const },
-          { workerInventoryAssignmentId: 'desc' as const },
-        ],
-      },
-    };
-
-  private readonly movementInclude = {
-    project: true,
-    worker: true,
-    element: true,
-    elementVariant: true,
-    performedByUser: true,
-    responsibleUser: true,
-  };
-
-  private readonly workerAssignmentInclude = {
-    worker: true,
-    project: true,
-    element: {
-      include: {
-        category: true,
-      },
-    },
-    elementVariant: true,
-    inventoryAsset: true,
-    sourceProjectInventoryEntry: true,
-  };
+  private readonly officeEntryInclude = OFFICE_ENTRY_INCLUDE;
+  private readonly fallProtectionGroupInclude = FALL_PROTECTION_GROUP_INCLUDE;
+  private readonly projectEntryInclude = PROJECT_ENTRY_INCLUDE;
+  private readonly movementInclude = MOVEMENT_INCLUDE;
+  private readonly workerAssignmentInclude = WORKER_ASSIGNMENT_INCLUDE;
 
   async findDashboard(query: { month?: number; year?: number }) {
     const { month, year, from, to } = this.getMonthRange(
       query.month,
       query.year,
     );
-    const protectionFamilies = [
+    const protectionFamilies: ElementFamily[] = [
       ElementFamily.Epp,
       ElementFamily.Epi,
       ElementFamily.Uniform,
@@ -920,7 +966,7 @@ export class InventoryService {
     }
 
     const profile = this.getInventoryProfile(entry.element);
-    const allowedFamilies = [
+    const allowedFamilies: ElementFamily[] = [
       ElementFamily.Epp,
       ElementFamily.Epi,
       ElementFamily.Uniform,
@@ -1034,7 +1080,7 @@ export class InventoryService {
     const profile = entry.fallProtectionGroupId
       ? { family: ElementFamily.Harness }
       : this.getInventoryProfile(entry.element);
-    const allowedFamilies = [
+    const allowedFamilies: ElementFamily[] = [
       ElementFamily.Epp,
       ElementFamily.Epi,
       ElementFamily.Uniform,
@@ -1100,7 +1146,7 @@ export class InventoryService {
     }
 
     const assignments = await this.prismaService.$transaction(async (tx) => {
-      const createdAssignments: any[] = [];
+      const createdAssignments: WorkerAssignmentWithRelations[] = [];
       const availability = availableEntries.map((item) => ({ ...item }));
 
       for (const assignment of cleanAssignments) {
@@ -1236,7 +1282,7 @@ export class InventoryService {
       throw new NotFoundException('Trabajador no encontrado.');
     }
 
-    const where: any = { workerId };
+    const where: Prisma.WorkerInventoryAssignmentWhereInput = { workerId };
 
     if (
       query.family &&
@@ -1250,12 +1296,17 @@ export class InventoryService {
     const hasValidYear = typeof query.year === 'number' && query.year > 0;
 
     if (hasValidMonth || hasValidYear) {
-      const safeYear = hasValidYear ? query.year! : new Date().getFullYear();
-      const from = hasValidMonth
-        ? new Date(Date.UTC(safeYear, query.month! - 1, 1, 0, 0, 0, 0))
+      const safeYear =
+        hasValidYear && typeof query.year === 'number'
+          ? query.year
+          : new Date().getFullYear();
+      const safeMonth =
+        hasValidMonth && typeof query.month === 'number' ? query.month : null;
+      const from = safeMonth !== null
+        ? new Date(Date.UTC(safeYear, safeMonth - 1, 1, 0, 0, 0, 0))
         : new Date(Date.UTC(safeYear, 0, 1, 0, 0, 0, 0));
-      const to = hasValidMonth
-        ? new Date(Date.UTC(safeYear, query.month!, 1, 0, 0, 0, 0))
+      const to = safeMonth !== null
+        ? new Date(Date.UTC(safeYear, safeMonth, 1, 0, 0, 0, 0))
         : new Date(Date.UTC(safeYear + 1, 0, 1, 0, 0, 0, 0));
       where.assignedAt = { gte: from, lt: to };
     }
@@ -1323,7 +1374,7 @@ export class InventoryService {
     }
 
     const result = await this.prismaService.$transaction(async (tx) => {
-      let officeEntry: any;
+      let officeEntry: OfficeEntryWithRelations;
 
       if (profile.usesUniqueInventory) {
         const [existingOfficeEntries, existingProjectEntries, existingMovements] =
@@ -1456,7 +1507,7 @@ export class InventoryService {
       message: 'Detalle de inventario de oficina obtenido exitosamente.',
       data: {
         ...this.mapOfficeInventoryEntry(entry),
-        movements: entry.movements.map((m: any) => this.mapMovement(m)),
+        movements: entry.movements.map((movement) => this.mapMovement(movement)),
       },
     };
   }
@@ -1840,7 +1891,7 @@ export class InventoryService {
   // ─── Global Movements Log ────────────────────────────────────
 
   async findAllMovements(query: FindMovementsQueryDto) {
-    const where: any = {};
+    const where: Prisma.InventoryMovementWhereInput = {};
 
     if (query.movementType) {
       where.movementType = query.movementType;
@@ -1972,7 +2023,7 @@ export class InventoryService {
       );
       selectedElementIdsByElementRequestId.set(
         responseLine.elementRequestId,
-        ((responseLine as any).selectedElementIds || []).map(Number),
+        responseLine.selectedElementIds.map(Number),
       );
     }
 
@@ -2002,7 +2053,7 @@ export class InventoryService {
         },
       });
 
-      const createdEntries: any[] = [];
+      const createdEntries: ProjectEntryWithRelations[] = [];
 
       for (const elementRequest of request.elementRequests) {
         const profile = this.getInventoryProfile(elementRequest.element);
@@ -2071,7 +2122,7 @@ export class InventoryService {
                 unit: elementRequest.unit,
                 quantityReceived: 1,
                 quantityReturned: 0,
-                notes: (elementRequest as any).notes ?? request.description,
+                notes: elementRequest.notes ?? request.description,
               },
               include: this.projectEntryInclude,
             });
@@ -2123,7 +2174,7 @@ export class InventoryService {
             unit: receivedUnit,
             quantityReceived,
             quantityReturned: 0,
-            notes: (elementRequest as any).notes ?? request.description,
+            notes: elementRequest.notes ?? request.description,
           },
           include: this.projectEntryInclude,
         });
@@ -2367,7 +2418,7 @@ export class InventoryService {
 
     const updatedEntry = await this.prismaService.$transaction(async (tx) => {
       let remaining = quantityToReturn;
-      let firstUpdatedEntry: any = null;
+      let firstUpdatedEntry: ProjectEntryWithRelations | null = null;
 
       for (const availableItem of returnableEntries) {
         if (remaining <= 0) break;
@@ -2454,6 +2505,12 @@ export class InventoryService {
 
       return firstUpdatedEntry;
     });
+
+    if (!updatedEntry) {
+      throw new NotFoundException(
+        'No se encontro un registro disponible para procesar el retorno.',
+      );
+    }
 
     return {
       statusCode: HttpStatus.OK,

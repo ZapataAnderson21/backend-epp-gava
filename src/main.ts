@@ -54,4 +54,4 @@ async function bootstrap() {
 
   logger.log(`Application is running on: ${process.env.PORT ?? 3001}`);
 }
-bootstrap();
+void bootstrap();

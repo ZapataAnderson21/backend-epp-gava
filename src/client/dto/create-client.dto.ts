@@ -9,9 +9,10 @@ import {
   Length,
 } from 'class-validator';
 
-const toNullIfEmpty = (v: any) => {
+const toNullIfEmpty = (v: unknown) => {
   if (v === undefined || v === null) return null;
-  const t = String(v).trim();
+  if (typeof v !== 'string') return v;
+  const t = v.trim();
   return t === '' ? null : t;
 };
 

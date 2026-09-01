@@ -7,7 +7,10 @@ describe('PurchaseOrderConditionService', () => {
     upsert: jest.fn(),
     findMany: jest.fn(),
   };
-  const prisma = { purchaseOrderCondition } as unknown as PrismaService;
+  const prisma = Object.assign(
+    Object.create(PrismaService.prototype) as PrismaService,
+    { purchaseOrderCondition },
+  );
   const service = new PurchaseOrderConditionService(prisma);
 
   beforeEach(() => {

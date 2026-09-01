@@ -8,12 +8,16 @@ import {
   Delete,
   Logger,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { ServiceSaleService } from './service-sale.service';
 import { CreateServiceSaleDto } from './dto/create-service-sale.dto';
 import { UpdateServiceSaleDto } from './dto/update-service-sale.dto';
+import { ListServiceSalesQueryDto } from './dto/list-service-sales-query.dto';
+import { UserTypes } from 'src/decorators/user-types.decorator';
 
 @Controller('service-sale')
+@UserTypes('GERENTE', 'ADMINISTRADOR', 'ADMINISTRADORA')
 export class ServiceSaleController {
   private readonly logger = new Logger('ServiceSaleController');
 
@@ -31,6 +35,19 @@ export class ServiceSaleController {
   findAll(@Param('projectId', ParseIntPipe) projectId: number) {
     this.logger.log(`Fetching all service sales for project ID: ${projectId}`);
     return this.serviceSaleService.findAllByProject(projectId);
+  }
+
+  @Get('project/:projectId/paginated')
+  findPaginated(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query() query: ListServiceSalesQueryDto,
+  ) {
+    return this.serviceSaleService.findPaginatedByProject(projectId, query);
+  }
+
+  @Get('project/:projectId/totals')
+  totalsByCurrency(@Param('projectId', ParseIntPipe) projectId: number) {
+    return this.serviceSaleService.sumAllAmountsByCurrency(projectId);
   }
 
   @Get(':id')

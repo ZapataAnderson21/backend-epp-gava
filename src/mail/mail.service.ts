@@ -5,12 +5,21 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer';
+import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 import * as path from 'path';
 import * as fs from 'fs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { RequestType } from 'src/request/enum/request-type.enum';
+
+interface SmtpErrorDetails {
+  code?: string;
+  command?: string;
+  responseCode?: number;
+  response?: string;
+  message?: string;
+}
 
 @Injectable()
 export class MailService {
@@ -97,13 +106,12 @@ export class MailService {
     const normalizedMailPort = Number(mailPort || 465);
     const isImplicitTls = normalizedMailPort === 465;
 
-    return nodemailer.createTransport({
+    const options: SMTPTransport.Options = {
       host: mailHost,
       port: normalizedMailPort,
       secure: isImplicitTls,
       requireTLS: normalizedMailPort === 587,
       name: mailHost,
-      family: 4,
       auth: {
         user: sender,
         pass: password,
@@ -114,22 +122,31 @@ export class MailService {
       connectionTimeout: 20000,
       greetingTimeout: 20000,
       socketTimeout: 30000,
-    });
+    };
+
+    return nodemailer.createTransport(options);
   }
 
-  private buildSmtpErrorData(error: any) {
+  private normalizeSmtpError(error: unknown): SmtpErrorDetails {
+    if (!(error instanceof Error)) return {};
+    return error as Error & SmtpErrorDetails;
+  }
+
+  private buildSmtpErrorData(error: unknown) {
+    const smtpError = this.normalizeSmtpError(error);
     return {
-      code: error?.code || null,
-      command: error?.command || null,
-      responseCode: error?.responseCode || null,
-      response: error?.response || error?.message || null,
+      code: smtpError.code || null,
+      command: smtpError.command || null,
+      responseCode: smtpError.responseCode || null,
+      response: smtpError.response || smtpError.message || null,
     };
   }
 
-  private formatSmtpError(error: any) {
+  private formatSmtpError(error: unknown) {
+    const smtpError = this.normalizeSmtpError(error);
     const response = this.buildSmtpErrorData(error);
 
-    if (error?.code === 'EAUTH' || error?.responseCode === 535) {
+    if (smtpError.code === 'EAUTH' || smtpError.responseCode === 535) {
       return {
         statusCode: HttpStatus.BAD_REQUEST,
         message:
@@ -138,7 +155,12 @@ export class MailService {
       };
     }
 
-    if (['ENOTFOUND', 'ECONNREFUSED', 'ETIMEDOUT', 'ESOCKET'].includes(error?.code)) {
+    if (
+      smtpError.code &&
+      ['ENOTFOUND', 'ECONNREFUSED', 'ETIMEDOUT', 'ESOCKET'].includes(
+        smtpError.code,
+      )
+    ) {
       return {
         statusCode: HttpStatus.SERVICE_UNAVAILABLE,
         message:
@@ -147,17 +169,17 @@ export class MailService {
       };
     }
 
-    if (typeof error?.responseCode === 'number') {
+    if (typeof smtpError.responseCode === 'number') {
       return {
         statusCode: HttpStatus.BAD_GATEWAY,
-        message: `El servidor de correos respondió con el código ${error.responseCode}.`,
+        message: `El servidor de correos respondió con el código ${smtpError.responseCode}.`,
         data: response,
       };
     }
 
     return {
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      message: error?.message || 'Error desconocido al validar el correo.',
+      message: smtpError.message || 'Error desconocido al validar el correo.',
       data: response,
     };
   }
@@ -211,7 +233,7 @@ export class MailService {
         message: 'Contraseña validada correctamente con el servidor de correos.',
         data: null,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof NotFoundException) {
         return {
           statusCode: HttpStatus.NOT_FOUND,
@@ -465,7 +487,7 @@ export class MailService {
           response: result.response,
         },
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof NotFoundException) {
         return {
           statusCode: HttpStatus.NOT_FOUND,
@@ -482,33 +504,35 @@ export class MailService {
         };
       }
 
-      if (error.code === 'EAUTH') {
+      const smtpError = this.normalizeSmtpError(error);
+
+      if (smtpError.code === 'EAUTH') {
         this.logger.error(
-          `SMTP authentication error for request ID: ${requestId}. Response: ${error.response}`,
+          `SMTP authentication error for request ID: ${requestId}. Response: ${smtpError.response}`,
         );
         return this.formatSmtpError(error);
       }
 
       if (
-        error.code === 'ENOTFOUND' ||
-        error.code === 'ECONNREFUSED' ||
-        error.code === 'ETIMEDOUT' ||
-        error.code === 'ESOCKET'
+        smtpError.code === 'ENOTFOUND' ||
+        smtpError.code === 'ECONNREFUSED' ||
+        smtpError.code === 'ETIMEDOUT' ||
+        smtpError.code === 'ESOCKET'
       ) {
         this.logger.error(
-          `SMTP connection error for request ID: ${requestId}. Code: ${error.code}, Message: ${error.message}`,
+          `SMTP connection error for request ID: ${requestId}. Code: ${smtpError.code}, Message: ${smtpError.message}`,
         );
         return this.formatSmtpError(error);
       }
 
       this.logger.error(
-        `Unexpected error sending email for request ID: ${requestId}. Error: ${error.message}`,
-        error.stack,
+        `Unexpected error sending email for request ID: ${requestId}. Error: ${smtpError.message ?? 'Unknown error'}`,
+        error instanceof Error ? error.stack : undefined,
       );
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: error.message || 'Error desconocido al enviar el correo.',
-        data: error.stack || null,
+        message: smtpError.message || 'Error desconocido al enviar el correo.',
+        data: error instanceof Error ? error.stack || null : null,
       };
     }
   }

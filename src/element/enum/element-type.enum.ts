@@ -1,18 +1,21 @@
-export enum ElementType {
-  Epp = 'epp',
-  Operative = 'operative',
-}
+export const ElementType = {
+  Epp: 'epp',
+  Operative: 'operative',
+} as const;
+export type ElementType = (typeof ElementType)[keyof typeof ElementType];
 
 export const ElementTypeLabelEs: Record<ElementType, string> = {
   [ElementType.Epp]: 'EPP',
   [ElementType.Operative]: 'Operativo',
 };
 
-export enum ElementControlType {
-  Consumable = 'consumable',
-  Returnable = 'returnable',
-  Individual = 'individual',
-}
+export const ElementControlType = {
+  Consumable: 'consumable',
+  Returnable: 'returnable',
+  Individual: 'individual',
+} as const;
+export type ElementControlType =
+  (typeof ElementControlType)[keyof typeof ElementControlType];
 
 export const ElementControlTypeLabelEs: Record<ElementControlType, string> = {
   [ElementControlType.Consumable]: 'Consumible',
@@ -20,16 +23,17 @@ export const ElementControlTypeLabelEs: Record<ElementControlType, string> = {
   [ElementControlType.Individual]: 'Individual',
 };
 
-export enum ElementFamily {
-  Epp = 'epp',
-  Epi = 'epi',
-  Uniform = 'uniform',
-  OfficeMaterial = 'officeMaterial',
-  SsomaSupply = 'ssomaSupply',
-  Ese = 'ese',
-  Harness = 'harness',
-  Measurement = 'measurement',
-}
+export const ElementFamily = {
+  Epp: 'epp',
+  Epi: 'epi',
+  Uniform: 'uniform',
+  OfficeMaterial: 'officeMaterial',
+  SsomaSupply: 'ssomaSupply',
+  Ese: 'ese',
+  Harness: 'harness',
+  Measurement: 'measurement',
+} as const;
+export type ElementFamily = (typeof ElementFamily)[keyof typeof ElementFamily];
 
 export const ElementFamilyLabelEs: Record<ElementFamily, string> = {
   [ElementFamily.Epp]: 'EPP',

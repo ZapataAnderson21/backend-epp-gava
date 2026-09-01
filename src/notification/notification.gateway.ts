@@ -24,6 +24,49 @@ const websocketCorsOrigins = (
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+interface NotificationJwtPayload {
+  userId?: number;
+  sub?: number;
+}
+
+interface ServerToClientEvents {
+  connected: (payload: { userId: number; message: string }) => void;
+  error: (payload: { message: string }) => void;
+  notification: (notification: unknown) => void;
+  unreadCount: (payload: { count: number }) => void;
+  requestMailProgress: (progress: RequestMailProgress) => void;
+}
+
+interface ClientToServerEvents {
+  getUnreadCount: () => void;
+  markAsRead: (payload: { notificationId: number }) => void;
+}
+
+interface InterServerEvents {
+  ping: () => void;
+}
+
+interface NotificationSocketData {
+  userId?: number;
+}
+
+type NotificationSocket = Socket<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  NotificationSocketData
+>;
+
+export interface RequestMailProgress {
+  operationId: string;
+  requestId: number;
+  step: string;
+  status: 'running' | 'success' | 'error';
+  message: string;
+  timestamp: string;
+  [key: string]: unknown;
+}
+
 @WebSocketGateway({
   cors: {
     origin: websocketCorsOrigins,
@@ -37,7 +80,12 @@ export class NotificationGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()
-  server: Server;
+  server!: Server<
+    ClientToServerEvents,
+    ServerToClientEvents,
+    InterServerEvents,
+    NotificationSocketData
+  >;
 
   private readonly logger = new Logger('NotificationGateway');
 
@@ -55,14 +103,19 @@ export class NotificationGateway
     );
   }
 
-  async handleConnection(client: Socket) {
+  async handleConnection(client: NotificationSocket): Promise<void> {
     this.logger.log(`Client attempting connection: ${client.id}`);
 
     try {
       // Obtener token del handshake (query o auth header)
+      const authToken: unknown = client.handshake.auth?.token;
+      const queryToken = client.handshake.query.token;
       const token =
-        client.handshake.auth?.token ||
-        (client.handshake.query?.token as string);
+        typeof authToken === 'string'
+          ? authToken
+          : typeof queryToken === 'string'
+            ? queryToken
+            : undefined;
 
       this.logger.debug(`Token received: ${token ? 'Yes' : 'No'}`);
 
@@ -78,13 +131,15 @@ export class NotificationGateway
       const normalizedToken = token.replace(/^Bearer\s+/i, '').trim();
 
       // Verificar y decodificar el JWT
-      let payload: any;
+      let payload: NotificationJwtPayload;
       try {
-        payload = this.jwtService.verify(normalizedToken);
+        payload = this.jwtService.verify<NotificationJwtPayload>(normalizedToken);
         this.logger.debug(`JWT payload: ${JSON.stringify(payload)}`);
-      } catch (jwtError) {
+      } catch (jwtError: unknown) {
         this.logger.error(
-          `JWT verification failed for client ${client.id}: ${jwtError.message}`,
+          `JWT verification failed for client ${client.id}: ${
+            jwtError instanceof Error ? jwtError.message : 'Unknown JWT error'
+          }`,
         );
         client.emit('error', { message: 'Invalid token' });
         client.disconnect();
@@ -125,7 +180,7 @@ export class NotificationGateway
       this.userSockets.get(userId)!.add(client.id);
 
       // Unir al usuario a su room personal
-      client.join(`user_${userId}`);
+      await client.join(`user_${userId}`);
 
       // Emitir confirmación de conexión exitosa
       client.emit('connected', {
@@ -136,16 +191,18 @@ export class NotificationGateway
       this.logger.log(
         `Client connected successfully: ${client.id} (User: ${userId})`,
       );
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error(
-        `Client ${client.id} connection error: ${error.message}`,
+        `Client ${client.id} connection error: ${
+          error instanceof Error ? error.message : 'Unknown connection error'
+        }`,
       );
       client.emit('error', { message: 'Connection failed' });
       client.disconnect();
     }
   }
 
-  handleDisconnect(client: Socket) {
+  handleDisconnect(client: NotificationSocket): void {
     const userId = client.data.userId;
 
     if (userId && this.userSockets.has(userId)) {
@@ -161,24 +218,27 @@ export class NotificationGateway
   }
 
   // Enviar notificación a un usuario específico
-  sendNotificationToUser(userId: number, notification: any) {
+  sendNotificationToUser(userId: number, notification: unknown): void {
     this.server.to(`user_${userId}`).emit('notification', notification);
     this.logger.log(`Notification sent to user ${userId}`);
   }
 
   // Enviar notificación a múltiples usuarios
-  sendNotificationToUsers(userIds: number[], notification: any) {
+  sendNotificationToUsers(userIds: number[], notification: unknown): void {
     userIds.forEach((userId) => {
       this.sendNotificationToUser(userId, notification);
     });
   }
 
   // Enviar actualización del contador de no leídas
-  sendUnreadCountToUser(userId: number, count: number) {
+  sendUnreadCountToUser(userId: number, count: number): void {
     this.server.to(`user_${userId}`).emit('unreadCount', { count });
   }
 
-  sendRequestMailProgressToUser(userId: number, progress: any) {
+  sendRequestMailProgressToUser(
+    userId: number,
+    progress: RequestMailProgress,
+  ): void {
     this.server.to(`user_${userId}`).emit('requestMailProgress', progress);
   }
 
@@ -196,7 +256,7 @@ export class NotificationGateway
 
   // Cliente puede solicitar el contador de no leídas
   @SubscribeMessage('getUnreadCount')
-  handleGetUnreadCount(client: Socket) {
+  handleGetUnreadCount(client: NotificationSocket) {
     // Este mensaje se manejará en el servicio cuando se integre
     const userId = client.data.userId;
     this.logger.log(`User ${userId} requested unread count`);
@@ -205,7 +265,10 @@ export class NotificationGateway
 
   // Cliente puede marcar notificación como leída via WebSocket
   @SubscribeMessage('markAsRead')
-  handleMarkAsRead(client: Socket, payload: { notificationId: number }) {
+  handleMarkAsRead(
+    client: NotificationSocket,
+    payload: { notificationId: number },
+  ) {
     const userId = client.data.userId;
     this.logger.log(
       `User ${userId} marking notification ${payload.notificationId} as read`,

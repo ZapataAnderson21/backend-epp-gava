@@ -82,7 +82,7 @@ export class ElementService {
   }
 
   private resolveLegacyType(
-    family?: string | null,
+    family?: ElementFamily | null,
     type?: string | null,
   ) {
     if (type && this.isElementType(type)) {
@@ -191,7 +191,7 @@ export class ElementService {
     inventoryAssets?: Array<{ inventoryAssetId: number; status: string }>;
   }>(element: T) {
     const family = this.isElementFamily(element.family)
-      ? (element.family as ElementFamily)
+      ? element.family
       : null;
     const isLegacy = !family;
     const variants: Array<{
@@ -601,10 +601,11 @@ export class ElementService {
     elementCategoryId?: number | null,
     elementId?: number,
   ) {
+    const validatedFamily = this.isElementFamily(family) ? family : null;
     const conflictingElements = await this.prismaService.element.findMany({
       where: {
         name: { equals: name.trim(), mode: 'insensitive' },
-        family: family as any,
+        family: validatedFamily,
         elementCategoryId: elementCategoryId ?? null,
         deletedAt: null,
       },
@@ -635,7 +636,7 @@ export class ElementService {
     }
   }
 
-  private async resolveElementPayload(
+  private resolveElementPayload(
     dto: CreateElementDto | UpdateElementDto,
     currentElement?: {
       elementId: number;
@@ -665,6 +666,12 @@ export class ElementService {
       ? (dto.controlType ?? null)
       : null;
 
+    if (nextFamily && !this.isElementFamily(nextFamily)) {
+      throw new BadRequestException(`Familia de inventario invalida: ${nextFamily}`);
+    }
+    const validatedFamily: ElementFamily | null =
+      nextFamily && this.isElementFamily(nextFamily) ? nextFamily : null;
+
     if (
       !nextFamily &&
       !nextType &&
@@ -677,20 +684,24 @@ export class ElementService {
       );
     }
 
-    const resolvedType = this.resolveLegacyType(nextFamily, nextType);
+    const resolvedType = this.resolveLegacyType(validatedFamily, nextType);
     const resolvedControlType = this.resolveControlType(
-      nextFamily,
+      validatedFamily,
       nextControlType,
     );
 
-    if (nextFamily && ElementFamilyRequiresCode[nextFamily] && !nextCode) {
+    if (
+      validatedFamily &&
+      ElementFamilyRequiresCode[validatedFamily] &&
+      !nextCode
+    ) {
       throw new BadRequestException(
-        `La familia ${ElementFamilyLabelEs[nextFamily]} requiere codigo obligatorio.`,
+        `La familia ${ElementFamilyLabelEs[validatedFamily]} requiere codigo obligatorio.`,
       );
     }
 
     return {
-      family: nextFamily,
+      family: validatedFamily,
       type: resolvedType,
       controlType: resolvedControlType,
       code: nextCode,
@@ -762,13 +773,14 @@ export class ElementService {
     this.logger.log('Creating element', JSON.stringify(createElementDto));
 
     const normalizedCode = this.normalizeOptionalText(createElementDto.code);
-    const resolved = await this.resolveElementPayload(createElementDto);
+    const resolved = this.resolveElementPayload(createElementDto);
 
-    if (!resolved.family && !resolved.type) {
+    if (!resolved.type) {
       throw new BadRequestException(
         'Debes indicar un tipo legado o una familia de inventario.',
       );
     }
+    const resolvedType = resolved.type;
 
     if (resolved.family && ElementFamilyRequiresCode[resolved.family] && !normalizedCode) {
       throw new BadRequestException(
@@ -786,7 +798,7 @@ export class ElementService {
 
     if (
       Number(createElementDto.stockMinimum ?? 0) > 0 &&
-      !this.supportsStockMinimum(resolved.family as ElementFamily | null)
+      !this.supportsStockMinimum(resolved.family)
     ) {
       throw new BadRequestException(
         'El stock minimo solo aplica para EPP, EPI, Uniforme y Materiales de Oficina.',
@@ -835,11 +847,11 @@ export class ElementService {
           expirationDate: isSsomaSupply
             ? null
             : this.normalizeOptionalDate(createElementDto.expirationDate),
-          type: resolved.type as any,
-          family: resolved.family as any,
-          controlType: resolved.controlType as any,
+          type: resolvedType,
+          family: resolved.family,
+          controlType: resolved.controlType,
           elementCategoryId,
-          stockMinimum: this.supportsStockMinimum(resolved.family as ElementFamily | null)
+          stockMinimum: this.supportsStockMinimum(resolved.family)
             ? createElementDto.stockMinimum ?? 0
             : 0,
         },
@@ -1009,12 +1021,16 @@ export class ElementService {
       ? this.normalizeOptionalText(updateElementDto.code)
       : existingElement.code;
 
-    const resolved = await this.resolveElementPayload(updateElementDto, {
+    const resolved = this.resolveElementPayload(updateElementDto, {
       elementId: existingElement.elementId,
       family: existingElement.family,
       type: existingElement.type,
       code: existingElement.code,
     });
+
+    if (!resolved.type) {
+      throw new BadRequestException('No se pudo resolver el tipo del elemento.');
+    }
 
     const nextFamily = Object.prototype.hasOwnProperty.call(
       updateElementDto,
@@ -1158,11 +1174,11 @@ export class ElementService {
       Object.prototype.hasOwnProperty.call(updateElementDto, 'family') ||
       Object.prototype.hasOwnProperty.call(updateElementDto, 'type')
     ) {
-      data.family = nextFamily as any;
-      data.type = resolved.type as any;
-      data.controlType = resolved.controlType as any;
+      data.family = nextFamily;
+      data.type = resolved.type;
+      data.controlType = resolved.controlType;
     } else if (Object.prototype.hasOwnProperty.call(updateElementDto, 'controlType')) {
-      data.controlType = resolved.controlType as any;
+      data.controlType = resolved.controlType;
     }
 
     if (

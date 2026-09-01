@@ -7,7 +7,10 @@ import { PurchaseOrderService } from './purchase-order.service';
 describe('PurchaseOrderService dashboard', () => {
   const purchaseOrder = { findMany: jest.fn() };
   const project = { findMany: jest.fn() };
-  const prisma = { purchaseOrder, project } as unknown as PrismaService;
+  const prisma = Object.assign(
+    Object.create(PrismaService.prototype) as PrismaService,
+    { purchaseOrder, project },
+  );
   const notificationService = {} as NotificationService;
   const service = new PurchaseOrderService(prisma, notificationService);
 

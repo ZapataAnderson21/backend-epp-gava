@@ -755,6 +755,9 @@ export class PurchaseOrderService {
       updatedAt,
       ...purchaseOrderData
     } = originalPurchaseOrder;
+    void _;
+    void createdAt;
+    void updatedAt;
 
     const newPurchaseOrder = await this.prisma.purchaseOrder.create({
       data: {
@@ -784,12 +787,19 @@ export class PurchaseOrderService {
 
     // Duplicar los recursos asociados
     if (resources && resources.length > 0) {
-      const resourcesData = resources.map(
-        ({ resourcePurchaseOrderId, purchaseOrderId: _, ...resource }) => ({
+      const resourcesData = resources.map((resourceWithIds) => {
+        const {
+          resourcePurchaseOrderId,
+          purchaseOrderId,
+          ...resource
+        } = resourceWithIds;
+        void resourcePurchaseOrderId;
+        void purchaseOrderId;
+        return {
           ...resource,
           purchaseOrderId: newPurchaseOrder.purchaseOrderId,
-        }),
-      );
+        };
+      });
 
       await this.prisma.resourcePurchaseOrder.createMany({
         data: resourcesData,

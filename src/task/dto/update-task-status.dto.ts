@@ -3,5 +3,5 @@ import { TaskStatus } from './create-task.dto';
 
 export class UpdateTaskStatusDto {
   @IsEnum(TaskStatus)
-  status: TaskStatus;
+  status!: TaskStatus;
 }

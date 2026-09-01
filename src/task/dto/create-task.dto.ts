@@ -27,7 +27,7 @@ export class CreateTaskDto {
   @IsString()
   @MinLength(3)
   @MaxLength(255)
-  title: string;
+  title!: string;
 
   @IsOptional()
   @IsString()
@@ -42,7 +42,7 @@ export class CreateTaskDto {
   priority?: TaskPriority;
 
   @IsInt()
-  projectId: number;
+  projectId!: number;
 
   @IsOptional()
   @IsInt()
