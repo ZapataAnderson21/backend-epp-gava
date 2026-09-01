@@ -11,6 +11,7 @@ import { UserTypes } from 'src/decorators/user-types.decorator';
 import { ConfigureGeneralPayrollDto } from './dto/configure-general-payroll.dto';
 import { InitializeGeneralPayrollDto } from './dto/initialize-general-payroll.dto';
 import { SaveGeneralPayrollDto } from './dto/save-general-payroll.dto';
+import { UpdateGeneralPayrollProjectWorkersDto } from './dto/update-general-payroll-project-workers.dto';
 import { GeneralPayrollService } from './general-payroll.service';
 
 @Controller('general-payroll')
@@ -52,6 +53,19 @@ export class GeneralPayrollController {
     @Body() dto: ConfigureGeneralPayrollDto,
   ) {
     return this.generalPayrollService.configure(weekId, dto);
+  }
+
+  @Put('weeks/:weekId/projects/:payrollProjectId/workers')
+  updateProjectWorkers(
+    @Param('weekId', ParseIntPipe) weekId: number,
+    @Param('payrollProjectId', ParseIntPipe) payrollProjectId: number,
+    @Body() dto: UpdateGeneralPayrollProjectWorkersDto,
+  ) {
+    return this.generalPayrollService.updateProjectWorkers(
+      weekId,
+      payrollProjectId,
+      dto,
+    );
   }
 
   @Put('weeks/:weekId')

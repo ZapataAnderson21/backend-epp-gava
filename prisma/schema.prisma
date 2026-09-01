@@ -1220,6 +1220,7 @@ model GeneralPayrollEntry {
   generalPayrollEntryId   Int      @id @default(autoincrement())
   generalPayrollProjectId Int
   generalPayrollWorkerId  Int
+  isActive                Boolean  @default(true)
   monday                  Decimal  @default(0) @db.Decimal(6, 2)
   tuesday                 Decimal  @default(0) @db.Decimal(6, 2)
   wednesday               Decimal  @default(0) @db.Decimal(6, 2)
@@ -1238,6 +1239,7 @@ model GeneralPayrollEntry {
 
   @@unique([generalPayrollProjectId, generalPayrollWorkerId])
   @@index([generalPayrollProjectId])
+  @@index([generalPayrollProjectId, isActive])
   @@index([generalPayrollWorkerId])
 }
 

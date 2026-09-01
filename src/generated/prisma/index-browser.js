@@ -703,6 +703,7 @@ exports.Prisma.GeneralPayrollEntryScalarFieldEnum = {
   generalPayrollEntryId: 'generalPayrollEntryId',
   generalPayrollProjectId: 'generalPayrollProjectId',
   generalPayrollWorkerId: 'generalPayrollWorkerId',
+  isActive: 'isActive',
   monday: 'monday',
   tuesday: 'tuesday',
   wednesday: 'wednesday',

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   HttpStatus,
   Injectable,
   NotFoundException,
@@ -12,6 +13,7 @@ import {
   SaveGeneralPayrollDto,
   SaveGeneralPayrollEntryDto,
 } from './dto/save-general-payroll.dto';
+import { UpdateGeneralPayrollProjectWorkersDto } from './dto/update-general-payroll-project-workers.dto';
 
 const attendanceFields = [
   ['monday', 'lunes'],
@@ -61,6 +63,7 @@ export class GeneralPayrollService {
       include: {
         generalPayroll: { include: { week: true } },
         entries: {
+          where: { isActive: true },
           include: {
             payrollWorker: { include: { worker: true } },
           },
@@ -191,6 +194,7 @@ export class GeneralPayrollService {
           (total, project) =>
             total +
             project.entries.reduce((subtotal, entry) => {
+              if (!entry.isActive) return subtotal;
               const worker = payroll.workers.find(
                 (item) =>
                   item.generalPayrollWorkerId === entry.generalPayrollWorkerId,
@@ -453,6 +457,124 @@ export class GeneralPayrollService {
     return this.findOne(weekId);
   }
 
+  async updateProjectWorkers(
+    weekId: number,
+    payrollProjectId: number,
+    dto: UpdateGeneralPayrollProjectWorkersDto,
+  ) {
+    const payrollProject =
+      await this.prisma.generalPayrollProject.findFirst({
+        where: {
+          generalPayrollProjectId: payrollProjectId,
+          generalPayroll: { weekId },
+        },
+        select: {
+          generalPayrollId: true,
+          entries: {
+            select: {
+              generalPayrollEntryId: true,
+              generalPayrollWorkerId: true,
+              isActive: true,
+              monday: true,
+              tuesday: true,
+              wednesday: true,
+              thursday: true,
+              friday: true,
+              saturday: true,
+              dominical: true,
+              overtimeAmount: true,
+              afpDiscount: true,
+              advanceDiscount: true,
+              payrollWorker: {
+                select: { worker: { select: { fullName: true } } },
+              },
+            },
+          },
+        },
+      });
+    if (!payrollProject) {
+      throw new NotFoundException(
+        'El proyecto no pertenece a la planilla semanal indicada.',
+      );
+    }
+
+    const selectedIds = new Set(dto.generalPayrollWorkerIds);
+    const validWorkerCount = await this.prisma.generalPayrollWorker.count({
+      where: {
+        generalPayrollId: payrollProject.generalPayrollId,
+        generalPayrollWorkerId: { in: dto.generalPayrollWorkerIds },
+      },
+    });
+    if (validWorkerCount !== dto.generalPayrollWorkerIds.length) {
+      throw new BadRequestException(
+        'Uno o más trabajadores no pertenecen a la plantilla de esta semana.',
+      );
+    }
+
+    const removedEntries = payrollProject.entries.filter(
+      (entry) =>
+        entry.isActive && !selectedIds.has(entry.generalPayrollWorkerId),
+    );
+    const entriesWithRecords = removedEntries.filter((entry) =>
+      [
+        ...attendanceFields.map(([field]) => Number(entry[field])),
+        Number(entry.overtimeAmount),
+        Number(entry.afpDiscount),
+        Number(entry.advanceDiscount),
+      ].some((value) => value !== 0),
+    );
+
+    if (entriesWithRecords.length > 0 && !dto.confirmClearAttendance) {
+      const workerNames = entriesWithRecords.map(
+        (entry) => entry.payrollWorker.worker.fullName,
+      );
+      throw new ConflictException({
+        message:
+          'Hay trabajadores con asistencias o montos registrados. Confirma su eliminación para continuar.',
+        workerNames,
+        confirmationRequired: true,
+      });
+    }
+
+    await this.prisma.$transaction(async (transaction) => {
+      if (dto.generalPayrollWorkerIds.length > 0) {
+        await transaction.generalPayrollEntry.updateMany({
+          where: {
+            generalPayrollProjectId: payrollProjectId,
+            generalPayrollWorkerId: {
+              in: dto.generalPayrollWorkerIds,
+            },
+          },
+          data: { isActive: true },
+        });
+      }
+
+      await transaction.generalPayrollEntry.updateMany({
+        where: {
+          generalPayrollProjectId: payrollProjectId,
+          generalPayrollWorkerId: {
+            notIn: dto.generalPayrollWorkerIds,
+          },
+        },
+        data: {
+          isActive: false,
+          monday: 0,
+          tuesday: 0,
+          wednesday: 0,
+          thursday: 0,
+          friday: 0,
+          saturday: 0,
+          dominical: 0,
+          overtimeAmount: 0,
+          afpDiscount: 0,
+          advanceDiscount: 0,
+        },
+      });
+    });
+
+    return this.findOne(weekId);
+  }
+
   async save(weekId: number, dto: SaveGeneralPayrollDto) {
     const payroll = await this.prisma.generalPayroll.findUnique({
       where: { weekId },
@@ -478,6 +600,7 @@ export class GeneralPayrollService {
         select: {
           generalPayrollEntryId: true,
           generalPayrollWorkerId: true,
+          isActive: true,
           monday: true,
           tuesday: true,
           wednesday: true,
@@ -581,6 +704,7 @@ export class GeneralPayrollService {
     payrollEntries: Array<{
       generalPayrollEntryId: number;
       generalPayrollWorkerId: number;
+      isActive: boolean;
       monday: Prisma.Decimal;
       tuesday: Prisma.Decimal;
       wednesday: Prisma.Decimal;
@@ -599,6 +723,7 @@ export class GeneralPayrollService {
     const occupied = new Map<string, string>();
 
     for (const storedEntry of payrollEntries) {
+      if (!storedEntry.isActive) continue;
       const update = updateById.get(storedEntry.generalPayrollEntryId);
       for (const [field, label] of attendanceFields) {
         const value = update ? update[field] : Number(storedEntry[field]);
@@ -646,6 +771,7 @@ export class GeneralPayrollService {
       generalPayrollEntryId: entry.generalPayrollEntryId,
       generalPayrollProjectId: entry.generalPayrollProjectId,
       generalPayrollWorkerId: entry.generalPayrollWorkerId,
+      isActive: entry.isActive,
       monday: Number(entry.monday) > 0 ? 1 : 0,
       tuesday: Number(entry.tuesday) > 0 ? 1 : 0,
       wednesday: Number(entry.wednesday) > 0 ? 1 : 0,

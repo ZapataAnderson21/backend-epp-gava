@@ -66661,6 +66661,7 @@ export namespace Prisma {
     generalPayrollEntryId: number | null
     generalPayrollProjectId: number | null
     generalPayrollWorkerId: number | null
+    isActive: boolean | null
     monday: Decimal | null
     tuesday: Decimal | null
     wednesday: Decimal | null
@@ -66679,6 +66680,7 @@ export namespace Prisma {
     generalPayrollEntryId: number | null
     generalPayrollProjectId: number | null
     generalPayrollWorkerId: number | null
+    isActive: boolean | null
     monday: Decimal | null
     tuesday: Decimal | null
     wednesday: Decimal | null
@@ -66697,6 +66699,7 @@ export namespace Prisma {
     generalPayrollEntryId: number
     generalPayrollProjectId: number
     generalPayrollWorkerId: number
+    isActive: number
     monday: number
     tuesday: number
     wednesday: number
@@ -66749,6 +66752,7 @@ export namespace Prisma {
     generalPayrollEntryId?: true
     generalPayrollProjectId?: true
     generalPayrollWorkerId?: true
+    isActive?: true
     monday?: true
     tuesday?: true
     wednesday?: true
@@ -66767,6 +66771,7 @@ export namespace Prisma {
     generalPayrollEntryId?: true
     generalPayrollProjectId?: true
     generalPayrollWorkerId?: true
+    isActive?: true
     monday?: true
     tuesday?: true
     wednesday?: true
@@ -66785,6 +66790,7 @@ export namespace Prisma {
     generalPayrollEntryId?: true
     generalPayrollProjectId?: true
     generalPayrollWorkerId?: true
+    isActive?: true
     monday?: true
     tuesday?: true
     wednesday?: true
@@ -66890,6 +66896,7 @@ export namespace Prisma {
     generalPayrollEntryId: number
     generalPayrollProjectId: number
     generalPayrollWorkerId: number
+    isActive: boolean
     monday: Decimal
     tuesday: Decimal
     wednesday: Decimal
@@ -66927,6 +66934,7 @@ export namespace Prisma {
     generalPayrollEntryId?: boolean
     generalPayrollProjectId?: boolean
     generalPayrollWorkerId?: boolean
+    isActive?: boolean
     monday?: boolean
     tuesday?: boolean
     wednesday?: boolean
@@ -66947,6 +66955,7 @@ export namespace Prisma {
     generalPayrollEntryId?: boolean
     generalPayrollProjectId?: boolean
     generalPayrollWorkerId?: boolean
+    isActive?: boolean
     monday?: boolean
     tuesday?: boolean
     wednesday?: boolean
@@ -66967,6 +66976,7 @@ export namespace Prisma {
     generalPayrollEntryId?: boolean
     generalPayrollProjectId?: boolean
     generalPayrollWorkerId?: boolean
+    isActive?: boolean
     monday?: boolean
     tuesday?: boolean
     wednesday?: boolean
@@ -66987,6 +66997,7 @@ export namespace Prisma {
     generalPayrollEntryId?: boolean
     generalPayrollProjectId?: boolean
     generalPayrollWorkerId?: boolean
+    isActive?: boolean
     monday?: boolean
     tuesday?: boolean
     wednesday?: boolean
@@ -67001,7 +67012,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type GeneralPayrollEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"generalPayrollEntryId" | "generalPayrollProjectId" | "generalPayrollWorkerId" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "dominical" | "overtimeAmount" | "afpDiscount" | "advanceDiscount" | "createdAt" | "updatedAt", ExtArgs["result"]["generalPayrollEntry"]>
+  export type GeneralPayrollEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"generalPayrollEntryId" | "generalPayrollProjectId" | "generalPayrollWorkerId" | "isActive" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "dominical" | "overtimeAmount" | "afpDiscount" | "advanceDiscount" | "createdAt" | "updatedAt", ExtArgs["result"]["generalPayrollEntry"]>
   export type GeneralPayrollEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     payrollProject?: boolean | GeneralPayrollProjectDefaultArgs<ExtArgs>
     payrollWorker?: boolean | GeneralPayrollWorkerDefaultArgs<ExtArgs>
@@ -67025,6 +67036,7 @@ export namespace Prisma {
       generalPayrollEntryId: number
       generalPayrollProjectId: number
       generalPayrollWorkerId: number
+      isActive: boolean
       monday: Prisma.Decimal
       tuesday: Prisma.Decimal
       wednesday: Prisma.Decimal
@@ -67465,6 +67477,7 @@ export namespace Prisma {
     readonly generalPayrollEntryId: FieldRef<"GeneralPayrollEntry", 'Int'>
     readonly generalPayrollProjectId: FieldRef<"GeneralPayrollEntry", 'Int'>
     readonly generalPayrollWorkerId: FieldRef<"GeneralPayrollEntry", 'Int'>
+    readonly isActive: FieldRef<"GeneralPayrollEntry", 'Boolean'>
     readonly monday: FieldRef<"GeneralPayrollEntry", 'Decimal'>
     readonly tuesday: FieldRef<"GeneralPayrollEntry", 'Decimal'>
     readonly wednesday: FieldRef<"GeneralPayrollEntry", 'Decimal'>
@@ -81838,6 +81851,7 @@ export namespace Prisma {
     generalPayrollEntryId: 'generalPayrollEntryId',
     generalPayrollProjectId: 'generalPayrollProjectId',
     generalPayrollWorkerId: 'generalPayrollWorkerId',
+    isActive: 'isActive',
     monday: 'monday',
     tuesday: 'tuesday',
     wednesday: 'wednesday',
@@ -86800,6 +86814,7 @@ export namespace Prisma {
     generalPayrollEntryId?: IntFilter<"GeneralPayrollEntry"> | number
     generalPayrollProjectId?: IntFilter<"GeneralPayrollEntry"> | number
     generalPayrollWorkerId?: IntFilter<"GeneralPayrollEntry"> | number
+    isActive?: BoolFilter<"GeneralPayrollEntry"> | boolean
     monday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
@@ -86820,6 +86835,7 @@ export namespace Prisma {
     generalPayrollEntryId?: SortOrder
     generalPayrollProjectId?: SortOrder
     generalPayrollWorkerId?: SortOrder
+    isActive?: SortOrder
     monday?: SortOrder
     tuesday?: SortOrder
     wednesday?: SortOrder
@@ -86844,6 +86860,7 @@ export namespace Prisma {
     NOT?: GeneralPayrollEntryWhereInput | GeneralPayrollEntryWhereInput[]
     generalPayrollProjectId?: IntFilter<"GeneralPayrollEntry"> | number
     generalPayrollWorkerId?: IntFilter<"GeneralPayrollEntry"> | number
+    isActive?: BoolFilter<"GeneralPayrollEntry"> | boolean
     monday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
@@ -86864,6 +86881,7 @@ export namespace Prisma {
     generalPayrollEntryId?: SortOrder
     generalPayrollProjectId?: SortOrder
     generalPayrollWorkerId?: SortOrder
+    isActive?: SortOrder
     monday?: SortOrder
     tuesday?: SortOrder
     wednesday?: SortOrder
@@ -86890,6 +86908,7 @@ export namespace Prisma {
     generalPayrollEntryId?: IntWithAggregatesFilter<"GeneralPayrollEntry"> | number
     generalPayrollProjectId?: IntWithAggregatesFilter<"GeneralPayrollEntry"> | number
     generalPayrollWorkerId?: IntWithAggregatesFilter<"GeneralPayrollEntry"> | number
+    isActive?: BoolWithAggregatesFilter<"GeneralPayrollEntry"> | boolean
     monday?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalWithAggregatesFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
@@ -92087,6 +92106,7 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollEntryCreateInput = {
+    isActive?: boolean
     monday?: Decimal | DecimalJsLike | number | string
     tuesday?: Decimal | DecimalJsLike | number | string
     wednesday?: Decimal | DecimalJsLike | number | string
@@ -92107,6 +92127,7 @@ export namespace Prisma {
     generalPayrollEntryId?: number
     generalPayrollProjectId: number
     generalPayrollWorkerId: number
+    isActive?: boolean
     monday?: Decimal | DecimalJsLike | number | string
     tuesday?: Decimal | DecimalJsLike | number | string
     wednesday?: Decimal | DecimalJsLike | number | string
@@ -92122,6 +92143,7 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollEntryUpdateInput = {
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -92142,6 +92164,7 @@ export namespace Prisma {
     generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
     generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -92160,6 +92183,7 @@ export namespace Prisma {
     generalPayrollEntryId?: number
     generalPayrollProjectId: number
     generalPayrollWorkerId: number
+    isActive?: boolean
     monday?: Decimal | DecimalJsLike | number | string
     tuesday?: Decimal | DecimalJsLike | number | string
     wednesday?: Decimal | DecimalJsLike | number | string
@@ -92175,6 +92199,7 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollEntryUpdateManyMutationInput = {
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -92193,6 +92218,7 @@ export namespace Prisma {
     generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
     generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -97006,6 +97032,7 @@ export namespace Prisma {
     generalPayrollEntryId?: SortOrder
     generalPayrollProjectId?: SortOrder
     generalPayrollWorkerId?: SortOrder
+    isActive?: SortOrder
     monday?: SortOrder
     tuesday?: SortOrder
     wednesday?: SortOrder
@@ -97040,6 +97067,7 @@ export namespace Prisma {
     generalPayrollEntryId?: SortOrder
     generalPayrollProjectId?: SortOrder
     generalPayrollWorkerId?: SortOrder
+    isActive?: SortOrder
     monday?: SortOrder
     tuesday?: SortOrder
     wednesday?: SortOrder
@@ -97058,6 +97086,7 @@ export namespace Prisma {
     generalPayrollEntryId?: SortOrder
     generalPayrollProjectId?: SortOrder
     generalPayrollWorkerId?: SortOrder
+    isActive?: SortOrder
     monday?: SortOrder
     tuesday?: SortOrder
     wednesday?: SortOrder
@@ -120481,6 +120510,7 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollEntryCreateWithoutPayrollProjectInput = {
+    isActive?: boolean
     monday?: Decimal | DecimalJsLike | number | string
     tuesday?: Decimal | DecimalJsLike | number | string
     wednesday?: Decimal | DecimalJsLike | number | string
@@ -120499,6 +120529,7 @@ export namespace Prisma {
   export type GeneralPayrollEntryUncheckedCreateWithoutPayrollProjectInput = {
     generalPayrollEntryId?: number
     generalPayrollWorkerId: number
+    isActive?: boolean
     monday?: Decimal | DecimalJsLike | number | string
     tuesday?: Decimal | DecimalJsLike | number | string
     wednesday?: Decimal | DecimalJsLike | number | string
@@ -120632,6 +120663,7 @@ export namespace Prisma {
     generalPayrollEntryId?: IntFilter<"GeneralPayrollEntry"> | number
     generalPayrollProjectId?: IntFilter<"GeneralPayrollEntry"> | number
     generalPayrollWorkerId?: IntFilter<"GeneralPayrollEntry"> | number
+    isActive?: BoolFilter<"GeneralPayrollEntry"> | boolean
     monday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFilter<"GeneralPayrollEntry"> | Decimal | DecimalJsLike | number | string
@@ -120711,6 +120743,7 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollEntryCreateWithoutPayrollWorkerInput = {
+    isActive?: boolean
     monday?: Decimal | DecimalJsLike | number | string
     tuesday?: Decimal | DecimalJsLike | number | string
     wednesday?: Decimal | DecimalJsLike | number | string
@@ -120729,6 +120762,7 @@ export namespace Prisma {
   export type GeneralPayrollEntryUncheckedCreateWithoutPayrollWorkerInput = {
     generalPayrollEntryId?: number
     generalPayrollProjectId: number
+    isActive?: boolean
     monday?: Decimal | DecimalJsLike | number | string
     tuesday?: Decimal | DecimalJsLike | number | string
     wednesday?: Decimal | DecimalJsLike | number | string
@@ -129005,6 +129039,7 @@ export namespace Prisma {
   export type GeneralPayrollEntryCreateManyPayrollProjectInput = {
     generalPayrollEntryId?: number
     generalPayrollWorkerId: number
+    isActive?: boolean
     monday?: Decimal | DecimalJsLike | number | string
     tuesday?: Decimal | DecimalJsLike | number | string
     wednesday?: Decimal | DecimalJsLike | number | string
@@ -129020,6 +129055,7 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollEntryUpdateWithoutPayrollProjectInput = {
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -129038,6 +129074,7 @@ export namespace Prisma {
   export type GeneralPayrollEntryUncheckedUpdateWithoutPayrollProjectInput = {
     generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
     generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -129055,6 +129092,7 @@ export namespace Prisma {
   export type GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollProjectInput = {
     generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
     generalPayrollWorkerId?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -129072,6 +129110,7 @@ export namespace Prisma {
   export type GeneralPayrollEntryCreateManyPayrollWorkerInput = {
     generalPayrollEntryId?: number
     generalPayrollProjectId: number
+    isActive?: boolean
     monday?: Decimal | DecimalJsLike | number | string
     tuesday?: Decimal | DecimalJsLike | number | string
     wednesday?: Decimal | DecimalJsLike | number | string
@@ -129087,6 +129126,7 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollEntryUpdateWithoutPayrollWorkerInput = {
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -129105,6 +129145,7 @@ export namespace Prisma {
   export type GeneralPayrollEntryUncheckedUpdateWithoutPayrollWorkerInput = {
     generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -129122,6 +129163,7 @@ export namespace Prisma {
   export type GeneralPayrollEntryUncheckedUpdateManyWithoutPayrollWorkerInput = {
     generalPayrollEntryId?: IntFieldUpdateOperationsInput | number
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     monday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tuesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     wednesday?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string

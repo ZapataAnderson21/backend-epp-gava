@@ -28,6 +28,7 @@ describe('General payroll permissions', () => {
     'findOne',
     'initialize',
     'configure',
+    'updateProjectWorkers',
     'save',
   ])(
     'allows LOGISTICA to use %s',
