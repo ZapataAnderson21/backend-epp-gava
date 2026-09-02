@@ -89,21 +89,29 @@ export class ResourceService {
   }
 
   async findPaginated(query: SearchPaginationQueryDto) {
-    const search = query.search?.trim();
+    const searchTerms =
+      query.search?.trim().split(/\s+/u).filter(Boolean) ?? [];
     const where = {
       deletedAt: null,
-      ...(search
+      ...(searchTerms.length > 0
         ? {
-            OR: [
-              { name: { contains: search, mode: 'insensitive' as const } },
-              { description: { contains: search, mode: 'insensitive' as const } },
-              { unit: { contains: search, mode: 'insensitive' as const } },
-              {
-                categoryResource: {
-                  name: { contains: search, mode: 'insensitive' as const },
+            AND: searchTerms.map((term) => ({
+              OR: [
+                { name: { contains: term, mode: 'insensitive' as const } },
+                {
+                  description: {
+                    contains: term,
+                    mode: 'insensitive' as const,
+                  },
                 },
-              },
-            ],
+                { unit: { contains: term, mode: 'insensitive' as const } },
+                {
+                  categoryResource: {
+                    name: { contains: term, mode: 'insensitive' as const },
+                  },
+                },
+              ],
+            })),
           }
         : {}),
     };
