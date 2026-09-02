@@ -752,17 +752,23 @@ export class GeneralPayrollService {
         project: project.project,
         entries: project.entries.map((entry) => this.serializeEntry(entry)),
       })),
-      workers: payroll.workers.map((worker) => ({
-        generalPayrollWorkerId: worker.generalPayrollWorkerId,
-        workerId: worker.workerId,
-        group: worker.group,
-        displayOrder: worker.displayOrder,
-        dailyWage: Number(worker.dailyWage),
-        additionalAmount: Number(worker.additionalAmount),
-        liquidationAmount: Number(worker.liquidationAmount),
-        sundayDinnerAmount: Number(worker.sundayDinnerAmount),
-        worker: worker.worker,
-      })),
+      workers: [...payroll.workers]
+        .sort((left, right) =>
+          left.worker.fullName.localeCompare(right.worker.fullName, 'es', {
+            sensitivity: 'base',
+          }),
+        )
+        .map((worker) => ({
+          generalPayrollWorkerId: worker.generalPayrollWorkerId,
+          workerId: worker.workerId,
+          group: worker.group,
+          displayOrder: worker.displayOrder,
+          dailyWage: Number(worker.dailyWage),
+          additionalAmount: Number(worker.additionalAmount),
+          liquidationAmount: Number(worker.liquidationAmount),
+          sundayDinnerAmount: Number(worker.sundayDinnerAmount),
+          worker: worker.worker,
+        })),
     };
   }
 

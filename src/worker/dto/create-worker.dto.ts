@@ -60,7 +60,7 @@ export class CreateWorkerDto {
 
   @ApiPropertyOptional({ example: '1990-01-01' })
   @Transform(({ value }: TransformFnParams): unknown =>
-    value === '' ? undefined : value,
+    value === '' || value === null ? undefined : value,
   )
   @IsOptional()
   @IsDateString({}, { message: 'birthDate debe tener formato ISO: YYYY-MM-DD' })
@@ -106,7 +106,7 @@ export class UpdateWorkerDto {
 
   @ApiPropertyOptional({ example: '1990-01-01' })
   @Transform(({ value }: TransformFnParams): unknown =>
-    value === '' ? undefined : value,
+    value === '' || value === null ? undefined : value,
   )
   @IsOptional()
   @IsDateString()
