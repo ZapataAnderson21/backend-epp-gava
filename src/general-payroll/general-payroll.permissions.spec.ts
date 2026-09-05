@@ -13,10 +13,9 @@ const effectiveMetadataFor = (methodName: string): string[] | undefined => {
   }
   return (
     (Reflect.getMetadata(USER_TYPES_KEY, handler) as string[] | undefined) ??
-    (Reflect.getMetadata(
-      USER_TYPES_KEY,
-      GeneralPayrollController,
-    ) as string[] | undefined)
+    (Reflect.getMetadata(USER_TYPES_KEY, GeneralPayrollController) as
+      | string[]
+      | undefined)
   );
 };
 
@@ -25,15 +24,13 @@ describe('General payroll permissions', () => {
     'findProjectTotals',
     'findByProject',
     'findWeeks',
+    'exportWeek',
     'findOne',
     'initialize',
     'configure',
     'updateProjectWorkers',
     'save',
-  ])(
-    'allows LOGISTICA to use %s',
-    (methodName) => {
-      expect(effectiveMetadataFor(methodName)).toContain('LOGISTICA');
-    },
-  );
+  ])('allows LOGISTICA to use %s', (methodName) => {
+    expect(effectiveMetadataFor(methodName)).toContain('LOGISTICA');
+  });
 });
