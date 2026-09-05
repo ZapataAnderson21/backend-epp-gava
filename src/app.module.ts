@@ -36,6 +36,7 @@ import { ElementRequestWorkerPlanModule } from './element_request_worker_plan/el
 import { ExpiringDocumentModule } from './expiring-document/expiring-document.module';
 import { PurchaseOrderConditionModule } from './purchase-order-condition/purchase-order-condition.module';
 import { GeneralPayrollModule } from './general-payroll/general-payroll.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { GeneralPayrollModule } from './general-payroll/general-payroll.module';
     ExpiringDocumentModule,
     PurchaseOrderConditionModule,
     GeneralPayrollModule,
+    DashboardModule,
   ],
   controllers: [],
   providers: [
