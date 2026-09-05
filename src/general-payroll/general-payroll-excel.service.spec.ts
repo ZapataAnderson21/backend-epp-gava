@@ -92,5 +92,29 @@ describe('GeneralPayrollExcelService', () => {
     expect(workbook.getWorksheet('TRABAJADORES')?.getCell('B2').value).toBe(
       '01234567',
     );
+
+    // Check the saved XLSX, including formula cells and group totals.
+    for (const sheetName of ['P-003', 'GENERAL']) {
+      const sheet = workbook.getWorksheet(sheetName)!;
+      for (const rowNumber of [7, 8]) {
+        for (let column = 4; column <= 11; column++) {
+          expect(sheet.getCell(rowNumber, column).numFmt).toBe('0');
+        }
+        for (let column = 12; column <= 17; column++) {
+          expect(sheet.getCell(rowNumber, column).numFmt).toBe(
+            '"S/ "#,##0.00;[Red]-"S/ "#,##0.00',
+          );
+        }
+      }
+      expect(sheet.getCell('D7').result ?? sheet.getCell('D7').value).toBe(1);
+      expect(sheet.getCell('F7').result ?? sheet.getCell('F7').value).toBe(0);
+      expect(sheet.getCell('K7').result).toBe(3);
+    }
+    expect(workbook.getWorksheet('GENERAL')?.getCell('U7').numFmt).toBe(
+      '"S/ "#,##0.00;[Red]-"S/ "#,##0.00',
+    );
+    expect(workbook.getWorksheet('TRABAJADORES')?.getCell('D2').numFmt).toBe(
+      '"S/ "#,##0.00;[Red]-"S/ "#,##0.00',
+    );
   });
 });

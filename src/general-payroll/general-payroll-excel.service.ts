@@ -75,8 +75,9 @@ const lightBlue = 'FFE0F2FE';
 const paleBlue = 'FFEAF2FF';
 const white = 'FFFFFFFF';
 const borderColor = 'FFCBD5E1';
-const moneyFormat = 'S/ #,##0.00;[Red]-S/ #,##0.00';
-const decimalFormat = '0.00';
+// Quote the currency text: an unescaped S/ is parsed as an invalid time format.
+const moneyFormat = '"S/ "#,##0.00;[Red]-"S/ "#,##0.00';
+const attendanceFormat = '0';
 
 @Injectable()
 export class GeneralPayrollExcelService {
@@ -538,7 +539,7 @@ export class GeneralPayrollExcelService {
 
   private applyFormats(row: ExcelJS.Row, columnCount: number) {
     for (let column = 4; column <= Math.min(11, columnCount); column++) {
-      row.getCell(column).numFmt = decimalFormat;
+      row.getCell(column).numFmt = attendanceFormat;
     }
     for (let column = 12; column <= Math.min(21, columnCount); column++) {
       row.getCell(column).numFmt = moneyFormat;
