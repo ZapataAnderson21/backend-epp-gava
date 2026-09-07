@@ -917,6 +917,7 @@ enum SupplierDocumentType {
 model Supplier {
   supplierId    Int                  @id @default(autoincrement())
   name          String               @unique
+  abbreviation  String               @db.VarChar(8)
   contactName   String
   phone         String
   email         String?              @db.Citext

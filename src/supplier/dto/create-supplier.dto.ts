@@ -8,6 +8,7 @@ import {
   IsString,
   Length,
   MaxLength,
+  Matches,
   MinLength,
   ValidateIf,
 } from 'class-validator';
@@ -33,6 +34,17 @@ export class CreateSupplierDto {
   @ApiProperty({ example: 'Proveedor SAC' })
   @IsString()
   name!: string;
+
+  @ApiProperty({ example: 'DIPACO', minLength: 1, maxLength: 8 })
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim().toUpperCase() : value,
+  )
+  @IsString()
+  @Matches(/^[A-Z0-9]{1,8}$/, {
+    message:
+      'La abreviatura debe contener de 1 a 8 letras mayúsculas o números, sin espacios ni símbolos.',
+  })
+  abbreviation!: string;
 
   @ApiProperty({ example: 'María Flores' })
   @IsString()

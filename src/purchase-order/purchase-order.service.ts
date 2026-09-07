@@ -97,95 +97,49 @@ export class PurchaseOrderService {
     // Si la OC ya tenía un correlativo válido, lo conservamos (por ejemplo, en updates).
     const currentPurchaseOrder = await this.prisma.purchaseOrder.findUnique({
       where: { purchaseOrderId },
-      select: { code: true, supplier: { select: { name: true } } },
+      select: { code: true, supplier: { select: { abbreviation: true } } },
     });
+
+    // An issued code is a historical identifier, not a live supplier label.
+    if (currentPurchaseOrder?.code?.match(sequencePattern)) {
+      return currentPurchaseOrder.code;
+    }
 
     const supplier = supplierId
       ? await this.prisma.supplier.findUnique({
           where: { supplierId },
-          select: { name: true },
+          select: { abbreviation: true },
         })
       : currentPurchaseOrder?.supplier;
 
-    if (!supplier?.name) {
+    if (
+      !supplier?.abbreviation ||
+      !/^[A-Z0-9]{1,8}$/.test(supplier.abbreviation)
+    ) {
       throw new BadRequestException(
-        'No se pudo obtener el proveedor para generar el código.',
+        'El proveedor debe tener una abreviatura válida para generar el código.',
       );
     }
 
-    const currentMatch = currentPurchaseOrder?.code?.match(sequencePattern);
-    const existingSequence = currentMatch ? Number(currentMatch[1]) : null;
+    const purchaseOrders = await this.prisma.purchaseOrder.findMany({
+      where: { code: { contains: yearMarker } },
+      select: { code: true },
+    });
 
-    let sequenceToUse: number;
-
-    if (
-      existingSequence &&
-      Number.isInteger(existingSequence) &&
-      existingSequence > 0
-    ) {
-      sequenceToUse = existingSequence;
-    } else {
-      const purchaseOrders = await this.prisma.purchaseOrder.findMany({
-        where: {
-          code: { contains: yearMarker },
-        },
-        select: { code: true },
-      });
-
-      let maxSequence = 0;
-      for (const po of purchaseOrders) {
-        const match = po.code?.match(sequencePattern);
-        const seq = match ? Number(match[1]) : NaN;
-        if (Number.isInteger(seq) && seq > 0) {
-          maxSequence = Math.max(maxSequence, seq);
-        }
+    let maxSequence = 0;
+    for (const po of purchaseOrders) {
+      const match = po.code?.match(sequencePattern);
+      const seq = match ? Number(match[1]) : NaN;
+      if (Number.isInteger(seq) && seq > 0) {
+        maxSequence = Math.max(maxSequence, seq);
       }
-
-      sequenceToUse = maxSequence + 1;
     }
 
+    const sequenceToUse = maxSequence + 1;
     const formattedSequence = sequenceToUse.toString().padStart(3, '0');
-    const supplierAbbreviation = this.abbreviateSupplierName(supplier.name);
+    const supplierAbbreviation = supplier.abbreviation;
     const formattedCode = `No ${formattedSequence}-${year}/${code}/${supplierAbbreviation}`;
     return formattedCode;
-  }
-
-  private abbreviateSupplierName(name: string): string {
-    const ignoredWords = new Set([
-      'DE',
-      'DEL',
-      'LA',
-      'LAS',
-      'LOS',
-      'Y',
-      'E',
-      'SA',
-      'SAC',
-      'SRL',
-      'EIRL',
-      'SAA',
-    ]);
-    const words = name
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toUpperCase()
-      .replace(/\./g, '')
-      .replace(/[^A-Z0-9\s]/g, ' ')
-      .split(/\s+/)
-      .filter((word) => word && !ignoredWords.has(word));
-
-    if (words.length === 0) {
-      return 'PROV';
-    }
-
-    if (words.length === 1) {
-      return words[0].slice(0, 8);
-    }
-
-    return words
-      .map((word) => word[0])
-      .join('')
-      .slice(0, 8);
   }
 
   async findDashboard(query: PurchaseOrderDashboardQueryDto) {
@@ -450,9 +404,17 @@ export class PurchaseOrderService {
         ? {
             OR: [
               { code: { contains: search, mode: 'insensitive' as const } },
-              { destination: { contains: search, mode: 'insensitive' as const } },
-              { carePerson: { contains: search, mode: 'insensitive' as const } },
-              { supplier: { name: { contains: search, mode: 'insensitive' as const } } },
+              {
+                destination: { contains: search, mode: 'insensitive' as const },
+              },
+              {
+                carePerson: { contains: search, mode: 'insensitive' as const },
+              },
+              {
+                supplier: {
+                  name: { contains: search, mode: 'insensitive' as const },
+                },
+              },
             ],
           }
         : {}),
@@ -653,19 +615,13 @@ export class PurchaseOrderService {
       previousStatus = currentPO?.status || null;
     }
 
-    if (updatePurchaseOrderDto.code) {
-      const code = await this.formatedCode(
-        purchaseOrderId,
-        updatePurchaseOrderDto.code,
-        updatePurchaseOrderDto.supplierId,
-      );
-      updatePurchaseOrderDto.code = code;
-      this.logger.log(`Formatted code for purchase order: ${code}`);
-    }
+    // Editing a supplier, project or other field must not rewrite an issued code.
+    const { code: ignoredCode, ...updateData } = updatePurchaseOrderDto;
+    void ignoredCode;
 
     const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
       where: { purchaseOrderId },
-      data: updatePurchaseOrderDto,
+      data: updateData,
       include: {
         project: true,
       },
@@ -788,11 +744,8 @@ export class PurchaseOrderService {
     // Duplicar los recursos asociados
     if (resources && resources.length > 0) {
       const resourcesData = resources.map((resourceWithIds) => {
-        const {
-          resourcePurchaseOrderId,
-          purchaseOrderId,
-          ...resource
-        } = resourceWithIds;
+        const { resourcePurchaseOrderId, purchaseOrderId, ...resource } =
+          resourceWithIds;
         void resourcePurchaseOrderId;
         void purchaseOrderId;
         return {

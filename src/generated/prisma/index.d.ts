@@ -50227,6 +50227,7 @@ export namespace Prisma {
   export type SupplierMinAggregateOutputType = {
     supplierId: number | null
     name: string | null
+    abbreviation: string | null
     contactName: string | null
     phone: string | null
     email: string | null
@@ -50245,6 +50246,7 @@ export namespace Prisma {
   export type SupplierMaxAggregateOutputType = {
     supplierId: number | null
     name: string | null
+    abbreviation: string | null
     contactName: string | null
     phone: string | null
     email: string | null
@@ -50263,6 +50265,7 @@ export namespace Prisma {
   export type SupplierCountAggregateOutputType = {
     supplierId: number
     name: number
+    abbreviation: number
     contactName: number
     phone: number
     email: number
@@ -50291,6 +50294,7 @@ export namespace Prisma {
   export type SupplierMinAggregateInputType = {
     supplierId?: true
     name?: true
+    abbreviation?: true
     contactName?: true
     phone?: true
     email?: true
@@ -50309,6 +50313,7 @@ export namespace Prisma {
   export type SupplierMaxAggregateInputType = {
     supplierId?: true
     name?: true
+    abbreviation?: true
     contactName?: true
     phone?: true
     email?: true
@@ -50327,6 +50332,7 @@ export namespace Prisma {
   export type SupplierCountAggregateInputType = {
     supplierId?: true
     name?: true
+    abbreviation?: true
     contactName?: true
     phone?: true
     email?: true
@@ -50432,6 +50438,7 @@ export namespace Prisma {
   export type SupplierGroupByOutputType = {
     supplierId: number
     name: string
+    abbreviation: string
     contactName: string
     phone: string
     email: string | null
@@ -50469,6 +50476,7 @@ export namespace Prisma {
   export type SupplierSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     supplierId?: boolean
     name?: boolean
+    abbreviation?: boolean
     contactName?: boolean
     phone?: boolean
     email?: boolean
@@ -50489,6 +50497,7 @@ export namespace Prisma {
   export type SupplierSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     supplierId?: boolean
     name?: boolean
+    abbreviation?: boolean
     contactName?: boolean
     phone?: boolean
     email?: boolean
@@ -50507,6 +50516,7 @@ export namespace Prisma {
   export type SupplierSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     supplierId?: boolean
     name?: boolean
+    abbreviation?: boolean
     contactName?: boolean
     phone?: boolean
     email?: boolean
@@ -50525,6 +50535,7 @@ export namespace Prisma {
   export type SupplierSelectScalar = {
     supplierId?: boolean
     name?: boolean
+    abbreviation?: boolean
     contactName?: boolean
     phone?: boolean
     email?: boolean
@@ -50540,7 +50551,7 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type SupplierOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"supplierId" | "name" | "contactName" | "phone" | "email" | "address" | "documentType" | "ruc" | "dni" | "accountNumber" | "bank" | "currency" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["supplier"]>
+  export type SupplierOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"supplierId" | "name" | "abbreviation" | "contactName" | "phone" | "email" | "address" | "documentType" | "ruc" | "dni" | "accountNumber" | "bank" | "currency" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["supplier"]>
   export type SupplierInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     purchaseOrders?: boolean | Supplier$purchaseOrdersArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
@@ -50556,6 +50567,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       supplierId: number
       name: string
+      abbreviation: string
       contactName: string
       phone: string
       email: string | null
@@ -50995,6 +51007,7 @@ export namespace Prisma {
   interface SupplierFieldRefs {
     readonly supplierId: FieldRef<"Supplier", 'Int'>
     readonly name: FieldRef<"Supplier", 'String'>
+    readonly abbreviation: FieldRef<"Supplier", 'String'>
     readonly contactName: FieldRef<"Supplier", 'String'>
     readonly phone: FieldRef<"Supplier", 'String'>
     readonly email: FieldRef<"Supplier", 'String'>
@@ -81643,6 +81656,7 @@ export namespace Prisma {
   export const SupplierScalarFieldEnum: {
     supplierId: 'supplierId',
     name: 'name',
+    abbreviation: 'abbreviation',
     contactName: 'contactName',
     phone: 'phone',
     email: 'email',
@@ -85705,6 +85719,7 @@ export namespace Prisma {
     NOT?: SupplierWhereInput | SupplierWhereInput[]
     supplierId?: IntFilter<"Supplier"> | number
     name?: StringFilter<"Supplier"> | string
+    abbreviation?: StringFilter<"Supplier"> | string
     contactName?: StringFilter<"Supplier"> | string
     phone?: StringFilter<"Supplier"> | string
     email?: StringNullableFilter<"Supplier"> | string | null
@@ -85724,6 +85739,7 @@ export namespace Prisma {
   export type SupplierOrderByWithRelationInput = {
     supplierId?: SortOrder
     name?: SortOrder
+    abbreviation?: SortOrder
     contactName?: SortOrder
     phone?: SortOrder
     email?: SortOrderInput | SortOrder
@@ -85748,6 +85764,7 @@ export namespace Prisma {
     AND?: SupplierWhereInput | SupplierWhereInput[]
     OR?: SupplierWhereInput[]
     NOT?: SupplierWhereInput | SupplierWhereInput[]
+    abbreviation?: StringFilter<"Supplier"> | string
     contactName?: StringFilter<"Supplier"> | string
     phone?: StringFilter<"Supplier"> | string
     email?: StringNullableFilter<"Supplier"> | string | null
@@ -85765,6 +85782,7 @@ export namespace Prisma {
   export type SupplierOrderByWithAggregationInput = {
     supplierId?: SortOrder
     name?: SortOrder
+    abbreviation?: SortOrder
     contactName?: SortOrder
     phone?: SortOrder
     email?: SortOrderInput | SortOrder
@@ -85791,6 +85809,7 @@ export namespace Prisma {
     NOT?: SupplierScalarWhereWithAggregatesInput | SupplierScalarWhereWithAggregatesInput[]
     supplierId?: IntWithAggregatesFilter<"Supplier"> | number
     name?: StringWithAggregatesFilter<"Supplier"> | string
+    abbreviation?: StringWithAggregatesFilter<"Supplier"> | string
     contactName?: StringWithAggregatesFilter<"Supplier"> | string
     phone?: StringWithAggregatesFilter<"Supplier"> | string
     email?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
@@ -90961,6 +90980,7 @@ export namespace Prisma {
 
   export type SupplierCreateInput = {
     name: string
+    abbreviation: string
     contactName: string
     phone: string
     email?: string | null
@@ -90980,6 +91000,7 @@ export namespace Prisma {
   export type SupplierUncheckedCreateInput = {
     supplierId?: number
     name: string
+    abbreviation: string
     contactName: string
     phone: string
     email?: string | null
@@ -90998,6 +91019,7 @@ export namespace Prisma {
 
   export type SupplierUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -91017,6 +91039,7 @@ export namespace Prisma {
   export type SupplierUncheckedUpdateInput = {
     supplierId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -91036,6 +91059,7 @@ export namespace Prisma {
   export type SupplierCreateManyInput = {
     supplierId?: number
     name: string
+    abbreviation: string
     contactName: string
     phone: string
     email?: string | null
@@ -91053,6 +91077,7 @@ export namespace Prisma {
 
   export type SupplierUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -91071,6 +91096,7 @@ export namespace Prisma {
   export type SupplierUncheckedUpdateManyInput = {
     supplierId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -96119,6 +96145,7 @@ export namespace Prisma {
   export type SupplierCountOrderByAggregateInput = {
     supplierId?: SortOrder
     name?: SortOrder
+    abbreviation?: SortOrder
     contactName?: SortOrder
     phone?: SortOrder
     email?: SortOrder
@@ -96141,6 +96168,7 @@ export namespace Prisma {
   export type SupplierMaxOrderByAggregateInput = {
     supplierId?: SortOrder
     name?: SortOrder
+    abbreviation?: SortOrder
     contactName?: SortOrder
     phone?: SortOrder
     email?: SortOrder
@@ -96159,6 +96187,7 @@ export namespace Prisma {
   export type SupplierMinOrderByAggregateInput = {
     supplierId?: SortOrder
     name?: SortOrder
+    abbreviation?: SortOrder
     contactName?: SortOrder
     phone?: SortOrder
     email?: SortOrder
@@ -119258,6 +119287,7 @@ export namespace Prisma {
 
   export type SupplierCreateWithoutPurchaseOrdersInput = {
     name: string
+    abbreviation: string
     contactName: string
     phone: string
     email?: string | null
@@ -119276,6 +119306,7 @@ export namespace Prisma {
   export type SupplierUncheckedCreateWithoutPurchaseOrdersInput = {
     supplierId?: number
     name: string
+    abbreviation: string
     contactName: string
     phone: string
     email?: string | null
@@ -119478,6 +119509,7 @@ export namespace Prisma {
 
   export type SupplierUpdateWithoutPurchaseOrdersInput = {
     name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119496,6 +119528,7 @@ export namespace Prisma {
   export type SupplierUncheckedUpdateWithoutPurchaseOrdersInput = {
     supplierId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null

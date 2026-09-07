@@ -137,6 +137,7 @@ export class SupplierService {
         ? {
             OR: [
               { name: { contains: search, mode: 'insensitive' as const } },
+              { abbreviation: { contains: search, mode: 'insensitive' as const } },
               { contactName: { contains: search, mode: 'insensitive' as const } },
               { ruc: { contains: search, mode: 'insensitive' as const } },
               { dni: { contains: search, mode: 'insensitive' as const } },

@@ -537,6 +537,7 @@ exports.Prisma.WorkerMonthlyEvaluationResponseScalarFieldEnum = {
 exports.Prisma.SupplierScalarFieldEnum = {
   supplierId: 'supplierId',
   name: 'name',
+  abbreviation: 'abbreviation',
   contactName: 'contactName',
   phone: 'phone',
   email: 'email',
