@@ -88,13 +88,27 @@ export class UserService {
       `Releasing disabled user unique identity. User ID: ${user.userId}`,
     );
 
-    return this.prisma.user.update({
-      where: { userId: user.userId },
-      data: {
-        email: this.buildDisabledEmail(user),
-        phone: null,
-        deletedAt: user.deletedAt ?? new Date(),
-      },
+    return this.prisma.$transaction(async (transaction) => {
+      await transaction.$executeRaw`SELECT pg_advisory_xact_lock(71823091)`;
+      const updated = await transaction.user.update({
+        where: { userId: user.userId },
+        data: {
+          email: this.buildDisabledEmail(user),
+          phone: null,
+          deletedAt: user.deletedAt ?? new Date(),
+        },
+      });
+      const administrators = await transaction.userUserType.count({
+        where: {
+          user: { deletedAt: null },
+          userType: { permissions: { has: 'roles.manage' } },
+        },
+      });
+      if (!administrators)
+        throw new BadRequestException(
+          'No puedes deshabilitar al último administrador de permisos.',
+        );
+      return updated;
     });
   }
 
@@ -529,10 +543,15 @@ export class UserService {
     };
   }
 
-  async update(id: number, updateUserDto: Partial<User>) {
+  async update(id: number, updateUserDto: UpdateUserDto) {
     await this.findOne(id);
 
-    const data = { ...updateUserDto } as Partial<User>;
+    const { userTypeId, ...fields } = updateUserDto;
+    if (userTypeId !== undefined)
+      throw new BadRequestException(
+        'Usa la acción Asignar rol para cambiar los permisos del usuario.',
+      );
+    const data = { ...fields } as Partial<User>;
 
     await this.ensureUniqueIdentityIsAvailable(
       {

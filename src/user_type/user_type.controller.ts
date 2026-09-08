@@ -9,19 +9,29 @@ import {
 } from '@nestjs/common';
 import { UserTypeService } from './user_type.service';
 import { CreateUserTypeDto } from './dto/create-user_type.dto';
-import { Public } from 'src/user/jwt/public.decorator';
+import { PermissionsService } from 'src/permissions/permissions.service';
 
 @Controller('user-type')
 export class UserTypeController {
   private readonly logger = new Logger('UserTypeController');
 
-  constructor(private readonly userTypeService: UserTypeService) {}
+  constructor(
+    private readonly userTypeService: UserTypeService,
+    private readonly permissionsService: PermissionsService,
+  ) {}
 
-  @Public()
   @Post()
   async create(@Body() createUserTypeDto: CreateUserTypeDto) {
     this.logger.log(`Creating user type: ${JSON.stringify(createUserTypeDto)}`);
-    return await this.userTypeService.create(createUserTypeDto);
+    const result = await this.permissionsService.save(undefined, {
+      name: createUserTypeDto.name,
+      permissions: [],
+    });
+    return {
+      ...result,
+      message:
+        'Rol creado sin permisos. Configura sus accesos en Roles y permisos.',
+    };
   }
 
   @Get()

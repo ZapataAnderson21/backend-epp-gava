@@ -18,10 +18,7 @@ import {
   AssignUserDto,
   ReorderTaskDto,
 } from './dto';
-import {
-  TaskPermissionGuard,
-  TaskOperation,
-} from './guards';
+import { TaskPermissionGuard, TaskOperation } from './guards';
 import { UserTypes } from 'src/decorators/user-types.decorator';
 
 @Controller('task')
@@ -79,8 +76,6 @@ export class TaskController {
    * Solo GERENTE, ADMINISTRADORA o usuarios asignados pueden actualizar
    */
   @Put(':taskId')
-  @UseGuards(TaskPermissionGuard)
-  @TaskOperation('update')
   update(
     @Param('taskId', ParseIntPipe) taskId: number,
     @Body() updateTaskDto: UpdateTaskDto,
@@ -94,8 +89,6 @@ export class TaskController {
    * Solo GERENTE, ADMINISTRADORA o usuarios asignados pueden cambiar el estado
    */
   @Patch(':taskId/status')
-  @UseGuards(TaskPermissionGuard)
-  @TaskOperation('update-status')
   updateStatus(
     @Param('taskId', ParseIntPipe) taskId: number,
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,

@@ -20,9 +20,11 @@ import { ResourceModule } from './resource/resource.module';
 import { ResourcePurchaseOrderModule } from './resource-purchase-order/resource-purchase-order.module';
 import { PettyCashModule } from './petty-cash/petty-cash.module';
 import { ServiceSaleModule } from './service-sale/service-sale.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthGuard } from './user/jwt/jwt.auth.guard';
-import { UserTypesGuard } from './guards/user-types.guard';
+import { PermissionsGuard } from './permissions/permissions.guard';
+import { PermissionsModule } from './permissions/permissions.module';
+import { FinancialInterceptor } from './permissions/financial.interceptor';
 import { WeekModule } from './week/week.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DailyWageModule } from './daily-wage/daily-wage.module';
@@ -40,6 +42,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
+    PermissionsModule,
     UserModule,
     UserTypeModule,
     ProjectModule,
@@ -79,7 +82,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
     MailService,
     PdfService,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
-    { provide: APP_GUARD, useClass: UserTypesGuard },
+    { provide: APP_GUARD, useClass: PermissionsGuard },
+    { provide: APP_INTERCEPTOR, useClass: FinancialInterceptor },
   ],
 })
 export class AppModule {}

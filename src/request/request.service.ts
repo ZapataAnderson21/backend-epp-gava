@@ -13,8 +13,7 @@ import { NotificationService } from 'src/notification/notification.service';
 import { InventoryService } from 'src/inventory/inventory.service';
 import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
 import { ListRequestsQueryDto } from './dto/list-requests-query.dto';
-
-const REQUEST_STATUS_MANAGERS = ['ADMINISTRADORA', 'GERENTE'];
+import { PermissionsService } from 'src/permissions/permissions.service';
 
 @Injectable()
 export class RequestService {
@@ -24,20 +23,8 @@ export class RequestService {
     private readonly prismaService: PrismaService,
     private readonly notificationService: NotificationService,
     private readonly inventoryService: InventoryService,
+    private readonly permissionsService: PermissionsService,
   ) {}
-
-  private async getUserTypeNames(userId: number) {
-    const links = await this.prismaService.userUserType.findMany({
-      where: { userId },
-      include: { userType: true },
-    });
-
-    return links.map((link) => link.userType.name);
-  }
-
-  private isRequestStatusManager(userTypes: string[]) {
-    return userTypes.some((type) => REQUEST_STATUS_MANAGERS.includes(type));
-  }
 
   private async assertCanUpdateStatus(
     request: {
@@ -53,13 +40,16 @@ export class RequestService {
       );
     }
 
-    const userTypes = await this.getUserTypeNames(actorUserId);
-    const isManager = this.isRequestStatusManager(userTypes);
+    const permissions = await this.permissionsService.forUser(actorUserId);
     const isRequester = request.userId === actorUserId;
-    const isLogistics = userTypes.includes('LOGISTICA');
+    const isLogistics = permissions.includes('requests.attend');
 
     if (status === RequestStatus.completed) {
-      if (!isRequester || request.status !== RequestStatus.addressed) {
+      if (
+        !permissions.includes('requests.manage') ||
+        !isRequester ||
+        request.status !== RequestStatus.addressed
+      ) {
         throw new BadRequestException(
           'Solo quien solicito el requerimiento puede confirmar la recepcion total cuando esta atendido.',
         );
@@ -67,14 +57,25 @@ export class RequestService {
       return;
     }
 
-    if (isManager) {
+    if (
+      status === RequestStatus.rejected &&
+      (
+        [
+          RequestStatus.inProgress,
+          RequestStatus.reviewed,
+          RequestStatus.approved,
+        ] as RequestStatus[]
+      ).includes(request.status) &&
+      permissions.includes('requests.approve')
+    ) {
       return;
     }
 
     if (
       request.status === RequestStatus.draft &&
       status === RequestStatus.inProgress &&
-      isRequester
+      isRequester &&
+      permissions.includes('requests.manage')
     ) {
       return;
     }
@@ -90,7 +91,7 @@ export class RequestService {
     if (
       request.status === RequestStatus.reviewed &&
       status === RequestStatus.approved &&
-      userTypes.includes('GERENTE')
+      permissions.includes('requests.approve')
     ) {
       return;
     }
@@ -98,7 +99,7 @@ export class RequestService {
     if (
       request.status === RequestStatus.inProgress &&
       status === RequestStatus.reviewed &&
-      userTypes.includes('ADMINISTRADORA')
+      permissions.includes('requests.review')
     ) {
       return;
     }
@@ -257,10 +258,30 @@ export class RequestService {
             AND: [
               {
                 OR: [
-                  { description: { contains: search, mode: 'insensitive' as const } },
-                  { project: { name: { contains: search, mode: 'insensitive' as const } } },
-                  { user: { name: { contains: search, mode: 'insensitive' as const } } },
-                  { user: { lastName: { contains: search, mode: 'insensitive' as const } } },
+                  {
+                    description: {
+                      contains: search,
+                      mode: 'insensitive' as const,
+                    },
+                  },
+                  {
+                    project: {
+                      name: { contains: search, mode: 'insensitive' as const },
+                    },
+                  },
+                  {
+                    user: {
+                      name: { contains: search, mode: 'insensitive' as const },
+                    },
+                  },
+                  {
+                    user: {
+                      lastName: {
+                        contains: search,
+                        mode: 'insensitive' as const,
+                      },
+                    },
+                  },
                 ],
               },
             ],
@@ -320,24 +341,24 @@ export class RequestService {
                 },
               },
             },
-              elementVariant: true,
-              fallProtectionGroup: {
-                include: {
-                  harnessElement: { include: { category: true } },
-                  anchorBandElement: { include: { category: true } },
-                  lifelineElement: { include: { category: true } },
-                  positioningLanyardElement: { include: { category: true } },
-                },
+            elementVariant: true,
+            fallProtectionGroup: {
+              include: {
+                harnessElement: { include: { category: true } },
+                anchorBandElement: { include: { category: true } },
+                lifelineElement: { include: { category: true } },
+                positioningLanyardElement: { include: { category: true } },
               },
-              elementRequestResponses: {
-                include: {
-                  requestResponse: true,
-                },
-                orderBy: [
-                  { updatedAt: 'desc' as const },
-                  { elementRequestResponseId: 'desc' as const },
-                ],
+            },
+            elementRequestResponses: {
+              include: {
+                requestResponse: true,
               },
+              orderBy: [
+                { updatedAt: 'desc' as const },
+                { elementRequestResponseId: 'desc' as const },
+              ],
+            },
             epiPlans: {
               include: {
                 elementVariant: true,

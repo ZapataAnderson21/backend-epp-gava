@@ -134,7 +134,10 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.UserTypeScalarFieldEnum = {
   userTypeId: 'userTypeId',
-  name: 'name'
+  name: 'name',
+  description: 'description',
+  permissions: 'permissions',
+  version: 'version'
 };
 
 exports.Prisma.UserUserTypeScalarFieldEnum = {

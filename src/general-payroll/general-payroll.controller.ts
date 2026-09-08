@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Res,
+  Req,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { UserTypes } from 'src/decorators/user-types.decorator';
@@ -76,8 +77,13 @@ export class GeneralPayrollController {
   configure(
     @Param('weekId', ParseIntPipe) weekId: number,
     @Body() dto: ConfigureGeneralPayrollDto,
+    @Req() request: { permissions: string[] },
   ) {
-    return this.generalPayrollService.configure(weekId, dto);
+    return this.generalPayrollService.configure(
+      weekId,
+      dto,
+      request.permissions,
+    );
   }
 
   @Put('weeks/:weekId/projects/:payrollProjectId/workers')

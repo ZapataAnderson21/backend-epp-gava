@@ -345,7 +345,11 @@ export class GeneralPayrollService {
     return this.findOne(weekId);
   }
 
-  async configure(weekId: number, dto: ConfigureGeneralPayrollDto) {
+  async configure(
+    weekId: number,
+    dto: ConfigureGeneralPayrollDto,
+    permissions: string[] = [],
+  ) {
     const week = await this.getWeek(weekId);
     const payroll = await this.prisma.generalPayroll.upsert({
       where: { weekId },
@@ -399,6 +403,59 @@ export class GeneralPayrollService {
     );
 
     await this.prisma.$transaction(async (transaction) => {
+      const removedEntries = await transaction.generalPayrollEntry.findMany({
+        where: {
+          payrollWorker: { generalPayrollId: payroll.generalPayrollId },
+          OR: [
+            { payrollProject: { projectId: { notIn: dto.projectIds } } },
+            {
+              payrollWorker: {
+                workerId: {
+                  notIn: dto.workers.map((worker) => worker.workerId),
+                },
+              },
+            },
+          ],
+        },
+      });
+      const removedWorkers = await transaction.generalPayrollWorker.findMany({
+        where: {
+          generalPayrollId: payroll.generalPayrollId,
+          workerId: { notIn: dto.workers.map((worker) => worker.workerId) },
+        },
+      });
+      if (
+        !permissions.includes('payroll.attendance') &&
+        removedEntries.some((entry) =>
+          attendanceFields.some(([field]) => Number(entry[field]) !== 0),
+        )
+      ) {
+        throw new BadRequestException(
+          'No puedes retirar trabajadores o proyectos con asistencias: necesitas el permiso Registrar asistencias.',
+        );
+      }
+      if (
+        !permissions.includes('payroll.payments') &&
+        (removedEntries.some((entry) =>
+          [
+            entry.overtimeAmount,
+            entry.afpDiscount,
+            entry.advanceDiscount,
+            ...attendanceFields.map(([field]) => entry[field]),
+          ].some((value) => Number(value) !== 0),
+        ) ||
+          removedWorkers.some((worker) =>
+            [
+              worker.additionalAmount,
+              worker.liquidationAmount,
+              worker.sundayDinnerAmount,
+            ].some((value) => Number(value) !== 0),
+          ))
+      ) {
+        throw new BadRequestException(
+          'No puedes retirar registros con pagos: necesitas el permiso Modificar pagos.',
+        );
+      }
       await transaction.generalPayrollProject.deleteMany({
         where: {
           generalPayrollId: payroll.generalPayrollId,
@@ -462,36 +519,35 @@ export class GeneralPayrollService {
     payrollProjectId: number,
     dto: UpdateGeneralPayrollProjectWorkersDto,
   ) {
-    const payrollProject =
-      await this.prisma.generalPayrollProject.findFirst({
-        where: {
-          generalPayrollProjectId: payrollProjectId,
-          generalPayroll: { weekId },
-        },
-        select: {
-          generalPayrollId: true,
-          entries: {
-            select: {
-              generalPayrollEntryId: true,
-              generalPayrollWorkerId: true,
-              isActive: true,
-              monday: true,
-              tuesday: true,
-              wednesday: true,
-              thursday: true,
-              friday: true,
-              saturday: true,
-              dominical: true,
-              overtimeAmount: true,
-              afpDiscount: true,
-              advanceDiscount: true,
-              payrollWorker: {
-                select: { worker: { select: { fullName: true } } },
-              },
+    const payrollProject = await this.prisma.generalPayrollProject.findFirst({
+      where: {
+        generalPayrollProjectId: payrollProjectId,
+        generalPayroll: { weekId },
+      },
+      select: {
+        generalPayrollId: true,
+        entries: {
+          select: {
+            generalPayrollEntryId: true,
+            generalPayrollWorkerId: true,
+            isActive: true,
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true,
+            dominical: true,
+            overtimeAmount: true,
+            afpDiscount: true,
+            advanceDiscount: true,
+            payrollWorker: {
+              select: { worker: { select: { fullName: true } } },
             },
           },
         },
-      });
+      },
+    });
     if (!payrollProject) {
       throw new NotFoundException(
         'El proyecto no pertenece a la planilla semanal indicada.',
@@ -726,7 +782,7 @@ export class GeneralPayrollService {
       if (!storedEntry.isActive) continue;
       const update = updateById.get(storedEntry.generalPayrollEntryId);
       for (const [field, label] of attendanceFields) {
-        const value = update ? update[field] : Number(storedEntry[field]);
+        const value = update?.[field] ?? Number(storedEntry[field]);
         if (value <= 0) continue;
 
         const key = `${storedEntry.generalPayrollWorkerId}:${field}`;

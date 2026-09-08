@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DashboardQueryDto } from './dashboard-query.dto';
+import { PermissionsService } from 'src/permissions/permissions.service';
 import {
   dashboardPeriod,
   dashboardPermissions,
@@ -13,7 +14,10 @@ import {
 
 @Injectable()
 export class DashboardService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly access: PermissionsService,
+  ) {}
 
   async findGeneral(query: DashboardQueryDto, userId: number) {
     const now = new Date();
@@ -23,26 +27,20 @@ export class DashboardService {
     const currency = query.currency ?? 'PEN';
     const period = dashboardPeriod(month, year);
     const selectedKey = period.keys[5];
-    const [links, projectOptions] = await Promise.all([
-      this.prisma.userUserType.findMany({
-        where: { userId },
-        select: { userType: { select: { name: true } } },
-      }),
-      this.prisma.project.findMany({
-        where: { deletedAt: null },
-        select: {
-          projectId: true,
-          name: true,
-          code: true,
-          status: true,
-          endDate: true,
-        },
-        orderBy: { name: 'asc' },
-      }),
-    ]);
-    const permissions = dashboardPermissions(
-      links.map((link) => link.userType.name),
-    );
+    const permissions = dashboardPermissions(await this.access.forUser(userId));
+    const projectOptions = permissions.projects
+      ? await this.prisma.project.findMany({
+          where: { deletedAt: null },
+          select: {
+            projectId: true,
+            name: true,
+            code: true,
+            status: true,
+            endDate: true,
+          },
+          orderBy: { name: 'asc' },
+        })
+      : [];
     if (
       query.projectId &&
       !projectOptions.some((project) => project.projectId === query.projectId)
@@ -156,28 +154,34 @@ export class DashboardService {
             orderBy: { week: { startDate: 'desc' } },
           })
         : [],
-      this.prisma.task.findMany({
-        where: scope,
-        select: { projectId: true, status: true, dueDate: true },
-      }),
+      permissions.progress
+        ? this.prisma.task.findMany({
+            where: scope,
+            select: { projectId: true, status: true, dueDate: true },
+          })
+        : [],
       permissions.purchases
         ? this.prisma.purchaseOrder.findMany({
             where: { ...scope, status: 'pending', createdAt: { lte: daysAgo } },
             select: { projectId: true },
           })
         : [],
-      this.prisma.request.findMany({
-        where: {
-          ...scope,
-          status: { in: ['inProgress', 'reviewed', 'approved'] },
-          deliveryDueDate: { lt: now },
-        },
-        select: { projectId: true },
-      }),
-      this.prisma.emergency.findMany({
-        where: { ...scope, status: 'pending' },
-        select: { projectId: true },
-      }),
+      permissions.requests
+        ? this.prisma.request.findMany({
+            where: {
+              ...scope,
+              status: { in: ['inProgress', 'reviewed', 'approved'] },
+              deliveryDueDate: { lt: now },
+            },
+            select: { projectId: true },
+          })
+        : [],
+      permissions.emergencies
+        ? this.prisma.emergency.findMany({
+            where: { ...scope, status: 'pending' },
+            select: { projectId: true },
+          })
+        : [],
       permissions.documents
         ? this.prisma.expiringDocument.findMany({
             where: {
@@ -188,16 +192,18 @@ export class DashboardService {
             select: { expirationDate: true },
           })
         : [],
-      this.prisma.element.findMany({
-        where: { deletedAt: null, stockMinimum: { gt: 0 } },
-        select: {
-          stockMinimum: true,
-          officeInventoryEntries: {
-            where: { status: 'available' },
-            select: { currentStock: true },
-          },
-        },
-      }),
+      permissions.inventory
+        ? this.prisma.element.findMany({
+            where: { deletedAt: null, stockMinimum: { gt: 0 } },
+            select: {
+              stockMinimum: true,
+              officeInventoryEntries: {
+                where: { status: 'available' },
+                select: { currentStock: true },
+              },
+            },
+          })
+        : [],
     ]);
 
     const trend = new Map(period.keys.map((key) => [key, emptyAmounts()]));

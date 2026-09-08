@@ -10,6 +10,11 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateNotificationDto, NotificationType } from './dto';
 import { NotificationGateway } from './notification.gateway';
+import { PermissionsService } from 'src/permissions/permissions.service';
+import {
+  notificationPermission,
+  notificationRecipientPermission,
+} from 'src/permissions/notification-permissions';
 
 @Injectable()
 export class NotificationService {
@@ -21,6 +26,7 @@ export class NotificationService {
     private readonly configService: ConfigService,
     @Inject(forwardRef(() => NotificationGateway))
     private readonly notificationGateway: NotificationGateway,
+    private readonly permissions: PermissionsService,
   ) {
     this.appUrl =
       this.configService.get<string>('APP_URL') || 'http://localhost:5173';
@@ -37,6 +43,12 @@ export class NotificationService {
    * Crear una notificación y emitirla por WebSocket
    */
   async create(createNotificationDto: CreateNotificationDto) {
+    if (
+      !(await this.permissions.forUser(createNotificationDto.userId)).includes(
+        notificationPermission(createNotificationDto.type),
+      )
+    )
+      return null;
     const notification = await this.prismaService.notification.create({
       data: createNotificationDto,
       include: {
@@ -75,6 +87,17 @@ export class NotificationService {
    * Crear múltiples notificaciones (para enviar a varios usuarios) y emitirlas
    */
   async createMany(notifications: CreateNotificationDto[]) {
+    const granted = new Map(
+      await Promise.all(
+        [...new Set(notifications.map((item) => item.userId))].map(
+          async (userId) =>
+            [userId, await this.permissions.forUser(userId)] as const,
+        ),
+      ),
+    );
+    notifications = notifications.filter((item) =>
+      granted.get(item.userId)?.includes(notificationPermission(item.type)),
+    );
     const created = await this.prismaService.notification.createMany({
       data: notifications,
     });
@@ -86,7 +109,15 @@ export class NotificationService {
     const userIds = [...new Set(notifications.map((n) => n.userId))];
     for (const userId of userIds) {
       const userNotifications = await this.prismaService.notification.findMany({
-        where: { userId, isRead: false },
+        where: {
+          userId,
+          isRead: false,
+          type: {
+            in: Object.values(NotificationType).filter((type) =>
+              granted.get(userId)?.includes(notificationPermission(type)),
+            ),
+          },
+        },
         orderBy: { createdAt: 'desc' },
         take: 5,
         include: {
@@ -125,10 +156,16 @@ export class NotificationService {
     options?: { onlyUnread?: boolean; limit?: number },
   ) {
     const { onlyUnread = false, limit = 50 } = options || {};
+    const granted = await this.permissions.forUser(userId);
 
     const notifications = await this.prismaService.notification.findMany({
       where: {
         userId,
+        type: {
+          in: Object.values(NotificationType).filter((type) =>
+            granted.includes(notificationPermission(type)),
+          ),
+        },
         ...(onlyUnread ? { isRead: false } : {}),
       },
       include: {
@@ -153,8 +190,17 @@ export class NotificationService {
    * Obtener conteo de notificaciones no leídas
    */
   async getUnreadCount(userId: number) {
+    const granted = await this.permissions.forUser(userId);
     const count = await this.prismaService.notification.count({
-      where: { userId, isRead: false },
+      where: {
+        userId,
+        isRead: false,
+        type: {
+          in: Object.values(NotificationType).filter((type) =>
+            granted.includes(notificationPermission(type)),
+          ),
+        },
+      },
     });
 
     return {
@@ -282,20 +328,17 @@ export class NotificationService {
    * Notificar a usuarios por tipo de rol
    */
   async notifyByUserType(
-    userTypeNames: string[],
+    _legacyRoleNames: string[],
     notification: Omit<CreateNotificationDto, 'userId'>,
   ) {
-    // Buscar usuarios que tengan alguno de los tipos especificados (case-insensitive)
+    const permission = notificationRecipientPermission(notification.type);
     const users = await this.prismaService.user.findMany({
       where: {
         deletedAt: null,
         userUserTypes: {
           some: {
             userType: {
-              name: {
-                in: userTypeNames,
-                mode: 'insensitive',
-              },
+              permissions: { has: permission },
             },
           },
         },
@@ -303,14 +346,10 @@ export class NotificationService {
       select: { userId: true },
     });
 
-    this.logger.log(
-      `notifyByUserType: Buscando usuarios con tipos [${userTypeNames.join(', ')}]. Encontrados: ${users.length}`,
-    );
+    this.logger.log(`Destinatarios con permiso ${permission}: ${users.length}`);
 
     if (users.length === 0) {
-      this.logger.warn(
-        `No se encontraron usuarios con los tipos: ${userTypeNames.join(', ')}`,
-      );
+      this.logger.warn(`No se encontraron destinatarios para ${permission}`);
       return;
     }
 

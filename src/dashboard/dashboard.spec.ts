@@ -4,6 +4,8 @@ import { Currency } from 'src/generated/prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DashboardService } from './dashboard.service';
 import { DashboardQueryDto } from './dashboard-query.dto';
+import { PermissionsService } from '../permissions/permissions.service';
+import { initialPermissions } from '../permissions/catalog';
 import {
   dashboardPeriod,
   dashboardPermissions,
@@ -67,7 +69,12 @@ function fixture(roles = ['GERENTE']) {
   };
   return {
     prisma,
-    service: new DashboardService(prisma as unknown as PrismaService),
+    service: new DashboardService(
+      prisma as unknown as PrismaService,
+      {
+        forUser: jest.fn().mockResolvedValue(roles.flatMap(initialPermissions)),
+      } as unknown as PermissionsService,
+    ),
   };
 }
 
@@ -137,14 +144,16 @@ describe('General dashboard', () => {
     [[], false, false, false],
     [['GERENTE'], true, true, true],
     [['ADMINISTRADORA'], true, true, true],
-    [['ADMINISTRADOR'], false, true, false],
+    [['ADMINISTRADOR'], true, true, false],
     [['LOGISTICA'], false, true, true],
     [['PREVENCIONISTA DE RIESGOS'], false, false, true],
     [['ADMINISTRADOR', 'LOGISTICA'], true, true, true],
   ])(
     'uses source permissions for roles %j',
     (roles, finance, payroll, documents) => {
-      expect(dashboardPermissions(roles)).toMatchObject({
+      expect(
+        dashboardPermissions(roles.flatMap(initialPermissions)),
+      ).toMatchObject({
         finance,
         payroll,
         documents,

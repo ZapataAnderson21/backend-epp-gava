@@ -20,22 +20,25 @@ export function dashboardPeriod(month: number, year: number) {
   };
 }
 
-export function dashboardPermissions(roles: string[]) {
-  const has = (...allowed: string[]) =>
-    allowed.some((role) => roles.includes(role));
-  const purchases = has('GERENTE', 'ADMINISTRADORA', 'LOGISTICA');
-  const registeredIncome = has('GERENTE', 'ADMINISTRADORA', 'ADMINISTRADOR');
+export function dashboardPermissions(granted: string[]) {
+  const has = (permission: string) => granted.includes(permission);
+  const purchases = has('orders.view');
   return {
     // A complete result must never expose a source the user cannot access.
-    finance: purchases && registeredIncome,
+    finance:
+      has('finance.view') &&
+      purchases &&
+      has('incomes.view') &&
+      has('cash.view') &&
+      has('payroll.view'),
     purchases,
-    payroll: has('GERENTE', 'ADMINISTRADORA', 'ADMINISTRADOR', 'LOGISTICA'),
-    documents: has(
-      'GERENTE',
-      'ADMINISTRADORA',
-      'LOGISTICA',
-      'PREVENCIONISTA DE RIESGOS',
-    ),
+    payroll: has('payroll.view') && has('finance.view'),
+    documents: has('documents.view'),
+    projects: has('projects.view'),
+    progress: has('progress.view'),
+    requests: has('requests.view'),
+    emergencies: has('emergencies.view'),
+    inventory: has('inventory.view'),
   };
 }
 

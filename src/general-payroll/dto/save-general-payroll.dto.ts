@@ -9,6 +9,7 @@ import {
   IsPositive,
   Min,
   ValidateNested,
+  ValidateIf,
 } from 'class-validator';
 
 const moneyOptions = { maxDecimalPlaces: 2 } as const;
@@ -20,29 +21,33 @@ export class SaveGeneralPayrollWorkerDto {
   @IsPositive()
   generalPayrollWorkerId!: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @Min(0)
-  dailyWage!: number;
+  dailyWage?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @Min(0)
-  additionalAmount!: number;
+  additionalAmount?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @Min(0)
-  liquidationAmount!: number;
+  liquidationAmount?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @Min(0)
-  sundayDinnerAmount!: number;
+  sundayDinnerAmount?: number;
 }
 
 export class SaveGeneralPayrollEntryDto {
@@ -52,65 +57,75 @@ export class SaveGeneralPayrollEntryDto {
   @IsPositive()
   generalPayrollEntryId!: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @IsIn([0, 1], { message: 'La asistencia del lunes debe ser 0 o 1.' })
-  monday!: number;
+  monday?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @IsIn([0, 1], { message: 'La asistencia del martes debe ser 0 o 1.' })
-  tuesday!: number;
+  tuesday?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @IsIn([0, 1], { message: 'La asistencia del miércoles debe ser 0 o 1.' })
-  wednesday!: number;
+  wednesday?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @IsIn([0, 1], { message: 'La asistencia del jueves debe ser 0 o 1.' })
-  thursday!: number;
+  thursday?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @IsIn([0, 1], { message: 'La asistencia del viernes debe ser 0 o 1.' })
-  friday!: number;
+  friday?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @IsIn([0, 1], { message: 'La asistencia del sábado debe ser 0 o 1.' })
-  saturday!: number;
+  saturday?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @IsIn([0, 1], { message: 'La asistencia dominical debe ser 0 o 1.' })
-  dominical!: number;
+  dominical?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @Min(0)
-  overtimeAmount!: number;
+  overtimeAmount?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @Min(0)
-  afpDiscount!: number;
+  afpDiscount?: number;
 
-  @ApiProperty({ minimum: 0 })
+  @ApiProperty({ minimum: 0, required: false })
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @Type(() => Number)
   @IsNumber(moneyOptions)
   @Min(0)
-  advanceDiscount!: number;
+  advanceDiscount?: number;
 }
 
 export class SaveGeneralPayrollDto {

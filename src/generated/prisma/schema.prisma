@@ -45,8 +45,11 @@ model User {
 }
 
 model UserType {
-  userTypeId Int    @id @default(autoincrement())
-  name       String @unique
+  userTypeId  Int      @id @default(autoincrement())
+  name        String   @unique
+  description String   @default("")
+  permissions String[] @default([])
+  version     Int      @default(1)
 
   userUserTypes UserUserType[]
 }

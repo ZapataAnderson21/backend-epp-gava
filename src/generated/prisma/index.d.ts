@@ -10075,50 +10075,68 @@ export namespace Prisma {
 
   export type UserTypeAvgAggregateOutputType = {
     userTypeId: number | null
+    version: number | null
   }
 
   export type UserTypeSumAggregateOutputType = {
     userTypeId: number | null
+    version: number | null
   }
 
   export type UserTypeMinAggregateOutputType = {
     userTypeId: number | null
     name: string | null
+    description: string | null
+    version: number | null
   }
 
   export type UserTypeMaxAggregateOutputType = {
     userTypeId: number | null
     name: string | null
+    description: string | null
+    version: number | null
   }
 
   export type UserTypeCountAggregateOutputType = {
     userTypeId: number
     name: number
+    description: number
+    permissions: number
+    version: number
     _all: number
   }
 
 
   export type UserTypeAvgAggregateInputType = {
     userTypeId?: true
+    version?: true
   }
 
   export type UserTypeSumAggregateInputType = {
     userTypeId?: true
+    version?: true
   }
 
   export type UserTypeMinAggregateInputType = {
     userTypeId?: true
     name?: true
+    description?: true
+    version?: true
   }
 
   export type UserTypeMaxAggregateInputType = {
     userTypeId?: true
     name?: true
+    description?: true
+    version?: true
   }
 
   export type UserTypeCountAggregateInputType = {
     userTypeId?: true
     name?: true
+    description?: true
+    permissions?: true
+    version?: true
     _all?: true
   }
 
@@ -10211,6 +10229,9 @@ export namespace Prisma {
   export type UserTypeGroupByOutputType = {
     userTypeId: number
     name: string
+    description: string
+    permissions: string[]
+    version: number
     _count: UserTypeCountAggregateOutputType | null
     _avg: UserTypeAvgAggregateOutputType | null
     _sum: UserTypeSumAggregateOutputType | null
@@ -10235,6 +10256,9 @@ export namespace Prisma {
   export type UserTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     userTypeId?: boolean
     name?: boolean
+    description?: boolean
+    permissions?: boolean
+    version?: boolean
     userUserTypes?: boolean | UserType$userUserTypesArgs<ExtArgs>
     _count?: boolean | UserTypeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userType"]>
@@ -10242,19 +10266,28 @@ export namespace Prisma {
   export type UserTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     userTypeId?: boolean
     name?: boolean
+    description?: boolean
+    permissions?: boolean
+    version?: boolean
   }, ExtArgs["result"]["userType"]>
 
   export type UserTypeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     userTypeId?: boolean
     name?: boolean
+    description?: boolean
+    permissions?: boolean
+    version?: boolean
   }, ExtArgs["result"]["userType"]>
 
   export type UserTypeSelectScalar = {
     userTypeId?: boolean
     name?: boolean
+    description?: boolean
+    permissions?: boolean
+    version?: boolean
   }
 
-  export type UserTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userTypeId" | "name", ExtArgs["result"]["userType"]>
+  export type UserTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userTypeId" | "name" | "description" | "permissions" | "version", ExtArgs["result"]["userType"]>
   export type UserTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userUserTypes?: boolean | UserType$userUserTypesArgs<ExtArgs>
     _count?: boolean | UserTypeCountOutputTypeDefaultArgs<ExtArgs>
@@ -10270,6 +10303,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       userTypeId: number
       name: string
+      description: string
+      permissions: string[]
+      version: number
     }, ExtArgs["result"]["userType"]>
     composites: {}
   }
@@ -10696,6 +10732,9 @@ export namespace Prisma {
   interface UserTypeFieldRefs {
     readonly userTypeId: FieldRef<"UserType", 'Int'>
     readonly name: FieldRef<"UserType", 'String'>
+    readonly description: FieldRef<"UserType", 'String'>
+    readonly permissions: FieldRef<"UserType", 'String[]'>
+    readonly version: FieldRef<"UserType", 'Int'>
   }
     
 
@@ -81157,7 +81196,10 @@ export namespace Prisma {
 
   export const UserTypeScalarFieldEnum: {
     userTypeId: 'userTypeId',
-    name: 'name'
+    name: 'name',
+    description: 'description',
+    permissions: 'permissions',
+    version: 'version'
   };
 
   export type UserTypeScalarFieldEnum = (typeof UserTypeScalarFieldEnum)[keyof typeof UserTypeScalarFieldEnum]
@@ -82806,12 +82848,18 @@ export namespace Prisma {
     NOT?: UserTypeWhereInput | UserTypeWhereInput[]
     userTypeId?: IntFilter<"UserType"> | number
     name?: StringFilter<"UserType"> | string
+    description?: StringFilter<"UserType"> | string
+    permissions?: StringNullableListFilter<"UserType">
+    version?: IntFilter<"UserType"> | number
     userUserTypes?: UserUserTypeListRelationFilter
   }
 
   export type UserTypeOrderByWithRelationInput = {
     userTypeId?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    permissions?: SortOrder
+    version?: SortOrder
     userUserTypes?: UserUserTypeOrderByRelationAggregateInput
   }
 
@@ -82821,12 +82869,18 @@ export namespace Prisma {
     AND?: UserTypeWhereInput | UserTypeWhereInput[]
     OR?: UserTypeWhereInput[]
     NOT?: UserTypeWhereInput | UserTypeWhereInput[]
+    description?: StringFilter<"UserType"> | string
+    permissions?: StringNullableListFilter<"UserType">
+    version?: IntFilter<"UserType"> | number
     userUserTypes?: UserUserTypeListRelationFilter
   }, "userTypeId" | "name">
 
   export type UserTypeOrderByWithAggregationInput = {
     userTypeId?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    permissions?: SortOrder
+    version?: SortOrder
     _count?: UserTypeCountOrderByAggregateInput
     _avg?: UserTypeAvgOrderByAggregateInput
     _max?: UserTypeMaxOrderByAggregateInput
@@ -82840,6 +82894,9 @@ export namespace Prisma {
     NOT?: UserTypeScalarWhereWithAggregatesInput | UserTypeScalarWhereWithAggregatesInput[]
     userTypeId?: IntWithAggregatesFilter<"UserType"> | number
     name?: StringWithAggregatesFilter<"UserType"> | string
+    description?: StringWithAggregatesFilter<"UserType"> | string
+    permissions?: StringNullableListFilter<"UserType">
+    version?: IntWithAggregatesFilter<"UserType"> | number
   }
 
   export type UserUserTypeWhereInput = {
@@ -88049,38 +88106,59 @@ export namespace Prisma {
 
   export type UserTypeCreateInput = {
     name: string
+    description?: string
+    permissions?: UserTypeCreatepermissionsInput | string[]
+    version?: number
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserTypeInput
   }
 
   export type UserTypeUncheckedCreateInput = {
     userTypeId?: number
     name: string
+    description?: string
+    permissions?: UserTypeCreatepermissionsInput | string[]
+    version?: number
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserTypeInput
   }
 
   export type UserTypeUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    permissions?: UserTypeUpdatepermissionsInput | string[]
+    version?: IntFieldUpdateOperationsInput | number
     userUserTypes?: UserUserTypeUpdateManyWithoutUserTypeNestedInput
   }
 
   export type UserTypeUncheckedUpdateInput = {
     userTypeId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    permissions?: UserTypeUpdatepermissionsInput | string[]
+    version?: IntFieldUpdateOperationsInput | number
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserTypeNestedInput
   }
 
   export type UserTypeCreateManyInput = {
     userTypeId?: number
     name: string
+    description?: string
+    permissions?: UserTypeCreatepermissionsInput | string[]
+    version?: number
   }
 
   export type UserTypeUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    permissions?: UserTypeUpdatepermissionsInput | string[]
+    version?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserTypeUncheckedUpdateManyInput = {
     userTypeId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    permissions?: UserTypeUpdatepermissionsInput | string[]
+    version?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserUserTypeCreateInput = {
@@ -93568,27 +93646,44 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type UserTypeCountOrderByAggregateInput = {
     userTypeId?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    permissions?: SortOrder
+    version?: SortOrder
   }
 
   export type UserTypeAvgOrderByAggregateInput = {
     userTypeId?: SortOrder
+    version?: SortOrder
   }
 
   export type UserTypeMaxOrderByAggregateInput = {
     userTypeId?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    version?: SortOrder
   }
 
   export type UserTypeMinOrderByAggregateInput = {
     userTypeId?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    version?: SortOrder
   }
 
   export type UserTypeSumOrderByAggregateInput = {
     userTypeId?: SortOrder
+    version?: SortOrder
   }
 
   export type UserScalarRelationFilter = {
@@ -97643,14 +97738,6 @@ export namespace Prisma {
     lineTotal?: SortOrder
   }
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
   export type ExpiringDocumentCategoryCountOrderByAggregateInput = {
     expiringDocumentCategoryId?: SortOrder
     name?: SortOrder
@@ -98824,6 +98911,10 @@ export namespace Prisma {
     deleteMany?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
   }
 
+  export type UserTypeCreatepermissionsInput = {
+    set: string[]
+  }
+
   export type UserUserTypeCreateNestedManyWithoutUserTypeInput = {
     create?: XOR<UserUserTypeCreateWithoutUserTypeInput, UserUserTypeUncheckedCreateWithoutUserTypeInput> | UserUserTypeCreateWithoutUserTypeInput[] | UserUserTypeUncheckedCreateWithoutUserTypeInput[]
     connectOrCreate?: UserUserTypeCreateOrConnectWithoutUserTypeInput | UserUserTypeCreateOrConnectWithoutUserTypeInput[]
@@ -98836,6 +98927,11 @@ export namespace Prisma {
     connectOrCreate?: UserUserTypeCreateOrConnectWithoutUserTypeInput | UserUserTypeCreateOrConnectWithoutUserTypeInput[]
     createMany?: UserUserTypeCreateManyUserTypeInputEnvelope
     connect?: UserUserTypeWhereUniqueInput | UserUserTypeWhereUniqueInput[]
+  }
+
+  export type UserTypeUpdatepermissionsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type UserUserTypeUpdateManyWithoutUserTypeNestedInput = {
@@ -106748,11 +106844,17 @@ export namespace Prisma {
 
   export type UserTypeCreateWithoutUserUserTypesInput = {
     name: string
+    description?: string
+    permissions?: UserTypeCreatepermissionsInput | string[]
+    version?: number
   }
 
   export type UserTypeUncheckedCreateWithoutUserUserTypesInput = {
     userTypeId?: number
     name: string
+    description?: string
+    permissions?: UserTypeCreatepermissionsInput | string[]
+    version?: number
   }
 
   export type UserTypeCreateOrConnectWithoutUserUserTypesInput = {
@@ -106845,11 +106947,17 @@ export namespace Prisma {
 
   export type UserTypeUpdateWithoutUserUserTypesInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    permissions?: UserTypeUpdatepermissionsInput | string[]
+    version?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserTypeUncheckedUpdateWithoutUserUserTypesInput = {
     userTypeId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    permissions?: UserTypeUpdatepermissionsInput | string[]
+    version?: IntFieldUpdateOperationsInput | number
   }
 
   export type RequestCreateWithoutProjectInput = {
