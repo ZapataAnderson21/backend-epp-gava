@@ -684,6 +684,7 @@ exports.Prisma.GeneralPayrollProjectScalarFieldEnum = {
   generalPayrollProjectId: 'generalPayrollProjectId',
   generalPayrollId: 'generalPayrollId',
   projectId: 'projectId',
+  locationType: 'locationType',
   displayOrder: 'displayOrder',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1066,6 +1067,11 @@ exports.PettyCashType = exports.$Enums.PettyCashType = {
   safety_equipment: 'safety_equipment',
   services: 'services',
   other: 'other'
+};
+
+exports.GeneralPayrollLocationType = exports.$Enums.GeneralPayrollLocationType = {
+  project: 'project',
+  services: 'services'
 };
 
 exports.GeneralPayrollWorkerGroup = exports.$Enums.GeneralPayrollWorkerGroup = {

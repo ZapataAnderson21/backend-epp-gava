@@ -51,6 +51,11 @@ export function endpointPermissions(
     return [['roles.view', 'users.view', 'users.assignRole']];
   if (controller === 'GeneralPayrollController' && handler === 'save')
     return [['payroll.view'], ['payroll.attendance', 'payroll.payments']];
+  if (
+    controller === 'GeneralPayrollController' &&
+    handler === 'updateAttendance'
+  )
+    return [['payroll.view'], ['payroll.attendance']];
   if (controller === 'DailyWageController')
     return [['payroll.view'], ['payroll.payments'], ['finance.view']];
   if (controller === 'InventoryController' && method !== 'GET')

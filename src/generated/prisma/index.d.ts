@@ -575,6 +575,14 @@ export const GeneralPayrollWorkerGroup: {
 export type GeneralPayrollWorkerGroup = (typeof GeneralPayrollWorkerGroup)[keyof typeof GeneralPayrollWorkerGroup]
 
 
+export const GeneralPayrollLocationType: {
+  project: 'project',
+  services: 'services'
+};
+
+export type GeneralPayrollLocationType = (typeof GeneralPayrollLocationType)[keyof typeof GeneralPayrollLocationType]
+
+
 export const TaskStatus: {
   pending: 'pending',
   in_progress: 'in_progress',
@@ -761,6 +769,10 @@ export const PettyCashType: typeof $Enums.PettyCashType
 export type GeneralPayrollWorkerGroup = $Enums.GeneralPayrollWorkerGroup
 
 export const GeneralPayrollWorkerGroup: typeof $Enums.GeneralPayrollWorkerGroup
+
+export type GeneralPayrollLocationType = $Enums.GeneralPayrollLocationType
+
+export const GeneralPayrollLocationType: typeof $Enums.GeneralPayrollLocationType
 
 export type TaskStatus = $Enums.TaskStatus
 
@@ -64304,6 +64316,7 @@ export namespace Prisma {
     generalPayrollProjectId: number | null
     generalPayrollId: number | null
     projectId: number | null
+    locationType: $Enums.GeneralPayrollLocationType | null
     displayOrder: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -64313,6 +64326,7 @@ export namespace Prisma {
     generalPayrollProjectId: number | null
     generalPayrollId: number | null
     projectId: number | null
+    locationType: $Enums.GeneralPayrollLocationType | null
     displayOrder: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -64322,6 +64336,7 @@ export namespace Prisma {
     generalPayrollProjectId: number
     generalPayrollId: number
     projectId: number
+    locationType: number
     displayOrder: number
     createdAt: number
     updatedAt: number
@@ -64347,6 +64362,7 @@ export namespace Prisma {
     generalPayrollProjectId?: true
     generalPayrollId?: true
     projectId?: true
+    locationType?: true
     displayOrder?: true
     createdAt?: true
     updatedAt?: true
@@ -64356,6 +64372,7 @@ export namespace Prisma {
     generalPayrollProjectId?: true
     generalPayrollId?: true
     projectId?: true
+    locationType?: true
     displayOrder?: true
     createdAt?: true
     updatedAt?: true
@@ -64365,6 +64382,7 @@ export namespace Prisma {
     generalPayrollProjectId?: true
     generalPayrollId?: true
     projectId?: true
+    locationType?: true
     displayOrder?: true
     createdAt?: true
     updatedAt?: true
@@ -64460,7 +64478,8 @@ export namespace Prisma {
   export type GeneralPayrollProjectGroupByOutputType = {
     generalPayrollProjectId: number
     generalPayrollId: number
-    projectId: number
+    projectId: number | null
+    locationType: $Enums.GeneralPayrollLocationType
     displayOrder: number
     createdAt: Date
     updatedAt: Date
@@ -64489,11 +64508,12 @@ export namespace Prisma {
     generalPayrollProjectId?: boolean
     generalPayrollId?: boolean
     projectId?: boolean
+    locationType?: boolean
     displayOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | GeneralPayrollProject$projectArgs<ExtArgs>
     entries?: boolean | GeneralPayrollProject$entriesArgs<ExtArgs>
     _count?: boolean | GeneralPayrollProjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["generalPayrollProject"]>
@@ -64502,60 +64522,64 @@ export namespace Prisma {
     generalPayrollProjectId?: boolean
     generalPayrollId?: boolean
     projectId?: boolean
+    locationType?: boolean
     displayOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | GeneralPayrollProject$projectArgs<ExtArgs>
   }, ExtArgs["result"]["generalPayrollProject"]>
 
   export type GeneralPayrollProjectSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     generalPayrollProjectId?: boolean
     generalPayrollId?: boolean
     projectId?: boolean
+    locationType?: boolean
     displayOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | GeneralPayrollProject$projectArgs<ExtArgs>
   }, ExtArgs["result"]["generalPayrollProject"]>
 
   export type GeneralPayrollProjectSelectScalar = {
     generalPayrollProjectId?: boolean
     generalPayrollId?: boolean
     projectId?: boolean
+    locationType?: boolean
     displayOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type GeneralPayrollProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"generalPayrollProjectId" | "generalPayrollId" | "projectId" | "displayOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["generalPayrollProject"]>
+  export type GeneralPayrollProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"generalPayrollProjectId" | "generalPayrollId" | "projectId" | "locationType" | "displayOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["generalPayrollProject"]>
   export type GeneralPayrollProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | GeneralPayrollProject$projectArgs<ExtArgs>
     entries?: boolean | GeneralPayrollProject$entriesArgs<ExtArgs>
     _count?: boolean | GeneralPayrollProjectCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type GeneralPayrollProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | GeneralPayrollProject$projectArgs<ExtArgs>
   }
   export type GeneralPayrollProjectIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     generalPayroll?: boolean | GeneralPayrollDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | GeneralPayrollProject$projectArgs<ExtArgs>
   }
 
   export type $GeneralPayrollProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "GeneralPayrollProject"
     objects: {
       generalPayroll: Prisma.$GeneralPayrollPayload<ExtArgs>
-      project: Prisma.$ProjectPayload<ExtArgs>
+      project: Prisma.$ProjectPayload<ExtArgs> | null
       entries: Prisma.$GeneralPayrollEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       generalPayrollProjectId: number
       generalPayrollId: number
-      projectId: number
+      projectId: number | null
+      locationType: $Enums.GeneralPayrollLocationType
       displayOrder: number
       createdAt: Date
       updatedAt: Date
@@ -64954,7 +64978,7 @@ export namespace Prisma {
   export interface Prisma__GeneralPayrollProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     generalPayroll<T extends GeneralPayrollDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayrollDefaultArgs<ExtArgs>>): Prisma__GeneralPayrollClient<$Result.GetResult<Prisma.$GeneralPayrollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    project<T extends GeneralPayrollProject$projectArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayrollProject$projectArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     entries<T extends GeneralPayrollProject$entriesArgs<ExtArgs> = {}>(args?: Subset<T, GeneralPayrollProject$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralPayrollEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -64988,6 +65012,7 @@ export namespace Prisma {
     readonly generalPayrollProjectId: FieldRef<"GeneralPayrollProject", 'Int'>
     readonly generalPayrollId: FieldRef<"GeneralPayrollProject", 'Int'>
     readonly projectId: FieldRef<"GeneralPayrollProject", 'Int'>
+    readonly locationType: FieldRef<"GeneralPayrollProject", 'GeneralPayrollLocationType'>
     readonly displayOrder: FieldRef<"GeneralPayrollProject", 'Int'>
     readonly createdAt: FieldRef<"GeneralPayrollProject", 'DateTime'>
     readonly updatedAt: FieldRef<"GeneralPayrollProject", 'DateTime'>
@@ -65384,6 +65409,25 @@ export namespace Prisma {
      * Limit how many GeneralPayrollProjects to delete.
      */
     limit?: number
+  }
+
+  /**
+   * GeneralPayrollProject.project
+   */
+  export type GeneralPayrollProject$projectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Project
+     */
+    select?: ProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Project
+     */
+    omit?: ProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectInclude<ExtArgs> | null
+    where?: ProjectWhereInput
   }
 
   /**
@@ -81878,6 +81922,7 @@ export namespace Prisma {
     generalPayrollProjectId: 'generalPayrollProjectId',
     generalPayrollId: 'generalPayrollId',
     projectId: 'projectId',
+    locationType: 'locationType',
     displayOrder: 'displayOrder',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -82590,6 +82635,20 @@ export namespace Prisma {
    * Reference to a field of type 'PettyCashType[]'
    */
   export type ListEnumPettyCashTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PettyCashType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'GeneralPayrollLocationType'
+   */
+  export type EnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeneralPayrollLocationType'>
+    
+
+
+  /**
+   * Reference to a field of type 'GeneralPayrollLocationType[]'
+   */
+  export type ListEnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeneralPayrollLocationType[]'>
     
 
 
@@ -86726,19 +86785,21 @@ export namespace Prisma {
     NOT?: GeneralPayrollProjectWhereInput | GeneralPayrollProjectWhereInput[]
     generalPayrollProjectId?: IntFilter<"GeneralPayrollProject"> | number
     generalPayrollId?: IntFilter<"GeneralPayrollProject"> | number
-    projectId?: IntFilter<"GeneralPayrollProject"> | number
+    projectId?: IntNullableFilter<"GeneralPayrollProject"> | number | null
+    locationType?: EnumGeneralPayrollLocationTypeFilter<"GeneralPayrollProject"> | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFilter<"GeneralPayrollProject"> | number
     createdAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
     updatedAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
     generalPayroll?: XOR<GeneralPayrollScalarRelationFilter, GeneralPayrollWhereInput>
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    project?: XOR<ProjectNullableScalarRelationFilter, ProjectWhereInput> | null
     entries?: GeneralPayrollEntryListRelationFilter
   }
 
   export type GeneralPayrollProjectOrderByWithRelationInput = {
     generalPayrollProjectId?: SortOrder
     generalPayrollId?: SortOrder
-    projectId?: SortOrder
+    projectId?: SortOrderInput | SortOrder
+    locationType?: SortOrder
     displayOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -86754,19 +86815,21 @@ export namespace Prisma {
     OR?: GeneralPayrollProjectWhereInput[]
     NOT?: GeneralPayrollProjectWhereInput | GeneralPayrollProjectWhereInput[]
     generalPayrollId?: IntFilter<"GeneralPayrollProject"> | number
-    projectId?: IntFilter<"GeneralPayrollProject"> | number
+    projectId?: IntNullableFilter<"GeneralPayrollProject"> | number | null
+    locationType?: EnumGeneralPayrollLocationTypeFilter<"GeneralPayrollProject"> | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFilter<"GeneralPayrollProject"> | number
     createdAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
     updatedAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
     generalPayroll?: XOR<GeneralPayrollScalarRelationFilter, GeneralPayrollWhereInput>
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    project?: XOR<ProjectNullableScalarRelationFilter, ProjectWhereInput> | null
     entries?: GeneralPayrollEntryListRelationFilter
   }, "generalPayrollProjectId" | "generalPayrollId_projectId">
 
   export type GeneralPayrollProjectOrderByWithAggregationInput = {
     generalPayrollProjectId?: SortOrder
     generalPayrollId?: SortOrder
-    projectId?: SortOrder
+    projectId?: SortOrderInput | SortOrder
+    locationType?: SortOrder
     displayOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -86783,7 +86846,8 @@ export namespace Prisma {
     NOT?: GeneralPayrollProjectScalarWhereWithAggregatesInput | GeneralPayrollProjectScalarWhereWithAggregatesInput[]
     generalPayrollProjectId?: IntWithAggregatesFilter<"GeneralPayrollProject"> | number
     generalPayrollId?: IntWithAggregatesFilter<"GeneralPayrollProject"> | number
-    projectId?: IntWithAggregatesFilter<"GeneralPayrollProject"> | number
+    projectId?: IntNullableWithAggregatesFilter<"GeneralPayrollProject"> | number | null
+    locationType?: EnumGeneralPayrollLocationTypeWithAggregatesFilter<"GeneralPayrollProject"> | $Enums.GeneralPayrollLocationType
     displayOrder?: IntWithAggregatesFilter<"GeneralPayrollProject"> | number
     createdAt?: DateTimeWithAggregatesFilter<"GeneralPayrollProject"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"GeneralPayrollProject"> | Date | string
@@ -92051,18 +92115,20 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollProjectCreateInput = {
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     generalPayroll: GeneralPayrollCreateNestedOneWithoutProjectsInput
-    project: ProjectCreateNestedOneWithoutGeneralPayrollProjectsInput
+    project?: ProjectCreateNestedOneWithoutGeneralPayrollProjectsInput
     entries?: GeneralPayrollEntryCreateNestedManyWithoutPayrollProjectInput
   }
 
   export type GeneralPayrollProjectUncheckedCreateInput = {
     generalPayrollProjectId?: number
     generalPayrollId: number
-    projectId: number
+    projectId?: number | null
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -92070,18 +92136,20 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollProjectUpdateInput = {
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     generalPayroll?: GeneralPayrollUpdateOneRequiredWithoutProjectsNestedInput
-    project?: ProjectUpdateOneRequiredWithoutGeneralPayrollProjectsNestedInput
+    project?: ProjectUpdateOneWithoutGeneralPayrollProjectsNestedInput
     entries?: GeneralPayrollEntryUpdateManyWithoutPayrollProjectNestedInput
   }
 
   export type GeneralPayrollProjectUncheckedUpdateInput = {
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
     generalPayrollId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
+    projectId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -92091,13 +92159,15 @@ export namespace Prisma {
   export type GeneralPayrollProjectCreateManyInput = {
     generalPayrollProjectId?: number
     generalPayrollId: number
-    projectId: number
+    projectId?: number | null
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type GeneralPayrollProjectUpdateManyMutationInput = {
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -92106,7 +92176,8 @@ export namespace Prisma {
   export type GeneralPayrollProjectUncheckedUpdateManyInput = {
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
     generalPayrollId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
+    projectId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -96990,6 +97061,13 @@ export namespace Prisma {
     weekId?: SortOrder
   }
 
+  export type EnumGeneralPayrollLocationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.GeneralPayrollLocationType | EnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GeneralPayrollLocationType[] | ListEnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GeneralPayrollLocationType[] | ListEnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGeneralPayrollLocationTypeFilter<$PrismaModel> | $Enums.GeneralPayrollLocationType
+  }
+
   export type GeneralPayrollScalarRelationFilter = {
     is?: GeneralPayrollWhereInput
     isNot?: GeneralPayrollWhereInput
@@ -97014,6 +97092,7 @@ export namespace Prisma {
     generalPayrollProjectId?: SortOrder
     generalPayrollId?: SortOrder
     projectId?: SortOrder
+    locationType?: SortOrder
     displayOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -97030,6 +97109,7 @@ export namespace Prisma {
     generalPayrollProjectId?: SortOrder
     generalPayrollId?: SortOrder
     projectId?: SortOrder
+    locationType?: SortOrder
     displayOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -97039,6 +97119,7 @@ export namespace Prisma {
     generalPayrollProjectId?: SortOrder
     generalPayrollId?: SortOrder
     projectId?: SortOrder
+    locationType?: SortOrder
     displayOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -97049,6 +97130,16 @@ export namespace Prisma {
     generalPayrollId?: SortOrder
     projectId?: SortOrder
     displayOrder?: SortOrder
+  }
+
+  export type EnumGeneralPayrollLocationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GeneralPayrollLocationType | EnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GeneralPayrollLocationType[] | ListEnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GeneralPayrollLocationType[] | ListEnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGeneralPayrollLocationTypeWithAggregatesFilter<$PrismaModel> | $Enums.GeneralPayrollLocationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGeneralPayrollLocationTypeFilter<$PrismaModel>
+    _max?: NestedEnumGeneralPayrollLocationTypeFilter<$PrismaModel>
   }
 
   export type EnumGeneralPayrollWorkerGroupFilter<$PrismaModel = never> = {
@@ -103773,6 +103864,10 @@ export namespace Prisma {
     connect?: GeneralPayrollEntryWhereUniqueInput | GeneralPayrollEntryWhereUniqueInput[]
   }
 
+  export type EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.GeneralPayrollLocationType
+  }
+
   export type GeneralPayrollUpdateOneRequiredWithoutProjectsNestedInput = {
     create?: XOR<GeneralPayrollCreateWithoutProjectsInput, GeneralPayrollUncheckedCreateWithoutProjectsInput>
     connectOrCreate?: GeneralPayrollCreateOrConnectWithoutProjectsInput
@@ -103781,10 +103876,12 @@ export namespace Prisma {
     update?: XOR<XOR<GeneralPayrollUpdateToOneWithWhereWithoutProjectsInput, GeneralPayrollUpdateWithoutProjectsInput>, GeneralPayrollUncheckedUpdateWithoutProjectsInput>
   }
 
-  export type ProjectUpdateOneRequiredWithoutGeneralPayrollProjectsNestedInput = {
+  export type ProjectUpdateOneWithoutGeneralPayrollProjectsNestedInput = {
     create?: XOR<ProjectCreateWithoutGeneralPayrollProjectsInput, ProjectUncheckedCreateWithoutGeneralPayrollProjectsInput>
     connectOrCreate?: ProjectCreateOrConnectWithoutGeneralPayrollProjectsInput
     upsert?: ProjectUpsertWithoutGeneralPayrollProjectsInput
+    disconnect?: ProjectWhereInput | boolean
+    delete?: ProjectWhereInput | boolean
     connect?: ProjectWhereUniqueInput
     update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutGeneralPayrollProjectsInput, ProjectUpdateWithoutGeneralPayrollProjectsInput>, ProjectUncheckedUpdateWithoutGeneralPayrollProjectsInput>
   }
@@ -105266,6 +105363,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPettyCashTypeFilter<$PrismaModel>
     _max?: NestedEnumPettyCashTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGeneralPayrollLocationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.GeneralPayrollLocationType | EnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GeneralPayrollLocationType[] | ListEnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GeneralPayrollLocationType[] | ListEnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGeneralPayrollLocationTypeFilter<$PrismaModel> | $Enums.GeneralPayrollLocationType
+  }
+
+  export type NestedEnumGeneralPayrollLocationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GeneralPayrollLocationType | EnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GeneralPayrollLocationType[] | ListEnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GeneralPayrollLocationType[] | ListEnumGeneralPayrollLocationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGeneralPayrollLocationTypeWithAggregatesFilter<$PrismaModel> | $Enums.GeneralPayrollLocationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGeneralPayrollLocationTypeFilter<$PrismaModel>
+    _max?: NestedEnumGeneralPayrollLocationTypeFilter<$PrismaModel>
   }
 
   export type NestedEnumGeneralPayrollWorkerGroupFilter<$PrismaModel = never> = {
@@ -107168,6 +107282,7 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollProjectCreateWithoutProjectInput = {
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -107178,6 +107293,7 @@ export namespace Prisma {
   export type GeneralPayrollProjectUncheckedCreateWithoutProjectInput = {
     generalPayrollProjectId?: number
     generalPayrollId: number
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -107625,7 +107741,8 @@ export namespace Prisma {
     NOT?: GeneralPayrollProjectScalarWhereInput | GeneralPayrollProjectScalarWhereInput[]
     generalPayrollProjectId?: IntFilter<"GeneralPayrollProject"> | number
     generalPayrollId?: IntFilter<"GeneralPayrollProject"> | number
-    projectId?: IntFilter<"GeneralPayrollProject"> | number
+    projectId?: IntNullableFilter<"GeneralPayrollProject"> | number | null
+    locationType?: EnumGeneralPayrollLocationTypeFilter<"GeneralPayrollProject"> | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFilter<"GeneralPayrollProject"> | number
     createdAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
     updatedAt?: DateTimeFilter<"GeneralPayrollProject"> | Date | string
@@ -120455,16 +120572,18 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollProjectCreateWithoutGeneralPayrollInput = {
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    project: ProjectCreateNestedOneWithoutGeneralPayrollProjectsInput
+    project?: ProjectCreateNestedOneWithoutGeneralPayrollProjectsInput
     entries?: GeneralPayrollEntryCreateNestedManyWithoutPayrollProjectInput
   }
 
   export type GeneralPayrollProjectUncheckedCreateWithoutGeneralPayrollInput = {
     generalPayrollProjectId?: number
-    projectId: number
+    projectId?: number | null
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -121021,17 +121140,19 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollProjectCreateWithoutEntriesInput = {
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     generalPayroll: GeneralPayrollCreateNestedOneWithoutProjectsInput
-    project: ProjectCreateNestedOneWithoutGeneralPayrollProjectsInput
+    project?: ProjectCreateNestedOneWithoutGeneralPayrollProjectsInput
   }
 
   export type GeneralPayrollProjectUncheckedCreateWithoutEntriesInput = {
     generalPayrollProjectId?: number
     generalPayrollId: number
-    projectId: number
+    projectId?: number | null
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -121086,17 +121207,19 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollProjectUpdateWithoutEntriesInput = {
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     generalPayroll?: GeneralPayrollUpdateOneRequiredWithoutProjectsNestedInput
-    project?: ProjectUpdateOneRequiredWithoutGeneralPayrollProjectsNestedInput
+    project?: ProjectUpdateOneWithoutGeneralPayrollProjectsNestedInput
   }
 
   export type GeneralPayrollProjectUncheckedUpdateWithoutEntriesInput = {
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
     generalPayrollId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
+    projectId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124751,6 +124874,7 @@ export namespace Prisma {
   export type GeneralPayrollProjectCreateManyProjectInput = {
     generalPayrollProjectId?: number
     generalPayrollId: number
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -125083,6 +125207,7 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollProjectUpdateWithoutProjectInput = {
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -125093,6 +125218,7 @@ export namespace Prisma {
   export type GeneralPayrollProjectUncheckedUpdateWithoutProjectInput = {
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
     generalPayrollId?: IntFieldUpdateOperationsInput | number
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -125102,6 +125228,7 @@ export namespace Prisma {
   export type GeneralPayrollProjectUncheckedUpdateManyWithoutProjectInput = {
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
     generalPayrollId?: IntFieldUpdateOperationsInput | number
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -129093,7 +129220,8 @@ export namespace Prisma {
 
   export type GeneralPayrollProjectCreateManyGeneralPayrollInput = {
     generalPayrollProjectId?: number
-    projectId: number
+    projectId?: number | null
+    locationType?: $Enums.GeneralPayrollLocationType
     displayOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -129113,16 +129241,18 @@ export namespace Prisma {
   }
 
   export type GeneralPayrollProjectUpdateWithoutGeneralPayrollInput = {
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutGeneralPayrollProjectsNestedInput
+    project?: ProjectUpdateOneWithoutGeneralPayrollProjectsNestedInput
     entries?: GeneralPayrollEntryUpdateManyWithoutPayrollProjectNestedInput
   }
 
   export type GeneralPayrollProjectUncheckedUpdateWithoutGeneralPayrollInput = {
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
+    projectId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -129131,7 +129261,8 @@ export namespace Prisma {
 
   export type GeneralPayrollProjectUncheckedUpdateManyWithoutGeneralPayrollInput = {
     generalPayrollProjectId?: IntFieldUpdateOperationsInput | number
-    projectId?: IntFieldUpdateOperationsInput | number
+    projectId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationType?: EnumGeneralPayrollLocationTypeFieldUpdateOperationsInput | $Enums.GeneralPayrollLocationType
     displayOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -82,6 +82,26 @@ describe('Dynamic role permissions', () => {
   it('separates payroll configuration and data entry', () => {
     expect(
       satisfies(
+        ['payroll.view', 'payroll.attendance'],
+        endpointPermissions(
+          'GeneralPayrollController',
+          'updateAttendance',
+          'PATCH',
+        ),
+      ),
+    ).toBe(true);
+    expect(
+      satisfies(
+        ['payroll.view', 'payroll.payments'],
+        endpointPermissions(
+          'GeneralPayrollController',
+          'updateAttendance',
+          'PATCH',
+        ),
+      ),
+    ).toBe(false);
+    expect(
+      satisfies(
         ['payroll.view', 'payroll.manage'],
         endpointPermissions('GeneralPayrollController', 'save', 'PUT'),
       ),

@@ -52,6 +52,9 @@ export class DashboardService {
     );
     const projectIds = projects.map((project) => project.projectId);
     const scope = { projectId: { in: projectIds } };
+    const payrollScope = query.projectId
+      ? scope
+      : { OR: [scope, { locationType: 'services' as const }] };
     const dates = { gte: period.from, lt: period.to };
     const daysAgo = new Date(now.getTime() - 7 * 86400000);
     const documentLimit = new Date(`${today}T00:00:00Z`);
@@ -111,7 +114,7 @@ export class DashboardService {
                 endDate: { gte: new Date(`${period.keys[0]}-01T00:00:00Z`) },
                 startDate: { lt: new Date(`${period.endDate}T00:00:00Z`) },
               },
-              projects: { some: scope },
+              projects: { some: payrollScope },
             },
             select: {
               week: {
@@ -129,7 +132,7 @@ export class DashboardService {
                 },
               },
               projects: {
-                where: scope,
+                where: payrollScope,
                 select: {
                   projectId: true,
                   entries: {

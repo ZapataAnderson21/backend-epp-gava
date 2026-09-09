@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Put,
   Res,
@@ -15,6 +16,7 @@ import { ConfigureGeneralPayrollDto } from './dto/configure-general-payroll.dto'
 import { InitializeGeneralPayrollDto } from './dto/initialize-general-payroll.dto';
 import { SaveGeneralPayrollDto } from './dto/save-general-payroll.dto';
 import { UpdateGeneralPayrollProjectWorkersDto } from './dto/update-general-payroll-project-workers.dto';
+import { UpdateGeneralPayrollAttendanceDto } from './dto/update-general-payroll-attendance.dto';
 import { GeneralPayrollService } from './general-payroll.service';
 import { GeneralPayrollExcelService } from './general-payroll-excel.service';
 
@@ -105,5 +107,14 @@ export class GeneralPayrollController {
     @Body() dto: SaveGeneralPayrollDto,
   ) {
     return this.generalPayrollService.save(weekId, dto);
+  }
+
+  @Patch('weeks/:weekId/entries/:entryId/attendance')
+  updateAttendance(
+    @Param('weekId', ParseIntPipe) weekId: number,
+    @Param('entryId', ParseIntPipe) entryId: number,
+    @Body() dto: UpdateGeneralPayrollAttendanceDto,
+  ) {
+    return this.generalPayrollService.updateAttendance(weekId, entryId, dto);
   }
 }

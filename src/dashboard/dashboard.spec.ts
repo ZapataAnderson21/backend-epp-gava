@@ -120,6 +120,33 @@ function payrollFixture() {
 }
 
 describe('General dashboard', () => {
+  it('includes Services globally even without projects, without assigning its costs to a project', async () => {
+    const { prisma, service } = fixture();
+    prisma.project.findMany.mockResolvedValue([]);
+    const payroll = payrollFixture();
+    prisma.generalPayroll.findMany.mockResolvedValue([
+      { ...payroll, projects: [{ projectId: null, entries: [entry()] }] },
+    ]);
+    const { data } = await service.findGeneral({ month: 9, year: 2026 }, 7);
+    expect(data.payroll).toMatchObject({ total: 200 });
+    expect(data.finances).toMatchObject({
+      payroll: 140,
+      adjustments: 60,
+      expenses: 200,
+    });
+    expect(data.projects).toEqual([]);
+    const scope = {
+      OR: [{ projectId: { in: [] } }, { locationType: 'services' }],
+    };
+    expect(prisma.generalPayroll.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ projects: { some: scope } }),
+        select: expect.objectContaining({
+          projects: expect.objectContaining({ where: scope }),
+        }),
+      }),
+    );
+  });
   it('keeps calendar months and Lima timestamps separate across years', () => {
     expect(dashboardPeriod(1, 2027)).toEqual({
       keys: ['2026-08', '2026-09', '2026-10', '2026-11', '2026-12', '2027-01'],

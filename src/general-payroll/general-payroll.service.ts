@@ -14,6 +14,11 @@ import {
   SaveGeneralPayrollEntryDto,
 } from './dto/save-general-payroll.dto';
 import { UpdateGeneralPayrollProjectWorkersDto } from './dto/update-general-payroll-project-workers.dto';
+import {
+  GeneralPayrollAttendanceFieldDto,
+  UpdateGeneralPayrollAttendanceDto,
+} from './dto/update-general-payroll-attendance.dto';
+import { payrollLocationName } from './payroll-location';
 
 const attendanceFields = [
   ['monday', 'lunes'],
@@ -233,7 +238,14 @@ export class GeneralPayrollService {
         startDate: week.startDate,
         endDate: week.endDate,
         initialized: Boolean(payroll),
-        projectCount: payroll?.projects.length ?? 0,
+        projectCount:
+          payroll?.projects.filter((location) => location.projectId !== null)
+            .length ?? 0,
+        locationCount: payroll?.projects.length ?? 0,
+        includesServices:
+          payroll?.projects.some(
+            (location) => location.locationType === 'services',
+          ) ?? false,
         workerCount: payroll?.workers.length ?? 0,
         totalAmount: this.round(projectTotal + adjustments),
       };
@@ -403,11 +415,26 @@ export class GeneralPayrollService {
     );
 
     await this.prisma.$transaction(async (transaction) => {
+      await transaction.$executeRaw`SELECT pg_advisory_xact_lock(98117, ${payroll.generalPayrollId}::int)`;
+      const services = await transaction.generalPayrollProject.findFirst({
+        where: {
+          generalPayrollId: payroll.generalPayrollId,
+          locationType: 'services',
+        },
+      });
+      // Older clients omit this field; do not silently remove their Services data.
+      const includeServices = dto.includeServices ?? Boolean(services);
+      const removedLocations: Prisma.GeneralPayrollProjectWhereInput = {
+        OR: [
+          { locationType: 'project', projectId: { notIn: dto.projectIds } },
+          ...(!includeServices ? [{ locationType: 'services' as const }] : []),
+        ],
+      };
       const removedEntries = await transaction.generalPayrollEntry.findMany({
         where: {
           payrollWorker: { generalPayrollId: payroll.generalPayrollId },
           OR: [
-            { payrollProject: { projectId: { notIn: dto.projectIds } } },
+            { payrollProject: removedLocations },
             {
               payrollWorker: {
                 workerId: {
@@ -425,13 +452,33 @@ export class GeneralPayrollService {
         },
       });
       if (
+        services &&
+        !includeServices &&
+        !dto.confirmRemoveServices &&
+        removedEntries.some(
+          (entry) =>
+            entry.generalPayrollProjectId ===
+              services.generalPayrollProjectId &&
+            [
+              ...attendanceFields.map(([field]) => entry[field]),
+              entry.overtimeAmount,
+              entry.afpDiscount,
+              entry.advanceDiscount,
+            ].some((value) => Number(value) !== 0),
+        )
+      ) {
+        throw new ConflictException(
+          'Servicios tiene asistencias o pagos. Confirma que deseas retirar esta ubicación y sus registros.',
+        );
+      }
+      if (
         !permissions.includes('payroll.attendance') &&
         removedEntries.some((entry) =>
           attendanceFields.some(([field]) => Number(entry[field]) !== 0),
         )
       ) {
         throw new BadRequestException(
-          'No puedes retirar trabajadores o proyectos con asistencias: necesitas el permiso Registrar asistencias.',
+          'No puedes retirar trabajadores o ubicaciones con asistencias: necesitas el permiso Registrar asistencias.',
         );
       }
       if (
@@ -459,7 +506,7 @@ export class GeneralPayrollService {
       await transaction.generalPayrollProject.deleteMany({
         where: {
           generalPayrollId: payroll.generalPayrollId,
-          projectId: { notIn: dto.projectIds },
+          ...removedLocations,
         },
       });
       await transaction.generalPayrollWorker.deleteMany({
@@ -508,9 +555,28 @@ export class GeneralPayrollService {
           }),
         ),
       );
+      if (includeServices) {
+        if (services) {
+          await transaction.generalPayrollProject.update({
+            where: {
+              generalPayrollProjectId: services.generalPayrollProjectId,
+            },
+            data: { displayOrder: dto.projectIds.length },
+          });
+        } else {
+          await transaction.generalPayrollProject.create({
+            data: {
+              generalPayrollId: payroll.generalPayrollId,
+              projectId: null,
+              locationType: 'services',
+              displayOrder: dto.projectIds.length,
+            },
+          });
+        }
+      }
+      await this.ensureEntryMatrix(payroll.generalPayrollId, transaction);
     });
 
-    await this.ensureEntryMatrix(payroll.generalPayrollId);
     return this.findOne(weekId);
   }
 
@@ -550,7 +616,7 @@ export class GeneralPayrollService {
     });
     if (!payrollProject) {
       throw new NotFoundException(
-        'El proyecto no pertenece a la planilla semanal indicada.',
+        'La ubicación no pertenece a la planilla semanal indicada.',
       );
     }
 
@@ -640,90 +706,177 @@ export class GeneralPayrollService {
       throw new NotFoundException('La planilla semanal aún no fue creada.');
     }
 
-    const [workerCount, payrollEntries] = await Promise.all([
-      this.prisma.generalPayrollWorker.count({
-        where: {
-          generalPayrollId: payroll.generalPayrollId,
-          generalPayrollWorkerId: {
-            in: dto.workers.map((worker) => worker.generalPayrollWorkerId),
+    await this.prisma.$transaction(async (transaction) => {
+      // Validate and save against the same weekly state, including Services.
+      await transaction.$executeRaw`SELECT pg_advisory_xact_lock(98117, ${payroll.generalPayrollId}::int)`;
+      const [workerCount, payrollEntries] = await Promise.all([
+        transaction.generalPayrollWorker.count({
+          where: {
+            generalPayrollId: payroll.generalPayrollId,
+            generalPayrollWorkerId: {
+              in: dto.workers.map((worker) => worker.generalPayrollWorkerId),
+            },
           },
-        },
-      }),
-      this.prisma.generalPayrollEntry.findMany({
+        }),
+        transaction.generalPayrollEntry.findMany({
+          where: {
+            payrollWorker: { generalPayrollId: payroll.generalPayrollId },
+          },
+          select: {
+            generalPayrollEntryId: true,
+            generalPayrollWorkerId: true,
+            isActive: true,
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true,
+            dominical: true,
+            payrollWorker: {
+              select: { worker: { select: { fullName: true } } },
+            },
+            payrollProject: {
+              select: {
+                locationType: true,
+                project: { select: { name: true } },
+              },
+            },
+          },
+        }),
+      ]);
+
+      const payrollEntryIds = new Set(
+        payrollEntries.map((entry) => entry.generalPayrollEntryId),
+      );
+      if (
+        workerCount !== dto.workers.length ||
+        dto.entries.some(
+          (entry) => !payrollEntryIds.has(entry.generalPayrollEntryId),
+        )
+      ) {
+        throw new BadRequestException(
+          'La planilla cambió mientras se editaba. Actualiza la página e inténtalo nuevamente.',
+        );
+      }
+
+      this.validateUniqueAttendance(payrollEntries, dto.entries);
+
+      await Promise.all([
+        ...dto.workers.map((worker) =>
+          transaction.generalPayrollWorker.update({
+            where: {
+              generalPayrollWorkerId: worker.generalPayrollWorkerId,
+            },
+            data: {
+              dailyWage: worker.dailyWage,
+              additionalAmount: worker.additionalAmount,
+              liquidationAmount: worker.liquidationAmount,
+              sundayDinnerAmount: worker.sundayDinnerAmount,
+            },
+          }),
+        ),
+        ...dto.entries.map((entry) =>
+          transaction.generalPayrollEntry.update({
+            where: { generalPayrollEntryId: entry.generalPayrollEntryId },
+            data: {
+              monday: entry.monday,
+              tuesday: entry.tuesday,
+              wednesday: entry.wednesday,
+              thursday: entry.thursday,
+              friday: entry.friday,
+              saturday: entry.saturday,
+              dominical: entry.dominical,
+              overtimeAmount: entry.overtimeAmount,
+              afpDiscount: entry.afpDiscount,
+              advanceDiscount: entry.advanceDiscount,
+            },
+          }),
+        ),
+      ]);
+    });
+
+    return this.findOne(weekId);
+  }
+
+  async updateAttendance(
+    weekId: number,
+    entryId: number,
+    dto: UpdateGeneralPayrollAttendanceDto,
+  ) {
+    const payroll = await this.prisma.generalPayroll.findUnique({
+      where: { weekId },
+      select: { generalPayrollId: true },
+    });
+    if (!payroll) {
+      throw new NotFoundException('La planilla semanal aún no fue creada.');
+    }
+
+    const data = await this.prisma.$transaction(async (transaction) => {
+      await transaction.$executeRaw`SELECT pg_advisory_xact_lock(98117, ${payroll.generalPayrollId}::int)`;
+      const entry = await transaction.generalPayrollEntry.findFirst({
         where: {
+          generalPayrollEntryId: entryId,
+          isActive: true,
           payrollWorker: { generalPayrollId: payroll.generalPayrollId },
         },
         select: {
-          generalPayrollEntryId: true,
           generalPayrollWorkerId: true,
-          isActive: true,
-          monday: true,
-          tuesday: true,
-          wednesday: true,
-          thursday: true,
-          friday: true,
-          saturday: true,
-          dominical: true,
           payrollWorker: {
             select: { worker: { select: { fullName: true } } },
           },
-          payrollProject: {
-            select: { project: { select: { name: true } } },
-          },
         },
-      }),
-    ]);
+      });
+      if (!entry) {
+        throw new NotFoundException(
+          'La asistencia no pertenece a esta planilla o ya no está activa.',
+        );
+      }
 
-    const payrollEntryIds = new Set(
-      payrollEntries.map((entry) => entry.generalPayrollEntryId),
-    );
-    if (
-      workerCount !== dto.workers.length ||
-      dto.entries.some(
-        (entry) => !payrollEntryIds.has(entry.generalPayrollEntryId),
-      )
-    ) {
-      throw new BadRequestException(
-        'La planilla cambió mientras se editaba. Actualiza la página e inténtalo nuevamente.',
-      );
-    }
-
-    this.validateUniqueAttendance(payrollEntries, dto.entries);
-
-    await this.prisma.$transaction([
-      ...dto.workers.map((worker) =>
-        this.prisma.generalPayrollWorker.update({
+      if (dto.value === 1) {
+        const conflict = await transaction.generalPayrollEntry.findFirst({
           where: {
-            generalPayrollWorkerId: worker.generalPayrollWorkerId,
+            generalPayrollEntryId: { not: entryId },
+            generalPayrollWorkerId: entry.generalPayrollWorkerId,
+            isActive: true,
+            [dto.field]: { gt: 0 },
+            payrollWorker: { generalPayrollId: payroll.generalPayrollId },
           },
-          data: {
-            dailyWage: worker.dailyWage,
-            additionalAmount: worker.additionalAmount,
-            liquidationAmount: worker.liquidationAmount,
-            sundayDinnerAmount: worker.sundayDinnerAmount,
+          select: {
+            payrollProject: {
+              select: {
+                locationType: true,
+                project: { select: { name: true } },
+              },
+            },
           },
-        }),
-      ),
-      ...dto.entries.map((entry) =>
-        this.prisma.generalPayrollEntry.update({
-          where: { generalPayrollEntryId: entry.generalPayrollEntryId },
-          data: {
-            monday: entry.monday,
-            tuesday: entry.tuesday,
-            wednesday: entry.wednesday,
-            thursday: entry.thursday,
-            friday: entry.friday,
-            saturday: entry.saturday,
-            dominical: entry.dominical,
-            overtimeAmount: entry.overtimeAmount,
-            afpDiscount: entry.afpDiscount,
-            advanceDiscount: entry.advanceDiscount,
-          },
-        }),
-      ),
-    ]);
+        });
+        if (conflict) {
+          const label = attendanceFields.find(
+            ([field]) => field === dto.field,
+          )?.[1];
+          throw new BadRequestException(
+            `${entry.payrollWorker.worker.fullName} ya tiene asistencia el ${label} en ${payrollLocationName(conflict.payrollProject)}.`,
+          );
+        }
+      }
 
-    return this.findOne(weekId);
+      await transaction.generalPayrollEntry.update({
+        where: { generalPayrollEntryId: entryId },
+        data: { [dto.field]: dto.value },
+      });
+      return {
+        generalPayrollEntryId: entryId,
+        field: dto.field as GeneralPayrollAttendanceFieldDto,
+        value: dto.value,
+      };
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Asistencia guardada correctamente.',
+      data,
+    };
   }
 
   private async getWeek(weekId: number) {
@@ -732,20 +885,23 @@ export class GeneralPayrollService {
     return week;
   }
 
-  private async ensureEntryMatrix(generalPayrollId: number) {
+  private async ensureEntryMatrix(
+    generalPayrollId: number,
+    client: Prisma.TransactionClient = this.prisma,
+  ) {
     const [projects, workers] = await Promise.all([
-      this.prisma.generalPayrollProject.findMany({
+      client.generalPayrollProject.findMany({
         where: { generalPayrollId },
         select: { generalPayrollProjectId: true },
       }),
-      this.prisma.generalPayrollWorker.findMany({
+      client.generalPayrollWorker.findMany({
         where: { generalPayrollId },
         select: { generalPayrollWorkerId: true },
       }),
     ]);
     if (!projects.length || !workers.length) return;
 
-    await this.prisma.generalPayrollEntry.createMany({
+    await client.generalPayrollEntry.createMany({
       data: projects.flatMap((project) =>
         workers.map((worker) => ({
           generalPayrollProjectId: project.generalPayrollProjectId,
@@ -769,7 +925,10 @@ export class GeneralPayrollService {
       saturday: Prisma.Decimal;
       dominical: Prisma.Decimal;
       payrollWorker: { worker: { fullName: string } };
-      payrollProject: { project: { name: string } };
+      payrollProject: {
+        locationType?: string;
+        project: { name: string } | null;
+      };
     }>,
     updates: SaveGeneralPayrollEntryDto[],
   ) {
@@ -792,7 +951,7 @@ export class GeneralPayrollService {
             `${storedEntry.payrollWorker.worker.fullName} ya tiene asistencia el ${label} en ${occupiedProject}.`,
           );
         }
-        occupied.set(key, storedEntry.payrollProject.project.name);
+        occupied.set(key, payrollLocationName(storedEntry.payrollProject));
       }
     }
   }
@@ -804,6 +963,8 @@ export class GeneralPayrollService {
       projects: payroll.projects.map((project) => ({
         generalPayrollProjectId: project.generalPayrollProjectId,
         projectId: project.projectId,
+        locationType: project.locationType,
+        locationName: payrollLocationName(project),
         displayOrder: project.displayOrder,
         project: project.project,
         entries: project.entries.map((entry) => this.serializeEntry(entry)),

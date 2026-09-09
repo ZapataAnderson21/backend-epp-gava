@@ -6,6 +6,10 @@ import {
 import * as ExcelJS from 'exceljs';
 import { Prisma } from 'src/generated/prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  payrollLocationName,
+  SERVICES_LOCATION_NAME,
+} from './payroll-location';
 
 const exportPayrollInclude = {
   week: true,
@@ -100,7 +104,7 @@ export class GeneralPayrollExcelService {
     }
     if (payroll.projects.length === 0) {
       throw new BadRequestException(
-        'La planilla no tiene proyectos configurados para exportar.',
+        'La planilla no tiene ubicaciones configuradas para exportar.',
       );
     }
 
@@ -112,12 +116,20 @@ export class GeneralPayrollExcelService {
     workbook.calcProperties.fullCalcOnLoad = true;
 
     const usedSheetNames = new Set<string>(['general', 'trabajadores']);
+    if (
+      payroll.projects.some((location) => location.locationType === 'services')
+    ) {
+      usedSheetNames.add(SERVICES_LOCATION_NAME.toLowerCase());
+    }
     const projectSheetNames = new Map<number, string>();
     for (const project of payroll.projects) {
-      const sheetName = this.uniqueSheetName(
-        project.project.code || `PROYECTO ${project.projectId}`,
-        usedSheetNames,
-      );
+      const sheetName =
+        project.locationType === 'services'
+          ? SERVICES_LOCATION_NAME
+          : this.uniqueSheetName(
+              project.project?.code || `PROYECTO ${project.projectId}`,
+              usedSheetNames,
+            );
       projectSheetNames.set(project.generalPayrollProjectId, sheetName);
       this.addProjectSheet(workbook, payroll, project, sheetName);
     }
@@ -154,8 +166,12 @@ export class GeneralPayrollExcelService {
     this.addSheetHeading(
       sheet,
       projectHeaders.length,
-      'PLANILLA DE OBRA',
-      `PROYECTO: ${project.project.code} — ${project.project.name}`,
+      project.locationType === 'services'
+        ? 'PLANILLA DE SERVICIOS'
+        : 'PLANILLA DE OBRA',
+      project.locationType === 'services'
+        ? `UBICACIÓN: ${SERVICES_LOCATION_NAME}`
+        : `PROYECTO: ${project.project?.code} — ${payrollLocationName(project)}`,
       payroll,
     );
 
@@ -264,7 +280,7 @@ export class GeneralPayrollExcelService {
       sheet,
       generalHeaders.length,
       'PLANILLA GENERAL',
-      `PROYECTOS: ${payroll.projects.map(({ project }) => project.code).join(' · ')}`,
+      `UBICACIONES: ${payroll.projects.map((location) => (location.locationType === 'services' ? SERVICES_LOCATION_NAME : location.project?.code)).join(' · ')}`,
       payroll,
     );
 

@@ -25,15 +25,13 @@ export class PermissionsGuard implements CanActivate {
       ])
     )
       return true;
-    const request = context
-      .switchToHttp()
-      .getRequest<{
-        user?: { userId: number };
-        permissions: string[];
-        method: string;
-        body?: Record<string, unknown>;
-        params: Record<string, string>;
-      }>();
+    const request = context.switchToHttp().getRequest<{
+      user?: { userId: number };
+      permissions: string[];
+      method: string;
+      body?: Record<string, unknown>;
+      params: Record<string, string>;
+    }>();
     if (!request.user) throw new ForbiddenException('No autenticado.');
     const granted = await this.permissions.forUser(request.user.userId);
     request.permissions = granted;
@@ -187,6 +185,11 @@ export class PermissionsGuard implements CanActivate {
         requirePermission('finance.view');
       }
     }
+    if (
+      controller === 'GeneralPayrollController' &&
+      handler === 'updateAttendance'
+    )
+      requirePermission('payroll.attendance');
     if (
       controller === 'GeneralPayrollController' &&
       body.confirmClearAttendance

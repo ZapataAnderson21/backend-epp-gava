@@ -3,6 +3,8 @@ import { Type } from 'class-transformer';
 import {
   ArrayUnique,
   IsArray,
+  IsBoolean,
+  IsOptional,
   IsEnum,
   IsInt,
   IsPositive,
@@ -27,6 +29,19 @@ export class GeneralPayrollRosterWorkerDto {
 }
 
 export class ConfigureGeneralPayrollDto {
+  @ApiProperty({
+    required: false,
+    description: 'Incluir la ubicación Servicios, sin asociarla a un proyecto.',
+  })
+  @IsOptional()
+  @IsBoolean()
+  includeServices?: boolean;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsBoolean()
+  confirmRemoveServices?: boolean;
+
   @ApiProperty({ type: [Number], example: [2, 8] })
   @IsArray()
   @ArrayUnique()

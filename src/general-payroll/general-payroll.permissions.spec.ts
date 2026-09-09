@@ -30,6 +30,7 @@ describe('General payroll permissions', () => {
     'configure',
     'updateProjectWorkers',
     'save',
+    'updateAttendance',
   ])('allows LOGISTICA to use %s', (methodName) => {
     expect(effectiveMetadataFor(methodName)).toContain('LOGISTICA');
   });
