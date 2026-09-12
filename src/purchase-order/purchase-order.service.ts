@@ -13,11 +13,17 @@ import {
   PurchaseOrderStatusLabelEs,
   PurchaseOrderStatus,
   PurchaseOrderType,
+  PurchaseOrderTypeLabelEs,
 } from './enum';
 import { NotificationService } from 'src/notification/notification.service';
 import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
 import { ListPurchaseOrdersQueryDto } from './dto/list-purchase-orders-query.dto';
 import { PurchaseOrderDashboardQueryDto } from './dto/purchase-order-dashboard-query.dto';
+import { PurchaseOrderSummaryQueryDto } from './dto/purchase-order-summary-query.dto';
+import type {
+  PurchaseOrderProjectSummary,
+  PurchaseOrderSummaryAmount,
+} from './types/purchase-order-summary';
 
 @Injectable()
 export class PurchaseOrderService {
@@ -381,7 +387,7 @@ export class PurchaseOrderService {
         PurchaseOrderStatusLabelEs[
           po.status as keyof typeof PurchaseOrderStatusLabelEs
         ] || 'Desconocido';
-      return { ...po, status };
+      return { ...po, status, statusCode: po.status };
     });
 
     this.logger.log(`Fetched ${purchaseOrders.length} purchase orders`);
@@ -389,6 +395,132 @@ export class PurchaseOrderService {
       statusCode: HttpStatus.OK,
       message: 'Órdenes de compra obtenidas exitosamente.',
       data: processedPurchaseOrder,
+    };
+  }
+
+  async findProjectSummary(
+    projectId: number,
+    query: PurchaseOrderSummaryQueryDto,
+  ) {
+    const project = await this.findProject(projectId);
+    const search = query.search?.trim();
+    const supplierFilter = {
+      ...(query.supplierId ? { supplierId: query.supplierId } : {}),
+      ...(query.currency ? { currency: query.currency } : {}),
+    };
+
+    const purchaseOrders = await this.prisma.purchaseOrder.findMany({
+      where: {
+        projectId,
+        ...(search
+          ? { code: { contains: search, mode: 'insensitive' as const } }
+          : {}),
+        ...(query.status ? { status: query.status } : {}),
+        ...(query.purchaseOrderType
+          ? { purchaseOrderType: query.purchaseOrderType }
+          : {}),
+        ...(Object.keys(supplierFilter).length > 0
+          ? { supplier: supplierFilter }
+          : {}),
+      },
+      select: {
+        purchaseOrderId: true,
+        code: true,
+        purchaseOrderType: true,
+        purchaseAmount: true,
+        saleAmount: true,
+        status: true,
+        supplierId: true,
+        supplier: {
+          select: { supplierId: true, name: true, currency: true },
+        },
+      },
+      orderBy: [{ createdAt: 'desc' }, { purchaseOrderId: 'desc' }],
+    });
+
+    const orders = purchaseOrders.map((purchaseOrder) => {
+      const purchaseAmount = Number(purchaseOrder.purchaseAmount);
+      const saleAmount = Number(purchaseOrder.saleAmount);
+      const purchaseOrderType =
+        purchaseOrder.purchaseOrderType as PurchaseOrderType;
+      const currency = purchaseOrder.supplier.currency as Currency;
+      const status = purchaseOrder.status as PurchaseOrderStatus;
+      return {
+        purchaseOrderId: purchaseOrder.purchaseOrderId,
+        code: purchaseOrder.code,
+        supplierId: purchaseOrder.supplierId,
+        supplierName: purchaseOrder.supplier.name,
+        purchaseOrderType,
+        purchaseOrderTypeLabel: PurchaseOrderTypeLabelEs[purchaseOrderType],
+        currency,
+        purchaseAmount,
+        saleAmount,
+        margin: saleAmount - purchaseAmount,
+        status,
+        statusLabel: PurchaseOrderStatusLabelEs[status],
+      };
+    });
+
+    const emptyAmount = (): PurchaseOrderSummaryAmount => ({
+      purchaseAmount: 0,
+      saleAmount: 0,
+      margin: 0,
+    });
+    const byCurrency: PurchaseOrderProjectSummary['totals']['byCurrency'] = {
+      [Currency.PEN]: emptyAmount(),
+      [Currency.USD]: emptyAmount(),
+      [Currency.EUR]: emptyAmount(),
+    };
+    const activeOrders = orders.filter(
+      (purchaseOrder) => purchaseOrder.status !== PurchaseOrderStatus.Cancelled,
+    );
+
+    for (const purchaseOrder of activeOrders) {
+      const totals = byCurrency[purchaseOrder.currency];
+      totals.purchaseAmount += purchaseOrder.purchaseAmount;
+      totals.saleAmount += purchaseOrder.saleAmount;
+      totals.margin += purchaseOrder.margin;
+    }
+
+    const supplierName = query.supplierId
+      ? (orders.find((order) => order.supplierId === query.supplierId)
+          ?.supplierName ??
+        (
+          await this.prisma.supplier.findUnique({
+            where: { supplierId: query.supplierId },
+            select: { name: true },
+          })
+        )?.name ??
+        null)
+      : null;
+
+    const summary: PurchaseOrderProjectSummary = {
+      project: {
+        projectId: project.projectId,
+        code: project.code,
+        name: project.name,
+      },
+      filters: {
+        search: search || null,
+        supplierId: query.supplierId ?? null,
+        supplierName,
+        currency: query.currency ?? null,
+        status: query.status ?? null,
+        purchaseOrderType: query.purchaseOrderType ?? null,
+      },
+      totals: {
+        totalOrders: orders.length,
+        activeOrders: activeOrders.length,
+        cancelledOrders: orders.length - activeOrders.length,
+        byCurrency,
+      },
+      orders,
+    };
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Resumen de órdenes de compra obtenido exitosamente.',
+      data: summary,
     };
   }
 

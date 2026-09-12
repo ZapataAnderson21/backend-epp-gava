@@ -39,7 +39,8 @@ export function endpointPermissions(
 ): string[][] | null {
   if (
     controller === 'NotificationController' ||
-    (controller === 'UserController' && ['me', 'updateMe'].includes(handler)) ||
+    (controller === 'UserController' &&
+      ['me', 'updateMe', 'logout'].includes(handler)) ||
     (controller === 'PermissionsController' && handler === 'me')
   )
     return [];
@@ -64,6 +65,11 @@ export function endpointPermissions(
     return [['projects.view'], ['projects.status']];
   if (controller === 'RequestController' && handler === 'updateStatus')
     return [['requests.view']]; // Per-transition validation follows.
+  if (
+    controller === 'PurchaseOrderController' &&
+    handler === 'generateProjectSummaryPdf'
+  )
+    return [['orders.view'], ['orders.export'], ['finance.view']];
   if (controller === 'RequestResponseController' && method !== 'GET')
     return [
       ['requests.view'],

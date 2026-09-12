@@ -140,7 +140,6 @@ export class PermissionsGuard implements CanActivate {
       })) {
         if (field in body) requirePermission(permission);
       }
-      if ('responderUserId' in body) body.responderUserId = request.user.userId;
     }
     if (
       controller === 'ElementRequestResponseController' &&

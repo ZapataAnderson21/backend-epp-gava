@@ -5,7 +5,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { CreateRequestResponseDto } from './dto/create-request_response.dto';
-import { UpdateRequestResponseDto } from './dto/update-request_response.dto';
+import { UpdateRequestResponseDto } from './dto/update-request-response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -14,7 +14,38 @@ export class RequestResponseService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createRequestResponseDto: CreateRequestResponseDto) {
+  private async assertRequestAccessible(
+    requestId: number,
+    actorUserId: number,
+    forWrite = false,
+  ) {
+    const request = await this.prismaService.request.findUnique({
+      where: { requestId },
+      select: { status: true, userId: true },
+    });
+
+    if (
+      !request ||
+      (request.status === 'draft' && request.userId !== actorUserId)
+    ) {
+      throw new BadRequestException('Request not found');
+    }
+    if (forWrite && request.status === 'draft') {
+      throw new BadRequestException(
+        'No se puede responder un requerimiento que sigue en borrador.',
+      );
+    }
+  }
+
+  async create(
+    createRequestResponseDto: CreateRequestResponseDto,
+    responderUserId: number,
+  ) {
+    await this.assertRequestAccessible(
+      createRequestResponseDto.requestId,
+      responderUserId,
+      true,
+    );
     this.logger.log(
       'Creating request response with data:',
       createRequestResponseDto,
@@ -22,8 +53,8 @@ export class RequestResponseService {
 
     const requestResponse = await this.prismaService.requestResponse.upsert({
       where: { requestId: createRequestResponseDto.requestId },
-      create: createRequestResponseDto,
-      update: createRequestResponseDto,
+      create: { ...createRequestResponseDto, responderUserId },
+      update: { ...createRequestResponseDto, responderUserId },
     });
 
     this.logger.log(
@@ -43,7 +74,7 @@ export class RequestResponseService {
     };
   }
 
-  async findOne(requestResponseId: number) {
+  async findOne(requestResponseId: number, viewerUserId: number) {
     this.logger.log(`Finding request response with ID: ${requestResponseId}`);
     const requestResponse = await this.prismaService.requestResponse.findUnique(
       {
@@ -82,6 +113,8 @@ export class RequestResponseService {
       );
       throw new BadRequestException('Request response not found');
     }
+
+    await this.assertRequestAccessible(requestResponse.requestId, viewerUserId);
 
     const returnResponder = {
       userId: requestResponse.responder
@@ -145,7 +178,8 @@ export class RequestResponseService {
     };
   }
 
-  async findByRequestId(requestId: number) {
+  async findByRequestId(requestId: number, viewerUserId: number) {
+    await this.assertRequestAccessible(requestId, viewerUserId);
     this.logger.log(`Finding request response with Request ID: ${requestId}`);
     const requestResponse = await this.prismaService.requestResponse.findUnique(
       {
@@ -205,7 +239,20 @@ export class RequestResponseService {
     };
   }
 
-  async update(id: number, updateRequestResponseDto: UpdateRequestResponseDto) {
+  async update(
+    id: number,
+    updateRequestResponseDto: UpdateRequestResponseDto,
+    actorUserId: number,
+  ) {
+    const existing = await this.prismaService.requestResponse.findUnique({
+      where: { requestResponseId: id },
+      select: { requestId: true },
+    });
+    if (!existing) {
+      throw new BadRequestException('Request response not found');
+    }
+    await this.assertRequestAccessible(existing.requestId, actorUserId, true);
+
     const updatedRequestResponse =
       await this.prismaService.requestResponse.update({
         where: { requestResponseId: id },

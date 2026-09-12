@@ -16,12 +16,18 @@ export class RequestWorkerService {
 
   private readonly logger = new Logger('RequestWorkerService');
 
-  async create(createRequestWorkerDto: CreateRequestWorkerDto) {
+  async create(
+    createRequestWorkerDto: CreateRequestWorkerDto,
+    actorUserId: number,
+  ) {
     this.logger.log(
       'Creating request worker',
       JSON.stringify(createRequestWorkerDto),
     );
-    await this.requestExistsAndIsDraft(createRequestWorkerDto.requestId);
+    await this.requestExistsAndIsDraft(
+      createRequestWorkerDto.requestId,
+      actorUserId,
+    );
 
     this.logger.log(
       `Verifying worker with ID: ${createRequestWorkerDto.workerId} exists`,
@@ -54,7 +60,8 @@ export class RequestWorkerService {
     };
   }
 
-  async findAllByRequestId(requestId: number) {
+  async findAllByRequestId(requestId: number, viewerUserId: number) {
+    await this.assertCanReadRequest(requestId, viewerUserId);
     this.logger.log(`Finding request workers for request ID: ${requestId}`);
     const requestWorkers = await this.prismaService.requestWorker.findMany({
       where: { requestId },
@@ -79,7 +86,7 @@ export class RequestWorkerService {
     };
   }
 
-  async findOne(requestWorkerId: number) {
+  async findOne(requestWorkerId: number, viewerUserId: number) {
     this.logger.log(`Finding request worker with ID: ${requestWorkerId}`);
     const requestWorker = await this.prismaService.requestWorker.findUnique({
       where: { requestWorkerId },
@@ -93,6 +100,15 @@ export class RequestWorkerService {
       this.logger.error(`Request worker with ID ${requestWorkerId} not found`);
       throw new NotFoundException(
         `La solicitud para un trabajador específico no fue encontrada.`,
+      );
+    }
+
+    if (
+      requestWorker.request.status === RequestStatus.draft &&
+      requestWorker.request.userId !== viewerUserId
+    ) {
+      throw new NotFoundException(
+        'La solicitud para un trabajador específico no fue encontrada.',
       );
     }
 
@@ -111,17 +127,36 @@ export class RequestWorkerService {
   async update(
     requestWorkerId: number,
     updateRequestWorkerDto: UpdateRequestWorkerDto,
+    actorUserId: number,
   ) {
     this.logger.log(
       `Updating request worker with ID: ${requestWorkerId}`,
       JSON.stringify(updateRequestWorkerDto),
     );
-    const existingRequestWorker = await this.findOne(requestWorkerId);
+    const existingRequestWorker = await this.findOne(
+      requestWorkerId,
+      actorUserId,
+    );
 
     this.logger.log(
       `Verifying associated request with ID: ${existingRequestWorker.data.requestId} is in draft status`,
     );
-    await this.requestExistsAndIsDraft(existingRequestWorker.data.requestId);
+    await this.requestExistsAndIsDraft(
+      existingRequestWorker.data.requestId,
+      actorUserId,
+    );
+    if (
+      updateRequestWorkerDto.requestId &&
+      updateRequestWorkerDto.requestId !== existingRequestWorker.data.requestId
+    ) {
+      await this.requestExistsAndIsDraft(
+        updateRequestWorkerDto.requestId,
+        actorUserId,
+      );
+    }
+    if (updateRequestWorkerDto.workerId) {
+      await this.verifyWorkerExists(updateRequestWorkerDto.workerId);
+    }
 
     const updatedRequestWorker = await this.prismaService.requestWorker.update({
       where: { requestWorkerId },
@@ -154,11 +189,17 @@ export class RequestWorkerService {
     };
   }
 
-  async remove(requestWorkerId: number) {
+  async remove(requestWorkerId: number, actorUserId: number) {
     this.logger.log(`Removing request worker with ID: ${requestWorkerId}`);
-    const existingRequestWorker = await this.findOne(requestWorkerId);
+    const existingRequestWorker = await this.findOne(
+      requestWorkerId,
+      actorUserId,
+    );
 
-    await this.requestExistsAndIsDraft(existingRequestWorker.data.requestId);
+    await this.requestExistsAndIsDraft(
+      existingRequestWorker.data.requestId,
+      actorUserId,
+    );
 
     const deletedRequestWorker = await this.prismaService.requestWorker.delete({
       where: { requestWorkerId },
@@ -189,16 +230,31 @@ export class RequestWorkerService {
     };
   }
 
-  async requestExistsAndIsDraft(requestId: number) {
+  private async assertCanReadRequest(requestId: number, viewerUserId: number) {
+    const request = await this.prismaService.request.findUnique({
+      where: { requestId },
+      select: { status: true, userId: true },
+    });
+    if (
+      !request ||
+      (request.status === RequestStatus.draft &&
+        request.userId !== viewerUserId)
+    ) {
+      throw new NotFoundException('La solicitud asociada no fue encontrada.');
+    }
+  }
+
+  async requestExistsAndIsDraft(requestId: number, actorUserId: number) {
     this.logger.log(
       `Checking if request exists and is in draft status for ID: ${requestId}`,
     );
 
     const request = await this.prismaService.request.findUnique({
       where: { requestId },
+      select: { requestId: true, status: true, userId: true },
     });
 
-    if (!request) {
+    if (!request || request.userId !== actorUserId) {
       this.logger.error(`Associated request with ID ${requestId} not found`);
       throw new NotFoundException('La solicitud asociada no fue encontrada.');
     }

@@ -21,6 +21,8 @@ import { PdfService } from 'src/pdf/pdf.service';
 import { createReadStream } from 'fs';
 import { ListPurchaseOrdersQueryDto } from './dto/list-purchase-orders-query.dto';
 import { PurchaseOrderDashboardQueryDto } from './dto/purchase-order-dashboard-query.dto';
+import { PurchaseOrderSummaryQueryDto } from './dto/purchase-order-summary-query.dto';
+import { GetUser } from 'src/decorators/get-user.decorator';
 
 @Controller('purchase-order')
 export class PurchaseOrderController {
@@ -69,6 +71,30 @@ export class PurchaseOrderController {
     @Query() query: ListPurchaseOrdersQueryDto,
   ) {
     return this.purchaseOrderService.findPaginatedByProject(projectId, query);
+  }
+
+  @Get('project/:projectId/summary/pdf')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
+  async generateProjectSummaryPdf(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query() query: PurchaseOrderSummaryQueryDto,
+    @GetUser('email') generatedBy: string,
+    @Res() res: Response,
+  ) {
+    const summary = await this.purchaseOrderService.findProjectSummary(
+      projectId,
+      query,
+    );
+    const { buffer, fileName } =
+      await this.pdfService.generatePurchaseOrderSummaryPdf(
+        summary.data,
+        generatedBy,
+      );
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    res.setHeader('Cache-Control', 'private, no-store');
+    return res.send(buffer);
   }
 
   @Get(':id')

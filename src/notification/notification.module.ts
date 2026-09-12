@@ -16,7 +16,7 @@ import { jwtConstants } from 'src/user/jwt/jwt.constants';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET') || jwtConstants.secret,
-        signOptions: { expiresIn: '3h' },
+        signOptions: { expiresIn: '3h', algorithm: 'HS256' },
       }),
     }),
   ],

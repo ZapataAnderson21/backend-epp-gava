@@ -41,6 +41,37 @@ export class ElementRequestResponseService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
+  private async assertMatchingRequest(
+    elementRequestId: number,
+    requestResponseId: number,
+  ) {
+    const [elementRequest, requestResponse] = await Promise.all([
+      this.prismaService.elementRequest.findUnique({
+        where: { elementRequestId },
+        select: { requestId: true, request: { select: { status: true } } },
+      }),
+      this.prismaService.requestResponse.findUnique({
+        where: { requestResponseId },
+        select: { requestId: true },
+      }),
+    ]);
+
+    if (
+      !elementRequest ||
+      !requestResponse ||
+      elementRequest.requestId !== requestResponse.requestId
+    ) {
+      throw new BadRequestException(
+        'La línea y la respuesta deben pertenecer al mismo requerimiento.',
+      );
+    }
+    if (elementRequest.request.status === 'draft') {
+      throw new BadRequestException(
+        'No se puede responder un requerimiento que sigue en borrador.',
+      );
+    }
+  }
+
   private normalizeQuantity(value: unknown) {
     const numberValue = Number(value ?? 0);
     return Math.round(numberValue * 10000) / 10000;
@@ -53,7 +84,10 @@ export class ElementRequestResponseService {
   private getResponseLineFamily(
     elementRequest: ResponseElementRequest,
   ): ResponseLineFamily {
-    if (elementRequest.fallProtectionGroupId || elementRequest.fallProtectionGroup) {
+    if (
+      elementRequest.fallProtectionGroupId ||
+      elementRequest.fallProtectionGroup
+    ) {
       return 'fallProtection';
     }
 
@@ -63,7 +97,9 @@ export class ElementRequestResponseService {
 
     if (
       typeof family === 'string' &&
-      ['epp', 'epi', 'uniform', 'officeMaterial', 'ssomaSupply'].includes(family)
+      ['epp', 'epi', 'uniform', 'officeMaterial', 'ssomaSupply'].includes(
+        family,
+      )
     ) {
       return 'protection';
     }
@@ -94,12 +130,8 @@ export class ElementRequestResponseService {
   }
 
   private async validateAndNormalizePayload<
-    T extends CreateElementRequestResponseDto | UpdateElementRequestResponseDto,
+    T extends UpdateElementRequestResponseDto & { elementRequestId: number },
   >(payload: T): Promise<T> {
-    if (!payload.elementRequestId) {
-      return payload;
-    }
-
     const elementRequest = await this.prismaService.elementRequest.findUnique({
       where: { elementRequestId: payload.elementRequestId },
       include: {
@@ -116,7 +148,9 @@ export class ElementRequestResponseService {
     });
 
     if (!elementRequest) {
-      throw new NotFoundException('La linea del requerimiento no fue encontrada.');
+      throw new NotFoundException(
+        'La linea del requerimiento no fue encontrada.',
+      );
     }
 
     const family = this.getResponseLineFamily(elementRequest);
@@ -259,6 +293,10 @@ export class ElementRequestResponseService {
     this.logger.log(
       `Creating ElementRequestResponse with data: ${JSON.stringify(createElementRequestResponseDto)}`,
     );
+    await this.assertMatchingRequest(
+      createElementRequestResponseDto.elementRequestId,
+      createElementRequestResponseDto.requestResponseId,
+    );
     const payload = await this.validateAndNormalizePayload(
       createElementRequestResponseDto,
     );
@@ -376,12 +414,38 @@ export class ElementRequestResponseService {
     this.logger.log(
       `Updating ElementRequestResponse with id: ${elementRequestResponseId}`,
     );
+    const existing = await this.prismaService.elementRequestResponse.findUnique(
+      {
+        where: { elementRequestResponseId },
+        select: { elementRequestId: true, requestResponseId: true },
+      },
+    );
+    if (!existing) {
+      throw new NotFoundException(
+        `ElementRequestResponse with id ${elementRequestResponseId} not found`,
+      );
+    }
+    await this.assertMatchingRequest(
+      existing.elementRequestId,
+      existing.requestResponseId,
+    );
+    const normalizedPayload = await this.validateAndNormalizePayload({
+      ...updateElementRequestResponseDto,
+      elementRequestId: existing.elementRequestId,
+      requestResponseId: existing.requestResponseId,
+    });
+    const {
+      elementRequestId: _elementRequestId,
+      requestResponseId: _requestResponseId,
+      ...updateData
+    } = normalizedPayload;
+    void _elementRequestId;
+    void _requestResponseId;
+
     const updatedElementRequestResponse =
       await this.prismaService.elementRequestResponse.update({
         where: { elementRequestResponseId },
-        data: await this.validateAndNormalizePayload(
-          updateElementRequestResponseDto,
-        ),
+        data: updateData,
         include: {
           elementRequest: true,
           requestResponse: true,

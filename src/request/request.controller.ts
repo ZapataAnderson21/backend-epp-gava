@@ -26,6 +26,8 @@ import { RequestStatus } from './enum';
 import { NotificationGateway } from 'src/notification/notification.gateway';
 import { GetUser } from 'src/decorators/get-user.decorator';
 import { ListRequestsQueryDto } from './dto/list-requests-query.dto';
+import { UpdateRequestStatusDto } from './dto/update-request-status.dto';
+import { SendRequestLogisticsDto } from './dto/send-request-logistics.dto';
 
 @Controller('request')
 export class RequestController {
@@ -38,8 +40,11 @@ export class RequestController {
   ) {}
 
   @Post()
-  async create(@Body() createRequestDto: CreateRequestDto) {
-    return await this.requestService.create(createRequestDto);
+  async create(
+    @Body() createRequestDto: CreateRequestDto,
+    @GetUser('userId') userId: number,
+  ) {
+    return await this.requestService.create(createRequestDto, userId);
   }
 
   @Get()
@@ -48,61 +53,62 @@ export class RequestController {
     projectId?: number,
     @Query('userId', new ParseIntPipe({ optional: true })) userId?: number,
     @Query('status') status?: RequestStatus,
-    @Query('viewerId', new ParseIntPipe({ optional: true })) viewerId?: number, // <-- NUEVO
+    @GetUser('userId') viewerUserId?: number,
   ) {
     return await this.requestService.findAll(
       projectId,
       userId,
       status,
-      viewerId,
+      viewerUserId,
     );
   }
 
   @Get('paginated')
-  async findPaginated(@Query() query: ListRequestsQueryDto) {
-    return await this.requestService.findPaginated(query);
+  async findPaginated(
+    @Query() query: ListRequestsQueryDto,
+    @GetUser('userId') viewerUserId: number,
+  ) {
+    return await this.requestService.findPaginated(query, viewerUserId);
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.requestService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser('userId') viewerUserId: number,
+  ) {
+    return await this.requestService.findOne(id, viewerUserId);
   }
 
   @Patch(':id/status')
   async updateStatus(
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: { status: RequestStatus; actorUserId?: number },
+    @Body() body: UpdateRequestStatusDto,
     @GetUser('userId') userId: number,
   ) {
-    return await this.requestService.updateStatus(
-      id,
-      body.status,
-      userId || body.actorUserId,
-    );
+    return await this.requestService.updateStatus(id, body.status, userId);
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRequestDto: UpdateRequestDto,
+    @GetUser('userId') userId: number,
   ) {
-    return await this.requestService.update(id, updateRequestDto);
+    return await this.requestService.update(id, updateRequestDto, userId);
   }
 
   @Post('sendLogistics')
   async sendToLogistics(
     @GetUser('userId') userId: number,
     @Body()
-    body: {
-      requestId: number;
-      passwordCPanel: string;
-      operationId?: string;
-      progressUserId?: number;
-    },
+    body: SendRequestLogisticsDto,
   ) {
     const requestId = Number(body.requestId);
-    const progressUserId = Number(body.progressUserId || 0);
+    const progressUserId = userId;
     const operationId = body.operationId || `request-mail-${requestId}`;
+
+    // Autorizar antes de validar SMTP, generar el PDF o enviar correo.
+    await this.requestService.assertCanSendToLogistics(requestId, userId);
 
     const emitProgress = (
       step: string,
@@ -194,7 +200,7 @@ export class RequestController {
       const result = await this.requestService.updateStatus(
         requestId,
         RequestStatus.inProgress,
-        userId || progressUserId || undefined,
+        userId,
       );
       emitProgress(
         'done',
@@ -216,12 +222,20 @@ export class RequestController {
   }
 
   @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    return await this.requestService.remove(id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser('userId') userId: number,
+  ) {
+    return await this.requestService.remove(id, userId);
   }
 
   @Get('pdf/:id')
-  getPdf(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
+  async getPdf(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser('userId') userId: number,
+    @Res() res: Response,
+  ) {
+    await this.requestService.findOne(id, userId);
     const outputDir =
       this.configService.get<string>('PDF_OUTPUT_DIR') ||
       path.resolve(__dirname, '..', '..', 'output');

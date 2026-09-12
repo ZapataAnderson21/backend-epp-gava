@@ -92,7 +92,9 @@ export class ElementRequestService {
     }
 
     const resolvedElementId =
-      fallProtectionGroup?.harnessElementId ?? dto.elementId ?? fallbackElementId;
+      fallProtectionGroup?.harnessElementId ??
+      dto.elementId ??
+      fallbackElementId;
     const resolvedRequestId = dto.requestId ?? fallbackRequestId;
 
     if (!resolvedElementId) {
@@ -143,7 +145,7 @@ export class ElementRequestService {
       elementVariantId: null,
       fallProtectionGroupId: isSsomaSupply
         ? null
-        : fallProtectionGroup?.fallProtectionGroupId ?? null,
+        : (fallProtectionGroup?.fallProtectionGroupId ?? null),
       quantityRequested: usesUniqueInventory
         ? 1
         : Math.max(normalizedQuantity, 0),
@@ -158,9 +160,17 @@ export class ElementRequestService {
     };
   }
 
-  async create(createElementRequestDto: CreateElementRequestDto) {
-    await this.requestExists(createElementRequestDto.requestId);
-    const payload = await this.buildElementRequestPayload(createElementRequestDto);
+  async create(
+    createElementRequestDto: CreateElementRequestDto,
+    actorUserId: number,
+  ) {
+    await this.requestExistsAndIsDraft(
+      createElementRequestDto.requestId,
+      actorUserId,
+    );
+    const payload = await this.buildElementRequestPayload(
+      createElementRequestDto,
+    );
 
     this.logger.log(
       `Creating Element Request with data: ${JSON.stringify(createElementRequestDto)}`,
@@ -185,7 +195,8 @@ export class ElementRequestService {
     };
   }
 
-  async findAllByRequestId(requestId: number) {
+  async findAllByRequestId(requestId: number, viewerUserId: number) {
+    await this.assertCanReadRequest(requestId, viewerUserId);
     this.logger.log(`Fetching Element Requests for requestId: ${requestId}`);
     const foundElementRequests =
       await this.prismaService.elementRequest.findMany({
@@ -208,7 +219,7 @@ export class ElementRequestService {
     };
   }
 
-  async findOne(elementRequestId: number) {
+  async findOne(elementRequestId: number, viewerUserId: number) {
     this.logger.log(`Fetching Element Request with ID: ${elementRequestId}`);
     const elementRequest = await this.prismaService.elementRequest.findUnique({
       where: { elementRequestId },
@@ -217,6 +228,13 @@ export class ElementRequestService {
 
     if (!elementRequest) {
       this.logger.warn(`Element Request with ID ${elementRequestId} not found`);
+      throw new NotFoundException('Element request not found');
+    }
+
+    if (
+      elementRequest.request.status === 'draft' &&
+      elementRequest.request.userId !== viewerUserId
+    ) {
       throw new NotFoundException('Element request not found');
     }
 
@@ -231,10 +249,27 @@ export class ElementRequestService {
   async update(
     elementRequestId: number,
     updateElementRequestDto: UpdateElementRequestDto,
+    actorUserId: number,
   ) {
-    const existingElementRequest = await this.findOne(elementRequestId);
+    const existingElementRequest = await this.findOne(
+      elementRequestId,
+      actorUserId,
+    );
 
-    await this.requestExistsAndIsDraft(existingElementRequest.data.requestId);
+    await this.requestExistsAndIsDraft(
+      existingElementRequest.data.requestId,
+      actorUserId,
+    );
+    if (
+      updateElementRequestDto.requestId &&
+      updateElementRequestDto.requestId !==
+        existingElementRequest.data.requestId
+    ) {
+      await this.requestExistsAndIsDraft(
+        updateElementRequestDto.requestId,
+        actorUserId,
+      );
+    }
     const payload = await this.buildElementRequestPayload(
       {
         quantityRequested:
@@ -274,10 +309,16 @@ export class ElementRequestService {
     };
   }
 
-  async remove(elementRequestId: number) {
-    const existingElementRequest = await this.findOne(elementRequestId);
+  async remove(elementRequestId: number, actorUserId: number) {
+    const existingElementRequest = await this.findOne(
+      elementRequestId,
+      actorUserId,
+    );
 
-    await this.requestExistsAndIsDraft(existingElementRequest.data.requestId);
+    await this.requestExistsAndIsDraft(
+      existingElementRequest.data.requestId,
+      actorUserId,
+    );
 
     this.logger.log(`Deleting Element Request with ID: ${elementRequestId}`);
     const deletedElementRequest =
@@ -302,30 +343,27 @@ export class ElementRequestService {
     };
   }
 
-  async requestExists(requestId: number) {
+  private async assertCanReadRequest(requestId: number, viewerUserId: number) {
     const request = await this.prismaService.request.findUnique({
       where: { requestId },
+      select: { status: true, userId: true },
     });
 
-    if (!request) {
-      this.logger.error(`Associated request with ID ${requestId} not found`);
+    if (
+      !request ||
+      (request.status === 'draft' && request.userId !== viewerUserId)
+    ) {
       throw new NotFoundException('Associated request not found');
     }
-
-    this.logger.log(`Associated request with ID ${requestId} found`);
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'La solicitud asociada fue encontrada exitosamente.',
-      data: request,
-    };
   }
 
-  async requestExistsAndIsDraft(requestId: number) {
+  async requestExistsAndIsDraft(requestId: number, actorUserId: number) {
     const request = await this.prismaService.request.findUnique({
       where: { requestId },
+      select: { requestId: true, status: true, userId: true },
     });
 
-    if (!request) {
+    if (!request || request.userId !== actorUserId) {
       this.logger.error(`Associated request with ID ${requestId} not found`);
       throw new NotFoundException('Associated request not found');
     }

@@ -6,87 +6,90 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Request } from 'express';
+import type { Request } from 'express';
+import { createHash } from 'crypto';
 import {
   RATE_LIMIT_KEY,
   RateLimitOptions,
 } from 'src/decorators/rate-limit.decorator';
+import { PrismaService } from 'src/prisma/prisma.service';
 
-interface Bucket {
-  count: number;
-  resetAt: number;
-}
+type BucketResult = { count: number; resetAt: Date };
 
 @Injectable()
 export class RateLimitGuard implements CanActivate {
-  private readonly buckets = new Map<string, Bucket>();
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly prisma: PrismaService,
+  ) {}
 
-  constructor(private readonly reflector: Reflector) {}
-
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const options = this.reflector.getAllAndOverride<RateLimitOptions>(
       RATE_LIMIT_KEY,
       [context.getHandler(), context.getClass()],
     );
 
-    if (!options) {
-      return true;
-    }
+    if (!options) return true;
 
     const request = context.switchToHttp().getRequest<Request>();
-    const ip = this.getRequestIp(request);
     const route = `${request.method}:${request.path}`;
-    const key = `${route}:${ip}`;
-    const now = Date.now();
+    const normalizedEmail = this.getNormalizedEmail(request);
+    const identifiers = [
+      `ip:${request.ip || request.socket.remoteAddress || 'unknown'}`,
+      ...(normalizedEmail ? [`account:${normalizedEmail}`] : []),
+    ];
 
-    this.cleanup(now);
-
-    const existing = this.buckets.get(key);
-    if (!existing || existing.resetAt <= now) {
-      this.buckets.set(key, {
-        count: 1,
-        resetAt: now + options.windowMs,
-      });
-      return true;
-    }
-
-    if (existing.count >= options.limit) {
-      const retryAfterSeconds = Math.max(
-        1,
-        Math.ceil((existing.resetAt - now) / 1000),
+    for (const identifier of identifiers) {
+      const bucket = await this.incrementBucket(
+        this.hashKey(`${route}:${identifier}`),
+        options.windowMs,
       );
-      throw new HttpException(
-        `Demasiadas solicitudes. Intente nuevamente en ${retryAfterSeconds} segundos.`,
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
+      if (bucket.count > options.limit) {
+        const retryAfterSeconds = Math.max(
+          1,
+          Math.ceil((bucket.resetAt.getTime() - Date.now()) / 1000),
+        );
+        throw new HttpException(
+          `Demasiadas solicitudes. Intente nuevamente en ${retryAfterSeconds} segundos.`,
+          HttpStatus.TOO_MANY_REQUESTS,
+        );
+      }
     }
-
-    existing.count += 1;
     return true;
   }
 
-  private cleanup(now: number): void {
-    if (this.buckets.size < 5000) {
-      return;
-    }
-
-    for (const [key, value] of this.buckets.entries()) {
-      if (value.resetAt <= now) {
-        this.buckets.delete(key);
-      }
-    }
+  private async incrementBucket(
+    key: string,
+    windowMs: number,
+  ): Promise<BucketResult> {
+    const now = new Date();
+    const newResetAt = new Date(now.getTime() + windowMs);
+    const rows = await this.prisma.$queryRaw<BucketResult[]>`
+      INSERT INTO "RateLimitBucket" ("key", "count", "resetAt", "updatedAt")
+      VALUES (${key}, 1, ${newResetAt}, ${now})
+      ON CONFLICT ("key") DO UPDATE SET
+        "count" = CASE
+          WHEN "RateLimitBucket"."resetAt" <= ${now} THEN 1
+          ELSE "RateLimitBucket"."count" + 1
+        END,
+        "resetAt" = CASE
+          WHEN "RateLimitBucket"."resetAt" <= ${now} THEN ${newResetAt}
+          ELSE "RateLimitBucket"."resetAt"
+        END,
+        "updatedAt" = ${now}
+      RETURNING "count", "resetAt"
+    `;
+    return rows[0];
   }
 
-  private getRequestIp(request: Request): string {
-    const forwarded = request.headers['x-forwarded-for'];
-    if (typeof forwarded === 'string' && forwarded.length > 0) {
-      return forwarded.split(',')[0].trim();
-    }
+  private getNormalizedEmail(request: Request): string | null {
+    const body = request.body as { email?: unknown } | undefined;
+    return typeof body?.email === 'string'
+      ? body.email.trim().toLowerCase().slice(0, 254)
+      : null;
+  }
 
-    if (Array.isArray(forwarded) && forwarded.length > 0) {
-      return forwarded[0];
-    }
-
-    return request.ip || request.socket.remoteAddress || 'unknown';
+  private hashKey(value: string): string {
+    return createHash('sha256').update(value).digest('hex');
   }
 }

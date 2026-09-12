@@ -19,15 +19,35 @@ import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
 import { ListUsersQueryDto } from './dto/list-users-query.dto';
+import { createHash } from 'crypto';
+import { UpdateMeDto } from './dto/update-me.dto';
+import { SessionJwtPayload } from './jwt/access-token';
+import { NotificationGateway } from 'src/notification/notification.gateway';
+
+const DUMMY_PASSWORD_HASH =
+  '$2b$10$Ex2C.DSbBjPV4Jg0fvGK7O4xVtCl21xt8U6Pyg/pBagOxkgsilL8e';
 
 @Injectable()
 export class UserService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private notificationGateway: NotificationGateway,
   ) {}
 
   private readonly logger = new Logger('UserService');
+
+  private assertBcryptPasswordLength(password: string) {
+    if (Buffer.byteLength(password, 'utf8') > 72) {
+      throw new BadRequestException(
+        'La contraseña no puede superar 72 bytes en UTF-8.',
+      );
+    }
+  }
+
+  private hashResetToken(token: string) {
+    return createHash('sha256').update(token).digest('hex');
+  }
 
   private buildDisabledEmail(user: Pick<User, 'userId' | 'email'>) {
     const safeLocalPart =
@@ -144,6 +164,7 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
+    this.assertBcryptPasswordLength(createUserDto.password);
     this.logger.log(
       `Validating associated user type: ${createUserDto.userTypeId.toString()}`,
     );
@@ -184,9 +205,7 @@ export class UserService {
     });
 
     if (!newUser) {
-      this.logger.error(
-        `Failed to create user: ${JSON.stringify(createUserDto)}`,
-      );
+      this.logger.error('Failed to create user');
       throw new BadRequestException('Failed to create user');
     }
 
@@ -246,26 +265,27 @@ export class UserService {
     this.logger.log(`Attempting login for email: ${email}`);
     const user = await this.findByEmail(email);
 
-    if (!user) {
-      this.logger.warn(`Login failed: User not found for email ${email}`);
-      throw new NotFoundException('El usuario con este correo no existe.');
+    const isPasswordValid = await compare(
+      password,
+      user?.password ?? DUMMY_PASSWORD_HASH,
+    );
+
+    if (!user || !isPasswordValid) {
+      this.logger.warn('Login failed: invalid credentials');
+      throw new UnauthorizedException(
+        'El correo o la contraseña son incorrectos.',
+      );
     }
 
-    this.logger.log(`User found: ${email}`);
-    const isPasswordValid = await compare(password, user.password);
-
-    if (!isPasswordValid) {
-      this.logger.warn(`Login failed: Invalid password for email ${email}`);
-      throw new UnauthorizedException('La contraseña es incorrecta.');
-    }
-
-    const payload = { userId: user.userId, email: user.email };
+    const payload: SessionJwtPayload = {
+      userId: user.userId,
+      email: user.email,
+      authVersion: user.authVersion,
+    };
 
     const accessToken = this.jwtService.sign(payload);
 
     this.logger.log(`Login successful for email: ${email}`);
-
-    this.logger.log(JSON.stringify({ payload, accessToken }));
 
     const returnUser = await this.findOne(user.userId);
 
@@ -463,33 +483,51 @@ export class UserService {
 
   async updatePassword(resetPasswordDto: ResetPasswordDto) {
     const { accessToken, password } = resetPasswordDto;
-
-    const user = await this.validateResetToken(accessToken);
-
-    if (!user) {
-      this.logger.warn(`Invalid or expired token: ${accessToken}`);
-      throw new UnauthorizedException('Invalid or expired token');
+    this.assertBcryptPasswordLength(password);
+    try {
+      this.jwtService.verify(accessToken, { algorithms: ['HS256'] });
+    } catch {
+      throw new UnauthorizedException('Invalid or expired reset token');
     }
-
+    const tokenHash = this.hashResetToken(accessToken);
+    const resetToken = await this.prisma.passwordResetToken.findUnique({
+      where: { token: tokenHash },
+    });
+    if (!resetToken || resetToken.used || resetToken.expiresAt <= new Date()) {
+      throw new UnauthorizedException('Invalid or expired reset token');
+    }
     const hashedPassword = await hash(password, 10);
+    const updatedUser = await this.prisma.$transaction(async (transaction) => {
+      const consumed = await transaction.passwordResetToken.updateMany({
+        where: {
+          token: tokenHash,
+          used: false,
+          expiresAt: { gt: new Date() },
+        },
+        data: { used: true, usedAt: new Date() },
+      });
+      if (consumed.count !== 1) {
+        throw new UnauthorizedException('Invalid or expired reset token');
+      }
 
-    this.logger.log(`Updating password for userId: ${user.userId}`);
-    const updatedUser = await this.prisma.user.update({
-      where: { userId: user.userId },
-      data: { password: hashedPassword },
+      const user = await transaction.user.findFirst({
+        where: { userId: resetToken.userId, deletedAt: null },
+        select: { userId: true },
+      });
+      if (!user) {
+        throw new UnauthorizedException('Invalid or expired reset token');
+      }
+
+      return transaction.user.update({
+        where: { userId: user.userId },
+        data: { password: hashedPassword, authVersion: { increment: 1 } },
+      });
     });
+    this.notificationGateway.disconnectUser(updatedUser.userId);
 
-    if (!updatedUser) {
-      this.logger.error(`Failed to update password for userId: ${user.userId}`);
-      throw new BadRequestException('Failed to update password');
-    }
-
-    await this.prisma.passwordResetToken.update({
-      where: { token: accessToken },
-      data: { used: true },
-    });
-
-    this.logger.log(`Password updated successfully for userId: ${user.userId}`);
+    this.logger.log(
+      `Password updated successfully for userId: ${updatedUser.userId}`,
+    );
 
     return {
       statusCode: HttpStatus.OK,
@@ -501,11 +539,15 @@ export class UserService {
     };
   }
 
-  async updateMe(userId: number, updateUserDto: UpdateUserDto) {
-    await this.findOne(userId);
+  async updateMe(userId: number, updateUserDto: UpdateMeDto) {
+    const currentUser = await this.prisma.user.findFirst({
+      where: { userId, deletedAt: null },
+    });
+    if (!currentUser) {
+      throw new NotFoundException('El usuario no ha sido encontrado.');
+    }
 
-    const { userTypeId, ...rest } = updateUserDto;
-    void userTypeId;
+    const { currentPassword, ...rest } = updateUserDto;
     const data = { ...rest } as Partial<User>;
 
     await this.ensureUniqueIdentityIsAvailable(
@@ -517,6 +559,13 @@ export class UserService {
     );
 
     if (typeof data.password === 'string' && data.password.trim().length > 0) {
+      if (
+        !currentPassword ||
+        !(await compare(currentPassword, currentUser.password))
+      ) {
+        throw new UnauthorizedException('La contraseña actual es incorrecta.');
+      }
+      this.assertBcryptPasswordLength(data.password);
       data.password = await hash(data.password, 10);
     } else {
       delete data.password;
@@ -525,8 +574,12 @@ export class UserService {
     this.logger.log(`Updating self user with id: ${userId}`);
     const updatedUser = await this.prisma.user.update({
       where: { userId },
-      data,
+      data: {
+        ...data,
+        ...(data.password ? { authVersion: { increment: 1 } } : {}),
+      },
     });
+    if (data.password) this.notificationGateway.disconnectUser(userId);
 
     if (!updatedUser) {
       this.logger.error(`Failed to update self user with id: ${userId}`);
@@ -562,6 +615,7 @@ export class UserService {
     );
 
     if (typeof data.password === 'string' && data.password.trim().length > 0) {
+      this.assertBcryptPasswordLength(data.password);
       data.password = await hash(data.password, 10);
     } else {
       delete data.password;
@@ -570,8 +624,12 @@ export class UserService {
     this.logger.log(`Updating user with id: ${id}`);
     const updatedUser = await this.prisma.user.update({
       where: { userId: id },
-      data,
+      data: {
+        ...data,
+        ...(data.password ? { authVersion: { increment: 1 } } : {}),
+      },
     });
+    if (data.password) this.notificationGateway.disconnectUser(id);
 
     if (!updatedUser) {
       this.logger.error(`Failed to update user with id: ${id}`);
@@ -589,7 +647,6 @@ export class UserService {
   }
 
   async emailExists(email: string): Promise<string | null> {
-    this.logger.log(`Checking if email exists: ${email}`);
     const user = await this.prisma.user.findUnique({
       where: {
         email: email,
@@ -598,14 +655,18 @@ export class UserService {
     });
 
     if (!user) {
-      this.logger.log(`Email does not exist: ${email}`);
-      throw new NotFoundException('Email does not exist');
+      return null;
     }
+
+    const rawToken = this.jwtService.sign({
+      email: user.email,
+      purpose: 'password-reset',
+    });
 
     const createdToken = await this.prisma.passwordResetToken.create({
       data: {
         userId: user.userId,
-        token: this.jwtService.sign({ email: user.email }),
+        token: this.hashResetToken(rawToken),
         expiresAt: new Date(Date.now() + 3600000),
       },
     });
@@ -618,12 +679,12 @@ export class UserService {
     }
 
     this.logger.log(`Password reset token created for email: ${email}`);
-    return createdToken.token;
+    return rawToken;
   }
 
   async validateResetToken(token: string) {
     const foundToken = await this.prisma.passwordResetToken.findUnique({
-      where: { token },
+      where: { token: this.hashResetToken(token) },
     });
 
     if (!foundToken || foundToken.used || foundToken.expiresAt < new Date()) {
@@ -631,7 +692,7 @@ export class UserService {
       throw new UnauthorizedException('Invalid or expired reset token');
     }
 
-    this.jwtService.verify(token);
+    this.jwtService.verify(token, { algorithms: ['HS256'] });
 
     const user = await this.prisma.user.findFirst({
       where: {
@@ -671,6 +732,7 @@ export class UserService {
     const deletedUser = user.deletedAt
       ? user
       : await this.releaseDisabledUserIdentity(user);
+    this.notificationGateway.disconnectUser(id);
 
     if (!deletedUser) {
       this.logger.error(`Failed to delete user with id: ${id}`);
@@ -689,26 +751,24 @@ export class UserService {
     };
   }
 
-  async logout(token: string) {
+  async logout(token?: string) {
     if (!token) {
       throw new BadRequestException('Token is required for logout');
     }
 
     const normalizedToken = token.replace(/^Bearer\s+/i, '').trim();
 
-    let decodedToken: unknown;
+    let decodedToken: SessionJwtPayload;
     try {
-      decodedToken = this.jwtService.decode(normalizedToken);
+      decodedToken = this.jwtService.verify<SessionJwtPayload>(
+        normalizedToken,
+        { algorithms: ['HS256'] },
+      );
     } catch {
       throw new BadRequestException('Invalid token');
     }
 
-    if (
-      !decodedToken ||
-      typeof decodedToken !== 'object' ||
-      !('exp' in decodedToken) ||
-      typeof decodedToken.exp !== 'number'
-    ) {
+    if (typeof decodedToken.exp !== 'number') {
       throw new BadRequestException('Invalid token');
     }
 
@@ -719,8 +779,10 @@ export class UserService {
       data: {
         token: normalizedToken,
         expiresAt,
+        userId: decodedToken.userId,
       },
     });
+    this.notificationGateway.disconnectUser(decodedToken.userId);
 
     this.logger.log('Token logged out successfully');
     return { statusCode: HttpStatus.OK };
@@ -734,7 +796,7 @@ export class UserService {
     const normalizedToken = token.replace(/^Bearer\s+/i, '').trim();
 
     try {
-      this.jwtService.verify(normalizedToken);
+      this.jwtService.verify(normalizedToken, { algorithms: ['HS256'] });
     } catch {
       return {
         statusCode: HttpStatus.OK,

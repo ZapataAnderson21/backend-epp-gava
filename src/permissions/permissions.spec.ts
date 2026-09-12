@@ -123,6 +123,17 @@ describe('Dynamic role permissions', () => {
       ),
     ).toBe(false);
   });
+  it('requires finance access to export the purchase order summary', () => {
+    const policy = endpointPermissions(
+      'PurchaseOrderController',
+      'generateProjectSummaryPdf',
+      'GET',
+    );
+    expect(satisfies(['orders.view', 'orders.export'], policy)).toBe(false);
+    expect(
+      satisfies(['orders.view', 'orders.export', 'finance.view'], policy),
+    ).toBe(true);
+  });
   it('removes nested money and denied modules without removing attendance', () => {
     const input = {
       data: {

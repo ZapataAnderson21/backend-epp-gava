@@ -8,6 +8,7 @@ import {
   IsString,
   Length,
   Matches,
+  MaxLength,
   MinLength,
 } from 'class-validator';
 
@@ -36,6 +37,9 @@ export class CreateUserDto {
   @Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).+$/, {
     message:
       '\nLa contraseña debe contener al menos una mayúscula, un número y un caracter especial.',
+  })
+  @MaxLength(72, {
+    message: '\nLa contraseña no puede superar 72 caracteres.',
   })
   password!: string;
 

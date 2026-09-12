@@ -109,13 +109,15 @@ export class RequestService {
     );
   }
 
-  async create(createRequestDto: CreateRequestDto) {
+  async create(createRequestDto: CreateRequestDto, userId: number) {
     this.logger.log(
       `Creating request with data: ${JSON.stringify(createRequestDto)}`,
     );
 
     const requestData = {
       ...createRequestDto,
+      userId,
+      status: RequestStatus.draft,
       deliveryDueDate: new Date(createRequestDto.deliveryDueDate),
     };
 
@@ -150,22 +152,37 @@ export class RequestService {
     };
   }
 
+  async assertCanSendToLogistics(requestId: number, actorUserId: number) {
+    const request = await this.prismaService.request.findUnique({
+      where: { requestId },
+      select: { userId: true, status: true },
+    });
+
+    if (!request) {
+      throw new NotFoundException('La solicitud no fue encontrada');
+    }
+
+    await this.assertCanUpdateStatus(
+      { userId: request.userId, status: request.status as RequestStatus },
+      RequestStatus.inProgress,
+      actorUserId,
+    );
+  }
+
   async findAll(
     projectId?: number,
     userId?: number,
     status?: RequestStatus,
-    viewerId?: number,
+    viewerUserId?: number,
   ) {
     this.logger.log('Retrieving all requests');
-    const viewerUserId = userId || viewerId;
-
     // Drafts are private: only the creator can see their own drafts.
     if (status === RequestStatus.draft) {
       const found = await this.prismaService.request.findMany({
         where: {
           projectId,
           status: RequestStatus.draft,
-          ...(viewerUserId ? { userId: viewerUserId } : {}),
+          userId: viewerUserId,
         },
         include: { project: true, user: true },
         orderBy: { requestId: 'desc' },
@@ -193,6 +210,7 @@ export class RequestService {
     const found = await this.prismaService.request.findMany({
       where: {
         projectId,
+        ...(userId ? { userId } : {}),
         ...(status
           ? { status }
           : {
@@ -231,14 +249,13 @@ export class RequestService {
     };
   }
 
-  async findPaginated(query: ListRequestsQueryDto) {
-    const viewerUserId = query.userId || query.viewerId;
+  async findPaginated(query: ListRequestsQueryDto, viewerUserId: number) {
     const search = query.search?.trim();
     const visibility =
       query.status === RequestStatus.draft
         ? {
             status: RequestStatus.draft,
-            ...(viewerUserId ? { userId: viewerUserId } : {}),
+            userId: viewerUserId,
           }
         : query.status
           ? { status: query.status }
@@ -252,6 +269,7 @@ export class RequestService {
             };
     const where = {
       projectId: query.projectId,
+      ...(query.userId ? { userId: query.userId } : {}),
       ...visibility,
       ...(search
         ? {
@@ -314,7 +332,7 @@ export class RequestService {
     };
   }
 
-  async findOne(requestId: number) {
+  async findOne(requestId: number, viewerUserId?: number) {
     this.logger.log(`Finding request with ID: ${requestId}`);
     const request = await this.prismaService.request.findUnique({
       where: { requestId },
@@ -382,6 +400,14 @@ export class RequestService {
     if (!request) {
       this.logger.warn(`Request not found with ID: ${requestId}`);
       throw new BadRequestException('Request not found');
+    }
+
+    if (
+      viewerUserId &&
+      request.status === RequestStatus.draft &&
+      request.userId !== viewerUserId
+    ) {
+      throw new NotFoundException('La solicitud no fue encontrada');
     }
 
     const processedRequest = {
@@ -614,12 +640,25 @@ export class RequestService {
     };
   }
 
-  async update(requestId: number, updateRequestDto: UpdateRequestDto) {
+  async update(
+    requestId: number,
+    updateRequestDto: UpdateRequestDto,
+    actorUserId: number,
+  ) {
     this.logger.log(
       `Updating request ID ${requestId} with data: ${JSON.stringify(updateRequestDto)}`,
     );
 
-    if (!(await this.requestIsDraft(requestId))) {
+    const existingRequest = await this.prismaService.request.findUnique({
+      where: { requestId },
+      select: { status: true, userId: true },
+    });
+
+    if (!existingRequest || existingRequest.userId !== actorUserId) {
+      throw new NotFoundException('La solicitud no fue encontrada');
+    }
+
+    if (existingRequest.status !== RequestStatus.draft) {
       this.logger.error(
         `Cannot update request ID ${requestId} because its status is not 'draft'`,
       );
@@ -655,12 +694,19 @@ export class RequestService {
     };
   }
 
-  async remove(requestId: number) {
-    const existingRequest = (await this.findOne(requestId)).data;
+  async remove(requestId: number, actorUserId: number) {
+    const existingRequest = await this.prismaService.request.findUnique({
+      where: { requestId },
+      select: { status: true, userId: true },
+    });
+
+    if (!existingRequest || existingRequest.userId !== actorUserId) {
+      throw new NotFoundException('La solicitud no fue encontrada');
+    }
 
     const { status } = existingRequest;
 
-    if (status !== 'draft') {
+    if (status !== RequestStatus.draft) {
       this.logger.error(
         `Cannot delete request ID ${requestId} because its status is not 'draft'`,
       );
@@ -684,27 +730,5 @@ export class RequestService {
       message: 'La solicitud ha sido eliminada exitosamente.',
       data: deletedRequest,
     };
-  }
-
-  async requestIsDraft(requestId: number) {
-    this.logger.log(
-      `Verifying existence of request ID: ${requestId} and checking if its status is 'draft'`,
-    );
-    const request = await this.prismaService.request.findUnique({
-      where: { requestId },
-    });
-
-    if (!request) {
-      this.logger.error(`Request ID ${requestId} not found`);
-      throw new NotFoundException('La solicitud no fue encontrada');
-    }
-
-    if (request.status !== 'draft') {
-      this.logger.error(`Request ID ${requestId} is not in 'draft' status`);
-      return false;
-    }
-
-    this.logger.log(`Request ID ${requestId} exists and is in 'draft' status`);
-    return true;
   }
 }

@@ -153,7 +153,7 @@ export class GeneralPayrollExcelService {
     sheetName: string,
   ) {
     const sheet = workbook.addWorksheet(sheetName, {
-      views: [{ state: 'frozen', ySplit: 5, xSplit: 3 }],
+      views: [{ state: 'frozen', ySplit: 6, xSplit: 3 }],
       pageSetup: {
         orientation: 'landscape',
         fitToPage: true,
@@ -266,7 +266,7 @@ export class GeneralPayrollExcelService {
     projectSheetNames: Map<number, string>,
   ) {
     const sheet = workbook.addWorksheet('GENERAL', {
-      views: [{ state: 'frozen', ySplit: 5, xSplit: 3 }],
+      views: [{ state: 'frozen', ySplit: 6, xSplit: 3 }],
       pageSetup: {
         orientation: 'landscape',
         fitToPage: true,

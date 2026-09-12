@@ -126,6 +126,7 @@ exports.Prisma.UserScalarFieldEnum = {
   lastName: 'lastName',
   email: 'email',
   password: 'password',
+  authVersion: 'authVersion',
   phone: 'phone',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -665,6 +666,13 @@ exports.Prisma.BlacklistedTokenScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.RateLimitBucketScalarFieldEnum = {
+  key: 'key',
+  count: 'count',
+  resetAt: 'resetAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.WeekScalarFieldEnum = {
   weekId: 'weekId',
   startDate: 'startDate',
@@ -1183,6 +1191,7 @@ exports.Prisma.ModelName = {
   ServiceSale: 'ServiceSale',
   PasswordResetToken: 'PasswordResetToken',
   BlacklistedToken: 'BlacklistedToken',
+  RateLimitBucket: 'RateLimitBucket',
   Week: 'Week',
   GeneralPayroll: 'GeneralPayroll',
   GeneralPayrollProject: 'GeneralPayrollProject',

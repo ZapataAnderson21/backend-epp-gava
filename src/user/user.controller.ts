@@ -5,12 +5,12 @@ import {
   Body,
   Patch,
   Param,
-  NotFoundException,
   Logger,
   ParseIntPipe,
   Delete,
   UseGuards,
   Req,
+  Res,
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -21,13 +21,17 @@ import { MailService } from 'src/mail/mail.service';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from './jwt/jwt.auth.guard';
-import { Request } from 'express';
+import type { Request, Response } from 'express';
 import type { AuthenticatedUser } from './jwt/jwt-strategy';
 
 type AuthenticatedRequest = Request & { user: AuthenticatedUser };
 import { RateLimit } from 'src/decorators/rate-limit.decorator';
 import { RateLimitGuard } from 'src/guards/rate-limit.guard';
 import { ListUsersQueryDto } from './dto/list-users-query.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { TokenDto } from './dto/token.dto';
+import { UpdateMeDto } from './dto/update-me.dto';
+import { ACCESS_TOKEN_COOKIE, extractAccessToken } from './jwt/access-token';
 
 @Controller('user')
 export class UserController {
@@ -48,27 +52,50 @@ export class UserController {
   @UseGuards(RateLimitGuard)
   @RateLimit({ limit: 5, windowMs: 60_000 })
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
+  async login(
+    @Body() loginDto: LoginDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     this.logger.log(`Attempting login for user: ${loginDto.email}`);
-    return await this.userService.login(loginDto);
+    const result = await this.userService.login(loginDto);
+    response.cookie(ACCESS_TOKEN_COOKIE, result.data.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 3 * 60 * 60 * 1000,
+      path: '/',
+    });
+    const { accessToken: _accessToken, ...safeData } = result.data;
+    void _accessToken;
+    return { ...result, data: safeData };
   }
 
-  @Public()
   @UseGuards(RateLimitGuard)
   @RateLimit({ limit: 20, windowMs: 60_000 })
   @Post('logout')
-  async logout(@Body('accessToken') token: string) {
+  async logout(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     this.logger.log('Logging out token');
-    return await this.userService.logout(token);
+    const token = extractAccessToken(request);
+    const result = await this.userService.logout(token);
+    response.clearCookie(ACCESS_TOKEN_COOKIE, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+    });
+    return result;
   }
 
   @Public()
   @UseGuards(RateLimitGuard)
   @RateLimit({ limit: 20, windowMs: 60_000 })
   @Post('validateToken')
-  async validateToken(@Body('accessToken') token: string) {
+  async validateToken(@Body() body: TokenDto) {
     this.logger.log(`Validating token...`);
-    return await this.userService.validateToken(token);
+    return await this.userService.validateToken(body.accessToken);
   }
 
   @Get()
@@ -101,7 +128,7 @@ export class UserController {
   @Patch('me')
   async updateMe(
     @Req() req: AuthenticatedRequest,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateMeDto,
   ) {
     const { userId } = req.user;
     this.logger.log(`Updating self user with ID: ${userId}`);
@@ -142,17 +169,20 @@ export class UserController {
   @UseGuards(RateLimitGuard)
   @RateLimit({ limit: 3, windowMs: 15 * 60_000 })
   @Post('forgot-password')
-  async forgotPassword(@Body('email') email: string) {
+  async forgotPassword(@Body() body: ForgotPasswordDto) {
     this.logger.log('Processing forgot password request');
-    const token = await this.userService.emailExists(email);
-
-    if (!token) {
-      this.logger.warn(`User with email ${email} not found`);
-      throw new NotFoundException(
-        'User with the provided email does not exist',
-      );
+    const token = await this.userService.emailExists(body.email);
+    if (token) {
+      try {
+        await this.mailService.sendPasswordResetEmail(body.email, token);
+      } catch (error) {
+        this.logger.error('No se pudo enviar el correo de recuperación', error);
+      }
     }
-
-    return await this.mailService.sendPasswordResetEmail(email, token);
+    return {
+      statusCode: 200,
+      message:
+        'Si el correo está registrado, recibirás instrucciones para restablecer la contraseña.',
+    };
   }
 }

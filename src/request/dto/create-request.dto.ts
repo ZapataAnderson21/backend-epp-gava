@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { RequestStatus, RequestType } from '../enum';
+import { RequestType } from '../enum';
 import {
   IsDateString,
   IsEnum,
@@ -16,25 +16,10 @@ export class CreateRequestDto {
   @IsDateString()
   deliveryDueDate!: string;
 
-  @ApiPropertyOptional({
-    enum: RequestStatus,
-    enumName: 'RequestStatus',
-    example: RequestStatus.draft,
-  })
-  @IsEnum(RequestStatus)
-  @IsOptional()
-  status?: RequestStatus;
-
   @ApiPropertyOptional({ example: 'No description provided.' })
   @IsOptional()
   @IsString()
   description?: string;
-
-  @ApiProperty({ example: 1 })
-  @Type(() => Number)
-  @IsInt()
-  @IsPositive()
-  userId!: number;
 
   @ApiProperty({ example: 10 })
   @Type(() => Number)

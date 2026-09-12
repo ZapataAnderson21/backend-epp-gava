@@ -1,6 +1,26 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateElementRequestResponseDto } from './create-element_request_response.dto';
+import { Type } from 'class-transformer';
+import {
+  ArrayUnique,
+  IsArray,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  Min,
+} from 'class-validator';
 
-export class UpdateElementRequestResponseDto extends PartialType(
-  CreateElementRequestResponseDto,
-) {}
+export class UpdateElementRequestResponseDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 4 })
+  @Min(0)
+  quantityAccepted?: number;
+
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @Type(() => Number)
+  @IsInt({ each: true })
+  @IsPositive({ each: true })
+  selectedElementIds?: number[];
+}

@@ -38,12 +38,19 @@ export class EmergencyService {
     }
 
     // Notificar a GERENTE y ADMINISTRADORA sobre la nueva emergencia
-    await this.notificationService.notifyEmergencyCreated(
-      emergency.emergencyId,
-      emergency.projectId,
-      emergency.project.name,
-      emergency.title,
-    );
+    try {
+      await this.notificationService.notifyEmergencyCreated(
+        emergency.emergencyId,
+        emergency.projectId,
+        emergency.project.name,
+        emergency.title,
+      );
+    } catch (error) {
+      this.logger.error(
+        `No se pudo notificar la emergencia ${emergency.emergencyId}`,
+        error instanceof Error ? error.stack : undefined,
+      );
+    }
 
     this.logger.log(
       `Emergency created successfully: ${JSON.stringify(emergency)}`,
@@ -110,10 +117,24 @@ export class EmergencyService {
         ? {
             OR: [
               { title: { contains: search, mode: 'insensitive' as const } },
-              { description: { contains: search, mode: 'insensitive' as const } },
-              { project: { name: { contains: search, mode: 'insensitive' as const } } },
-              { user: { name: { contains: search, mode: 'insensitive' as const } } },
-              { user: { lastName: { contains: search, mode: 'insensitive' as const } } },
+              {
+                description: { contains: search, mode: 'insensitive' as const },
+              },
+              {
+                project: {
+                  name: { contains: search, mode: 'insensitive' as const },
+                },
+              },
+              {
+                user: {
+                  name: { contains: search, mode: 'insensitive' as const },
+                },
+              },
+              {
+                user: {
+                  lastName: { contains: search, mode: 'insensitive' as const },
+                },
+              },
             ],
           }
         : {}),

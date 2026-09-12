@@ -11,6 +11,8 @@ import { MailService } from 'src/mail/mail.service';
 import { PdfService } from 'src/pdf/pdf.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RateLimitGuard } from 'src/guards/rate-limit.guard';
+import { TokenCleanupService } from './token-cleanup.service';
+import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
   controllers: [UserController],
@@ -22,16 +24,18 @@ import { RateLimitGuard } from 'src/guards/rate-limit.guard';
     PdfService,
     JwtStrategy,
     RateLimitGuard,
+    TokenCleanupService,
   ],
   imports: [
     PrismaModule,
+    NotificationModule,
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET') || jwtConstants.secret,
-        signOptions: { expiresIn: '3h' },
+        signOptions: { expiresIn: '3h', algorithm: 'HS256' },
       }),
     }),
   ],

@@ -27,9 +27,12 @@ import { ConfigService } from '@nestjs/config';
 import { RequestStatus, RequestType } from 'src/request/enum';
 import {
   PaymentMethodLabelEs,
+  PurchaseOrderStatus,
+  PurchaseOrderStatusLabelEs,
   PurchaseOrderTypeLabelEs,
 } from 'src/purchase-order/enum';
 import { CurrencyLabelEs } from 'src/supplier/enum/currency.enum';
+import type { PurchaseOrderProjectSummary } from 'src/purchase-order/types/purchase-order-summary';
 
 @Injectable()
 export class PdfService {
@@ -39,6 +42,289 @@ export class PdfService {
     private readonly prismaService: PrismaService,
     private readonly configService: ConfigService,
   ) {}
+
+  async generatePurchaseOrderSummaryPdf(
+    summary: PurchaseOrderProjectSummary,
+    generatedBy: string,
+  ) {
+    const fonts = {
+      Roboto: {
+        normal: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
+        bold: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
+        italics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
+        bolditalics: path.join(
+          process.cwd(),
+          'src/pdf/fonts/Roboto-BoldItalic.ttf',
+        ),
+      },
+    };
+    const printer = new PdfPrinter(fonts);
+    const money = (value: number) =>
+      new Intl.NumberFormat('es-PE', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+        .formatToParts(value)
+        .map((part) => (part.type === 'group' ? ' ' : part.value))
+        .join('');
+    const safeFilePart = (value: string) =>
+      value
+        .replace(/[\\/:*?"<>|]/g, '-')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '') || 'proyecto';
+    const generatedAt = new Intl.DateTimeFormat('es-PE', {
+      dateStyle: 'long',
+      timeStyle: 'short',
+      timeZone: 'America/Lima',
+    }).format(new Date());
+
+    const filterLabels = [
+      summary.filters.search
+        ? `Código contiene: ${summary.filters.search}`
+        : null,
+      summary.filters.supplierName
+        ? `Proveedor: ${summary.filters.supplierName}`
+        : null,
+      summary.filters.currency ? `Moneda: ${summary.filters.currency}` : null,
+      summary.filters.status
+        ? `Estado: ${PurchaseOrderStatusLabelEs[summary.filters.status]}`
+        : null,
+      summary.filters.purchaseOrderType
+        ? `Tipo: ${PurchaseOrderTypeLabelEs[summary.filters.purchaseOrderType]}`
+        : null,
+    ].filter((label): label is string => Boolean(label));
+
+    const headerCell = (text: string) => ({
+      text,
+      bold: true,
+      color: '#ffffff',
+      fillColor: '#14519d',
+      alignment: 'center' as const,
+      margin: [2, 4, 2, 4] as [number, number, number, number],
+    });
+    const amountCell = (value: number, currency: string) => ({
+      text: `${currency} ${money(value)}`,
+      alignment: 'right' as const,
+      noWrap: true,
+    });
+
+    const orderRows: TableCell[][] = summary.orders.map((order) => {
+      const isCancelled = order.status === PurchaseOrderStatus.Cancelled;
+      const color = isCancelled ? '#6b7280' : '#142c4c';
+      const fillColor = isCancelled ? '#f3f4f6' : undefined;
+      const cell = (content: string) => ({
+        text: content,
+        color,
+        fillColor,
+        margin: [1, 3, 1, 3] as [number, number, number, number],
+      });
+      return [
+        { ...cell(order.code), fontSize: 7, noWrap: true },
+        cell(order.supplierName),
+        cell(order.purchaseOrderTypeLabel),
+        cell(order.currency),
+        { ...cell(''), ...amountCell(order.purchaseAmount, order.currency) },
+        { ...cell(''), ...amountCell(order.saleAmount, order.currency) },
+        { ...cell(''), ...amountCell(order.margin, order.currency) },
+        cell(order.statusLabel),
+      ];
+    });
+    const currencySummaryRows: TableCell[][] = Object.entries(
+      summary.totals.byCurrency,
+    ).map(([currency, totals]) => [
+      {
+        text: currency,
+        bold: true,
+        alignment: 'center',
+      },
+      amountCell(totals.purchaseAmount, currency),
+      amountCell(totals.saleAmount, currency),
+      amountCell(totals.margin, currency),
+    ]);
+    const emptyOrderRow: TableCell[] = [
+      {
+        text: 'No hay órdenes que coincidan con los filtros.',
+        colSpan: 8,
+        alignment: 'center',
+        color: '#6b7280',
+        margin: [0, 12, 0, 12],
+      },
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+    ];
+    const orderTableBody: TableCell[][] = [
+      [
+        headerCell('Código OC'),
+        headerCell('Proveedor'),
+        headerCell('Tipo'),
+        headerCell('Moneda'),
+        headerCell('Gasto'),
+        headerCell('Ingreso'),
+        headerCell('Utilidad'),
+        headerCell('Estado'),
+      ],
+      ...(orderRows.length > 0 ? orderRows : [emptyOrderRow]),
+    ];
+
+    const docDefinition: TDocumentDefinitions = {
+      pageSize: 'A4',
+      pageOrientation: 'landscape',
+      pageMargins: [30, 28, 30, 38],
+      content: [
+        {
+          columns: [
+            { image: logo, fit: [115, 55], width: 125 },
+            {
+              width: '*',
+              stack: [
+                {
+                  text: 'RESUMEN DE ÓRDENES DE COMPRA',
+                  style: 'title',
+                },
+                {
+                  text: `${summary.project.code} - ${summary.project.name}`,
+                  style: 'project',
+                },
+                {
+                  text: `Generado por ${generatedBy} · ${generatedAt}`,
+                  style: 'metadata',
+                },
+              ],
+            },
+          ],
+          margin: [0, 0, 0, 12],
+        },
+        {
+          text:
+            filterLabels.length > 0
+              ? `Filtros: ${filterLabels.join(' · ')}`
+              : 'Filtros: todas las órdenes del proyecto',
+          style: 'filters',
+          margin: [0, 0, 0, 10],
+        },
+        {
+          columns: [
+            {
+              width: 125,
+              table: {
+                widths: ['*'],
+                body: [
+                  [
+                    {
+                      text: `ÓRDENES\n${summary.totals.totalOrders}`,
+                      style: 'kpi',
+                      fillColor: '#eff6ff',
+                    },
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+            {
+              width: '*',
+              margin: [10, 0, 0, 0],
+              table: {
+                headerRows: 1,
+                widths: [55, '*', '*', '*'],
+                body: [
+                  [
+                    headerCell('Moneda'),
+                    headerCell('Gastos'),
+                    headerCell('Ingresos'),
+                    headerCell('Utilidad'),
+                  ],
+                  ...currencySummaryRows,
+                ],
+              },
+              layout: 'lightHorizontalLines',
+            },
+          ],
+          margin: [0, 0, 0, 14],
+        },
+        {
+          table: {
+            headerRows: 1,
+            dontBreakRows: true,
+            widths: [105, '*', 58, 43, 72, 72, 72, 58],
+            body: orderTableBody,
+          },
+          layout: {
+            hLineColor: () => '#dbe3ee',
+            vLineColor: () => '#dbe3ee',
+            hLineWidth: () => 0.6,
+            vLineWidth: () => 0.6,
+            paddingLeft: () => 4,
+            paddingRight: () => 4,
+          },
+        },
+        {
+          text: `Las ${summary.totals.cancelledOrders} órdenes canceladas visibles no se incluyen en los totales financieros.`,
+          style: 'note',
+          margin: [0, 8, 0, 0],
+        },
+      ],
+      footer: (currentPage, pageCount) => ({
+        text: `SIR GAVA · Página ${currentPage} de ${pageCount}`,
+        alignment: 'right',
+        color: '#64748b',
+        fontSize: 8,
+        margin: [30, 12, 30, 0],
+      }),
+      styles: {
+        title: {
+          fontSize: 17,
+          bold: true,
+          color: '#142c4c',
+          alignment: 'right',
+        },
+        project: {
+          fontSize: 11,
+          bold: true,
+          color: '#14519d',
+          alignment: 'right',
+          margin: [0, 4, 0, 0],
+        },
+        metadata: {
+          fontSize: 8,
+          color: '#64748b',
+          alignment: 'right',
+          margin: [0, 3, 0, 0],
+        },
+        filters: { fontSize: 8, color: '#475569' },
+        kpi: {
+          fontSize: 13,
+          bold: true,
+          color: '#14519d',
+          alignment: 'center',
+          margin: [8, 13, 8, 13],
+        },
+        note: { fontSize: 8, italics: true, color: '#64748b' },
+      },
+      defaultStyle: { font: 'Roboto', fontSize: 8 },
+    };
+
+    const pdfDoc = printer.createPdfKitDocument(docDefinition);
+    const chunks: Buffer[] = [];
+    return new Promise<{ buffer: Buffer; fileName: string }>(
+      (resolve, reject) => {
+        pdfDoc.on('data', (chunk: Buffer) => chunks.push(chunk));
+        pdfDoc.on('end', () =>
+          resolve({
+            buffer: Buffer.concat(chunks),
+            fileName: `resumen-ordenes-${safeFilePart(summary.project.code)}.pdf`,
+          }),
+        );
+        pdfDoc.on('error', reject);
+        pdfDoc.end();
+      },
+    );
+  }
 
   async generatePurchaseOrderPdf(purchaseOrderId: number) {
     // === 1) Obtener la OC con todos los datos necesarios ===

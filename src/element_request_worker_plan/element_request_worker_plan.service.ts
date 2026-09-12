@@ -28,7 +28,10 @@ export class ElementRequestWorkerPlanService {
     return element.type === 'epp' && element.controlType === 'individual';
   }
 
-  private async findDraftElementRequest(elementRequestId: number) {
+  private async findDraftElementRequest(
+    elementRequestId: number,
+    actorUserId: number,
+  ) {
     const elementRequest = await this.prismaService.elementRequest.findUnique({
       where: { elementRequestId },
       include: {
@@ -38,6 +41,10 @@ export class ElementRequestWorkerPlanService {
     });
 
     if (!elementRequest) {
+      throw new NotFoundException('No se encontro la linea del requerimiento.');
+    }
+
+    if (elementRequest.request.userId !== actorUserId) {
       throw new NotFoundException('No se encontro la linea del requerimiento.');
     }
 
@@ -56,8 +63,11 @@ export class ElementRequestWorkerPlanService {
     return elementRequest;
   }
 
-  async findAllByElementRequestId(elementRequestId: number) {
-    await this.findDraftElementRequest(elementRequestId);
+  async findAllByElementRequestId(
+    elementRequestId: number,
+    actorUserId: number,
+  ) {
+    await this.findDraftElementRequest(elementRequestId, actorUserId);
 
     const plans = await this.prismaService.elementRequestWorkerPlan.findMany({
       where: { elementRequestId },
@@ -81,8 +91,12 @@ export class ElementRequestWorkerPlanService {
   async replaceForElementRequest(
     elementRequestId: number,
     replaceDto: ReplaceElementRequestWorkerPlansDto,
+    actorUserId: number,
   ) {
-    const elementRequest = await this.findDraftElementRequest(elementRequestId);
+    const elementRequest = await this.findDraftElementRequest(
+      elementRequestId,
+      actorUserId,
+    );
     const normalizedPlans = (replaceDto.plans || [])
       .map((plan) => ({
         requestWorkerId: plan.requestWorkerId,
@@ -92,7 +106,9 @@ export class ElementRequestWorkerPlanService {
       }))
       .filter((plan) => plan.plannedQuantity > 0);
 
-    const requestWorkerIds = normalizedPlans.map((plan) => plan.requestWorkerId);
+    const requestWorkerIds = normalizedPlans.map(
+      (plan) => plan.requestWorkerId,
+    );
     const uniqueRequestWorkerIds = [...new Set(requestWorkerIds)];
 
     const requestWorkers = uniqueRequestWorkerIds.length

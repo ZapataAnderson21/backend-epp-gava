@@ -19,13 +19,6 @@ export class ListRequestsQueryDto extends SearchPaginationQueryDto {
   @IsPositive()
   userId?: number;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @IsPositive()
-  viewerId?: number;
-
   @ApiPropertyOptional({ enum: RequestStatus })
   @IsOptional()
   @IsEnum(RequestStatus)

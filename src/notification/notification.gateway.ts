@@ -10,12 +10,15 @@ import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  extractAccessTokenFromCookie,
+  SessionJwtPayload,
+} from 'src/user/jwt/access-token';
 
-const defaultCorsOrigins = [
-  'http://localhost:5173',
-  'http://sir.gavacyc.com',
-  'https://sir.gavacyc.com',
-];
+const defaultCorsOrigins =
+  process.env.NODE_ENV === 'production'
+    ? ['https://sir.gavacyc.com']
+    : ['http://localhost:5173', 'https://sir.gavacyc.com'];
 
 const websocketCorsOrigins = (
   process.env.CORS_ORIGINS || defaultCorsOrigins.join(',')
@@ -23,11 +26,6 @@ const websocketCorsOrigins = (
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
-
-interface NotificationJwtPayload {
-  userId?: number;
-  sub?: number;
-}
 
 interface ServerToClientEvents {
   connected: (payload: { userId: number; message: string }) => void;
@@ -75,6 +73,7 @@ export interface RequestMailProgress {
   },
   namespace: 'notifications',
   transports: ['websocket', 'polling'],
+  maxHttpBufferSize: 64 * 1024,
 })
 export class NotificationGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -107,15 +106,9 @@ export class NotificationGateway
     this.logger.log(`Client attempting connection: ${client.id}`);
 
     try {
-      // Obtener token del handshake (query o auth header)
-      const authToken: unknown = client.handshake.auth?.token;
-      const queryToken = client.handshake.query.token;
-      const token =
-        typeof authToken === 'string'
-          ? authToken
-          : typeof queryToken === 'string'
-            ? queryToken
-            : undefined;
+      const token = extractAccessTokenFromCookie(
+        client.handshake.headers.cookie,
+      );
 
       this.logger.debug(`Token received: ${token ? 'Yes' : 'No'}`);
 
@@ -131,10 +124,11 @@ export class NotificationGateway
       const normalizedToken = token.replace(/^Bearer\s+/i, '').trim();
 
       // Verificar y decodificar el JWT
-      let payload: NotificationJwtPayload;
+      let payload: SessionJwtPayload;
       try {
-        payload = this.jwtService.verify<NotificationJwtPayload>(normalizedToken);
-        this.logger.debug(`JWT payload: ${JSON.stringify(payload)}`);
+        payload = this.jwtService.verify<SessionJwtPayload>(normalizedToken, {
+          algorithms: ['HS256'],
+        });
       } catch (jwtError: unknown) {
         this.logger.error(
           `JWT verification failed for client ${client.id}: ${
@@ -160,13 +154,26 @@ export class NotificationGateway
         return;
       }
 
-      const userId = payload.userId || payload.sub;
+      const userId = payload.userId;
 
       if (!userId) {
         this.logger.warn(
           `Client ${client.id} connection rejected: Invalid token payload (no userId)`,
         );
         client.emit('error', { message: 'Invalid token payload' });
+        client.disconnect();
+        return;
+      }
+
+      const user = await this.prismaService.user.findFirst({
+        where: { userId, deletedAt: null },
+        select: { authVersion: true },
+      });
+      if (!user || user.authVersion !== payload.authVersion) {
+        this.logger.warn(
+          `Client ${client.id} connection rejected: Session revoked`,
+        );
+        client.emit('error', { message: 'Session expired' });
         client.disconnect();
         return;
       }
@@ -240,6 +247,13 @@ export class NotificationGateway
     progress: RequestMailProgress,
   ): void {
     this.server.to(`user_${userId}`).emit('requestMailProgress', progress);
+  }
+
+  disconnectUser(userId: number): void {
+    if (this.server) {
+      this.server.in(`user_${userId}`).disconnectSockets(true);
+    }
+    this.userSockets.delete(userId);
   }
 
   // Verificar si un usuario está conectado

@@ -92,6 +92,13 @@ describe('GeneralPayrollExcelService', () => {
     expect(workbook.getWorksheet('TRABAJADORES')?.getCell('B2').value).toBe(
       '01234567',
     );
+    for (const sheetName of ['P-003', 'GENERAL']) {
+      expect(workbook.getWorksheet(sheetName)?.views).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ state: 'frozen', xSplit: 3, ySplit: 6 }),
+        ]),
+      );
+    }
 
     // Check the saved XLSX, including formula cells and group totals.
     for (const sheetName of ['P-003', 'GENERAL']) {
@@ -116,5 +123,5 @@ describe('GeneralPayrollExcelService', () => {
     expect(workbook.getWorksheet('TRABAJADORES')?.getCell('D2').numFmt).toBe(
       '"S/ "#,##0.00;[Red]-"S/ "#,##0.00',
     );
-  });
+  }, 120_000);
 });

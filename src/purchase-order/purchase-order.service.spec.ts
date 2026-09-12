@@ -6,10 +6,11 @@ import { PurchaseOrderService } from './purchase-order.service';
 
 describe('PurchaseOrderService dashboard', () => {
   const purchaseOrder = { findMany: jest.fn() };
-  const project = { findMany: jest.fn() };
+  const project = { findMany: jest.fn(), findUnique: jest.fn() };
+  const supplier = { findUnique: jest.fn() };
   const prisma = Object.assign(
     Object.create(PrismaService.prototype) as PrismaService,
-    { purchaseOrder, project },
+    { purchaseOrder, project, supplier },
   );
   const notificationService = {} as NotificationService;
   const service = new PurchaseOrderService(prisma, notificationService);
@@ -20,6 +21,11 @@ describe('PurchaseOrderService dashboard', () => {
       { projectId: 1, name: 'Proyecto Norte' },
       { projectId: 2, name: 'Proyecto Sur' },
     ]);
+    project.findUnique.mockResolvedValue({
+      projectId: 1,
+      code: 'P-001',
+      name: 'Proyecto Norte',
+    });
   });
 
   it('agrupa indicadores, semanas y rankings sin sumar órdenes canceladas', async () => {
@@ -171,5 +177,74 @@ describe('PurchaseOrderService dashboard', () => {
         services: { totalPEN: 260, totalUSD: 120, totalEUR: 0 },
       },
     });
+  });
+
+  it('genera el resumen financiero filtrado sin sumar órdenes canceladas', async () => {
+    purchaseOrder.findMany.mockResolvedValue([
+      {
+        purchaseOrderId: 1,
+        code: 'No 001-2026/OC/PROV',
+        purchaseOrderType: PurchaseOrderType.Materials,
+        purchaseAmount: 1000,
+        saleAmount: 1400,
+        status: PurchaseOrderStatus.Authorized,
+        supplierId: 10,
+        supplier: {
+          supplierId: 10,
+          name: 'Proveedor A',
+          currency: Currency.PEN,
+        },
+      },
+      {
+        purchaseOrderId: 2,
+        code: 'No 002-2026/OC/PROV',
+        purchaseOrderType: PurchaseOrderType.Materials,
+        purchaseAmount: 500,
+        saleAmount: 800,
+        status: PurchaseOrderStatus.Cancelled,
+        supplierId: 10,
+        supplier: {
+          supplierId: 10,
+          name: 'Proveedor A',
+          currency: Currency.PEN,
+        },
+      },
+    ]);
+
+    const result = await service.findProjectSummary(1, {
+      search: '001',
+      supplierId: 10,
+      currency: Currency.PEN,
+      purchaseOrderType: PurchaseOrderType.Materials,
+    });
+
+    expect(purchaseOrder.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          projectId: 1,
+          code: { contains: '001', mode: 'insensitive' },
+          purchaseOrderType: PurchaseOrderType.Materials,
+          supplier: { supplierId: 10, currency: Currency.PEN },
+        },
+      }),
+    );
+    expect(result.data.totals).toEqual({
+      totalOrders: 2,
+      activeOrders: 1,
+      cancelledOrders: 1,
+      byCurrency: {
+        PEN: { purchaseAmount: 1000, saleAmount: 1400, margin: 400 },
+        USD: { purchaseAmount: 0, saleAmount: 0, margin: 0 },
+        EUR: { purchaseAmount: 0, saleAmount: 0, margin: 0 },
+      },
+    });
+    expect(result.data.filters.supplierName).toBe('Proveedor A');
+    expect(result.data.orders[0]).toEqual(
+      expect.objectContaining({
+        statusLabel: 'Autorizada',
+        purchaseOrderTypeLabel: 'Materiales',
+        margin: 400,
+      }),
+    );
   });
 });

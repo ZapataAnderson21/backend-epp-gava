@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  MaxLength,
 } from 'class-validator';
 import { EmergencyStatus } from '../enum/emergency-status.enum';
 import { Type } from 'class-transformer';
@@ -19,11 +20,13 @@ export class CreateEmergencyDto {
   @ApiProperty({ example: 'Destornillador roto.' })
   @IsString()
   @IsNotEmpty({ message: 'El título es obligatorio. ' })
+  @MaxLength(160)
   title!: string;
 
   @ApiProperty({ example: 'Descripción detallada...' })
   @IsString()
   @IsNotEmpty({ message: 'La descripción es obligatoria. ' })
+  @MaxLength(4000)
   description!: string;
 
   @ApiProperty({ example: 1 })
