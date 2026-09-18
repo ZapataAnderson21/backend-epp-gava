@@ -10,7 +10,7 @@ export class UpdateSupplierDto extends PartialType(
   @ApiPropertyOptional({
     example: 'DIPACO',
     minLength: 1,
-    maxLength: 8,
+    maxLength: 10,
     nullable: false,
   })
   @ValidateIf((_object, value: unknown) => value !== undefined)
@@ -18,9 +18,9 @@ export class UpdateSupplierDto extends PartialType(
     typeof value === 'string' ? value.trim().toUpperCase() : value,
   )
   @IsString()
-  @Matches(/^[A-Z0-9]{1,8}$/, {
+  @Matches(/^[A-Z0-9]{1,10}$/, {
     message:
-      'La abreviatura debe contener de 1 a 8 letras mayúsculas o números, sin espacios ni símbolos.',
+      'La abreviatura debe contener de 1 a 10 letras mayúsculas o números, sin espacios ni símbolos.',
   })
   abbreviation?: string;
 }

@@ -35,14 +35,14 @@ export class CreateSupplierDto {
   @IsString()
   name!: string;
 
-  @ApiProperty({ example: 'DIPACO', minLength: 1, maxLength: 8 })
+  @ApiProperty({ example: 'DIPACO', minLength: 1, maxLength: 10 })
   @Transform(({ value }: { value: unknown }) =>
     typeof value === 'string' ? value.trim().toUpperCase() : value,
   )
   @IsString()
-  @Matches(/^[A-Z0-9]{1,8}$/, {
+  @Matches(/^[A-Z0-9]{1,10}$/, {
     message:
-      'La abreviatura debe contener de 1 a 8 letras mayúsculas o números, sin espacios ni símbolos.',
+      'La abreviatura debe contener de 1 a 10 letras mayúsculas o números, sin espacios ni símbolos.',
   })
   abbreviation!: string;
 

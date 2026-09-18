@@ -21,13 +21,13 @@ describe('Purchase order supplier abbreviation', () => {
   it('usa la abreviatura guardada y mantiene el correlativo anual', async () => {
     purchaseOrder.findUnique.mockResolvedValue({
       code: '2208',
-      supplier: { abbreviation: 'MANUAL12' },
+      supplier: { abbreviation: 'MANUAL1234' },
     });
     purchaseOrder.findMany.mockResolvedValue([
       { code: `No 007-${year}/2208/OLD` },
     ]);
     expect(await service.formatedCode(1, '2208')).toBe(
-      `No 008-${year}/2208/MANUAL12`,
+      `No 008-${year}/2208/MANUAL1234`,
     );
   });
 

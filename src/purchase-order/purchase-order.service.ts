@@ -120,7 +120,7 @@ export class PurchaseOrderService {
 
     if (
       !supplier?.abbreviation ||
-      !/^[A-Z0-9]{1,8}$/.test(supplier.abbreviation)
+      !/^[A-Z0-9]{1,10}$/.test(supplier.abbreviation)
     ) {
       throw new BadRequestException(
         'El proveedor debe tener una abreviatura válida para generar el código.',
