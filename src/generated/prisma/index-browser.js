@@ -161,6 +161,23 @@ exports.Prisma.ProjectScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.RequestFormDraftScalarFieldEnum = {
+  userId: 'userId',
+  slot: 'slot',
+  version: 'version',
+  payload: 'payload',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PurchaseOrderDraftScalarFieldEnum = {
+  userId: 'userId',
+  projectId: 'projectId',
+  slot: 'slot',
+  version: 'version',
+  payload: 'payload',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ElementCategoryScalarFieldEnum = {
   elementCategoryId: 'elementCategoryId',
   name: 'name',
@@ -1152,6 +1169,8 @@ exports.Prisma.ModelName = {
   UserType: 'UserType',
   UserUserType: 'UserUserType',
   Project: 'Project',
+  RequestFormDraft: 'RequestFormDraft',
+  PurchaseOrderDraft: 'PurchaseOrderDraft',
   ElementCategory: 'ElementCategory',
   Element: 'Element',
   FallProtectionGroup: 'FallProtectionGroup',

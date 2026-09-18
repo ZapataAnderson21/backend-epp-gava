@@ -34,6 +34,16 @@ export type UserUserType = $Result.DefaultSelection<Prisma.$UserUserTypePayload>
  */
 export type Project = $Result.DefaultSelection<Prisma.$ProjectPayload>
 /**
+ * Model RequestFormDraft
+ * 
+ */
+export type RequestFormDraft = $Result.DefaultSelection<Prisma.$RequestFormDraftPayload>
+/**
+ * Model PurchaseOrderDraft
+ * 
+ */
+export type PurchaseOrderDraft = $Result.DefaultSelection<Prisma.$PurchaseOrderDraftPayload>
+/**
  * Model ElementCategory
  * 
  */
@@ -959,6 +969,26 @@ export class PrismaClient<
     * ```
     */
   get project(): Prisma.ProjectDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.requestFormDraft`: Exposes CRUD operations for the **RequestFormDraft** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RequestFormDrafts
+    * const requestFormDrafts = await prisma.requestFormDraft.findMany()
+    * ```
+    */
+  get requestFormDraft(): Prisma.RequestFormDraftDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.purchaseOrderDraft`: Exposes CRUD operations for the **PurchaseOrderDraft** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PurchaseOrderDrafts
+    * const purchaseOrderDrafts = await prisma.purchaseOrderDraft.findMany()
+    * ```
+    */
+  get purchaseOrderDraft(): Prisma.PurchaseOrderDraftDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.elementCategory`: Exposes CRUD operations for the **ElementCategory** model.
@@ -1957,6 +1987,8 @@ export namespace Prisma {
     UserType: 'UserType',
     UserUserType: 'UserUserType',
     Project: 'Project',
+    RequestFormDraft: 'RequestFormDraft',
+    PurchaseOrderDraft: 'PurchaseOrderDraft',
     ElementCategory: 'ElementCategory',
     Element: 'Element',
     FallProtectionGroup: 'FallProtectionGroup',
@@ -2028,7 +2060,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userType" | "userUserType" | "project" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "complaint" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrderCondition" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "rateLimitBucket" | "week" | "generalPayroll" | "generalPayrollProject" | "generalPayrollWorker" | "generalPayrollEntry" | "dailyWage" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem" | "expiringDocumentCategory" | "expiringDocument" | "expiringDocumentHistory" | "expiringDocumentNotification"
+      modelProps: "user" | "userType" | "userUserType" | "project" | "requestFormDraft" | "purchaseOrderDraft" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "complaint" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrderCondition" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "rateLimitBucket" | "week" | "generalPayroll" | "generalPayrollProject" | "generalPayrollWorker" | "generalPayrollEntry" | "dailyWage" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem" | "expiringDocumentCategory" | "expiringDocument" | "expiringDocumentHistory" | "expiringDocumentNotification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2325,6 +2357,154 @@ export namespace Prisma {
           count: {
             args: Prisma.ProjectCountArgs<ExtArgs>
             result: $Utils.Optional<ProjectCountAggregateOutputType> | number
+          }
+        }
+      }
+      RequestFormDraft: {
+        payload: Prisma.$RequestFormDraftPayload<ExtArgs>
+        fields: Prisma.RequestFormDraftFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RequestFormDraftFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RequestFormDraftFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload>
+          }
+          findFirst: {
+            args: Prisma.RequestFormDraftFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RequestFormDraftFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload>
+          }
+          findMany: {
+            args: Prisma.RequestFormDraftFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload>[]
+          }
+          create: {
+            args: Prisma.RequestFormDraftCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload>
+          }
+          createMany: {
+            args: Prisma.RequestFormDraftCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RequestFormDraftCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload>[]
+          }
+          delete: {
+            args: Prisma.RequestFormDraftDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload>
+          }
+          update: {
+            args: Prisma.RequestFormDraftUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload>
+          }
+          deleteMany: {
+            args: Prisma.RequestFormDraftDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RequestFormDraftUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RequestFormDraftUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload>[]
+          }
+          upsert: {
+            args: Prisma.RequestFormDraftUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RequestFormDraftPayload>
+          }
+          aggregate: {
+            args: Prisma.RequestFormDraftAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRequestFormDraft>
+          }
+          groupBy: {
+            args: Prisma.RequestFormDraftGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RequestFormDraftGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RequestFormDraftCountArgs<ExtArgs>
+            result: $Utils.Optional<RequestFormDraftCountAggregateOutputType> | number
+          }
+        }
+      }
+      PurchaseOrderDraft: {
+        payload: Prisma.$PurchaseOrderDraftPayload<ExtArgs>
+        fields: Prisma.PurchaseOrderDraftFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PurchaseOrderDraftFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PurchaseOrderDraftFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload>
+          }
+          findFirst: {
+            args: Prisma.PurchaseOrderDraftFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PurchaseOrderDraftFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload>
+          }
+          findMany: {
+            args: Prisma.PurchaseOrderDraftFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload>[]
+          }
+          create: {
+            args: Prisma.PurchaseOrderDraftCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload>
+          }
+          createMany: {
+            args: Prisma.PurchaseOrderDraftCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PurchaseOrderDraftCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload>[]
+          }
+          delete: {
+            args: Prisma.PurchaseOrderDraftDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload>
+          }
+          update: {
+            args: Prisma.PurchaseOrderDraftUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload>
+          }
+          deleteMany: {
+            args: Prisma.PurchaseOrderDraftDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PurchaseOrderDraftUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PurchaseOrderDraftUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload>[]
+          }
+          upsert: {
+            args: Prisma.PurchaseOrderDraftUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderDraftPayload>
+          }
+          aggregate: {
+            args: Prisma.PurchaseOrderDraftAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePurchaseOrderDraft>
+          }
+          groupBy: {
+            args: Prisma.PurchaseOrderDraftGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PurchaseOrderDraftGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PurchaseOrderDraftCountArgs<ExtArgs>
+            result: $Utils.Optional<PurchaseOrderDraftCountAggregateOutputType> | number
           }
         }
       }
@@ -6568,6 +6748,8 @@ export namespace Prisma {
     userType?: UserTypeOmit
     userUserType?: UserUserTypeOmit
     project?: ProjectOmit
+    requestFormDraft?: RequestFormDraftOmit
+    purchaseOrderDraft?: PurchaseOrderDraftOmit
     elementCategory?: ElementCategoryOmit
     element?: ElementOmit
     fallProtectionGroup?: FallProtectionGroupOmit
@@ -6704,6 +6886,8 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    requestFormDrafts: number
+    purchaseOrderDrafts: number
     blacklistedTokens: number
     responses: number
     requests: number
@@ -6727,6 +6911,8 @@ export namespace Prisma {
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    requestFormDrafts?: boolean | UserCountOutputTypeCountRequestFormDraftsArgs
+    purchaseOrderDrafts?: boolean | UserCountOutputTypeCountPurchaseOrderDraftsArgs
     blacklistedTokens?: boolean | UserCountOutputTypeCountBlacklistedTokensArgs
     responses?: boolean | UserCountOutputTypeCountResponsesArgs
     requests?: boolean | UserCountOutputTypeCountRequestsArgs
@@ -6758,6 +6944,20 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountRequestFormDraftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RequestFormDraftWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPurchaseOrderDraftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurchaseOrderDraftWhereInput
   }
 
   /**
@@ -6937,6 +7137,7 @@ export namespace Prisma {
    */
 
   export type ProjectCountOutputType = {
+    purchaseOrderDrafts: number
     requests: number
     emergencies: number
     purchaseOrders: number
@@ -6952,6 +7153,7 @@ export namespace Prisma {
   }
 
   export type ProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purchaseOrderDrafts?: boolean | ProjectCountOutputTypeCountPurchaseOrderDraftsArgs
     requests?: boolean | ProjectCountOutputTypeCountRequestsArgs
     emergencies?: boolean | ProjectCountOutputTypeCountEmergenciesArgs
     purchaseOrders?: boolean | ProjectCountOutputTypeCountPurchaseOrdersArgs
@@ -6975,6 +7177,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the ProjectCountOutputType
      */
     select?: ProjectCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProjectCountOutputType without action
+   */
+  export type ProjectCountOutputTypeCountPurchaseOrderDraftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurchaseOrderDraftWhereInput
   }
 
   /**
@@ -8718,6 +8927,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
+    requestFormDrafts?: boolean | User$requestFormDraftsArgs<ExtArgs>
+    purchaseOrderDrafts?: boolean | User$purchaseOrderDraftsArgs<ExtArgs>
     blacklistedTokens?: boolean | User$blacklistedTokensArgs<ExtArgs>
     responses?: boolean | User$responsesArgs<ExtArgs>
     requests?: boolean | User$requestsArgs<ExtArgs>
@@ -8782,6 +8993,8 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "name" | "lastName" | "email" | "password" | "authVersion" | "phone" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    requestFormDrafts?: boolean | User$requestFormDraftsArgs<ExtArgs>
+    purchaseOrderDrafts?: boolean | User$purchaseOrderDraftsArgs<ExtArgs>
     blacklistedTokens?: boolean | User$blacklistedTokensArgs<ExtArgs>
     responses?: boolean | User$responsesArgs<ExtArgs>
     requests?: boolean | User$requestsArgs<ExtArgs>
@@ -8810,6 +9023,8 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      requestFormDrafts: Prisma.$RequestFormDraftPayload<ExtArgs>[]
+      purchaseOrderDrafts: Prisma.$PurchaseOrderDraftPayload<ExtArgs>[]
       blacklistedTokens: Prisma.$BlacklistedTokenPayload<ExtArgs>[]
       responses: Prisma.$RequestResponsePayload<ExtArgs>[]
       requests: Prisma.$RequestPayload<ExtArgs>[]
@@ -9236,6 +9451,8 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    requestFormDrafts<T extends User$requestFormDraftsArgs<ExtArgs> = {}>(args?: Subset<T, User$requestFormDraftsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    purchaseOrderDrafts<T extends User$purchaseOrderDraftsArgs<ExtArgs> = {}>(args?: Subset<T, User$purchaseOrderDraftsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     blacklistedTokens<T extends User$blacklistedTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$blacklistedTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlacklistedTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     responses<T extends User$responsesArgs<ExtArgs> = {}>(args?: Subset<T, User$responsesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     requests<T extends User$requestsArgs<ExtArgs> = {}>(args?: Subset<T, User$requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9680,6 +9897,54 @@ export namespace Prisma {
      * Limit how many Users to delete.
      */
     limit?: number
+  }
+
+  /**
+   * User.requestFormDrafts
+   */
+  export type User$requestFormDraftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+    where?: RequestFormDraftWhereInput
+    orderBy?: RequestFormDraftOrderByWithRelationInput | RequestFormDraftOrderByWithRelationInput[]
+    cursor?: RequestFormDraftWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RequestFormDraftScalarFieldEnum | RequestFormDraftScalarFieldEnum[]
+  }
+
+  /**
+   * User.purchaseOrderDrafts
+   */
+  export type User$purchaseOrderDraftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    where?: PurchaseOrderDraftWhereInput
+    orderBy?: PurchaseOrderDraftOrderByWithRelationInput | PurchaseOrderDraftOrderByWithRelationInput[]
+    cursor?: PurchaseOrderDraftWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PurchaseOrderDraftScalarFieldEnum | PurchaseOrderDraftScalarFieldEnum[]
   }
 
   /**
@@ -12613,6 +12878,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
+    purchaseOrderDrafts?: boolean | Project$purchaseOrderDraftsArgs<ExtArgs>
     requests?: boolean | Project$requestsArgs<ExtArgs>
     emergencies?: boolean | Project$emergenciesArgs<ExtArgs>
     purchaseOrders?: boolean | Project$purchaseOrdersArgs<ExtArgs>
@@ -12672,6 +12938,7 @@ export namespace Prisma {
 
   export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"projectId" | "name" | "code" | "description" | "status" | "location" | "startDate" | "endDate" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purchaseOrderDrafts?: boolean | Project$purchaseOrderDraftsArgs<ExtArgs>
     requests?: boolean | Project$requestsArgs<ExtArgs>
     emergencies?: boolean | Project$emergenciesArgs<ExtArgs>
     purchaseOrders?: boolean | Project$purchaseOrdersArgs<ExtArgs>
@@ -12692,6 +12959,7 @@ export namespace Prisma {
   export type $ProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Project"
     objects: {
+      purchaseOrderDrafts: Prisma.$PurchaseOrderDraftPayload<ExtArgs>[]
       requests: Prisma.$RequestPayload<ExtArgs>[]
       emergencies: Prisma.$EmergencyPayload<ExtArgs>[]
       purchaseOrders: Prisma.$PurchaseOrderPayload<ExtArgs>[]
@@ -13111,6 +13379,7 @@ export namespace Prisma {
    */
   export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    purchaseOrderDrafts<T extends Project$purchaseOrderDraftsArgs<ExtArgs> = {}>(args?: Subset<T, Project$purchaseOrderDraftsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     requests<T extends Project$requestsArgs<ExtArgs> = {}>(args?: Subset<T, Project$requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     emergencies<T extends Project$emergenciesArgs<ExtArgs> = {}>(args?: Subset<T, Project$emergenciesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmergencyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     purchaseOrders<T extends Project$purchaseOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Project$purchaseOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -13551,6 +13820,30 @@ export namespace Prisma {
   }
 
   /**
+   * Project.purchaseOrderDrafts
+   */
+  export type Project$purchaseOrderDraftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    where?: PurchaseOrderDraftWhereInput
+    orderBy?: PurchaseOrderDraftOrderByWithRelationInput | PurchaseOrderDraftOrderByWithRelationInput[]
+    cursor?: PurchaseOrderDraftWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PurchaseOrderDraftScalarFieldEnum | PurchaseOrderDraftScalarFieldEnum[]
+  }
+
+  /**
    * Project.requests
    */
   export type Project$requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13854,6 +14147,2215 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProjectInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RequestFormDraft
+   */
+
+  export type AggregateRequestFormDraft = {
+    _count: RequestFormDraftCountAggregateOutputType | null
+    _avg: RequestFormDraftAvgAggregateOutputType | null
+    _sum: RequestFormDraftSumAggregateOutputType | null
+    _min: RequestFormDraftMinAggregateOutputType | null
+    _max: RequestFormDraftMaxAggregateOutputType | null
+  }
+
+  export type RequestFormDraftAvgAggregateOutputType = {
+    userId: number | null
+    version: number | null
+  }
+
+  export type RequestFormDraftSumAggregateOutputType = {
+    userId: number | null
+    version: number | null
+  }
+
+  export type RequestFormDraftMinAggregateOutputType = {
+    userId: number | null
+    slot: string | null
+    version: number | null
+    updatedAt: Date | null
+  }
+
+  export type RequestFormDraftMaxAggregateOutputType = {
+    userId: number | null
+    slot: string | null
+    version: number | null
+    updatedAt: Date | null
+  }
+
+  export type RequestFormDraftCountAggregateOutputType = {
+    userId: number
+    slot: number
+    version: number
+    payload: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RequestFormDraftAvgAggregateInputType = {
+    userId?: true
+    version?: true
+  }
+
+  export type RequestFormDraftSumAggregateInputType = {
+    userId?: true
+    version?: true
+  }
+
+  export type RequestFormDraftMinAggregateInputType = {
+    userId?: true
+    slot?: true
+    version?: true
+    updatedAt?: true
+  }
+
+  export type RequestFormDraftMaxAggregateInputType = {
+    userId?: true
+    slot?: true
+    version?: true
+    updatedAt?: true
+  }
+
+  export type RequestFormDraftCountAggregateInputType = {
+    userId?: true
+    slot?: true
+    version?: true
+    payload?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RequestFormDraftAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RequestFormDraft to aggregate.
+     */
+    where?: RequestFormDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RequestFormDrafts to fetch.
+     */
+    orderBy?: RequestFormDraftOrderByWithRelationInput | RequestFormDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RequestFormDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RequestFormDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RequestFormDrafts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RequestFormDrafts
+    **/
+    _count?: true | RequestFormDraftCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RequestFormDraftAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RequestFormDraftSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RequestFormDraftMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RequestFormDraftMaxAggregateInputType
+  }
+
+  export type GetRequestFormDraftAggregateType<T extends RequestFormDraftAggregateArgs> = {
+        [P in keyof T & keyof AggregateRequestFormDraft]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRequestFormDraft[P]>
+      : GetScalarType<T[P], AggregateRequestFormDraft[P]>
+  }
+
+
+
+
+  export type RequestFormDraftGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RequestFormDraftWhereInput
+    orderBy?: RequestFormDraftOrderByWithAggregationInput | RequestFormDraftOrderByWithAggregationInput[]
+    by: RequestFormDraftScalarFieldEnum[] | RequestFormDraftScalarFieldEnum
+    having?: RequestFormDraftScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RequestFormDraftCountAggregateInputType | true
+    _avg?: RequestFormDraftAvgAggregateInputType
+    _sum?: RequestFormDraftSumAggregateInputType
+    _min?: RequestFormDraftMinAggregateInputType
+    _max?: RequestFormDraftMaxAggregateInputType
+  }
+
+  export type RequestFormDraftGroupByOutputType = {
+    userId: number
+    slot: string
+    version: number
+    payload: JsonValue | null
+    updatedAt: Date
+    _count: RequestFormDraftCountAggregateOutputType | null
+    _avg: RequestFormDraftAvgAggregateOutputType | null
+    _sum: RequestFormDraftSumAggregateOutputType | null
+    _min: RequestFormDraftMinAggregateOutputType | null
+    _max: RequestFormDraftMaxAggregateOutputType | null
+  }
+
+  type GetRequestFormDraftGroupByPayload<T extends RequestFormDraftGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RequestFormDraftGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RequestFormDraftGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RequestFormDraftGroupByOutputType[P]>
+            : GetScalarType<T[P], RequestFormDraftGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RequestFormDraftSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    slot?: boolean
+    version?: boolean
+    payload?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["requestFormDraft"]>
+
+  export type RequestFormDraftSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    slot?: boolean
+    version?: boolean
+    payload?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["requestFormDraft"]>
+
+  export type RequestFormDraftSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    slot?: boolean
+    version?: boolean
+    payload?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["requestFormDraft"]>
+
+  export type RequestFormDraftSelectScalar = {
+    userId?: boolean
+    slot?: boolean
+    version?: boolean
+    payload?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RequestFormDraftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "slot" | "version" | "payload" | "updatedAt", ExtArgs["result"]["requestFormDraft"]>
+  export type RequestFormDraftInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type RequestFormDraftIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type RequestFormDraftIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $RequestFormDraftPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RequestFormDraft"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      userId: number
+      slot: string
+      version: number
+      payload: Prisma.JsonValue | null
+      updatedAt: Date
+    }, ExtArgs["result"]["requestFormDraft"]>
+    composites: {}
+  }
+
+  type RequestFormDraftGetPayload<S extends boolean | null | undefined | RequestFormDraftDefaultArgs> = $Result.GetResult<Prisma.$RequestFormDraftPayload, S>
+
+  type RequestFormDraftCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RequestFormDraftFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RequestFormDraftCountAggregateInputType | true
+    }
+
+  export interface RequestFormDraftDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RequestFormDraft'], meta: { name: 'RequestFormDraft' } }
+    /**
+     * Find zero or one RequestFormDraft that matches the filter.
+     * @param {RequestFormDraftFindUniqueArgs} args - Arguments to find a RequestFormDraft
+     * @example
+     * // Get one RequestFormDraft
+     * const requestFormDraft = await prisma.requestFormDraft.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RequestFormDraftFindUniqueArgs>(args: SelectSubset<T, RequestFormDraftFindUniqueArgs<ExtArgs>>): Prisma__RequestFormDraftClient<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RequestFormDraft that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RequestFormDraftFindUniqueOrThrowArgs} args - Arguments to find a RequestFormDraft
+     * @example
+     * // Get one RequestFormDraft
+     * const requestFormDraft = await prisma.requestFormDraft.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RequestFormDraftFindUniqueOrThrowArgs>(args: SelectSubset<T, RequestFormDraftFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RequestFormDraftClient<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RequestFormDraft that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RequestFormDraftFindFirstArgs} args - Arguments to find a RequestFormDraft
+     * @example
+     * // Get one RequestFormDraft
+     * const requestFormDraft = await prisma.requestFormDraft.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RequestFormDraftFindFirstArgs>(args?: SelectSubset<T, RequestFormDraftFindFirstArgs<ExtArgs>>): Prisma__RequestFormDraftClient<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RequestFormDraft that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RequestFormDraftFindFirstOrThrowArgs} args - Arguments to find a RequestFormDraft
+     * @example
+     * // Get one RequestFormDraft
+     * const requestFormDraft = await prisma.requestFormDraft.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RequestFormDraftFindFirstOrThrowArgs>(args?: SelectSubset<T, RequestFormDraftFindFirstOrThrowArgs<ExtArgs>>): Prisma__RequestFormDraftClient<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RequestFormDrafts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RequestFormDraftFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RequestFormDrafts
+     * const requestFormDrafts = await prisma.requestFormDraft.findMany()
+     * 
+     * // Get first 10 RequestFormDrafts
+     * const requestFormDrafts = await prisma.requestFormDraft.findMany({ take: 10 })
+     * 
+     * // Only select the `userId`
+     * const requestFormDraftWithUserIdOnly = await prisma.requestFormDraft.findMany({ select: { userId: true } })
+     * 
+     */
+    findMany<T extends RequestFormDraftFindManyArgs>(args?: SelectSubset<T, RequestFormDraftFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RequestFormDraft.
+     * @param {RequestFormDraftCreateArgs} args - Arguments to create a RequestFormDraft.
+     * @example
+     * // Create one RequestFormDraft
+     * const RequestFormDraft = await prisma.requestFormDraft.create({
+     *   data: {
+     *     // ... data to create a RequestFormDraft
+     *   }
+     * })
+     * 
+     */
+    create<T extends RequestFormDraftCreateArgs>(args: SelectSubset<T, RequestFormDraftCreateArgs<ExtArgs>>): Prisma__RequestFormDraftClient<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RequestFormDrafts.
+     * @param {RequestFormDraftCreateManyArgs} args - Arguments to create many RequestFormDrafts.
+     * @example
+     * // Create many RequestFormDrafts
+     * const requestFormDraft = await prisma.requestFormDraft.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RequestFormDraftCreateManyArgs>(args?: SelectSubset<T, RequestFormDraftCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RequestFormDrafts and returns the data saved in the database.
+     * @param {RequestFormDraftCreateManyAndReturnArgs} args - Arguments to create many RequestFormDrafts.
+     * @example
+     * // Create many RequestFormDrafts
+     * const requestFormDraft = await prisma.requestFormDraft.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RequestFormDrafts and only return the `userId`
+     * const requestFormDraftWithUserIdOnly = await prisma.requestFormDraft.createManyAndReturn({
+     *   select: { userId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RequestFormDraftCreateManyAndReturnArgs>(args?: SelectSubset<T, RequestFormDraftCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RequestFormDraft.
+     * @param {RequestFormDraftDeleteArgs} args - Arguments to delete one RequestFormDraft.
+     * @example
+     * // Delete one RequestFormDraft
+     * const RequestFormDraft = await prisma.requestFormDraft.delete({
+     *   where: {
+     *     // ... filter to delete one RequestFormDraft
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RequestFormDraftDeleteArgs>(args: SelectSubset<T, RequestFormDraftDeleteArgs<ExtArgs>>): Prisma__RequestFormDraftClient<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RequestFormDraft.
+     * @param {RequestFormDraftUpdateArgs} args - Arguments to update one RequestFormDraft.
+     * @example
+     * // Update one RequestFormDraft
+     * const requestFormDraft = await prisma.requestFormDraft.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RequestFormDraftUpdateArgs>(args: SelectSubset<T, RequestFormDraftUpdateArgs<ExtArgs>>): Prisma__RequestFormDraftClient<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RequestFormDrafts.
+     * @param {RequestFormDraftDeleteManyArgs} args - Arguments to filter RequestFormDrafts to delete.
+     * @example
+     * // Delete a few RequestFormDrafts
+     * const { count } = await prisma.requestFormDraft.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RequestFormDraftDeleteManyArgs>(args?: SelectSubset<T, RequestFormDraftDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RequestFormDrafts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RequestFormDraftUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RequestFormDrafts
+     * const requestFormDraft = await prisma.requestFormDraft.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RequestFormDraftUpdateManyArgs>(args: SelectSubset<T, RequestFormDraftUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RequestFormDrafts and returns the data updated in the database.
+     * @param {RequestFormDraftUpdateManyAndReturnArgs} args - Arguments to update many RequestFormDrafts.
+     * @example
+     * // Update many RequestFormDrafts
+     * const requestFormDraft = await prisma.requestFormDraft.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RequestFormDrafts and only return the `userId`
+     * const requestFormDraftWithUserIdOnly = await prisma.requestFormDraft.updateManyAndReturn({
+     *   select: { userId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RequestFormDraftUpdateManyAndReturnArgs>(args: SelectSubset<T, RequestFormDraftUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RequestFormDraft.
+     * @param {RequestFormDraftUpsertArgs} args - Arguments to update or create a RequestFormDraft.
+     * @example
+     * // Update or create a RequestFormDraft
+     * const requestFormDraft = await prisma.requestFormDraft.upsert({
+     *   create: {
+     *     // ... data to create a RequestFormDraft
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RequestFormDraft we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RequestFormDraftUpsertArgs>(args: SelectSubset<T, RequestFormDraftUpsertArgs<ExtArgs>>): Prisma__RequestFormDraftClient<$Result.GetResult<Prisma.$RequestFormDraftPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RequestFormDrafts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RequestFormDraftCountArgs} args - Arguments to filter RequestFormDrafts to count.
+     * @example
+     * // Count the number of RequestFormDrafts
+     * const count = await prisma.requestFormDraft.count({
+     *   where: {
+     *     // ... the filter for the RequestFormDrafts we want to count
+     *   }
+     * })
+    **/
+    count<T extends RequestFormDraftCountArgs>(
+      args?: Subset<T, RequestFormDraftCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RequestFormDraftCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RequestFormDraft.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RequestFormDraftAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RequestFormDraftAggregateArgs>(args: Subset<T, RequestFormDraftAggregateArgs>): Prisma.PrismaPromise<GetRequestFormDraftAggregateType<T>>
+
+    /**
+     * Group by RequestFormDraft.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RequestFormDraftGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RequestFormDraftGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RequestFormDraftGroupByArgs['orderBy'] }
+        : { orderBy?: RequestFormDraftGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RequestFormDraftGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRequestFormDraftGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RequestFormDraft model
+   */
+  readonly fields: RequestFormDraftFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RequestFormDraft.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RequestFormDraftClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RequestFormDraft model
+   */
+  interface RequestFormDraftFieldRefs {
+    readonly userId: FieldRef<"RequestFormDraft", 'Int'>
+    readonly slot: FieldRef<"RequestFormDraft", 'String'>
+    readonly version: FieldRef<"RequestFormDraft", 'Int'>
+    readonly payload: FieldRef<"RequestFormDraft", 'Json'>
+    readonly updatedAt: FieldRef<"RequestFormDraft", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RequestFormDraft findUnique
+   */
+  export type RequestFormDraftFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which RequestFormDraft to fetch.
+     */
+    where: RequestFormDraftWhereUniqueInput
+  }
+
+  /**
+   * RequestFormDraft findUniqueOrThrow
+   */
+  export type RequestFormDraftFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which RequestFormDraft to fetch.
+     */
+    where: RequestFormDraftWhereUniqueInput
+  }
+
+  /**
+   * RequestFormDraft findFirst
+   */
+  export type RequestFormDraftFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which RequestFormDraft to fetch.
+     */
+    where?: RequestFormDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RequestFormDrafts to fetch.
+     */
+    orderBy?: RequestFormDraftOrderByWithRelationInput | RequestFormDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RequestFormDrafts.
+     */
+    cursor?: RequestFormDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RequestFormDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RequestFormDrafts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RequestFormDrafts.
+     */
+    distinct?: RequestFormDraftScalarFieldEnum | RequestFormDraftScalarFieldEnum[]
+  }
+
+  /**
+   * RequestFormDraft findFirstOrThrow
+   */
+  export type RequestFormDraftFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which RequestFormDraft to fetch.
+     */
+    where?: RequestFormDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RequestFormDrafts to fetch.
+     */
+    orderBy?: RequestFormDraftOrderByWithRelationInput | RequestFormDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RequestFormDrafts.
+     */
+    cursor?: RequestFormDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RequestFormDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RequestFormDrafts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RequestFormDrafts.
+     */
+    distinct?: RequestFormDraftScalarFieldEnum | RequestFormDraftScalarFieldEnum[]
+  }
+
+  /**
+   * RequestFormDraft findMany
+   */
+  export type RequestFormDraftFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which RequestFormDrafts to fetch.
+     */
+    where?: RequestFormDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RequestFormDrafts to fetch.
+     */
+    orderBy?: RequestFormDraftOrderByWithRelationInput | RequestFormDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RequestFormDrafts.
+     */
+    cursor?: RequestFormDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RequestFormDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RequestFormDrafts.
+     */
+    skip?: number
+    distinct?: RequestFormDraftScalarFieldEnum | RequestFormDraftScalarFieldEnum[]
+  }
+
+  /**
+   * RequestFormDraft create
+   */
+  export type RequestFormDraftCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RequestFormDraft.
+     */
+    data: XOR<RequestFormDraftCreateInput, RequestFormDraftUncheckedCreateInput>
+  }
+
+  /**
+   * RequestFormDraft createMany
+   */
+  export type RequestFormDraftCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RequestFormDrafts.
+     */
+    data: RequestFormDraftCreateManyInput | RequestFormDraftCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RequestFormDraft createManyAndReturn
+   */
+  export type RequestFormDraftCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * The data used to create many RequestFormDrafts.
+     */
+    data: RequestFormDraftCreateManyInput | RequestFormDraftCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RequestFormDraft update
+   */
+  export type RequestFormDraftUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RequestFormDraft.
+     */
+    data: XOR<RequestFormDraftUpdateInput, RequestFormDraftUncheckedUpdateInput>
+    /**
+     * Choose, which RequestFormDraft to update.
+     */
+    where: RequestFormDraftWhereUniqueInput
+  }
+
+  /**
+   * RequestFormDraft updateMany
+   */
+  export type RequestFormDraftUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RequestFormDrafts.
+     */
+    data: XOR<RequestFormDraftUpdateManyMutationInput, RequestFormDraftUncheckedUpdateManyInput>
+    /**
+     * Filter which RequestFormDrafts to update
+     */
+    where?: RequestFormDraftWhereInput
+    /**
+     * Limit how many RequestFormDrafts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RequestFormDraft updateManyAndReturn
+   */
+  export type RequestFormDraftUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * The data used to update RequestFormDrafts.
+     */
+    data: XOR<RequestFormDraftUpdateManyMutationInput, RequestFormDraftUncheckedUpdateManyInput>
+    /**
+     * Filter which RequestFormDrafts to update
+     */
+    where?: RequestFormDraftWhereInput
+    /**
+     * Limit how many RequestFormDrafts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RequestFormDraft upsert
+   */
+  export type RequestFormDraftUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RequestFormDraft to update in case it exists.
+     */
+    where: RequestFormDraftWhereUniqueInput
+    /**
+     * In case the RequestFormDraft found by the `where` argument doesn't exist, create a new RequestFormDraft with this data.
+     */
+    create: XOR<RequestFormDraftCreateInput, RequestFormDraftUncheckedCreateInput>
+    /**
+     * In case the RequestFormDraft was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RequestFormDraftUpdateInput, RequestFormDraftUncheckedUpdateInput>
+  }
+
+  /**
+   * RequestFormDraft delete
+   */
+  export type RequestFormDraftDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+    /**
+     * Filter which RequestFormDraft to delete.
+     */
+    where: RequestFormDraftWhereUniqueInput
+  }
+
+  /**
+   * RequestFormDraft deleteMany
+   */
+  export type RequestFormDraftDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RequestFormDrafts to delete
+     */
+    where?: RequestFormDraftWhereInput
+    /**
+     * Limit how many RequestFormDrafts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RequestFormDraft without action
+   */
+  export type RequestFormDraftDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RequestFormDraft
+     */
+    select?: RequestFormDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RequestFormDraft
+     */
+    omit?: RequestFormDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestFormDraftInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PurchaseOrderDraft
+   */
+
+  export type AggregatePurchaseOrderDraft = {
+    _count: PurchaseOrderDraftCountAggregateOutputType | null
+    _avg: PurchaseOrderDraftAvgAggregateOutputType | null
+    _sum: PurchaseOrderDraftSumAggregateOutputType | null
+    _min: PurchaseOrderDraftMinAggregateOutputType | null
+    _max: PurchaseOrderDraftMaxAggregateOutputType | null
+  }
+
+  export type PurchaseOrderDraftAvgAggregateOutputType = {
+    userId: number | null
+    projectId: number | null
+    version: number | null
+  }
+
+  export type PurchaseOrderDraftSumAggregateOutputType = {
+    userId: number | null
+    projectId: number | null
+    version: number | null
+  }
+
+  export type PurchaseOrderDraftMinAggregateOutputType = {
+    userId: number | null
+    projectId: number | null
+    slot: string | null
+    version: number | null
+    updatedAt: Date | null
+  }
+
+  export type PurchaseOrderDraftMaxAggregateOutputType = {
+    userId: number | null
+    projectId: number | null
+    slot: string | null
+    version: number | null
+    updatedAt: Date | null
+  }
+
+  export type PurchaseOrderDraftCountAggregateOutputType = {
+    userId: number
+    projectId: number
+    slot: number
+    version: number
+    payload: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PurchaseOrderDraftAvgAggregateInputType = {
+    userId?: true
+    projectId?: true
+    version?: true
+  }
+
+  export type PurchaseOrderDraftSumAggregateInputType = {
+    userId?: true
+    projectId?: true
+    version?: true
+  }
+
+  export type PurchaseOrderDraftMinAggregateInputType = {
+    userId?: true
+    projectId?: true
+    slot?: true
+    version?: true
+    updatedAt?: true
+  }
+
+  export type PurchaseOrderDraftMaxAggregateInputType = {
+    userId?: true
+    projectId?: true
+    slot?: true
+    version?: true
+    updatedAt?: true
+  }
+
+  export type PurchaseOrderDraftCountAggregateInputType = {
+    userId?: true
+    projectId?: true
+    slot?: true
+    version?: true
+    payload?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PurchaseOrderDraftAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PurchaseOrderDraft to aggregate.
+     */
+    where?: PurchaseOrderDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurchaseOrderDrafts to fetch.
+     */
+    orderBy?: PurchaseOrderDraftOrderByWithRelationInput | PurchaseOrderDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PurchaseOrderDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurchaseOrderDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurchaseOrderDrafts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PurchaseOrderDrafts
+    **/
+    _count?: true | PurchaseOrderDraftCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PurchaseOrderDraftAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PurchaseOrderDraftSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PurchaseOrderDraftMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PurchaseOrderDraftMaxAggregateInputType
+  }
+
+  export type GetPurchaseOrderDraftAggregateType<T extends PurchaseOrderDraftAggregateArgs> = {
+        [P in keyof T & keyof AggregatePurchaseOrderDraft]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePurchaseOrderDraft[P]>
+      : GetScalarType<T[P], AggregatePurchaseOrderDraft[P]>
+  }
+
+
+
+
+  export type PurchaseOrderDraftGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurchaseOrderDraftWhereInput
+    orderBy?: PurchaseOrderDraftOrderByWithAggregationInput | PurchaseOrderDraftOrderByWithAggregationInput[]
+    by: PurchaseOrderDraftScalarFieldEnum[] | PurchaseOrderDraftScalarFieldEnum
+    having?: PurchaseOrderDraftScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PurchaseOrderDraftCountAggregateInputType | true
+    _avg?: PurchaseOrderDraftAvgAggregateInputType
+    _sum?: PurchaseOrderDraftSumAggregateInputType
+    _min?: PurchaseOrderDraftMinAggregateInputType
+    _max?: PurchaseOrderDraftMaxAggregateInputType
+  }
+
+  export type PurchaseOrderDraftGroupByOutputType = {
+    userId: number
+    projectId: number
+    slot: string
+    version: number
+    payload: JsonValue | null
+    updatedAt: Date
+    _count: PurchaseOrderDraftCountAggregateOutputType | null
+    _avg: PurchaseOrderDraftAvgAggregateOutputType | null
+    _sum: PurchaseOrderDraftSumAggregateOutputType | null
+    _min: PurchaseOrderDraftMinAggregateOutputType | null
+    _max: PurchaseOrderDraftMaxAggregateOutputType | null
+  }
+
+  type GetPurchaseOrderDraftGroupByPayload<T extends PurchaseOrderDraftGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PurchaseOrderDraftGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PurchaseOrderDraftGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PurchaseOrderDraftGroupByOutputType[P]>
+            : GetScalarType<T[P], PurchaseOrderDraftGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PurchaseOrderDraftSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    projectId?: boolean
+    slot?: boolean
+    version?: boolean
+    payload?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["purchaseOrderDraft"]>
+
+  export type PurchaseOrderDraftSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    projectId?: boolean
+    slot?: boolean
+    version?: boolean
+    payload?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["purchaseOrderDraft"]>
+
+  export type PurchaseOrderDraftSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    projectId?: boolean
+    slot?: boolean
+    version?: boolean
+    payload?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["purchaseOrderDraft"]>
+
+  export type PurchaseOrderDraftSelectScalar = {
+    userId?: boolean
+    projectId?: boolean
+    slot?: boolean
+    version?: boolean
+    payload?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PurchaseOrderDraftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "projectId" | "slot" | "version" | "payload" | "updatedAt", ExtArgs["result"]["purchaseOrderDraft"]>
+  export type PurchaseOrderDraftInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+  export type PurchaseOrderDraftIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+  export type PurchaseOrderDraftIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+
+  export type $PurchaseOrderDraftPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PurchaseOrderDraft"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      project: Prisma.$ProjectPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      userId: number
+      projectId: number
+      slot: string
+      version: number
+      payload: Prisma.JsonValue | null
+      updatedAt: Date
+    }, ExtArgs["result"]["purchaseOrderDraft"]>
+    composites: {}
+  }
+
+  type PurchaseOrderDraftGetPayload<S extends boolean | null | undefined | PurchaseOrderDraftDefaultArgs> = $Result.GetResult<Prisma.$PurchaseOrderDraftPayload, S>
+
+  type PurchaseOrderDraftCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PurchaseOrderDraftFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PurchaseOrderDraftCountAggregateInputType | true
+    }
+
+  export interface PurchaseOrderDraftDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PurchaseOrderDraft'], meta: { name: 'PurchaseOrderDraft' } }
+    /**
+     * Find zero or one PurchaseOrderDraft that matches the filter.
+     * @param {PurchaseOrderDraftFindUniqueArgs} args - Arguments to find a PurchaseOrderDraft
+     * @example
+     * // Get one PurchaseOrderDraft
+     * const purchaseOrderDraft = await prisma.purchaseOrderDraft.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PurchaseOrderDraftFindUniqueArgs>(args: SelectSubset<T, PurchaseOrderDraftFindUniqueArgs<ExtArgs>>): Prisma__PurchaseOrderDraftClient<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PurchaseOrderDraft that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PurchaseOrderDraftFindUniqueOrThrowArgs} args - Arguments to find a PurchaseOrderDraft
+     * @example
+     * // Get one PurchaseOrderDraft
+     * const purchaseOrderDraft = await prisma.purchaseOrderDraft.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PurchaseOrderDraftFindUniqueOrThrowArgs>(args: SelectSubset<T, PurchaseOrderDraftFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PurchaseOrderDraftClient<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PurchaseOrderDraft that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderDraftFindFirstArgs} args - Arguments to find a PurchaseOrderDraft
+     * @example
+     * // Get one PurchaseOrderDraft
+     * const purchaseOrderDraft = await prisma.purchaseOrderDraft.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PurchaseOrderDraftFindFirstArgs>(args?: SelectSubset<T, PurchaseOrderDraftFindFirstArgs<ExtArgs>>): Prisma__PurchaseOrderDraftClient<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PurchaseOrderDraft that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderDraftFindFirstOrThrowArgs} args - Arguments to find a PurchaseOrderDraft
+     * @example
+     * // Get one PurchaseOrderDraft
+     * const purchaseOrderDraft = await prisma.purchaseOrderDraft.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PurchaseOrderDraftFindFirstOrThrowArgs>(args?: SelectSubset<T, PurchaseOrderDraftFindFirstOrThrowArgs<ExtArgs>>): Prisma__PurchaseOrderDraftClient<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PurchaseOrderDrafts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderDraftFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PurchaseOrderDrafts
+     * const purchaseOrderDrafts = await prisma.purchaseOrderDraft.findMany()
+     * 
+     * // Get first 10 PurchaseOrderDrafts
+     * const purchaseOrderDrafts = await prisma.purchaseOrderDraft.findMany({ take: 10 })
+     * 
+     * // Only select the `userId`
+     * const purchaseOrderDraftWithUserIdOnly = await prisma.purchaseOrderDraft.findMany({ select: { userId: true } })
+     * 
+     */
+    findMany<T extends PurchaseOrderDraftFindManyArgs>(args?: SelectSubset<T, PurchaseOrderDraftFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PurchaseOrderDraft.
+     * @param {PurchaseOrderDraftCreateArgs} args - Arguments to create a PurchaseOrderDraft.
+     * @example
+     * // Create one PurchaseOrderDraft
+     * const PurchaseOrderDraft = await prisma.purchaseOrderDraft.create({
+     *   data: {
+     *     // ... data to create a PurchaseOrderDraft
+     *   }
+     * })
+     * 
+     */
+    create<T extends PurchaseOrderDraftCreateArgs>(args: SelectSubset<T, PurchaseOrderDraftCreateArgs<ExtArgs>>): Prisma__PurchaseOrderDraftClient<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PurchaseOrderDrafts.
+     * @param {PurchaseOrderDraftCreateManyArgs} args - Arguments to create many PurchaseOrderDrafts.
+     * @example
+     * // Create many PurchaseOrderDrafts
+     * const purchaseOrderDraft = await prisma.purchaseOrderDraft.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PurchaseOrderDraftCreateManyArgs>(args?: SelectSubset<T, PurchaseOrderDraftCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PurchaseOrderDrafts and returns the data saved in the database.
+     * @param {PurchaseOrderDraftCreateManyAndReturnArgs} args - Arguments to create many PurchaseOrderDrafts.
+     * @example
+     * // Create many PurchaseOrderDrafts
+     * const purchaseOrderDraft = await prisma.purchaseOrderDraft.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PurchaseOrderDrafts and only return the `userId`
+     * const purchaseOrderDraftWithUserIdOnly = await prisma.purchaseOrderDraft.createManyAndReturn({
+     *   select: { userId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PurchaseOrderDraftCreateManyAndReturnArgs>(args?: SelectSubset<T, PurchaseOrderDraftCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PurchaseOrderDraft.
+     * @param {PurchaseOrderDraftDeleteArgs} args - Arguments to delete one PurchaseOrderDraft.
+     * @example
+     * // Delete one PurchaseOrderDraft
+     * const PurchaseOrderDraft = await prisma.purchaseOrderDraft.delete({
+     *   where: {
+     *     // ... filter to delete one PurchaseOrderDraft
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PurchaseOrderDraftDeleteArgs>(args: SelectSubset<T, PurchaseOrderDraftDeleteArgs<ExtArgs>>): Prisma__PurchaseOrderDraftClient<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PurchaseOrderDraft.
+     * @param {PurchaseOrderDraftUpdateArgs} args - Arguments to update one PurchaseOrderDraft.
+     * @example
+     * // Update one PurchaseOrderDraft
+     * const purchaseOrderDraft = await prisma.purchaseOrderDraft.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PurchaseOrderDraftUpdateArgs>(args: SelectSubset<T, PurchaseOrderDraftUpdateArgs<ExtArgs>>): Prisma__PurchaseOrderDraftClient<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PurchaseOrderDrafts.
+     * @param {PurchaseOrderDraftDeleteManyArgs} args - Arguments to filter PurchaseOrderDrafts to delete.
+     * @example
+     * // Delete a few PurchaseOrderDrafts
+     * const { count } = await prisma.purchaseOrderDraft.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PurchaseOrderDraftDeleteManyArgs>(args?: SelectSubset<T, PurchaseOrderDraftDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PurchaseOrderDrafts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderDraftUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PurchaseOrderDrafts
+     * const purchaseOrderDraft = await prisma.purchaseOrderDraft.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PurchaseOrderDraftUpdateManyArgs>(args: SelectSubset<T, PurchaseOrderDraftUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PurchaseOrderDrafts and returns the data updated in the database.
+     * @param {PurchaseOrderDraftUpdateManyAndReturnArgs} args - Arguments to update many PurchaseOrderDrafts.
+     * @example
+     * // Update many PurchaseOrderDrafts
+     * const purchaseOrderDraft = await prisma.purchaseOrderDraft.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PurchaseOrderDrafts and only return the `userId`
+     * const purchaseOrderDraftWithUserIdOnly = await prisma.purchaseOrderDraft.updateManyAndReturn({
+     *   select: { userId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PurchaseOrderDraftUpdateManyAndReturnArgs>(args: SelectSubset<T, PurchaseOrderDraftUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PurchaseOrderDraft.
+     * @param {PurchaseOrderDraftUpsertArgs} args - Arguments to update or create a PurchaseOrderDraft.
+     * @example
+     * // Update or create a PurchaseOrderDraft
+     * const purchaseOrderDraft = await prisma.purchaseOrderDraft.upsert({
+     *   create: {
+     *     // ... data to create a PurchaseOrderDraft
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PurchaseOrderDraft we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PurchaseOrderDraftUpsertArgs>(args: SelectSubset<T, PurchaseOrderDraftUpsertArgs<ExtArgs>>): Prisma__PurchaseOrderDraftClient<$Result.GetResult<Prisma.$PurchaseOrderDraftPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PurchaseOrderDrafts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderDraftCountArgs} args - Arguments to filter PurchaseOrderDrafts to count.
+     * @example
+     * // Count the number of PurchaseOrderDrafts
+     * const count = await prisma.purchaseOrderDraft.count({
+     *   where: {
+     *     // ... the filter for the PurchaseOrderDrafts we want to count
+     *   }
+     * })
+    **/
+    count<T extends PurchaseOrderDraftCountArgs>(
+      args?: Subset<T, PurchaseOrderDraftCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PurchaseOrderDraftCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PurchaseOrderDraft.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderDraftAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PurchaseOrderDraftAggregateArgs>(args: Subset<T, PurchaseOrderDraftAggregateArgs>): Prisma.PrismaPromise<GetPurchaseOrderDraftAggregateType<T>>
+
+    /**
+     * Group by PurchaseOrderDraft.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderDraftGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PurchaseOrderDraftGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PurchaseOrderDraftGroupByArgs['orderBy'] }
+        : { orderBy?: PurchaseOrderDraftGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PurchaseOrderDraftGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPurchaseOrderDraftGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PurchaseOrderDraft model
+   */
+  readonly fields: PurchaseOrderDraftFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PurchaseOrderDraft.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PurchaseOrderDraftClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PurchaseOrderDraft model
+   */
+  interface PurchaseOrderDraftFieldRefs {
+    readonly userId: FieldRef<"PurchaseOrderDraft", 'Int'>
+    readonly projectId: FieldRef<"PurchaseOrderDraft", 'Int'>
+    readonly slot: FieldRef<"PurchaseOrderDraft", 'String'>
+    readonly version: FieldRef<"PurchaseOrderDraft", 'Int'>
+    readonly payload: FieldRef<"PurchaseOrderDraft", 'Json'>
+    readonly updatedAt: FieldRef<"PurchaseOrderDraft", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PurchaseOrderDraft findUnique
+   */
+  export type PurchaseOrderDraftFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which PurchaseOrderDraft to fetch.
+     */
+    where: PurchaseOrderDraftWhereUniqueInput
+  }
+
+  /**
+   * PurchaseOrderDraft findUniqueOrThrow
+   */
+  export type PurchaseOrderDraftFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which PurchaseOrderDraft to fetch.
+     */
+    where: PurchaseOrderDraftWhereUniqueInput
+  }
+
+  /**
+   * PurchaseOrderDraft findFirst
+   */
+  export type PurchaseOrderDraftFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which PurchaseOrderDraft to fetch.
+     */
+    where?: PurchaseOrderDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurchaseOrderDrafts to fetch.
+     */
+    orderBy?: PurchaseOrderDraftOrderByWithRelationInput | PurchaseOrderDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PurchaseOrderDrafts.
+     */
+    cursor?: PurchaseOrderDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurchaseOrderDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurchaseOrderDrafts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PurchaseOrderDrafts.
+     */
+    distinct?: PurchaseOrderDraftScalarFieldEnum | PurchaseOrderDraftScalarFieldEnum[]
+  }
+
+  /**
+   * PurchaseOrderDraft findFirstOrThrow
+   */
+  export type PurchaseOrderDraftFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which PurchaseOrderDraft to fetch.
+     */
+    where?: PurchaseOrderDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurchaseOrderDrafts to fetch.
+     */
+    orderBy?: PurchaseOrderDraftOrderByWithRelationInput | PurchaseOrderDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PurchaseOrderDrafts.
+     */
+    cursor?: PurchaseOrderDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurchaseOrderDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurchaseOrderDrafts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PurchaseOrderDrafts.
+     */
+    distinct?: PurchaseOrderDraftScalarFieldEnum | PurchaseOrderDraftScalarFieldEnum[]
+  }
+
+  /**
+   * PurchaseOrderDraft findMany
+   */
+  export type PurchaseOrderDraftFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter, which PurchaseOrderDrafts to fetch.
+     */
+    where?: PurchaseOrderDraftWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurchaseOrderDrafts to fetch.
+     */
+    orderBy?: PurchaseOrderDraftOrderByWithRelationInput | PurchaseOrderDraftOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PurchaseOrderDrafts.
+     */
+    cursor?: PurchaseOrderDraftWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurchaseOrderDrafts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurchaseOrderDrafts.
+     */
+    skip?: number
+    distinct?: PurchaseOrderDraftScalarFieldEnum | PurchaseOrderDraftScalarFieldEnum[]
+  }
+
+  /**
+   * PurchaseOrderDraft create
+   */
+  export type PurchaseOrderDraftCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PurchaseOrderDraft.
+     */
+    data: XOR<PurchaseOrderDraftCreateInput, PurchaseOrderDraftUncheckedCreateInput>
+  }
+
+  /**
+   * PurchaseOrderDraft createMany
+   */
+  export type PurchaseOrderDraftCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PurchaseOrderDrafts.
+     */
+    data: PurchaseOrderDraftCreateManyInput | PurchaseOrderDraftCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PurchaseOrderDraft createManyAndReturn
+   */
+  export type PurchaseOrderDraftCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * The data used to create many PurchaseOrderDrafts.
+     */
+    data: PurchaseOrderDraftCreateManyInput | PurchaseOrderDraftCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PurchaseOrderDraft update
+   */
+  export type PurchaseOrderDraftUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PurchaseOrderDraft.
+     */
+    data: XOR<PurchaseOrderDraftUpdateInput, PurchaseOrderDraftUncheckedUpdateInput>
+    /**
+     * Choose, which PurchaseOrderDraft to update.
+     */
+    where: PurchaseOrderDraftWhereUniqueInput
+  }
+
+  /**
+   * PurchaseOrderDraft updateMany
+   */
+  export type PurchaseOrderDraftUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PurchaseOrderDrafts.
+     */
+    data: XOR<PurchaseOrderDraftUpdateManyMutationInput, PurchaseOrderDraftUncheckedUpdateManyInput>
+    /**
+     * Filter which PurchaseOrderDrafts to update
+     */
+    where?: PurchaseOrderDraftWhereInput
+    /**
+     * Limit how many PurchaseOrderDrafts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PurchaseOrderDraft updateManyAndReturn
+   */
+  export type PurchaseOrderDraftUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * The data used to update PurchaseOrderDrafts.
+     */
+    data: XOR<PurchaseOrderDraftUpdateManyMutationInput, PurchaseOrderDraftUncheckedUpdateManyInput>
+    /**
+     * Filter which PurchaseOrderDrafts to update
+     */
+    where?: PurchaseOrderDraftWhereInput
+    /**
+     * Limit how many PurchaseOrderDrafts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PurchaseOrderDraft upsert
+   */
+  export type PurchaseOrderDraftUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PurchaseOrderDraft to update in case it exists.
+     */
+    where: PurchaseOrderDraftWhereUniqueInput
+    /**
+     * In case the PurchaseOrderDraft found by the `where` argument doesn't exist, create a new PurchaseOrderDraft with this data.
+     */
+    create: XOR<PurchaseOrderDraftCreateInput, PurchaseOrderDraftUncheckedCreateInput>
+    /**
+     * In case the PurchaseOrderDraft was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PurchaseOrderDraftUpdateInput, PurchaseOrderDraftUncheckedUpdateInput>
+  }
+
+  /**
+   * PurchaseOrderDraft delete
+   */
+  export type PurchaseOrderDraftDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
+    /**
+     * Filter which PurchaseOrderDraft to delete.
+     */
+    where: PurchaseOrderDraftWhereUniqueInput
+  }
+
+  /**
+   * PurchaseOrderDraft deleteMany
+   */
+  export type PurchaseOrderDraftDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PurchaseOrderDrafts to delete
+     */
+    where?: PurchaseOrderDraftWhereInput
+    /**
+     * Limit how many PurchaseOrderDrafts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PurchaseOrderDraft without action
+   */
+  export type PurchaseOrderDraftDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderDraft
+     */
+    select?: PurchaseOrderDraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderDraft
+     */
+    omit?: PurchaseOrderDraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseOrderDraftInclude<ExtArgs> | null
   }
 
 
@@ -82400,6 +84902,29 @@ export namespace Prisma {
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
+  export const RequestFormDraftScalarFieldEnum: {
+    userId: 'userId',
+    slot: 'slot',
+    version: 'version',
+    payload: 'payload',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RequestFormDraftScalarFieldEnum = (typeof RequestFormDraftScalarFieldEnum)[keyof typeof RequestFormDraftScalarFieldEnum]
+
+
+  export const PurchaseOrderDraftScalarFieldEnum: {
+    userId: 'userId',
+    projectId: 'projectId',
+    slot: 'slot',
+    version: 'version',
+    payload: 'payload',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PurchaseOrderDraftScalarFieldEnum = (typeof PurchaseOrderDraftScalarFieldEnum)[keyof typeof PurchaseOrderDraftScalarFieldEnum]
+
+
   export const ElementCategoryScalarFieldEnum: {
     elementCategoryId: 'elementCategoryId',
     name: 'name',
@@ -83389,6 +85914,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
    * Reference to a field of type 'ElementType'
    */
   export type EnumElementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ElementType'>
@@ -83648,20 +86187,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-  /**
    * Reference to a field of type 'MonthlyEvaluationStatus'
    */
   export type EnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MonthlyEvaluationStatus'>
@@ -83916,6 +86441,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    requestFormDrafts?: RequestFormDraftListRelationFilter
+    purchaseOrderDrafts?: PurchaseOrderDraftListRelationFilter
     blacklistedTokens?: BlacklistedTokenListRelationFilter
     responses?: RequestResponseListRelationFilter
     requests?: RequestListRelationFilter
@@ -83949,6 +86476,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
+    requestFormDrafts?: RequestFormDraftOrderByRelationAggregateInput
+    purchaseOrderDrafts?: PurchaseOrderDraftOrderByRelationAggregateInput
     blacklistedTokens?: BlacklistedTokenOrderByRelationAggregateInput
     responses?: RequestResponseOrderByRelationAggregateInput
     requests?: RequestOrderByRelationAggregateInput
@@ -83985,6 +86514,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    requestFormDrafts?: RequestFormDraftListRelationFilter
+    purchaseOrderDrafts?: PurchaseOrderDraftListRelationFilter
     blacklistedTokens?: BlacklistedTokenListRelationFilter
     responses?: RequestResponseListRelationFilter
     requests?: RequestListRelationFilter
@@ -84164,6 +86695,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Project"> | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftListRelationFilter
     requests?: RequestListRelationFilter
     emergencies?: EmergencyListRelationFilter
     purchaseOrders?: PurchaseOrderListRelationFilter
@@ -84190,6 +86722,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
+    purchaseOrderDrafts?: PurchaseOrderDraftOrderByRelationAggregateInput
     requests?: RequestOrderByRelationAggregateInput
     emergencies?: EmergencyOrderByRelationAggregateInput
     purchaseOrders?: PurchaseOrderOrderByRelationAggregateInput
@@ -84219,6 +86752,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Project"> | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftListRelationFilter
     requests?: RequestListRelationFilter
     emergencies?: EmergencyListRelationFilter
     purchaseOrders?: PurchaseOrderListRelationFilter
@@ -84267,6 +86801,130 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Project"> | Date | string | null
+  }
+
+  export type RequestFormDraftWhereInput = {
+    AND?: RequestFormDraftWhereInput | RequestFormDraftWhereInput[]
+    OR?: RequestFormDraftWhereInput[]
+    NOT?: RequestFormDraftWhereInput | RequestFormDraftWhereInput[]
+    userId?: IntFilter<"RequestFormDraft"> | number
+    slot?: StringFilter<"RequestFormDraft"> | string
+    version?: IntFilter<"RequestFormDraft"> | number
+    payload?: JsonNullableFilter<"RequestFormDraft">
+    updatedAt?: DateTimeFilter<"RequestFormDraft"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type RequestFormDraftOrderByWithRelationInput = {
+    userId?: SortOrder
+    slot?: SortOrder
+    version?: SortOrder
+    payload?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type RequestFormDraftWhereUniqueInput = Prisma.AtLeast<{
+    userId_slot?: RequestFormDraftUserIdSlotCompoundUniqueInput
+    AND?: RequestFormDraftWhereInput | RequestFormDraftWhereInput[]
+    OR?: RequestFormDraftWhereInput[]
+    NOT?: RequestFormDraftWhereInput | RequestFormDraftWhereInput[]
+    userId?: IntFilter<"RequestFormDraft"> | number
+    slot?: StringFilter<"RequestFormDraft"> | string
+    version?: IntFilter<"RequestFormDraft"> | number
+    payload?: JsonNullableFilter<"RequestFormDraft">
+    updatedAt?: DateTimeFilter<"RequestFormDraft"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "userId_slot">
+
+  export type RequestFormDraftOrderByWithAggregationInput = {
+    userId?: SortOrder
+    slot?: SortOrder
+    version?: SortOrder
+    payload?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: RequestFormDraftCountOrderByAggregateInput
+    _avg?: RequestFormDraftAvgOrderByAggregateInput
+    _max?: RequestFormDraftMaxOrderByAggregateInput
+    _min?: RequestFormDraftMinOrderByAggregateInput
+    _sum?: RequestFormDraftSumOrderByAggregateInput
+  }
+
+  export type RequestFormDraftScalarWhereWithAggregatesInput = {
+    AND?: RequestFormDraftScalarWhereWithAggregatesInput | RequestFormDraftScalarWhereWithAggregatesInput[]
+    OR?: RequestFormDraftScalarWhereWithAggregatesInput[]
+    NOT?: RequestFormDraftScalarWhereWithAggregatesInput | RequestFormDraftScalarWhereWithAggregatesInput[]
+    userId?: IntWithAggregatesFilter<"RequestFormDraft"> | number
+    slot?: StringWithAggregatesFilter<"RequestFormDraft"> | string
+    version?: IntWithAggregatesFilter<"RequestFormDraft"> | number
+    payload?: JsonNullableWithAggregatesFilter<"RequestFormDraft">
+    updatedAt?: DateTimeWithAggregatesFilter<"RequestFormDraft"> | Date | string
+  }
+
+  export type PurchaseOrderDraftWhereInput = {
+    AND?: PurchaseOrderDraftWhereInput | PurchaseOrderDraftWhereInput[]
+    OR?: PurchaseOrderDraftWhereInput[]
+    NOT?: PurchaseOrderDraftWhereInput | PurchaseOrderDraftWhereInput[]
+    userId?: IntFilter<"PurchaseOrderDraft"> | number
+    projectId?: IntFilter<"PurchaseOrderDraft"> | number
+    slot?: StringFilter<"PurchaseOrderDraft"> | string
+    version?: IntFilter<"PurchaseOrderDraft"> | number
+    payload?: JsonNullableFilter<"PurchaseOrderDraft">
+    updatedAt?: DateTimeFilter<"PurchaseOrderDraft"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  }
+
+  export type PurchaseOrderDraftOrderByWithRelationInput = {
+    userId?: SortOrder
+    projectId?: SortOrder
+    slot?: SortOrder
+    version?: SortOrder
+    payload?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    project?: ProjectOrderByWithRelationInput
+  }
+
+  export type PurchaseOrderDraftWhereUniqueInput = Prisma.AtLeast<{
+    userId_projectId_slot?: PurchaseOrderDraftUserIdProjectIdSlotCompoundUniqueInput
+    AND?: PurchaseOrderDraftWhereInput | PurchaseOrderDraftWhereInput[]
+    OR?: PurchaseOrderDraftWhereInput[]
+    NOT?: PurchaseOrderDraftWhereInput | PurchaseOrderDraftWhereInput[]
+    userId?: IntFilter<"PurchaseOrderDraft"> | number
+    projectId?: IntFilter<"PurchaseOrderDraft"> | number
+    slot?: StringFilter<"PurchaseOrderDraft"> | string
+    version?: IntFilter<"PurchaseOrderDraft"> | number
+    payload?: JsonNullableFilter<"PurchaseOrderDraft">
+    updatedAt?: DateTimeFilter<"PurchaseOrderDraft"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  }, "userId_projectId_slot">
+
+  export type PurchaseOrderDraftOrderByWithAggregationInput = {
+    userId?: SortOrder
+    projectId?: SortOrder
+    slot?: SortOrder
+    version?: SortOrder
+    payload?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: PurchaseOrderDraftCountOrderByAggregateInput
+    _avg?: PurchaseOrderDraftAvgOrderByAggregateInput
+    _max?: PurchaseOrderDraftMaxOrderByAggregateInput
+    _min?: PurchaseOrderDraftMinOrderByAggregateInput
+    _sum?: PurchaseOrderDraftSumOrderByAggregateInput
+  }
+
+  export type PurchaseOrderDraftScalarWhereWithAggregatesInput = {
+    AND?: PurchaseOrderDraftScalarWhereWithAggregatesInput | PurchaseOrderDraftScalarWhereWithAggregatesInput[]
+    OR?: PurchaseOrderDraftScalarWhereWithAggregatesInput[]
+    NOT?: PurchaseOrderDraftScalarWhereWithAggregatesInput | PurchaseOrderDraftScalarWhereWithAggregatesInput[]
+    userId?: IntWithAggregatesFilter<"PurchaseOrderDraft"> | number
+    projectId?: IntWithAggregatesFilter<"PurchaseOrderDraft"> | number
+    slot?: StringWithAggregatesFilter<"PurchaseOrderDraft"> | string
+    version?: IntWithAggregatesFilter<"PurchaseOrderDraft"> | number
+    payload?: JsonNullableWithAggregatesFilter<"PurchaseOrderDraft">
+    updatedAt?: DateTimeWithAggregatesFilter<"PurchaseOrderDraft"> | Date | string
   }
 
   export type ElementCategoryWhereInput = {
@@ -89206,6 +91864,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -89239,6 +91899,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -89271,6 +91933,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -89304,6 +91968,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -89470,6 +92136,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
@@ -89496,6 +92163,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
@@ -89521,6 +92189,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
@@ -89547,6 +92216,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
@@ -89600,6 +92270,122 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type RequestFormDraftCreateInput = {
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutRequestFormDraftsInput
+  }
+
+  export type RequestFormDraftUncheckedCreateInput = {
+    userId: number
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type RequestFormDraftUpdateInput = {
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutRequestFormDraftsNestedInput
+  }
+
+  export type RequestFormDraftUncheckedUpdateInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RequestFormDraftCreateManyInput = {
+    userId: number
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type RequestFormDraftUpdateManyMutationInput = {
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RequestFormDraftUncheckedUpdateManyInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseOrderDraftCreateInput = {
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutPurchaseOrderDraftsInput
+    project: ProjectCreateNestedOneWithoutPurchaseOrderDraftsInput
+  }
+
+  export type PurchaseOrderDraftUncheckedCreateInput = {
+    userId: number
+    projectId: number
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type PurchaseOrderDraftUpdateInput = {
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPurchaseOrderDraftsNestedInput
+    project?: ProjectUpdateOneRequiredWithoutPurchaseOrderDraftsNestedInput
+  }
+
+  export type PurchaseOrderDraftUncheckedUpdateInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseOrderDraftCreateManyInput = {
+    userId: number
+    projectId: number
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type PurchaseOrderDraftUpdateManyMutationInput = {
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseOrderDraftUncheckedUpdateManyInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ElementCategoryCreateInput = {
@@ -94683,6 +97469,18 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type RequestFormDraftListRelationFilter = {
+    every?: RequestFormDraftWhereInput
+    some?: RequestFormDraftWhereInput
+    none?: RequestFormDraftWhereInput
+  }
+
+  export type PurchaseOrderDraftListRelationFilter = {
+    every?: PurchaseOrderDraftWhereInput
+    some?: PurchaseOrderDraftWhereInput
+    none?: PurchaseOrderDraftWhereInput
+  }
+
   export type BlacklistedTokenListRelationFilter = {
     every?: BlacklistedTokenWhereInput
     some?: BlacklistedTokenWhereInput
@@ -94776,6 +97574,14 @@ export namespace Prisma {
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type RequestFormDraftOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PurchaseOrderDraftOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type BlacklistedTokenOrderByRelationAggregateInput = {
@@ -95187,6 +97993,140 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProjectStatusFilter<$PrismaModel>
     _max?: NestedEnumProjectStatusFilter<$PrismaModel>
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type RequestFormDraftUserIdSlotCompoundUniqueInput = {
+    userId: number
+    slot: string
+  }
+
+  export type RequestFormDraftCountOrderByAggregateInput = {
+    userId?: SortOrder
+    slot?: SortOrder
+    version?: SortOrder
+    payload?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RequestFormDraftAvgOrderByAggregateInput = {
+    userId?: SortOrder
+    version?: SortOrder
+  }
+
+  export type RequestFormDraftMaxOrderByAggregateInput = {
+    userId?: SortOrder
+    slot?: SortOrder
+    version?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RequestFormDraftMinOrderByAggregateInput = {
+    userId?: SortOrder
+    slot?: SortOrder
+    version?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RequestFormDraftSumOrderByAggregateInput = {
+    userId?: SortOrder
+    version?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type ProjectScalarRelationFilter = {
+    is?: ProjectWhereInput
+    isNot?: ProjectWhereInput
+  }
+
+  export type PurchaseOrderDraftUserIdProjectIdSlotCompoundUniqueInput = {
+    userId: number
+    projectId: number
+    slot: string
+  }
+
+  export type PurchaseOrderDraftCountOrderByAggregateInput = {
+    userId?: SortOrder
+    projectId?: SortOrder
+    slot?: SortOrder
+    version?: SortOrder
+    payload?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurchaseOrderDraftAvgOrderByAggregateInput = {
+    userId?: SortOrder
+    projectId?: SortOrder
+    version?: SortOrder
+  }
+
+  export type PurchaseOrderDraftMaxOrderByAggregateInput = {
+    userId?: SortOrder
+    projectId?: SortOrder
+    slot?: SortOrder
+    version?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurchaseOrderDraftMinOrderByAggregateInput = {
+    userId?: SortOrder
+    projectId?: SortOrder
+    slot?: SortOrder
+    version?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurchaseOrderDraftSumOrderByAggregateInput = {
+    userId?: SortOrder
+    projectId?: SortOrder
+    version?: SortOrder
   }
 
   export type ElementListRelationFilter = {
@@ -95672,11 +98612,6 @@ export namespace Prisma {
     in?: $Enums.RequestType[] | ListEnumRequestTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.RequestType[] | ListEnumRequestTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumRequestTypeFilter<$PrismaModel> | $Enums.RequestType
-  }
-
-  export type ProjectScalarRelationFilter = {
-    is?: ProjectWhereInput
-    isNot?: ProjectWhereInput
   }
 
   export type UserNullableScalarRelationFilter = {
@@ -97231,29 +100166,6 @@ export namespace Prisma {
     notIn?: $Enums.MonthlyEvaluationQuestionType[] | ListEnumMonthlyEvaluationQuestionTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel> | $Enums.MonthlyEvaluationQuestionType
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type MonthlyEvaluationSectionScalarRelationFilter = {
     is?: MonthlyEvaluationSectionWhereInput
@@ -97342,32 +100254,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel>
     _max?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type EnumMonthlyEvaluationStatusFilter<$PrismaModel = never> = {
@@ -99417,6 +102303,20 @@ export namespace Prisma {
     _max?: NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel>
   }
 
+  export type RequestFormDraftCreateNestedManyWithoutUserInput = {
+    create?: XOR<RequestFormDraftCreateWithoutUserInput, RequestFormDraftUncheckedCreateWithoutUserInput> | RequestFormDraftCreateWithoutUserInput[] | RequestFormDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RequestFormDraftCreateOrConnectWithoutUserInput | RequestFormDraftCreateOrConnectWithoutUserInput[]
+    createMany?: RequestFormDraftCreateManyUserInputEnvelope
+    connect?: RequestFormDraftWhereUniqueInput | RequestFormDraftWhereUniqueInput[]
+  }
+
+  export type PurchaseOrderDraftCreateNestedManyWithoutUserInput = {
+    create?: XOR<PurchaseOrderDraftCreateWithoutUserInput, PurchaseOrderDraftUncheckedCreateWithoutUserInput> | PurchaseOrderDraftCreateWithoutUserInput[] | PurchaseOrderDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PurchaseOrderDraftCreateOrConnectWithoutUserInput | PurchaseOrderDraftCreateOrConnectWithoutUserInput[]
+    createMany?: PurchaseOrderDraftCreateManyUserInputEnvelope
+    connect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+  }
+
   export type BlacklistedTokenCreateNestedManyWithoutUserInput = {
     create?: XOR<BlacklistedTokenCreateWithoutUserInput, BlacklistedTokenUncheckedCreateWithoutUserInput> | BlacklistedTokenCreateWithoutUserInput[] | BlacklistedTokenUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BlacklistedTokenCreateOrConnectWithoutUserInput | BlacklistedTokenCreateOrConnectWithoutUserInput[]
@@ -99555,6 +102455,20 @@ export namespace Prisma {
     connectOrCreate?: InventoryMovementCreateOrConnectWithoutResponsibleUserInput | InventoryMovementCreateOrConnectWithoutResponsibleUserInput[]
     createMany?: InventoryMovementCreateManyResponsibleUserInputEnvelope
     connect?: InventoryMovementWhereUniqueInput | InventoryMovementWhereUniqueInput[]
+  }
+
+  export type RequestFormDraftUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<RequestFormDraftCreateWithoutUserInput, RequestFormDraftUncheckedCreateWithoutUserInput> | RequestFormDraftCreateWithoutUserInput[] | RequestFormDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RequestFormDraftCreateOrConnectWithoutUserInput | RequestFormDraftCreateOrConnectWithoutUserInput[]
+    createMany?: RequestFormDraftCreateManyUserInputEnvelope
+    connect?: RequestFormDraftWhereUniqueInput | RequestFormDraftWhereUniqueInput[]
+  }
+
+  export type PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PurchaseOrderDraftCreateWithoutUserInput, PurchaseOrderDraftUncheckedCreateWithoutUserInput> | PurchaseOrderDraftCreateWithoutUserInput[] | PurchaseOrderDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PurchaseOrderDraftCreateOrConnectWithoutUserInput | PurchaseOrderDraftCreateOrConnectWithoutUserInput[]
+    createMany?: PurchaseOrderDraftCreateManyUserInputEnvelope
+    connect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
   }
 
   export type BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput = {
@@ -99719,6 +102633,34 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type RequestFormDraftUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RequestFormDraftCreateWithoutUserInput, RequestFormDraftUncheckedCreateWithoutUserInput> | RequestFormDraftCreateWithoutUserInput[] | RequestFormDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RequestFormDraftCreateOrConnectWithoutUserInput | RequestFormDraftCreateOrConnectWithoutUserInput[]
+    upsert?: RequestFormDraftUpsertWithWhereUniqueWithoutUserInput | RequestFormDraftUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RequestFormDraftCreateManyUserInputEnvelope
+    set?: RequestFormDraftWhereUniqueInput | RequestFormDraftWhereUniqueInput[]
+    disconnect?: RequestFormDraftWhereUniqueInput | RequestFormDraftWhereUniqueInput[]
+    delete?: RequestFormDraftWhereUniqueInput | RequestFormDraftWhereUniqueInput[]
+    connect?: RequestFormDraftWhereUniqueInput | RequestFormDraftWhereUniqueInput[]
+    update?: RequestFormDraftUpdateWithWhereUniqueWithoutUserInput | RequestFormDraftUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RequestFormDraftUpdateManyWithWhereWithoutUserInput | RequestFormDraftUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RequestFormDraftScalarWhereInput | RequestFormDraftScalarWhereInput[]
+  }
+
+  export type PurchaseOrderDraftUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PurchaseOrderDraftCreateWithoutUserInput, PurchaseOrderDraftUncheckedCreateWithoutUserInput> | PurchaseOrderDraftCreateWithoutUserInput[] | PurchaseOrderDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PurchaseOrderDraftCreateOrConnectWithoutUserInput | PurchaseOrderDraftCreateOrConnectWithoutUserInput[]
+    upsert?: PurchaseOrderDraftUpsertWithWhereUniqueWithoutUserInput | PurchaseOrderDraftUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PurchaseOrderDraftCreateManyUserInputEnvelope
+    set?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    disconnect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    delete?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    connect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    update?: PurchaseOrderDraftUpdateWithWhereUniqueWithoutUserInput | PurchaseOrderDraftUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PurchaseOrderDraftUpdateManyWithWhereWithoutUserInput | PurchaseOrderDraftUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PurchaseOrderDraftScalarWhereInput | PurchaseOrderDraftScalarWhereInput[]
   }
 
   export type BlacklistedTokenUpdateManyWithoutUserNestedInput = {
@@ -99999,6 +102941,34 @@ export namespace Prisma {
     update?: InventoryMovementUpdateWithWhereUniqueWithoutResponsibleUserInput | InventoryMovementUpdateWithWhereUniqueWithoutResponsibleUserInput[]
     updateMany?: InventoryMovementUpdateManyWithWhereWithoutResponsibleUserInput | InventoryMovementUpdateManyWithWhereWithoutResponsibleUserInput[]
     deleteMany?: InventoryMovementScalarWhereInput | InventoryMovementScalarWhereInput[]
+  }
+
+  export type RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RequestFormDraftCreateWithoutUserInput, RequestFormDraftUncheckedCreateWithoutUserInput> | RequestFormDraftCreateWithoutUserInput[] | RequestFormDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RequestFormDraftCreateOrConnectWithoutUserInput | RequestFormDraftCreateOrConnectWithoutUserInput[]
+    upsert?: RequestFormDraftUpsertWithWhereUniqueWithoutUserInput | RequestFormDraftUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RequestFormDraftCreateManyUserInputEnvelope
+    set?: RequestFormDraftWhereUniqueInput | RequestFormDraftWhereUniqueInput[]
+    disconnect?: RequestFormDraftWhereUniqueInput | RequestFormDraftWhereUniqueInput[]
+    delete?: RequestFormDraftWhereUniqueInput | RequestFormDraftWhereUniqueInput[]
+    connect?: RequestFormDraftWhereUniqueInput | RequestFormDraftWhereUniqueInput[]
+    update?: RequestFormDraftUpdateWithWhereUniqueWithoutUserInput | RequestFormDraftUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RequestFormDraftUpdateManyWithWhereWithoutUserInput | RequestFormDraftUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RequestFormDraftScalarWhereInput | RequestFormDraftScalarWhereInput[]
+  }
+
+  export type PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PurchaseOrderDraftCreateWithoutUserInput, PurchaseOrderDraftUncheckedCreateWithoutUserInput> | PurchaseOrderDraftCreateWithoutUserInput[] | PurchaseOrderDraftUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PurchaseOrderDraftCreateOrConnectWithoutUserInput | PurchaseOrderDraftCreateOrConnectWithoutUserInput[]
+    upsert?: PurchaseOrderDraftUpsertWithWhereUniqueWithoutUserInput | PurchaseOrderDraftUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PurchaseOrderDraftCreateManyUserInputEnvelope
+    set?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    disconnect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    delete?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    connect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    update?: PurchaseOrderDraftUpdateWithWhereUniqueWithoutUserInput | PurchaseOrderDraftUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PurchaseOrderDraftUpdateManyWithWhereWithoutUserInput | PurchaseOrderDraftUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PurchaseOrderDraftScalarWhereInput | PurchaseOrderDraftScalarWhereInput[]
   }
 
   export type BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput = {
@@ -100360,6 +103330,13 @@ export namespace Prisma {
     update?: XOR<XOR<UserTypeUpdateToOneWithWhereWithoutUserUserTypesInput, UserTypeUpdateWithoutUserUserTypesInput>, UserTypeUncheckedUpdateWithoutUserUserTypesInput>
   }
 
+  export type PurchaseOrderDraftCreateNestedManyWithoutProjectInput = {
+    create?: XOR<PurchaseOrderDraftCreateWithoutProjectInput, PurchaseOrderDraftUncheckedCreateWithoutProjectInput> | PurchaseOrderDraftCreateWithoutProjectInput[] | PurchaseOrderDraftUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: PurchaseOrderDraftCreateOrConnectWithoutProjectInput | PurchaseOrderDraftCreateOrConnectWithoutProjectInput[]
+    createMany?: PurchaseOrderDraftCreateManyProjectInputEnvelope
+    connect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+  }
+
   export type RequestCreateNestedManyWithoutProjectInput = {
     create?: XOR<RequestCreateWithoutProjectInput, RequestUncheckedCreateWithoutProjectInput> | RequestCreateWithoutProjectInput[] | RequestUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: RequestCreateOrConnectWithoutProjectInput | RequestCreateOrConnectWithoutProjectInput[]
@@ -100442,6 +103419,13 @@ export namespace Prisma {
     connectOrCreate?: WorkerInventoryAssignmentCreateOrConnectWithoutProjectInput | WorkerInventoryAssignmentCreateOrConnectWithoutProjectInput[]
     createMany?: WorkerInventoryAssignmentCreateManyProjectInputEnvelope
     connect?: WorkerInventoryAssignmentWhereUniqueInput | WorkerInventoryAssignmentWhereUniqueInput[]
+  }
+
+  export type PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<PurchaseOrderDraftCreateWithoutProjectInput, PurchaseOrderDraftUncheckedCreateWithoutProjectInput> | PurchaseOrderDraftCreateWithoutProjectInput[] | PurchaseOrderDraftUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: PurchaseOrderDraftCreateOrConnectWithoutProjectInput | PurchaseOrderDraftCreateOrConnectWithoutProjectInput[]
+    createMany?: PurchaseOrderDraftCreateManyProjectInputEnvelope
+    connect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
   }
 
   export type RequestUncheckedCreateNestedManyWithoutProjectInput = {
@@ -100530,6 +103514,20 @@ export namespace Prisma {
 
   export type EnumProjectStatusFieldUpdateOperationsInput = {
     set?: $Enums.ProjectStatus
+  }
+
+  export type PurchaseOrderDraftUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<PurchaseOrderDraftCreateWithoutProjectInput, PurchaseOrderDraftUncheckedCreateWithoutProjectInput> | PurchaseOrderDraftCreateWithoutProjectInput[] | PurchaseOrderDraftUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: PurchaseOrderDraftCreateOrConnectWithoutProjectInput | PurchaseOrderDraftCreateOrConnectWithoutProjectInput[]
+    upsert?: PurchaseOrderDraftUpsertWithWhereUniqueWithoutProjectInput | PurchaseOrderDraftUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: PurchaseOrderDraftCreateManyProjectInputEnvelope
+    set?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    disconnect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    delete?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    connect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    update?: PurchaseOrderDraftUpdateWithWhereUniqueWithoutProjectInput | PurchaseOrderDraftUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: PurchaseOrderDraftUpdateManyWithWhereWithoutProjectInput | PurchaseOrderDraftUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: PurchaseOrderDraftScalarWhereInput | PurchaseOrderDraftScalarWhereInput[]
   }
 
   export type RequestUpdateManyWithoutProjectNestedInput = {
@@ -100700,6 +103698,20 @@ export namespace Prisma {
     deleteMany?: WorkerInventoryAssignmentScalarWhereInput | WorkerInventoryAssignmentScalarWhereInput[]
   }
 
+  export type PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<PurchaseOrderDraftCreateWithoutProjectInput, PurchaseOrderDraftUncheckedCreateWithoutProjectInput> | PurchaseOrderDraftCreateWithoutProjectInput[] | PurchaseOrderDraftUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: PurchaseOrderDraftCreateOrConnectWithoutProjectInput | PurchaseOrderDraftCreateOrConnectWithoutProjectInput[]
+    upsert?: PurchaseOrderDraftUpsertWithWhereUniqueWithoutProjectInput | PurchaseOrderDraftUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: PurchaseOrderDraftCreateManyProjectInputEnvelope
+    set?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    disconnect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    delete?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    connect?: PurchaseOrderDraftWhereUniqueInput | PurchaseOrderDraftWhereUniqueInput[]
+    update?: PurchaseOrderDraftUpdateWithWhereUniqueWithoutProjectInput | PurchaseOrderDraftUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: PurchaseOrderDraftUpdateManyWithWhereWithoutProjectInput | PurchaseOrderDraftUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: PurchaseOrderDraftScalarWhereInput | PurchaseOrderDraftScalarWhereInput[]
+  }
+
   export type RequestUncheckedUpdateManyWithoutProjectNestedInput = {
     create?: XOR<RequestCreateWithoutProjectInput, RequestUncheckedCreateWithoutProjectInput> | RequestCreateWithoutProjectInput[] | RequestUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: RequestCreateOrConnectWithoutProjectInput | RequestCreateOrConnectWithoutProjectInput[]
@@ -100866,6 +103878,48 @@ export namespace Prisma {
     update?: WorkerInventoryAssignmentUpdateWithWhereUniqueWithoutProjectInput | WorkerInventoryAssignmentUpdateWithWhereUniqueWithoutProjectInput[]
     updateMany?: WorkerInventoryAssignmentUpdateManyWithWhereWithoutProjectInput | WorkerInventoryAssignmentUpdateManyWithWhereWithoutProjectInput[]
     deleteMany?: WorkerInventoryAssignmentScalarWhereInput | WorkerInventoryAssignmentScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutRequestFormDraftsInput = {
+    create?: XOR<UserCreateWithoutRequestFormDraftsInput, UserUncheckedCreateWithoutRequestFormDraftsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRequestFormDraftsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutRequestFormDraftsNestedInput = {
+    create?: XOR<UserCreateWithoutRequestFormDraftsInput, UserUncheckedCreateWithoutRequestFormDraftsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRequestFormDraftsInput
+    upsert?: UserUpsertWithoutRequestFormDraftsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRequestFormDraftsInput, UserUpdateWithoutRequestFormDraftsInput>, UserUncheckedUpdateWithoutRequestFormDraftsInput>
+  }
+
+  export type UserCreateNestedOneWithoutPurchaseOrderDraftsInput = {
+    create?: XOR<UserCreateWithoutPurchaseOrderDraftsInput, UserUncheckedCreateWithoutPurchaseOrderDraftsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPurchaseOrderDraftsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProjectCreateNestedOneWithoutPurchaseOrderDraftsInput = {
+    create?: XOR<ProjectCreateWithoutPurchaseOrderDraftsInput, ProjectUncheckedCreateWithoutPurchaseOrderDraftsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutPurchaseOrderDraftsInput
+    connect?: ProjectWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutPurchaseOrderDraftsNestedInput = {
+    create?: XOR<UserCreateWithoutPurchaseOrderDraftsInput, UserUncheckedCreateWithoutPurchaseOrderDraftsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPurchaseOrderDraftsInput
+    upsert?: UserUpsertWithoutPurchaseOrderDraftsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPurchaseOrderDraftsInput, UserUpdateWithoutPurchaseOrderDraftsInput>, UserUncheckedUpdateWithoutPurchaseOrderDraftsInput>
+  }
+
+  export type ProjectUpdateOneRequiredWithoutPurchaseOrderDraftsNestedInput = {
+    create?: XOR<ProjectCreateWithoutPurchaseOrderDraftsInput, ProjectUncheckedCreateWithoutPurchaseOrderDraftsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutPurchaseOrderDraftsInput
+    upsert?: ProjectUpsertWithoutPurchaseOrderDraftsInput
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutPurchaseOrderDraftsInput, ProjectUpdateWithoutPurchaseOrderDraftsInput>, ProjectUncheckedUpdateWithoutPurchaseOrderDraftsInput>
   }
 
   export type ElementCreateNestedManyWithoutCategoryInput = {
@@ -106128,6 +109182,29 @@ export namespace Prisma {
     _min?: NestedEnumProjectStatusFilter<$PrismaModel>
     _max?: NestedEnumProjectStatusFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumElementTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.ElementType | EnumElementTypeFieldRefInput<$PrismaModel>
@@ -106484,29 +109561,6 @@ export namespace Prisma {
     _min?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel>
     _max?: NestedEnumMonthlyEvaluationQuestionTypeFilter<$PrismaModel>
   }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type NestedEnumMonthlyEvaluationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.MonthlyEvaluationStatus | EnumMonthlyEvaluationStatusFieldRefInput<$PrismaModel>
@@ -106801,6 +109855,56 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel>
     _max?: NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel>
+  }
+
+  export type RequestFormDraftCreateWithoutUserInput = {
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type RequestFormDraftUncheckedCreateWithoutUserInput = {
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type RequestFormDraftCreateOrConnectWithoutUserInput = {
+    where: RequestFormDraftWhereUniqueInput
+    create: XOR<RequestFormDraftCreateWithoutUserInput, RequestFormDraftUncheckedCreateWithoutUserInput>
+  }
+
+  export type RequestFormDraftCreateManyUserInputEnvelope = {
+    data: RequestFormDraftCreateManyUserInput | RequestFormDraftCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PurchaseOrderDraftCreateWithoutUserInput = {
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutPurchaseOrderDraftsInput
+  }
+
+  export type PurchaseOrderDraftUncheckedCreateWithoutUserInput = {
+    projectId: number
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type PurchaseOrderDraftCreateOrConnectWithoutUserInput = {
+    where: PurchaseOrderDraftWhereUniqueInput
+    create: XOR<PurchaseOrderDraftCreateWithoutUserInput, PurchaseOrderDraftUncheckedCreateWithoutUserInput>
+  }
+
+  export type PurchaseOrderDraftCreateManyUserInputEnvelope = {
+    data: PurchaseOrderDraftCreateManyUserInput | PurchaseOrderDraftCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type BlacklistedTokenCreateWithoutUserInput = {
@@ -107575,6 +110679,61 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RequestFormDraftUpsertWithWhereUniqueWithoutUserInput = {
+    where: RequestFormDraftWhereUniqueInput
+    update: XOR<RequestFormDraftUpdateWithoutUserInput, RequestFormDraftUncheckedUpdateWithoutUserInput>
+    create: XOR<RequestFormDraftCreateWithoutUserInput, RequestFormDraftUncheckedCreateWithoutUserInput>
+  }
+
+  export type RequestFormDraftUpdateWithWhereUniqueWithoutUserInput = {
+    where: RequestFormDraftWhereUniqueInput
+    data: XOR<RequestFormDraftUpdateWithoutUserInput, RequestFormDraftUncheckedUpdateWithoutUserInput>
+  }
+
+  export type RequestFormDraftUpdateManyWithWhereWithoutUserInput = {
+    where: RequestFormDraftScalarWhereInput
+    data: XOR<RequestFormDraftUpdateManyMutationInput, RequestFormDraftUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type RequestFormDraftScalarWhereInput = {
+    AND?: RequestFormDraftScalarWhereInput | RequestFormDraftScalarWhereInput[]
+    OR?: RequestFormDraftScalarWhereInput[]
+    NOT?: RequestFormDraftScalarWhereInput | RequestFormDraftScalarWhereInput[]
+    userId?: IntFilter<"RequestFormDraft"> | number
+    slot?: StringFilter<"RequestFormDraft"> | string
+    version?: IntFilter<"RequestFormDraft"> | number
+    payload?: JsonNullableFilter<"RequestFormDraft">
+    updatedAt?: DateTimeFilter<"RequestFormDraft"> | Date | string
+  }
+
+  export type PurchaseOrderDraftUpsertWithWhereUniqueWithoutUserInput = {
+    where: PurchaseOrderDraftWhereUniqueInput
+    update: XOR<PurchaseOrderDraftUpdateWithoutUserInput, PurchaseOrderDraftUncheckedUpdateWithoutUserInput>
+    create: XOR<PurchaseOrderDraftCreateWithoutUserInput, PurchaseOrderDraftUncheckedCreateWithoutUserInput>
+  }
+
+  export type PurchaseOrderDraftUpdateWithWhereUniqueWithoutUserInput = {
+    where: PurchaseOrderDraftWhereUniqueInput
+    data: XOR<PurchaseOrderDraftUpdateWithoutUserInput, PurchaseOrderDraftUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PurchaseOrderDraftUpdateManyWithWhereWithoutUserInput = {
+    where: PurchaseOrderDraftScalarWhereInput
+    data: XOR<PurchaseOrderDraftUpdateManyMutationInput, PurchaseOrderDraftUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PurchaseOrderDraftScalarWhereInput = {
+    AND?: PurchaseOrderDraftScalarWhereInput | PurchaseOrderDraftScalarWhereInput[]
+    OR?: PurchaseOrderDraftScalarWhereInput[]
+    NOT?: PurchaseOrderDraftScalarWhereInput | PurchaseOrderDraftScalarWhereInput[]
+    userId?: IntFilter<"PurchaseOrderDraft"> | number
+    projectId?: IntFilter<"PurchaseOrderDraft"> | number
+    slot?: StringFilter<"PurchaseOrderDraft"> | string
+    version?: IntFilter<"PurchaseOrderDraft"> | number
+    payload?: JsonNullableFilter<"PurchaseOrderDraft">
+    updatedAt?: DateTimeFilter<"PurchaseOrderDraft"> | Date | string
+  }
+
   export type BlacklistedTokenUpsertWithWhereUniqueWithoutUserInput = {
     where: BlacklistedTokenWhereUniqueInput
     update: XOR<BlacklistedTokenUpdateWithoutUserInput, BlacklistedTokenUncheckedUpdateWithoutUserInput>
@@ -108179,6 +111338,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -108211,6 +111372,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -108278,6 +111441,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -108310,6 +111475,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -108355,6 +111522,32 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     permissions?: UserTypeUpdatepermissionsInput | string[]
     version?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PurchaseOrderDraftCreateWithoutProjectInput = {
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutPurchaseOrderDraftsInput
+  }
+
+  export type PurchaseOrderDraftUncheckedCreateWithoutProjectInput = {
+    userId: number
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type PurchaseOrderDraftCreateOrConnectWithoutProjectInput = {
+    where: PurchaseOrderDraftWhereUniqueInput
+    create: XOR<PurchaseOrderDraftCreateWithoutProjectInput, PurchaseOrderDraftUncheckedCreateWithoutProjectInput>
+  }
+
+  export type PurchaseOrderDraftCreateManyProjectInputEnvelope = {
+    data: PurchaseOrderDraftCreateManyProjectInput | PurchaseOrderDraftCreateManyProjectInput[]
+    skipDuplicates?: boolean
   }
 
   export type RequestCreateWithoutProjectInput = {
@@ -108863,6 +112056,22 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PurchaseOrderDraftUpsertWithWhereUniqueWithoutProjectInput = {
+    where: PurchaseOrderDraftWhereUniqueInput
+    update: XOR<PurchaseOrderDraftUpdateWithoutProjectInput, PurchaseOrderDraftUncheckedUpdateWithoutProjectInput>
+    create: XOR<PurchaseOrderDraftCreateWithoutProjectInput, PurchaseOrderDraftUncheckedCreateWithoutProjectInput>
+  }
+
+  export type PurchaseOrderDraftUpdateWithWhereUniqueWithoutProjectInput = {
+    where: PurchaseOrderDraftWhereUniqueInput
+    data: XOR<PurchaseOrderDraftUpdateWithoutProjectInput, PurchaseOrderDraftUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type PurchaseOrderDraftUpdateManyWithWhereWithoutProjectInput = {
+    where: PurchaseOrderDraftScalarWhereInput
+    data: XOR<PurchaseOrderDraftUpdateManyMutationInput, PurchaseOrderDraftUncheckedUpdateManyWithoutProjectInput>
+  }
+
   export type RequestUpsertWithWhereUniqueWithoutProjectInput = {
     where: RequestWhereUniqueInput
     update: XOR<RequestUpdateWithoutProjectInput, RequestUncheckedUpdateWithoutProjectInput>
@@ -109182,6 +112391,424 @@ export namespace Prisma {
     assignedAt?: DateTimeFilter<"WorkerInventoryAssignment"> | Date | string
     returnedAt?: DateTimeNullableFilter<"WorkerInventoryAssignment"> | Date | string | null
     notes?: StringNullableFilter<"WorkerInventoryAssignment"> | string | null
+  }
+
+  export type UserCreateWithoutRequestFormDraftsInput = {
+    name: string
+    lastName: string
+    email: string
+    password: string
+    authVersion?: number
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
+    blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
+    responses?: RequestResponseCreateNestedManyWithoutResponderInput
+    requests?: RequestCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
+    responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserUncheckedCreateWithoutRequestFormDraftsInput = {
+    userId?: number
+    name: string
+    lastName: string
+    email: string
+    password: string
+    authVersion?: number
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
+    blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
+    responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
+    requests?: RequestUncheckedCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserCreateOrConnectWithoutRequestFormDraftsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutRequestFormDraftsInput, UserUncheckedCreateWithoutRequestFormDraftsInput>
+  }
+
+  export type UserUpsertWithoutRequestFormDraftsInput = {
+    update: XOR<UserUpdateWithoutRequestFormDraftsInput, UserUncheckedUpdateWithoutRequestFormDraftsInput>
+    create: XOR<UserCreateWithoutRequestFormDraftsInput, UserUncheckedCreateWithoutRequestFormDraftsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutRequestFormDraftsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutRequestFormDraftsInput, UserUncheckedUpdateWithoutRequestFormDraftsInput>
+  }
+
+  export type UserUpdateWithoutRequestFormDraftsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    authVersion?: IntFieldUpdateOperationsInput | number
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
+    blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUpdateManyWithoutResponderNestedInput
+    requests?: RequestUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutRequestFormDraftsInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    authVersion?: IntFieldUpdateOperationsInput | number
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
+    blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
+    requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type UserCreateWithoutPurchaseOrderDraftsInput = {
+    name: string
+    lastName: string
+    email: string
+    password: string
+    authVersion?: number
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
+    responses?: RequestResponseCreateNestedManyWithoutResponderInput
+    requests?: RequestCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryCreateNestedManyWithoutChangedByInput
+    responsibleInventoryMovements?: InventoryMovementCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPurchaseOrderDraftsInput = {
+    userId?: number
+    name: string
+    lastName: string
+    email: string
+    password: string
+    authVersion?: number
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
+    responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
+    requests?: RequestUncheckedCreateNestedManyWithoutUserInput
+    userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    taskAssignments?: TaskAssignmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedCreateNestedManyWithoutCreatedByUserInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutEvaluatorUserInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutOpenedByUserInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedCreateNestedManyWithoutClosedByUserInput
+    receivedRequestsIntoInventory?: RequestUncheckedCreateNestedManyWithoutInventoryReceivedByUserInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutResponsibleUserInput
+    performedInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByUserInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedCreateNestedManyWithoutUpdatedByInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutResponsibleUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPurchaseOrderDraftsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPurchaseOrderDraftsInput, UserUncheckedCreateWithoutPurchaseOrderDraftsInput>
+  }
+
+  export type ProjectCreateWithoutPurchaseOrderDraftsInput = {
+    name: string
+    code: string
+    description?: string
+    status?: $Enums.ProjectStatus
+    location: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    requests?: RequestCreateNestedManyWithoutProjectInput
+    emergencies?: EmergencyCreateNestedManyWithoutProjectInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
+    pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
+    serviceSales?: ServiceSaleCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectCreateNestedManyWithoutProjectInput
+    tasks?: TaskCreateNestedManyWithoutProjectInput
+    notifications?: NotificationCreateNestedManyWithoutProjectInput
+    inventoryEntries?: ProjectInventoryEntryCreateNestedManyWithoutProjectInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutProjectInput
+    currentInventoryAssets?: InventoryAssetCreateNestedManyWithoutCurrentProjectInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutPurchaseOrderDraftsInput = {
+    projectId?: number
+    name: string
+    code: string
+    description?: string
+    status?: $Enums.ProjectStatus
+    location: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
+    emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
+    pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
+    serviceSales?: ServiceSaleUncheckedCreateNestedManyWithoutProjectInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedCreateNestedManyWithoutProjectInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
+    inventoryEntries?: ProjectInventoryEntryUncheckedCreateNestedManyWithoutProjectInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutProjectInput
+    currentInventoryAssets?: InventoryAssetUncheckedCreateNestedManyWithoutCurrentProjectInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutPurchaseOrderDraftsInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutPurchaseOrderDraftsInput, ProjectUncheckedCreateWithoutPurchaseOrderDraftsInput>
+  }
+
+  export type UserUpsertWithoutPurchaseOrderDraftsInput = {
+    update: XOR<UserUpdateWithoutPurchaseOrderDraftsInput, UserUncheckedUpdateWithoutPurchaseOrderDraftsInput>
+    create: XOR<UserCreateWithoutPurchaseOrderDraftsInput, UserUncheckedCreateWithoutPurchaseOrderDraftsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPurchaseOrderDraftsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPurchaseOrderDraftsInput, UserUncheckedUpdateWithoutPurchaseOrderDraftsInput>
+  }
+
+  export type UserUpdateWithoutPurchaseOrderDraftsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    authVersion?: IntFieldUpdateOperationsInput | number
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUpdateManyWithoutResponderNestedInput
+    requests?: RequestUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUpdateManyWithoutChangedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPurchaseOrderDraftsInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    authVersion?: IntFieldUpdateOperationsInput | number
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
+    responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
+    requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
+    userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    taskAssignments?: TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdMonthlyEvaluationTemplates?: MonthlyEvaluationTemplateUncheckedUpdateManyWithoutCreatedByUserNestedInput
+    evaluatedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutEvaluatorUserNestedInput
+    openedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutOpenedByUserNestedInput
+    closedMonthlyEvaluations?: WorkerMonthlyEvaluationUncheckedUpdateManyWithoutClosedByUserNestedInput
+    receivedRequestsIntoInventory?: RequestUncheckedUpdateManyWithoutInventoryReceivedByUserNestedInput
+    projectInventoryResponsibilities?: ProjectInventoryEntryUncheckedUpdateManyWithoutResponsibleUserNestedInput
+    performedInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    createdExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+    updatedExpiringDocuments?: ExpiringDocumentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    expiringDocumentHistory?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    responsibleInventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutResponsibleUserNestedInput
+  }
+
+  export type ProjectUpsertWithoutPurchaseOrderDraftsInput = {
+    update: XOR<ProjectUpdateWithoutPurchaseOrderDraftsInput, ProjectUncheckedUpdateWithoutPurchaseOrderDraftsInput>
+    create: XOR<ProjectCreateWithoutPurchaseOrderDraftsInput, ProjectUncheckedCreateWithoutPurchaseOrderDraftsInput>
+    where?: ProjectWhereInput
+  }
+
+  export type ProjectUpdateToOneWithWhereWithoutPurchaseOrderDraftsInput = {
+    where?: ProjectWhereInput
+    data: XOR<ProjectUpdateWithoutPurchaseOrderDraftsInput, ProjectUncheckedUpdateWithoutPurchaseOrderDraftsInput>
+  }
+
+  export type ProjectUpdateWithoutPurchaseOrderDraftsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    location?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requests?: RequestUpdateManyWithoutProjectNestedInput
+    emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
+    pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
+    serviceSales?: ServiceSaleUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUpdateManyWithoutProjectNestedInput
+    tasks?: TaskUpdateManyWithoutProjectNestedInput
+    notifications?: NotificationUpdateManyWithoutProjectNestedInput
+    inventoryEntries?: ProjectInventoryEntryUpdateManyWithoutProjectNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutProjectNestedInput
+    currentInventoryAssets?: InventoryAssetUpdateManyWithoutCurrentProjectNestedInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutPurchaseOrderDraftsInput = {
+    projectId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    location?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
+    emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
+    pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
+    serviceSales?: ServiceSaleUncheckedUpdateManyWithoutProjectNestedInput
+    generalPayrollProjects?: GeneralPayrollProjectUncheckedUpdateManyWithoutProjectNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
+    inventoryEntries?: ProjectInventoryEntryUncheckedUpdateManyWithoutProjectNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutProjectNestedInput
+    currentInventoryAssets?: InventoryAssetUncheckedUpdateManyWithoutCurrentProjectNestedInput
+    workerInventoryAssignments?: WorkerInventoryAssignmentUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ElementCreateWithoutCategoryInput = {
@@ -111605,6 +115232,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
@@ -111630,6 +115258,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
@@ -111658,6 +115287,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
@@ -111690,6 +115321,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
@@ -111726,6 +115359,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -111758,6 +115393,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -112048,6 +115685,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
@@ -112073,6 +115711,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
@@ -112107,6 +115746,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
@@ -112139,6 +115780,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
@@ -112181,6 +115824,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -112213,6 +115858,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -113407,6 +117054,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     requests?: RequestCreateNestedManyWithoutUserInput
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
@@ -113439,6 +117088,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
@@ -113608,6 +117259,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
@@ -113640,6 +117293,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
@@ -113704,6 +117359,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
@@ -113729,6 +117385,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
@@ -114007,6 +117664,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -114039,6 +117698,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -114177,6 +117838,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
@@ -114202,6 +117864,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
@@ -114522,6 +118185,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -114554,6 +118219,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -114770,6 +118437,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
@@ -114795,6 +118463,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
@@ -115019,6 +118688,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -115051,6 +118722,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -115087,6 +118760,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -115119,6 +118794,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -115343,6 +119020,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
@@ -115368,6 +119046,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
@@ -115622,6 +119301,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -115654,6 +119335,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -115696,6 +119379,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -115728,6 +119413,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -116350,6 +120037,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
@@ -116375,6 +120063,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
@@ -116717,6 +120406,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
@@ -116742,6 +120432,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
@@ -117421,6 +121112,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -117453,6 +121146,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -117490,6 +121185,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
@@ -117515,6 +121211,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
@@ -117595,6 +121292,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -117627,6 +121326,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -117670,6 +121371,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
@@ -117695,6 +121397,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
@@ -117734,6 +121437,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -117766,6 +121471,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -117813,6 +121520,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -117845,6 +121554,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -118343,6 +122054,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
@@ -118368,6 +122080,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
@@ -118701,6 +122414,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
@@ -118726,6 +122440,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
@@ -118983,6 +122698,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -119015,6 +122732,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -119099,6 +122818,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -119131,6 +122852,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -119699,6 +123422,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -119731,6 +123456,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -119767,6 +123494,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -119799,6 +123528,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -119835,6 +123566,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -119867,6 +123600,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -120029,6 +123764,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -120061,6 +123798,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -120103,6 +123842,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -120135,6 +123876,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -120177,6 +123920,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -120209,6 +123954,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -120798,6 +124545,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashCreateNestedManyWithoutProjectInput
@@ -120823,6 +124571,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     pettyCashes?: PettyCashUncheckedCreateNestedManyWithoutProjectInput
@@ -121014,6 +124763,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUpdateManyWithoutProjectNestedInput
@@ -121039,6 +124789,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     pettyCashes?: PettyCashUncheckedUpdateManyWithoutProjectNestedInput
@@ -121343,6 +125094,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
@@ -121368,6 +125120,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
@@ -121408,6 +125161,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
@@ -121433,6 +125187,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
@@ -121457,6 +125212,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
@@ -121482,6 +125238,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
@@ -121522,6 +125279,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
@@ -121547,6 +125305,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
@@ -121570,6 +125329,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -121602,6 +125363,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -121649,6 +125412,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -121681,6 +125446,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -121712,6 +125479,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
     userUserTypes?: UserUserTypeCreateNestedManyWithoutUserInput
@@ -121744,6 +125513,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
     userUserTypes?: UserUserTypeUncheckedCreateNestedManyWithoutUserInput
@@ -121791,6 +125562,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
     userUserTypes?: UserUserTypeUpdateManyWithoutUserNestedInput
@@ -121823,6 +125596,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
     userUserTypes?: UserUserTypeUncheckedUpdateManyWithoutUserNestedInput
@@ -122065,6 +125840,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
@@ -122090,6 +125866,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
@@ -122201,6 +125978,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
@@ -122226,6 +126004,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
@@ -122707,6 +126486,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
@@ -122732,6 +126512,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
@@ -122919,6 +126700,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
@@ -122944,6 +126726,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
@@ -123101,6 +126884,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -123133,6 +126918,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -123226,6 +127013,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -123258,6 +127047,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -123289,6 +127080,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -123321,6 +127114,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -123528,6 +127323,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutProjectInput
     requests?: RequestCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutProjectInput
@@ -123553,6 +127349,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutProjectInput
     requests?: RequestUncheckedCreateNestedManyWithoutProjectInput
     emergencies?: EmergencyUncheckedCreateNestedManyWithoutProjectInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutProjectInput
@@ -123592,6 +127389,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -123624,6 +127423,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -123861,6 +127662,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutProjectNestedInput
     requests?: RequestUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutProjectNestedInput
@@ -123886,6 +127688,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutProjectNestedInput
     requests?: RequestUncheckedUpdateManyWithoutProjectNestedInput
     emergencies?: EmergencyUncheckedUpdateManyWithoutProjectNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutProjectNestedInput
@@ -124282,6 +128085,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -124314,6 +128119,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -124350,6 +128157,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -124382,6 +128191,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -124517,6 +128328,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -124549,6 +128362,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -124591,6 +128406,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -124623,6 +128440,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -124744,6 +128563,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenCreateNestedManyWithoutUserInput
     responses?: RequestResponseCreateNestedManyWithoutResponderInput
     requests?: RequestCreateNestedManyWithoutUserInput
@@ -124776,6 +128597,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedCreateNestedManyWithoutUserInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedCreateNestedManyWithoutUserInput
     blacklistedTokens?: BlacklistedTokenUncheckedCreateNestedManyWithoutUserInput
     responses?: RequestResponseUncheckedCreateNestedManyWithoutResponderInput
     requests?: RequestUncheckedCreateNestedManyWithoutUserInput
@@ -124875,6 +128698,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUpdateManyWithoutResponderNestedInput
     requests?: RequestUpdateManyWithoutUserNestedInput
@@ -124907,6 +128732,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestFormDrafts?: RequestFormDraftUncheckedUpdateManyWithoutUserNestedInput
+    purchaseOrderDrafts?: PurchaseOrderDraftUncheckedUpdateManyWithoutUserNestedInput
     blacklistedTokens?: BlacklistedTokenUncheckedUpdateManyWithoutUserNestedInput
     responses?: RequestResponseUncheckedUpdateManyWithoutResponderNestedInput
     requests?: RequestUncheckedUpdateManyWithoutUserNestedInput
@@ -125024,6 +128851,21 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     history?: ExpiringDocumentHistoryUncheckedUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type RequestFormDraftCreateManyUserInput = {
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type PurchaseOrderDraftCreateManyUserInput = {
+    projectId: number
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
   }
 
   export type BlacklistedTokenCreateManyUserInput = {
@@ -125295,6 +129137,51 @@ export namespace Prisma {
     performedByUserId?: number | null
     notes?: string | null
     createdAt?: Date | string
+  }
+
+  export type RequestFormDraftUpdateWithoutUserInput = {
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RequestFormDraftUncheckedUpdateWithoutUserInput = {
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RequestFormDraftUncheckedUpdateManyWithoutUserInput = {
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseOrderDraftUpdateWithoutUserInput = {
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutPurchaseOrderDraftsNestedInput
+  }
+
+  export type PurchaseOrderDraftUncheckedUpdateWithoutUserInput = {
+    projectId?: IntFieldUpdateOperationsInput | number
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseOrderDraftUncheckedUpdateManyWithoutUserInput = {
+    projectId?: IntFieldUpdateOperationsInput | number
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BlacklistedTokenUpdateWithoutUserInput = {
@@ -126159,6 +130046,14 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
   }
 
+  export type PurchaseOrderDraftCreateManyProjectInput = {
+    userId: number
+    slot: string
+    version?: number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
   export type RequestCreateManyProjectInput = {
     requestId?: number
     deliveryDueDate: Date | string
@@ -126335,6 +130230,30 @@ export namespace Prisma {
     assignedAt?: Date | string
     returnedAt?: Date | string | null
     notes?: string | null
+  }
+
+  export type PurchaseOrderDraftUpdateWithoutProjectInput = {
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPurchaseOrderDraftsNestedInput
+  }
+
+  export type PurchaseOrderDraftUncheckedUpdateWithoutProjectInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseOrderDraftUncheckedUpdateManyWithoutProjectInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    slot?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RequestUpdateWithoutProjectInput = {

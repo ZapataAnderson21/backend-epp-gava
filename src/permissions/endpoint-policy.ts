@@ -9,9 +9,11 @@ export const controllerModules: Record<string, string> = {
   CategoryResourceController: 'resources',
   PurchaseOrderConditionController: 'resources',
   PurchaseOrderController: 'orders',
+  PurchaseOrderDraftController: 'orders',
   ResourcePurchaseOrderController: 'orders',
   QuotationController: 'quotations',
   RequestController: 'requests',
+  RequestFormDraftController: 'requests',
   ElementRequestController: 'requests',
   RequestWorkerController: 'requests',
   ElementRequestWorkerPlanController: 'requests',
@@ -46,6 +48,10 @@ export function endpointPermissions(
     return [];
   const module = controllerModules[controller];
   if (!module) return null;
+  if (controller === 'RequestFormDraftController')
+    return [['requests.view'], ['requests.manage']];
+  if (controller === 'PurchaseOrderDraftController')
+    return [['orders.view'], ['orders.manage'], ['finance.view']];
   if (controller === 'PermissionsController' && handler === 'assign')
     return [['users.view'], ['users.assignRole']];
   if (controller === 'UserTypeController' && method === 'GET')
