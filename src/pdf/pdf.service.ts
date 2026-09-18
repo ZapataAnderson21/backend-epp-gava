@@ -869,7 +869,7 @@ export class PdfService {
                 margin: [0, 4, 0, 4],
               },
               {
-                text: 'Angi Gonzales Cotrina',
+                text: 'Morayma Lloja Fernandez',
                 alignment: 'center',
                 margin: [0, 4, 0, 4],
               },
