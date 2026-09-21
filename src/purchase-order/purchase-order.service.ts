@@ -148,6 +148,21 @@ export class PurchaseOrderService {
     return formattedCode;
   }
 
+  async findDirectory() {
+    const orders = await this.prisma.purchaseOrder.findMany({
+      where: { project: { deletedAt: null } },
+      select: {
+        purchaseOrderId: true,
+        code: true,
+        projectId: true,
+        project: { select: { name: true } },
+        supplier: { select: { name: true } },
+      },
+      orderBy: [{ createdAt: 'desc' }, { purchaseOrderId: 'desc' }],
+    });
+    return { statusCode: HttpStatus.OK, data: orders };
+  }
+
   async findDashboard(query: PurchaseOrderDashboardQueryDto) {
     const today = new Date();
     const month = query.month ?? today.getMonth() + 1;

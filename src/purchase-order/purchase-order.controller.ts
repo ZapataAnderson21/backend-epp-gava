@@ -48,6 +48,12 @@ export class PurchaseOrderController {
     return this.purchaseOrderService.findDashboard(query);
   }
 
+  @Get('directory')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
+  findDirectory() {
+    return this.purchaseOrderService.findDirectory();
+  }
+
   @Get('project/:projectId/unit-values')
   @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
   findUnitValuesByProject(@Param('projectId', ParseIntPipe) projectId: number) {
