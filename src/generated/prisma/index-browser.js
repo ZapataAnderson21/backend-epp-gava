@@ -603,6 +603,14 @@ exports.Prisma.PurchaseOrderConditionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PurchaseOrderCreationScalarFieldEnum = {
+  userId: 'userId',
+  key: 'key',
+  requestHash: 'requestHash',
+  purchaseOrderId: 'purchaseOrderId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.PurchaseOrderScalarFieldEnum = {
   purchaseOrderId: 'purchaseOrderId',
   code: 'code',
@@ -1204,6 +1212,7 @@ exports.Prisma.ModelName = {
   CategoryResource: 'CategoryResource',
   Resource: 'Resource',
   PurchaseOrderCondition: 'PurchaseOrderCondition',
+  PurchaseOrderCreation: 'PurchaseOrderCreation',
   PurchaseOrder: 'PurchaseOrder',
   ResourcePurchaseOrder: 'ResourcePurchaseOrder',
   PettyCash: 'PettyCash',

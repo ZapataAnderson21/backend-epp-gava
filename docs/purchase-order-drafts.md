@@ -31,4 +31,4 @@ npm run build
 
 Prueba manual: escribir un dato, recargar, desconectar internet, editar, volver a conectar y comprobar el aviso de sincronización. Abrir la misma ruta en otra computadora con la misma cuenta y verificar recuperación. Modificar desde ambas para comprobar el aviso de conflicto. Un error al guardar la orden debe mantener el borrador.
 
-El guardado formal existente sigue usando solicitudes separadas para cabecera e ítems; este cambio protege el borrador, pero no convierte ese flujo en una transacción única. Si una interrupción ocurre durante ese guardado, revisar la orden que pudo haberse creado antes de volver a crearla.
+La creación formal ahora envía cabecera e ítems juntos a `POST /purchase-order/complete`, con `creationKey` persistida en el borrador. La transacción guarda todo o revierte todo. El mismo intento devuelve la orden ya guardada, sin crear otra. La edición conserva su flujo de sincronización de ítems existente; no asigna nuevos correlativos. Ver [despliegue y límites del guardado](purchase-order-creation.md).

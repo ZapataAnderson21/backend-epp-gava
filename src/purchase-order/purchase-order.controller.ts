@@ -12,7 +12,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { PurchaseOrderService } from './purchase-order.service';
-import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
+import { CreateCompletePurchaseOrderDto } from './dto/create-complete-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
 import { DuplicatePurchaseOrderDto } from './dto/duplicate-purchase-order.dto';
 import { Response } from 'express';
@@ -33,13 +33,16 @@ export class PurchaseOrderController {
     private readonly pdfService: PdfService,
   ) {}
 
-  @Post()
+  @Post(['', 'complete'])
   @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
-  create(@Body() createPurchaseOrderDto: CreatePurchaseOrderDto) {
+  create(
+    @Body() createPurchaseOrderDto: CreateCompletePurchaseOrderDto,
+    @GetUser('userId') userId: number,
+  ) {
     this.logger.log(
       `Creating purchase order: ${JSON.stringify(createPurchaseOrderDto)}`,
     );
-    return this.purchaseOrderService.create(createPurchaseOrderDto);
+    return this.purchaseOrderService.create(createPurchaseOrderDto, userId);
   }
 
   @Get('dashboard')
@@ -159,6 +162,7 @@ export class PurchaseOrderController {
   duplicate(
     @Param('id', ParseIntPipe) id: number,
     @Body() duplicatePurchaseOrderDto: DuplicatePurchaseOrderDto,
+    @GetUser('userId') userId: number,
   ) {
     this.logger.log(
       `Duplicating purchase order with ID: ${id} to project: ${duplicatePurchaseOrderDto.projectId}`,
@@ -166,6 +170,8 @@ export class PurchaseOrderController {
     return this.purchaseOrderService.duplicate(
       id,
       duplicatePurchaseOrderDto.projectId,
+      duplicatePurchaseOrderDto.creationKey,
+      userId,
     );
   }
 

@@ -1,11 +1,26 @@
 import {
   BadRequestException,
+  ConflictException,
   HttpStatus,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
+
+import { CreateCompletePurchaseOrderDto } from './dto/create-complete-purchase-order.dto';
+import { Prisma } from 'src/generated/prisma';
+import { createHash } from 'node:crypto';
+
+function canonical(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
+  if (value && typeof value === 'object')
+    return `{${Object.entries(value)
+      .filter(([, v]) => v !== undefined)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([k, v]) => `${JSON.stringify(k)}:${canonical(v)}`)
+      .join(',')}}`;
+  return JSON.stringify(value);
+}
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Currency } from 'src/supplier/enum/currency.enum';
@@ -34,63 +49,137 @@ export class PurchaseOrderService {
     private readonly notificationService: NotificationService,
   ) {}
 
-  async create(createPurchaseOrderDto: CreatePurchaseOrderDto) {
-    this.logger.log('Creating a new purchase order');
-    const newPurchaseOrder = await this.prisma.purchaseOrder.create({
-      data: createPurchaseOrderDto,
-      include: {
-        project: true,
-      },
-    });
-
-    if (!newPurchaseOrder) {
-      this.logger.error('Failed to create a new purchase order');
-      throw new BadRequestException('No se pudo crear la orden de compra. ');
-    }
-
-    const code = await this.formatedCode(
-      newPurchaseOrder.purchaseOrderId,
-      newPurchaseOrder.code,
-    );
-
-    this.logger.log(`Generated code for purchase order: ${code}`);
-
-    // Actualizar directamente con Prisma para evitar doble formateo en this.update()
-    const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
-      where: { purchaseOrderId: newPurchaseOrder.purchaseOrderId },
-      data: { code },
-      include: {
-        project: true,
-      },
-    });
-
-    if (!updatedPurchaseOrder) {
-      this.logger.error(
-        `Failed to update purchase order with id: ${newPurchaseOrder.purchaseOrderId}`,
-      );
+  async create(dto: CreateCompletePurchaseOrderDto, userId: number) {
+    const { creationKey, items, ...header } = dto;
+    if (!creationKey || !Number.isInteger(userId))
+      throw new BadRequestException('Actualice la página antes de guardar.');
+    if (
+      !items?.length ||
+      new Set(items.map((item) => item.resourceId)).size !== items.length
+    ) {
       throw new BadRequestException(
-        'No se pudo actualizar la orden de compra con el código generado.',
+        'Agregue recursos y no repita el mismo recurso en varias filas.',
       );
     }
-
-    // Notificar a GERENTE sobre nueva orden de compra pendiente
-    await this.notificationService.notifyPurchaseOrderPending(
-      newPurchaseOrder.purchaseOrderId,
-      code,
-      newPurchaseOrder.project?.name || 'Proyecto',
-      newPurchaseOrder.projectId,
+    const requestHash = createHash('sha256')
+      .update(canonical({ header, items }))
+      .digest('hex');
+    const result = await this.prisma.$transaction(
+      async (tx) => {
+        // All creation paths share the lock; PostgreSQL releases it on commit/rollback.
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(20260921, 1)`;
+        const receipt = await tx.purchaseOrderCreation.findUnique({
+          where: { userId_key: { userId, key: creationKey } },
+        });
+        if (receipt) {
+          if (receipt.requestHash !== requestHash)
+            throw new ConflictException(
+              `Este intento ya guardó la orden con ID ${receipt.purchaseOrderId}. Revísela antes de guardar cambios.`,
+            );
+          const order = await tx.purchaseOrder.findUnique({
+            where: { purchaseOrderId: receipt.purchaseOrderId },
+            include: { project: true },
+          });
+          if (!order)
+            throw new ConflictException(
+              'La orden de este intento fue eliminada. Inicie una nueva orden; no se volverá a crear al reintentar.',
+            );
+          return { order, replayed: true };
+        }
+        if (
+          !(await tx.project.findFirst({
+            where: { projectId: header.projectId, deletedAt: null },
+          }))
+        )
+          throw new BadRequestException('Proyecto no encontrado.');
+        const code = await this.allocateCode(
+          tx,
+          header.code,
+          header.supplierId,
+        );
+        const order = await tx.purchaseOrder.create({
+          data: { ...header, code },
+          include: { project: true },
+        });
+        const saved = order;
+        await tx.resourcePurchaseOrder.createMany({
+          data: items.map((item) => ({
+            ...item,
+            purchaseOrderId: saved.purchaseOrderId,
+          })),
+        });
+        await tx.purchaseOrderCreation.create({
+          data: {
+            userId,
+            key: creationKey,
+            requestHash,
+            purchaseOrderId: saved.purchaseOrderId,
+          },
+        });
+        return { order: saved, replayed: false };
+      },
+      { maxWait: 15000, timeout: 30000 },
     );
 
-    this.logger.log(
-      `Purchase order created successfully with id: ${updatedPurchaseOrder.purchaseOrderId}`,
-    );
+    if (!result.replayed) {
+      this.logger.log(
+        `Generated code for purchase order: ${result.order.code}`,
+      );
+      this.logger.log(
+        `Purchase order created successfully with id: ${result.order.purchaseOrderId}`,
+      );
+      try {
+        await this.notificationService.notifyPurchaseOrderPending(
+          result.order.purchaseOrderId,
+          result.order.code,
+          result.order.project.name,
+          result.order.projectId,
+        );
+      } catch {
+        this.logger.error(
+          `La OC ${result.order.purchaseOrderId} se guardó, pero falló su notificación.`,
+        );
+      }
+    }
     return {
       statusCode: HttpStatus.CREATED,
-      message: 'Orden de compra creada exitosamente.',
-      data: updatedPurchaseOrder,
+      message: result.replayed
+        ? 'Orden ya guardada; se recuperó sin duplicarla.'
+        : 'Orden de compra creada exitosamente.',
+      data: result.order,
     };
   }
 
+  private async allocateCode(
+    tx: Prisma.TransactionClient,
+    baseCode: string,
+    supplierId: number,
+  ) {
+    const supplier = await tx.supplier.findUnique({
+      where: { supplierId },
+      select: { abbreviation: true },
+    });
+    if (
+      !supplier?.abbreviation ||
+      !/^[A-Z0-9]{1,10}$/.test(supplier.abbreviation)
+    ) {
+      throw new BadRequestException(
+        'El proveedor debe tener una abreviatura válida para generar el código.',
+      );
+    }
+    const year = new Date().getFullYear();
+    const orders = await tx.purchaseOrder.findMany({
+      where: { code: { contains: `-${year}/` } },
+      select: { code: true },
+    });
+    let maximum = 0;
+    for (const order of orders) {
+      const match = /^No\s+(\d+)-(\d{4})\/.+\/[^/]+$/.exec(order.code);
+      if (match && Number(match[2]) === year)
+        maximum = Math.max(maximum, Number(match[1]));
+    }
+    return `No ${String(maximum + 1).padStart(3, '0')}-${year}/${baseCode}/${supplier.abbreviation}`;
+  }
   async formatedCode(
     purchaseOrderId: number,
     code: string,
@@ -825,97 +914,97 @@ export class PurchaseOrderService {
     };
   }
 
-  async duplicate(purchaseOrderId: number, projectId: number) {
-    this.logger.log(`Duplicating purchase order with id: ${purchaseOrderId}`);
-
-    // Obtener la orden de compra original con sus recursos
-    const originalPurchaseOrder = await this.prisma.purchaseOrder.findUnique({
-      where: { purchaseOrderId },
-      include: {
-        resources: true,
+  async duplicate(
+    purchaseOrderId: number,
+    projectId: number,
+    creationKey: string,
+    userId: number,
+  ) {
+    const requestHash = createHash('sha256')
+      .update(canonical({ duplicate: purchaseOrderId, projectId }))
+      .digest('hex');
+    const saved = await this.prisma.$transaction(
+      async (tx) => {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(20260921, 1)`;
+        const receipt = await tx.purchaseOrderCreation.findUnique({
+          where: { userId_key: { userId, key: creationKey } },
+        });
+        if (receipt) {
+          if (receipt.requestHash !== requestHash)
+            throw new ConflictException(
+              'Este intento ya fue usado para otra orden.',
+            );
+          const order = await tx.purchaseOrder.findUnique({
+            where: { purchaseOrderId: receipt.purchaseOrderId },
+          });
+          if (!order)
+            throw new ConflictException(
+              'La copia de este intento fue eliminada; no se volverá a crear al reintentar.',
+            );
+          return order;
+        }
+        const original = await tx.purchaseOrder.findUnique({
+          where: { purchaseOrderId },
+          include: { resources: true },
+        });
+        if (!original)
+          throw new NotFoundException('No se encontró la orden original.');
+        if (
+          !(await tx.project.findFirst({
+            where: { projectId, deletedAt: null },
+          }))
+        )
+          throw new BadRequestException('Proyecto no encontrado.');
+        const {
+          purchaseOrderId: oldId,
+          resources,
+          createdAt,
+          updatedAt,
+          ...data
+        } = original;
+        void oldId;
+        void createdAt;
+        void updatedAt;
+        const code = await this.allocateCode(
+          tx,
+          `COPY-${original.code.split('/')[1] || original.code}`,
+          original.supplierId,
+        );
+        const order = await tx.purchaseOrder.create({
+          data: { ...data, code, projectId, status: 'pending' },
+        });
+        if (resources.length)
+          await tx.resourcePurchaseOrder.createMany({
+            data: resources.map(
+              ({
+                resourcePurchaseOrderId,
+                purchaseOrderId: oldOrderId,
+                ...item
+              }) => {
+                void resourcePurchaseOrderId;
+                void oldOrderId;
+                return { ...item, purchaseOrderId: order.purchaseOrderId };
+              },
+            ),
+          });
+        await tx.purchaseOrderCreation.create({
+          data: {
+            userId,
+            key: creationKey,
+            requestHash,
+            purchaseOrderId: order.purchaseOrderId,
+          },
+        });
+        return order;
       },
-    });
-
-    if (!originalPurchaseOrder) {
-      this.logger.error(`Purchase order with id: ${purchaseOrderId} not found`);
-      throw new NotFoundException(
-        `No se encontró la orden de compra con id: ${purchaseOrderId}`,
-      );
-    }
-
-    // Verificar que el proyecto existe
-    await this.findProject(projectId);
-
-    // Extraer el código original (sin el formato)
-    const arrayCode = originalPurchaseOrder.code.split('/');
-    const originalCode = arrayCode[1] || originalPurchaseOrder.code;
-
-    // Crear nueva orden de compra con los mismos datos pero nuevo projectId, código y estado pending
-    const {
-      purchaseOrderId: _,
-      resources,
-      createdAt,
-      updatedAt,
-      ...purchaseOrderData
-    } = originalPurchaseOrder;
-    void _;
-    void createdAt;
-    void updatedAt;
-
-    const newPurchaseOrder = await this.prisma.purchaseOrder.create({
-      data: {
-        ...purchaseOrderData,
-        projectId,
-        code: `COPY-${originalCode}`,
-        status: 'pending',
-      },
-    });
-
-    if (!newPurchaseOrder) {
-      this.logger.error('Failed to duplicate purchase order');
-      throw new BadRequestException('No se pudo duplicar la orden de compra.');
-    }
-
-    // Generar el código formateado
-    const formattedCode = await this.formatedCode(
-      newPurchaseOrder.purchaseOrderId,
-      newPurchaseOrder.code,
-    );
-
-    // Actualizar con el código formateado
-    const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
-      where: { purchaseOrderId: newPurchaseOrder.purchaseOrderId },
-      data: { code: formattedCode },
-    });
-
-    // Duplicar los recursos asociados
-    if (resources && resources.length > 0) {
-      const resourcesData = resources.map((resourceWithIds) => {
-        const { resourcePurchaseOrderId, purchaseOrderId, ...resource } =
-          resourceWithIds;
-        void resourcePurchaseOrderId;
-        void purchaseOrderId;
-        return {
-          ...resource,
-          purchaseOrderId: newPurchaseOrder.purchaseOrderId,
-        };
-      });
-
-      await this.prisma.resourcePurchaseOrder.createMany({
-        data: resourcesData,
-      });
-    }
-
-    this.logger.log(
-      `Purchase order duplicated successfully with id: ${newPurchaseOrder.purchaseOrderId}`,
+      { maxWait: 15000, timeout: 30000 },
     );
     return {
       statusCode: HttpStatus.CREATED,
-      message: 'Orden de compra duplicada exitosamente.',
-      data: updatedPurchaseOrder,
+      message: 'Copia guardada exitosamente.',
+      data: saved,
     };
   }
-
   async remove(purchaseOrderId: number) {
     this.logger.log(`Removing purchase order with id: ${purchaseOrderId}`);
     const [, deletedPurchaseOrder] = await this.prisma.$transaction([

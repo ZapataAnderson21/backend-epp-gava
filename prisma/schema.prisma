@@ -1052,6 +1052,16 @@ model PurchaseOrderCondition {
   @@index([updatedAt])
 }
 
+// Receipt deliberately survives hard deletion of its order, preventing replay.
+model PurchaseOrderCreation {
+  userId Int
+  key String @db.Uuid
+  requestHash String @db.VarChar(64)
+  purchaseOrderId Int @unique
+  createdAt DateTime @default(now())
+  @@id([userId, key])
+}
+
 model PurchaseOrder {
   purchaseOrderId       Int                 @id @default(autoincrement())
   code                  String              @unique
