@@ -532,11 +532,22 @@ export class PdfService {
       border: [false, false, false, false],
     });
 
+    // LETTER: 612pt minus page margins, gaps, cell padding and table borders.
+    const infoColumnWidth = (612 - 60 - 16 - 48 - 6) / 3;
+    // Keep normal word wrapping; allow long uninterrupted tokens to wrap too.
+    // Only PDF text is changed, never the stored value.
+    const wrapInfoValue = (value: string) =>
+      value.replace(/\S{17,}/gu, (token) => Array.from(token).join('\u200b'));
+    const infoField = (label: string, value: string) => ({
+      text: [{ text: `${label}: `, bold: true }, wrapInfoValue(value)],
+      lineHeight: 1.75,
+    });
+
     // Una sola tabla mantiene los tres bloques con exactamente la misma altura,
     // incluso cuando algún dato se divide en más de una línea.
     const purchaseOrderInfoTable = {
       table: {
-        widths: ['*', 8, '*', 8, '*'],
+        widths: [infoColumnWidth, 8, infoColumnWidth, 8, infoColumnWidth],
         body: [
           [
             infoHeaderCell('DATOS DEL PROVEEDOR'),
@@ -547,110 +558,35 @@ export class PdfService {
           ],
           [
             infoBodyCell([
-              {
-                text: [
-                  { text: 'Proveedor: ', bold: true },
-                  purchaseOrder.supplier?.name || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'RUC: ', bold: true },
-                  purchaseOrder.supplier?.ruc || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'Contacto: ', bold: true },
-                  purchaseOrder.supplier?.contactName || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'Correo: ', bold: true },
-                  purchaseOrder.supplier?.email || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'Teléfono: ', bold: true },
-                  purchaseOrder.supplier?.phone || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'Cotización: ', bold: true },
-                  purchaseOrder.quotation || '',
-                ],
-                lineHeight: 1.75,
-              },
+              infoField('Proveedor', purchaseOrder.supplier?.name || ''),
+              infoField('RUC', purchaseOrder.supplier?.ruc || ''),
+              infoField('Contacto', purchaseOrder.supplier?.contactName || ''),
+              infoField('Correo', purchaseOrder.supplier?.email || ''),
+              infoField('Teléfono', purchaseOrder.supplier?.phone || ''),
+              infoField('Cotización', purchaseOrder.quotation || ''),
             ]),
             infoGapCell(),
             infoBodyCell([
-              {
-                text: [
-                  { text: 'Lugar de entrega: ', bold: true },
-                  purchaseOrder.deliveryLocation || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'Destino: ', bold: true },
-                  purchaseOrder.destination || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'Atención: ', bold: true },
-                  purchaseOrder.carePerson || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'DNI: ', bold: true },
-                  purchaseOrder.dniCarePerson || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'Observación: ', bold: true },
-                  purchaseOrder.observations || '',
-                ],
-                lineHeight: 1.75,
-              },
+              infoField(
+                'Lugar de entrega',
+                purchaseOrder.deliveryLocation || '',
+              ),
+              infoField('Destino', purchaseOrder.destination || ''),
+              infoField('Atención', purchaseOrder.carePerson || ''),
+              infoField('DNI', purchaseOrder.dniCarePerson || ''),
+              infoField('Observación', purchaseOrder.observations || ''),
             ]),
             infoGapCell(),
             infoBodyCell([
-              {
-                text: [
-                  { text: 'Crédito: ', bold: true },
-                  purchaseOrder.paymentConditions || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'Método de pago: ', bold: true },
-                  PaymentMethodLabelEs[purchaseOrder.paymentMethod] || '',
-                ],
-                lineHeight: 1.75,
-              },
-              {
-                text: [
-                  { text: 'Cta. cte: ', bold: true },
-                  `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}`,
-                ],
-                lineHeight: 1.75,
-              },
+              infoField('Crédito', purchaseOrder.paymentConditions || ''),
+              infoField(
+                'Método de pago',
+                PaymentMethodLabelEs[purchaseOrder.paymentMethod] || '',
+              ),
+              infoField(
+                'Cta. cte',
+                `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}`,
+              ),
             ]),
           ],
         ],
