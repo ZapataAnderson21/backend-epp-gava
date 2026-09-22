@@ -851,9 +851,30 @@ export class PurchaseOrderService {
       previousStatus = currentPO?.status || null;
     }
 
-    // Editing a supplier, project or other field must not rewrite an issued code.
-    const { code: ignoredCode, ...updateData } = updatePurchaseOrderDto;
-    void ignoredCode;
+    // Only the editable reference can change; keep the issued number/year/suffix.
+    const { code, ...otherData } = updatePurchaseOrderDto;
+    const updateData: UpdatePurchaseOrderDto = { ...otherData };
+    if (code !== undefined) {
+      const reference = code.trim();
+      if (!reference || reference.includes('/')) {
+        throw new BadRequestException(
+          'El código de referencia es obligatorio y no puede contener /.',
+        );
+      }
+      const current = await this.prisma.purchaseOrder.findUnique({
+        where: { purchaseOrderId },
+        select: { code: true },
+      });
+      const parts = current?.code.match(
+        /^(No\s+\d+-\d{4}\/)([^/]+)(\/[^/]+)$/i,
+      );
+      if (!parts) {
+        throw new BadRequestException(
+          'El código existente no tiene el formato esperado. No se modificó la orden.',
+        );
+      }
+      updateData.code = `${parts[1]}${reference}${parts[3]}`;
+    }
 
     const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
       where: { purchaseOrderId },

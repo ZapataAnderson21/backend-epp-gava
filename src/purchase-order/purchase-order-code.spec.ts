@@ -52,16 +52,47 @@ describe('Purchase order supplier abbreviation', () => {
     );
   });
 
-  it('no reescribe códigos históricos al editar una orden', async () => {
+  it('edita la referencia conservando correlativo, año y sufijo histórico', async () => {
+    purchaseOrder.findUnique.mockResolvedValue({
+      code: 'No 237-2020/2226/ANTIGUO',
+    });
     purchaseOrder.update.mockResolvedValue({
       purchaseOrderId: 1,
       code: 'CODIGO-LEGADO',
     });
-    await service.update(1, { code: 'NUEVO', supplierId: 2 });
+    await service.update(1, { code: ' 2226-1 ', supplierId: 2 });
     const calls = purchaseOrder.update.mock.calls as Array<
       [{ data: Record<string, unknown> }]
     >;
-    expect(calls[0][0].data).toEqual({ supplierId: 2 });
+    expect(calls[0][0].data).toEqual({
+      supplierId: 2,
+      code: 'No 237-2020/2226-1/ANTIGUO',
+    });
     expect(purchaseOrder.findMany).not.toHaveBeenCalled();
+  });
+
+  it('conserva el código si solo cambia el proveedor', async () => {
+    purchaseOrder.update.mockResolvedValue({ purchaseOrderId: 1 });
+    await service.update(1, { supplierId: 2 });
+    expect(purchaseOrder.update).toHaveBeenCalledWith(
+      expect.objectContaining({ data: { supplierId: 2 } }),
+    );
+    expect(purchaseOrder.findUnique).not.toHaveBeenCalled();
+  });
+
+  it.each(['', ' ', 'No 999-2026/OTRO/ABC'])(
+    'rechaza una referencia inválida: %s',
+    async (code) => {
+      await expect(service.update(1, { code })).rejects.toThrow();
+      expect(purchaseOrder.update).not.toHaveBeenCalled();
+    },
+  );
+
+  it('rechaza un formato histórico desconocido sin sobrescribirlo', async () => {
+    purchaseOrder.findUnique.mockResolvedValue({ code: 'CODIGO-LEGADO' });
+    await expect(service.update(1, { code: 'NUEVO' })).rejects.toThrow(
+      'formato esperado',
+    );
+    expect(purchaseOrder.update).not.toHaveBeenCalled();
   });
 });
