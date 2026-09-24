@@ -16,7 +16,13 @@ describe('Purchase order supplier abbreviation', () => {
   const service = new PurchaseOrderService(prisma, {} as NotificationService);
   const year = new Date().getFullYear();
 
-  beforeEach(() => jest.resetAllMocks());
+  beforeEach(() => {
+    jest.resetAllMocks();
+    Object.assign(prisma, {
+      $transaction: (run: (tx: unknown) => unknown) =>
+        run({ purchaseOrder, supplier, $executeRaw: jest.fn() }),
+    });
+  });
 
   it('usa la abreviatura guardada y mantiene el correlativo anual', async () => {
     purchaseOrder.findUnique.mockResolvedValue({

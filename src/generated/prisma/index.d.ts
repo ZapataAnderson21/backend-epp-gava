@@ -209,6 +209,11 @@ export type Resource = $Result.DefaultSelection<Prisma.$ResourcePayload>
  */
 export type PurchaseOrderCondition = $Result.DefaultSelection<Prisma.$PurchaseOrderConditionPayload>
 /**
+ * Model PurchaseOrderRenumber
+ * 
+ */
+export type PurchaseOrderRenumber = $Result.DefaultSelection<Prisma.$PurchaseOrderRenumberPayload>
+/**
  * Model PurchaseOrderCreation
  * 
  */
@@ -1326,6 +1331,16 @@ export class PrismaClient<
   get purchaseOrderCondition(): Prisma.PurchaseOrderConditionDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.purchaseOrderRenumber`: Exposes CRUD operations for the **PurchaseOrderRenumber** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PurchaseOrderRenumbers
+    * const purchaseOrderRenumbers = await prisma.purchaseOrderRenumber.findMany()
+    * ```
+    */
+  get purchaseOrderRenumber(): Prisma.PurchaseOrderRenumberDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.purchaseOrderCreation`: Exposes CRUD operations for the **PurchaseOrderCreation** model.
     * Example usage:
     * ```ts
@@ -2037,6 +2052,7 @@ export namespace Prisma {
     CategoryResource: 'CategoryResource',
     Resource: 'Resource',
     PurchaseOrderCondition: 'PurchaseOrderCondition',
+    PurchaseOrderRenumber: 'PurchaseOrderRenumber',
     PurchaseOrderCreation: 'PurchaseOrderCreation',
     PurchaseOrder: 'PurchaseOrder',
     ResourcePurchaseOrder: 'ResourcePurchaseOrder',
@@ -2076,7 +2092,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userType" | "userUserType" | "project" | "requestFormDraft" | "purchaseOrderDraft" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "complaint" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrderCondition" | "purchaseOrderCreation" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "rateLimitBucket" | "week" | "generalPayroll" | "generalPayrollProject" | "generalPayrollWorker" | "generalPayrollEntry" | "dailyWage" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem" | "expiringDocumentCategory" | "expiringDocument" | "expiringDocumentHistory" | "expiringDocumentNotification"
+      modelProps: "user" | "userType" | "userUserType" | "project" | "requestFormDraft" | "purchaseOrderDraft" | "elementCategory" | "element" | "fallProtectionGroup" | "fallProtectionGroupComponent" | "elementVariant" | "request" | "requestWorker" | "elementRequest" | "elementRequestWorkerPlan" | "requestResponse" | "projectInventoryEntry" | "inventoryMovement" | "officeInventoryEntry" | "inventoryAsset" | "harnessAssetProfile" | "harnessComponent" | "harnessComponentAssignment" | "measurementAssetProfile" | "elementRequestResponse" | "emergency" | "complaint" | "worker" | "workerInventoryAssignment" | "monthlyEvaluationTemplate" | "monthlyEvaluationTemplateVersion" | "monthlyEvaluationSection" | "monthlyEvaluationQuestion" | "workerMonthlyEvaluation" | "workerMonthlyEvaluationResponse" | "supplier" | "categoryResource" | "resource" | "purchaseOrderCondition" | "purchaseOrderRenumber" | "purchaseOrderCreation" | "purchaseOrder" | "resourcePurchaseOrder" | "pettyCash" | "serviceSale" | "passwordResetToken" | "blacklistedToken" | "rateLimitBucket" | "week" | "generalPayroll" | "generalPayrollProject" | "generalPayrollWorker" | "generalPayrollEntry" | "dailyWage" | "task" | "taskAssignment" | "notification" | "client" | "quotation" | "quotationItem" | "expiringDocumentCategory" | "expiringDocument" | "expiringDocumentHistory" | "expiringDocumentNotification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4966,6 +4982,80 @@ export namespace Prisma {
           }
         }
       }
+      PurchaseOrderRenumber: {
+        payload: Prisma.$PurchaseOrderRenumberPayload<ExtArgs>
+        fields: Prisma.PurchaseOrderRenumberFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PurchaseOrderRenumberFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PurchaseOrderRenumberFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload>
+          }
+          findFirst: {
+            args: Prisma.PurchaseOrderRenumberFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PurchaseOrderRenumberFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload>
+          }
+          findMany: {
+            args: Prisma.PurchaseOrderRenumberFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload>[]
+          }
+          create: {
+            args: Prisma.PurchaseOrderRenumberCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload>
+          }
+          createMany: {
+            args: Prisma.PurchaseOrderRenumberCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PurchaseOrderRenumberCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload>[]
+          }
+          delete: {
+            args: Prisma.PurchaseOrderRenumberDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload>
+          }
+          update: {
+            args: Prisma.PurchaseOrderRenumberUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload>
+          }
+          deleteMany: {
+            args: Prisma.PurchaseOrderRenumberDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PurchaseOrderRenumberUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PurchaseOrderRenumberUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload>[]
+          }
+          upsert: {
+            args: Prisma.PurchaseOrderRenumberUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PurchaseOrderRenumberPayload>
+          }
+          aggregate: {
+            args: Prisma.PurchaseOrderRenumberAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePurchaseOrderRenumber>
+          }
+          groupBy: {
+            args: Prisma.PurchaseOrderRenumberGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PurchaseOrderRenumberGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PurchaseOrderRenumberCountArgs<ExtArgs>
+            result: $Utils.Optional<PurchaseOrderRenumberCountAggregateOutputType> | number
+          }
+        }
+      }
       PurchaseOrderCreation: {
         payload: Prisma.$PurchaseOrderCreationPayload<ExtArgs>
         fields: Prisma.PurchaseOrderCreationFieldRefs
@@ -6873,6 +6963,7 @@ export namespace Prisma {
     categoryResource?: CategoryResourceOmit
     resource?: ResourceOmit
     purchaseOrderCondition?: PurchaseOrderConditionOmit
+    purchaseOrderRenumber?: PurchaseOrderRenumberOmit
     purchaseOrderCreation?: PurchaseOrderCreationOmit
     purchaseOrder?: PurchaseOrderOmit
     resourcePurchaseOrder?: ResourcePurchaseOrderOmit
@@ -57597,6 +57688,1087 @@ export namespace Prisma {
 
 
   /**
+   * Model PurchaseOrderRenumber
+   */
+
+  export type AggregatePurchaseOrderRenumber = {
+    _count: PurchaseOrderRenumberCountAggregateOutputType | null
+    _avg: PurchaseOrderRenumberAvgAggregateOutputType | null
+    _sum: PurchaseOrderRenumberSumAggregateOutputType | null
+    _min: PurchaseOrderRenumberMinAggregateOutputType | null
+    _max: PurchaseOrderRenumberMaxAggregateOutputType | null
+  }
+
+  export type PurchaseOrderRenumberAvgAggregateOutputType = {
+    userId: number | null
+    year: number | null
+  }
+
+  export type PurchaseOrderRenumberSumAggregateOutputType = {
+    userId: number | null
+    year: number | null
+  }
+
+  export type PurchaseOrderRenumberMinAggregateOutputType = {
+    id: string | null
+    userId: number | null
+    actorName: string | null
+    year: number | null
+    fingerprint: string | null
+    reason: string | null
+    createdAt: Date | null
+    appliedAt: Date | null
+  }
+
+  export type PurchaseOrderRenumberMaxAggregateOutputType = {
+    id: string | null
+    userId: number | null
+    actorName: string | null
+    year: number | null
+    fingerprint: string | null
+    reason: string | null
+    createdAt: Date | null
+    appliedAt: Date | null
+  }
+
+  export type PurchaseOrderRenumberCountAggregateOutputType = {
+    id: number
+    userId: number
+    actorName: number
+    year: number
+    plan: number
+    fingerprint: number
+    reason: number
+    createdAt: number
+    appliedAt: number
+    _all: number
+  }
+
+
+  export type PurchaseOrderRenumberAvgAggregateInputType = {
+    userId?: true
+    year?: true
+  }
+
+  export type PurchaseOrderRenumberSumAggregateInputType = {
+    userId?: true
+    year?: true
+  }
+
+  export type PurchaseOrderRenumberMinAggregateInputType = {
+    id?: true
+    userId?: true
+    actorName?: true
+    year?: true
+    fingerprint?: true
+    reason?: true
+    createdAt?: true
+    appliedAt?: true
+  }
+
+  export type PurchaseOrderRenumberMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    actorName?: true
+    year?: true
+    fingerprint?: true
+    reason?: true
+    createdAt?: true
+    appliedAt?: true
+  }
+
+  export type PurchaseOrderRenumberCountAggregateInputType = {
+    id?: true
+    userId?: true
+    actorName?: true
+    year?: true
+    plan?: true
+    fingerprint?: true
+    reason?: true
+    createdAt?: true
+    appliedAt?: true
+    _all?: true
+  }
+
+  export type PurchaseOrderRenumberAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PurchaseOrderRenumber to aggregate.
+     */
+    where?: PurchaseOrderRenumberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurchaseOrderRenumbers to fetch.
+     */
+    orderBy?: PurchaseOrderRenumberOrderByWithRelationInput | PurchaseOrderRenumberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PurchaseOrderRenumberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurchaseOrderRenumbers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurchaseOrderRenumbers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PurchaseOrderRenumbers
+    **/
+    _count?: true | PurchaseOrderRenumberCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PurchaseOrderRenumberAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PurchaseOrderRenumberSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PurchaseOrderRenumberMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PurchaseOrderRenumberMaxAggregateInputType
+  }
+
+  export type GetPurchaseOrderRenumberAggregateType<T extends PurchaseOrderRenumberAggregateArgs> = {
+        [P in keyof T & keyof AggregatePurchaseOrderRenumber]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePurchaseOrderRenumber[P]>
+      : GetScalarType<T[P], AggregatePurchaseOrderRenumber[P]>
+  }
+
+
+
+
+  export type PurchaseOrderRenumberGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurchaseOrderRenumberWhereInput
+    orderBy?: PurchaseOrderRenumberOrderByWithAggregationInput | PurchaseOrderRenumberOrderByWithAggregationInput[]
+    by: PurchaseOrderRenumberScalarFieldEnum[] | PurchaseOrderRenumberScalarFieldEnum
+    having?: PurchaseOrderRenumberScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PurchaseOrderRenumberCountAggregateInputType | true
+    _avg?: PurchaseOrderRenumberAvgAggregateInputType
+    _sum?: PurchaseOrderRenumberSumAggregateInputType
+    _min?: PurchaseOrderRenumberMinAggregateInputType
+    _max?: PurchaseOrderRenumberMaxAggregateInputType
+  }
+
+  export type PurchaseOrderRenumberGroupByOutputType = {
+    id: string
+    userId: number
+    actorName: string
+    year: number
+    plan: JsonValue
+    fingerprint: string
+    reason: string | null
+    createdAt: Date
+    appliedAt: Date | null
+    _count: PurchaseOrderRenumberCountAggregateOutputType | null
+    _avg: PurchaseOrderRenumberAvgAggregateOutputType | null
+    _sum: PurchaseOrderRenumberSumAggregateOutputType | null
+    _min: PurchaseOrderRenumberMinAggregateOutputType | null
+    _max: PurchaseOrderRenumberMaxAggregateOutputType | null
+  }
+
+  type GetPurchaseOrderRenumberGroupByPayload<T extends PurchaseOrderRenumberGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PurchaseOrderRenumberGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PurchaseOrderRenumberGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PurchaseOrderRenumberGroupByOutputType[P]>
+            : GetScalarType<T[P], PurchaseOrderRenumberGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PurchaseOrderRenumberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    actorName?: boolean
+    year?: boolean
+    plan?: boolean
+    fingerprint?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    appliedAt?: boolean
+  }, ExtArgs["result"]["purchaseOrderRenumber"]>
+
+  export type PurchaseOrderRenumberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    actorName?: boolean
+    year?: boolean
+    plan?: boolean
+    fingerprint?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    appliedAt?: boolean
+  }, ExtArgs["result"]["purchaseOrderRenumber"]>
+
+  export type PurchaseOrderRenumberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    actorName?: boolean
+    year?: boolean
+    plan?: boolean
+    fingerprint?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    appliedAt?: boolean
+  }, ExtArgs["result"]["purchaseOrderRenumber"]>
+
+  export type PurchaseOrderRenumberSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    actorName?: boolean
+    year?: boolean
+    plan?: boolean
+    fingerprint?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    appliedAt?: boolean
+  }
+
+  export type PurchaseOrderRenumberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "actorName" | "year" | "plan" | "fingerprint" | "reason" | "createdAt" | "appliedAt", ExtArgs["result"]["purchaseOrderRenumber"]>
+
+  export type $PurchaseOrderRenumberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PurchaseOrderRenumber"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: number
+      actorName: string
+      year: number
+      plan: Prisma.JsonValue
+      fingerprint: string
+      reason: string | null
+      createdAt: Date
+      appliedAt: Date | null
+    }, ExtArgs["result"]["purchaseOrderRenumber"]>
+    composites: {}
+  }
+
+  type PurchaseOrderRenumberGetPayload<S extends boolean | null | undefined | PurchaseOrderRenumberDefaultArgs> = $Result.GetResult<Prisma.$PurchaseOrderRenumberPayload, S>
+
+  type PurchaseOrderRenumberCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PurchaseOrderRenumberFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PurchaseOrderRenumberCountAggregateInputType | true
+    }
+
+  export interface PurchaseOrderRenumberDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PurchaseOrderRenumber'], meta: { name: 'PurchaseOrderRenumber' } }
+    /**
+     * Find zero or one PurchaseOrderRenumber that matches the filter.
+     * @param {PurchaseOrderRenumberFindUniqueArgs} args - Arguments to find a PurchaseOrderRenumber
+     * @example
+     * // Get one PurchaseOrderRenumber
+     * const purchaseOrderRenumber = await prisma.purchaseOrderRenumber.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PurchaseOrderRenumberFindUniqueArgs>(args: SelectSubset<T, PurchaseOrderRenumberFindUniqueArgs<ExtArgs>>): Prisma__PurchaseOrderRenumberClient<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PurchaseOrderRenumber that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PurchaseOrderRenumberFindUniqueOrThrowArgs} args - Arguments to find a PurchaseOrderRenumber
+     * @example
+     * // Get one PurchaseOrderRenumber
+     * const purchaseOrderRenumber = await prisma.purchaseOrderRenumber.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PurchaseOrderRenumberFindUniqueOrThrowArgs>(args: SelectSubset<T, PurchaseOrderRenumberFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PurchaseOrderRenumberClient<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PurchaseOrderRenumber that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderRenumberFindFirstArgs} args - Arguments to find a PurchaseOrderRenumber
+     * @example
+     * // Get one PurchaseOrderRenumber
+     * const purchaseOrderRenumber = await prisma.purchaseOrderRenumber.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PurchaseOrderRenumberFindFirstArgs>(args?: SelectSubset<T, PurchaseOrderRenumberFindFirstArgs<ExtArgs>>): Prisma__PurchaseOrderRenumberClient<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PurchaseOrderRenumber that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderRenumberFindFirstOrThrowArgs} args - Arguments to find a PurchaseOrderRenumber
+     * @example
+     * // Get one PurchaseOrderRenumber
+     * const purchaseOrderRenumber = await prisma.purchaseOrderRenumber.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PurchaseOrderRenumberFindFirstOrThrowArgs>(args?: SelectSubset<T, PurchaseOrderRenumberFindFirstOrThrowArgs<ExtArgs>>): Prisma__PurchaseOrderRenumberClient<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PurchaseOrderRenumbers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderRenumberFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PurchaseOrderRenumbers
+     * const purchaseOrderRenumbers = await prisma.purchaseOrderRenumber.findMany()
+     * 
+     * // Get first 10 PurchaseOrderRenumbers
+     * const purchaseOrderRenumbers = await prisma.purchaseOrderRenumber.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const purchaseOrderRenumberWithIdOnly = await prisma.purchaseOrderRenumber.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PurchaseOrderRenumberFindManyArgs>(args?: SelectSubset<T, PurchaseOrderRenumberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PurchaseOrderRenumber.
+     * @param {PurchaseOrderRenumberCreateArgs} args - Arguments to create a PurchaseOrderRenumber.
+     * @example
+     * // Create one PurchaseOrderRenumber
+     * const PurchaseOrderRenumber = await prisma.purchaseOrderRenumber.create({
+     *   data: {
+     *     // ... data to create a PurchaseOrderRenumber
+     *   }
+     * })
+     * 
+     */
+    create<T extends PurchaseOrderRenumberCreateArgs>(args: SelectSubset<T, PurchaseOrderRenumberCreateArgs<ExtArgs>>): Prisma__PurchaseOrderRenumberClient<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PurchaseOrderRenumbers.
+     * @param {PurchaseOrderRenumberCreateManyArgs} args - Arguments to create many PurchaseOrderRenumbers.
+     * @example
+     * // Create many PurchaseOrderRenumbers
+     * const purchaseOrderRenumber = await prisma.purchaseOrderRenumber.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PurchaseOrderRenumberCreateManyArgs>(args?: SelectSubset<T, PurchaseOrderRenumberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PurchaseOrderRenumbers and returns the data saved in the database.
+     * @param {PurchaseOrderRenumberCreateManyAndReturnArgs} args - Arguments to create many PurchaseOrderRenumbers.
+     * @example
+     * // Create many PurchaseOrderRenumbers
+     * const purchaseOrderRenumber = await prisma.purchaseOrderRenumber.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PurchaseOrderRenumbers and only return the `id`
+     * const purchaseOrderRenumberWithIdOnly = await prisma.purchaseOrderRenumber.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PurchaseOrderRenumberCreateManyAndReturnArgs>(args?: SelectSubset<T, PurchaseOrderRenumberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PurchaseOrderRenumber.
+     * @param {PurchaseOrderRenumberDeleteArgs} args - Arguments to delete one PurchaseOrderRenumber.
+     * @example
+     * // Delete one PurchaseOrderRenumber
+     * const PurchaseOrderRenumber = await prisma.purchaseOrderRenumber.delete({
+     *   where: {
+     *     // ... filter to delete one PurchaseOrderRenumber
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PurchaseOrderRenumberDeleteArgs>(args: SelectSubset<T, PurchaseOrderRenumberDeleteArgs<ExtArgs>>): Prisma__PurchaseOrderRenumberClient<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PurchaseOrderRenumber.
+     * @param {PurchaseOrderRenumberUpdateArgs} args - Arguments to update one PurchaseOrderRenumber.
+     * @example
+     * // Update one PurchaseOrderRenumber
+     * const purchaseOrderRenumber = await prisma.purchaseOrderRenumber.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PurchaseOrderRenumberUpdateArgs>(args: SelectSubset<T, PurchaseOrderRenumberUpdateArgs<ExtArgs>>): Prisma__PurchaseOrderRenumberClient<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PurchaseOrderRenumbers.
+     * @param {PurchaseOrderRenumberDeleteManyArgs} args - Arguments to filter PurchaseOrderRenumbers to delete.
+     * @example
+     * // Delete a few PurchaseOrderRenumbers
+     * const { count } = await prisma.purchaseOrderRenumber.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PurchaseOrderRenumberDeleteManyArgs>(args?: SelectSubset<T, PurchaseOrderRenumberDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PurchaseOrderRenumbers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderRenumberUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PurchaseOrderRenumbers
+     * const purchaseOrderRenumber = await prisma.purchaseOrderRenumber.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PurchaseOrderRenumberUpdateManyArgs>(args: SelectSubset<T, PurchaseOrderRenumberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PurchaseOrderRenumbers and returns the data updated in the database.
+     * @param {PurchaseOrderRenumberUpdateManyAndReturnArgs} args - Arguments to update many PurchaseOrderRenumbers.
+     * @example
+     * // Update many PurchaseOrderRenumbers
+     * const purchaseOrderRenumber = await prisma.purchaseOrderRenumber.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PurchaseOrderRenumbers and only return the `id`
+     * const purchaseOrderRenumberWithIdOnly = await prisma.purchaseOrderRenumber.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PurchaseOrderRenumberUpdateManyAndReturnArgs>(args: SelectSubset<T, PurchaseOrderRenumberUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PurchaseOrderRenumber.
+     * @param {PurchaseOrderRenumberUpsertArgs} args - Arguments to update or create a PurchaseOrderRenumber.
+     * @example
+     * // Update or create a PurchaseOrderRenumber
+     * const purchaseOrderRenumber = await prisma.purchaseOrderRenumber.upsert({
+     *   create: {
+     *     // ... data to create a PurchaseOrderRenumber
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PurchaseOrderRenumber we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PurchaseOrderRenumberUpsertArgs>(args: SelectSubset<T, PurchaseOrderRenumberUpsertArgs<ExtArgs>>): Prisma__PurchaseOrderRenumberClient<$Result.GetResult<Prisma.$PurchaseOrderRenumberPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PurchaseOrderRenumbers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderRenumberCountArgs} args - Arguments to filter PurchaseOrderRenumbers to count.
+     * @example
+     * // Count the number of PurchaseOrderRenumbers
+     * const count = await prisma.purchaseOrderRenumber.count({
+     *   where: {
+     *     // ... the filter for the PurchaseOrderRenumbers we want to count
+     *   }
+     * })
+    **/
+    count<T extends PurchaseOrderRenumberCountArgs>(
+      args?: Subset<T, PurchaseOrderRenumberCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PurchaseOrderRenumberCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PurchaseOrderRenumber.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderRenumberAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PurchaseOrderRenumberAggregateArgs>(args: Subset<T, PurchaseOrderRenumberAggregateArgs>): Prisma.PrismaPromise<GetPurchaseOrderRenumberAggregateType<T>>
+
+    /**
+     * Group by PurchaseOrderRenumber.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseOrderRenumberGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PurchaseOrderRenumberGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PurchaseOrderRenumberGroupByArgs['orderBy'] }
+        : { orderBy?: PurchaseOrderRenumberGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PurchaseOrderRenumberGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPurchaseOrderRenumberGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PurchaseOrderRenumber model
+   */
+  readonly fields: PurchaseOrderRenumberFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PurchaseOrderRenumber.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PurchaseOrderRenumberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PurchaseOrderRenumber model
+   */
+  interface PurchaseOrderRenumberFieldRefs {
+    readonly id: FieldRef<"PurchaseOrderRenumber", 'String'>
+    readonly userId: FieldRef<"PurchaseOrderRenumber", 'Int'>
+    readonly actorName: FieldRef<"PurchaseOrderRenumber", 'String'>
+    readonly year: FieldRef<"PurchaseOrderRenumber", 'Int'>
+    readonly plan: FieldRef<"PurchaseOrderRenumber", 'Json'>
+    readonly fingerprint: FieldRef<"PurchaseOrderRenumber", 'String'>
+    readonly reason: FieldRef<"PurchaseOrderRenumber", 'String'>
+    readonly createdAt: FieldRef<"PurchaseOrderRenumber", 'DateTime'>
+    readonly appliedAt: FieldRef<"PurchaseOrderRenumber", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PurchaseOrderRenumber findUnique
+   */
+  export type PurchaseOrderRenumberFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * Filter, which PurchaseOrderRenumber to fetch.
+     */
+    where: PurchaseOrderRenumberWhereUniqueInput
+  }
+
+  /**
+   * PurchaseOrderRenumber findUniqueOrThrow
+   */
+  export type PurchaseOrderRenumberFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * Filter, which PurchaseOrderRenumber to fetch.
+     */
+    where: PurchaseOrderRenumberWhereUniqueInput
+  }
+
+  /**
+   * PurchaseOrderRenumber findFirst
+   */
+  export type PurchaseOrderRenumberFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * Filter, which PurchaseOrderRenumber to fetch.
+     */
+    where?: PurchaseOrderRenumberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurchaseOrderRenumbers to fetch.
+     */
+    orderBy?: PurchaseOrderRenumberOrderByWithRelationInput | PurchaseOrderRenumberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PurchaseOrderRenumbers.
+     */
+    cursor?: PurchaseOrderRenumberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurchaseOrderRenumbers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurchaseOrderRenumbers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PurchaseOrderRenumbers.
+     */
+    distinct?: PurchaseOrderRenumberScalarFieldEnum | PurchaseOrderRenumberScalarFieldEnum[]
+  }
+
+  /**
+   * PurchaseOrderRenumber findFirstOrThrow
+   */
+  export type PurchaseOrderRenumberFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * Filter, which PurchaseOrderRenumber to fetch.
+     */
+    where?: PurchaseOrderRenumberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurchaseOrderRenumbers to fetch.
+     */
+    orderBy?: PurchaseOrderRenumberOrderByWithRelationInput | PurchaseOrderRenumberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PurchaseOrderRenumbers.
+     */
+    cursor?: PurchaseOrderRenumberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurchaseOrderRenumbers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurchaseOrderRenumbers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PurchaseOrderRenumbers.
+     */
+    distinct?: PurchaseOrderRenumberScalarFieldEnum | PurchaseOrderRenumberScalarFieldEnum[]
+  }
+
+  /**
+   * PurchaseOrderRenumber findMany
+   */
+  export type PurchaseOrderRenumberFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * Filter, which PurchaseOrderRenumbers to fetch.
+     */
+    where?: PurchaseOrderRenumberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PurchaseOrderRenumbers to fetch.
+     */
+    orderBy?: PurchaseOrderRenumberOrderByWithRelationInput | PurchaseOrderRenumberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PurchaseOrderRenumbers.
+     */
+    cursor?: PurchaseOrderRenumberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PurchaseOrderRenumbers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PurchaseOrderRenumbers.
+     */
+    skip?: number
+    distinct?: PurchaseOrderRenumberScalarFieldEnum | PurchaseOrderRenumberScalarFieldEnum[]
+  }
+
+  /**
+   * PurchaseOrderRenumber create
+   */
+  export type PurchaseOrderRenumberCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PurchaseOrderRenumber.
+     */
+    data: XOR<PurchaseOrderRenumberCreateInput, PurchaseOrderRenumberUncheckedCreateInput>
+  }
+
+  /**
+   * PurchaseOrderRenumber createMany
+   */
+  export type PurchaseOrderRenumberCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PurchaseOrderRenumbers.
+     */
+    data: PurchaseOrderRenumberCreateManyInput | PurchaseOrderRenumberCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PurchaseOrderRenumber createManyAndReturn
+   */
+  export type PurchaseOrderRenumberCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * The data used to create many PurchaseOrderRenumbers.
+     */
+    data: PurchaseOrderRenumberCreateManyInput | PurchaseOrderRenumberCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PurchaseOrderRenumber update
+   */
+  export type PurchaseOrderRenumberUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PurchaseOrderRenumber.
+     */
+    data: XOR<PurchaseOrderRenumberUpdateInput, PurchaseOrderRenumberUncheckedUpdateInput>
+    /**
+     * Choose, which PurchaseOrderRenumber to update.
+     */
+    where: PurchaseOrderRenumberWhereUniqueInput
+  }
+
+  /**
+   * PurchaseOrderRenumber updateMany
+   */
+  export type PurchaseOrderRenumberUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PurchaseOrderRenumbers.
+     */
+    data: XOR<PurchaseOrderRenumberUpdateManyMutationInput, PurchaseOrderRenumberUncheckedUpdateManyInput>
+    /**
+     * Filter which PurchaseOrderRenumbers to update
+     */
+    where?: PurchaseOrderRenumberWhereInput
+    /**
+     * Limit how many PurchaseOrderRenumbers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PurchaseOrderRenumber updateManyAndReturn
+   */
+  export type PurchaseOrderRenumberUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * The data used to update PurchaseOrderRenumbers.
+     */
+    data: XOR<PurchaseOrderRenumberUpdateManyMutationInput, PurchaseOrderRenumberUncheckedUpdateManyInput>
+    /**
+     * Filter which PurchaseOrderRenumbers to update
+     */
+    where?: PurchaseOrderRenumberWhereInput
+    /**
+     * Limit how many PurchaseOrderRenumbers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PurchaseOrderRenumber upsert
+   */
+  export type PurchaseOrderRenumberUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PurchaseOrderRenumber to update in case it exists.
+     */
+    where: PurchaseOrderRenumberWhereUniqueInput
+    /**
+     * In case the PurchaseOrderRenumber found by the `where` argument doesn't exist, create a new PurchaseOrderRenumber with this data.
+     */
+    create: XOR<PurchaseOrderRenumberCreateInput, PurchaseOrderRenumberUncheckedCreateInput>
+    /**
+     * In case the PurchaseOrderRenumber was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PurchaseOrderRenumberUpdateInput, PurchaseOrderRenumberUncheckedUpdateInput>
+  }
+
+  /**
+   * PurchaseOrderRenumber delete
+   */
+  export type PurchaseOrderRenumberDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+    /**
+     * Filter which PurchaseOrderRenumber to delete.
+     */
+    where: PurchaseOrderRenumberWhereUniqueInput
+  }
+
+  /**
+   * PurchaseOrderRenumber deleteMany
+   */
+  export type PurchaseOrderRenumberDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PurchaseOrderRenumbers to delete
+     */
+    where?: PurchaseOrderRenumberWhereInput
+    /**
+     * Limit how many PurchaseOrderRenumbers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PurchaseOrderRenumber without action
+   */
+  export type PurchaseOrderRenumberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PurchaseOrderRenumber
+     */
+    select?: PurchaseOrderRenumberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PurchaseOrderRenumber
+     */
+    omit?: PurchaseOrderRenumberOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model PurchaseOrderCreation
    */
 
@@ -86573,6 +87745,21 @@ export namespace Prisma {
   export type PurchaseOrderConditionScalarFieldEnum = (typeof PurchaseOrderConditionScalarFieldEnum)[keyof typeof PurchaseOrderConditionScalarFieldEnum]
 
 
+  export const PurchaseOrderRenumberScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    actorName: 'actorName',
+    year: 'year',
+    plan: 'plan',
+    fingerprint: 'fingerprint',
+    reason: 'reason',
+    createdAt: 'createdAt',
+    appliedAt: 'appliedAt'
+  };
+
+  export type PurchaseOrderRenumberScalarFieldEnum = (typeof PurchaseOrderRenumberScalarFieldEnum)[keyof typeof PurchaseOrderRenumberScalarFieldEnum]
+
+
   export const PurchaseOrderCreationScalarFieldEnum: {
     userId: 'userId',
     key: 'key',
@@ -91077,6 +92264,80 @@ export namespace Prisma {
     normalizedContent?: StringWithAggregatesFilter<"PurchaseOrderCondition"> | string
     createdAt?: DateTimeWithAggregatesFilter<"PurchaseOrderCondition"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PurchaseOrderCondition"> | Date | string
+  }
+
+  export type PurchaseOrderRenumberWhereInput = {
+    AND?: PurchaseOrderRenumberWhereInput | PurchaseOrderRenumberWhereInput[]
+    OR?: PurchaseOrderRenumberWhereInput[]
+    NOT?: PurchaseOrderRenumberWhereInput | PurchaseOrderRenumberWhereInput[]
+    id?: UuidFilter<"PurchaseOrderRenumber"> | string
+    userId?: IntFilter<"PurchaseOrderRenumber"> | number
+    actorName?: StringFilter<"PurchaseOrderRenumber"> | string
+    year?: IntFilter<"PurchaseOrderRenumber"> | number
+    plan?: JsonFilter<"PurchaseOrderRenumber">
+    fingerprint?: StringFilter<"PurchaseOrderRenumber"> | string
+    reason?: StringNullableFilter<"PurchaseOrderRenumber"> | string | null
+    createdAt?: DateTimeFilter<"PurchaseOrderRenumber"> | Date | string
+    appliedAt?: DateTimeNullableFilter<"PurchaseOrderRenumber"> | Date | string | null
+  }
+
+  export type PurchaseOrderRenumberOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    actorName?: SortOrder
+    year?: SortOrder
+    plan?: SortOrder
+    fingerprint?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    appliedAt?: SortOrderInput | SortOrder
+  }
+
+  export type PurchaseOrderRenumberWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PurchaseOrderRenumberWhereInput | PurchaseOrderRenumberWhereInput[]
+    OR?: PurchaseOrderRenumberWhereInput[]
+    NOT?: PurchaseOrderRenumberWhereInput | PurchaseOrderRenumberWhereInput[]
+    userId?: IntFilter<"PurchaseOrderRenumber"> | number
+    actorName?: StringFilter<"PurchaseOrderRenumber"> | string
+    year?: IntFilter<"PurchaseOrderRenumber"> | number
+    plan?: JsonFilter<"PurchaseOrderRenumber">
+    fingerprint?: StringFilter<"PurchaseOrderRenumber"> | string
+    reason?: StringNullableFilter<"PurchaseOrderRenumber"> | string | null
+    createdAt?: DateTimeFilter<"PurchaseOrderRenumber"> | Date | string
+    appliedAt?: DateTimeNullableFilter<"PurchaseOrderRenumber"> | Date | string | null
+  }, "id">
+
+  export type PurchaseOrderRenumberOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    actorName?: SortOrder
+    year?: SortOrder
+    plan?: SortOrder
+    fingerprint?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    appliedAt?: SortOrderInput | SortOrder
+    _count?: PurchaseOrderRenumberCountOrderByAggregateInput
+    _avg?: PurchaseOrderRenumberAvgOrderByAggregateInput
+    _max?: PurchaseOrderRenumberMaxOrderByAggregateInput
+    _min?: PurchaseOrderRenumberMinOrderByAggregateInput
+    _sum?: PurchaseOrderRenumberSumOrderByAggregateInput
+  }
+
+  export type PurchaseOrderRenumberScalarWhereWithAggregatesInput = {
+    AND?: PurchaseOrderRenumberScalarWhereWithAggregatesInput | PurchaseOrderRenumberScalarWhereWithAggregatesInput[]
+    OR?: PurchaseOrderRenumberScalarWhereWithAggregatesInput[]
+    NOT?: PurchaseOrderRenumberScalarWhereWithAggregatesInput | PurchaseOrderRenumberScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PurchaseOrderRenumber"> | string
+    userId?: IntWithAggregatesFilter<"PurchaseOrderRenumber"> | number
+    actorName?: StringWithAggregatesFilter<"PurchaseOrderRenumber"> | string
+    year?: IntWithAggregatesFilter<"PurchaseOrderRenumber"> | number
+    plan?: JsonWithAggregatesFilter<"PurchaseOrderRenumber">
+    fingerprint?: StringWithAggregatesFilter<"PurchaseOrderRenumber"> | string
+    reason?: StringNullableWithAggregatesFilter<"PurchaseOrderRenumber"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PurchaseOrderRenumber"> | Date | string
+    appliedAt?: DateTimeNullableWithAggregatesFilter<"PurchaseOrderRenumber"> | Date | string | null
   }
 
   export type PurchaseOrderCreationWhereInput = {
@@ -96630,6 +97891,90 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PurchaseOrderRenumberCreateInput = {
+    id: string
+    userId: number
+    actorName: string
+    year: number
+    plan: JsonNullValueInput | InputJsonValue
+    fingerprint: string
+    reason?: string | null
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+  }
+
+  export type PurchaseOrderRenumberUncheckedCreateInput = {
+    id: string
+    userId: number
+    actorName: string
+    year: number
+    plan: JsonNullValueInput | InputJsonValue
+    fingerprint: string
+    reason?: string | null
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+  }
+
+  export type PurchaseOrderRenumberUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
+    actorName?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    plan?: JsonNullValueInput | InputJsonValue
+    fingerprint?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PurchaseOrderRenumberUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
+    actorName?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    plan?: JsonNullValueInput | InputJsonValue
+    fingerprint?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PurchaseOrderRenumberCreateManyInput = {
+    id: string
+    userId: number
+    actorName: string
+    year: number
+    plan: JsonNullValueInput | InputJsonValue
+    fingerprint: string
+    reason?: string | null
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+  }
+
+  export type PurchaseOrderRenumberUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
+    actorName?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    plan?: JsonNullValueInput | InputJsonValue
+    fingerprint?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PurchaseOrderRenumberUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
+    actorName?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    plan?: JsonNullValueInput | InputJsonValue
+    fingerprint?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type PurchaseOrderCreationCreateInput = {
     userId: number
     key: string
@@ -101973,6 +103318,114 @@ export namespace Prisma {
     mode?: QueryMode
     not?: NestedUuidFilter<$PrismaModel> | string
   }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type PurchaseOrderRenumberCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    actorName?: SortOrder
+    year?: SortOrder
+    plan?: SortOrder
+    fingerprint?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+    appliedAt?: SortOrder
+  }
+
+  export type PurchaseOrderRenumberAvgOrderByAggregateInput = {
+    userId?: SortOrder
+    year?: SortOrder
+  }
+
+  export type PurchaseOrderRenumberMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    actorName?: SortOrder
+    year?: SortOrder
+    fingerprint?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+    appliedAt?: SortOrder
+  }
+
+  export type PurchaseOrderRenumberMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    actorName?: SortOrder
+    year?: SortOrder
+    fingerprint?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+    appliedAt?: SortOrder
+  }
+
+  export type PurchaseOrderRenumberSumOrderByAggregateInput = {
+    userId?: SortOrder
+    year?: SortOrder
+  }
+
+  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
 
   export type PurchaseOrderCreationUserIdKeyCompoundUniqueInput = {
     userId: number
@@ -102011,21 +103464,6 @@ export namespace Prisma {
   export type PurchaseOrderCreationSumOrderByAggregateInput = {
     userId?: SortOrder
     purchaseOrderId?: SortOrder
-  }
-
-  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type EnumPaymentMethodFilter<$PrismaModel = never> = {
@@ -103455,29 +104893,6 @@ export namespace Prisma {
     notIn?: $Enums.ExpiringDocumentHistoryAction[] | ListEnumExpiringDocumentHistoryActionFieldRefInput<$PrismaModel>
     not?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel> | $Enums.ExpiringDocumentHistoryAction
   }
-  export type JsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type ExpiringDocumentScalarRelationFilter = {
     is?: ExpiringDocumentWhereInput
@@ -103529,32 +104944,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel>
     _max?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel>
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type EnumExpiringDocumentAlertLevelFilter<$PrismaModel = never> = {
@@ -110966,6 +112355,29 @@ export namespace Prisma {
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
   }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
@@ -111152,29 +112564,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel>
     _max?: NestedEnumExpiringDocumentHistoryActionFilter<$PrismaModel>
-  }
-  export type NestedJsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumExpiringDocumentAlertLevelFilter<$PrismaModel = never> = {

@@ -841,48 +841,54 @@ export class PurchaseOrderService {
   ) {
     this.logger.log(`Updating purchase order with id: ${purchaseOrderId}`);
 
-    // Obtener el estado anterior si hay cambio de estado
     let previousStatus: string | null = null;
-    if (updatePurchaseOrderDto.status) {
-      const currentPO = await this.prisma.purchaseOrder.findUnique({
-        where: { purchaseOrderId },
-        select: { status: true },
-      });
-      previousStatus = currentPO?.status || null;
-    }
+    const updatedPurchaseOrder = await this.prisma.$transaction(
+      async (tx) => {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(20260921, 1)`;
+        // Obtener el estado anterior si hay cambio de estado
+        if (updatePurchaseOrderDto.status) {
+          const currentPO = await tx.purchaseOrder.findUnique({
+            where: { purchaseOrderId },
+            select: { status: true },
+          });
+          previousStatus = currentPO?.status || null;
+        }
 
-    // Only the editable reference can change; keep the issued number/year/suffix.
-    const { code, ...otherData } = updatePurchaseOrderDto;
-    const updateData: UpdatePurchaseOrderDto = { ...otherData };
-    if (code !== undefined) {
-      const reference = code.trim();
-      if (!reference || reference.includes('/')) {
-        throw new BadRequestException(
-          'El código de referencia es obligatorio y no puede contener /.',
-        );
-      }
-      const current = await this.prisma.purchaseOrder.findUnique({
-        where: { purchaseOrderId },
-        select: { code: true },
-      });
-      const parts = current?.code.match(
-        /^(No\s+\d+-\d{4}\/)([^/]+)(\/[^/]+)$/i,
-      );
-      if (!parts) {
-        throw new BadRequestException(
-          'El código existente no tiene el formato esperado. No se modificó la orden.',
-        );
-      }
-      updateData.code = `${parts[1]}${reference}${parts[3]}`;
-    }
+        // Only the editable reference can change; keep the issued number/year/suffix.
+        const { code, ...otherData } = updatePurchaseOrderDto;
+        const updateData: UpdatePurchaseOrderDto = { ...otherData };
+        if (code !== undefined) {
+          const reference = code.trim();
+          if (!reference || reference.includes('/')) {
+            throw new BadRequestException(
+              'El código de referencia es obligatorio y no puede contener /.',
+            );
+          }
+          const current = await tx.purchaseOrder.findUnique({
+            where: { purchaseOrderId },
+            select: { code: true },
+          });
+          const parts = current?.code.match(
+            /^(No\s+\d+-\d{4}\/)([^/]+)(\/[^/]+)$/i,
+          );
+          if (!parts) {
+            throw new BadRequestException(
+              'El código existente no tiene el formato esperado. No se modificó la orden.',
+            );
+          }
+          updateData.code = `${parts[1]}${reference}${parts[3]}`;
+        }
 
-    const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
-      where: { purchaseOrderId },
-      data: updateData,
-      include: {
-        project: true,
+        return tx.purchaseOrder.update({
+          where: { purchaseOrderId },
+          data: updateData,
+          include: {
+            project: true,
+          },
+        });
       },
-    });
+      { maxWait: 15000, timeout: 30000 },
+    );
 
     if (!updatedPurchaseOrder) {
       this.logger.error(

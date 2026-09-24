@@ -1053,6 +1053,20 @@ model PurchaseOrderCondition {
 }
 
 // Receipt deliberately survives hard deletion of its order, preventing replay.
+// No foreign keys: history and retry receipts survive deletion of orders/users.
+model PurchaseOrderRenumber {
+  id String @id @db.Uuid
+  userId Int
+  actorName String
+  year Int
+  plan Json
+  fingerprint String @db.VarChar(64)
+  reason String?
+  createdAt DateTime @default(now())
+  appliedAt DateTime?
+  @@index([year, appliedAt])
+}
+
 model PurchaseOrderCreation {
   userId Int
   key String @db.Uuid

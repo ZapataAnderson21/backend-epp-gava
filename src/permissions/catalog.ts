@@ -34,7 +34,11 @@ export const permissionModules = [
     key: 'orders',
     label: 'Órdenes de compra',
     actions: ['view', 'manage', 'delete', 'export'],
-    special: [['authorize', 'Autorizar / cancelar']],
+    special: [
+      ['authorize', 'Autorizar / cancelar'],
+      ['renumber', 'Corregir numeración'],
+      ['renumberHistory', 'Ver historial de numeración'],
+    ],
   },
   {
     key: 'quotations',
@@ -169,7 +173,9 @@ export function normalizePermissions(input: string[]): string[] {
 // Used once by the migration; runtime authorization never depends on role names.
 export function initialPermissions(name: string): string[] {
   if (['GERENTE', 'ADMINISTRADORA'].includes(name))
-    return [...allPermissions].sort();
+    return allPermissions
+      .filter((p) => !['orders.renumber', 'orders.renumberHistory'].includes(p))
+      .sort();
   const permissions = [
     'dashboard.view',
     'projects.view',
@@ -195,7 +201,13 @@ export function initialPermissions(name: string): string[] {
     ]) {
       permissions.push(
         ...allPermissions.filter(
-          (p) => p.startsWith(`${module}.`) && p !== 'orders.authorize',
+          (p) =>
+            p.startsWith(`${module}.`) &&
+            ![
+              'orders.authorize',
+              'orders.renumber',
+              'orders.renumberHistory',
+            ].includes(p),
         ),
       );
     }

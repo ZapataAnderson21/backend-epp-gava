@@ -9,6 +9,7 @@ export const controllerModules: Record<string, string> = {
   CategoryResourceController: 'resources',
   PurchaseOrderConditionController: 'resources',
   PurchaseOrderController: 'orders',
+  RenumberController: 'orders',
   PurchaseOrderDraftController: 'orders',
   ResourcePurchaseOrderController: 'orders',
   QuotationController: 'quotations',
@@ -48,6 +49,13 @@ export function endpointPermissions(
     return [];
   const module = controllerModules[controller];
   if (!module) return null;
+  if (controller === 'RenumberController') {
+    if (handler === 'history')
+      return [['orders.view'], ['orders.renumberHistory']];
+    if (['candidates', 'preview', 'apply'].includes(handler))
+      return [['orders.view'], ['orders.renumber']];
+    return null;
+  }
   if (controller === 'RequestFormDraftController')
     return [['requests.view'], ['requests.manage']];
   if (controller === 'PurchaseOrderDraftController')

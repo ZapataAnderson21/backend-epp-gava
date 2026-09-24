@@ -132,3 +132,9 @@ describe('Sensitive operation guard', () => {
     await expect(check.run()).rejects.toBeInstanceOf(ForbiddenException);
   });
 });
+
+it('enforces renumber permission on the API without requiring finance access', async () => {
+  await expect(fixture(['orders.view', 'orders.renumber'], 'RenumberController', 'apply', {reason:'Corrección'}, 'POST').run()).resolves.toBe(true);
+  await expect(fixture(['orders.view', 'orders.manage', 'finance.view'], 'RenumberController', 'apply', {}, 'POST').run()).rejects.toBeInstanceOf(ForbiddenException);
+  await expect(fixture(['orders.view', 'orders.renumberHistory'], 'RenumberController', 'history', {}, 'GET').run()).resolves.toBe(true);
+});

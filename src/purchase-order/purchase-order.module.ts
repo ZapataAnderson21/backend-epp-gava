@@ -6,10 +6,21 @@ import { NotificationModule } from 'src/notification/notification.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { PurchaseOrderDraftController } from './purchase-order-draft.controller';
 import { PurchaseOrderDraftService } from './purchase-order-draft.service';
+import { RenumberController } from './renumber.controller';
+import { RenumberService } from './renumber.service';
 
 @Module({
   imports: [NotificationModule, PrismaModule],
-  controllers: [PurchaseOrderController, PurchaseOrderDraftController],
-  providers: [PurchaseOrderService, PdfService, PurchaseOrderDraftService],
+  controllers: [
+    PurchaseOrderController,
+    PurchaseOrderDraftController,
+    RenumberController,
+  ],
+  providers: [
+    PurchaseOrderService,
+    PdfService,
+    PurchaseOrderDraftService,
+    RenumberService,
+  ],
 })
 export class PurchaseOrderModule {}
