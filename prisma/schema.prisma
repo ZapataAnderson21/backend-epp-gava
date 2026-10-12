@@ -952,7 +952,7 @@ model Supplier {
   name          String               @unique
   abbreviation  String               @db.VarChar(10)
   contactName   String
-  phone         String
+  phone         String?
   email         String?              @db.Citext
   address       String?
   documentType  SupplierDocumentType @default(ruc)

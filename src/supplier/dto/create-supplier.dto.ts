@@ -50,17 +50,18 @@ export class CreateSupplierDto {
   @IsString()
   contactName!: string;
 
-  @ApiPropertyOptional({ example: '987654321' })
+  @ApiPropertyOptional({ example: '987654321', nullable: true })
+  @Transform(({ value }) => toNullIfEmpty(value))
+  @IsOptional()
   @Length(9, 9, { message: 'El teléfono debe tener exactamente 9 caracteres.' })
   @IsString()
-  @IsNotEmpty({ message: 'El teléfono es obligatorio.' })
-  phone!: string;
+  phone?: string | null;
 
-  @ApiPropertyOptional({ example: 'ventas@proveedor.com' })
+  @ApiPropertyOptional({ example: 'ventas@proveedor.com', nullable: true })
   @Transform(({ value }) => toNullIfEmpty(value))
   @IsOptional()
   @IsEmail({}, { message: 'El email no tiene formato válido.' })
-  email?: string;
+  email?: string | null;
 
   @ApiPropertyOptional({ example: 'Av. Siempre Viva 123' })
   @IsString()

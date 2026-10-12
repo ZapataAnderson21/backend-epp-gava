@@ -53283,7 +53283,7 @@ export namespace Prisma {
     name: string
     abbreviation: string
     contactName: string
-    phone: string
+    phone: string | null
     email: string | null
     address: string | null
     documentType: $Enums.SupplierDocumentType
@@ -53412,7 +53412,7 @@ export namespace Prisma {
       name: string
       abbreviation: string
       contactName: string
-      phone: string
+      phone: string | null
       email: string | null
       address: string | null
       documentType: $Enums.SupplierDocumentType
@@ -91957,7 +91957,7 @@ export namespace Prisma {
     name?: StringFilter<"Supplier"> | string
     abbreviation?: StringFilter<"Supplier"> | string
     contactName?: StringFilter<"Supplier"> | string
-    phone?: StringFilter<"Supplier"> | string
+    phone?: StringNullableFilter<"Supplier"> | string | null
     email?: StringNullableFilter<"Supplier"> | string | null
     address?: StringNullableFilter<"Supplier"> | string | null
     documentType?: EnumSupplierDocumentTypeFilter<"Supplier"> | $Enums.SupplierDocumentType
@@ -91977,7 +91977,7 @@ export namespace Prisma {
     name?: SortOrder
     abbreviation?: SortOrder
     contactName?: SortOrder
-    phone?: SortOrder
+    phone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     documentType?: SortOrder
@@ -92002,7 +92002,7 @@ export namespace Prisma {
     NOT?: SupplierWhereInput | SupplierWhereInput[]
     abbreviation?: StringFilter<"Supplier"> | string
     contactName?: StringFilter<"Supplier"> | string
-    phone?: StringFilter<"Supplier"> | string
+    phone?: StringNullableFilter<"Supplier"> | string | null
     email?: StringNullableFilter<"Supplier"> | string | null
     address?: StringNullableFilter<"Supplier"> | string | null
     documentType?: EnumSupplierDocumentTypeFilter<"Supplier"> | $Enums.SupplierDocumentType
@@ -92020,7 +92020,7 @@ export namespace Prisma {
     name?: SortOrder
     abbreviation?: SortOrder
     contactName?: SortOrder
-    phone?: SortOrder
+    phone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     documentType?: SortOrder
@@ -92047,7 +92047,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Supplier"> | string
     abbreviation?: StringWithAggregatesFilter<"Supplier"> | string
     contactName?: StringWithAggregatesFilter<"Supplier"> | string
-    phone?: StringWithAggregatesFilter<"Supplier"> | string
+    phone?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
     email?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
     address?: StringNullableWithAggregatesFilter<"Supplier"> | string | null
     documentType?: EnumSupplierDocumentTypeWithAggregatesFilter<"Supplier"> | $Enums.SupplierDocumentType
@@ -97557,7 +97557,7 @@ export namespace Prisma {
     name: string
     abbreviation: string
     contactName: string
-    phone: string
+    phone?: string | null
     email?: string | null
     address?: string | null
     documentType?: $Enums.SupplierDocumentType
@@ -97577,7 +97577,7 @@ export namespace Prisma {
     name: string
     abbreviation: string
     contactName: string
-    phone: string
+    phone?: string | null
     email?: string | null
     address?: string | null
     documentType?: $Enums.SupplierDocumentType
@@ -97596,7 +97596,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
@@ -97616,7 +97616,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
@@ -97636,7 +97636,7 @@ export namespace Prisma {
     name: string
     abbreviation: string
     contactName: string
-    phone: string
+    phone?: string | null
     email?: string | null
     address?: string | null
     documentType?: $Enums.SupplierDocumentType
@@ -97654,7 +97654,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
@@ -97673,7 +97673,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
@@ -127320,7 +127320,7 @@ export namespace Prisma {
     name: string
     abbreviation: string
     contactName: string
-    phone: string
+    phone?: string | null
     email?: string | null
     address?: string | null
     documentType?: $Enums.SupplierDocumentType
@@ -127339,7 +127339,7 @@ export namespace Prisma {
     name: string
     abbreviation: string
     contactName: string
-    phone: string
+    phone?: string | null
     email?: string | null
     address?: string | null
     documentType?: $Enums.SupplierDocumentType
@@ -127544,7 +127544,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
@@ -127563,7 +127563,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     abbreviation?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     documentType?: EnumSupplierDocumentTypeFieldUpdateOperationsInput | $Enums.SupplierDocumentType
