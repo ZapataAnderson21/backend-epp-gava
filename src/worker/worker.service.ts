@@ -20,6 +20,21 @@ export class WorkerService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
+  private parseBirthDate(birthDate: unknown): Date {
+    if (typeof birthDate !== 'string') {
+      throw new BadRequestException('birthDate con tipo no soportado.');
+    }
+    const iso =
+      birthDate.length === 10 ? `${birthDate}T00:00:00.000Z` : birthDate;
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) {
+      throw new BadRequestException(
+        'birthDate inválida. Use formato YYYY-MM-DD o ISO-8601.',
+      );
+    }
+    return d;
+  }
+
   async create(createWorkerDto: CreateWorkerDto) {
     this.logger.log(
       `Creating worker with data: ${JSON.stringify(createWorkerDto)}`,
@@ -55,10 +70,12 @@ export class WorkerService {
       }
     }
 
-    const data = {
-      ...createWorkerDto,
+    const { birthDate, ...rest } = createWorkerDto;
+    const data: Prisma.WorkerUncheckedCreateInput = {
+      ...rest,
       phone: emptyToNull(createWorkerDto.phone),
       personalEmail: emptyToNull(createWorkerDto.personalEmail),
+      ...(birthDate ? { birthDate: this.parseBirthDate(birthDate) } : {}),
     };
 
     const worker = await this.prismaService.worker.create({
@@ -234,21 +251,7 @@ export class WorkerService {
     const data: Prisma.WorkerUncheckedUpdateInput = { ...rest };
 
     if (birthDate !== undefined) {
-      if (typeof birthDate === 'string') {
-        const iso =
-          birthDate.length === 10
-            ? `${birthDate}T00:00:00.000Z`
-            : birthDate;
-        const d = new Date(iso);
-        if (isNaN(d.getTime())) {
-          throw new BadRequestException(
-            'birthDate inválida. Use formato YYYY-MM-DD o ISO-8601.',
-          );
-        }
-        data.birthDate = d;
-      } else {
-        throw new BadRequestException('birthDate con tipo no soportado.');
-      }
+      data.birthDate = this.parseBirthDate(birthDate);
     }
 
     if (dto.phone !== undefined) data.phone = emptyToNull(dto.phone);
