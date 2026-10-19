@@ -22,22 +22,29 @@ describe('Supplier abbreviation validation', () => {
     expect(validateSync(dto)).toEqual([]);
   });
 
-  it.each(['ABCDEFGHI', 'ABCDEFGH12'])(
-    'acepta %s al crear y editar',
-    (abbreviation) => {
-      expect(
-        validateSync(
-          plainToInstance(CreateSupplierDto, {
-            ...validSupplier,
-            abbreviation,
-          }),
-        ),
-      ).toEqual([]);
-      expect(
-        validateSync(plainToInstance(UpdateSupplierDto, { abbreviation })),
-      ).toEqual([]);
-    },
-  );
+  it.each([
+    'A',
+    '&',
+    'ABCDEFGHI',
+    'ABCDEFGH12',
+    'A&B-S.A.C.',
+    'A_+@#%()!?',
+    'A\\B',
+    'A"B',
+    'A<B>',
+  ])('acepta %s al crear y editar', (abbreviation) => {
+    expect(
+      validateSync(
+        plainToInstance(CreateSupplierDto, {
+          ...validSupplier,
+          abbreviation,
+        }),
+      ),
+    ).toEqual([]);
+    expect(
+      validateSync(plainToInstance(UpdateSupplierDto, { abbreviation })),
+    ).toEqual([]);
+  });
 
   it.each([
     undefined,
@@ -47,6 +54,9 @@ describe('Supplier abbreviation validation', () => {
     'DOS PAL',
     'A/B',
     'ÁBC',
+    'A\nB',
+    'A\tB',
+    'A\u0000B',
     '12345678901',
     123,
   ])('rechaza la abreviatura inválida %p al crear', (abbreviation) => {
@@ -73,13 +83,20 @@ describe('Supplier abbreviation validation', () => {
     expect(validateSync(dto)).toEqual([]);
   });
 
-  it.each([null, '', '   ', 'A/B', '12345678901'])(
-    'no permite borrar la abreviatura con %p al editar',
-    (abbreviation) => {
-      const dto = plainToInstance(UpdateSupplierDto, { abbreviation });
-      expect(
-        validateSync(dto).some((error) => error.property === 'abbreviation'),
-      ).toBe(true);
-    },
-  );
+  it.each([
+    null,
+    '',
+    '   ',
+    'A/B',
+    'A B',
+    'A\nB',
+    'A\tB',
+    'A\u0000B',
+    '12345678901',
+  ])('no permite borrar la abreviatura con %p al editar', (abbreviation) => {
+    const dto = plainToInstance(UpdateSupplierDto, { abbreviation });
+    expect(
+      validateSync(dto).some((error) => error.property === 'abbreviation'),
+    ).toBe(true);
+  });
 });

@@ -40,9 +40,9 @@ export class CreateSupplierDto {
     typeof value === 'string' ? value.trim().toUpperCase() : value,
   )
   @IsString()
-  @Matches(/^[A-Z0-9]{1,10}$/, {
+  @Matches(/^[!-\x2E\x30-\x60\x7B-\x7E]{1,10}$/, {
     message:
-      'La abreviatura debe contener de 1 a 10 letras mayúsculas o números, sin espacios ni símbolos.',
+      'La abreviatura debe contener de 1 a 10 caracteres: letras A-Z, números o símbolos ASCII, sin espacios ni /.',
   })
   abbreviation!: string;
 

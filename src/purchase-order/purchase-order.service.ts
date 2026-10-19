@@ -161,7 +161,7 @@ export class PurchaseOrderService {
     });
     if (
       !supplier?.abbreviation ||
-      !/^[A-Z0-9]{1,10}$/.test(supplier.abbreviation)
+      !/^[!-\x2E\x30-\x60\x7B-\x7E]{1,10}$/.test(supplier.abbreviation)
     ) {
       throw new BadRequestException(
         'El proveedor debe tener una abreviatura válida para generar el código.',
@@ -209,7 +209,7 @@ export class PurchaseOrderService {
 
     if (
       !supplier?.abbreviation ||
-      !/^[A-Z0-9]{1,10}$/.test(supplier.abbreviation)
+      !/^[!-\x2E\x30-\x60\x7B-\x7E]{1,10}$/.test(supplier.abbreviation)
     ) {
       throw new BadRequestException(
         'El proveedor debe tener una abreviatura válida para generar el código.',

@@ -48,6 +48,38 @@ describe('Purchase order supplier abbreviation', () => {
     expect(supplier.findUnique).not.toHaveBeenCalled();
   });
 
+  it.each(['A&B-S.A.C.', 'A_+@#%()!?'])(
+    'preserves symbols in generated codes: %s',
+    async (abbreviation) => {
+      purchaseOrder.findUnique.mockResolvedValue({
+        code: '2208',
+        supplier: { abbreviation },
+      });
+      supplier.findUnique.mockResolvedValue({ abbreviation });
+      purchaseOrder.findMany.mockResolvedValue([
+        { code: `No 007-${year}/2208/OLD` },
+      ]);
+      expect(await service.formatedCode(1, '2208')).toBe(
+        `No 008-${year}/2208/${abbreviation}`,
+      );
+      // The transactional allocator is shared by complete creation and duplication.
+      const allocator = service as unknown as {
+        allocateCode: (
+          tx: unknown,
+          baseCode: string,
+          supplierId: number,
+        ) => Promise<string>;
+      };
+      expect(
+        await allocator.allocateCode(
+          { supplier, purchaseOrder },
+          'COPY-2208',
+          1,
+        ),
+      ).toBe(`No 008-${year}/COPY-2208/${abbreviation}`);
+    },
+  );
+
   it('no genera una orden con una abreviatura vacía', async () => {
     purchaseOrder.findUnique.mockResolvedValue({
       code: '2208',
