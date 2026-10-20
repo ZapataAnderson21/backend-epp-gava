@@ -736,9 +736,9 @@ model Complaint {
 model Worker {
   workerId      Int        @id @default(autoincrement())
   fullName      String
-  dni           String     @unique @db.VarChar(8)
-  phone         String?    @unique
-  personalEmail String?    @unique @db.Citext
+  dni           String     @db.VarChar(8)
+  phone         String?
+  personalEmail String?    @db.Citext
   address       String?    @default("Sin dirección especificada.")
   birthDate     DateTime?
   workerType    WorkerType @default(unspecified)
@@ -755,6 +755,8 @@ model Worker {
   workerInventoryAssignments WorkerInventoryAssignment[]
 
   @@index([dni])
+  @@index([phone])
+  @@index([personalEmail])
   @@index([deletedAt])
 }
 

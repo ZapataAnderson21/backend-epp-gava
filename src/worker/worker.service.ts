@@ -35,40 +35,68 @@ export class WorkerService {
     return d;
   }
 
+  private async runSerializable<T>(
+    fn: (tx: Prisma.TransactionClient) => Promise<T>,
+  ): Promise<T> {
+    try {
+      return await this.prismaService.$transaction(fn, {
+        isolationLevel: 'Serializable',
+      });
+    } catch (error) {
+      if ((error as { code?: unknown } | null)?.code === 'P2034') {
+        this.logger.warn('Serialization conflict while saving worker');
+        throw new ConflictException(
+          'Otro registro se está guardando al mismo tiempo. Inténtalo de nuevo.',
+        );
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Uniqueness of dni/phone/personalEmail is enforced only among active
+   * (non soft-deleted) workers, so deleted records never block reuse.
+   */
+  private async assertNoActiveDuplicates(
+    tx: Prisma.TransactionClient,
+    fields: {
+      dni?: string | null;
+      phone?: string | null;
+      personalEmail?: string | null;
+    },
+    excludeWorkerId?: number,
+  ): Promise<void> {
+    const scope = {
+      deletedAt: null,
+      ...(excludeWorkerId !== undefined
+        ? { workerId: { not: excludeWorkerId } }
+        : {}),
+    };
+    const checks = [
+      { key: 'dni', value: fields.dni, label: 'DNI' },
+      { key: 'phone', value: fields.phone, label: 'teléfono' },
+      { key: 'personalEmail', value: fields.personalEmail, label: 'correo' },
+    ] as const;
+
+    for (const { key, value, label } of checks) {
+      if (value === undefined || value === null) continue;
+      const duplicate = await tx.worker.findFirst({
+        where: { [key]: value, ...scope },
+        select: { workerId: true },
+      });
+      if (duplicate) {
+        this.logger.error(`Active worker with ${key}: ${value} already exists`);
+        throw new ConflictException(
+          `El trabajador con ${label} ${value} ya existe.`,
+        );
+      }
+    }
+  }
+
   async create(createWorkerDto: CreateWorkerDto) {
     this.logger.log(
       `Creating worker with data: ${JSON.stringify(createWorkerDto)}`,
     );
-
-    this.logger.log(
-      `Checking for existing worker with phone: ${createWorkerDto.phone}`,
-    );
-    const existsWorker = await this.findByDni(createWorkerDto.dni);
-
-    if (existsWorker) {
-      this.logger.error(
-        `Worker with DNI: ${createWorkerDto.dni} already exists`,
-      );
-      throw new ConflictException(
-        `El trabajador con DNI ${createWorkerDto.dni} ya existe.`,
-      );
-    }
-
-    if (createWorkerDto.phone) {
-      this.logger.log(
-        `Checking for existing worker with phone: ${createWorkerDto.phone}`,
-      );
-      const existsPhone = await this.findByPhone(createWorkerDto.phone);
-
-      if (existsPhone) {
-        this.logger.error(
-          `Worker with phone: ${createWorkerDto.phone} already exists`,
-        );
-        throw new ConflictException(
-          `El trabajador con teléfono ${createWorkerDto.phone} ya existe.`,
-        );
-      }
-    }
 
     const { birthDate, ...rest } = createWorkerDto;
     const data: Prisma.WorkerUncheckedCreateInput = {
@@ -78,8 +106,13 @@ export class WorkerService {
       ...(birthDate ? { birthDate: this.parseBirthDate(birthDate) } : {}),
     };
 
-    const worker = await this.prismaService.worker.create({
-      data,
+    const worker = await this.runSerializable(async (tx) => {
+      await this.assertNoActiveDuplicates(tx, {
+        dni: data.dni,
+        phone: data.phone,
+        personalEmail: data.personalEmail,
+      });
+      return tx.worker.create({ data });
     });
 
     if (!worker) {
@@ -258,9 +291,17 @@ export class WorkerService {
     if (dto.personalEmail !== undefined)
       data.personalEmail = emptyToNull(dto.personalEmail);
 
-    const updatedWorker = await this.prismaService.worker.update({
-      where: { workerId },
-      data,
+    const updatedWorker = await this.runSerializable(async (tx) => {
+      await this.assertNoActiveDuplicates(
+        tx,
+        {
+          dni: dto.dni,
+          phone: data.phone as string | null | undefined,
+          personalEmail: data.personalEmail as string | null | undefined,
+        },
+        workerId,
+      );
+      return tx.worker.update({ where: { workerId }, data });
     });
 
     return {
@@ -316,7 +357,7 @@ export class WorkerService {
   async findByDni(dni: string) {
     this.logger.log(`Finding worker with DNI: ${dni}`);
 
-    const worker = await this.prismaService.worker.findUnique({
+    const worker = await this.prismaService.worker.findFirst({
       where: {
         dni,
         deletedAt: null,

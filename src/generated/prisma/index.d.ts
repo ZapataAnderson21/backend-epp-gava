@@ -91241,13 +91241,13 @@ export namespace Prisma {
 
   export type WorkerWhereUniqueInput = Prisma.AtLeast<{
     workerId?: number
-    dni?: string
-    phone?: string
-    personalEmail?: string
     AND?: WorkerWhereInput | WorkerWhereInput[]
     OR?: WorkerWhereInput[]
     NOT?: WorkerWhereInput | WorkerWhereInput[]
     fullName?: StringFilter<"Worker"> | string
+    dni?: StringFilter<"Worker"> | string
+    phone?: StringNullableFilter<"Worker"> | string | null
+    personalEmail?: StringNullableFilter<"Worker"> | string | null
     address?: StringNullableFilter<"Worker"> | string | null
     birthDate?: DateTimeNullableFilter<"Worker"> | Date | string | null
     workerType?: EnumWorkerTypeFilter<"Worker"> | $Enums.WorkerType
@@ -91261,7 +91261,7 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementListRelationFilter
     currentInventoryAssets?: InventoryAssetListRelationFilter
     workerInventoryAssignments?: WorkerInventoryAssignmentListRelationFilter
-  }, "workerId" | "dni" | "phone" | "personalEmail">
+  }, "workerId">
 
   export type WorkerOrderByWithAggregationInput = {
     workerId?: SortOrder
