@@ -1742,6 +1742,12 @@ model SsomaSignatureEvidence {
   exceptionalHoldSetByUserId Int?
   exceptionalHoldUntil     DateTime?
   exceptionalHoldMetadata  Json                        @default("{}")
+  publicationHoldReference String?                     @db.Text
+  publicationHoldReason    String?                     @db.Text
+  publicationHoldUntil     DateTime?
+  revisionHoldReference    String?                     @db.Text
+  revisionHoldReason       String?                     @db.Text
+  revisionHoldUntil        DateTime?
   createdAt                DateTime                    @default(now())
   updatedAt                DateTime                    @updatedAt
 
