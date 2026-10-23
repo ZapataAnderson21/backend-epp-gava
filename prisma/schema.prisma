@@ -45,6 +45,7 @@ model User {
   ssomaTalkAuditEvents               SsomaTalkAuditEvent[]        @relation("SsomaAuditActor")
   ssomaTalkRevisions                 SsomaTalkRevision[]         @relation("SsomaRevisionAuthor")
   ssomaDocumentPublications          SsomaDocumentPublication[]  @relation("SsomaPublicationActor")
+  ssomaRetentionHolds                SsomaSignatureEvidence[]    @relation("SsomaEvidenceHoldSetter")
 
   @@index([name])
   @@index([lastName])
@@ -1628,10 +1629,13 @@ model ExpiringDocumentNotification {
 }
 
 enum SsomaTalkStatus {
-  DRAFT
-  SCHEDULED
-  COMPLETED
-  VOIDED
+  draft
+  inProgress
+  open
+  closing
+  closed
+  voided
+  annulled
 }
 
 enum SsomaAttendanceStatus {
@@ -1675,7 +1679,7 @@ model SsomaTalk {
   createdByUserId  Int
   talkDate         DateTime       @db.Date
   topic            String         @db.Text
-  status           SsomaTalkStatus @default(DRAFT)
+  status           SsomaTalkStatus @default(draft)
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
@@ -1704,6 +1708,7 @@ model SsomaTalkAttendance {
   talk     SsomaTalk                 @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
   worker   Worker                    @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
   evidence SsomaSignatureEvidence[]
+  auditEvents SsomaTalkAuditEvent[]
 
   @@unique([ssomaTalkId, workerId])
   @@index([workerId, attendanceDate])
@@ -1720,14 +1725,30 @@ model SsomaSignatureEvidence {
   objectReference          String?                     @db.Text
   sha256                   String?                     @db.VarChar(64)
   metadata                 Json                        @default("{}")
+  retentionPolicyVersion   String                      @default("ssoma-signature-v1") @db.VarChar(64)
   retentionDays            Int                         @default(7)
   deletionEligibleAt       DateTime?
+  deletionAttemptCount     Int                         @default(0)
+  lastDeletionAttemptAt    DateTime?
+  lastDeletionError        String?                     @db.Text
+  deletedAt                DateTime?
+  verifiedDocumentVersionTalkId Int?
+  verifiedDocumentVersionId Int?
+  backupMetadata           Json                        @default("{}")
+  purgeMetadata            Json                        @default("{}")
+  exceptionalHoldReason    String?                     @db.Text
+  exceptionalHoldSetAt     DateTime?
+  exceptionalHoldSetByUserId Int?
+  exceptionalHoldUntil     DateTime?
+  exceptionalHoldMetadata  Json                        @default("{}")
   createdAt                DateTime                    @default(now())
   updatedAt                DateTime                    @updatedAt
 
   attendance SsomaTalkAttendance      @relation(fields: [ssomaTalkAttendanceId], references: [ssomaTalkAttendanceId], onDelete: Restrict, onUpdate: Cascade)
   talk       SsomaTalk                 @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
   worker     Worker                   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  verifiedDocumentVersion SsomaTalkDocumentVersion? @relation("SsomaEvidenceVerifiedDocument", fields: [verifiedDocumentVersionTalkId, verifiedDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade)
+  exceptionalHoldSetBy User? @relation("SsomaEvidenceHoldSetter", fields: [exceptionalHoldSetByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
   deletionJobs SsomaSignatureDeletionJob[]
 
   @@index([status, deletionEligibleAt])
@@ -1737,16 +1758,25 @@ model SsomaSignatureEvidence {
 model SsomaTalkAuditEvent {
   ssomaTalkAuditEventId Int      @id @default(autoincrement())
   ssomaTalkId           Int
+  ssomaTalkAttendanceId Int?
   actorUserId           Int?
   eventType             String   @db.VarChar(100)
-  payload               Json     @default("{}")
-  createdAt             DateTime @default(now())
+  previousState         Json?
+  newState              Json?
+  changedFields         Json     @default("{}")
+  reason                String?  @db.Text
+  serverAt              DateTime @default(now())
+  documentVersionTalkId Int?
+  ssomaTalkDocumentVersionId Int?
 
-  talk  SsomaTalk @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
-  actor User?     @relation("SsomaAuditActor", fields: [actorUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  talk SsomaTalk @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
+  attendance SsomaTalkAttendance? @relation(fields: [ssomaTalkAttendanceId], references: [ssomaTalkAttendanceId], onDelete: Restrict, onUpdate: Cascade)
+  actor User? @relation("SsomaAuditActor", fields: [actorUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  documentVersion SsomaTalkDocumentVersion? @relation("SsomaAuditDocumentVersion", fields: [documentVersionTalkId, ssomaTalkDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade)
 
-  @@index([ssomaTalkId, createdAt])
+  @@index([ssomaTalkId, serverAt])
   @@index([actorUserId])
+  @@index([ssomaTalkAttendanceId])
 }
 
 model SsomaTalkRevision {
@@ -1771,19 +1801,34 @@ model SsomaTalkDocumentVersion {
   status                     SsomaDocumentVersionStatus @default(HISTORICAL)
   objectReference            String                    @db.Text
   sha256                     String                    @db.VarChar(64)
+  byteSize                   BigInt
+  replacesVersionTalkId      Int?
+  replacesVersionId          Int?
+  officialDocumentSnapshot   Json
+  verifiedAt                 DateTime?
+  verifiedSha256             String?                   @db.VarChar(64)
+  verificationMethod         String?                   @db.VarChar(100)
+  publishedAt                DateTime?
+  currentAt                  DateTime?
   metadata                   Json                      @default("{}")
   createdAt                  DateTime                  @default(now())
 
   talk         SsomaTalk                 @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
   publications SsomaDocumentPublication[]
+  replacedVersion SsomaTalkDocumentVersion? @relation("SsomaDocumentVersionLineage", fields: [replacesVersionTalkId, replacesVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade)
+  replacedBy SsomaTalkDocumentVersion[] @relation("SsomaDocumentVersionLineage")
+  verifiedEvidence SsomaSignatureEvidence[] @relation("SsomaEvidenceVerifiedDocument")
+  auditEvents SsomaTalkAuditEvent[] @relation("SsomaAuditDocumentVersion")
 
   @@unique([ssomaTalkId, versionNumber])
+  @@unique([ssomaTalkId, ssomaTalkDocumentVersionId])
   @@index([ssomaTalkId, status])
 }
 
 model SsomaDocumentPublication {
   ssomaDocumentPublicationId Int                  @id @default(autoincrement())
   ssomaTalkId                Int
+  documentVersionTalkId      Int?
   ssomaTalkDocumentVersionId Int?
   actorUserId                Int?
   status                     SsomaPublicationStatus @default(PENDING)
@@ -1794,7 +1839,7 @@ model SsomaDocumentPublication {
   completedAt                DateTime?
 
   talk    SsomaTalk                 @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
-  version SsomaTalkDocumentVersion? @relation(fields: [ssomaTalkDocumentVersionId], references: [ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade)
+  version SsomaTalkDocumentVersion? @relation(fields: [documentVersionTalkId, ssomaTalkDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade)
   actor   User?                    @relation("SsomaPublicationActor", fields: [actorUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([ssomaTalkId, createdAt])
