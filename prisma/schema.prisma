@@ -1711,6 +1711,7 @@ model SsomaTalkAttendance {
   auditEvents SsomaTalkAuditEvent[]
 
   @@unique([ssomaTalkId, workerId])
+  @@unique([ssomaTalkId, ssomaTalkAttendanceId])
   @@index([workerId, attendanceDate])
   @@index([status, attendanceDate])
 }
@@ -1758,6 +1759,7 @@ model SsomaSignatureEvidence {
 model SsomaTalkAuditEvent {
   ssomaTalkAuditEventId Int      @id @default(autoincrement())
   ssomaTalkId           Int
+  attendanceTalkId      Int?
   ssomaTalkAttendanceId Int?
   actorUserId           Int?
   eventType             String   @db.VarChar(100)
@@ -1770,7 +1772,7 @@ model SsomaTalkAuditEvent {
   ssomaTalkDocumentVersionId Int?
 
   talk SsomaTalk @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
-  attendance SsomaTalkAttendance? @relation(fields: [ssomaTalkAttendanceId], references: [ssomaTalkAttendanceId], onDelete: Restrict, onUpdate: Cascade)
+  attendance SsomaTalkAttendance? @relation(fields: [attendanceTalkId, ssomaTalkAttendanceId], references: [ssomaTalkId, ssomaTalkAttendanceId], onDelete: Restrict, onUpdate: Cascade)
   actor User? @relation("SsomaAuditActor", fields: [actorUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
   documentVersion SsomaTalkDocumentVersion? @relation("SsomaAuditDocumentVersion", fields: [documentVersionTalkId, ssomaTalkDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade)
 
