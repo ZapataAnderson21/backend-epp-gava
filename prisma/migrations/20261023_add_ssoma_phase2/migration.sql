@@ -371,6 +371,15 @@ BEGIN
   ) THEN
     RAISE EXCEPTION 'SSOMA document version contents and private object reference are immutable';
   END IF;
+  IF TG_OP = 'UPDATE' AND OLD."status" = 'CURRENT' AND (
+    NEW."publishedAt" IS DISTINCT FROM OLD."publishedAt" OR
+    NEW."verifiedAt" IS DISTINCT FROM OLD."verifiedAt" OR
+    NEW."verifiedSha256" IS DISTINCT FROM OLD."verifiedSha256" OR
+    NEW."verificationMethod" IS DISTINCT FROM OLD."verificationMethod" OR
+    NEW."currentAt" IS DISTINCT FROM OLD."currentAt"
+  ) THEN
+    RAISE EXCEPTION 'CURRENT SSOMA document verification evidence is immutable';
+  END IF;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
