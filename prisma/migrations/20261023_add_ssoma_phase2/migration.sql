@@ -78,7 +78,7 @@ CREATE TABLE "SsomaSignatureEvidence" (
   ),
   CONSTRAINT "SsomaSignatureEvidence_verification_reference_pair_check" CHECK (("verifiedDocumentVersionTalkId" IS NULL) = ("verifiedDocumentVersionId" IS NULL)),
   CONSTRAINT "SsomaSignatureEvidence_verification_talk_match_check" CHECK ("verifiedDocumentVersionTalkId" IS NULL OR "verifiedDocumentVersionTalkId" = "ssomaTalkId"),
-  CONSTRAINT "SsomaSignatureEvidence_eligibility_requires_verified_document_check" CHECK ("deletionEligibleAt" IS NULL OR ("verifiedDocumentVersionTalkId" = "ssomaTalkId" AND "verifiedDocumentVersionId" IS NOT NULL))
+  CONSTRAINT "SsomaSignatureEvidence_verified_document_required_check" CHECK ("deletionEligibleAt" IS NULL OR ("verifiedDocumentVersionTalkId" = "ssomaTalkId" AND "verifiedDocumentVersionId" IS NOT NULL))
 );
 
 CREATE TABLE "SsomaTalkAuditEvent" (
@@ -179,7 +179,7 @@ CREATE UNIQUE INDEX "SsomaTalkAttendance_ssomaTalkId_workerId_key" ON "SsomaTalk
 CREATE UNIQUE INDEX "SsomaTalkAttendance_ssomaTalkId_ssomaTalkAttendanceId_key" ON "SsomaTalkAttendance"("ssomaTalkId", "ssomaTalkAttendanceId");
 CREATE UNIQUE INDEX "SsomaTalkAttendance_one_active_worker_per_day" ON "SsomaTalkAttendance"("workerId", "attendanceDate") WHERE "status" IN ('PENDING', 'SIGNING', 'SIGNED', 'DECLINED');
 CREATE UNIQUE INDEX "SsomaTalkDocumentVersion_ssomaTalkId_versionNumber_key" ON "SsomaTalkDocumentVersion"("ssomaTalkId", "versionNumber");
-CREATE UNIQUE INDEX "SsomaTalkDocumentVersion_ssomaTalkId_ssomaTalkDocumentVersionId_key" ON "SsomaTalkDocumentVersion"("ssomaTalkId", "ssomaTalkDocumentVersionId");
+CREATE UNIQUE INDEX "SsomaTalkDocumentVersion_talk_version_id_key" ON "SsomaTalkDocumentVersion"("ssomaTalkId", "ssomaTalkDocumentVersionId");
 CREATE UNIQUE INDEX "SsomaTalkDocumentVersion_one_current_per_talk" ON "SsomaTalkDocumentVersion"("ssomaTalkId") WHERE "status" = 'CURRENT';
 CREATE UNIQUE INDEX "SsomaTalkRevision_ssomaTalkId_revisionNumber_key" ON "SsomaTalkRevision"("ssomaTalkId", "revisionNumber");
 CREATE UNIQUE INDEX "SsomaSignatureDeletionJob_idempotencyKey_key" ON "SsomaSignatureDeletionJob"("idempotencyKey");
