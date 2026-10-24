@@ -264,8 +264,8 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
       const talkId = await createTalk(client, fixture, '2026-10-26');
       const attendanceId = await createAttendance(client, talkId, fixture.workerId, '2026-10-26');
       const evidence = await client.query(
-        `INSERT INTO "SsomaSignatureEvidence" ("ssomaTalkAttendanceId", "ssomaTalkId", "workerId", "attendanceDate", "objectReference", "sha256")
-         VALUES ($1, $2, $3, DATE '2026-10-26', 'private://ssoma/evidence/test.sig', repeat('c', 64))
+        `INSERT INTO "SsomaSignatureEvidence" ("ssomaTalkAttendanceId", "ssomaTalkId", "workerId", "attendanceDate", "objectReference", "sha256", "updatedAt")
+         VALUES ($1, $2, $3, DATE '2026-10-26', 'private://ssoma/evidence/test.sig', repeat('c', 64), CURRENT_TIMESTAMP)
          RETURNING "ssomaSignatureEvidenceId", "retentionDays", "retentionPolicyVersion", "deletionAttemptCount", "deletedAt", "backupMetadata", "purgeMetadata"`,
         [attendanceId, talkId, fixture.workerId],
       );
@@ -301,13 +301,37 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
          WHERE "ssomaSignatureEvidenceId" = $3`,
         [talkId, versionId, evidence.rows[0].ssomaSignatureEvidenceId, fixture.userId],
       );
-      const held = await client.query(
+      const exceptionalHold = await client.query(
+        `SELECT "exceptionalHoldReason", "exceptionalHoldSetAt", "exceptionalHoldSetByUserId", "exceptionalHoldMetadata"
+         FROM "SsomaSignatureEvidence" WHERE "ssomaSignatureEvidenceId" = $1`,
+        [evidence.rows[0].ssomaSignatureEvidenceId],
+      );
+      expect(exceptionalHold.rows[0].exceptionalHoldReason).toBe('Legal preservation request');
+      expect(exceptionalHold.rows[0].exceptionalHoldSetAt).not.toBeNull();
+      expect(exceptionalHold.rows[0].exceptionalHoldSetByUserId).toBe(fixture.userId);
+      expect(exceptionalHold.rows[0].exceptionalHoldMetadata).toEqual({ case: 'LEGAL-TEST' });
+
+      const exceptionalBlocked = await client.query(
         `UPDATE "SsomaSignatureEvidence" SET "status" = 'DELETING', "deletionAttemptCount" = 1,
            "lastDeletionAttemptAt" = CURRENT_TIMESTAMP WHERE "ssomaSignatureEvidenceId" = $1`,
         [evidence.rows[0].ssomaSignatureEvidenceId],
       ).catch((error: Error) => error);
-      expect(held).toBeInstanceOf(Error);
-      expect((held as Error).message).toMatch(/publication or revision hold/i);
+      expect(exceptionalBlocked).toBeInstanceOf(Error);
+      expect((exceptionalBlocked as Error).message).toMatch(/exceptional retention hold/i);
+
+      await client.query(
+        `UPDATE "SsomaSignatureEvidence" SET "exceptionalHoldReason" = NULL, "exceptionalHoldSetAt" = NULL,
+           "exceptionalHoldSetByUserId" = NULL, "exceptionalHoldUntil" = NULL
+         WHERE "ssomaSignatureEvidenceId" = $1`,
+        [evidence.rows[0].ssomaSignatureEvidenceId],
+      );
+      const publicationBlocked = await client.query(
+        `UPDATE "SsomaSignatureEvidence" SET "status" = 'DELETING', "deletionAttemptCount" = 1,
+           "lastDeletionAttemptAt" = CURRENT_TIMESTAMP WHERE "ssomaSignatureEvidenceId" = $1`,
+        [evidence.rows[0].ssomaSignatureEvidenceId],
+      ).catch((error: Error) => error);
+      expect(publicationBlocked).toBeInstanceOf(Error);
+      expect((publicationBlocked as Error).message).toMatch(/publication or revision hold/i);
 
       await client.query(
         `UPDATE "SsomaSignatureEvidence" SET "publicationHoldReference" = NULL, "publicationHoldReason" = NULL,
@@ -374,7 +398,7 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
     }
   });
 
-  it('uses non-cascading historical foreign keys and unique deletion-job idempotency keys', async () => {
+  it('uses non-cascading historical foreign keys', async () => {
     const client = await pool!.connect();
     try {
       const fks = await client.query(
@@ -386,24 +410,32 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
       );
       expect(fks.rows.length).toBeGreaterThan(0);
       expect(fks.rows.every((constraint) => constraint.confdeltype !== 'c')).toBe(true);
+    } finally {
+      client.release();
+    }
+  });
 
+  it('enforces unique deletion-job idempotency keys', async () => {
+    const client = await pool!.connect();
+    try {
       const fixture = await createFixture(client);
       const talkId = await createTalk(client, fixture, '2026-10-27');
       const attendanceId = await createAttendance(client, talkId, fixture.workerId, '2026-10-27');
       const evidence = await client.query(
-        `INSERT INTO "SsomaSignatureEvidence" ("ssomaTalkAttendanceId", "ssomaTalkId", "workerId", "attendanceDate")
-         VALUES ($1, $2, $3, DATE '2026-10-27') RETURNING "ssomaSignatureEvidenceId"`,
+        `INSERT INTO "SsomaSignatureEvidence" ("ssomaTalkAttendanceId", "ssomaTalkId", "workerId", "attendanceDate", "updatedAt")
+         VALUES ($1, $2, $3, DATE '2026-10-27', CURRENT_TIMESTAMP) RETURNING "ssomaSignatureEvidenceId"`,
         [attendanceId, talkId, fixture.workerId],
       );
       const idempotencyKey = `ssoma-${randomUUID()}`;
       const job = await client.query(
-        `INSERT INTO "SsomaSignatureDeletionJob" ("ssomaSignatureEvidenceId", "idempotencyKey")
-         VALUES ($1, $2) RETURNING "ssomaSignatureDeletionJobId"`,
+        `INSERT INTO "SsomaSignatureDeletionJob" ("ssomaSignatureEvidenceId", "idempotencyKey", "updatedAt")
+         VALUES ($1, $2, CURRENT_TIMESTAMP) RETURNING "ssomaSignatureDeletionJobId"`,
         [evidence.rows[0].ssomaSignatureEvidenceId, idempotencyKey],
       );
       expect(job.rows[0].ssomaSignatureDeletionJobId).toBeDefined();
       await expect(client.query(
-        `INSERT INTO "SsomaSignatureDeletionJob" ("ssomaSignatureEvidenceId", "idempotencyKey") VALUES ($1, $2)`,
+        `INSERT INTO "SsomaSignatureDeletionJob" ("ssomaSignatureEvidenceId", "idempotencyKey", "updatedAt")
+         VALUES ($1, $2, CURRENT_TIMESTAMP)`,
         [evidence.rows[0].ssomaSignatureEvidenceId, idempotencyKey],
       )).rejects.toThrow(/unique/i);
     } finally {
