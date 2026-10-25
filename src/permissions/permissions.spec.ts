@@ -59,6 +59,11 @@ describe('Dynamic role permissions', () => {
       ['downloadCurrentPdf', 'GET', 'ssoma.export'],
       ['downloadVersionPdf', 'GET', 'ssoma.export'],
       ['reconcilePublications', 'GET', 'ssoma.audit'],
+      ['getRetentionStatus', 'GET', 'ssoma.audit'],
+      ['getRetentionOrphanReport', 'GET', 'ssoma.audit'],
+      ['runRetentionMaintenance', 'POST', 'ssoma.manage'],
+      ['setRetentionHold', 'POST', 'ssoma.manage'],
+      ['clearRetentionHold', 'DELETE', 'ssoma.manage'],
     ] as const;
     for (const [handler, method, permission] of cases) {
       expect(

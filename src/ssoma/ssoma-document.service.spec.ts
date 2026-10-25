@@ -6,7 +6,7 @@ const signatureHash = createHash('sha256').update(signatureBytes).digest('hex');
 const pdfBytes = Buffer.from('%PDF-1.7\nSSOMA official\n');
 const pdfHash = createHash('sha256').update(pdfBytes).digest('hex');
 
-function buildHarness(options: { currentVersion?: unknown; revision?: unknown; txError?: Error } = {}) {
+function buildHarness(options: { currentVersion?: unknown; revision?: unknown; txError?: Error; retentionStatus?: string } = {}) {
   const events: string[] = [];
   const talk = {
     ssomaTalkId: 41, projectId: 2, status: 'open', talkDate: new Date('2026-10-25T00:00:00Z'), topic: 'Safe work',
@@ -32,7 +32,7 @@ function buildHarness(options: { currentVersion?: unknown; revision?: unknown; t
       create: jest.fn().mockImplementation(async ({ data }: { data: { versionNumber: number } }) => ({ ssomaTalkDocumentVersionId: 5, ssomaTalkId: 41, versionNumber: data.versionNumber, status: 'CURRENT', sha256: pdfHash, byteSize: BigInt(pdfBytes.length), publishedAt: new Date() })),
       updateMany: jest.fn().mockResolvedValue({ count: 1 }),
     },
-    ssomaSignatureEvidence: { updateMany: jest.fn().mockResolvedValue({ count: 1 }) },
+    ssomaSignatureEvidence: { findFirst: jest.fn().mockResolvedValue(options.retentionStatus ? { ssomaSignatureEvidenceId: 71 } : null), updateMany: jest.fn().mockResolvedValue({ count: 1 }) },
     ssomaDocumentPublication: {
       findUnique: jest.fn(async () => publicationRecord),
       create: jest.fn().mockImplementation(async ({ data }: { data: Record<string, unknown> }) => {
@@ -53,6 +53,7 @@ function buildHarness(options: { currentVersion?: unknown; revision?: unknown; t
     ssomaTalkDocumentVersion: { findFirst: jest.fn().mockResolvedValue(publishedVersion), findUnique: jest.fn().mockResolvedValue(publishedVersion), findMany: jest.fn().mockResolvedValue([]) },
     ssomaDocumentPublication: { findUnique: jest.fn(async () => publicationRecord), findMany: jest.fn().mockResolvedValue([]), create: jest.fn().mockResolvedValue({}), update: jest.fn().mockResolvedValue({}) },
     ssomaTalkAuditEvent: { create: jest.fn().mockResolvedValue({}) },
+    ssomaSignatureEvidence: { findFirst: jest.fn().mockResolvedValue(options.retentionStatus ? { ssomaSignatureEvidenceId: 71 } : null) },
     $transaction: jest.fn(async (callback: (client: typeof tx) => unknown) => {
       events.push('transaction');
       transactionAttempts += 1;
@@ -153,6 +154,14 @@ describe('SsomaDocumentService', () => {
     expect(harness.renderer.render).toHaveBeenCalledWith(expect.objectContaining({ talk: expect.objectContaining({ topic: 'Corrected safe work' }), participants: [expect.objectContaining({ workerId: 11 })] }), expect.any(Map));
     expect(harness.tx.ssomaTalkDocumentVersion.create).toHaveBeenCalledWith({ data: expect.objectContaining({ replacesVersionTalkId: 41, replacesVersionId: 4 }) });
     expect(harness.tx.ssomaTalkAuditEvent.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ eventType: 'document_current_version_replaced', reason: 'Corrected attendance' }) }));
+  });
+
+  it('refuses to start a revision after signature retention enters an irreversible state', async () => {
+    const current = { ssomaTalkId: 41, ssomaTalkDocumentVersionId: 4, versionNumber: 1, status: 'CURRENT', objectReference: 'old-pdf', sha256: pdfHash, byteSize: BigInt(pdfBytes.length), officialDocumentSnapshot: {} };
+    const harness = buildHarness({ currentVersion: current, retentionStatus: 'PENDING_DELETION' });
+    harness.talk.status = 'closed';
+    await expect(harness.service.startRevision(41, 9, 'Corrected record')).rejects.toThrow('La retención de firmas ya comenzó');
+    expect(harness.tx.ssomaTalkRevision.create).not.toHaveBeenCalled();
   });
 
   it('returns private verified current and historical bytes without exposing object references', async () => {

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -30,6 +31,8 @@ import { CaptureSignatureDto } from './dto/capture-signature.dto';
 import { SignatureEvidenceService } from './signature-evidence.service';
 import { SsomaDocumentService } from './ssoma-document.service';
 import { PublishSsomaDocumentDto, StartSsomaRevisionDto } from './dto/ssoma-publication.dto';
+import { ClearSsomaRetentionHoldDto, RunSsomaRetentionDto, SetSsomaRetentionHoldDto } from './dto/ssoma-retention.dto';
+import { SsomaRetentionService } from './ssoma-retention.service';
 
 @Controller('ssoma')
 export class SsomaController {
@@ -37,6 +40,7 @@ export class SsomaController {
     private readonly ssoma: SsomaService,
     private readonly signatures: SignatureEvidenceService,
     private readonly documents: SsomaDocumentService,
+    private readonly retention: SsomaRetentionService,
   ) {}
 
   @Post('talks/:id/attendance/:attendanceId/signature')
@@ -130,6 +134,39 @@ export class SsomaController {
       disposition: `attachment; filename="ssoma-talk-${talkId}-version-${versionId}.pdf"`,
       length: bytes.length,
     });
+  }
+
+  @Get('maintenance/retention/status')
+  getRetentionStatus() {
+    return this.retention.status();
+  }
+
+  @Get('maintenance/retention/orphans')
+  getRetentionOrphanReport() {
+    return this.retention.orphanReport();
+  }
+
+  @Post('maintenance/retention/run')
+  runRetentionMaintenance(@Body() dto: RunSsomaRetentionDto = {}) {
+    return this.retention.runMaintenance(dto.batchSize);
+  }
+
+  @Post('signature-evidence/:evidenceId/retention-hold')
+  setRetentionHold(
+    @Param('evidenceId', ParseIntPipe) evidenceId: number,
+    @Body() dto: SetSsomaRetentionHoldDto,
+    @GetUser() user: SsomaRequestUser,
+  ) {
+    return this.retention.setRetentionHold(evidenceId, user.userId, dto.reason, dto.holdUntil ? new Date(dto.holdUntil) : null);
+  }
+
+  @Delete('signature-evidence/:evidenceId/retention-hold')
+  clearRetentionHold(
+    @Param('evidenceId', ParseIntPipe) evidenceId: number,
+    @Body() dto: ClearSsomaRetentionHoldDto,
+    @GetUser() user: SsomaRequestUser,
+  ) {
+    return this.retention.clearRetentionHold(evidenceId, user.userId, dto.reason);
   }
 
   @Post('talks')

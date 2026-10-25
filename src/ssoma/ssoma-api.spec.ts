@@ -27,6 +27,7 @@ function buildHarness() {
       findMany: jest.fn(),
       count: jest.fn(),
     },
+    ssomaSignatureEvidence: { findFirst: jest.fn() },
     worker: { findMany: jest.fn(), count: jest.fn() },
   };
   const prisma = {
@@ -295,6 +296,20 @@ describe('SsomaService API behavior', () => {
     expect(tx.ssomaTalkAuditEvent.create).toHaveBeenCalledWith({
       data: expect.objectContaining({ eventType: 'attendance_voided', reason: 'Incorrect record' }),
     });
+  });
+
+  it('refuses attendance invalidation after individual evidence retention has started', async () => {
+    const { service, tx } = buildHarness();
+    tx.ssomaTalk.findUnique.mockResolvedValue({ ...talk, status: SsomaTalkStatus.closed });
+    tx.ssomaTalkAttendance.findUnique.mockResolvedValue({
+      ssomaTalkAttendanceId: 12,
+      ssomaTalkId: 5,
+      status: SsomaAttendanceStatus.SIGNED,
+    });
+    tx.ssomaSignatureEvidence.findFirst.mockResolvedValue({ ssomaSignatureEvidenceId: 22 });
+
+    await expect(service.invalidateAttendance(5, 12, 'Correction required', actorUserId)).rejects.toBeInstanceOf(ConflictException);
+    expect(tx.ssomaTalkAttendance.update).not.toHaveBeenCalled();
   });
 
   it('restricts edits and participant changes to valid lifecycle states', async () => {

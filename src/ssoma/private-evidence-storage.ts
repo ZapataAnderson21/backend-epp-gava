@@ -24,6 +24,12 @@ export interface PrivateEvidenceVerification {
   readonly size: number | null;
 }
 
+export interface PrivateEvidenceInspection {
+  readonly exists: boolean;
+  readonly sha256: string | null;
+  readonly size: number | null;
+}
+
 export interface PrivateEvidenceStorage {
   putIfAbsent(input: {
     namespace: PrivateEvidenceNamespace;
@@ -42,6 +48,8 @@ export interface PrivateEvidenceStorage {
     sha256: string,
     size: number,
   ): Promise<PrivateEvidenceVerification>;
+  /** Distinguishes a missing object from an existing object with different bytes. */
+  inspect(reference: PrivateEvidenceReference): Promise<PrivateEvidenceInspection>;
   deleteIfMatch(
     reference: PrivateEvidenceReference,
     sha256: string,
@@ -143,10 +151,26 @@ export class LocalFilesystemPrivateEvidenceStorage implements PrivateEvidenceSto
 
   async verify(reference: PrivateEvidenceReference, sha256: string, size: number) {
     try {
-      const bytes = await this.readVerified(reference, sha256, size);
-      return { verified: true, sha256: digest(bytes), size: bytes.length };
+      const inspection = await this.inspect(reference);
+      return {
+        verified: inspection.exists && inspection.sha256 === sha256 && inspection.size === size,
+        sha256: inspection.sha256,
+        size: inspection.size,
+      };
     } catch {
       return { verified: false, sha256: null, size: null };
+    }
+  }
+
+  async inspect(reference: PrivateEvidenceReference) {
+    try {
+      const path = await this.pathFor(reference);
+      const bytes = await this.readPrivate(path);
+      return { exists: true, sha256: digest(bytes), size: bytes.length };
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT')
+        return { exists: false, sha256: null, size: null };
+      throw error;
     }
   }
 
@@ -239,5 +263,6 @@ export class UnavailablePrivateEvidenceStorage implements PrivateEvidenceStorage
   putIfAbsent(): Promise<PrivateEvidencePutResult> { return Promise.reject(this.unavailable()); }
   readVerified(): Promise<Buffer> { return Promise.reject(this.unavailable()); }
   verify(): Promise<PrivateEvidenceVerification> { return Promise.reject(this.unavailable()); }
+  inspect(): Promise<PrivateEvidenceInspection> { return Promise.reject(this.unavailable()); }
   deleteIfMatch(): Promise<boolean> { return Promise.reject(this.unavailable()); }
 }

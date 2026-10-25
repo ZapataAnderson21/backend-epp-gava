@@ -136,6 +136,11 @@ export class SsomaDocumentService {
     if (!talk) throw new NotFoundException('Charla SSOMA no encontrada.');
     if (talk.status !== SsomaTalkStatus.closed || !current)
       throw new ConflictException('Solo se puede revisar una charla cerrada con documento vigente.');
+    const retentionStarted = await this.prisma.ssomaSignatureEvidence.findFirst({
+      where: { ssomaTalkId: talkId, status: { in: [SsomaSignatureEvidenceStatus.PENDING_DELETION, SsomaSignatureEvidenceStatus.DELETING, SsomaSignatureEvidenceStatus.DELETE_FAILED, SsomaSignatureEvidenceStatus.DELETED] } },
+      select: { ssomaSignatureEvidenceId: true },
+    });
+    if (retentionStarted) throw new ConflictException('La retención de firmas ya comenzó; la revisión requiere una rectificación aprobada o nuevas firmas.');
     const latest = await this.prisma.ssomaTalkRevision.findFirst({ where: { ssomaTalkId: talkId }, orderBy: { revisionNumber: 'desc' }, select: { revisionNumber: true } });
     const revisionNumber = (latest?.revisionNumber ?? 0) + 1;
     try {
@@ -144,6 +149,11 @@ export class SsomaDocumentService {
         const liveCurrent = await tx.ssomaTalkDocumentVersion.findFirst({ where: { ssomaTalkId: talkId, status: SsomaDocumentVersionStatus.CURRENT }, select: { ssomaTalkDocumentVersionId: true } });
         if (!live || live.status !== SsomaTalkStatus.closed || liveCurrent?.ssomaTalkDocumentVersionId !== current.ssomaTalkDocumentVersionId)
           throw new ConflictException('La charla o su versión vigente cambió durante el inicio de la revisión.');
+        const liveRetention = await tx.ssomaSignatureEvidence.findFirst({
+          where: { ssomaTalkId: talkId, status: { in: [SsomaSignatureEvidenceStatus.PENDING_DELETION, SsomaSignatureEvidenceStatus.DELETING, SsomaSignatureEvidenceStatus.DELETE_FAILED, SsomaSignatureEvidenceStatus.DELETED] } },
+          select: { ssomaSignatureEvidenceId: true },
+        });
+        if (liveRetention) throw new ConflictException('La retención de firmas ya comenzó; la revisión requiere una rectificación aprobada o nuevas firmas.');
         const created = await tx.ssomaTalkRevision.create({
           data: {
             ssomaTalkId: talkId,
@@ -514,7 +524,7 @@ export class SsomaDocumentService {
         status: attendance.status === SsomaAttendanceStatus.SIGNED ? 'SIGNED' : 'DECLINED',
       });
       if (attendance.status === SsomaAttendanceStatus.SIGNED) {
-        const evidence = attendance.evidence.find((item) => item.status !== SsomaSignatureEvidenceStatus.DELETED);
+        const evidence = attendance.evidence.find((item) => item.status === SsomaSignatureEvidenceStatus.ACTIVE);
         if (!evidence?.objectReference || !evidence.sha256)
           throw new ConflictException('Falta evidencia individual de firma; se requiere rectificación aprobada o una nueva firma.');
         signatures.push({ workerId: attendance.workerId, reference: evidence.objectReference, sha256: evidence.sha256, byteSize: requiredByteSize(evidence.metadata) });
@@ -559,7 +569,7 @@ export class SsomaDocumentService {
       if (!attendance || !isOfficialAttendance(attendance.status)) continue;
       participants.push({ ...previous, status: attendance.status === SsomaAttendanceStatus.SIGNED ? 'SIGNED' : 'DECLINED' });
       if (attendance.status === SsomaAttendanceStatus.SIGNED) {
-        const evidence = attendance.evidence.find((item) => item.status !== SsomaSignatureEvidenceStatus.DELETED);
+        const evidence = attendance.evidence.find((item) => item.status === SsomaSignatureEvidenceStatus.ACTIVE);
         if (!evidence?.objectReference || !evidence.sha256)
           throw new ConflictException('Falta evidencia individual de firma para la revisión; se requiere rectificación aprobada o una nueva firma.');
         signatures.push({ workerId: attendance.workerId, reference: evidence.objectReference, sha256: evidence.sha256, byteSize: requiredByteSize(evidence.metadata) });

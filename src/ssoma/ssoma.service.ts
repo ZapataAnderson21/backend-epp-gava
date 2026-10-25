@@ -9,6 +9,7 @@ import {
 import {
   Prisma,
   SsomaAttendanceStatus,
+  SsomaSignatureEvidenceStatus,
   SsomaTalkStatus,
 } from 'src/generated/prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -412,6 +413,21 @@ export class SsomaService {
           current.status !== SsomaAttendanceStatus.DECLINED
         )
           throw new ForbiddenException('Solo se puede invalidar una asistencia firmada o rechazada.');
+        const irreversibleRetention = await tx.ssomaSignatureEvidence.findFirst({
+          where: {
+            ssomaTalkId,
+            ssomaTalkAttendanceId: attendanceId,
+            status: { in: [
+              SsomaSignatureEvidenceStatus.PENDING_DELETION,
+              SsomaSignatureEvidenceStatus.DELETING,
+              SsomaSignatureEvidenceStatus.DELETE_FAILED,
+              SsomaSignatureEvidenceStatus.DELETED,
+            ] },
+          },
+          select: { ssomaSignatureEvidenceId: true },
+        });
+        if (irreversibleRetention)
+          throw new ConflictException('La retención de firmas ya comenzó; se requiere una rectificación aprobada.');
         const updated = await tx.ssomaTalkAttendance.update({
           where: {
             ssomaTalkId_ssomaTalkAttendanceId: {

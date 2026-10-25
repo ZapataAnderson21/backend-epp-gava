@@ -23,6 +23,7 @@ describe('LocalFilesystemPrivateEvidenceStorage', () => {
     expect((await storage.putIfAbsent({ namespace: 'signatures', key: 'talk-1/attendance-2.png', bytes, sha256: digest })).created).toBe(false);
     await expect(storage.putIfAbsent({ namespace: 'signatures', key: 'talk-1/attendance-2.png', bytes: Buffer.from('different'), sha256: digest })).rejects.toThrow();
     expect(await storage.deleteIfMatch(put.reference, digest)).toBe(true);
+    expect(await storage.inspect(put.reference)).toEqual({ exists: false, sha256: null, size: null });
     expect(await storage.deleteIfMatch(put.reference, digest)).toBe(false);
   });
 
@@ -30,5 +31,13 @@ describe('LocalFilesystemPrivateEvidenceStorage', () => {
     const bytes = Buffer.from('x');
     await expect(storage.putIfAbsent({ namespace: 'signatures', key: '../outside', bytes, sha256: 'a'.repeat(64) })).rejects.toThrow();
     expect(() => new LocalFilesystemPrivateEvidenceStorage(root, 'production')).toThrow();
+  });
+
+  it('treats a removed private root as verified absence without exposing filesystem details', async () => {
+    const bytes = Buffer.from('private evidence');
+    const digest = require('node:crypto').createHash('sha256').update(bytes).digest('hex');
+    const put = await storage.putIfAbsent({ namespace: 'signatures', key: 'talk-1/attendance-2.png', bytes, sha256: digest });
+    await rm(root, { recursive: true, force: true });
+    expect(await storage.inspect(put.reference)).toEqual({ exists: false, sha256: null, size: null });
   });
 });
