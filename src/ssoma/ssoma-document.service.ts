@@ -60,7 +60,11 @@ interface PrivateSignature {
 interface OfficialSnapshotRecord {
   document: SsomaOfficialDocumentSnapshot;
   signatures: PrivateSignature[];
-  revisionContext: { revisionId: number; baseVersionId: number } | null;
+  revisionContext: {
+    revisionId: number;
+    baseVersionId: number;
+    attendanceIdsToVoid: number[];
+  } | null;
 }
 
 interface PublishRequest {
@@ -161,6 +165,7 @@ export class SsomaDocumentService {
     actorUserId: number,
     reason: string,
     overrides: Partial<SsomaOfficialDocumentSnapshot['talk']> = {},
+    attendanceIdsToVoid: number[] = [],
   ) {
     const normalizedReason = reason?.trim();
     if (!normalizedReason)
@@ -178,6 +183,13 @@ export class SsomaDocumentService {
     ]);
     if (Object.keys(overrides).some((key) => !allowed.has(key)))
       throw new ConflictException('La revisión contiene campos no editables.');
+    if (
+      attendanceIdsToVoid.some((id) => !Number.isSafeInteger(id) || id <= 0) ||
+      new Set(attendanceIdsToVoid).size !== attendanceIdsToVoid.length
+    )
+      throw new ConflictException(
+        'La lista de asistencias para invalidar contiene identificadores no válidos.',
+      );
     const [talk, current] = await Promise.all([
       this.prisma.ssomaTalk.findUnique({
         where: { ssomaTalkId: talkId },
@@ -262,6 +274,40 @@ export class SsomaDocumentService {
             throw new ConflictException(
               'La retención de firmas ya comenzó; la revisión requiere una rectificación aprobada o nuevas firmas.',
             );
+          if (attendanceIdsToVoid.length) {
+            const selected = await tx.ssomaTalkAttendance.findMany({
+              where: {
+                ssomaTalkId: talkId,
+                ssomaTalkAttendanceId: { in: attendanceIdsToVoid },
+                status: {
+                  in: [
+                    SsomaAttendanceStatus.SIGNED,
+                    SsomaAttendanceStatus.DECLINED,
+                  ],
+                },
+              },
+              select: { ssomaTalkAttendanceId: true, workerId: true },
+            });
+            const base = isObject(current.officialDocumentSnapshot)
+              ? current.officialDocumentSnapshot
+              : null;
+            const baseParticipants = base?.participants;
+            if (
+              selected.length !== attendanceIdsToVoid.length ||
+              !Array.isArray(baseParticipants) ||
+              selected.some(
+                (attendance) =>
+                  !baseParticipants.some(
+                    (participant) =>
+                      isObject(participant) &&
+                      participant.workerId === attendance.workerId,
+                  ),
+              )
+            )
+              throw new ConflictException(
+                'Solo se puede invalidar una asistencia firmada o declinada que figure en la versión vigente.',
+              );
+          }
           const created = await tx.ssomaTalkRevision.create({
             data: {
               ssomaTalkId: talkId,
@@ -271,6 +317,7 @@ export class SsomaDocumentService {
                 reason: normalizedReason,
                 baseVersionId: current.ssomaTalkDocumentVersionId,
                 talkOverrides: overrides,
+                attendanceIdsToVoid,
               }),
             },
           });
@@ -761,6 +808,14 @@ export class SsomaDocumentService {
               'El número de versión cambió durante la publicación.',
             );
 
+          if (request.revisionId !== null && revisionRecord)
+            await this.applyRevisionInvalidations(
+              tx,
+              request,
+              revisionRecord,
+              currentTalk,
+            );
+
           if (liveCurrent) {
             const demoted = await tx.ssomaTalkDocumentVersion.updateMany({
               where: {
@@ -1044,14 +1099,21 @@ export class SsomaDocumentService {
     const overrides = isObject(revisionData.talkOverrides as Prisma.JsonValue)
       ? (revisionData.talkOverrides as Prisma.JsonObject)
       : {};
+    const attendanceIdsToVoid = this.revisionAttendanceIds(revision);
+    const attendanceIdsToVoidSet = new Set(attendanceIdsToVoid);
     const currentAttendance = new Map(
       talk.attendances.map((attendance) => [attendance.workerId, attendance]),
     );
     const participants: SsomaOfficialParticipant[] = [];
     const signatures: PrivateSignature[] = [];
+    const invalidatedAttendanceIds = new Set<number>();
     for (const previous of baseDocument.participants) {
       const attendance = currentAttendance.get(previous.workerId);
       if (!attendance || !isOfficialAttendance(attendance.status)) continue;
+      if (attendanceIdsToVoidSet.has(attendance.ssomaTalkAttendanceId)) {
+        invalidatedAttendanceIds.add(attendance.ssomaTalkAttendanceId);
+        continue;
+      }
       participants.push({
         ...previous,
         status:
@@ -1075,6 +1137,10 @@ export class SsomaDocumentService {
         });
       }
     }
+    if (invalidatedAttendanceIds.size !== attendanceIdsToVoidSet.size)
+      throw new ConflictException(
+        'La asistencia elegida ya no corresponde a una participación oficial de la versión base.',
+      );
     if (!participants.length)
       throw new ConflictException(
         'La revisión no contiene participantes oficiales.',
@@ -1110,8 +1176,85 @@ export class SsomaDocumentService {
       revisionContext: {
         revisionId: revision.ssomaTalkRevisionId,
         baseVersionId: baseVersion.ssomaTalkDocumentVersionId,
+        attendanceIdsToVoid,
       },
     };
+  }
+
+  private revisionAttendanceIds(
+    revision: Prisma.SsomaTalkRevisionGetPayload<object>,
+  ) {
+    if (!isObject(revision.snapshot)) return [];
+    const value = revision.snapshot.attendanceIdsToVoid;
+    if (!Array.isArray(value)) return [];
+    if (
+      value.some(
+        (id) => typeof id !== 'number' || !Number.isSafeInteger(id) || id <= 0,
+      ) ||
+      new Set(value).size !== value.length
+    )
+      throw new ConflictException(
+        'La revisión contiene una lista de invalidación no válida.',
+      );
+    return value as number[];
+  }
+
+  private async applyRevisionInvalidations(
+    tx: Prisma.TransactionClient,
+    request: PublishRequest,
+    revision: Prisma.SsomaTalkRevisionGetPayload<object>,
+    talk: TalkForDocument,
+  ) {
+    const ids = this.revisionAttendanceIds(revision);
+    if (!ids.length) return;
+    const targets = talk.attendances.filter((attendance) =>
+      ids.includes(attendance.ssomaTalkAttendanceId),
+    );
+    if (
+      targets.length !== ids.length ||
+      targets.some(
+        (attendance) =>
+          attendance.status !== SsomaAttendanceStatus.SIGNED &&
+          attendance.status !== SsomaAttendanceStatus.DECLINED,
+      )
+    )
+      throw new ConflictException(
+        'Una asistencia cambió antes de confirmar la revisión; se conserva el documento vigente.',
+      );
+    for (const attendance of targets) {
+      const updated = await tx.ssomaTalkAttendance.updateMany({
+        where: {
+          ssomaTalkId: request.talkId,
+          ssomaTalkAttendanceId: attendance.ssomaTalkAttendanceId,
+          status: attendance.status,
+        },
+        data: { status: SsomaAttendanceStatus.VOIDED },
+      });
+      if (updated.count !== 1)
+        throw new ConflictException(
+          'Una asistencia cambió durante la revisión; se conserva el documento vigente.',
+        );
+      await tx.ssomaTalkAuditEvent.create({
+        data: {
+          ssomaTalkId: request.talkId,
+          attendanceTalkId: request.talkId,
+          ssomaTalkAttendanceId: attendance.ssomaTalkAttendanceId,
+          actorUserId: request.actorUserId,
+          eventType: 'attendance_voided',
+          reason: this.revisionReason(revision.snapshot),
+          previousState: {
+            workerId: attendance.workerId,
+            status: attendance.status,
+          },
+          newState: {
+            workerId: attendance.workerId,
+            status: SsomaAttendanceStatus.VOIDED,
+            revisionId: revision.ssomaTalkRevisionId,
+          },
+          changedFields: { status: true, currentDocumentVersion: true },
+        },
+      });
+    }
   }
 
   private async loadSignatureImages(signatures: PrivateSignature[]) {

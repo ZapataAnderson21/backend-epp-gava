@@ -9,6 +9,7 @@ import {
 import {
   Prisma,
   SsomaAttendanceStatus,
+  SsomaPublicationStatus,
   SsomaSignatureEvidenceStatus,
   SsomaTalkStatus,
 } from 'src/generated/prisma';
@@ -167,7 +168,7 @@ export class SsomaService {
     if (!Object.keys(dto).length)
       throw new BadRequestException('Debe indicar al menos un campo editable.');
     try {
-      const talk = await this.prisma.$transaction(async (tx) => {
+      const mutate = async (tx: Prisma.TransactionClient) => {
         const previous = await tx.ssomaTalk.findUnique({
           where: { ssomaTalkId },
         });
@@ -177,10 +178,38 @@ export class SsomaService {
           throw new ForbiddenException(
             'Solo se puede editar una charla en borrador.',
           );
+        const movedDate =
+          dto.talkDate !== undefined &&
+          dateOnly(dto.talkDate).getTime() !== previous.talkDate.getTime();
+        if (movedDate) {
+          const linkedEvidence = await tx.ssomaSignatureEvidence.findFirst({
+            where: { ssomaTalkId },
+            select: { ssomaSignatureEvidenceId: true },
+          });
+          if (linkedEvidence)
+            throw new ConflictException(
+              'La fecha no se puede cambiar después de crear evidencia de firma.',
+            );
+        }
         const updated = await tx.ssomaTalk.update({
           where: { ssomaTalkId, status: SsomaTalkStatus.draft },
           data: talkWriteData(dto) as Prisma.SsomaTalkUncheckedUpdateInput,
         });
+        if (movedDate) {
+          const synchronized = await tx.ssomaTalkAttendance.updateMany({
+            where: { ssomaTalkId },
+            data: { attendanceDate: updated.talkDate },
+          });
+          if (
+            synchronized.count !==
+            (await tx.ssomaTalkAttendance.count({
+              where: { ssomaTalkId },
+            }))
+          )
+            throw new ConflictException(
+              'No se pudieron sincronizar todas las fechas de asistencia.',
+            );
+        }
         await this.createAuditEvent(tx, {
           ssomaTalkId,
           actorUserId,
@@ -193,7 +222,11 @@ export class SsomaService {
           changedFields,
         });
         return updated;
-      });
+      };
+      const talk =
+        dto.talkDate !== undefined
+          ? await this.runSerializable(mutate)
+          : await this.prisma.$transaction(mutate);
       return this.result(
         HttpStatus.OK,
         'Borrador de charla actualizado.',
@@ -226,14 +259,19 @@ export class SsomaService {
     const where: Prisma.WorkerWhereInput = {
       deletedAt: null,
       ...(search
-        ? { fullName: { contains: search, mode: 'insensitive' } }
+        ? {
+            OR: [
+              { fullName: { contains: search, mode: 'insensitive' } },
+              { dni: { contains: search, mode: 'insensitive' } },
+            ],
+          }
         : {}),
     };
     const { skip, take } = getPaginationArgs(query);
     const [items, totalItems] = await Promise.all([
       this.prisma.worker.findMany({
         where,
-        select: { workerId: true, fullName: true },
+        select: { workerId: true, fullName: true, dni: true },
         orderBy: [{ fullName: 'asc' }, { workerId: 'asc' }],
         skip,
         take,
@@ -427,7 +465,11 @@ export class SsomaService {
     const auditReason = requiredReason(reason);
     try {
       const attendance = await this.prisma.$transaction(async (tx) => {
-        await this.getTalkForParticipantMutation(tx, ssomaTalkId);
+        const talk = await this.getTalkForParticipantMutation(tx, ssomaTalkId);
+        if (talk.status === SsomaTalkStatus.closed)
+          throw new ConflictException(
+            'Una charla cerrada solo puede invalidarse mediante una revisión documental.',
+          );
         const current = await tx.ssomaTalkAttendance.findUnique({
           where: {
             ssomaTalkId_ssomaTalkAttendanceId: {
@@ -545,12 +587,95 @@ export class SsomaService {
     reason?: string,
   ) {
     try {
-      const talk = await this.prisma.$transaction(async (tx) => {
+      const mutate = async (tx: Prisma.TransactionClient) => {
         const current = await tx.ssomaTalk.findUnique({
           where: { ssomaTalkId },
         });
         if (!current)
           throw new NotFoundException('Charla SSOMA no encontrada.');
+        if (action === 'annul') {
+          if (current.status === SsomaTalkStatus.closed)
+            throw new ConflictException(
+              'Una charla cerrada no puede anularse sin una rectificación documental aprobada.',
+            );
+          const activeRevision = await tx.ssomaTalkRevision.findFirst({
+            where: { ssomaTalkId },
+            select: { ssomaTalkRevisionId: true },
+          });
+          const activePublication = await tx.ssomaDocumentPublication.findFirst(
+            {
+              where: {
+                ssomaTalkId,
+                status: {
+                  in: [
+                    SsomaPublicationStatus.PENDING,
+                    SsomaPublicationStatus.FAILED,
+                  ],
+                },
+              },
+              select: { ssomaDocumentPublicationId: true },
+            },
+          );
+          if (activeRevision || activePublication)
+            throw new ConflictException(
+              'No se puede anular mientras haya una revisión o publicación pendiente de resolver.',
+            );
+          const attendances = await tx.ssomaTalkAttendance.findMany({
+            where: {
+              ssomaTalkId,
+              status: {
+                in: [
+                  SsomaAttendanceStatus.PENDING,
+                  SsomaAttendanceStatus.SIGNING,
+                  SsomaAttendanceStatus.SIGNED,
+                  SsomaAttendanceStatus.DECLINED,
+                ],
+              },
+            },
+            select: {
+              ssomaTalkAttendanceId: true,
+              workerId: true,
+              status: true,
+              evidence: { select: { ssomaSignatureEvidenceId: true } },
+            },
+          });
+          for (const attendance of attendances) {
+            const unfinished =
+              attendance.status === SsomaAttendanceStatus.PENDING ||
+              attendance.status === SsomaAttendanceStatus.SIGNING;
+            if (unfinished && attendance.evidence.length)
+              throw new ConflictException(
+                'No se puede anular una asistencia en curso con evidencia de firma vinculada.',
+              );
+            const nextStatus = unfinished
+              ? SsomaAttendanceStatus.REMOVED
+              : SsomaAttendanceStatus.VOIDED;
+            const changed = await tx.ssomaTalkAttendance.updateMany({
+              where: {
+                ssomaTalkId,
+                ssomaTalkAttendanceId: attendance.ssomaTalkAttendanceId,
+                status: attendance.status,
+              },
+              data: { status: nextStatus },
+            });
+            if (changed.count !== 1)
+              throw new ConflictException(
+                'Una asistencia cambió durante la anulación; no se aplicó ningún cambio.',
+              );
+            await this.createAttendanceAudit(tx, {
+              ssomaTalkId,
+              attendanceId: attendance.ssomaTalkAttendanceId,
+              actorUserId,
+              eventType: unfinished
+                ? 'participant_removed'
+                : 'attendance_voided',
+              reason: reason!,
+              previousStatus: attendance.status,
+              newStatus: nextStatus,
+              workerId: attendance.workerId,
+            });
+          }
+        }
         const transition = getSsomaTalkTransition(action, current.status);
         if (!transition)
           throw new ForbiddenException(
@@ -571,11 +696,38 @@ export class SsomaService {
           changedFields: { status: true },
         });
         return updated;
-      });
+      };
+      const talk =
+        action === 'annul'
+          ? await this.runSerializable(mutate)
+          : await this.prisma.$transaction(mutate);
       return this.result(HttpStatus.OK, 'Estado de charla actualizado.', talk);
     } catch (error) {
       throwSsomaDatabaseError(error);
     }
+  }
+
+  private async runSerializable<T>(
+    operation: (tx: Prisma.TransactionClient) => Promise<T>,
+  ): Promise<T> {
+    const maxAttempts = 3;
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      try {
+        return await this.prisma.$transaction(operation, {
+          isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+        });
+      } catch (error) {
+        const serializationConflict =
+          typeof error === 'object' &&
+          error !== null &&
+          'code' in error &&
+          error.code === 'P2034';
+        if (!serializationConflict || attempt === maxAttempts) throw error;
+      }
+    }
+    throw new ConflictException(
+      'La transacción serializable no pudo completarse.',
+    );
   }
 
   private talkWhere(query: ListSsomaTalksQueryDto): Prisma.SsomaTalkWhereInput {

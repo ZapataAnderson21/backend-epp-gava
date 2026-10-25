@@ -1,5 +1,7 @@
 import { Type } from 'class-transformer';
 import {
+  ArrayUnique,
+  IsArray,
   IsInt,
   IsOptional,
   IsString,
@@ -22,6 +24,14 @@ export class StartSsomaRevisionDto {
   @MinLength(1)
   @MaxLength(2000)
   reason!: string;
+
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @Type(() => Number)
+  @IsInt({ each: true })
+  @Min(1, { each: true })
+  attendanceIdsToVoid?: number[];
 
   @IsOptional()
   @IsString()

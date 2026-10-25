@@ -97,8 +97,14 @@ export class SsomaController {
     @Body() dto: StartSsomaRevisionDto,
     @GetUser() user: SsomaRequestUser,
   ) {
-    const { reason, ...overrides } = dto;
-    return this.documents.startRevision(talkId, user.userId, reason, overrides);
+    const { reason, attendanceIdsToVoid, ...overrides } = dto;
+    return this.documents.startRevision(
+      talkId,
+      user.userId,
+      reason,
+      overrides,
+      attendanceIdsToVoid,
+    );
   }
 
   @Post('talks/:id/revisions/:revisionId/publish')

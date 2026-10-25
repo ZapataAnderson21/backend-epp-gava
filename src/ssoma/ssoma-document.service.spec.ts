@@ -113,6 +113,8 @@ function buildHarness(
     },
     ssomaTalkAttendance: {
       findMany: jest.fn().mockResolvedValue(talk.attendances),
+      findUnique: jest.fn(),
+      updateMany: jest.fn().mockResolvedValue({ count: 1 }),
     },
     ssomaTalkRevision: {
       findUnique: jest.fn().mockResolvedValue(options.revision ?? null),
@@ -483,6 +485,129 @@ describe('SsomaDocumentService', () => {
         data: objectContaining({
           eventType: 'document_current_version_replaced',
           reason: 'Corrected attendance',
+        }),
+      }),
+    );
+  });
+
+  it('publishes closed-talk invalidation through an immutable revision before voiding the attendee', async () => {
+    const baseSnapshot = {
+      talkId: 41,
+      versionNumber: 1,
+      project: { code: 'P-1', name: 'Project North' },
+      talk: {
+        talkDate: '2026-10-25',
+        topic: 'Safe work',
+        trainer: 'Trainer',
+        location: 'Site',
+        targetAudience: 'Crew',
+        scheduledTime: '08:30',
+        durationMinutes: 5,
+        observations: 'Use PPE.',
+        responsibleName: 'Lead',
+        responsiblePosition: 'Supervisor',
+      },
+      participants: [
+        {
+          workerId: 11,
+          fullName: 'Ana Worker',
+          dni: '00000011',
+          workerType: 'technician',
+          status: 'SIGNED',
+        },
+        {
+          workerId: 12,
+          fullName: 'Ben Worker',
+          dni: '00000012',
+          workerType: 'laborer',
+          status: 'DECLINED',
+        },
+      ],
+      signatures: [
+        {
+          workerId: 11,
+          reference: 'sig-a',
+          sha256: signatureHash,
+          byteSize: signatureBytes.length,
+        },
+      ],
+    };
+    const current = {
+      ssomaTalkId: 41,
+      ssomaTalkDocumentVersionId: 4,
+      versionNumber: 1,
+      status: 'CURRENT',
+      objectReference: 'old-pdf',
+      sha256: pdfHash,
+      byteSize: BigInt(pdfBytes.length),
+      officialDocumentSnapshot: baseSnapshot,
+    };
+    const revision = {
+      ssomaTalkRevisionId: 8,
+      ssomaTalkId: 41,
+      revisionNumber: 1,
+      authoredByUserId: 9,
+      snapshot: {
+        reason: 'Incorrect attendance',
+        baseVersionId: 4,
+        talkOverrides: {},
+        attendanceIdsToVoid: [1],
+      },
+    };
+    const harness = buildHarness({ currentVersion: current, revision });
+    harness.talk.status = 'closed';
+
+    await harness.service.publishRevision(41, 8, 9, 'invalidate-key-1');
+
+    expect(harness.renderer.render).toHaveBeenCalledWith(
+      objectContaining({
+        participants: [objectContaining({ workerId: 12, status: 'DECLINED' })],
+      }),
+      anyOf(Map),
+    );
+    expect(harness.tx.ssomaTalkAttendance.updateMany).toHaveBeenCalledWith(
+      objectContaining({
+        where: objectContaining({
+          ssomaTalkId: 41,
+          ssomaTalkAttendanceId: 1,
+          status: 'SIGNED',
+        }),
+        data: { status: 'VOIDED' },
+      }),
+    );
+    expect(harness.tx.ssomaTalkAuditEvent.create).toHaveBeenCalledWith(
+      objectContaining({
+        data: objectContaining({
+          eventType: 'attendance_voided',
+          actorUserId: 9,
+          reason: 'Incorrect attendance',
+        }),
+      }),
+    );
+  });
+
+  it('records invalidation targets inside the existing revision snapshot contract', async () => {
+    const current = {
+      ssomaTalkId: 41,
+      ssomaTalkDocumentVersionId: 4,
+      versionNumber: 1,
+      status: 'CURRENT',
+      officialDocumentSnapshot: {
+        participants: [{ workerId: 11, status: 'SIGNED' }],
+      },
+    };
+    const harness = buildHarness({ currentVersion: current });
+    harness.talk.status = 'closed';
+    harness.tx.ssomaTalkAttendance.findMany.mockResolvedValue([
+      { ssomaTalkAttendanceId: 1, workerId: 11 },
+    ]);
+
+    await harness.service.startRevision(41, 9, 'Incorrect attendance', {}, [1]);
+
+    expect(harness.tx.ssomaTalkRevision.create).toHaveBeenCalledWith(
+      objectContaining({
+        data: objectContaining({
+          snapshot: objectContaining({ attendanceIdsToVoid: [1] }),
         }),
       }),
     );

@@ -1159,6 +1159,82 @@ describeWhenConfigured(
         owner.release();
       }
     });
+    it('keeps talk and attendance dates atomic when a coordinated move conflicts in PostgreSQL', async () => {
+      const client = await pool!.connect();
+      try {
+        const fixture = await createFixture(client);
+        const validTalkId = await createTalk(client, fixture, '2026-11-19');
+        await createAttendance(
+          client,
+          validTalkId,
+          fixture.workerId,
+          '2026-11-19',
+        );
+        await client.query('BEGIN');
+        await client.query(
+          'UPDATE "SsomaTalk" SET "talkDate" = $1::date WHERE "ssomaTalkId" = $2',
+          ['2026-11-18', validTalkId],
+        );
+        await client.query(
+          'UPDATE "SsomaTalkAttendance" SET "attendanceDate" = $1::date WHERE "ssomaTalkId" = $2',
+          ['2026-11-18', validTalkId],
+        );
+        await client.query('COMMIT');
+        const validMove = await client.query<Record<string, unknown>>(
+          `SELECT t."talkDate"::text AS "talkDate", a."attendanceDate"::text AS "attendanceDate"
+             FROM "SsomaTalk" t JOIN "SsomaTalkAttendance" a USING ("ssomaTalkId")
+            WHERE t."ssomaTalkId" = $1`,
+          [validTalkId],
+        );
+        expect(validMove.rows[0]).toEqual({
+          talkDate: '2026-11-18',
+          attendanceDate: '2026-11-18',
+        });
+        const sourceTalkId = await createTalk(client, fixture, '2026-11-20');
+        await createAttendance(
+          client,
+          sourceTalkId,
+          fixture.workerId,
+          '2026-11-20',
+        );
+        const occupiedTalkId = await createTalk(client, fixture, '2026-11-21');
+        await createAttendance(
+          client,
+          occupiedTalkId,
+          fixture.workerId,
+          '2026-11-21',
+        );
+
+        await expect(
+          (async () => {
+            await client.query('BEGIN');
+            await client.query(
+              'UPDATE "SsomaTalk" SET "talkDate" = $1::date WHERE "ssomaTalkId" = $2',
+              ['2026-11-21', sourceTalkId],
+            );
+            await client.query(
+              'UPDATE "SsomaTalkAttendance" SET "attendanceDate" = $1::date WHERE "ssomaTalkId" = $2',
+              ['2026-11-21', sourceTalkId],
+            );
+            await client.query('COMMIT');
+          })(),
+        ).rejects.toMatchObject({ code: '23505' });
+        await client.query('ROLLBACK');
+
+        const state = await client.query<Record<string, unknown>>(
+          `SELECT t."talkDate"::text AS "talkDate", a."attendanceDate"::text AS "attendanceDate"
+             FROM "SsomaTalk" t JOIN "SsomaTalkAttendance" a USING ("ssomaTalkId")
+            WHERE t."ssomaTalkId" = $1`,
+          [sourceTalkId],
+        );
+        expect(state.rows[0]).toEqual({
+          talkDate: '2026-11-20',
+          attendanceDate: '2026-11-20',
+        });
+      } finally {
+        client.release();
+      }
+    });
   },
 );
 
