@@ -30,17 +30,28 @@ function chunk(type: string, data: Buffer) {
   return result;
 }
 
-function png() {
+function png(
+  options: {
+    width?: number;
+    height?: number;
+    depth?: number;
+    color?: number;
+  } = {},
+) {
   const signature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
   const header = Buffer.alloc(13);
-  header.writeUInt32BE(1, 0);
-  header.writeUInt32BE(1, 4);
-  header[8] = 8;
-  header[9] = 6;
+  const width = options.width ?? 1;
+  const height = options.height ?? 1;
+  header.writeUInt32BE(width, 0);
+  header.writeUInt32BE(height, 4);
+  header[8] = options.depth ?? 8;
+  header[9] = options.color ?? 6;
+  const row = Buffer.alloc(height * (width * 4 + 1));
+  for (let index = 0; index < height; index++) row[index * (width * 4 + 1)] = 0;
   return Buffer.concat([
     signature,
     chunk('IHDR', header),
-    chunk('IDAT', deflateSync(Buffer.from([0, 255, 0, 0, 255]))),
+    chunk('IDAT', deflateSync(row)),
     chunk('IEND', Buffer.alloc(0)),
   ]);
 }
@@ -170,6 +181,25 @@ describe('SignatureEvidenceService', () => {
       }),
     ).rejects.toThrow();
     expect(broken.storage.putIfAbsent).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['non-RGBA color type', { color: 2 }],
+    ['non-eight-bit depth', { depth: 16 }],
+    ['oversized dimensions', { width: 2049, height: 1 }],
+  ])('rejects unsupported signature PNG form: %s', async (_label, options) => {
+    const h = harness();
+    await expect(
+      h.service.capture({
+        talkId: 7,
+        attendanceId: 15,
+        workerId: 23,
+        actorUserId: 5,
+        mimeType: 'image/png',
+        bytes: png(options),
+      }),
+    ).rejects.toThrow();
+    expect(h.storage.putIfAbsent).not.toHaveBeenCalled();
   });
 
   it('enforces the upload ceiling before parsing and compensates when the audit transaction fails', async () => {

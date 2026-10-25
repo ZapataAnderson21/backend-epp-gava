@@ -58,7 +58,7 @@ export class SignatureEvidenceService {
       throw new BadRequestException(
         'El archivo de firma excede el límite permitido o está vacío.',
       );
-    const dimensions = validateSignaturePng(input.bytes);
+    const dimensions = await validateSignaturePng(input.bytes);
     const checksum = sha256(input.bytes);
     const attendance = await this.prisma.ssomaTalkAttendance.findUnique({
       where: { ssomaTalkAttendanceId: input.attendanceId },

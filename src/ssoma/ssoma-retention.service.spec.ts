@@ -392,6 +392,83 @@ describe('SsomaRetentionService', () => {
     expect(h.ev.status).toBe('ACTIVE');
   });
 
+  it('allows an earlier failed publication once a later current version is verified', async () => {
+    const h = harness({
+      evidence: {
+        talk: {
+          publications: [
+            {
+              status: 'FAILED',
+              completedAt: new Date(currentAt.getTime() - 10_000),
+              metadata: {},
+              ssomaTalkDocumentVersionId: null,
+            },
+            {
+              status: 'PUBLISHED',
+              completedAt: currentAt,
+              metadata: {},
+              ssomaTalkDocumentVersionId: 5,
+            },
+          ],
+        },
+      },
+    });
+    expect((await h.service.scheduleEligible()).scheduled).toBe(1);
+  });
+
+  it('blocks a failed publication without historical proof', async () => {
+    const h = harness({
+      evidence: {
+        talk: {
+          publications: [
+            {
+              status: 'FAILED',
+              completedAt: new Date(currentAt.getTime() + 1),
+              metadata: {},
+              ssomaTalkDocumentVersionId: null,
+            },
+          ],
+        },
+      },
+    });
+    expect((await h.service.scheduleEligible()).scheduled).toBe(0);
+  });
+
+  it('matches signature exclusion only on the complete worker-reference-checksum identity', async () => {
+    const h = harness({
+      evidence: {
+        status: 'ACTIVE',
+        attendance: { status: 'VOIDED' },
+        verifiedDocumentVersionId: 5,
+        verifiedDocumentVersion: {
+          ...evidence().verifiedDocumentVersion,
+          status: 'HISTORICAL',
+        },
+        talk: {
+          documentVersions: [
+            {
+              ...evidence().talk.documentVersions[0],
+              ssomaTalkDocumentVersionId: 6,
+              status: 'CURRENT',
+              officialDocumentSnapshot: {
+                participants: [{ workerId: 99, status: 'SIGNED' }],
+                signatures: [
+                  {
+                    workerId: 99,
+                    reference: 'signature-ref',
+                    sha256: signatureHash,
+                    byteSize: signature.length,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    });
+    expect((await h.service.scheduleEligible()).scheduled).toBe(1);
+  });
+
   it('starts retention only after a verified corrected current version excludes a voided signature', async () => {
     const previous = evidence().verifiedDocumentVersion as unknown as Record<
       string,

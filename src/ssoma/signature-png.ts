@@ -1,9 +1,12 @@
-import { inflateSync } from 'node:zlib';
+import { inflate as inflateCallback } from 'node:zlib';
+import { promisify } from 'node:util';
 import { BadRequestException } from '@nestjs/common';
 
 const PNG_MAGIC = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-const MAX_DIMENSION = 4096;
-const MAX_PIXELS = 12_000_000;
+const inflate = promisify(inflateCallback);
+const MAX_DIMENSION = 2048;
+const MAX_PIXELS = 4_000_000;
+const MAX_DECOMPRESSED_BYTES = MAX_PIXELS * 4 + MAX_DIMENSION;
 
 export interface ValidatedPng {
   width: number;
@@ -20,7 +23,9 @@ function crc32(bytes: Buffer) {
   return (crc ^ 0xffffffff) >>> 0;
 }
 
-export function validateSignaturePng(bytes: Buffer): ValidatedPng {
+export async function validateSignaturePng(
+  bytes: Buffer,
+): Promise<ValidatedPng> {
   const invalid = () =>
     new BadRequestException('El archivo de firma PNG no es válido.');
   if (
@@ -65,20 +70,14 @@ export function validateSignaturePng(bytes: Buffer): ValidatedPng {
       const compression = data[10],
         filter = data[11],
         interlace = data[12];
-      const allowedDepths: Record<number, number[]> = {
-        0: [1, 2, 4, 8, 16],
-        2: [8, 16],
-        3: [1, 2, 4, 8],
-        4: [8, 16],
-        6: [8, 16],
-      };
       if (
         !width ||
         !height ||
         width > MAX_DIMENSION ||
         height > MAX_DIMENSION ||
         width * height > MAX_PIXELS ||
-        !allowedDepths[colorType]?.includes(bitDepth) ||
+        colorType !== 6 ||
+        bitDepth !== 8 ||
         compression !== 0 ||
         filter !== 0 ||
         interlace !== 0
@@ -110,11 +109,11 @@ export function validateSignaturePng(bytes: Buffer): ValidatedPng {
     offset = chunkEnd;
   }
   if (!sawHeader || !sawEnd) throw invalid();
-  const channels: Record<number, number> = { 0: 1, 2: 3, 3: 1, 4: 2, 6: 4 };
-  const rowBytes = Math.ceil((width * channels[colorType] * bitDepth) / 8);
+  const rowBytes = width * 4;
   const expectedBytes = height * (rowBytes + 1);
+  if (expectedBytes > MAX_DECOMPRESSED_BYTES) throw invalid();
   try {
-    const raw = inflateSync(Buffer.concat(idat), {
+    const raw = await inflate(Buffer.concat(idat), {
       maxOutputLength: expectedBytes,
     });
     if (raw.length !== expectedBytes) throw invalid();

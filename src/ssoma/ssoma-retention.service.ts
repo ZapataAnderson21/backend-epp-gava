@@ -37,6 +37,7 @@ const evidenceInclude = {
       publications: {
         select: {
           status: true,
+          completedAt: true,
           metadata: true,
           ssomaTalkDocumentVersionId: true,
         },
@@ -915,19 +916,6 @@ export class SsomaRetentionService {
         currentAt: null,
         reason: 'retention_hold_active',
       };
-    if (
-      talk.publications.some(
-        (publication) =>
-          publication.status === SsomaPublicationStatus.PENDING ||
-          publication.status === SsomaPublicationStatus.FAILED,
-      )
-    )
-      return {
-        eligible: false,
-        currentAt: null,
-        reason: 'publication_pending_or_failed',
-      };
-
     const version = evidence.talk.documentVersions[0];
     if (
       !version ||
@@ -945,6 +933,21 @@ export class SsomaRetentionService {
         eligible: false,
         currentAt: null,
         reason: 'verified_current_version_missing',
+      };
+    if (
+      talk.publications.some(
+        (publication) =>
+          publication.status === SsomaPublicationStatus.PENDING ||
+          (publication.status === SsomaPublicationStatus.FAILED &&
+            (!publication.completedAt ||
+              publication.completedAt.getTime() >=
+                version.publishedAt!.getTime())),
+      )
+    )
+      return {
+        eligible: false,
+        currentAt: null,
+        reason: 'publication_pending_or_failed',
       };
     const signedSnapshot =
       signedAttendance &&
@@ -1056,9 +1059,11 @@ export class SsomaRetentionService {
     const noSignature = snapshotValue.signatures.every(
       (value) =>
         !isObject(value) ||
-        (value.workerId !== evidence.workerId &&
-          value.reference !== evidence.objectReference &&
-          value.sha256 !== evidence.sha256),
+        !(
+          value.workerId === evidence.workerId &&
+          value.reference === evidence.objectReference &&
+          value.sha256 === evidence.sha256
+        ),
     );
     return Boolean(noParticipant && noSignature);
   }
@@ -1070,6 +1075,7 @@ export class SsomaRetentionService {
     }>,
     publications: Array<{
       status: SsomaPublicationStatus;
+      completedAt: Date | null;
       metadata: Prisma.JsonValue;
       ssomaTalkDocumentVersionId: number | null;
     }>,
