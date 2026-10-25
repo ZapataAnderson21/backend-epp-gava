@@ -61,6 +61,12 @@ export function endpointPermissions(
     const specialAction: Record<string, string> = {
       sign: 'sign',
       captureSignature: 'sign',
+      closeTalk: 'close',
+      startRevision: 'revise',
+      publishRevision: 'revise',
+      downloadCurrentPdf: 'export',
+      downloadVersionPdf: 'export',
+      reconcilePublications: 'audit',
       invalidateAttendance: 'invalidate',
       close: 'close',
       revise: 'revise',
@@ -79,7 +85,7 @@ export function endpointPermissions(
       ].includes(handler)
     )
       return [['ssoma.view'], ['ssoma.manage']];
-    if (['listTalks', 'findTalk', 'searchWorkers', 'getAvailability'].includes(handler))
+    if (['listTalks', 'findTalk', 'searchWorkers', 'getAvailability', 'listDocumentVersions', 'listRevisions'].includes(handler))
       return [['ssoma.view']];
     const action = specialAction[handler];
     if (action) return [['ssoma.view'], [`ssoma.${action}`]];

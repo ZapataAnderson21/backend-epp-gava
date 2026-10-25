@@ -53,6 +53,12 @@ describe('Dynamic role permissions', () => {
       ['close', 'POST', 'ssoma.close'],
       ['revise', 'POST', 'ssoma.revise'],
       ['export', 'GET', 'ssoma.export'],
+      ['closeTalk', 'POST', 'ssoma.close'],
+      ['startRevision', 'POST', 'ssoma.revise'],
+      ['publishRevision', 'POST', 'ssoma.revise'],
+      ['downloadCurrentPdf', 'GET', 'ssoma.export'],
+      ['downloadVersionPdf', 'GET', 'ssoma.export'],
+      ['reconcilePublications', 'GET', 'ssoma.audit'],
     ] as const;
     for (const [handler, method, permission] of cases) {
       expect(

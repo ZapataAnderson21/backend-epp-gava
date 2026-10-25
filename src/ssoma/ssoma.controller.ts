@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
   BadRequestException,
+  StreamableFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/decorators/get-user.decorator';
@@ -27,12 +28,15 @@ import { SsomaService } from './ssoma.service';
 import { SsomaRequestUser } from './ssoma-user-context';
 import { CaptureSignatureDto } from './dto/capture-signature.dto';
 import { SignatureEvidenceService } from './signature-evidence.service';
+import { SsomaDocumentService } from './ssoma-document.service';
+import { PublishSsomaDocumentDto, StartSsomaRevisionDto } from './dto/ssoma-publication.dto';
 
 @Controller('ssoma')
 export class SsomaController {
   constructor(
     private readonly ssoma: SsomaService,
     private readonly signatures: SignatureEvidenceService,
+    private readonly documents: SsomaDocumentService,
   ) {}
 
   @Post('talks/:id/attendance/:attendanceId/signature')
@@ -58,6 +62,73 @@ export class SsomaController {
       actorUserId: user.userId,
       mimeType: file.mimetype,
       bytes: file.buffer,
+    });
+  }
+
+  @Post('talks/:id/close')
+  closeTalk(
+    @Param('id', ParseIntPipe) talkId: number,
+    @Body() dto: PublishSsomaDocumentDto,
+    @GetUser() user: SsomaRequestUser,
+  ) {
+    return this.documents.closeTalk(talkId, user.userId, dto.idempotencyKey);
+  }
+
+  @Post('talks/:id/revisions')
+  startRevision(
+    @Param('id', ParseIntPipe) talkId: number,
+    @Body() dto: StartSsomaRevisionDto,
+    @GetUser() user: SsomaRequestUser,
+  ) {
+    const { reason, ...overrides } = dto;
+    return this.documents.startRevision(talkId, user.userId, reason, overrides);
+  }
+
+  @Post('talks/:id/revisions/:revisionId/publish')
+  publishRevision(
+    @Param('id', ParseIntPipe) talkId: number,
+    @Param('revisionId', ParseIntPipe) revisionId: number,
+    @Body() dto: PublishSsomaDocumentDto,
+    @GetUser() user: SsomaRequestUser,
+  ) {
+    return this.documents.publishRevision(talkId, revisionId, user.userId, dto.idempotencyKey);
+  }
+
+  @Get('talks/:id/versions')
+  listDocumentVersions(@Param('id', ParseIntPipe) talkId: number) {
+    return this.documents.listVersions(talkId);
+  }
+
+  @Get('talks/:id/revisions')
+  listRevisions(@Param('id', ParseIntPipe) talkId: number) {
+    return this.documents.listRevisions(talkId);
+  }
+
+  @Get('talks/:id/publications/reconciliation')
+  reconcilePublications(@Param('id', ParseIntPipe) talkId: number) {
+    return this.documents.reconcilePublications(talkId);
+  }
+
+  @Get('talks/:id/document')
+  async downloadCurrentPdf(@Param('id', ParseIntPipe) talkId: number) {
+    const bytes = await this.documents.downloadCurrent(talkId);
+    return new StreamableFile(bytes, {
+      type: 'application/pdf',
+      disposition: `attachment; filename="ssoma-talk-${talkId}.pdf"`,
+      length: bytes.length,
+    });
+  }
+
+  @Get('talks/:id/versions/:versionId/document')
+  async downloadVersionPdf(
+    @Param('id', ParseIntPipe) talkId: number,
+    @Param('versionId', ParseIntPipe) versionId: number,
+  ) {
+    const bytes = await this.documents.downloadVersion(talkId, versionId);
+    return new StreamableFile(bytes, {
+      type: 'application/pdf',
+      disposition: `attachment; filename="ssoma-talk-${talkId}-version-${versionId}.pdf"`,
+      length: bytes.length,
     });
   }
 

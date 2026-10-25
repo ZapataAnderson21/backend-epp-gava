@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { SsomaController } from './ssoma.controller';
 import { SsomaService } from './ssoma.service';
 import { SignatureEvidenceService } from './signature-evidence.service';
+import { SsomaDocumentService } from './ssoma-document.service';
+import { SsomaOfficialPdfRenderer } from './ssoma-official-pdf';
 import {
   PRIVATE_EVIDENCE_STORAGE,
   LocalFilesystemPrivateEvidenceStorage,
@@ -13,6 +15,8 @@ import {
   providers: [
     SsomaService,
     SignatureEvidenceService,
+    SsomaDocumentService,
+    SsomaOfficialPdfRenderer,
     {
       provide: PRIVATE_EVIDENCE_STORAGE,
       useFactory: () => {
