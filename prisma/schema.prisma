@@ -1777,10 +1777,10 @@ model SsomaTalkAuditEvent {
   documentVersionTalkId Int?
   ssomaTalkDocumentVersionId Int?
 
-  talk SsomaTalk @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
-  attendance SsomaTalkAttendance? @relation(fields: [attendanceTalkId, ssomaTalkAttendanceId], references: [ssomaTalkId, ssomaTalkAttendanceId], onDelete: Restrict, onUpdate: Cascade)
-  actor User? @relation("SsomaAuditActor", fields: [actorUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  documentVersion SsomaTalkDocumentVersion? @relation("SsomaAuditDocumentVersion", fields: [documentVersionTalkId, ssomaTalkDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade)
+  talk SsomaTalk @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Restrict)
+  attendance SsomaTalkAttendance? @relation(fields: [attendanceTalkId, ssomaTalkAttendanceId], references: [ssomaTalkId, ssomaTalkAttendanceId], onDelete: Restrict, onUpdate: Restrict)
+  actor User? @relation("SsomaAuditActor", fields: [actorUserId], references: [userId], onDelete: Restrict, onUpdate: Restrict)
+  documentVersion SsomaTalkDocumentVersion? @relation("SsomaAuditDocumentVersion", fields: [documentVersionTalkId, ssomaTalkDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Restrict)
 
   @@index([ssomaTalkId, serverAt])
   @@index([actorUserId])

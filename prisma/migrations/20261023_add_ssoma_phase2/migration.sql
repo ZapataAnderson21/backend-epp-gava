@@ -208,10 +208,11 @@ ALTER TABLE "SsomaSignatureEvidence" ADD CONSTRAINT "SsomaSignatureEvidence_ssom
 ALTER TABLE "SsomaSignatureEvidence" ADD CONSTRAINT "SsomaSignatureEvidence_workerId_fkey" FOREIGN KEY ("workerId") REFERENCES "Worker"("workerId") ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE "SsomaSignatureEvidence" ADD CONSTRAINT "SsomaSignatureEvidence_verified_document_fkey" FOREIGN KEY ("verifiedDocumentVersionTalkId", "verifiedDocumentVersionId") REFERENCES "SsomaTalkDocumentVersion"("ssomaTalkId", "ssomaTalkDocumentVersionId") ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE "SsomaSignatureEvidence" ADD CONSTRAINT "SsomaSignatureEvidence_exceptionalHoldSetByUserId_fkey" FOREIGN KEY ("exceptionalHoldSetByUserId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
-ALTER TABLE "SsomaTalkAuditEvent" ADD CONSTRAINT "SsomaTalkAuditEvent_ssomaTalkId_fkey" FOREIGN KEY ("ssomaTalkId") REFERENCES "SsomaTalk"("ssomaTalkId") ON DELETE RESTRICT ON UPDATE CASCADE;
-ALTER TABLE "SsomaTalkAuditEvent" ADD CONSTRAINT "SsomaTalkAuditEvent_attendance_fkey" FOREIGN KEY ("attendanceTalkId", "ssomaTalkAttendanceId") REFERENCES "SsomaTalkAttendance"("ssomaTalkId", "ssomaTalkAttendanceId") ON DELETE RESTRICT ON UPDATE CASCADE;
-ALTER TABLE "SsomaTalkAuditEvent" ADD CONSTRAINT "SsomaTalkAuditEvent_actorUserId_fkey" FOREIGN KEY ("actorUserId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
-ALTER TABLE "SsomaTalkAuditEvent" ADD CONSTRAINT "SsomaTalkAuditEvent_documentVersion_fkey" FOREIGN KEY ("documentVersionTalkId", "ssomaTalkDocumentVersionId") REFERENCES "SsomaTalkDocumentVersion"("ssomaTalkId", "ssomaTalkDocumentVersionId") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- Historical audit references are stable: parent identifiers are immutable and never cascade into history.
+ALTER TABLE "SsomaTalkAuditEvent" ADD CONSTRAINT "SsomaTalkAuditEvent_ssomaTalkId_fkey" FOREIGN KEY ("ssomaTalkId") REFERENCES "SsomaTalk"("ssomaTalkId") ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE "SsomaTalkAuditEvent" ADD CONSTRAINT "SsomaTalkAuditEvent_attendance_fkey" FOREIGN KEY ("attendanceTalkId", "ssomaTalkAttendanceId") REFERENCES "SsomaTalkAttendance"("ssomaTalkId", "ssomaTalkAttendanceId") ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE "SsomaTalkAuditEvent" ADD CONSTRAINT "SsomaTalkAuditEvent_actorUserId_fkey" FOREIGN KEY ("actorUserId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE "SsomaTalkAuditEvent" ADD CONSTRAINT "SsomaTalkAuditEvent_documentVersion_fkey" FOREIGN KEY ("documentVersionTalkId", "ssomaTalkDocumentVersionId") REFERENCES "SsomaTalkDocumentVersion"("ssomaTalkId", "ssomaTalkDocumentVersionId") ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE "SsomaTalkRevision" ADD CONSTRAINT "SsomaTalkRevision_ssomaTalkId_fkey" FOREIGN KEY ("ssomaTalkId") REFERENCES "SsomaTalk"("ssomaTalkId") ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE "SsomaTalkRevision" ADD CONSTRAINT "SsomaTalkRevision_authoredByUserId_fkey" FOREIGN KEY ("authoredByUserId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE "SsomaTalkDocumentVersion" ADD CONSTRAINT "SsomaTalkDocumentVersion_ssomaTalkId_fkey" FOREIGN KEY ("ssomaTalkId") REFERENCES "SsomaTalk"("ssomaTalkId") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -297,6 +298,9 @@ CREATE FUNCTION ssoma_validate_evidence_retention() RETURNS trigger AS $$
 DECLARE
   anchor "SsomaTalkDocumentVersion"%ROWTYPE;
 BEGIN
+  IF TG_OP = 'INSERT' AND NEW."status" <> 'ACTIVE' THEN
+    RAISE EXCEPTION 'New SSOMA signature evidence must begin in ACTIVE state';
+  END IF;
   IF NEW."deletionEligibleAt" IS NOT NULL THEN
     SELECT * INTO anchor FROM "SsomaTalkDocumentVersion"
       WHERE "ssomaTalkId" = NEW."verifiedDocumentVersionTalkId"
@@ -309,15 +313,26 @@ BEGIN
     END IF;
   END IF;
 
-  IF NEW."status" IN ('DELETING', 'DELETED') AND NEW."exceptionalHoldReason" IS NOT NULL
+  IF NEW."status" IN ('DELETING', 'DELETE_FAILED', 'DELETED') AND NEW."exceptionalHoldReason" IS NOT NULL
       AND (NEW."exceptionalHoldUntil" IS NULL OR NEW."exceptionalHoldUntil" > CURRENT_TIMESTAMP) THEN
     RAISE EXCEPTION 'SSOMA signature evidence is protected by an exceptional retention hold';
   END IF;
-  IF NEW."status" IN ('DELETING', 'DELETED') AND (
+  IF NEW."status" IN ('DELETING', 'DELETE_FAILED', 'DELETED') AND (
       (NEW."publicationHoldReason" IS NOT NULL AND (NEW."publicationHoldUntil" IS NULL OR NEW."publicationHoldUntil" > CURRENT_TIMESTAMP)) OR
       (NEW."revisionHoldReason" IS NOT NULL AND (NEW."revisionHoldUntil" IS NULL OR NEW."revisionHoldUntil" > CURRENT_TIMESTAMP))
   ) THEN
     RAISE EXCEPTION 'SSOMA signature evidence is protected by a publication or revision hold';
+  END IF;
+  IF NEW."status" IN ('DELETING', 'DELETE_FAILED', 'DELETED') AND (
+      NEW."deletionEligibleAt" IS NULL OR NEW."deletionEligibleAt" > clock_timestamp()) THEN
+    RAISE EXCEPTION 'SSOMA signature evidence is not retention-eligible for deletion';
+  END IF;
+  IF TG_OP = 'UPDATE' AND NEW."status" IS DISTINCT FROM OLD."status" AND NOT (
+      (OLD."status" = 'ACTIVE' AND NEW."status" = 'PENDING_DELETION') OR
+      (OLD."status" = 'PENDING_DELETION' AND NEW."status" = 'DELETING') OR
+      (OLD."status" = 'DELETING' AND NEW."status" IN ('DELETE_FAILED', 'DELETED')) OR
+      (OLD."status" = 'DELETE_FAILED' AND NEW."status" = 'DELETING')) THEN
+    RAISE EXCEPTION 'SSOMA signature evidence has an invalid deletion state transition';
   END IF;
   RETURN NEW;
 END;
@@ -397,3 +412,41 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER "SsomaTalkAuditEvent_append_only"
 BEFORE UPDATE OR DELETE ON "SsomaTalkAuditEvent"
 FOR EACH ROW EXECUTE FUNCTION ssoma_reject_audit_mutation();
+CREATE TRIGGER "SsomaTalkAuditEvent_no_truncate"
+BEFORE TRUNCATE ON "SsomaTalkAuditEvent"
+FOR EACH STATEMENT EXECUTE FUNCTION ssoma_reject_audit_mutation();
+
+-- Table owners and privileged maintenance roles can bypass triggers; deployment must grant application roles
+-- INSERT/SELECT only and withhold UPDATE/DELETE/TRUNCATE. This migration intentionally invents no role names.
+CREATE FUNCTION ssoma_validate_audit_event() RETURNS trigger AS $$
+DECLARE
+  human_event BOOLEAN;
+  audit_payload TEXT;
+BEGIN
+  audit_payload := COALESCE(NEW."previousState"::text, '') || COALESCE(NEW."newState"::text, '') || COALESCE(NEW."changedFields"::text, '');
+  IF audit_payload ~* '"[^"]*(signature|base64|trace)[^"]*"[[:space:]]*:' OR audit_payload ~* 'data:image/[a-z0-9.+-]+;base64,' THEN
+    RAISE EXCEPTION 'SSOMA audit metadata cannot contain signature payloads, Base64 images, or traces';
+  END IF;
+  IF NEW."eventType" IN ('attendance_signed', 'attendance_declined', 'talk_created', 'talk_status_changed',
+      'document_published', 'retention_hold_set', 'retention_hold_cleared') THEN
+    human_event := TRUE;
+  ELSIF NEW."eventType" IN ('system_signature_deletion_started', 'system_signature_deletion_failed',
+      'system_signature_deleted', 'system_document_publication_failed') THEN
+    human_event := FALSE;
+  ELSE
+    RAISE EXCEPTION 'SSOMA audit event type is not in the controlled catalog';
+  END IF;
+  IF human_event AND (NEW."actorUserId" IS NULL OR NEW."reason" IS NULL OR length(btrim(NEW."reason")) = 0) THEN
+    RAISE EXCEPTION 'SSOMA human audit events require an actor and nonblank reason';
+  END IF;
+  IF NOT human_event AND NEW."actorUserId" IS NOT NULL THEN
+    RAISE EXCEPTION 'SSOMA system audit events cannot claim a human actor';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER "SsomaTalkAuditEvent_validate_catalog"
+BEFORE INSERT ON "SsomaTalkAuditEvent"
+FOR EACH ROW EXECUTE FUNCTION ssoma_validate_audit_event();
+COMMENT ON TABLE "SsomaTalkAuditEvent" IS 'Append-only event metadata only; never store signature images, Base64 payloads, or traces. Application roles require INSERT/SELECT only; UPDATE, DELETE, and TRUNCATE privileges must be withheld by deployment.';

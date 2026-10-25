@@ -121,20 +121,37 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
         [secondProject.rows[0].projectId, first.userId],
       );
 
-      const races = await Promise.allSettled([
-        fixture.query(
+      const observer = await pool!.connect();
+      try {
+        await fixture.query('BEGIN');
+        await other.query('BEGIN');
+        await fixture.query(
           `INSERT INTO "SsomaTalkAttendance" ("ssomaTalkId", "workerId", "attendanceDate", "status", "updatedAt")
            VALUES ($1, $2, DATE '2026-10-22', 'PENDING', CURRENT_TIMESTAMP)`,
           [firstConcurrentTalk, first.workerId],
-        ),
-        other.query(
+        );
+        await other.query("SET LOCAL lock_timeout = '5s'");
+        const competingInsert = other.query(
           `INSERT INTO "SsomaTalkAttendance" ("ssomaTalkId", "workerId", "attendanceDate", "status", "updatedAt")
            VALUES ($1, $2, DATE '2026-10-22', 'SIGNED', CURRENT_TIMESTAMP)`,
           [secondConcurrentTalk.rows[0].ssomaTalkId, first.workerId],
-        ),
-      ]);
-      expect(races.filter((race) => race.status === 'fulfilled')).toHaveLength(1);
-      expect(races.filter((race) => race.status === 'rejected')).toHaveLength(1);
+        );
+        let blockedOnUniqueIndex = false;
+        for (let attempt = 0; attempt < 100 && !blockedOnUniqueIndex; attempt += 1) {
+          const waiting = await observer.query(
+            `SELECT 1 FROM pg_stat_activity WHERE wait_event_type = 'Lock'
+             AND query LIKE '%INSERT INTO "SsomaTalkAttendance"%' AND pid <> pg_backend_pid()`,
+          );
+          blockedOnUniqueIndex = waiting.rowCount === 1;
+          if (!blockedOnUniqueIndex) await new Promise((resolve) => setTimeout(resolve, 10));
+        }
+        expect(blockedOnUniqueIndex).toBe(true);
+        await fixture.query('COMMIT');
+        await expect(competingInsert).rejects.toThrow(/unique/i);
+        await other.query('ROLLBACK').catch(() => undefined);
+      } finally {
+        observer.release();
+      }
 
       const closedTalk = await createTalk(fixture, first, '2026-10-23', 'closed');
       await createAttendance(fixture, closedTalk, first.workerId, '2026-10-23');
@@ -147,7 +164,16 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
         [closedTalk, first.workerId],
       );
       expect(records.rows[0].status).toBe('closed');
+
+      for (const [attendanceStatus, day] of [['SIGNING', '2026-10-29'], ['DECLINED', '2026-10-30']]) {
+        const occupiedTalk = await createTalk(fixture, first, day);
+        await createAttendance(fixture, occupiedTalk, first.workerId, day, attendanceStatus);
+        const conflictingTalk = await createTalk(fixture, { ...first, projectId: secondProject.rows[0].projectId }, day);
+        await expect(createAttendance(fixture, conflictingTalk, first.workerId, day)).rejects.toThrow(/unique/i);
+      }
     } finally {
+      await fixture.query('ROLLBACK').catch(() => undefined);
+      await other.query('ROLLBACK').catch(() => undefined);
       fixture.release();
       other.release();
     }
@@ -279,6 +305,15 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
         'UPDATE "SsomaSignatureEvidence" SET "workerId" = $1 WHERE "ssomaSignatureEvidenceId" = $2',
         [fixture.workerId + 1000000, evidence.rows[0].ssomaSignatureEvidenceId],
       )).rejects.toThrow(/binding/i);
+      await expect(client.query(
+        `UPDATE "SsomaTalkAttendance" SET "attendanceDate" = DATE '2026-10-27'
+         WHERE "ssomaTalkAttendanceId" = $1`,
+        [attendanceId],
+      )).rejects.toThrow(/binding cannot change/i);
+      await expect(client.query(
+        `UPDATE "SsomaTalkAttendance" SET "workerId" = $1 WHERE "ssomaTalkAttendanceId" = $2`,
+        [fixture.workerId + 1000000, attendanceId],
+      )).rejects.toThrow(/binding cannot change/i);
 
       await expect(client.query(
         `UPDATE "SsomaSignatureEvidence" SET "status" = 'PENDING_DELETION', "deletionEligibleAt" = CURRENT_TIMESTAMP
@@ -338,27 +373,55 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
            "revisionHoldReference" = NULL, "revisionHoldReason" = NULL,
            "exceptionalHoldReason" = NULL, "exceptionalHoldSetAt" = NULL, "exceptionalHoldSetByUserId" = NULL,
            "exceptionalHoldUntil" = NULL,
-           "status" = 'DELETE_FAILED', "deletionAttemptCount" = 1, "lastDeletionAttemptAt" = CURRENT_TIMESTAMP,
-           "lastDeletionError" = 'simulated object-store failure', "purgeMetadata" = '{"attempted":true}'::jsonb
+           "purgeMetadata" = '{"attempted":true}'::jsonb
          WHERE "ssomaSignatureEvidenceId" = $1`,
         [evidence.rows[0].ssomaSignatureEvidenceId],
       );
-      await client.query(
-        `UPDATE "SsomaSignatureEvidence" SET "status" = 'DELETED', "deletedAt" = CURRENT_TIMESTAMP
-         WHERE "ssomaSignatureEvidenceId" = $1`,
-        [evidence.rows[0].ssomaSignatureEvidenceId],
-      );
-      const deleted = await client.query(
-        `SELECT "retentionPolicyVersion", "retentionDays", "deletionAttemptCount", "lastDeletionError", "deletedAt", "purgeMetadata"
+      const retained = await client.query(
+        `SELECT "retentionPolicyVersion", "retentionDays", "status", "deletedAt", "purgeMetadata"
          FROM "SsomaSignatureEvidence" WHERE "ssomaSignatureEvidenceId" = $1`,
         [evidence.rows[0].ssomaSignatureEvidenceId],
       );
-      expect(deleted.rows[0].retentionPolicyVersion).toBe('ssoma-retention-2026-10');
-      expect(deleted.rows[0].retentionDays).toBe(10);
-      expect(deleted.rows[0].deletionAttemptCount).toBe(1);
-      expect(deleted.rows[0].lastDeletionError).toBe('simulated object-store failure');
-      expect(deleted.rows[0].deletedAt).not.toBeNull();
-      expect(deleted.rows[0].purgeMetadata).toEqual({ attempted: true });
+      expect(retained.rows[0].retentionPolicyVersion).toBe('ssoma-retention-2026-10');
+      expect(retained.rows[0].retentionDays).toBe(10);
+      expect(retained.rows[0].status).toBe('PENDING_DELETION');
+      expect(retained.rows[0].deletedAt).toBeNull();
+      expect(retained.rows[0].purgeMetadata).toEqual({ attempted: true });
+    } finally {
+      client.release();
+    }
+  });
+
+  it('rejects entry into deletion states until server-time eligibility is reached', async () => {
+    const client = await pool!.connect();
+    try {
+      const fixture = await createFixture(client);
+      const talkId = await createTalk(client, fixture, '2026-10-28');
+      const attendanceId = await createAttendance(client, talkId, fixture.workerId, '2026-10-28');
+      const version = await createCurrentDocumentVersion(client, talkId);
+      const versionId = version.rows[0].ssomaTalkDocumentVersionId as number;
+      const evidence = await client.query(
+        `INSERT INTO "SsomaSignatureEvidence" ("ssomaTalkAttendanceId", "ssomaTalkId", "workerId", "attendanceDate", "verifiedDocumentVersionTalkId", "verifiedDocumentVersionId", "deletionEligibleAt", "updatedAt")
+         VALUES ($1, $2, $3, DATE '2026-10-28', $2, $4, CURRENT_TIMESTAMP + INTERVAL '10 days', CURRENT_TIMESTAMP)
+         RETURNING "ssomaSignatureEvidenceId"`,
+        [attendanceId, talkId, fixture.workerId, versionId],
+      );
+      const id = evidence.rows[0].ssomaSignatureEvidenceId;
+      await client.query(`UPDATE "SsomaSignatureEvidence" SET "status" = 'PENDING_DELETION' WHERE "ssomaSignatureEvidenceId" = $1`, [id]);
+      await expect(client.query(
+        `UPDATE "SsomaSignatureEvidence" SET "status" = 'DELETING', "deletionAttemptCount" = 1,
+           "lastDeletionAttemptAt" = CURRENT_TIMESTAMP WHERE "ssomaSignatureEvidenceId" = $1`, [id],
+      )).rejects.toThrow(/eligib/i);
+      await expect(client.query(
+        `UPDATE "SsomaSignatureEvidence" SET "status" = 'DELETE_FAILED', "deletionAttemptCount" = 1,
+           "lastDeletionAttemptAt" = CURRENT_TIMESTAMP, "lastDeletionError" = 'simulated failure'
+         WHERE "ssomaSignatureEvidenceId" = $1`, [id],
+      )).rejects.toThrow(/eligib/i);
+      await expect(client.query(
+        `UPDATE "SsomaSignatureEvidence" SET "status" = 'DELETED', "deletionAttemptCount" = 1,
+           "lastDeletionAttemptAt" = CURRENT_TIMESTAMP, "deletedAt" = CURRENT_TIMESTAMP
+         WHERE "ssomaSignatureEvidenceId" = $1`, [id],
+      )).rejects.toThrow(/eligib/i);
     } finally {
       client.release();
     }
@@ -393,6 +456,31 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
         'DELETE FROM "SsomaTalkAuditEvent" WHERE "ssomaTalkAuditEventId" = $1',
         [audit.rows[0].ssomaTalkAuditEventId],
       )).rejects.toThrow(/append-only/i);
+      await expect(client.query('TRUNCATE "SsomaTalkAuditEvent"')).rejects.toThrow(/append-only/i);
+      await expect(client.query(
+        `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId", "reason")
+         VALUES ($1, 'attendance_signed', $2, '   ')`,
+        [talkId, fixture.userId],
+      )).rejects.toThrow(/actor and nonblank reason/i);
+      await expect(client.query(
+        `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType") VALUES ($1, 'unknown_event')`,
+        [talkId],
+      )).rejects.toThrow(/controlled catalog/i);
+      await expect(client.query(
+        `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId", "reason", "changedFields")
+         VALUES ($1, 'attendance_signed', $2, 'Signature captured', '{"signatureImage":"data:image/png;base64,AAAA"}'::jsonb)`,
+        [talkId, fixture.userId],
+      )).rejects.toThrow(/cannot contain signature payloads/i);
+      await expect(client.query(
+        `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId", "reason", "changedFields")
+         VALUES ($1, 'attendance_signed', $2, 'Signature captured', '{"trace":"private stack"}'::jsonb)`,
+        [talkId, fixture.userId],
+      )).rejects.toThrow(/cannot contain signature payloads/i);
+      await client.query(
+        `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType")
+         VALUES ($1, 'system_signature_deletion_started')`,
+        [talkId],
+      );
     } finally {
       client.release();
     }
@@ -402,14 +490,13 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
     const client = await pool!.connect();
     try {
       const fks = await client.query(
-        `SELECT c.conname, c.confdeltype
+        `SELECT c.conname, c.confdeltype, c.confupdtype
          FROM pg_constraint c
          JOIN pg_class t ON t.oid = c.conrelid
-         WHERE c.contype = 'f' AND t.relname LIKE 'Ssoma%'
-           AND c.conname NOT LIKE '%_idempotencyKey_key'`,
+         WHERE c.contype = 'f' AND t.relname = 'SsomaTalkAuditEvent'`,
       );
-      expect(fks.rows.length).toBeGreaterThan(0);
-      expect(fks.rows.every((constraint) => constraint.confdeltype !== 'c')).toBe(true);
+      expect(fks.rows).toHaveLength(4);
+      expect(fks.rows.every((constraint) => constraint.confdeltype === 'r' && constraint.confupdtype === 'r')).toBe(true);
     } finally {
       client.release();
     }
