@@ -11,6 +11,53 @@ import { redactFinancial } from './financial.interceptor';
 import { dashboardPermissions } from '../dashboard/dashboard-calculations';
 
 describe('Dynamic role permissions', () => {
+  it('registers the SSOMA permission surface and grants it to the PDR role', () => {
+    const ssomaPermissions = [
+      'ssoma.view',
+      'ssoma.manage',
+      'ssoma.sign',
+      'ssoma.invalidate',
+      'ssoma.close',
+      'ssoma.revise',
+      'ssoma.void',
+      'ssoma.export',
+      'ssoma.audit',
+    ];
+    expect(ssomaPermissions.every((permission) => allPermissions.includes(permission))).toBe(true);
+    expect(initialPermissions('PREVENCIONISTA DE RIESGOS')).toEqual(
+      expect.arrayContaining(ssomaPermissions),
+    );
+    const migration = readFileSync(
+      resolve(__dirname, '../../prisma/migrations/20261025_add_ssoma_phase3/migration.sql'),
+      'utf8',
+    );
+    for (const permission of ssomaPermissions)
+      expect(migration).toContain(`'${permission}'`);
+  });
+  it('uses action-specific permissions for SSOMA talk operations', () => {
+    const cases = [
+      ['findAll', 'GET', 'ssoma.view'],
+      ['create', 'POST', 'ssoma.manage'],
+      ['sign', 'POST', 'ssoma.sign'],
+      ['invalidate', 'POST', 'ssoma.invalidate'],
+      ['close', 'POST', 'ssoma.close'],
+      ['revise', 'POST', 'ssoma.revise'],
+      ['void', 'POST', 'ssoma.void'],
+      ['export', 'GET', 'ssoma.export'],
+      ['audit', 'GET', 'ssoma.audit'],
+    ] as const;
+    for (const [handler, method, permission] of cases) {
+      expect(
+        satisfies(
+          ['ssoma.view', permission],
+          endpointPermissions('SsomaTalkController', handler, method),
+        ),
+      ).toBe(true);
+    }
+    expect(
+      satisfies(['ssoma.view', 'ssoma.manage'], endpointPermissions('SsomaTalkController', 'sign', 'POST')),
+    ).toBe(false);
+  });
   it('normalizes dependencies and rejects unknown privileges', () => {
     expect(normalizePermissions(['payroll.payments'])).toEqual([
       'finance.view',
@@ -49,7 +96,12 @@ describe('Dynamic role permissions', () => {
           : sql.match(
               new RegExp(`WHEN '${name}' THEN ARRAY\\[([^\\]]*)\\]`),
             )?.[1];
-      expect(seeded?.replaceAll("'", '').split(',')).toEqual(permissions);
+      const historicalPermissions = seeded?.replaceAll("'", '').split(',');
+      expect(
+        historicalPermissions?.filter((p) => !p.startsWith('ssoma.')),
+      ).toEqual(
+        permissions.filter((p) => !p.startsWith('ssoma.')),
+      );
     }
     expect(initialPermissions('LOGISTICA')).not.toContain('roles.manage');
   });

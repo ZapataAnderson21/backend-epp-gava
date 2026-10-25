@@ -1679,6 +1679,14 @@ model SsomaTalk {
   createdByUserId  Int
   talkDate         DateTime       @db.Date
   topic            String         @db.Text
+  trainer          String?        @db.VarChar(200)
+  location         String?        @db.Text
+  targetAudience   String?        @db.Text
+  scheduledTime    DateTime?      @db.Time(0)
+  durationMinutes  Int?
+  observations     String?        @db.Text
+  responsibleName  String?        @db.VarChar(200)
+  responsiblePosition String?     @db.VarChar(200)
   status           SsomaTalkStatus @default(draft)
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
@@ -1694,6 +1702,7 @@ model SsomaTalk {
 
   @@index([projectId, talkDate])
   @@index([status, talkDate])
+  @@index([scheduledTime])
 }
 
 model SsomaTalkAttendance {
@@ -1840,6 +1849,7 @@ model SsomaDocumentPublication {
   ssomaTalkDocumentVersionId Int?
   actorUserId                Int?
   status                     SsomaPublicationStatus @default(PENDING)
+  idempotencyKey             String?                @unique @db.VarChar(200)
   failureCode                String?              @db.VarChar(100)
   failureDetail              String?              @db.Text
   metadata                   Json                 @default("{}")

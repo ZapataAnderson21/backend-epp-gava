@@ -39,6 +39,7 @@ import { ExpiringDocumentModule } from './expiring-document/expiring-document.mo
 import { PurchaseOrderConditionModule } from './purchase-order-condition/purchase-order-condition.module';
 import { GeneralPayrollModule } from './general-payroll/general-payroll.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { SsomaModule } from './ssoma/ssoma.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     PurchaseOrderConditionModule,
     GeneralPayrollModule,
     DashboardModule,
+    SsomaModule,
   ],
   controllers: [],
   providers: [

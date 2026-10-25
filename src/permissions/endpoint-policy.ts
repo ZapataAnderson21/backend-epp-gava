@@ -30,6 +30,7 @@ export const controllerModules: Record<string, string> = {
   WorkerMonthlyEvaluationController: 'evaluations',
   ExpiringDocumentController: 'documents',
   EmergencyController: 'emergencies',
+  SsomaTalkController: 'ssoma',
   UserController: 'users',
   UserTypeController: 'roles',
   PermissionsController: 'roles',
@@ -55,6 +56,19 @@ export function endpointPermissions(
     if (['candidates', 'preview', 'apply'].includes(handler))
       return [['orders.view'], ['orders.renumber']];
     return null;
+  }
+  if (controller === 'SsomaTalkController') {
+    const specialAction: Record<string, string> = {
+      sign: 'sign',
+      invalidate: 'invalidate',
+      close: 'close',
+      revise: 'revise',
+      void: 'void',
+      audit: 'audit',
+    };
+    const action = specialAction[handler];
+    if (action) return [['ssoma.view'], [`ssoma.${action}`]];
+    if (handler === 'export') return [['ssoma.view'], ['ssoma.export']];
   }
   if (controller === 'RequestFormDraftController')
     return [['requests.view'], ['requests.manage']];
