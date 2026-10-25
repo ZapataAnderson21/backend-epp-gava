@@ -183,6 +183,7 @@ CREATE UNIQUE INDEX "SsomaTalkDocumentVersion_talk_version_id_key" ON "SsomaTalk
 CREATE UNIQUE INDEX "SsomaTalkDocumentVersion_one_current_per_talk" ON "SsomaTalkDocumentVersion"("ssomaTalkId") WHERE "status" = 'CURRENT';
 CREATE UNIQUE INDEX "SsomaTalkRevision_ssomaTalkId_revisionNumber_key" ON "SsomaTalkRevision"("ssomaTalkId", "revisionNumber");
 CREATE UNIQUE INDEX "SsomaSignatureDeletionJob_idempotencyKey_key" ON "SsomaSignatureDeletionJob"("idempotencyKey");
+COMMENT ON INDEX "SsomaSignatureDeletionJob_idempotencyKey_key" IS 'Persistent PostgreSQL deduplication only; Phase 3 owns operational retries and external-storage side effects.';
 
 CREATE INDEX "SsomaTalk_projectId_talkDate_idx" ON "SsomaTalk"("projectId", "talkDate");
 CREATE INDEX "SsomaTalk_status_talkDate_idx" ON "SsomaTalk"("status", "talkDate");
@@ -428,10 +429,13 @@ BEGIN
     RAISE EXCEPTION 'SSOMA audit metadata cannot contain signature payloads, Base64 images, or traces';
   END IF;
   IF NEW."eventType" IN ('attendance_signed', 'attendance_declined', 'talk_created', 'talk_status_changed',
-      'document_published', 'retention_hold_set', 'retention_hold_cleared') THEN
+      'document_published', 'retention_hold_set', 'retention_hold_cleared', 'talk_updated',
+      'participant_added', 'attendance_signature_started', 'participant_removed', 'attendance_voided',
+      'document_revision_started', 'document_current_version_replaced') THEN
     human_event := TRUE;
   ELSIF NEW."eventType" IN ('system_signature_deletion_started', 'system_signature_deletion_failed',
-      'system_signature_deleted', 'system_document_publication_failed') THEN
+      'system_signature_deleted', 'system_document_publication_failed',
+      'system_signature_deletion_scheduled', 'system_signature_deletion_blocked') THEN
     human_event := FALSE;
   ELSE
     RAISE EXCEPTION 'SSOMA audit event type is not in the controlled catalog';
@@ -449,4 +453,5 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER "SsomaTalkAuditEvent_validate_catalog"
 BEFORE INSERT ON "SsomaTalkAuditEvent"
 FOR EACH ROW EXECUTE FUNCTION ssoma_validate_audit_event();
-COMMENT ON TABLE "SsomaTalkAuditEvent" IS 'Append-only event metadata only; never store signature images, Base64 payloads, or traces. Application roles require INSERT/SELECT only; UPDATE, DELETE, and TRUNCATE privileges must be withheld by deployment.';
+COMMENT ON FUNCTION ssoma_validate_audit_event() IS 'Closed catalog. Human events requiring actorUserId and nonblank reason: attendance_signed, attendance_declined, talk_created, talk_status_changed, document_published, retention_hold_set, retention_hold_cleared, talk_updated, participant_added, attendance_signature_started, participant_removed, attendance_voided, document_revision_started, document_current_version_replaced. System events requiring NULL actorUserId: system_signature_deletion_started, system_signature_deletion_scheduled, system_signature_deletion_blocked, system_signature_deletion_failed, system_signature_deleted, system_document_publication_failed. Use talk_status_changed for close/annul; document_published for initial and revision publication. Never add redundant close, annul, or revision-published event names.';
+COMMENT ON TABLE "SsomaTalkAuditEvent" IS 'Append-only event metadata only; never store signature images, Base64 payloads, or traces. Application roles require INSERT/SELECT only; UPDATE, DELETE, and TRUNCATE privileges must be withheld by deployment. Talk close/annul map to talk_status_changed; initial/revision publication map to document_published; deletion scheduler outcomes use the controlled system_signature_deletion_* events.';

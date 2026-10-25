@@ -1,5 +1,5 @@
-import { randomUUID } from 'node:crypto';
-import { Pool, PoolClient } from 'pg';
+import { randomBytes, randomUUID } from 'node:crypto';
+import { Client, Pool, PoolClient } from 'pg';
 
 const databaseUrl = process.env.SSOMA_TEST_DATABASE_URL;
 
@@ -29,6 +29,35 @@ type Fixture = {
   userId: number;
   workerId: number;
 };
+
+function quoteIdentifier(identifier: string): string {
+  return `"${identifier.replace(/"/g, '""')}"`;
+}
+
+async function expectInsufficientPrivilege(operation: Promise<unknown>, label = 'privilege-protected operation'): Promise<void> {
+  const error = await operation.then(() => null, (failure: { code?: string }) => failure);
+  if (!error) throw new Error(`${label} unexpectedly succeeded`);
+  expect(error).toMatchObject({ code: '42501' });
+}
+
+async function expectTriggerFailure(operation: Promise<unknown>, message: RegExp): Promise<void> {
+  const error = await operation.then(() => null, (failure: { code?: string; message?: string }) => failure);
+  expect(error).toMatchObject({ code: 'P0001' });
+  expect(error?.message).toMatch(message);
+}
+
+async function expectUnauthorizedGrantNoOp(
+  operation: Promise<{ command: string }>,
+  noticeCodes: string[],
+  privilegeRemainsAbsent: () => Promise<boolean>,
+): Promise<void> {
+  const noticesBefore = noticeCodes.length;
+  const result = await operation;
+  expect(result.command).toBe('GRANT');
+  // PostgreSQL 16 emits a WARNING with SQLSTATE 01007 for an ungrantable GRANT, rather than an error.
+  expect(noticeCodes.slice(noticesBefore)).toContain('01007');
+  expect(await privilegeRemainsAbsent()).toBe(true);
+}
 
 async function createFixture(client: PoolClient): Promise<Fixture> {
   const suffix = randomUUID().replace(/-/g, '');
@@ -336,6 +365,10 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
          WHERE "ssomaSignatureEvidenceId" = $3`,
         [talkId, versionId, evidence.rows[0].ssomaSignatureEvidenceId, fixture.userId],
       );
+      await expectTriggerFailure(client.query(
+        `UPDATE "SsomaSignatureEvidence" SET "status" = 'ACTIVE'
+         WHERE "ssomaSignatureEvidenceId" = $1`, [evidence.rows[0].ssomaSignatureEvidenceId],
+      ), /invalid deletion state transition/i);
       const exceptionalHold = await client.query(
         `SELECT "exceptionalHoldReason", "exceptionalHoldSetAt", "exceptionalHoldSetByUserId", "exceptionalHoldMetadata"
          FROM "SsomaSignatureEvidence" WHERE "ssomaSignatureEvidenceId" = $1`,
@@ -392,6 +425,8 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
     }
   });
 
+  // Exact-expiry acceptance and successful post-expiry retries remain a Phase 3 time-controlled operational test gap.
+  // The CURRENT-document trigger assigns currentAt at insertion and preserves it, so tests cannot safely age an anchor without weakening that invariant or adding a clock/GUC.
   it('rejects entry into deletion states until server-time eligibility is reached', async () => {
     const client = await pool!.connect();
     try {
@@ -408,20 +443,20 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
       );
       const id = evidence.rows[0].ssomaSignatureEvidenceId;
       await client.query(`UPDATE "SsomaSignatureEvidence" SET "status" = 'PENDING_DELETION' WHERE "ssomaSignatureEvidenceId" = $1`, [id]);
-      await expect(client.query(
+      await expectTriggerFailure(client.query(
         `UPDATE "SsomaSignatureEvidence" SET "status" = 'DELETING', "deletionAttemptCount" = 1,
            "lastDeletionAttemptAt" = CURRENT_TIMESTAMP WHERE "ssomaSignatureEvidenceId" = $1`, [id],
-      )).rejects.toThrow(/eligib/i);
-      await expect(client.query(
+      ), /eligib/i);
+      await expectTriggerFailure(client.query(
         `UPDATE "SsomaSignatureEvidence" SET "status" = 'DELETE_FAILED', "deletionAttemptCount" = 1,
            "lastDeletionAttemptAt" = CURRENT_TIMESTAMP, "lastDeletionError" = 'simulated failure'
          WHERE "ssomaSignatureEvidenceId" = $1`, [id],
-      )).rejects.toThrow(/eligib/i);
-      await expect(client.query(
+      ), /eligib/i);
+      await expectTriggerFailure(client.query(
         `UPDATE "SsomaSignatureEvidence" SET "status" = 'DELETED', "deletionAttemptCount" = 1,
            "lastDeletionAttemptAt" = CURRENT_TIMESTAMP, "deletedAt" = CURRENT_TIMESTAMP
          WHERE "ssomaSignatureEvidenceId" = $1`, [id],
-      )).rejects.toThrow(/eligib/i);
+      ), /eligib/i);
     } finally {
       client.release();
     }
@@ -448,24 +483,24 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
       expect(audit.rows[0].newState).toEqual({ status: 'SIGNED' });
       expect(audit.rows[0].changedFields).toEqual({ status: true });
       expect(audit.rows[0].reason).toBe('Worker completed the signature');
-      await expect(client.query(
+      await expectTriggerFailure(client.query(
         'UPDATE "SsomaTalkAuditEvent" SET "eventType" = \'changed\' WHERE "ssomaTalkAuditEventId" = $1',
         [audit.rows[0].ssomaTalkAuditEventId],
-      )).rejects.toThrow(/append-only/i);
-      await expect(client.query(
+      ), /append-only/i);
+      await expectTriggerFailure(client.query(
         'DELETE FROM "SsomaTalkAuditEvent" WHERE "ssomaTalkAuditEventId" = $1',
         [audit.rows[0].ssomaTalkAuditEventId],
-      )).rejects.toThrow(/append-only/i);
-      await expect(client.query('TRUNCATE "SsomaTalkAuditEvent"')).rejects.toThrow(/append-only/i);
-      await expect(client.query(
+      ), /append-only/i);
+      await expectTriggerFailure(client.query('TRUNCATE "SsomaTalkAuditEvent"'), /append-only/i);
+      await expectTriggerFailure(client.query(
         `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId", "reason")
          VALUES ($1, 'attendance_signed', $2, '   ')`,
         [talkId, fixture.userId],
-      )).rejects.toThrow(/actor and nonblank reason/i);
-      await expect(client.query(
+      ), /actor and nonblank reason/i);
+      await expectTriggerFailure(client.query(
         `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType") VALUES ($1, 'unknown_event')`,
         [talkId],
-      )).rejects.toThrow(/controlled catalog/i);
+      ), /controlled catalog/i);
       await expect(client.query(
         `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId", "reason", "changedFields")
          VALUES ($1, 'attendance_signed', $2, 'Signature captured', '{"signatureImage":"data:image/png;base64,AAAA"}'::jsonb)`,
@@ -481,6 +516,48 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
          VALUES ($1, 'system_signature_deletion_started')`,
         [talkId],
       );
+    } finally {
+      client.release();
+    }
+  });
+
+  it('accepts the approved audit catalog additions with human and system actor rules', async () => {
+    const client = await pool!.connect();
+    try {
+      const fixture = await createFixture(client);
+      const talkId = await createTalk(client, fixture, '2026-10-27');
+      const humanEvents = [
+        'talk_updated', 'participant_added', 'attendance_signature_started', 'participant_removed',
+        'attendance_voided', 'document_revision_started', 'document_current_version_replaced',
+      ];
+      for (const eventType of humanEvents) {
+        await client.query(
+          `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId", "reason")
+           VALUES ($1, $2, $3, 'Approved catalog event')`,
+          [talkId, eventType, fixture.userId],
+        );
+      }
+      for (const eventType of ['system_signature_deletion_scheduled', 'system_signature_deletion_blocked']) {
+        await client.query(
+          'INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType") VALUES ($1, $2)',
+          [talkId, eventType],
+        );
+        await expect(client.query(
+          'INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId") VALUES ($1, $2, $3)',
+          [talkId, eventType, fixture.userId],
+        )).rejects.toMatchObject({ code: 'P0001' });
+      }
+      await expect(client.query(
+        `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId", "reason")
+         VALUES ($1, 'talk_updated', NULL, 'Missing actor')`, [talkId],
+      )).rejects.toMatchObject({ code: 'P0001' });
+      await expect(client.query(
+        `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId", "reason")
+         VALUES ($1, 'talk_updated', $2, '   ')`, [talkId, fixture.userId],
+      )).rejects.toMatchObject({ code: 'P0001' });
+      await expect(client.query(
+        `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType") VALUES ($1, 'talk_closed')`, [talkId],
+      )).rejects.toMatchObject({ code: 'P0001' });
     } finally {
       client.release();
     }
@@ -502,7 +579,8 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
     }
   });
 
-  it('enforces unique deletion-job idempotency keys', async () => {
+  // The unique key proves persistent PostgreSQL deduplication only; Phase 3 owns operational retries and external-storage effects.
+  it('enforces persistent PostgreSQL deletion-job idempotency keys', async () => {
     const client = await pool!.connect();
     try {
       const fixture = await createFixture(client);
@@ -527,6 +605,168 @@ describeWhenConfigured('SSOMA PostgreSQL integrity (requires an explicitly confi
       )).rejects.toThrow(/unique/i);
     } finally {
       client.release();
+    }
+  });
+
+  it('enforces the audit least-privilege boundary through a separate temporary login role', async () => {
+    const owner = await pool!.connect();
+    const suffix = randomUUID().replace(/-/g, '');
+    const roleName = `ssoma_audit_${suffix}`;
+    const roleIdentifier = quoteIdentifier(roleName);
+    const password = randomBytes(32).toString('base64url');
+    let roleClient: Client | undefined;
+    let roleCreated = false;
+    try {
+      const fixture = await createFixture(owner);
+      const talkId = await createTalk(owner, fixture, '2026-10-29');
+      const roleRow = await owner.query('SELECT current_database() AS database_name, current_user AS owner_name');
+      const databaseName = roleRow.rows[0].database_name as string;
+      const ownerName = roleRow.rows[0].owner_name as string;
+
+      // The disposable database grants TEMP to PUBLIC by default; remove only that test-DB-wide default so the effective role stays minimal.
+      await owner.query(`REVOKE TEMP ON DATABASE ${quoteIdentifier(databaseName)} FROM PUBLIC`);
+      await owner.query(
+        `CREATE ROLE ${roleIdentifier} LOGIN PASSWORD '${password}'
+         NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS NOREPLICATION NOINHERIT`,
+      );
+      roleCreated = true;
+
+      // These are the executable grant semantics of prisma/sql/ssoma-audit-role-privileges.sql.
+      await owner.query(`ALTER ROLE ${roleIdentifier} NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS NOREPLICATION NOINHERIT`);
+      await owner.query(`REVOKE ALL PRIVILEGES ON DATABASE ${quoteIdentifier(databaseName)} FROM ${roleIdentifier}`);
+      await owner.query(`GRANT CONNECT ON DATABASE ${quoteIdentifier(databaseName)} TO ${roleIdentifier}`);
+      await owner.query(`REVOKE ALL PRIVILEGES ON SCHEMA public FROM ${roleIdentifier}`);
+      await owner.query(`GRANT USAGE ON SCHEMA public TO ${roleIdentifier}`);
+      await owner.query(`REVOKE ALL PRIVILEGES ON TABLE public."SsomaTalkAuditEvent" FROM ${roleIdentifier}`);
+      await owner.query(`GRANT SELECT, INSERT ON TABLE public."SsomaTalkAuditEvent" TO ${roleIdentifier}`);
+      await owner.query(`REVOKE ALL PRIVILEGES ON SEQUENCE public."SsomaTalkAuditEvent_ssomaTalkAuditEventId_seq" FROM ${roleIdentifier}`);
+      await owner.query(`GRANT USAGE ON SEQUENCE public."SsomaTalkAuditEvent_ssomaTalkAuditEventId_seq" TO ${roleIdentifier}`);
+
+      const databaseTarget = new URL(databaseUrl!);
+      roleClient = new Client({
+        host: databaseTarget.hostname,
+        port: Number(databaseTarget.port || 5432),
+        database: decodeURIComponent(databaseTarget.pathname.replace(/^\//, '')),
+        user: roleName,
+        password,
+      });
+      const noticeCodes: string[] = [];
+      roleClient.on('notice', (notice: { code?: string }) => noticeCodes.push(notice.code ?? ''));
+      await roleClient.connect();
+      const currentUser = await roleClient.query('SELECT current_user AS current_user');
+      expect(currentUser.rows[0].current_user).toBe(roleName);
+
+      const privileges = await roleClient.query(
+        `SELECT r.rolsuper, r.rolcreatedb, r.rolcreaterole, r.rolbypassrls, r.rolreplication, r.rolinherit,
+                pg_get_userbyid(t.relowner) AS table_owner,
+                pg_get_userbyid(s.relowner) AS sequence_owner,
+                n.nspname AS schema_name,
+                pg_get_userbyid(n.nspowner) AS schema_owner,
+                pg_get_userbyid(d.datdba) AS database_owner,
+                has_database_privilege(current_user, current_database(), 'CONNECT') AS database_connect,
+                has_database_privilege(current_user, current_database(), 'CREATE') AS database_create,
+                has_database_privilege(current_user, current_database(), 'TEMP') AS database_temp,
+                has_schema_privilege(current_user, 'public', 'USAGE') AS schema_usage,
+                has_schema_privilege(current_user, 'public', 'CREATE') AS schema_create,
+                has_table_privilege(current_user, t.oid, 'SELECT') AS can_select,
+                has_table_privilege(current_user, t.oid, 'INSERT') AS can_insert,
+                has_table_privilege(current_user, t.oid, 'UPDATE') AS can_update,
+                has_table_privilege(current_user, t.oid, 'DELETE') AS can_delete,
+                has_table_privilege(current_user, t.oid, 'TRUNCATE') AS can_truncate,
+                has_table_privilege(current_user, t.oid, 'REFERENCES') AS can_reference,
+                has_table_privilege(current_user, t.oid, 'TRIGGER') AS can_trigger,
+                has_sequence_privilege(current_user, s.oid, 'USAGE') AS sequence_usage,
+                has_sequence_privilege(current_user, s.oid, 'SELECT') AS sequence_select,
+                has_sequence_privilege(current_user, s.oid, 'UPDATE') AS sequence_update,
+                EXISTS (SELECT 1 FROM pg_auth_members m WHERE m.member = r.oid OR m.roleid = r.oid) AS has_membership
+         FROM pg_roles r
+         JOIN pg_class t ON t.oid = 'public."SsomaTalkAuditEvent"'::regclass
+         JOIN pg_class s ON s.oid = pg_get_serial_sequence('public."SsomaTalkAuditEvent"', 'ssomaTalkAuditEventId')::regclass
+         JOIN pg_namespace n ON n.oid = t.relnamespace
+         JOIN pg_database d ON d.datname = current_database()
+         WHERE r.rolname = current_user`,
+      );
+      expect(privileges.rows).toHaveLength(1);
+      const p = privileges.rows[0];
+      expect(p).toMatchObject({
+        rolsuper: false, rolcreatedb: false, rolcreaterole: false, rolbypassrls: false,
+        rolreplication: false, rolinherit: false, database_connect: true, database_create: false, database_temp: false,
+        schema_usage: true, schema_create: false, can_select: true, can_insert: true,
+        can_update: false, can_delete: false, can_truncate: false, can_reference: false,
+        can_trigger: false, sequence_usage: true, sequence_select: false, sequence_update: false,
+        has_membership: false,
+      });
+      expect(p.table_owner).not.toBe(roleName);
+      expect(p.sequence_owner).not.toBe(roleName);
+      expect(p.schema_name).toBe('public');
+      expect(p.schema_owner).not.toBe(roleName);
+      expect(p.database_owner).not.toBe(roleName);
+      expect(p.table_owner).toBe(ownerName);
+
+      const ownerEvent = await owner.query(
+        `INSERT INTO "SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId", "reason")
+         VALUES ($1, 'talk_created', $2, 'Owner-created visibility fixture') RETURNING "ssomaTalkAuditEventId"`,
+        [talkId, fixture.userId],
+      );
+      const visible = await roleClient.query(
+        'SELECT "ssomaTalkAuditEventId" FROM public."SsomaTalkAuditEvent" WHERE "ssomaTalkAuditEventId" = $1',
+        [ownerEvent.rows[0].ssomaTalkAuditEventId],
+      );
+      expect(visible.rows).toHaveLength(1);
+      const inserted = await roleClient.query(
+        `INSERT INTO public."SsomaTalkAuditEvent" ("ssomaTalkId", "eventType", "actorUserId", "reason")
+         VALUES ($1, 'talk_updated', $2, 'Least privilege append fixture') RETURNING "ssomaTalkAuditEventId"`,
+        [talkId, fixture.userId],
+      );
+      expect(inserted.rows[0].ssomaTalkAuditEventId).toBeDefined();
+
+      const eventId = inserted.rows[0].ssomaTalkAuditEventId;
+      await expectInsufficientPrivilege(roleClient.query(
+        `UPDATE public."SsomaTalkAuditEvent" SET "eventType" = 'changed' WHERE "ssomaTalkAuditEventId" = $1`, [eventId],
+      ));
+      await expectInsufficientPrivilege(roleClient.query(
+        'DELETE FROM public."SsomaTalkAuditEvent" WHERE "ssomaTalkAuditEventId" = $1', [eventId],
+      ));
+      await expectInsufficientPrivilege(roleClient.query('TRUNCATE public."SsomaTalkAuditEvent"'));
+      await expectInsufficientPrivilege(roleClient.query(
+        'ALTER TABLE public."SsomaTalkAuditEvent" DISABLE TRIGGER "SsomaTalkAuditEvent_append_only"',
+      ));
+      await expectInsufficientPrivilege(roleClient.query(
+        'DROP TRIGGER "SsomaTalkAuditEvent_append_only" ON public."SsomaTalkAuditEvent"',
+      ));
+      await expectInsufficientPrivilege(roleClient.query(
+        `ALTER TABLE public."SsomaTalkAuditEvent" OWNER TO ${roleIdentifier}`,
+      ));
+      await expectUnauthorizedGrantNoOp(
+        roleClient.query('GRANT UPDATE ON TABLE public."SsomaTalkAuditEvent" TO PUBLIC'),
+        noticeCodes,
+        async () => {
+          const result = await roleClient!.query("SELECT NOT has_table_privilege(current_user, 'public.\"SsomaTalkAuditEvent\"', 'UPDATE') AS absent");
+          return result.rows[0].absent as boolean;
+        },
+      );
+      await expectUnauthorizedGrantNoOp(
+        roleClient.query('GRANT CREATE ON SCHEMA public TO PUBLIC'),
+        noticeCodes,
+        async () => {
+          const result = await roleClient!.query("SELECT NOT has_schema_privilege(current_user, 'public', 'CREATE') AS absent");
+          return result.rows[0].absent as boolean;
+        },
+      );
+      await expectInsufficientPrivilege(roleClient.query(`ALTER ROLE ${roleIdentifier} SUPERUSER`));
+      await expectInsufficientPrivilege(roleClient.query(`CREATE ROLE ${quoteIdentifier(`ssoma_escalation_${suffix}`)}`));
+      await expectInsufficientPrivilege(roleClient.query(`CREATE DATABASE ${quoteIdentifier(`ssoma_escalation_${suffix}`)}`));
+    } finally {
+      if (roleClient) await roleClient.end();
+      if (roleCreated) {
+        const database = await owner.query('SELECT current_database() AS name');
+        await owner.query(`REVOKE ALL PRIVILEGES ON TABLE public."SsomaTalkAuditEvent" FROM ${roleIdentifier}`);
+        await owner.query(`REVOKE ALL PRIVILEGES ON SEQUENCE public."SsomaTalkAuditEvent_ssomaTalkAuditEventId_seq" FROM ${roleIdentifier}`);
+        await owner.query(`REVOKE ALL PRIVILEGES ON SCHEMA public FROM ${roleIdentifier}`);
+        await owner.query(`REVOKE CONNECT ON DATABASE ${quoteIdentifier(database.rows[0].name as string)} FROM ${roleIdentifier}`);
+        await owner.query(`DROP ROLE ${roleIdentifier}`);
+      }
+      owner.release();
     }
   });
 });
