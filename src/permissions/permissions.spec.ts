@@ -65,6 +65,12 @@ describe('Dynamic role permissions', () => {
     expect(
       satisfies(['ssoma.view', 'ssoma.manage'], endpointPermissions('SsomaController', 'sign', 'POST')),
     ).toBe(false);
+    expect(
+      satisfies(['ssoma.view', 'ssoma.sign'], endpointPermissions('SsomaController', 'captureSignature', 'POST')),
+    ).toBe(true);
+    expect(
+      satisfies(['ssoma.view', 'ssoma.manage'], endpointPermissions('SsomaController', 'captureSignature', 'POST')),
+    ).toBe(false);
     expect(endpointPermissions('SsomaController', 'unknown', 'GET')).toBeNull();
   });
   it('normalizes dependencies and rejects unknown privileges', () => {

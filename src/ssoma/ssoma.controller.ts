@@ -7,7 +7,11 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
+  BadRequestException,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/decorators/get-user.decorator';
 import { SsomaReasonDto } from './dto/ssoma-reason.dto';
 import {
@@ -21,10 +25,41 @@ import {
 } from './dto/ssoma-talk.dto';
 import { SsomaService } from './ssoma.service';
 import { SsomaRequestUser } from './ssoma-user-context';
+import { CaptureSignatureDto } from './dto/capture-signature.dto';
+import { SignatureEvidenceService } from './signature-evidence.service';
 
 @Controller('ssoma')
 export class SsomaController {
-  constructor(private readonly ssoma: SsomaService) {}
+  constructor(
+    private readonly ssoma: SsomaService,
+    private readonly signatures: SignatureEvidenceService,
+  ) {}
+
+  @Post('talks/:id/attendance/:attendanceId/signature')
+  @UseInterceptors(FileInterceptor('signature', {
+    limits: { fileSize: 1_000_000, files: 1, fields: 1, fieldSize: 128 },
+    fileFilter: (_request, file, callback) => {
+      if (file.mimetype !== 'image/png') return callback(new BadRequestException('Solo se aceptan firmas PNG.'), false);
+      callback(null, true);
+    },
+  }))
+  captureSignature(
+    @Param('id', ParseIntPipe) talkId: number,
+    @Param('attendanceId', ParseIntPipe) attendanceId: number,
+    @Body() dto: CaptureSignatureDto,
+    @UploadedFile() file: Express.Multer.File,
+    @GetUser() user: SsomaRequestUser,
+  ) {
+    if (!file) throw new BadRequestException('Debe adjuntar una firma PNG.');
+    return this.signatures.capture({
+      talkId,
+      attendanceId,
+      workerId: dto.workerId,
+      actorUserId: user.userId,
+      mimeType: file.mimetype,
+      bytes: file.buffer,
+    });
+  }
 
   @Post('talks')
   createTalk(

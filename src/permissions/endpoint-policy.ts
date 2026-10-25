@@ -60,6 +60,7 @@ export function endpointPermissions(
   if (controller === 'SsomaController') {
     const specialAction: Record<string, string> = {
       sign: 'sign',
+      captureSignature: 'sign',
       invalidateAttendance: 'invalidate',
       close: 'close',
       revise: 'revise',
