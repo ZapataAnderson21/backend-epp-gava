@@ -30,7 +30,7 @@ export const controllerModules: Record<string, string> = {
   WorkerMonthlyEvaluationController: 'evaluations',
   ExpiringDocumentController: 'documents',
   EmergencyController: 'emergencies',
-  SsomaTalkController: 'ssoma',
+  SsomaController: 'ssoma',
   UserController: 'users',
   UserTypeController: 'roles',
   PermissionsController: 'roles',
@@ -57,18 +57,32 @@ export function endpointPermissions(
       return [['orders.view'], ['orders.renumber']];
     return null;
   }
-  if (controller === 'SsomaTalkController') {
+  if (controller === 'SsomaController') {
     const specialAction: Record<string, string> = {
       sign: 'sign',
-      invalidate: 'invalidate',
+      invalidateAttendance: 'invalidate',
       close: 'close',
       revise: 'revise',
-      void: 'void',
-      audit: 'audit',
+      annulTalk: 'void',
+      auditHistory: 'audit',
+      export: 'export',
     };
+    if (
+      [
+        'createTalk',
+        'updateDraft',
+        'startTalk',
+        'openTalk',
+        'addParticipants',
+        'removeParticipant',
+      ].includes(handler)
+    )
+      return [['ssoma.view'], ['ssoma.manage']];
+    if (['listTalks', 'findTalk', 'searchWorkers', 'getAvailability'].includes(handler))
+      return [['ssoma.view']];
     const action = specialAction[handler];
     if (action) return [['ssoma.view'], [`ssoma.${action}`]];
-    if (handler === 'export') return [['ssoma.view'], ['ssoma.export']];
+    return null;
   }
   if (controller === 'RequestFormDraftController')
     return [['requests.view'], ['requests.manage']];

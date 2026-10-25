@@ -36,27 +36,36 @@ describe('Dynamic role permissions', () => {
   });
   it('uses action-specific permissions for SSOMA talk operations', () => {
     const cases = [
-      ['findAll', 'GET', 'ssoma.view'],
-      ['create', 'POST', 'ssoma.manage'],
+      ['listTalks', 'GET', 'ssoma.view'],
+      ['createTalk', 'POST', 'ssoma.manage'],
+      ['findTalk', 'GET', 'ssoma.view'],
+      ['updateDraft', 'PATCH', 'ssoma.manage'],
+      ['startTalk', 'POST', 'ssoma.manage'],
+      ['openTalk', 'POST', 'ssoma.manage'],
+      ['annulTalk', 'POST', 'ssoma.void'],
+      ['searchWorkers', 'GET', 'ssoma.view'],
+      ['getAvailability', 'GET', 'ssoma.view'],
+      ['addParticipants', 'POST', 'ssoma.manage'],
+      ['removeParticipant', 'POST', 'ssoma.manage'],
+      ['invalidateAttendance', 'POST', 'ssoma.invalidate'],
+      ['auditHistory', 'GET', 'ssoma.audit'],
       ['sign', 'POST', 'ssoma.sign'],
-      ['invalidate', 'POST', 'ssoma.invalidate'],
       ['close', 'POST', 'ssoma.close'],
       ['revise', 'POST', 'ssoma.revise'],
-      ['void', 'POST', 'ssoma.void'],
       ['export', 'GET', 'ssoma.export'],
-      ['audit', 'GET', 'ssoma.audit'],
     ] as const;
     for (const [handler, method, permission] of cases) {
       expect(
         satisfies(
           ['ssoma.view', permission],
-          endpointPermissions('SsomaTalkController', handler, method),
+          endpointPermissions('SsomaController', handler, method),
         ),
       ).toBe(true);
     }
     expect(
-      satisfies(['ssoma.view', 'ssoma.manage'], endpointPermissions('SsomaTalkController', 'sign', 'POST')),
+      satisfies(['ssoma.view', 'ssoma.manage'], endpointPermissions('SsomaController', 'sign', 'POST')),
     ).toBe(false);
+    expect(endpointPermissions('SsomaController', 'unknown', 'GET')).toBeNull();
   });
   it('normalizes dependencies and rejects unknown privileges', () => {
     expect(normalizePermissions(['payroll.payments'])).toEqual([

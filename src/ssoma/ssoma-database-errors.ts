@@ -6,7 +6,6 @@ import {
 
 interface PrismaKnownRequestErrorLike {
   code: string;
-  meta?: { target?: string | string[] };
 }
 
 function isPrismaKnownRequestError(
@@ -25,10 +24,13 @@ export function mapSsomaDatabaseError(error: unknown): Error | null {
   if (!isPrismaKnownRequestError(error)) return null;
   switch (error.code) {
     case 'P2002':
-      return new ConflictException({
-        message: 'A conflicting SSOMA record already exists.',
-        constraint: error.meta?.target ?? undefined,
-      });
+      return new ConflictException(
+        'La asistencia entra en conflicto con un registro existente.',
+      );
+    case 'P2034':
+      return new ConflictException(
+        'La operación SSOMA tuvo un cambio concurrente. Intente nuevamente.',
+      );
     case 'P2025':
       return new NotFoundException('The requested SSOMA record was not found.');
     case 'P2003':
