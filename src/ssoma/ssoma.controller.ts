@@ -30,8 +30,15 @@ import { SsomaRequestUser } from './ssoma-user-context';
 import { CaptureSignatureDto } from './dto/capture-signature.dto';
 import { SignatureEvidenceService } from './signature-evidence.service';
 import { SsomaDocumentService } from './ssoma-document.service';
-import { PublishSsomaDocumentDto, StartSsomaRevisionDto } from './dto/ssoma-publication.dto';
-import { ClearSsomaRetentionHoldDto, RunSsomaRetentionDto, SetSsomaRetentionHoldDto } from './dto/ssoma-retention.dto';
+import {
+  PublishSsomaDocumentDto,
+  StartSsomaRevisionDto,
+} from './dto/ssoma-publication.dto';
+import {
+  ClearSsomaRetentionHoldDto,
+  RunSsomaRetentionDto,
+  SetSsomaRetentionHoldDto,
+} from './dto/ssoma-retention.dto';
 import { SsomaRetentionService } from './ssoma-retention.service';
 
 @Controller('ssoma')
@@ -44,13 +51,19 @@ export class SsomaController {
   ) {}
 
   @Post('talks/:id/attendance/:attendanceId/signature')
-  @UseInterceptors(FileInterceptor('signature', {
-    limits: { fileSize: 1_000_000, files: 1, fields: 1, fieldSize: 128 },
-    fileFilter: (_request, file, callback) => {
-      if (file.mimetype !== 'image/png') return callback(new BadRequestException('Solo se aceptan firmas PNG.'), false);
-      callback(null, true);
-    },
-  }))
+  @UseInterceptors(
+    FileInterceptor('signature', {
+      limits: { fileSize: 1_000_000, files: 1, fields: 1, fieldSize: 128 },
+      fileFilter: (_request, file, callback) => {
+        if (file.mimetype !== 'image/png')
+          return callback(
+            new BadRequestException('Solo se aceptan firmas PNG.'),
+            false,
+          );
+        callback(null, true);
+      },
+    }),
+  )
   captureSignature(
     @Param('id', ParseIntPipe) talkId: number,
     @Param('attendanceId', ParseIntPipe) attendanceId: number,
@@ -95,7 +108,12 @@ export class SsomaController {
     @Body() dto: PublishSsomaDocumentDto,
     @GetUser() user: SsomaRequestUser,
   ) {
-    return this.documents.publishRevision(talkId, revisionId, user.userId, dto.idempotencyKey);
+    return this.documents.publishRevision(
+      talkId,
+      revisionId,
+      user.userId,
+      dto.idempotencyKey,
+    );
   }
 
   @Get('talks/:id/versions')
@@ -157,7 +175,12 @@ export class SsomaController {
     @Body() dto: SetSsomaRetentionHoldDto,
     @GetUser() user: SsomaRequestUser,
   ) {
-    return this.retention.setRetentionHold(evidenceId, user.userId, dto.reason, dto.holdUntil ? new Date(dto.holdUntil) : null);
+    return this.retention.setRetentionHold(
+      evidenceId,
+      user.userId,
+      dto.reason,
+      dto.holdUntil ? new Date(dto.holdUntil) : null,
+    );
   }
 
   @Delete('signature-evidence/:evidenceId/retention-hold')
@@ -166,7 +189,11 @@ export class SsomaController {
     @Body() dto: ClearSsomaRetentionHoldDto,
     @GetUser() user: SsomaRequestUser,
   ) {
-    return this.retention.clearRetentionHold(evidenceId, user.userId, dto.reason);
+    return this.retention.clearRetentionHold(
+      evidenceId,
+      user.userId,
+      dto.reason,
+    );
   }
 
   @Post('talks')
@@ -247,7 +274,12 @@ export class SsomaController {
     @Body() dto: SsomaReasonDto,
     @GetUser() user: SsomaRequestUser,
   ) {
-    return this.ssoma.removeParticipant(id, attendanceId, dto.reason, user.userId);
+    return this.ssoma.removeParticipant(
+      id,
+      attendanceId,
+      dto.reason,
+      user.userId,
+    );
   }
 
   @Post('talks/:id/attendance/:attendanceId/invalidate')
@@ -257,7 +289,12 @@ export class SsomaController {
     @Body() dto: SsomaReasonDto,
     @GetUser() user: SsomaRequestUser,
   ) {
-    return this.ssoma.invalidateAttendance(id, attendanceId, dto.reason, user.userId);
+    return this.ssoma.invalidateAttendance(
+      id,
+      attendanceId,
+      dto.reason,
+      user.userId,
+    );
   }
 
   @Get('talks/:id/audit')

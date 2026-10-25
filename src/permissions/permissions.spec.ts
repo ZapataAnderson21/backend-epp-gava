@@ -23,12 +23,19 @@ describe('Dynamic role permissions', () => {
       'ssoma.export',
       'ssoma.audit',
     ];
-    expect(ssomaPermissions.every((permission) => allPermissions.includes(permission))).toBe(true);
+    expect(
+      ssomaPermissions.every((permission) =>
+        allPermissions.includes(permission),
+      ),
+    ).toBe(true);
     expect(initialPermissions('PREVENCIONISTA DE RIESGOS')).toEqual(
       expect.arrayContaining(ssomaPermissions),
     );
     const migration = readFileSync(
-      resolve(__dirname, '../../prisma/migrations/20261025_add_ssoma_phase3/migration.sql'),
+      resolve(
+        __dirname,
+        '../../prisma/migrations/20261025_add_ssoma_phase3/migration.sql',
+      ),
       'utf8',
     );
     for (const permission of ssomaPermissions)
@@ -74,13 +81,22 @@ describe('Dynamic role permissions', () => {
       ).toBe(true);
     }
     expect(
-      satisfies(['ssoma.view', 'ssoma.manage'], endpointPermissions('SsomaController', 'sign', 'POST')),
+      satisfies(
+        ['ssoma.view', 'ssoma.manage'],
+        endpointPermissions('SsomaController', 'sign', 'POST'),
+      ),
     ).toBe(false);
     expect(
-      satisfies(['ssoma.view', 'ssoma.sign'], endpointPermissions('SsomaController', 'captureSignature', 'POST')),
+      satisfies(
+        ['ssoma.view', 'ssoma.sign'],
+        endpointPermissions('SsomaController', 'captureSignature', 'POST'),
+      ),
     ).toBe(true);
     expect(
-      satisfies(['ssoma.view', 'ssoma.manage'], endpointPermissions('SsomaController', 'captureSignature', 'POST')),
+      satisfies(
+        ['ssoma.view', 'ssoma.manage'],
+        endpointPermissions('SsomaController', 'captureSignature', 'POST'),
+      ),
     ).toBe(false);
     expect(endpointPermissions('SsomaController', 'unknown', 'GET')).toBeNull();
   });
@@ -125,9 +141,7 @@ describe('Dynamic role permissions', () => {
       const historicalPermissions = seeded?.replaceAll("'", '').split(',');
       expect(
         historicalPermissions?.filter((p) => !p.startsWith('ssoma.')),
-      ).toEqual(
-        permissions.filter((p) => !p.startsWith('ssoma.')),
-      );
+      ).toEqual(permissions.filter((p) => !p.startsWith('ssoma.')));
     }
     expect(initialPermissions('LOGISTICA')).not.toContain('roles.manage');
   });

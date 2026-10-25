@@ -34,7 +34,9 @@ export function mapSsomaDatabaseError(error: unknown): Error | null {
     case 'P2025':
       return new NotFoundException('The requested SSOMA record was not found.');
     case 'P2003':
-      return new BadRequestException('The SSOMA record references invalid data.');
+      return new BadRequestException(
+        'The SSOMA record references invalid data.',
+      );
     default:
       return null;
   }

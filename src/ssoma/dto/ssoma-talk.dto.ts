@@ -78,7 +78,9 @@ export class CreateSsomaTalkDto {
   responsiblePosition?: string | null;
 }
 
-class EditableSsomaTalkDto extends OmitType(CreateSsomaTalkDto, ['projectId'] as const) {}
+class EditableSsomaTalkDto extends OmitType(CreateSsomaTalkDto, [
+  'projectId',
+] as const) {}
 
 export class UpdateSsomaTalkDto extends PartialType(EditableSsomaTalkDto) {}
 

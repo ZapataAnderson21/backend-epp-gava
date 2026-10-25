@@ -49,7 +49,9 @@ export interface PrivateEvidenceStorage {
     size: number,
   ): Promise<PrivateEvidenceVerification>;
   /** Distinguishes a missing object from an existing object with different bytes. */
-  inspect(reference: PrivateEvidenceReference): Promise<PrivateEvidenceInspection>;
+  inspect(
+    reference: PrivateEvidenceReference,
+  ): Promise<PrivateEvidenceInspection>;
   deleteIfMatch(
     reference: PrivateEvidenceReference,
     sha256: string,
@@ -77,8 +79,12 @@ function opaqueReference(namespace: PrivateEvidenceNamespace, key: string) {
 
 function decodeReference(reference: PrivateEvidenceReference) {
   const prefix = 'ssoma-private:v1:';
-  if (!reference?.value?.startsWith(prefix)) throw new Error('Invalid private evidence reference');
-  const decoded = Buffer.from(reference.value.slice(prefix.length), 'base64url').toString('utf8');
+  if (!reference?.value?.startsWith(prefix))
+    throw new Error('Invalid private evidence reference');
+  const decoded = Buffer.from(
+    reference.value.slice(prefix.length),
+    'base64url',
+  ).toString('utf8');
   const slash = decoded.indexOf('/');
   const namespace = decoded.slice(0, slash) as PrivateEvidenceNamespace;
   const key = decoded.slice(slash + 1);
@@ -94,17 +100,34 @@ function isSafeKey(key: string): boolean {
     key.length <= 512 &&
     !key.includes('\\') &&
     !key.startsWith('/') &&
-    key.split('/').every((part) => part.length > 0 && part !== '.' && part !== '..' && /^[a-zA-Z0-9._-]+$/.test(part))
+    key
+      .split('/')
+      .every(
+        (part) =>
+          part.length > 0 &&
+          part !== '.' &&
+          part !== '..' &&
+          /^[a-zA-Z0-9._-]+$/.test(part),
+      )
   );
 }
 
 /** Explicit local/test-only adapter. It never silently falls back from a production provider. */
-export class LocalFilesystemPrivateEvidenceStorage implements PrivateEvidenceStorage {
+export class LocalFilesystemPrivateEvidenceStorage
+  implements PrivateEvidenceStorage
+{
   private readonly root: string;
 
-  constructor(root: string, environment = process.env.NODE_ENV ?? 'development') {
-    if (environment.toLowerCase() === 'production') throw new Error('Local SSOMA evidence storage is forbidden in production');
-    if (!root || !isAbsolute(root)) throw new Error('SSOMA evidence root must be an absolute path');
+  constructor(
+    root: string,
+    environment = process.env.NODE_ENV ?? 'development',
+  ) {
+    if (environment.toLowerCase() === 'production')
+      throw new Error(
+        'Local SSOMA evidence storage is forbidden in production',
+      );
+    if (!root || !isAbsolute(root))
+      throw new Error('SSOMA evidence root must be an absolute path');
     this.root = resolve(root);
   }
 
@@ -115,11 +138,16 @@ export class LocalFilesystemPrivateEvidenceStorage implements PrivateEvidenceSto
     sha256: string;
   }): Promise<PrivateEvidencePutResult> {
     this.assertLocation(input.namespace, input.key);
-    if (digest(input.bytes) !== input.sha256) throw new Error('Evidence checksum does not match bytes');
+    if (digest(input.bytes) !== input.sha256)
+      throw new Error('Evidence checksum does not match bytes');
     const target = await this.ensureParent(input.namespace, input.key);
     const reference = opaqueReference(input.namespace, input.key);
     try {
-      const handle = await open(target, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL, 0o600);
+      const handle = await open(
+        target,
+        constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL,
+        0o600,
+      );
       try {
         await handle.writeFile(input.bytes);
         await handle.sync();
@@ -141,19 +169,31 @@ export class LocalFilesystemPrivateEvidenceStorage implements PrivateEvidenceSto
     }
   }
 
-  async readVerified(reference: PrivateEvidenceReference, sha256: string, size: number) {
+  async readVerified(
+    reference: PrivateEvidenceReference,
+    sha256: string,
+    size: number,
+  ) {
     const path = await this.pathFor(reference);
     await chmod(path, 0o600);
     const bytes = await this.readPrivate(path);
-    if (bytes.length !== size || digest(bytes) !== sha256) throw new Error('Private evidence verification failed');
+    if (bytes.length !== size || digest(bytes) !== sha256)
+      throw new Error('Private evidence verification failed');
     return bytes;
   }
 
-  async verify(reference: PrivateEvidenceReference, sha256: string, size: number) {
+  async verify(
+    reference: PrivateEvidenceReference,
+    sha256: string,
+    size: number,
+  ) {
     try {
       const inspection = await this.inspect(reference);
       return {
-        verified: inspection.exists && inspection.sha256 === sha256 && inspection.size === size,
+        verified:
+          inspection.exists &&
+          inspection.sha256 === sha256 &&
+          inspection.size === size,
         sha256: inspection.sha256,
         size: inspection.size,
       };
@@ -190,14 +230,16 @@ export class LocalFilesystemPrivateEvidenceStorage implements PrivateEvidenceSto
   }
 
   private assertLocation(namespace: PrivateEvidenceNamespace, key: string) {
-    if (!NAMESPACES.includes(namespace) || !isSafeKey(key)) throw new Error('Invalid private evidence path');
+    if (!NAMESPACES.includes(namespace) || !isSafeKey(key))
+      throw new Error('Invalid private evidence path');
   }
 
   private async ensureParent(namespace: PrivateEvidenceNamespace, key: string) {
     const target = join(this.root, namespace, ...key.split('/'));
     await mkdir(this.root, { recursive: true, mode: 0o700 });
     const canonicalRoot = await realpath(this.root);
-    if (canonicalRoot !== this.root) throw new Error('Evidence root must not be a symlink');
+    if (canonicalRoot !== this.root)
+      throw new Error('Evidence root must not be a symlink');
     await chmod(this.root, 0o700);
     const parts = [namespace, ...key.split('/').slice(0, -1)];
     let current = this.root;
@@ -209,10 +251,11 @@ export class LocalFilesystemPrivateEvidenceStorage implements PrivateEvidenceSto
         if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
       }
       const stat = await lstat(current);
-      if (!stat.isDirectory() || stat.isSymbolicLink()) throw new Error('Evidence path contains a symlink');
+      if (!stat.isDirectory() || stat.isSymbolicLink())
+        throw new Error('Evidence path contains a symlink');
       await chmod(current, 0o700);
     }
-    await this.assertContained(target);
+    this.assertContained(target);
     return target;
   }
 
@@ -220,13 +263,14 @@ export class LocalFilesystemPrivateEvidenceStorage implements PrivateEvidenceSto
     const { namespace, key } = decodeReference(reference);
     this.assertLocation(namespace, key);
     const target = join(this.root, namespace, ...key.split('/'));
-    if ((await realpath(this.root)) !== this.root) throw new Error('Evidence root must not be a symlink');
-    await this.assertContained(target);
+    if ((await realpath(this.root)) !== this.root)
+      throw new Error('Evidence root must not be a symlink');
+    this.assertContained(target);
     await this.assertNoSymlink(target);
     return target;
   }
 
-  private async assertContained(target: string) {
+  private assertContained(target: string) {
     const rel = relative(this.root, target);
     if (!rel || rel.startsWith(`..${sep}`) || rel === '..' || isAbsolute(rel))
       throw new Error('Evidence path escapes private root');
@@ -239,8 +283,10 @@ export class LocalFilesystemPrivateEvidenceStorage implements PrivateEvidenceSto
       current = join(current, part);
       try {
         const stat = await lstat(current);
-        if (stat.isSymbolicLink()) throw new Error('Evidence path contains a symlink');
-        if (current !== target && !stat.isDirectory()) throw new Error('Evidence path component is not a directory');
+        if (stat.isSymbolicLink())
+          throw new Error('Evidence path contains a symlink');
+        if (current !== target && !stat.isDirectory())
+          throw new Error('Evidence path component is not a directory');
       } catch (error) {
         if ((error as NodeJS.ErrnoException).code === 'ENOENT') return;
         throw error;
@@ -249,7 +295,10 @@ export class LocalFilesystemPrivateEvidenceStorage implements PrivateEvidenceSto
   }
 
   private async readPrivate(path: string) {
-    const handle = await open(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
+    const handle = await open(
+      path,
+      constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0),
+    );
     try {
       return await handle.readFile();
     } finally {
@@ -258,11 +307,25 @@ export class LocalFilesystemPrivateEvidenceStorage implements PrivateEvidenceSto
   }
 }
 
-export class UnavailablePrivateEvidenceStorage implements PrivateEvidenceStorage {
-  private unavailable(): never { throw new Error('SSOMA private evidence storage is not configured'); }
-  putIfAbsent(): Promise<PrivateEvidencePutResult> { return Promise.reject(this.unavailable()); }
-  readVerified(): Promise<Buffer> { return Promise.reject(this.unavailable()); }
-  verify(): Promise<PrivateEvidenceVerification> { return Promise.reject(this.unavailable()); }
-  inspect(): Promise<PrivateEvidenceInspection> { return Promise.reject(this.unavailable()); }
-  deleteIfMatch(): Promise<boolean> { return Promise.reject(this.unavailable()); }
+export class UnavailablePrivateEvidenceStorage
+  implements PrivateEvidenceStorage
+{
+  private unavailable(): Error {
+    return new Error('SSOMA private evidence storage is not configured');
+  }
+  putIfAbsent(): Promise<PrivateEvidencePutResult> {
+    return Promise.reject(this.unavailable());
+  }
+  readVerified(): Promise<Buffer> {
+    return Promise.reject(this.unavailable());
+  }
+  verify(): Promise<PrivateEvidenceVerification> {
+    return Promise.reject(this.unavailable());
+  }
+  inspect(): Promise<PrivateEvidenceInspection> {
+    return Promise.reject(this.unavailable());
+  }
+  deleteIfMatch(): Promise<boolean> {
+    return Promise.reject(this.unavailable());
+  }
 }

@@ -90,7 +90,16 @@ export function endpointPermissions(
       ].includes(handler)
     )
       return [['ssoma.view'], ['ssoma.manage']];
-    if (['listTalks', 'findTalk', 'searchWorkers', 'getAvailability', 'listDocumentVersions', 'listRevisions'].includes(handler))
+    if (
+      [
+        'listTalks',
+        'findTalk',
+        'searchWorkers',
+        'getAvailability',
+        'listDocumentVersions',
+        'listRevisions',
+      ].includes(handler)
+    )
       return [['ssoma.view']];
     const action = specialAction[handler];
     if (action) return [['ssoma.view'], [`ssoma.${action}`]];

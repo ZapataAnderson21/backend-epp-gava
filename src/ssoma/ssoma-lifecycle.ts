@@ -1,7 +1,4 @@
-import {
-  SsomaAttendanceStatus,
-  SsomaTalkStatus,
-} from 'src/generated/prisma';
+import { SsomaAttendanceStatus, SsomaTalkStatus } from 'src/generated/prisma';
 
 export const ssomaTalkStatuses = Object.values(SsomaTalkStatus);
 
@@ -13,10 +10,26 @@ export type SsomaTalkTransition = Readonly<{
 
 /** Only transitions represented by the Phase 2 lifecycle are exposed. */
 export const ssomaTalkTransitions: readonly SsomaTalkTransition[] = [
-  { action: 'start', from: SsomaTalkStatus.draft, to: SsomaTalkStatus.inProgress },
-  { action: 'open', from: SsomaTalkStatus.inProgress, to: SsomaTalkStatus.open },
-  { action: 'annul', from: SsomaTalkStatus.draft, to: SsomaTalkStatus.annulled },
-  { action: 'annul', from: SsomaTalkStatus.inProgress, to: SsomaTalkStatus.annulled },
+  {
+    action: 'start',
+    from: SsomaTalkStatus.draft,
+    to: SsomaTalkStatus.inProgress,
+  },
+  {
+    action: 'open',
+    from: SsomaTalkStatus.inProgress,
+    to: SsomaTalkStatus.open,
+  },
+  {
+    action: 'annul',
+    from: SsomaTalkStatus.draft,
+    to: SsomaTalkStatus.annulled,
+  },
+  {
+    action: 'annul',
+    from: SsomaTalkStatus.inProgress,
+    to: SsomaTalkStatus.annulled,
+  },
   { action: 'annul', from: SsomaTalkStatus.open, to: SsomaTalkStatus.annulled },
 ];
 
