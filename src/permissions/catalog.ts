@@ -108,6 +108,19 @@ export const permissionModules = [
     special: [],
   },
   {
+    key: 'ssoma',
+    label: 'Charlas SSOMA',
+    actions: ['view', 'manage', 'export'],
+    special: [
+      ['sign', 'Registrar firmas'],
+      ['invalidate', 'Invalidar charla'],
+      ['close', 'Cerrar charla'],
+      ['revise', 'Revisar charla'],
+      ['void', 'Anular charla'],
+      ['audit', 'Ver auditoría'],
+    ],
+  },
+  {
     key: 'users',
     label: 'Usuarios',
     actions: ['view', 'manage', 'delete'],
@@ -247,6 +260,7 @@ export function initialPermissions(name: string): string[] {
       'evaluations.view',
       'evaluations.manage',
       'evaluations.export',
+      ...allPermissions.filter((permission) => permission.startsWith('ssoma.')),
     );
   return normalizePermissions(permissions);
 }

@@ -30,6 +30,7 @@ export const controllerModules: Record<string, string> = {
   WorkerMonthlyEvaluationController: 'evaluations',
   ExpiringDocumentController: 'documents',
   EmergencyController: 'emergencies',
+  SsomaController: 'ssoma',
   UserController: 'users',
   UserTypeController: 'roles',
   PermissionsController: 'roles',
@@ -54,6 +55,54 @@ export function endpointPermissions(
       return [['orders.view'], ['orders.renumberHistory']];
     if (['candidates', 'preview', 'apply'].includes(handler))
       return [['orders.view'], ['orders.renumber']];
+    return null;
+  }
+  if (controller === 'SsomaController') {
+    const specialAction: Record<string, string> = {
+      sign: 'sign',
+      captureSignature: 'sign',
+      closeTalk: 'close',
+      startRevision: 'revise',
+      publishRevision: 'revise',
+      downloadCurrentPdf: 'export',
+      downloadVersionPdf: 'export',
+      reconcilePublications: 'audit',
+      getRetentionStatus: 'audit',
+      getRetentionOrphanReport: 'audit',
+      runRetentionMaintenance: 'manage',
+      setRetentionHold: 'manage',
+      clearRetentionHold: 'manage',
+      invalidateAttendance: 'invalidate',
+      close: 'close',
+      revise: 'revise',
+      annulTalk: 'void',
+      auditHistory: 'audit',
+      export: 'export',
+    };
+    if (
+      [
+        'createTalk',
+        'updateDraft',
+        'startTalk',
+        'openTalk',
+        'addParticipants',
+        'removeParticipant',
+      ].includes(handler)
+    )
+      return [['ssoma.view'], ['ssoma.manage']];
+    if (
+      [
+        'listTalks',
+        'findTalk',
+        'searchWorkers',
+        'getAvailability',
+        'listDocumentVersions',
+        'listRevisions',
+      ].includes(handler)
+    )
+      return [['ssoma.view']];
+    const action = specialAction[handler];
+    if (action) return [['ssoma.view'], [`ssoma.${action}`]];
     return null;
   }
   if (controller === 'RequestFormDraftController')
