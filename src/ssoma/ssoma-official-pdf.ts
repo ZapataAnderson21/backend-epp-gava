@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import PdfPrinter from 'pdfmake/src/printer';
 import type { Content, TDocumentDefinitions } from 'pdfmake/interfaces';
+import { SsomaActivityType } from 'src/generated/prisma';
 import { accessSync, constants as fsConstants, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
@@ -27,6 +28,8 @@ export interface SsomaOfficialDocumentSnapshot {
   talk: {
     talkDate: string;
     topic: string;
+    activityType: SsomaActivityType;
+    otherActivityText: string | null;
     trainer: string | null;
     location: string | null;
     targetAudience: string | null;
@@ -88,6 +91,7 @@ export const SSOMA_TEMPLATE_GEOMETRY = {
   signatureBlockTop: 3082 * TEMPLATE_SCALE,
   frameBottom: 3381 * TEMPLATE_SCALE,
   fieldAnchors: {
+    workerCount: { x: 476, y: 88 },
     topic: { x: 56, y: 120 },
     date: { x: 516, y: 120 },
     trainer: { x: 160, y: 134 },
@@ -96,6 +100,18 @@ export const SSOMA_TEMPLATE_GEOMETRY = {
     startTime: { x: 358, y: 162 },
     endTime: { x: 430, y: 162 },
     duration: { x: 541, y: 162 },
+  },
+  activityCheckboxAnchors: {
+    INDUCTION: { x: 390 * TEMPLATE_SCALE, y: 453 * TEMPLATE_SCALE },
+    TALK: { x: 688 * TEMPLATE_SCALE, y: 453 * TEMPLATE_SCALE },
+    TRAINING: { x: 1078 * TEMPLATE_SCALE, y: 453 * TEMPLATE_SCALE },
+    PRACTICE: { x: 1471 * TEMPLATE_SCALE, y: 453 * TEMPLATE_SCALE },
+    DRILL: { x: 1785 * TEMPLATE_SCALE, y: 453 * TEMPLATE_SCALE },
+    OTHER: { x: 1980 * TEMPLATE_SCALE, y: 453 * TEMPLATE_SCALE },
+  },
+  otherActivityTextAnchor: {
+    x: 2025 * TEMPLATE_SCALE,
+    y: 453 * TEMPLATE_SCALE,
   },
 } as const;
 
@@ -407,8 +423,7 @@ function fitPngWithinBox(
   return { width, height };
 }
 
-function checkboxMark(): Content {
-  // Charla is the approved activity for this module; the existing checkbox is static.
+function checkboxMark(position: { x: number; y: number }): Content {
   return {
     canvas: [
       {
@@ -430,7 +445,7 @@ function checkboxMark(): Content {
         lineColor: '#000000',
       },
     ],
-    absolutePosition: { x: px(688), y: px(453) },
+    absolutePosition: position,
   } as Content;
 }
 
@@ -547,7 +562,38 @@ function pageContent(
       'left',
       fontFamily,
     ),
-    checkboxMark(),
+    checkboxMark(
+      SSOMA_TEMPLATE_GEOMETRY.activityCheckboxAnchors[
+        snapshot.talk.activityType ?? SsomaActivityType.TALK
+      ],
+    ),
+    absoluteText(
+      String(snapshot.participants.length),
+      SSOMA_TEMPLATE_GEOMETRY.fieldAnchors.workerCount.x,
+      SSOMA_TEMPLATE_GEOMETRY.fieldAnchors.workerCount.y,
+      82,
+      12,
+      5.6,
+      false,
+      'left',
+      fontFamily,
+    ),
+    ...(snapshot.talk.activityType === SsomaActivityType.OTHER &&
+    textOrBlank(snapshot.talk.otherActivityText)
+      ? [
+          absoluteText(
+            textOrBlank(snapshot.talk.otherActivityText),
+            SSOMA_TEMPLATE_GEOMETRY.otherActivityTextAnchor.x,
+            SSOMA_TEMPLATE_GEOMETRY.otherActivityTextAnchor.y,
+            px(2349) - SSOMA_TEMPLATE_GEOMETRY.otherActivityTextAnchor.x - 4,
+            px(24),
+            5.6,
+            false,
+            'left',
+            fontFamily,
+          ),
+        ]
+      : []),
   ];
 
   const columns = SSOMA_TEMPLATE_GEOMETRY.attendanceColumnSeparators;

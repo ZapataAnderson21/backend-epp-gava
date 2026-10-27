@@ -6,6 +6,7 @@ import {
   SSOMA_TEMPLATE_GEOMETRY,
   measureSsomaTextWidth,
 } from './ssoma-official-pdf';
+import { SsomaActivityType } from 'src/generated/prisma';
 
 const participant = (index: number) => ({
   workerId: index + 1,
@@ -15,13 +16,20 @@ const participant = (index: number) => ({
   status: 'SIGNED' as const,
 });
 
-const snapshot = (count = 28, versionNumber = 1) => ({
+const snapshot = (
+  count = 28,
+  versionNumber = 1,
+  activityType: SsomaActivityType = SsomaActivityType.TALK,
+  otherActivityText: string | null = null,
+) => ({
   talkId: 41,
   versionNumber,
   project: { code: 'P-1', name: 'Project North' },
   talk: {
     talkDate: '2026-10-25',
     topic: 'Safe work',
+    activityType,
+    otherActivityText,
     trainer: 'Trainer',
     location: 'Site',
     targetAudience: 'Crew',
@@ -109,6 +117,7 @@ describe('SsomaOfficialPdfRenderer', () => {
     ]);
     expect(SSOMA_TEMPLATE_GEOMETRY.frameBottom).toBeCloseTo(811.44, 5);
     expect(SSOMA_TEMPLATE_GEOMETRY.fieldAnchors).toEqual({
+      workerCount: { x: 476, y: 88 },
       topic: { x: 56, y: 120 },
       date: { x: 516, y: 120 },
       trainer: { x: 160, y: 134 },
@@ -123,6 +132,56 @@ describe('SsomaOfficialPdfRenderer', () => {
       SSOMA_TEMPLATE_GEOMETRY.participantTop +
         SSOMA_TEMPLATE_GEOMETRY.participantRowHeight * 28,
     ).toBeCloseTo(SSOMA_TEMPLATE_GEOMETRY.participantBottom, 5);
+  });
+
+  it('marks exactly the selected official activity and renders Other text and participant count', () => {
+    const renderer = new SsomaOfficialPdfRenderer();
+    const activityTypes = Object.values(SsomaActivityType);
+    const markPositions = activityTypes.map((activityType) => {
+      const page = renderer.buildDocumentDefinition(
+        snapshot(
+          2,
+          1,
+          activityType,
+          activityType === SsomaActivityType.OTHER ? 'Visita' : null,
+        ),
+        new Map(),
+      ).content as unknown as Array<{ stack: Array<Record<string, unknown>> }>;
+      const marks = page[0].stack.filter((node) => {
+        const canvas = node.canvas as
+          | Array<Record<string, unknown>>
+          | undefined;
+        return (
+          canvas?.length === 2 && canvas.every((shape) => shape.type === 'line')
+        );
+      });
+      expect(marks).toHaveLength(1);
+      return (marks[0].absolutePosition as { x: number }).x;
+    });
+    expect(new Set(markPositions).size).toBe(activityTypes.length);
+
+    const page = renderer.buildDocumentDefinition(
+      snapshot(2, 1, 'OTHER', 'Visita'),
+      new Map(),
+    ).content as unknown as Array<{ stack: Array<Record<string, unknown>> }>;
+    const count = page[0].stack.find((node) => {
+      const position = node.absolutePosition as
+        | { x?: number; y?: number }
+        | undefined;
+      return position?.x === 476 && position.y === 88 && node.text === '2';
+    });
+    expect(count).toBeDefined();
+    const otherText = page[0].stack.find((node) => node.text === 'Visita');
+    expect(otherText).toBeDefined();
+    const otherPosition = otherText?.absolutePosition as
+      | { x: number; y: number }
+      | undefined;
+    expect(otherPosition?.x).toBe(
+      SSOMA_TEMPLATE_GEOMETRY.otherActivityTextAnchor.x,
+    );
+    expect(
+      (otherPosition?.x ?? 0) + (otherText?.width as number),
+    ).toBeLessThanOrEqual(SSOMA_TEMPLATE_GEOMETRY.frameRight);
   });
 
   it('selects configured licensed HSEQ fonts only when both files are readable', () => {
@@ -324,6 +383,7 @@ describe('SsomaOfficialPdfRenderer', () => {
       [501, 556],
       [516, 556],
       [541, 561],
+      [476, 558],
     ]);
     for (const node of textNodes) {
       const width = node.width as number;
