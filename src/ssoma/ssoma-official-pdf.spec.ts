@@ -1,5 +1,6 @@
 import { deflateSync } from 'node:zlib';
 import {
+  resolveSsomaPdfFontConfiguration,
   SsomaOfficialPdfRenderer,
   paginateSsomaParticipants,
 } from './ssoma-official-pdf';
@@ -30,6 +31,20 @@ const snapshot = {
   },
   participants: Array.from({ length: 28 }, (_, index) => participant(index)),
 };
+
+const fallbackFontConfigurationCases: Array<
+  [NodeJS.ProcessEnv, (fontPath: string) => boolean]
+> = [
+  [{}, () => false],
+  [
+    {
+      SSOMA_HSEQ_FONT_REGULAR_PATH: 'C:/licensed/tahoma.ttf',
+      SSOMA_HSEQ_FONT_BOLD_PATH: 'C:/licensed/tahomabd.ttf',
+    },
+    () => false,
+  ],
+  [{ SSOMA_HSEQ_FONT_REGULAR_PATH: 'C:/licensed/tahoma.ttf' }, () => true],
+];
 
 function contentText(value: unknown): string[] {
   if (Array.isArray(value)) return value.flatMap(contentText);
@@ -110,6 +125,42 @@ function png(width: number, height: number): Buffer {
 }
 
 describe('SsomaOfficialPdfRenderer', () => {
+  it('selects licensed HSEQ regular and bold font paths when both are readable', () => {
+    const configured = resolveSsomaPdfFontConfiguration(
+      {
+        SSOMA_HSEQ_FONT_REGULAR_PATH: 'C:/licensed/tahoma.ttf',
+        SSOMA_HSEQ_FONT_BOLD_PATH: 'C:/licensed/tahomabd.ttf',
+      },
+      () => true,
+    );
+
+    expect(configured.family).toBe('Tahoma');
+    expect(configured.files).toEqual({
+      normal: 'C:/licensed/tahoma.ttf',
+      bold: 'C:/licensed/tahomabd.ttf',
+      italics: 'C:/licensed/tahoma.ttf',
+      bolditalics: 'C:/licensed/tahomabd.ttf',
+    });
+    expect(
+      new SsomaOfficialPdfRenderer().buildDocumentDefinition(
+        snapshot,
+        new Map(),
+        configured.family,
+      ).defaultStyle?.font,
+    ).toBe('Tahoma');
+  });
+
+  it.each(fallbackFontConfigurationCases)(
+    'falls back to bundled Roboto for absent or unreadable font paths',
+    (env, isReadable) => {
+      const configured = resolveSsomaPdfFontConfiguration(env, isReadable);
+
+      expect(configured.family).toBe('Roboto');
+      expect(configured.files.normal).toContain('Roboto-Regular.ttf');
+      expect(configured.files.bold).toContain('Roboto-Bold.ttf');
+    },
+  );
+
   it('paginates all participants in groups of at most 28 without omissions', () => {
     expect(
       paginateSsomaParticipants(snapshot.participants).map(

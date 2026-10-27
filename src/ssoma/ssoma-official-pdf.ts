@@ -5,6 +5,7 @@ import type {
   TableCell,
   TDocumentDefinitions,
 } from 'pdfmake/interfaces';
+import { accessSync, constants as fsConstants } from 'node:fs';
 import { join } from 'node:path';
 
 export interface SsomaOfficialParticipant {
@@ -39,11 +40,65 @@ const PAGE_WIDTH = 595.28;
 const PAGE_MARGINS: [number, number, number, number] = [31, 28, 31, 29];
 const FORM_WIDTH = PAGE_WIDTH - PAGE_MARGINS[0] - PAGE_MARGINS[2];
 const ROW_SCALE = 0.5;
+const HSEQ_FONT_REGULAR_ENV = 'SSOMA_HSEQ_FONT_REGULAR_PATH';
+const HSEQ_FONT_BOLD_ENV = 'SSOMA_HSEQ_FONT_BOLD_PATH';
 const COLORS = {
   black: '#000000',
   white: '#FFFFFF',
   header: '#D9D9D9',
 };
+
+export type SsomaPdfFontFamily = 'Tahoma' | 'Roboto';
+
+export interface SsomaPdfFontConfiguration {
+  family: SsomaPdfFontFamily;
+  files: {
+    normal: string;
+    bold: string;
+    italics: string;
+    bolditalics: string;
+  };
+}
+
+function isReadableFontFile(fontPath: string) {
+  try {
+    accessSync(fontPath, fsConstants.R_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function resolveSsomaPdfFontConfiguration(
+  env: NodeJS.ProcessEnv = process.env,
+  isReadable: (fontPath: string) => boolean = isReadableFontFile,
+): SsomaPdfFontConfiguration {
+  const regularPath = env[HSEQ_FONT_REGULAR_ENV]?.trim();
+  const boldPath = env[HSEQ_FONT_BOLD_ENV]?.trim();
+  if (
+    regularPath &&
+    boldPath &&
+    isReadable(regularPath) &&
+    isReadable(boldPath)
+  ) {
+    return {
+      family: 'Tahoma',
+      files: {
+        normal: regularPath,
+        bold: boldPath,
+        italics: regularPath,
+        bolditalics: boldPath,
+      },
+    };
+  }
+  const roboto = {
+    normal: join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
+    bold: join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
+    italics: join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
+    bolditalics: join(process.cwd(), 'src/pdf/fonts/Roboto-BoldItalic.ttf'),
+  };
+  return { family: 'Roboto', files: roboto };
+}
 
 // These are the SST-F-002 A:C, D:E, F:H, I:J, and K:L print proportions.
 const COMPANY_COLUMNS = [40.56, 20.14, 59.27, 29.28, 30.42];
@@ -676,6 +731,7 @@ export class SsomaOfficialPdfRenderer {
   buildDocumentDefinition(
     snapshot: SsomaOfficialDocumentSnapshot,
     signatures: ReadonlyMap<number, Buffer>,
+    fontFamily: SsomaPdfFontFamily = resolveSsomaPdfFontConfiguration().family,
   ): TDocumentDefinitions {
     const participantPages = paginateSsomaParticipants(snapshot.participants);
     const content: Content[] = [];
@@ -698,7 +754,7 @@ export class SsomaOfficialPdfRenderer {
       pageOrientation: 'portrait',
       pageMargins: PAGE_MARGINS,
       content,
-      defaultStyle: { font: 'Roboto', fontSize: 6.1, color: COLORS.black },
+      defaultStyle: { font: fontFamily, fontSize: 6.1, color: COLORS.black },
     };
   }
 
@@ -706,16 +762,14 @@ export class SsomaOfficialPdfRenderer {
     snapshot: SsomaOfficialDocumentSnapshot,
     signatures: ReadonlyMap<number, Buffer>,
   ) {
-    const fonts = {
-      Roboto: {
-        normal: join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
-        bold: join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
-        italics: join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
-        bolditalics: join(process.cwd(), 'src/pdf/fonts/Roboto-BoldItalic.ttf'),
-      },
-    };
+    const fontConfiguration = resolveSsomaPdfFontConfiguration();
+    const fonts = { [fontConfiguration.family]: fontConfiguration.files };
     const pdfDoc = new PdfPrinter(fonts).createPdfKitDocument(
-      this.buildDocumentDefinition(snapshot, signatures),
+      this.buildDocumentDefinition(
+        snapshot,
+        signatures,
+        fontConfiguration.family,
+      ),
     );
     const chunks: Buffer[] = [];
     return new Promise<Buffer>((resolve, reject) => {
