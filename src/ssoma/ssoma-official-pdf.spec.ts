@@ -93,6 +93,8 @@ describe('SsomaOfficialPdfRenderer', () => {
       pageHeight: 841.8,
       frameLeft: 30.72,
       frameRight: 563.76,
+      signatureCellRight: 563.76,
+      pageControlBottom: 69.6,
       attendanceColumnSeparators: [72, 234, 386.4, 473.28],
       attendanceHeaderTop: 188.64,
       participantTop: 203.76,
@@ -177,7 +179,47 @@ describe('SsomaOfficialPdfRenderer', () => {
       ),
     );
     expect(rowNumbers(pageContents[2])).toEqual(['57', '58']);
+    const rowPatches = (page: { stack: unknown[] }) =>
+      page.stack.filter((node) => {
+        if (typeof node !== 'object' || node === null) return false;
+        const record = node as Record<string, unknown>;
+        const position = record.absolutePosition as { y?: number } | undefined;
+        const canvas = record.canvas as
+          | Array<Record<string, unknown>>
+          | undefined;
+        const rectangle = canvas?.[0];
+        return (
+          position?.y !== undefined &&
+          position.y >= SSOMA_TEMPLATE_GEOMETRY.participantTop &&
+          position.y < SSOMA_TEMPLATE_GEOMETRY.participantBottom &&
+          rectangle?.color === '#FFFFFF'
+        );
+      });
+    expect(rowPatches(pageContents[0])).toHaveLength(0);
+    expect(rowPatches(pageContents[1])).toHaveLength(28);
+    expect(rowPatches(pageContents[2])).toHaveLength(28);
     expect(collectText(pageContents[2].stack).join(' ')).toContain('3 de 3');
+  });
+
+  it('clears only the page value area without crossing into the official heading', () => {
+    const definition = new SsomaOfficialPdfRenderer().buildDocumentDefinition(
+      snapshot(1),
+      new Map(),
+    );
+    const page = (
+      definition.content as unknown as Array<{ stack: unknown[] }>
+    )[0];
+    const patch = page.stack[0] as {
+      absolutePosition: { x: number; y: number };
+      canvas: Array<{ w: number; h: number }>;
+    };
+    expect(patch.absolutePosition).toEqual({ x: 501, y: 62 });
+    expect(patch.absolutePosition.x + patch.canvas[0].w).toBeLessThan(
+      SSOMA_TEMPLATE_GEOMETRY.frameRight,
+    );
+    expect(patch.canvas[0].h).toBeLessThanOrEqual(
+      69.6 - patch.absolutePosition.y,
+    );
   });
 
   it('repeats the single-page workbook observation and signatory form on continuations', () => {
@@ -249,15 +291,27 @@ describe('SsomaOfficialPdfRenderer', () => {
         typeof node === 'object' && node !== null && 'image' in node,
     );
     expect(images).toHaveLength(2);
-    expect(images[0].fit).toEqual(images[1].fit);
-    expect((images[0].absolutePosition as { x: number }).x).toBeCloseTo(
-      476.28,
-      3,
-    );
-    expect((images[1].absolutePosition as { x: number }).x).toBeCloseTo(
-      476.28,
-      3,
-    );
+    for (const item of images) {
+      const width = item.width as number;
+      const height = item.height as number;
+      expect(Number.isFinite(width) && width > 0).toBe(true);
+      expect(Number.isFinite(height) && height > 0).toBe(true);
+    }
+    expect(
+      (images[0].width as number) / (images[0].height as number),
+    ).toBeCloseTo(5, 5);
+    expect(
+      (images[1].width as number) / (images[1].height as number),
+    ).toBeCloseTo(0.2, 5);
+    const signatureCellLeft =
+      SSOMA_TEMPLATE_GEOMETRY.attendanceColumnSeparators[3] + 3;
+    const signatureCellRight = SSOMA_TEMPLATE_GEOMETRY.signatureCellRight - 3;
+    for (const item of images) {
+      const position = item.absolutePosition as { x: number; y: number };
+      const width = item.width as number;
+      expect(position.x).toBeGreaterThanOrEqual(signatureCellLeft);
+      expect(position.x + width).toBeLessThanOrEqual(signatureCellRight);
+    }
   });
 
   it('renders a valid revision-compatible PDF with a repeated official background', async () => {

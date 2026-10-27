@@ -60,6 +60,8 @@ export const SSOMA_TEMPLATE_GEOMETRY = {
   pageHeight: PAGE_HEIGHT,
   frameLeft: 128 * TEMPLATE_SCALE,
   frameRight: 2349 * TEMPLATE_SCALE,
+  signatureCellRight: 2349 * TEMPLATE_SCALE,
+  pageControlBottom: 290 * TEMPLATE_SCALE,
   attendanceColumnSeparators: [300, 975, 1610, 1972].map(
     (pixel) => pixel * TEMPLATE_SCALE,
   ),
@@ -211,9 +213,44 @@ function absoluteImage(
 ): Content {
   return {
     image: `data:image/png;base64,${data.toString('base64')}`,
-    fit: [width, height],
+    width,
+    height,
     absolutePosition: { x, y },
   } as Content;
+}
+
+function fitPngWithinBox(
+  data: Buffer,
+  maxWidth: number,
+  maxHeight: number,
+): { width: number; height: number } | undefined {
+  const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+  if (
+    data.length < 24 ||
+    !data.subarray(0, 8).equals(pngSignature) ||
+    !Number.isFinite(maxWidth) ||
+    !Number.isFinite(maxHeight) ||
+    maxWidth <= 0 ||
+    maxHeight <= 0
+  ) {
+    return undefined;
+  }
+
+  const sourceWidth = data.readUInt32BE(16);
+  const sourceHeight = data.readUInt32BE(20);
+  if (sourceWidth <= 0 || sourceHeight <= 0) return undefined;
+  const scale = Math.min(1, maxWidth / sourceWidth, maxHeight / sourceHeight);
+  const width = sourceWidth * scale;
+  const height = sourceHeight * scale;
+  if (
+    !Number.isFinite(width) ||
+    !Number.isFinite(height) ||
+    width <= 0 ||
+    height <= 0
+  ) {
+    return undefined;
+  }
+  return { width, height };
 }
 
 function checkboxMark(): Content {
@@ -253,7 +290,7 @@ function pageContent(
   const content: Content[] = [
     // Replace only the printed static page digits; the approved label stays in the template.
     {
-      canvas: [{ type: 'rect', x: 0, y: 0, w: 55, h: 10, color: '#FFFFFF' }],
+      canvas: [{ type: 'rect', x: 0, y: 0, w: 55, h: 7, color: '#FFFFFF' }],
       absolutePosition: { x: 501, y: 62 },
     } as Content,
     absoluteText(`${pageIndex + 1} de ${pageCount}`, 501, 63, 55, 9, 5.6, true),
@@ -284,13 +321,9 @@ function pageContent(
   const columns = SSOMA_TEMPLATE_GEOMETRY.attendanceColumnSeparators;
   const rowHeight = SSOMA_TEMPLATE_GEOMETRY.participantRowHeight;
   const rowTop = SSOMA_TEMPLATE_GEOMETRY.participantTop;
-  participants.forEach((participant, index) => {
-    const top = rowTop + index * rowHeight;
-    const number = String(
-      pageIndex * MAX_PARTICIPANTS_PER_PAGE + index + 1,
-    ).padStart(2, '0');
-    const y = top + 4.5;
-    if (pageIndex > 0) {
+  if (pageIndex > 0) {
+    for (let rowIndex = 0; rowIndex < MAX_PARTICIPANTS_PER_PAGE; rowIndex++) {
+      const top = rowTop + rowIndex * rowHeight;
       content.push({
         canvas: [
           {
@@ -304,6 +337,15 @@ function pageContent(
         ],
         absolutePosition: { x: px(134), y: top + 1.1 },
       } as Content);
+    }
+  }
+  participants.forEach((participant, index) => {
+    const top = rowTop + index * rowHeight;
+    const number = String(
+      pageIndex * MAX_PARTICIPANTS_PER_PAGE + index + 1,
+    ).padStart(2, '0');
+    const y = top + 4.5;
+    if (pageIndex > 0) {
       content.push(absoluteText(number, 47, y, 12, 9, 5.8, true));
     }
     content.push(
@@ -332,15 +374,22 @@ function pageContent(
         ? signatures.get(participant.workerId)
         : undefined;
     if (signature) {
-      content.push(
-        absoluteImage(
-          signature,
-          columns[3] + 3,
-          top + 1.3,
-          columns[4] - columns[3] - 6,
-          rowHeight - 2.6,
-        ),
-      );
+      const maxWidth =
+        SSOMA_TEMPLATE_GEOMETRY.signatureCellRight - columns[3] - 6;
+      const maxHeight = rowHeight - 2.6;
+      const fittedSize = fitPngWithinBox(signature, maxWidth, maxHeight);
+      if (fittedSize) {
+        const cellLeft = columns[3] + 3;
+        content.push(
+          absoluteImage(
+            signature,
+            cellLeft + (maxWidth - fittedSize.width) / 2,
+            top + (rowHeight - fittedSize.height) / 2,
+            fittedSize.width,
+            fittedSize.height,
+          ),
+        );
+      }
     }
   });
 
