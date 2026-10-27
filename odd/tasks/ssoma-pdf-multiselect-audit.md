@@ -53,6 +53,7 @@ Extend the SSOMA talk contract and official HSEQ PDF with activity metadata and 
 - Focused four-suite SSOMA tests passed again after generation (51 tests); generated files were then restored to HEAD, leaving the tracked generated-client subtree clean.
 - `git diff --check 3ddb42f3be20de24afa200f24123657016a7472f..HEAD` passed with exit 0; no handwritten source changed in this follow-up, so lint was not rerun.
 - No database migration or full PostgreSQL integration was run.
+- Other-text geometry correction commit: `1104f9e` (`fix(ssoma): align Other text within official box`). Initial test run required temporary Prisma generation because the intentionally restored client lacks the new enum; RED then showed x=486pt versus the official box left edge 489.84pt. GREEN: geometry test keeps twelve wide `W` characters and the text node inside the measured box; all four focused SSOMA suites passed (52 tests). `npm run build` exited 0, targeted ESLint passed, generated outputs were restored to HEAD, and `git diff --check 3ddb42f3be20de24afa200f24123657016a7472f..HEAD` passed.
 
 ## Next Step
 
