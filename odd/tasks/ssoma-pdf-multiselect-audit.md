@@ -37,7 +37,7 @@ Extend the SSOMA talk contract and official HSEQ PDF with activity metadata and 
 ### BE-03 — Validate and close
 
 - [x] Run Prisma validate/generate, focused deterministic suites, build, and targeted ESLint.
-- [ ] Resolve committed generated-declaration trailing-whitespace findings from `git diff --check`; full PostgreSQL integration intentionally deferred.
+- [x] Remove committed generated-client rewrite and verify generation/build; full PostgreSQL integration intentionally deferred.
 
 ## Progress
 
@@ -48,9 +48,12 @@ Extend the SSOMA talk contract and official HSEQ PDF with activity metadata and 
 - BE-01 GREEN: four focused SSOMA suites passed (51 tests); Prisma validate/generate, Nest build, targeted ESLint passed.
 - BE-02 RED: checkbox mapping was non-distinct and expected worker-count anchor was absent; snapshot metadata test failed before renderer/service mapping.
 - BE-02 GREEN: four focused SSOMA suites passed (51 tests); Prisma validate/generate, Nest build, targeted ESLint passed.
-- `git diff --check` reports trailing whitespace in generated `src/generated/prisma/index.d.ts` comments and Windows CRLF conversion notices; no handwritten source whitespace was reported.
+- Follow-up cleanup commit `380531e` restores all tracked `src/generated/prisma/**` outputs to the exact base state; generated output remains a local build artifact and is not committed.
+- `npx prisma generate` passed using a dummy process-local DATABASE_URL; `npm run build` passed and regenerated the Prisma client before Nest compilation.
+- Focused four-suite SSOMA tests passed again after generation (51 tests); generated files were then restored to HEAD, leaving the tracked generated-client subtree clean.
+- `git diff --check 3ddb42f3be20de24afa200f24123657016a7472f..HEAD` passed with exit 0; no handwritten source changed in this follow-up, so lint was not rerun.
 - No database migration or full PostgreSQL integration was run.
 
 ## Next Step
 
-- Parent review and decision on generated-client whitespace findings; full PostgreSQL integration remains intentionally deferred.
+- Frontend/backend integration and full PostgreSQL integration remain outside this correction; original checkout remains untouched.
