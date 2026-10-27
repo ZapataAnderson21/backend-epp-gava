@@ -81,6 +81,9 @@ export const SSOMA_TEMPLATE_GEOMETRY = {
   participantRowHeight: ((2830 - 849) * TEMPLATE_SCALE) / 28,
   participantBottom: 2830 * TEMPLATE_SCALE,
   observationsTop: 2830 * TEMPLATE_SCALE,
+  observationRuleY: [2913, 2958, 3003].map((pixel) => pixel * TEMPLATE_SCALE),
+  observationTextTopPadding: 7.6,
+  observationTextHeight: 6.8,
   legalNoteTop: 3052 * TEMPLATE_SCALE,
   signatureBlockTop: 3082 * TEMPLATE_SCALE,
   frameBottom: 3381 * TEMPLATE_SCALE,
@@ -647,9 +650,10 @@ function pageContent(
         absoluteText(
           line,
           observationX,
-          SSOMA_TEMPLATE_GEOMETRY.observationsTop + 12 + index * 15,
+          SSOMA_TEMPLATE_GEOMETRY.observationRuleY[index] -
+            SSOMA_TEMPLATE_GEOMETRY.observationTextTopPadding,
           observationWidth,
-          10,
+          SSOMA_TEMPLATE_GEOMETRY.observationTextHeight,
           observationFontSize,
           false,
           'left',

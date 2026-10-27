@@ -104,6 +104,9 @@ describe('SsomaOfficialPdfRenderer', () => {
     });
     expect(SSOMA_TEMPLATE_GEOMETRY.participantBottom).toBeCloseTo(679.2, 5);
     expect(SSOMA_TEMPLATE_GEOMETRY.observationsTop).toBeCloseTo(679.2, 5);
+    expect(SSOMA_TEMPLATE_GEOMETRY.observationRuleY).toEqual([
+      699.12, 709.92, 720.72,
+    ]);
     expect(SSOMA_TEMPLATE_GEOMETRY.frameBottom).toBeCloseTo(811.44, 5);
     expect(SSOMA_TEMPLATE_GEOMETRY.fieldAnchors).toEqual({
       topic: { x: 56, y: 120 },
@@ -357,18 +360,23 @@ describe('SsomaOfficialPdfRenderer', () => {
     expect(
       observations.map((node) => (node.absolutePosition as { y: number }).y),
     ).toEqual([
-      SSOMA_TEMPLATE_GEOMETRY.observationsTop + 12,
-      SSOMA_TEMPLATE_GEOMETRY.observationsTop + 27,
-      SSOMA_TEMPLATE_GEOMETRY.observationsTop + 42,
+      ...SSOMA_TEMPLATE_GEOMETRY.observationRuleY.map(
+        (ruleY) => ruleY - SSOMA_TEMPLATE_GEOMETRY.observationTextTopPadding,
+      ),
     ]);
     expect(
-      observations.every(
-        (node) =>
-          Math.abs((node.absolutePosition as { x: number }).x - 110.4) < 0.01 &&
-          (node.absolutePosition as { y: number }).y +
-            (node.height as number) <=
-            SSOMA_TEMPLATE_GEOMETRY.legalNoteTop,
-      ),
+      observations.every((node, index) => {
+        const { x, y } = node.absolutePosition as { x: number; y: number };
+        const ruleY = SSOMA_TEMPLATE_GEOMETRY.observationRuleY[index];
+        return (
+          Math.abs(x - 110.4) < 0.01 &&
+          (node.height as number) ===
+            SSOMA_TEMPLATE_GEOMETRY.observationTextHeight &&
+          y + (node.height as number) <= ruleY - 0.8 &&
+          y >= SSOMA_TEMPLATE_GEOMETRY.observationsTop &&
+          y + (node.height as number) < SSOMA_TEMPLATE_GEOMETRY.legalNoteTop
+        );
+      }),
     ).toBe(true);
   });
 
