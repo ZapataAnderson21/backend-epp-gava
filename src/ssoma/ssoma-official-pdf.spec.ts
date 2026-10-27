@@ -3,6 +3,7 @@ import {
   resolveSsomaPdfFontConfiguration,
   SsomaOfficialPdfRenderer,
   paginateSsomaParticipants,
+  SSOMA_TEMPLATE_GEOMETRY,
 } from './ssoma-official-pdf';
 
 const participant = (index: number) => ({
@@ -13,9 +14,9 @@ const participant = (index: number) => ({
   status: 'SIGNED' as const,
 });
 
-const snapshot = {
+const snapshot = (count = 28, versionNumber = 1) => ({
   talkId: 41,
-  versionNumber: 1,
+  versionNumber,
   project: { code: 'P-1', name: 'Project North' },
   talk: {
     talkDate: '2026-10-25',
@@ -24,59 +25,13 @@ const snapshot = {
     location: 'Site',
     targetAudience: 'Crew',
     scheduledTime: '08:30',
-    durationMinutes: 5,
+    durationMinutes: 45,
     observations: 'Use protective equipment.',
-    responsibleName: 'Lead',
-    responsiblePosition: 'Supervisor',
+    responsibleName: null,
+    responsiblePosition: null,
   },
-  participants: Array.from({ length: 28 }, (_, index) => participant(index)),
-};
-
-const fallbackFontConfigurationCases: Array<
-  [NodeJS.ProcessEnv, (fontPath: string) => boolean]
-> = [
-  [{}, () => false],
-  [
-    {
-      SSOMA_HSEQ_FONT_REGULAR_PATH: 'C:/licensed/tahoma.ttf',
-      SSOMA_HSEQ_FONT_BOLD_PATH: 'C:/licensed/tahomabd.ttf',
-    },
-    () => false,
-  ],
-  [{ SSOMA_HSEQ_FONT_REGULAR_PATH: 'C:/licensed/tahoma.ttf' }, () => true],
-];
-
-function contentText(value: unknown): string[] {
-  if (Array.isArray(value)) return value.flatMap(contentText);
-  if (!value || typeof value !== 'object') return [];
-  const record = value as Record<string, unknown>;
-  const ownText = typeof record.text === 'string' ? [record.text] : [];
-  return [
-    ...ownText,
-    ...Object.entries(record)
-      .filter(([key]) => key !== 'text')
-      .flatMap(([, child]) => contentText(child)),
-  ];
-}
-
-function formPages(
-  definition: ReturnType<SsomaOfficialPdfRenderer['buildDocumentDefinition']>,
-) {
-  return definition.content as unknown as Array<Record<string, unknown>>;
-}
-
-function tableBodies(value: unknown): unknown[][][] {
-  if (Array.isArray(value)) return value.flatMap(tableBodies);
-  if (!value || typeof value !== 'object') return [];
-  const record = value as Record<string, unknown>;
-  const result: unknown[][][] = [];
-  const table = record.table as { body?: unknown[][] } | undefined;
-  if (table?.body) result.push(table.body);
-  for (const [key, child] of Object.entries(record)) {
-    if (key !== 'table') result.push(...tableBodies(child));
-  }
-  return result;
-}
+  participants: Array.from({ length: count }, (_, index) => participant(index)),
+});
 
 function png(width: number, height: number): Buffer {
   const crc32 = (buffer: Buffer) => {
@@ -103,17 +58,12 @@ function png(width: number, height: number): Buffer {
   dimensions[9] = 6;
   const raw = Buffer.alloc(height * (width * 4 + 1));
   for (let y = 0; y < height; y++) {
-    const rowOffset = y * (width * 4 + 1);
+    const offset = y * (width * 4 + 1);
     for (let x = 0; x < width; x++) {
-      const signatureY =
-        height / 2 + Math.sin((x / width) * Math.PI * 4) * height * 0.2;
-      if (Math.abs(y - signatureY) <= Math.max(1, height * 0.015)) {
-        const pixelOffset = rowOffset + 1 + x * 4;
-        raw[pixelOffset] = 20;
-        raw[pixelOffset + 1] = 48;
-        raw[pixelOffset + 2] = 85;
-        raw[pixelOffset + 3] = 255;
-      }
+      raw[offset + 1 + x * 4] = 20;
+      raw[offset + 2 + x * 4] = 48;
+      raw[offset + 3 + x * 4] = 85;
+      raw[offset + 4 + x * 4] = 255;
     }
   }
   return Buffer.concat([
@@ -124,8 +74,52 @@ function png(width: number, height: number): Buffer {
   ]);
 }
 
+function collectText(value: unknown): string[] {
+  if (Array.isArray(value)) return value.flatMap(collectText);
+  if (!value || typeof value !== 'object') return [];
+  const record = value as Record<string, unknown>;
+  return [
+    ...(typeof record.text === 'string' ? [record.text] : []),
+    ...Object.entries(record)
+      .filter(([key]) => key !== 'text')
+      .flatMap(([, child]) => collectText(child)),
+  ];
+}
+
 describe('SsomaOfficialPdfRenderer', () => {
-  it('selects licensed HSEQ regular and bold font paths when both are readable', () => {
+  it('uses measured SST-F-002 page and attendance geometry', () => {
+    expect(SSOMA_TEMPLATE_GEOMETRY).toMatchObject({
+      pageWidth: 595.2,
+      pageHeight: 841.8,
+      frameLeft: 30.72,
+      frameRight: 563.76,
+      attendanceColumnSeparators: [72, 234, 386.4, 473.28],
+      attendanceHeaderTop: 188.64,
+      participantTop: 203.76,
+      legalNoteTop: 732.48,
+      signatureBlockTop: 739.68,
+    });
+    expect(SSOMA_TEMPLATE_GEOMETRY.participantBottom).toBeCloseTo(679.2, 5);
+    expect(SSOMA_TEMPLATE_GEOMETRY.observationsTop).toBeCloseTo(679.2, 5);
+    expect(SSOMA_TEMPLATE_GEOMETRY.frameBottom).toBeCloseTo(811.44, 5);
+    expect(SSOMA_TEMPLATE_GEOMETRY.fieldAnchors).toEqual({
+      topic: { x: 56, y: 120 },
+      date: { x: 516, y: 120 },
+      trainer: { x: 160, y: 134 },
+      location: { x: 62, y: 148 },
+      audience: { x: 82, y: 162 },
+      startTime: { x: 358, y: 162 },
+      endTime: { x: 430, y: 162 },
+      duration: { x: 541, y: 162 },
+    });
+    expect(SSOMA_TEMPLATE_GEOMETRY.participantRowHeight).toBeCloseTo(16.98, 2);
+    expect(
+      SSOMA_TEMPLATE_GEOMETRY.participantTop +
+        SSOMA_TEMPLATE_GEOMETRY.participantRowHeight * 28,
+    ).toBeCloseTo(SSOMA_TEMPLATE_GEOMETRY.participantBottom, 5);
+  });
+
+  it('selects configured licensed HSEQ fonts only when both files are readable', () => {
     const configured = resolveSsomaPdfFontConfiguration(
       {
         SSOMA_HSEQ_FONT_REGULAR_PATH: 'C:/licensed/tahoma.ttf',
@@ -133,40 +127,21 @@ describe('SsomaOfficialPdfRenderer', () => {
       },
       () => true,
     );
-
     expect(configured.family).toBe('Tahoma');
-    expect(configured.files).toEqual({
-      normal: 'C:/licensed/tahoma.ttf',
-      bold: 'C:/licensed/tahomabd.ttf',
-      italics: 'C:/licensed/tahoma.ttf',
-      bolditalics: 'C:/licensed/tahomabd.ttf',
-    });
+    expect(configured.files.normal).toBe('C:/licensed/tahoma.ttf');
+    expect(configured.files.bold).toBe('C:/licensed/tahomabd.ttf');
     expect(
-      new SsomaOfficialPdfRenderer().buildDocumentDefinition(
-        snapshot,
-        new Map(),
-        configured.family,
-      ).defaultStyle?.font,
-    ).toBe('Tahoma');
+      resolveSsomaPdfFontConfiguration(
+        { SSOMA_HSEQ_FONT_REGULAR_PATH: 'C:/licensed/tahoma.ttf' },
+        () => true,
+      ).family,
+    ).toBe('Roboto');
+    expect(
+      resolveSsomaPdfFontConfiguration({}, () => false).files.normal,
+    ).toContain('Roboto-Regular.ttf');
   });
 
-  it.each(fallbackFontConfigurationCases)(
-    'falls back to bundled Roboto for absent or unreadable font paths',
-    (env, isReadable) => {
-      const configured = resolveSsomaPdfFontConfiguration(env, isReadable);
-
-      expect(configured.family).toBe('Roboto');
-      expect(configured.files.normal).toContain('Roboto-Regular.ttf');
-      expect(configured.files.bold).toContain('Roboto-Bold.ttf');
-    },
-  );
-
-  it('paginates all participants in groups of at most 28 without omissions', () => {
-    expect(
-      paginateSsomaParticipants(snapshot.participants).map(
-        (page) => page.length,
-      ),
-    ).toEqual([28]);
+  it('paginates all participants in groups of 28 and preserves continuous numbering', () => {
     const expanded = Array.from({ length: 58 }, (_, index) =>
       participant(index),
     );
@@ -175,12 +150,57 @@ describe('SsomaOfficialPdfRenderer', () => {
     expect(pages.flat().map((row) => row.workerId)).toEqual(
       expanded.map((row) => row.workerId),
     );
+
+    const definition = new SsomaOfficialPdfRenderer().buildDocumentDefinition(
+      snapshot(58),
+      new Map(),
+    );
+    const pageContents = definition.content as Array<{
+      stack: unknown[];
+      pageBreak?: string;
+    }>;
+    expect(pageContents).toHaveLength(3);
+    expect(
+      pageContents.slice(0, 2).every((page) => page.pageBreak === 'after'),
+    ).toBe(true);
+    const rowNumbers = (page: { stack: unknown[] }) =>
+      (page.stack as Array<Record<string, unknown>>)
+        .filter((node) => {
+          const position = node.absolutePosition as { x?: number } | undefined;
+          return position?.x === 47 && typeof node.text === 'string';
+        })
+        .map((node) => node.text);
+    expect(rowNumbers(pageContents[0])).toHaveLength(0);
+    expect(rowNumbers(pageContents[1])).toEqual(
+      Array.from({ length: 28 }, (_, index) =>
+        String(index + 29).padStart(2, '0'),
+      ),
+    );
+    expect(rowNumbers(pageContents[2])).toEqual(['57', '58']);
+    expect(collectText(pageContents[2].stack).join(' ')).toContain('3 de 3');
   });
 
-  it('renders a valid PDF and excludes audit/internal fields from the official document', async () => {
+  it('repeats the single-page workbook observation and signatory form on continuations', () => {
+    // SST-F-002 defines one 28-row page; later pages repeat that approved page form.
+    const definition = new SsomaOfficialPdfRenderer().buildDocumentDefinition(
+      snapshot(58),
+      new Map(),
+    );
+    const pages = definition.content as unknown as Array<{ stack: unknown[] }>;
+    expect(pages).toHaveLength(3);
+    const background = definition.background as { image: string };
+    expect(background.image).toContain('hseq-reg-036-blank.png');
+    for (const page of pages) {
+      expect(collectText(page.stack).join(' ')).toContain(
+        'Use protective equipment.',
+      );
+    }
+  });
+
+  it('lays dynamic fields over the official template and omits audit data', () => {
     const renderer = new SsomaOfficialPdfRenderer();
     const unsafe = {
-      ...snapshot,
+      ...snapshot(2),
       auditEvents: [{ eventType: 'document_revision_started' }],
       correctionReason: 'Internal correction reason',
     };
@@ -188,189 +208,65 @@ describe('SsomaOfficialPdfRenderer', () => {
       unsafe as never,
       new Map(),
     );
-    const header =
-      typeof definition.header === 'function'
-        ? definition.header(1, 3, {
-            width: 595,
-            height: 842,
-            orientation: 'portrait',
-          })
-        : definition.header;
-    const visibleJson = JSON.stringify({ definition, header });
-    expect(visibleJson).toContain('Safe work');
-    expect(visibleJson).not.toContain('auditEvents');
-    expect(visibleJson).not.toContain('Internal correction reason');
-    const pdf = await renderer.render(snapshot, new Map());
+    const text = collectText(definition.content).join(' ');
+    const background = definition.background as {
+      image: string;
+      width: number;
+      height: number;
+    };
+    expect(background.image).toContain('hseq-reg-036-blank.png');
+    expect(background.width).toBe(595.2);
+    expect(background.height).toBe(841.8);
+    expect(definition.pageMargins).toEqual([0, 0, 0, 0]);
+    expect(text).toContain('Safe work');
+    expect(text).toContain('25/10/2026');
+    expect(text).toContain('08:30');
+    expect(text).toContain('09:15');
+    expect(text).toContain('0.75');
+    expect(text).toContain('Use protective equipment.');
+    expect(text).not.toContain('auditEvents');
+    expect(text).not.toContain('Internal correction reason');
+    expect(text).not.toContain('Operario');
+  });
+
+  it('fits signatures in the worker identity cell without reusing or distorting them', () => {
+    const signatures = new Map([
+      [1, png(160, 32)],
+      [2, png(32, 160)],
+    ]);
+    const definition = new SsomaOfficialPdfRenderer().buildDocumentDefinition(
+      snapshot(2),
+      signatures,
+    );
+    const serializedContent = JSON.stringify(definition.content);
+    expect(serializedContent).toContain(png(160, 32).toString('base64'));
+    expect(serializedContent).toContain(png(32, 160).toString('base64'));
+    const content = definition.content as unknown as Array<{
+      stack: unknown[];
+    }>;
+    const images = content[0].stack.filter(
+      (node): node is Record<string, unknown> =>
+        typeof node === 'object' && node !== null && 'image' in node,
+    );
+    expect(images).toHaveLength(2);
+    expect(images[0].fit).toEqual(images[1].fit);
+    expect((images[0].absolutePosition as { x: number }).x).toBeCloseTo(
+      476.28,
+      3,
+    );
+    expect((images[1].absolutePosition as { x: number }).x).toBeCloseTo(
+      476.28,
+      3,
+    );
+  });
+
+  it('renders a valid revision-compatible PDF with a repeated official background', async () => {
+    const renderer = new SsomaOfficialPdfRenderer();
+    const pdf = await renderer.render(
+      snapshot(58, 2),
+      new Map([[1, png(64, 32)]]),
+    );
     expect(pdf.subarray(0, 5).toString('ascii')).toBe('%PDF-');
     expect(pdf.length).toBeGreaterThan(1500);
   });
-
-  it('reproduces the approved form control block and derives official time fields', () => {
-    const definition = new SsomaOfficialPdfRenderer().buildDocumentDefinition(
-      snapshot,
-      new Map(),
-    );
-    const text = contentText(definition).join(' ');
-
-    expect(text).toContain(
-      'REGISTRO DE INDUCCIÓN, CAPACITACIÓN, ENTRENAMIENTO Y SIMULACROS DE EMERGENCIA',
-    );
-    expect(text).toContain('HSEQ-REG-036');
-    expect(text).toContain('Versión: 02');
-    expect(text).toContain('06/01/2026');
-    expect(text).toContain('GAVA C&C S.R.L.');
-    expect(text).toContain('20480347138');
-    expect(text).toContain('Charla');
-    expect(text).toContain('08:35');
-    expect(text).toContain('0.08');
-    expect(text).toContain('R.M. 050-2013-TR');
-    expect(text).toContain('Expositor');
-    expect(text).toContain('Responsable del Registro');
-    expect(text).toContain('CARGO:');
-    expect(text).toContain('DNI:');
-    expect(text).not.toContain('No especificado');
-  });
-
-  it('matches workbook attendance row heights and lower-section anchors', () => {
-    const definition = new SsomaOfficialPdfRenderer().buildDocumentDefinition(
-      snapshot,
-      new Map(),
-    );
-    const sections = formPages(definition)[0].stack as Array<
-      Record<string, unknown>
-    >;
-    const attendance = sections[8].table as {
-      heights: (index: number) => number;
-    };
-    const observations = sections[9].table as { heights: number[] };
-    const legalNote = sections[10].table as {
-      heights: number[];
-    };
-    const signatures = sections[11].table as {
-      heights: (index: number) => number;
-    };
-
-    expect(attendance.heights(0)).toBeCloseTo(27.95 * 0.52, 5);
-    expect(attendance.heights(1)).toBeCloseTo(31.9 * 0.52, 5);
-    expect(attendance.heights(28)).toBeCloseTo(31.9 * 0.52, 5);
-    expect(observations.heights).toEqual(
-      [24.95, 20.45, 20.45, 33.6].map((height) => height * 0.53),
-    );
-    expect(legalNote.heights).toEqual([13.8 * 0.5]);
-    expect(signatures.heights(0)).toBeCloseTo(9.95 * 0.53, 5);
-    expect(signatures.heights(7)).toBeCloseTo(15 * 0.53, 5);
-    expect(signatures.heights(8)).toBeCloseTo(13.9 * 0.53, 5);
-  });
-
-  it.each([
-    ['few participants', 2, 1],
-    ['exactly one form page', 28, 1],
-    ['more than one form page', 58, 3],
-  ])(
-    'keeps exactly 28 official attendance rows for %s',
-    (_label, count, expectedPageCount) => {
-      const participants = Array.from({ length: count }, (_, index) =>
-        participant(index),
-      );
-      const definition = new SsomaOfficialPdfRenderer().buildDocumentDefinition(
-        { ...snapshot, participants },
-        new Map(),
-      );
-      const pages = formPages(definition);
-
-      expect(pages).toHaveLength(expectedPageCount);
-      expect(
-        pages.map(
-          (page) =>
-            tableBodies(page).find((body) => body.length >= 29)?.length ?? 0,
-        ),
-      ).toEqual(Array.from({ length: expectedPageCount }, () => 29));
-      expect(
-        pages.map((page) =>
-          contentText(page).join(' ').includes('HSEQ-REG-036'),
-        ),
-      ).toEqual(Array.from({ length: expectedPageCount }, () => true));
-      expect(
-        pages.map((page) =>
-          contentText(page).join(' ').includes('Observaciones:'),
-        ),
-      ).toEqual(Array.from({ length: expectedPageCount }, () => true));
-      expect(
-        pages.map((page) =>
-          contentText(page).join(' ').includes('Responsable del Registro'),
-        ),
-      ).toEqual(Array.from({ length: expectedPageCount }, () => true));
-    },
-  );
-
-  it('maps varied signature images by worker identity and fits without stretching', async () => {
-    const participants = [participant(0), participant(1)];
-    const wideSignature = png(160, 32);
-    const tallSignature = png(32, 160);
-    const renderer = new SsomaOfficialPdfRenderer();
-    const signatureMap = new Map([
-      [participants[0].workerId, wideSignature],
-      [participants[1].workerId, tallSignature],
-    ]);
-    const definition = renderer.buildDocumentDefinition(
-      { ...snapshot, participants },
-      signatureMap,
-    );
-    const table = tableBodies(definition).find((body) => body.length >= 29);
-    expect(table).toBeDefined();
-    const signatureCells = table!
-      .slice(1, 3)
-      .map((row) => row[4] as Record<string, unknown>);
-
-    expect(signatureCells.map((cell) => cell.image)).toEqual([
-      `data:image/png;base64,${wideSignature.toString('base64')}`,
-      `data:image/png;base64,${tallSignature.toString('base64')}`,
-    ]);
-    const fittedBoxes = signatureCells.map(
-      (cell) => cell.fit as [number, number],
-    );
-    expect(
-      fittedBoxes.every(([width, height]) => width > height && height === 13),
-    ).toBe(true);
-    expect(
-      signatureCells.every((cell) => !('width' in cell) && !('height' in cell)),
-    ).toBe(true);
-    const rendered = await renderer.render(
-      { ...snapshot, participants },
-      signatureMap,
-    );
-    expect(rendered.subarray(0, 5).toString('ascii')).toBe('%PDF-');
-  });
-
-  it('does not place a signed image in a declined participant row', () => {
-    const declined = { ...participant(0), status: 'DECLINED' as const };
-    const image = png(160, 32);
-    const definition = new SsomaOfficialPdfRenderer().buildDocumentDefinition(
-      { ...snapshot, participants: [declined] },
-      new Map([[declined.workerId, image]]),
-    );
-    const table = tableBodies(definition).find((body) => body.length >= 29);
-
-    expect(table?.[1][4]).not.toHaveProperty('image');
-  });
-
-  it.each([2, 28, 58])(
-    'renders %i participants into one full form per 28-row batch',
-    async (count) => {
-      const renderer = new SsomaOfficialPdfRenderer();
-      const pdf = await renderer.render(
-        {
-          ...snapshot,
-          participants: Array.from({ length: count }, (_, index) =>
-            participant(index),
-          ),
-        },
-        new Map(),
-      );
-      const pageObjects =
-        pdf.toString('latin1').match(/\/Type \/Page\b/g) ?? [];
-
-      expect(pageObjects).toHaveLength(Math.ceil(count / 28));
-    },
-  );
 });

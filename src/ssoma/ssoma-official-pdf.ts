@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import PdfPrinter from 'pdfmake/src/printer';
-import type {
-  Content,
-  TableCell,
-  TDocumentDefinitions,
-} from 'pdfmake/interfaces';
+import type { Content, TDocumentDefinitions } from 'pdfmake/interfaces';
 import { accessSync, constants as fsConstants } from 'node:fs';
 import { join } from 'node:path';
 
@@ -35,23 +31,6 @@ export interface SsomaOfficialDocumentSnapshot {
   participants: SsomaOfficialParticipant[];
 }
 
-const MAX_PARTICIPANTS_PER_PAGE = 28;
-const PAGE_WIDTH = 595.28;
-const PAGE_MARGINS: [number, number, number, number] = [31, 28, 31, 22];
-const FORM_WIDTH = PAGE_WIDTH - PAGE_MARGINS[0] - PAGE_MARGINS[2];
-const ROW_SCALE = 0.5;
-// The approved workbook's fitted print scale is 53%; its 28-row attendance
-// grid measured slightly above the 53% full-page grid after PDF line weights.
-const WORKBOOK_FIT_SCALE = 0.53;
-const ATTENDANCE_ROW_SCALE = 0.52;
-const HSEQ_FONT_REGULAR_ENV = 'SSOMA_HSEQ_FONT_REGULAR_PATH';
-const HSEQ_FONT_BOLD_ENV = 'SSOMA_HSEQ_FONT_BOLD_PATH';
-const COLORS = {
-  black: '#000000',
-  white: '#FFFFFF',
-  header: '#D9D9D9',
-};
-
 export type SsomaPdfFontFamily = 'Tahoma' | 'Roboto';
 
 export interface SsomaPdfFontConfiguration {
@@ -64,7 +43,47 @@ export interface SsomaPdfFontConfiguration {
   };
 }
 
-function isReadableFontFile(fontPath: string) {
+const MAX_PARTICIPANTS_PER_PAGE = 28;
+const PAGE_WIDTH = 595.2;
+const PAGE_HEIGHT = 841.8;
+const TEMPLATE_SCALE = 0.24; // 300 dpi Excel render pixels to PDF points.
+const HSEQ_FONT_REGULAR_ENV = 'SSOMA_HSEQ_FONT_REGULAR_PATH';
+const HSEQ_FONT_BOLD_ENV = 'SSOMA_HSEQ_FONT_BOLD_PATH';
+const TEMPLATE_PATH = join(
+  process.cwd(),
+  'src/ssoma/assets/hseq-reg-036-blank.png',
+);
+
+/** Coordinates measured on the approved SST-F-002 A4 Excel print render. */
+export const SSOMA_TEMPLATE_GEOMETRY = {
+  pageWidth: PAGE_WIDTH,
+  pageHeight: PAGE_HEIGHT,
+  frameLeft: 128 * TEMPLATE_SCALE,
+  frameRight: 2349 * TEMPLATE_SCALE,
+  attendanceColumnSeparators: [300, 975, 1610, 1972].map(
+    (pixel) => pixel * TEMPLATE_SCALE,
+  ),
+  attendanceHeaderTop: 786 * TEMPLATE_SCALE,
+  participantTop: 849 * TEMPLATE_SCALE,
+  participantRowHeight: ((2830 - 849) * TEMPLATE_SCALE) / 28,
+  participantBottom: 2830 * TEMPLATE_SCALE,
+  observationsTop: 2830 * TEMPLATE_SCALE,
+  legalNoteTop: 3052 * TEMPLATE_SCALE,
+  signatureBlockTop: 3082 * TEMPLATE_SCALE,
+  frameBottom: 3381 * TEMPLATE_SCALE,
+  fieldAnchors: {
+    topic: { x: 56, y: 120 },
+    date: { x: 516, y: 120 },
+    trainer: { x: 160, y: 134 },
+    location: { x: 62, y: 148 },
+    audience: { x: 82, y: 162 },
+    startTime: { x: 358, y: 162 },
+    endTime: { x: 430, y: 162 },
+    duration: { x: 541, y: 162 },
+  },
+} as const;
+
+function readableFontFile(fontPath: string) {
   try {
     accessSync(fontPath, fsConstants.R_OK);
     return true;
@@ -75,7 +94,7 @@ function isReadableFontFile(fontPath: string) {
 
 export function resolveSsomaPdfFontConfiguration(
   env: NodeJS.ProcessEnv = process.env,
-  isReadable: (fontPath: string) => boolean = isReadableFontFile,
+  isReadable: (fontPath: string) => boolean = readableFontFile,
 ): SsomaPdfFontConfiguration {
   const regularPath = env[HSEQ_FONT_REGULAR_ENV]?.trim();
   const boldPath = env[HSEQ_FONT_BOLD_ENV]?.trim();
@@ -95,45 +114,16 @@ export function resolveSsomaPdfFontConfiguration(
       },
     };
   }
-  const roboto = {
-    normal: join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
-    bold: join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
-    italics: join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
-    bolditalics: join(process.cwd(), 'src/pdf/fonts/Roboto-BoldItalic.ttf'),
+  return {
+    family: 'Roboto',
+    files: {
+      normal: join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
+      bold: join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
+      italics: join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
+      bolditalics: join(process.cwd(), 'src/pdf/fonts/Roboto-BoldItalic.ttf'),
+    },
   };
-  return { family: 'Roboto', files: roboto };
 }
-
-// These are the SST-F-002 A:C, D:E, F:H, I:J, and K:L print proportions.
-const COMPANY_COLUMNS = [40.56, 20.14, 59.27, 29.28, 30.42];
-const companyWidthTotal = COMPANY_COLUMNS.reduce(
-  (total, value) => total + value,
-  0,
-);
-const companyWidths = COMPANY_COLUMNS.map(
-  (value) => (value / companyWidthTotal) * FORM_WIDTH,
-);
-
-const borders = {
-  hLineWidth: () => 0.45,
-  vLineWidth: () => 0.45,
-  hLineColor: () => COLORS.black,
-  vLineColor: () => COLORS.black,
-  paddingLeft: () => 1.2,
-  paddingRight: () => 1.2,
-  paddingTop: () => 0,
-  paddingBottom: () => 0,
-};
-
-const PARTICIPANT_COLUMNS = [14, 54.55, 51.42, 29.28, 30.42];
-const participantTotal = PARTICIPANT_COLUMNS.reduce(
-  (total, value) => total + value,
-  0,
-);
-const participantWidths = PARTICIPANT_COLUMNS.map(
-  (value) => (value / participantTotal) * FORM_WIDTH,
-);
-const signatureColumnWidth = participantWidths[4];
 
 export function paginateSsomaParticipants<T>(
   participants: readonly T[],
@@ -143,29 +133,19 @@ export function paginateSsomaParticipants<T>(
     let index = 0;
     index < participants.length;
     index += MAX_PARTICIPANTS_PER_PAGE
-  )
+  ) {
     pages.push(participants.slice(index, index + MAX_PARTICIPANTS_PER_PAGE));
+  }
   return pages.length ? pages : [[]];
 }
 
-function workerTypeLabel(type: string) {
-  const labels: Record<string, string> = {
-    laborer: 'Operario',
-    technician: 'Técnico',
-    engineer: 'Ingeniero',
-    administrator: 'Administrador',
-    manager: 'Gerente',
-  };
-  return labels[type] ?? '';
+function textOrBlank(value: string | null | undefined) {
+  return value?.trim() ?? '';
 }
 
 function displayDate(value: string) {
   const [year, month, day] = value.split('-');
   return year && month && day ? `${day}/${month}/${year}` : '';
-}
-
-function textOrBlank(value: string | null | undefined) {
-  return value?.trim() ?? '';
 }
 
 function formatTime(value: string | null) {
@@ -188,562 +168,188 @@ function endTime(start: string | null, durationMinutes: number | null) {
 }
 
 function durationHours(durationMinutes: number | null) {
-  if (durationMinutes === null || !Number.isFinite(durationMinutes)) return '';
-  return (durationMinutes / 60).toFixed(2);
+  return durationMinutes === null || !Number.isFinite(durationMinutes)
+    ? ''
+    : (durationMinutes / 60).toFixed(2);
 }
 
-function cell(text: string, options: Partial<TableCell> = {}): TableCell {
+function px(pixel: number) {
+  return pixel * TEMPLATE_SCALE;
+}
+
+function absoluteText(
+  text: string,
+  x: number,
+  y: number,
+  width: number,
+  height = 12,
+  fontSize = 5.6,
+  bold = false,
+  alignment: 'left' | 'center' | 'right' = 'left',
+): Content {
+  if (!text) return { text: '' };
   return {
     text,
-    fontSize: 6.1,
-    color: COLORS.black,
-    margin: [1, 0, 1, 0],
-    ...options,
-  } as TableCell;
-}
-
-function makeCheckbox(selected: boolean): Record<string, unknown> {
-  return {
-    canvas: [
-      {
-        type: 'rect',
-        x: 0,
-        y: 0,
-        w: 11,
-        h: 8,
-        lineWidth: 0.6,
-        lineColor: COLORS.black,
-      },
-      ...(selected
-        ? [
-            {
-              type: 'line' as const,
-              x1: 2,
-              y1: 4,
-              x2: 4.5,
-              y2: 6.5,
-              lineWidth: 0.8,
-              lineColor: COLORS.black,
-            },
-            {
-              type: 'line' as const,
-              x1: 4.5,
-              y1: 6.5,
-              x2: 9,
-              y2: 1.5,
-              lineWidth: 0.8,
-              lineColor: COLORS.black,
-            },
-          ]
-        : []),
-    ],
-  };
-}
-
-function activityChecklist(): Record<string, unknown> {
-  const options = [
-    ['Inducción', false],
-    ['Charla', true],
-    ['Capacitación', false],
-    ['Entrenamiento', false],
-    ['Simulacro', false],
-    ['Otros', false],
-  ] as const;
-  const columns: Content[] = [];
-  for (const [label, selected] of options) {
-    columns.push(
-      {
-        text: label,
-        fontSize: 5.5,
-        alignment: 'center',
-        width: 'auto',
-      } as Content,
-      { ...makeCheckbox(selected), width: 16 } as unknown as Content,
-    );
-  }
-  columns.push({
-    text: '',
-    width: '*',
-  } as Content);
-  columns.push({
-    canvas: [
-      {
-        type: 'rect',
-        x: 0,
-        y: 0,
-        w: 70,
-        h: 13,
-        lineWidth: 0.6,
-        lineColor: COLORS.black,
-      },
-    ],
-    width: 73,
-  } as unknown as Content);
-  return {
-    columns,
-    columnGap: 1,
-    margin: [2, 0, 2, 0],
-    alignment: 'center',
-  };
-}
-
-function signatureSection(): Content {
-  const widths = [40, 162, 80, 208, 43];
-  // Rows 48-55 carry the signature labels; Excel's default-height final row
-  // supplies the visible lower frame seen in the approved print render.
-  const heights = [9.95, 15, 15.6, 15, 9.95, 20.1, 20.1, 15, 13.9].map(
-    (height) => height * WORKBOOK_FIT_SCALE,
-  );
-  const body: TableCell[][] = Array.from({ length: 9 }, () =>
-    Array.from(
-      { length: 5 },
-      () => ({ text: '', border: [false, false, false, false] }) as TableCell,
-    ),
-  );
-  body[3][1] = cell('Expositor', {
-    bold: true,
-    alignment: 'center',
-    fontSize: 5,
-    margin: [0, 0, 0, 0],
-    border: [false, true, false, false],
-  });
-  body[3][3] = cell('Responsable del Registro', {
-    bold: true,
-    alignment: 'center',
-    fontSize: 5,
-    margin: [0, 0, 0, 0],
-    border: [false, true, false, false],
-  });
-  body[5][1] = cell('CARGO:', { bold: true, alignment: 'left' });
-  body[5][3] = cell('CARGO:', { bold: true, alignment: 'left' });
-  body[6][1] = cell('DNI:', { bold: true, alignment: 'left' });
-  body[6][3] = cell('DNI:', { bold: true, alignment: 'left' });
-  for (let rowIndex = 0; rowIndex < body.length; rowIndex++) {
-    body[rowIndex][0].border = [true, rowIndex === 0, false, false];
-    body[rowIndex][4].border = [false, rowIndex === 0, true, false];
-  }
-  for (let columnIndex = 1; columnIndex < 4; columnIndex++) {
-    body[0][columnIndex].border = [false, true, false, false];
-    body[8][columnIndex].border = [false, false, false, true];
-  }
-  body[8][0].border = [true, false, false, true];
-  body[8][4].border = [false, false, true, true];
-  return {
-    table: {
-      widths,
-      heights: (index: number) => heights[index] ?? 0,
-      body,
-    },
-    layout: {
-      hLineWidth: (index: number) =>
-        index === 0 || index === 3 || index === 9 ? 0.45 : 0,
-      vLineWidth: (index: number) => (index === 0 || index === 5 ? 0.45 : 0),
-      hLineColor: () => COLORS.black,
-      vLineColor: () => COLORS.black,
-      paddingLeft: () => 0,
-      paddingRight: () => 0,
-      paddingTop: () => 0,
-      paddingBottom: () => 0,
-    },
+    fontSize,
+    bold,
+    alignment,
+    color: '#000000',
+    margin: 0,
+    noWrap: true,
+    absolutePosition: { x, y },
+    width,
+    height,
   } as Content;
 }
 
-function formPage(
+function absoluteImage(
+  data: Buffer,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+): Content {
+  return {
+    image: `data:image/png;base64,${data.toString('base64')}`,
+    fit: [width, height],
+    absolutePosition: { x, y },
+  } as Content;
+}
+
+function checkboxMark(): Content {
+  // Charla is the approved activity for this module; the existing checkbox is static.
+  return {
+    canvas: [
+      {
+        type: 'line',
+        x1: 0,
+        y1: 4,
+        x2: 2.2,
+        y2: 6.2,
+        lineWidth: 1,
+        lineColor: '#000000',
+      },
+      {
+        type: 'line',
+        x1: 2.2,
+        y1: 6.2,
+        x2: 7,
+        y2: 0.5,
+        lineWidth: 1,
+        lineColor: '#000000',
+      },
+    ],
+    absolutePosition: { x: px(688), y: px(453) },
+  } as Content;
+}
+
+function pageContent(
   snapshot: SsomaOfficialDocumentSnapshot,
   participants: readonly SsomaOfficialParticipant[],
   signatures: ReadonlyMap<number, Buffer>,
   pageIndex: number,
   pageCount: number,
 ): Content[] {
-  const rowHeight = (height: number) => height * ROW_SCALE;
-  const logoPath = join(process.cwd(), 'src/ssoma/assets/gava-logo.png');
-  const topHeights = [20.1, 20.1, 20.1, 17.45].map(rowHeight);
-  const headerBody: TableCell[][] = [
-    [
-      {
-        image: logoPath,
-        fit: [114, 31],
-        rowSpan: 4,
-        alignment: 'center',
-        margin: [3, 0, 3, 0],
-      } as TableCell,
-      {
-        text: 'REGISTRO DE INDUCCIÓN, CAPACITACIÓN, ENTRENAMIENTO Y SIMULACROS DE EMERGENCIA',
-        rowSpan: 4,
-        bold: true,
-        alignment: 'center',
-        fontSize: 8.3,
-        margin: [7, 0, 7, 0],
-      } as TableCell,
-      cell('Código: HSEQ-REG-036', {
-        bold: true,
-        fontSize: 6.2,
-        alignment: 'left',
-      }),
-    ],
-    [{}, {}, cell('Versión: 02', { bold: true, fontSize: 6.2 })],
-    [{}, {}, cell('Fecha: 06/01/2026', { bold: true, fontSize: 6.2 })],
-    [
-      {},
-      {},
-      cell(`Página: ${pageIndex + 1} de ${pageCount}`, {
-        bold: true,
-        fontSize: 6.2,
-      }),
-    ],
+  const content: Content[] = [
+    // Replace only the printed static page digits; the approved label stays in the template.
+    {
+      canvas: [{ type: 'rect', x: 0, y: 0, w: 55, h: 10, color: '#FFFFFF' }],
+      absolutePosition: { x: 501, y: 62 },
+    } as Content,
+    absoluteText(`${pageIndex + 1} de ${pageCount}`, 501, 63, 55, 9, 5.6, true),
+    absoluteText(textOrBlank(snapshot.talk.topic), 56, 120, 409, 12),
+    absoluteText(displayDate(snapshot.talk.talkDate), 516, 120, 40, 12),
+    absoluteText(textOrBlank(snapshot.talk.trainer), 160, 134, 400, 12),
+    absoluteText(textOrBlank(snapshot.talk.location), 62, 148, 492, 12),
+    absoluteText(textOrBlank(snapshot.talk.targetAudience), 82, 162, 214, 12),
+    absoluteText(formatTime(snapshot.talk.scheduledTime), 358, 162, 25, 12),
+    absoluteText(
+      endTime(snapshot.talk.scheduledTime, snapshot.talk.durationMinutes),
+      430,
+      162,
+      30,
+      12,
+    ),
+    absoluteText(
+      durationHours(snapshot.talk.durationMinutes),
+      541,
+      162,
+      20,
+      12,
+      5.6,
+    ),
+    checkboxMark(),
   ];
-  const controlWidth = (30.42 / companyWidthTotal) * FORM_WIDTH;
-  const titleWidth =
-    FORM_WIDTH - controlWidth - (40.56 / companyWidthTotal) * FORM_WIDTH;
-  const header: Content = {
-    table: {
-      widths: [
-        FORM_WIDTH - controlWidth - titleWidth,
-        titleWidth,
-        controlWidth,
-      ],
-      heights: (index: number) => topHeights[index] ?? 0,
-      body: headerBody,
-    },
-    layout: borders,
-  };
 
-  const companyRows: TableCell[][] = [
-    [
-      cell('RAZÓN SOCIAL', {
-        bold: true,
-        alignment: 'center',
-        fillColor: COLORS.header,
-        fontSize: 6.1,
-      }),
-      cell('RUC', {
-        bold: true,
-        alignment: 'center',
-        fillColor: COLORS.header,
-        fontSize: 6.1,
-      }),
-      cell('DOMICILIO (Dirección, distrito, departamento, provincia)', {
-        bold: true,
-        alignment: 'center',
-        fillColor: COLORS.header,
-        fontSize: 5.6,
-      }),
-      cell('ACTIVIDAD ECONÓMICA', {
-        bold: true,
-        alignment: 'center',
-        fillColor: COLORS.header,
-        fontSize: 5.6,
-      }),
-      cell('N° TRABAJADORES EN EL CENTRO LABORAL', {
-        bold: true,
-        alignment: 'center',
-        fillColor: COLORS.header,
-        fontSize: 5.4,
-      }),
-    ],
-    [
-      cell('GAVA C&C S.R.L.', { alignment: 'center', fontSize: 5.8 }),
-      cell('20480347138', { alignment: 'center', fontSize: 5.8 }),
-      cell('Call. Vicente de la Vega N° 1488 Campodónico - Chcilayo', {
-        alignment: 'center',
-        fontSize: 5.3,
-      }),
-      cell('Intalaciones Eléctricas, Obras Eléctromecánicas', {
-        alignment: 'center',
-        fontSize: 5.2,
-      }),
-      cell('', { alignment: 'center' }),
-    ],
-  ];
-  const company: Content = {
-    table: {
-      widths: companyWidths,
-      heights: (index: number) => rowHeight(index === 0 ? 33 : 26.45),
-      body: companyRows,
-    },
-    layout: borders,
-  };
-
-  const activity: Content = {
-    table: {
-      widths: [FORM_WIDTH],
-      heights: [rowHeight(35.45)],
-      body: [
-        [
+  const columns = SSOMA_TEMPLATE_GEOMETRY.attendanceColumnSeparators;
+  const rowHeight = SSOMA_TEMPLATE_GEOMETRY.participantRowHeight;
+  const rowTop = SSOMA_TEMPLATE_GEOMETRY.participantTop;
+  participants.forEach((participant, index) => {
+    const top = rowTop + index * rowHeight;
+    const number = String(
+      pageIndex * MAX_PARTICIPANTS_PER_PAGE + index + 1,
+    ).padStart(2, '0');
+    const y = top + 4.5;
+    if (pageIndex > 0) {
+      content.push({
+        canvas: [
           {
-            ...activityChecklist(),
-            border: [true, true, true, true],
-            margin: [2, 0, 2, 0],
-          } as unknown as TableCell,
+            type: 'rect',
+            x: 0,
+            y: 0,
+            w: px(163),
+            h: rowHeight - 2.2,
+            color: '#FFFFFF',
+          },
         ],
-      ],
-    },
-    layout: borders,
-  };
-
-  const talkRows: Content[] = [
-    {
-      table: {
-        widths: [FORM_WIDTH - controlWidth, controlWidth],
-        heights: [rowHeight(25.15)],
-        body: [
-          [
-            cell(`Tema:  ${textOrBlank(snapshot.talk.topic)}`, {
-              bold: true,
-              fontSize: 6.2,
-            }),
-            cell(`Fecha: ${displayDate(snapshot.talk.talkDate)}`, {
-              bold: true,
-              fontSize: 6.2,
-            }),
-          ],
-        ],
-      },
-      layout: borders,
-    },
-    {
-      table: {
-        widths: [FORM_WIDTH],
-        heights: [rowHeight(26.45)],
-        body: [
-          [
-            cell(
-              `Nombre del Capacitador o Entrenador:  ${textOrBlank(snapshot.talk.trainer)}`,
-              { bold: true, fontSize: 6.2 },
-            ),
-          ],
-        ],
-      },
-      layout: borders,
-    },
-    {
-      table: {
-        widths: [FORM_WIDTH],
-        heights: [rowHeight(24.6)],
-        body: [
-          [
-            cell(`Lugar:  ${textOrBlank(snapshot.talk.location)}`, {
-              bold: true,
-              fontSize: 6.2,
-            }),
-          ],
-        ],
-      },
-      layout: borders,
-    },
-    {
-      table: {
-        widths: [
-          (95.7 / participantTotal) * FORM_WIDTH,
-          (24.285 / participantTotal) * FORM_WIDTH,
-          (29.28 / participantTotal) * FORM_WIDTH,
-          (30.42 / participantTotal) * FORM_WIDTH,
-        ],
-        heights: [rowHeight(27.6)],
-        body: [
-          [
-            cell(`Dirigido a:  ${textOrBlank(snapshot.talk.targetAudience)}`, {
-              bold: true,
-              fontSize: 6.2,
-            }),
-            cell(`H. Inicio: ${formatTime(snapshot.talk.scheduledTime)}`, {
-              bold: true,
-              fontSize: 5.9,
-            }),
-            cell(
-              `H. Término: ${endTime(snapshot.talk.scheduledTime, snapshot.talk.durationMinutes)}`,
-              { bold: true, fontSize: 5.9 },
-            ),
-            cell(
-              `Duración en Horas: ${durationHours(snapshot.talk.durationMinutes)}`,
-              { bold: true, fontSize: 5.7 },
-            ),
-          ],
-        ],
-      },
-      layout: borders,
-    },
-  ];
-
-  const attendanceBody: TableCell[][] = [
-    [
-      cell('N°', { bold: true, alignment: 'center', fillColor: COLORS.header }),
-      cell('APELLIDOS Y NOMBRES', {
-        bold: true,
-        alignment: 'center',
-        fillColor: COLORS.header,
-      }),
-      cell('DNI', {
-        bold: true,
-        alignment: 'center',
-        fillColor: COLORS.header,
-      }),
-      cell('CARGO / ÁREA', {
-        bold: true,
-        alignment: 'center',
-        fillColor: COLORS.header,
-        fontSize: 5.8,
-      }),
-      cell('FIRMA', {
-        bold: true,
-        alignment: 'center',
-        fillColor: COLORS.header,
-      }),
-    ],
-  ];
-  for (let rowIndex = 0; rowIndex < MAX_PARTICIPANTS_PER_PAGE; rowIndex++) {
-    const participant = participants[rowIndex];
+        absolutePosition: { x: px(134), y: top + 1.1 },
+      } as Content);
+      content.push(absoluteText(number, 47, y, 12, 9, 5.8, true));
+    }
+    content.push(
+      absoluteText(
+        participant.fullName,
+        columns[0] + 4,
+        y,
+        columns[1] - columns[0] - 8,
+        9,
+        5.6,
+      ),
+    );
+    content.push(
+      absoluteText(
+        participant.dni,
+        columns[1] + 3,
+        y,
+        columns[2] - columns[1] - 6,
+        9,
+        5.6,
+      ),
+    );
+    // Worker classification is not an official position; leave CARGO / ÁREA blank.
     const signature =
-      participant?.status === 'SIGNED'
+      participant.status === 'SIGNED'
         ? signatures.get(participant.workerId)
         : undefined;
-    attendanceBody.push([
-      cell(
-        String(pageIndex * MAX_PARTICIPANTS_PER_PAGE + rowIndex + 1).padStart(
-          2,
-          '0',
+    if (signature) {
+      content.push(
+        absoluteImage(
+          signature,
+          columns[3] + 3,
+          top + 1.3,
+          columns[4] - columns[3] - 6,
+          rowHeight - 2.6,
         ),
-        {
-          bold: true,
-          alignment: 'center',
-          fontSize: 6.1,
-        },
-      ),
-      cell(participant?.fullName ?? '', { alignment: 'left', fontSize: 5.8 }),
-      cell(participant?.dni ?? '', { alignment: 'center', fontSize: 5.8 }),
-      cell(participant ? workerTypeLabel(participant.workerType) : '', {
-        alignment: 'center',
-        fontSize: 5.8,
-      }),
-      signature
-        ? ({
-            image: `data:image/png;base64,${signature.toString('base64')}`,
-            fit: [Math.max(1, signatureColumnWidth - 7), 13],
-            alignment: 'center',
-            margin: [1, 0, 1, 0],
-          } as TableCell)
-        : cell('', { alignment: 'center' }),
-    ]);
-  }
-  const attendance: Content = {
-    table: {
-      headerRows: 1,
-      dontBreakRows: true,
-      keepWithHeaderRows: 1,
-      widths: participantWidths,
-      heights: (index: number) =>
-        (index === 0 ? 27.95 : 31.9) * ATTENDANCE_ROW_SCALE,
-      body: attendanceBody,
-    },
-    layout: borders,
-  };
-
-  const observationRule = (indent: number): Content => ({
-    canvas: [
-      {
-        type: 'line',
-        x1: indent,
-        y1: 1,
-        x2: FORM_WIDTH - 2,
-        y2: 1,
-        lineWidth: 0.4,
-        lineColor: COLORS.black,
-        dash: { length: 1, space: 1 },
-      },
-    ],
+      );
+    }
   });
-  const observationRows: TableCell[][] = [
-    [cell('Observaciones:', { bold: true, italics: true, fontSize: 6.1 })],
-    [
-      {
-        stack: [
-          {
-            text: textOrBlank(snapshot.talk.observations),
-            fontSize: 5.8,
-            margin: [36, 0, 2, 0],
-          },
-          observationRule(40),
-        ],
-        margin: [0, 0, 0, 0],
-      } as unknown as TableCell,
-    ],
-    [
-      {
-        stack: [observationRule(10)],
-        margin: [0, 0, 0, 0],
-      } as unknown as TableCell,
-    ],
-    [
-      {
-        stack: [observationRule(10)],
-        margin: [0, 0, 0, 0],
-      } as unknown as TableCell,
-    ],
-  ];
-  const observations: Content = {
-    table: {
-      widths: [FORM_WIDTH],
-      heights: [42, 43, 44, 45].map(
-        (row) =>
-          (row === 45 ? 33.6 : row === 42 ? 24.95 : 20.45) * WORKBOOK_FIT_SCALE,
-      ),
-      body: observationRows,
-    },
-    layout: {
-      hLineWidth: () => 0,
-      vLineWidth: () => 0,
-      hLineColor: () => COLORS.black,
-      vLineColor: () => COLORS.black,
-      paddingLeft: () => 0,
-      paddingRight: () => 0,
-      paddingTop: () => 0,
-      paddingBottom: () => 0,
-    },
-  };
-  const legalNote: Content = {
-    table: {
-      widths: [FORM_WIDTH],
-      // This one-row note has 1.8 px of PDF border overhead at 120 dpi;
-      // the workbook's rendered note anchor is 1 px shorter than 15 pt * 53%.
-      heights: [13.8 * ROW_SCALE],
-      body: [
-        [
-          cell('Formato de acuerdo a los lineamientos de la R.M. 050-2013-TR', {
-            fontSize: 5.7,
-          }),
-        ],
-      ],
-    },
-    layout: borders,
-  };
 
-  return [
-    header,
-    company,
-    activity,
-    ...talkRows,
-    {
-      table: {
-        widths: [FORM_WIDTH],
-        heights: [rowHeight(24.95)],
-        body: [
-          [
-            cell('REGISTRO DE ASISTENCIA', {
-              bold: true,
-              alignment: 'center',
-              fillColor: COLORS.header,
-              fontSize: 6.3,
-            }),
-          ],
-        ],
-      },
-      layout: borders,
-    } as Content,
-    attendance,
-    observations,
-    legalNote,
-    signatureSection(),
-  ];
+  const observations = textOrBlank(snapshot.talk.observations);
+  if (observations)
+    content.push(
+      absoluteText(observations, px(300), px(2870), px(1950), 10, 5.4),
+    );
+  return content;
 }
 
 @Injectable()
@@ -753,28 +359,34 @@ export class SsomaOfficialPdfRenderer {
     signatures: ReadonlyMap<number, Buffer>,
     fontFamily: SsomaPdfFontFamily = resolveSsomaPdfFontConfiguration().family,
   ): TDocumentDefinitions {
-    const participantPages = paginateSsomaParticipants(snapshot.participants);
+    const pages = paginateSsomaParticipants(snapshot.participants);
     const content: Content[] = [];
-    participantPages.forEach((participants, pageIndex) => {
-      content.push({
-        stack: formPage(
+    pages.forEach((participants, pageIndex) => {
+      const page: Content = {
+        stack: pageContent(
           snapshot,
           participants,
           signatures,
           pageIndex,
-          participantPages.length,
+          pages.length,
         ),
-        ...(pageIndex < participantPages.length - 1
+        ...(pageIndex < pages.length - 1
           ? { pageBreak: 'after' as const }
           : {}),
-      });
+      } as Content;
+      content.push(page);
     });
     return {
-      pageSize: 'A4',
+      pageSize: { width: PAGE_WIDTH, height: PAGE_HEIGHT },
       pageOrientation: 'portrait',
-      pageMargins: PAGE_MARGINS,
+      pageMargins: [0, 0, 0, 0],
+      background: {
+        image: TEMPLATE_PATH,
+        width: PAGE_WIDTH,
+        height: PAGE_HEIGHT,
+      } as Content,
       content,
-      defaultStyle: { font: fontFamily, fontSize: 6.1, color: COLORS.black },
+      defaultStyle: { font: fontFamily, fontSize: 5.6, color: '#000000' },
     };
   }
 
