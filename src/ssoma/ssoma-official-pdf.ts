@@ -109,8 +109,12 @@ export const SSOMA_TEMPLATE_GEOMETRY = {
     DRILL: { x: 1785 * TEMPLATE_SCALE, y: 453 * TEMPLATE_SCALE },
     OTHER: { x: 1980 * TEMPLATE_SCALE, y: 453 * TEMPLATE_SCALE },
   },
+  otherActivityTextBox: {
+    left: 2041 * TEMPLATE_SCALE,
+    right: 2328 * TEMPLATE_SCALE,
+  },
   otherActivityTextAnchor: {
-    x: 2025 * TEMPLATE_SCALE,
+    x: 2041 * TEMPLATE_SCALE,
     y: 453 * TEMPLATE_SCALE,
   },
 } as const;
@@ -585,7 +589,8 @@ function pageContent(
             textOrBlank(snapshot.talk.otherActivityText),
             SSOMA_TEMPLATE_GEOMETRY.otherActivityTextAnchor.x,
             SSOMA_TEMPLATE_GEOMETRY.otherActivityTextAnchor.y,
-            px(2349) - SSOMA_TEMPLATE_GEOMETRY.otherActivityTextAnchor.x - 4,
+            SSOMA_TEMPLATE_GEOMETRY.otherActivityTextBox.right -
+              SSOMA_TEMPLATE_GEOMETRY.otherActivityTextAnchor.x,
             px(24),
             5.6,
             false,

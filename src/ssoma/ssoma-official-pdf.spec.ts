@@ -184,6 +184,28 @@ describe('SsomaOfficialPdfRenderer', () => {
     ).toBeLessThanOrEqual(SSOMA_TEMPLATE_GEOMETRY.frameRight);
   });
 
+  it('keeps twelve wide Other characters inside the official text box', () => {
+    const wideOtherText = 'W'.repeat(12);
+    const renderer = new SsomaOfficialPdfRenderer();
+    const page = renderer.buildDocumentDefinition(
+      snapshot(0, 1, SsomaActivityType.OTHER, wideOtherText),
+      new Map(),
+    ).content as unknown as Array<{ stack: Array<Record<string, unknown>> }>;
+    const text = page[0].stack.find((node) => node.text === wideOtherText);
+    const position = text?.absolutePosition as { x: number } | undefined;
+    const pixelToPoint = SSOMA_TEMPLATE_GEOMETRY.frameRight / 2349;
+    const officialBoxLeft = 2041 * pixelToPoint;
+    const officialBoxRight = 2328 * pixelToPoint;
+
+    expect(position?.x).toBeGreaterThanOrEqual(officialBoxLeft);
+    expect(position!.x + (text!.width as number)).toBeLessThanOrEqual(
+      officialBoxRight,
+    );
+    expect(
+      measureSsomaTextWidth(wideOtherText, text!.fontSize as number, 'Roboto'),
+    ).toBeLessThanOrEqual(text!.width as number);
+  });
+
   it('selects configured licensed HSEQ fonts only when both files are readable', () => {
     const configured = resolveSsomaPdfFontConfiguration(
       {
