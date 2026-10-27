@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { validateSync } from 'class-validator';
 import {
@@ -120,5 +120,50 @@ describe('SSOMA Phase 3 schema foundation', () => {
     expect(validateSync(longOther).map(({ property }) => property)).toContain(
       'otherActivityText',
     );
+  });
+
+  it('applies the UTC currentAt correction after the additive activity migration', () => {
+    const migrationsRoot = resolve(__dirname, '../../prisma/migrations');
+    const migrationNames = readdirSync(migrationsRoot).sort();
+    const activityIndex = migrationNames.indexOf(
+      '20261027_add_ssoma_activity_type',
+    );
+    const utcIndex = migrationNames.indexOf(
+      '20261027_fix_ssoma_document_current_utc',
+    );
+    expect(activityIndex).toBeGreaterThanOrEqual(0);
+    expect(utcIndex).toBeGreaterThan(activityIndex);
+
+    const phase2 = readFileSync(
+      resolve(migrationsRoot, '20261023_add_ssoma_phase2/migration.sql'),
+      'utf8',
+    );
+    expect(phase2).toContain(
+      'CREATE FUNCTION ssoma_validate_document_version()',
+    );
+    expect(phase2).toContain('"currentAt" TIMESTAMP(3)');
+    expect(phase2).toContain(
+      'EXECUTE FUNCTION ssoma_validate_document_version()',
+    );
+
+    const activity = readFileSync(
+      resolve(migrationsRoot, '20261027_add_ssoma_activity_type/migration.sql'),
+      'utf8',
+    );
+    expect(activity).toContain('CREATE TYPE "SsomaActivityType"');
+
+    const utcMigration = readFileSync(
+      resolve(
+        migrationsRoot,
+        '20261027_fix_ssoma_document_current_utc/migration.sql',
+      ),
+      'utf8',
+    );
+    expect(utcMigration).toContain(
+      'CREATE OR REPLACE FUNCTION ssoma_validate_document_version()',
+    );
+    expect(
+      utcMigration.match(/clock_timestamp\(\) AT TIME ZONE 'UTC'/g),
+    ).toHaveLength(2);
   });
 });
