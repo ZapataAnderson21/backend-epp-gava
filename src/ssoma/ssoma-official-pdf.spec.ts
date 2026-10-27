@@ -4,6 +4,7 @@ import {
   SsomaOfficialPdfRenderer,
   paginateSsomaParticipants,
   SSOMA_TEMPLATE_GEOMETRY,
+  measureSsomaTextWidth,
 } from './ssoma-official-pdf';
 
 const participant = (index: number) => ({
@@ -269,6 +270,106 @@ describe('SsomaOfficialPdfRenderer', () => {
     expect(text).not.toContain('auditEvents');
     expect(text).not.toContain('Internal correction reason');
     expect(text).not.toContain('Operario');
+  });
+
+  it('bounds maximum-length dynamic values to their official cells and observation lines', () => {
+    const longValue = 'W'.repeat(260);
+    const longObservations = `${'Observation with excessive detail '.repeat(40)}`;
+    const crowded = {
+      ...snapshot(1),
+      talk: {
+        ...snapshot(1).talk,
+        topic: longValue,
+        location: longValue,
+        targetAudience: longValue,
+        observations: longObservations,
+      },
+      participants: [
+        { ...participant(0), fullName: longValue, dni: longValue },
+      ],
+    };
+    const definition = new SsomaOfficialPdfRenderer().buildDocumentDefinition(
+      crowded,
+      new Map(),
+      'Roboto',
+    );
+    expect(crowded.talk.topic).toBe(longValue);
+    expect(crowded.talk.observations).toBe(longObservations);
+    expect(crowded.participants[0].fullName).toBe(longValue);
+    const page = (
+      definition.content as unknown as Array<{ stack: unknown[] }>
+    )[0];
+    const textNodes = page.stack.filter(
+      (node): node is Record<string, unknown> =>
+        typeof node === 'object' &&
+        node !== null &&
+        typeof (node as { text?: unknown }).text === 'string' &&
+        (node as { text: string }).text.length > 0,
+    );
+
+    const rightEdgeByX = new Map<number, number>([
+      [47, 59],
+      [56, 465],
+      [62, 554],
+      [76, SSOMA_TEMPLATE_GEOMETRY.attendanceColumnSeparators[1] - 4],
+      [82, 296],
+      [110.4, SSOMA_TEMPLATE_GEOMETRY.frameRight - 6],
+      [160, 560],
+      [237, SSOMA_TEMPLATE_GEOMETRY.attendanceColumnSeparators[2] - 3],
+      [358, 383],
+      [430, 460],
+      [501, 556],
+      [516, 556],
+      [541, 561],
+    ]);
+    for (const node of textNodes) {
+      const width = node.width as number;
+      const fontSize = node.fontSize as number;
+      const x = (node.absolutePosition as { x: number }).x;
+      const cellRight = rightEdgeByX.get(Number(x.toFixed(1)));
+      expect(Number.isFinite(width) && width > 0).toBe(true);
+      expect(Number.isFinite(fontSize) && fontSize >= 4.2).toBe(true);
+      expect(
+        measureSsomaTextWidth(
+          node.text as string,
+          fontSize,
+          'Roboto',
+          Boolean(node.bold),
+        ),
+      ).toBeLessThanOrEqual(width + 0.01);
+      expect(cellRight).toBeDefined();
+      expect(x + width).toBeLessThanOrEqual(cellRight! + 0.01);
+    }
+    expect(textNodes.some((node) => node.text === longValue)).toBe(false);
+    const observations = textNodes.filter((node) => {
+      const position = node.absolutePosition as { y?: number } | undefined;
+      return (
+        position?.y !== undefined &&
+        position.y >= SSOMA_TEMPLATE_GEOMETRY.observationsTop
+      );
+    });
+    expect(observations).toHaveLength(3);
+    expect(
+      observations.every(
+        (node) => (node.text as string).length < longObservations.length,
+      ),
+    ).toBe(true);
+    expect(
+      observations.map((node) => (node.absolutePosition as { y: number }).y),
+    ).toEqual([
+      SSOMA_TEMPLATE_GEOMETRY.observationsTop + 12,
+      SSOMA_TEMPLATE_GEOMETRY.observationsTop + 27,
+      SSOMA_TEMPLATE_GEOMETRY.observationsTop + 42,
+    ]);
+    expect(
+      observations.every(
+        (node) =>
+          Math.abs((node.absolutePosition as { x: number }).x - 110.4) < 0.01 &&
+          (node.absolutePosition as { y: number }).y +
+            (node.height as number) <=
+            SSOMA_TEMPLATE_GEOMETRY.legalNoteTop,
+      ),
+    ).toBe(true);
   });
 
   it('fits signatures in the worker identity cell without reusing or distorting them', () => {

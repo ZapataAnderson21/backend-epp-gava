@@ -1,8 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import PdfPrinter from 'pdfmake/src/printer';
 import type { Content, TDocumentDefinitions } from 'pdfmake/interfaces';
-import { accessSync, constants as fsConstants } from 'node:fs';
+import { accessSync, constants as fsConstants, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { join } from 'node:path';
+
+const fontkit = createRequire(__filename)('@foliojs-fork/fontkit') as {
+  create(data: Buffer): {
+    unitsPerEm: number;
+    layout(text: string): { glyphs: Array<{ advanceWidth: number }> };
+  };
+};
 
 export interface SsomaOfficialParticipant {
   workerId: number;
@@ -49,6 +57,9 @@ const PAGE_HEIGHT = 841.8;
 const TEMPLATE_SCALE = 0.24; // 300 dpi Excel render pixels to PDF points.
 const HSEQ_FONT_REGULAR_ENV = 'SSOMA_HSEQ_FONT_REGULAR_PATH';
 const HSEQ_FONT_BOLD_ENV = 'SSOMA_HSEQ_FONT_BOLD_PATH';
+// Dynamic cells shrink to 4.2 pt, then truncate with an ellipsis rather than spill.
+const MIN_DYNAMIC_FONT_SIZE = 4.2;
+const MAX_OBSERVATION_LINES = 3;
 const TEMPLATE_PATH = join(
   process.cwd(),
   'src/ssoma/assets/hseq-reg-036-blank.png',
@@ -188,11 +199,13 @@ function absoluteText(
   fontSize = 5.6,
   bold = false,
   alignment: 'left' | 'center' | 'right' = 'left',
+  fontFamily: SsomaPdfFontFamily = resolveSsomaPdfFontConfiguration().family,
 ): Content {
   if (!text) return { text: '' };
+  const fitted = fitTextToCell(text, width, fontSize, fontFamily, bold);
   return {
-    text,
-    fontSize,
+    text: fitted.text,
+    fontSize: fitted.fontSize,
     bold,
     alignment,
     color: '#000000',
@@ -202,6 +215,144 @@ function absoluteText(
     width,
     height,
   } as Content;
+}
+
+const loadedFonts = new Map<string, ReturnType<typeof fontkit.create>>();
+
+function fontPath(fontFamily: SsomaPdfFontFamily, bold: boolean): string {
+  if (fontFamily === 'Tahoma') {
+    const configured = resolveSsomaPdfFontConfiguration();
+    if (configured.family === 'Tahoma') {
+      return bold ? configured.files.bold : configured.files.normal;
+    }
+  }
+  return join(
+    process.cwd(),
+    `src/pdf/fonts/Roboto-${bold ? 'Bold' : 'Regular'}.ttf`,
+  );
+}
+
+function loadedFont(fontFamily: SsomaPdfFontFamily, bold: boolean) {
+  const path = fontPath(fontFamily, bold);
+  let font = loadedFonts.get(path);
+  if (!font) {
+    font = fontkit.create(readFileSync(path));
+    loadedFonts.set(path, font);
+  }
+  return font;
+}
+
+export function measureSsomaTextWidth(
+  text: string,
+  fontSize: number,
+  fontFamily: SsomaPdfFontFamily,
+  bold = false,
+): number {
+  if (!text) return 0;
+  try {
+    const font = loadedFont(fontFamily, bold);
+    const glyphs = font.layout(text).glyphs;
+    return (
+      (glyphs.reduce((total, glyph) => total + glyph.advanceWidth, 0) /
+        font.unitsPerEm) *
+      fontSize
+    );
+  } catch {
+    // Keep an unreadable font or unsupported glyph from making an overlay unbounded.
+    return Array.from(text).length * fontSize;
+  }
+}
+
+function normalizedSingleLine(text: string): string {
+  return text.replace(/\s+/g, ' ').trim();
+}
+
+function truncateToWidth(
+  text: string,
+  width: number,
+  fontSize: number,
+  fontFamily: SsomaPdfFontFamily,
+  bold: boolean,
+): string {
+  const points = Array.from(text);
+  const ellipsis = '…';
+  let low = 0;
+  let high = points.length;
+  while (low < high) {
+    const middle = Math.ceil((low + high) / 2);
+    const candidate = `${points.slice(0, middle).join('').trimEnd()}${ellipsis}`;
+    if (measureSsomaTextWidth(candidate, fontSize, fontFamily, bold) <= width) {
+      low = middle;
+    } else {
+      high = middle - 1;
+    }
+  }
+  if (low > 0) return `${points.slice(0, low).join('').trimEnd()}${ellipsis}`;
+  return measureSsomaTextWidth(ellipsis, fontSize, fontFamily, bold) <= width
+    ? ellipsis
+    : '';
+}
+
+function fitTextToCell(
+  source: string,
+  width: number,
+  preferredFontSize: number,
+  fontFamily: SsomaPdfFontFamily,
+  bold: boolean,
+): { text: string; fontSize: number } {
+  const text = normalizedSingleLine(source);
+  for (
+    let fontSize = preferredFontSize;
+    fontSize >= MIN_DYNAMIC_FONT_SIZE;
+    fontSize = Math.round((fontSize - 0.2) * 10) / 10
+  ) {
+    if (measureSsomaTextWidth(text, fontSize, fontFamily, bold) <= width) {
+      return { text, fontSize };
+    }
+  }
+  return {
+    text: truncateToWidth(text, width, MIN_DYNAMIC_FONT_SIZE, fontFamily, bold),
+    fontSize: MIN_DYNAMIC_FONT_SIZE,
+  };
+}
+
+function wrapObservations(
+  text: string,
+  width: number,
+  fontSize: number,
+  fontFamily: SsomaPdfFontFamily,
+): string[] {
+  const words = normalizedSingleLine(text).split(' ').filter(Boolean);
+  const lines: string[] = [];
+  let line = '';
+  while (words.length > 0 && lines.length < MAX_OBSERVATION_LINES) {
+    const word = words.shift()!;
+    const candidate = line ? `${line} ${word}` : word;
+    if (measureSsomaTextWidth(candidate, fontSize, fontFamily) <= width) {
+      line = candidate;
+      continue;
+    }
+    if (line) {
+      lines.push(line);
+      line = '';
+      words.unshift(word);
+      continue;
+    }
+    lines.push(truncateToWidth(word, width, fontSize, fontFamily, false));
+  }
+  if (line && lines.length < MAX_OBSERVATION_LINES) lines.push(line);
+  if (words.length > 0 && lines.length === MAX_OBSERVATION_LINES) {
+    const last = lines[MAX_OBSERVATION_LINES - 1];
+    const remaining = `${last} ${words.join(' ')}`;
+    lines[MAX_OBSERVATION_LINES - 1] = truncateToWidth(
+      remaining,
+      width,
+      fontSize,
+      fontFamily,
+      false,
+    );
+  }
+  return lines;
 }
 
 function absoluteImage(
@@ -286,6 +437,7 @@ function pageContent(
   signatures: ReadonlyMap<number, Buffer>,
   pageIndex: number,
   pageCount: number,
+  fontFamily: SsomaPdfFontFamily,
 ): Content[] {
   const content: Content[] = [
     // Replace only the printed static page digits; the approved label stays in the template.
@@ -293,19 +445,93 @@ function pageContent(
       canvas: [{ type: 'rect', x: 0, y: 0, w: 55, h: 7, color: '#FFFFFF' }],
       absolutePosition: { x: 501, y: 62 },
     } as Content,
-    absoluteText(`${pageIndex + 1} de ${pageCount}`, 501, 63, 55, 9, 5.6, true),
-    absoluteText(textOrBlank(snapshot.talk.topic), 56, 120, 409, 12),
-    absoluteText(displayDate(snapshot.talk.talkDate), 516, 120, 40, 12),
-    absoluteText(textOrBlank(snapshot.talk.trainer), 160, 134, 400, 12),
-    absoluteText(textOrBlank(snapshot.talk.location), 62, 148, 492, 12),
-    absoluteText(textOrBlank(snapshot.talk.targetAudience), 82, 162, 214, 12),
-    absoluteText(formatTime(snapshot.talk.scheduledTime), 358, 162, 25, 12),
+    absoluteText(
+      `${pageIndex + 1} de ${pageCount}`,
+      501,
+      63,
+      55,
+      9,
+      5.6,
+      true,
+      'left',
+      fontFamily,
+    ),
+    absoluteText(
+      textOrBlank(snapshot.talk.topic),
+      56,
+      120,
+      409,
+      12,
+      5.6,
+      false,
+      'left',
+      fontFamily,
+    ),
+    absoluteText(
+      displayDate(snapshot.talk.talkDate),
+      516,
+      120,
+      40,
+      12,
+      5.6,
+      false,
+      'left',
+      fontFamily,
+    ),
+    absoluteText(
+      textOrBlank(snapshot.talk.trainer),
+      160,
+      134,
+      400,
+      12,
+      5.6,
+      false,
+      'left',
+      fontFamily,
+    ),
+    absoluteText(
+      textOrBlank(snapshot.talk.location),
+      62,
+      148,
+      492,
+      12,
+      5.6,
+      false,
+      'left',
+      fontFamily,
+    ),
+    absoluteText(
+      textOrBlank(snapshot.talk.targetAudience),
+      82,
+      162,
+      214,
+      12,
+      5.6,
+      false,
+      'left',
+      fontFamily,
+    ),
+    absoluteText(
+      formatTime(snapshot.talk.scheduledTime),
+      358,
+      162,
+      25,
+      12,
+      5.6,
+      false,
+      'left',
+      fontFamily,
+    ),
     absoluteText(
       endTime(snapshot.talk.scheduledTime, snapshot.talk.durationMinutes),
       430,
       162,
       30,
       12,
+      5.6,
+      false,
+      'left',
+      fontFamily,
     ),
     absoluteText(
       durationHours(snapshot.talk.durationMinutes),
@@ -314,6 +540,9 @@ function pageContent(
       20,
       12,
       5.6,
+      false,
+      'left',
+      fontFamily,
     ),
     checkboxMark(),
   ];
@@ -346,7 +575,9 @@ function pageContent(
     ).padStart(2, '0');
     const y = top + 4.5;
     if (pageIndex > 0) {
-      content.push(absoluteText(number, 47, y, 12, 9, 5.8, true));
+      content.push(
+        absoluteText(number, 47, y, 12, 9, 5.8, true, 'left', fontFamily),
+      );
     }
     content.push(
       absoluteText(
@@ -356,6 +587,9 @@ function pageContent(
         columns[1] - columns[0] - 8,
         9,
         5.6,
+        false,
+        'left',
+        fontFamily,
       ),
     );
     content.push(
@@ -366,6 +600,9 @@ function pageContent(
         columns[2] - columns[1] - 6,
         9,
         5.6,
+        false,
+        'left',
+        fontFamily,
       ),
     );
     // Worker classification is not an official position; leave CARGO / ÁREA blank.
@@ -394,10 +631,33 @@ function pageContent(
   });
 
   const observations = textOrBlank(snapshot.talk.observations);
-  if (observations)
-    content.push(
-      absoluteText(observations, px(300), px(2870), px(1950), 10, 5.4),
+  if (observations) {
+    const observationX = px(460);
+    const observationWidth =
+      SSOMA_TEMPLATE_GEOMETRY.frameRight - observationX - 6;
+    const observationFontSize = 5.4;
+    const lines = wrapObservations(
+      observations,
+      observationWidth,
+      observationFontSize,
+      fontFamily,
     );
+    lines.forEach((line, index) =>
+      content.push(
+        absoluteText(
+          line,
+          observationX,
+          SSOMA_TEMPLATE_GEOMETRY.observationsTop + 12 + index * 15,
+          observationWidth,
+          10,
+          observationFontSize,
+          false,
+          'left',
+          fontFamily,
+        ),
+      ),
+    );
+  }
   return content;
 }
 
@@ -418,6 +678,7 @@ export class SsomaOfficialPdfRenderer {
           signatures,
           pageIndex,
           pages.length,
+          fontFamily,
         ),
         ...(pageIndex < pages.length - 1
           ? { pageBreak: 'after' as const }
