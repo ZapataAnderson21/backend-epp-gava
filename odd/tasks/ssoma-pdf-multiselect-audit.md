@@ -43,10 +43,10 @@ Extend the SSOMA talk contract and official HSEQ PDF with activity metadata and 
 
 - [x] Preserve the existing `20261027_fix_ssoma_document_current_utc` migration without its test-harness or generated-file residue.
 - [x] Verify migration ordering and compatibility with `20261027_add_ssoma_activity_type`.
-- [ ] Back up and verify the local `requestsgava` database before applying pending migrations.
-- [ ] Apply pending migrations only to `localhost:5432/requestsgava` and verify closure-related trigger behavior.
-- [ ] Re-run the coordinated backend/frontend contract checks.
-- Route: delegated direct; source-only migration integration and schema-test coverage completed; DB steps remain explicitly pending.
+- [x] Back up and verify the local `requestsgava` database before applying pending migrations.
+- [x] Apply pending migrations only to `localhost:5432/requestsgava`; confirm the UTC correction was applied, the activity migration deployed successfully, and Prisma reports up to date. No real talk-close/P0001 runtime test was performed.
+- [x] Re-run the coordinated backend/frontend contract checks.
+- Route: delegated direct; source integration, local backup/migration, and coordinated contract validation completed.
 
 ## Progress
 
@@ -61,12 +61,14 @@ Extend the SSOMA talk contract and official HSEQ PDF with activity metadata and 
 - `npx prisma generate` passed using a dummy process-local DATABASE_URL; `npm run build` passed and regenerated the Prisma client before Nest compilation.
 - Focused four-suite SSOMA tests passed again after generation (51 tests); generated files were then restored to HEAD, leaving the tracked generated-client subtree clean.
 - `git diff --check 3ddb42f3be20de24afa200f24123657016a7472f..HEAD` passed with exit 0; no handwritten source changed in this follow-up, so lint was not rerun.
-- No database migration or full PostgreSQL integration was run.
+- At the source-only stage, no database migration or PostgreSQL integration was run; the later BE-04 deployment evidence is recorded below.
 - BE-04 source integration RED: after `npx prisma generate` with a dummy process-local `DATABASE_URL`, the new schema test failed because `20261027_fix_ssoma_document_current_utc` was absent.
 - BE-04 GREEN: copied the migration byte-for-byte from the HSEQ conformance worktree (SHA-256 `4718B50DE9293986E7BE5DEC1571D0B45B330904CE120AE9C544A8E0DC0965E4`); added a schema test asserting filesystem sort order after the activity migration, Phase 2 trigger/table compatibility, function replacement, and both UTC timestamp expressions. Commit `aafb258` (`fix(ssoma): integrate UTC current document migration`).
 - `npx prisma validate`, focused `npx jest src/ssoma/ssoma-schema.spec.ts --runInBand` (6 tests), `npm run build`, and `npx eslint src/ssoma/ssoma-schema.spec.ts` passed. Build regenerated Prisma output, then `src/generated/prisma/**` was restored to HEAD. No database was accessed.
+- BE-04 deployed integration: backup `C:\Users\ander\Documents\GAVA\backups\requestsgava\requestsgava-before-ssoma-activity-20261027T234516Z.dump` verified at 439,312 bytes, SHA-256 `fede9634ae177cb1b56e34b98ffa5ffac6a16527a93cf4d5b594e862319c0a20`. UTC correction applied; activity migration deployed successfully; Prisma migration status is up to date.
+- Final backend verification: 35 suites / 327 tests passed; Prisma/build/lint/diff checks passed. Pre-existing unrelated schema differences were left untouched. No actual talk-close/P0001 runtime test was run.
 - Other-text geometry correction commit: `1104f9e` (`fix(ssoma): align Other text within official box`). Initial test run required temporary Prisma generation because the intentionally restored client lacks the new enum; RED then showed x=486pt versus the official box left edge 489.84pt. GREEN: geometry test keeps twelve wide `W` characters and the text node inside the measured box; all four focused SSOMA suites passed (52 tests). `npm run build` exited 0, targeted ESLint passed, generated outputs were restored to HEAD, and `git diff --check 3ddb42f3be20de24afa200f24123657016a7472f..HEAD` passed.
 
 ## Next Step
 
-- Only after explicit follow-up authorization, back up/verify the local database before pending-migration execution; BE-04 source integration is committed as `aafb258`.
+- Next step: local manual talk-close verification, or separately authorized publication; no further source work is planned.
