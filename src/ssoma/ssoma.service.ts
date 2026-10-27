@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import {
   Prisma,
+  SsomaActivityType,
   SsomaAttendanceStatus,
   SsomaPublicationStatus,
   SsomaSignatureEvidenceStatus,
@@ -75,12 +76,49 @@ function requiredReason(reason: string): string {
 
 function talkWriteData(
   dto: CreateSsomaTalkDto | UpdateSsomaTalkDto,
+  existing?: {
+    activityType: SsomaActivityType;
+    otherActivityText: string | null;
+  },
 ): Prisma.SsomaTalkUncheckedCreateInput | Prisma.SsomaTalkUncheckedUpdateInput {
   if ('topic' in dto && (typeof dto.topic !== 'string' || !dto.topic.trim()))
     throw new BadRequestException('El tema de la charla es obligatorio.');
+  const activityType =
+    dto.activityType ?? existing?.activityType ?? SsomaActivityType.TALK;
+  if (!Object.values(SsomaActivityType).includes(activityType))
+    throw new BadRequestException('El tipo de actividad no es válido.');
+  const otherActivityText =
+    dto.otherActivityText !== undefined
+      ? dto.otherActivityText
+      : activityType === existing?.activityType
+        ? existing?.otherActivityText
+        : null;
+  let normalizedOtherText: string | null = null;
+  if (activityType === SsomaActivityType.OTHER) {
+    normalizedOtherText =
+      typeof otherActivityText === 'string' ? otherActivityText.trim() : '';
+    if (!normalizedOtherText || normalizedOtherText.length > 12)
+      throw new BadRequestException(
+        'Indica un tipo de actividad Otro de hasta 12 caracteres.',
+      );
+  } else if (
+    typeof dto.otherActivityText === 'string' &&
+    dto.otherActivityText.trim()
+  ) {
+    throw new BadRequestException(
+      'El detalle de Otro solo corresponde a ese tipo de actividad.',
+    );
+  }
   const { talkDate, scheduledTime, ...rest } = dto;
+  const activityFields =
+    existing === undefined ||
+    dto.activityType !== undefined ||
+    dto.otherActivityText !== undefined
+      ? { activityType, otherActivityText: normalizedOtherText }
+      : {};
   return {
     ...rest,
+    ...activityFields,
     ...(talkDate !== undefined ? { talkDate: dateOnly(talkDate) } : {}),
     ...(scheduledTime !== undefined
       ? {
@@ -193,7 +231,10 @@ export class SsomaService {
         }
         const updated = await tx.ssomaTalk.update({
           where: { ssomaTalkId, status: SsomaTalkStatus.draft },
-          data: talkWriteData(dto) as Prisma.SsomaTalkUncheckedUpdateInput,
+          data: talkWriteData(
+            dto,
+            previous,
+          ) as Prisma.SsomaTalkUncheckedUpdateInput,
         });
         if (movedDate) {
           const synchronized = await tx.ssomaTalkAttendance.updateMany({

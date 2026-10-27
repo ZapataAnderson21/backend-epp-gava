@@ -16,7 +16,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { SsomaTalkStatus } from 'src/generated/prisma';
+import { SsomaActivityType, SsomaTalkStatus } from 'src/generated/prisma';
 import { SsomaPaginationDto } from './ssoma-pagination.dto';
 
 const dateOnlyOptions = { strict: true };
@@ -35,6 +35,15 @@ export class CreateSsomaTalkDto {
   @MinLength(1)
   @MaxLength(500)
   topic!: string;
+
+  @IsOptional()
+  @IsEnum(SsomaActivityType)
+  activityType?: SsomaActivityType;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(12)
+  otherActivityText?: string | null;
 
   @IsOptional()
   @IsString()

@@ -67,4 +67,58 @@ describe('SSOMA Phase 3 schema foundation', () => {
       'talkDate',
     );
   });
+
+  it('persists the approved activity choices and a bounded Other label', () => {
+    const activity =
+      schema.match(/enum SsomaActivityType \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    for (const value of [
+      'INDUCTION',
+      'TALK',
+      'TRAINING',
+      'PRACTICE',
+      'DRILL',
+      'OTHER',
+    ])
+      expect(activity).toMatch(new RegExp(`\\b${value}\\b`));
+    const talk = schema.match(/model SsomaTalk \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    expect(talk).toMatch(/activityType\s+SsomaActivityType\s+@default\(TALK\)/);
+    expect(talk).toMatch(/otherActivityText\s+String\?\s+@db\.VarChar\(12\)/);
+
+    const migration = readFileSync(
+      resolve(
+        __dirname,
+        '../../prisma/migrations/20261027_add_ssoma_activity_type/migration.sql',
+      ),
+      'utf8',
+    );
+    expect(migration).toContain('CREATE TYPE "SsomaActivityType"');
+    expect(migration).toContain(
+      '"activityType" "SsomaActivityType" NOT NULL DEFAULT \'TALK\'',
+    );
+    expect(migration).toContain('"otherActivityText" VARCHAR(12)');
+    expect(migration).toContain('btrim("otherActivityText")');
+  });
+
+  it('validates activity enum and Other text length on the talk DTO', () => {
+    const invalidActivity = Object.assign(new CreateSsomaTalkDto(), {
+      projectId: 9,
+      talkDate: '2026-10-25',
+      topic: 'Safety',
+      activityType: 'NOT_AN_ACTIVITY',
+    });
+    expect(
+      validateSync(invalidActivity).map(({ property }) => property),
+    ).toContain('activityType');
+
+    const longOther = Object.assign(new CreateSsomaTalkDto(), {
+      projectId: 9,
+      talkDate: '2026-10-25',
+      topic: 'Safety',
+      activityType: 'OTHER',
+      otherActivityText: 'x'.repeat(13),
+    });
+    expect(validateSync(longOther).map(({ property }) => property)).toContain(
+      'otherActivityText',
+    );
+  });
 });

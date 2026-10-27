@@ -1638,6 +1638,15 @@ enum SsomaTalkStatus {
   annulled
 }
 
+enum SsomaActivityType {
+  INDUCTION
+  TALK
+  TRAINING
+  PRACTICE
+  DRILL
+  OTHER
+}
+
 enum SsomaAttendanceStatus {
   PENDING
   SIGNING
@@ -1687,6 +1696,8 @@ model SsomaTalk {
   observations     String?        @db.Text
   responsibleName  String?        @db.VarChar(200)
   responsiblePosition String?     @db.VarChar(200)
+  activityType     SsomaActivityType @default(TALK)
+  otherActivityText String?        @db.VarChar(12)
   status           SsomaTalkStatus @default(draft)
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt

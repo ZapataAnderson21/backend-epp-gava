@@ -1,5 +1,13 @@
-import { ConflictException, ForbiddenException } from '@nestjs/common';
-import { SsomaAttendanceStatus, SsomaTalkStatus } from 'src/generated/prisma';
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+} from '@nestjs/common';
+import {
+  SsomaActivityType,
+  SsomaAttendanceStatus,
+  SsomaTalkStatus,
+} from 'src/generated/prisma';
 import { SsomaService } from './ssoma.service';
 import { mapSsomaDatabaseError } from './ssoma-database-errors';
 
@@ -85,6 +93,142 @@ describe('SsomaService API behavior', () => {
       }),
     });
     expect(result.data).toEqual(talk);
+  });
+
+  it('defaults legacy create requests to TALK and clears Other text', async () => {
+    const { service, tx } = buildHarness();
+    tx.ssomaTalk.create.mockResolvedValue(talk);
+    tx.ssomaTalkAuditEvent.create.mockResolvedValue({});
+
+    await service.createTalk(
+      { projectId: 9, talkDate: '2026-10-25', topic: 'Toolbox safety' },
+      actorUserId,
+    );
+
+    expect(tx.ssomaTalk.create).toHaveBeenCalledWith({
+      data: objectContaining({
+        activityType: SsomaActivityType.TALK,
+        otherActivityText: null,
+      }),
+    });
+  });
+
+  it('requires trimmed Other text for OTHER and rejects text for other activity types', async () => {
+    const { service, tx } = buildHarness();
+    await expect(
+      service.createTalk(
+        {
+          projectId: 9,
+          talkDate: '2026-10-25',
+          topic: 'Safety',
+          activityType: SsomaActivityType.OTHER,
+        },
+        actorUserId,
+      ),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    await expect(
+      service.createTalk(
+        {
+          projectId: 9,
+          talkDate: '2026-10-25',
+          topic: 'Safety',
+          activityType: SsomaActivityType.OTHER,
+          otherActivityText: '   ',
+        },
+        actorUserId,
+      ),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    await expect(
+      service.createTalk(
+        {
+          projectId: 9,
+          talkDate: '2026-10-25',
+          topic: 'Safety',
+          activityType: SsomaActivityType.TALK,
+          otherActivityText: 'External',
+        },
+        actorUserId,
+      ),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(tx.ssomaTalk.create).not.toHaveBeenCalled();
+
+    tx.ssomaTalk.create.mockResolvedValue(talk);
+    tx.ssomaTalkAuditEvent.create.mockResolvedValue({});
+    await service.createTalk(
+      {
+        projectId: 9,
+        talkDate: '2026-10-25',
+        topic: 'Safety',
+        activityType: SsomaActivityType.OTHER,
+        otherActivityText: '  Safety fair  ',
+      },
+      actorUserId,
+    );
+    expect(tx.ssomaTalk.create).toHaveBeenCalledWith({
+      data: objectContaining({
+        activityType: SsomaActivityType.OTHER,
+        otherActivityText: 'Safety fair',
+      }),
+    });
+  });
+
+  it('validates activity updates against the merged draft and clears Other on type change', async () => {
+    const { service, tx } = buildHarness();
+    tx.ssomaTalk.findUnique.mockResolvedValue({
+      ...talk,
+      activityType: SsomaActivityType.TALK,
+      otherActivityText: null,
+    });
+    await expect(
+      service.updateDraft(
+        5,
+        { activityType: SsomaActivityType.OTHER },
+        actorUserId,
+      ),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(tx.ssomaTalk.update).not.toHaveBeenCalled();
+
+    tx.ssomaTalk.findUnique.mockResolvedValue({
+      ...talk,
+      activityType: SsomaActivityType.OTHER,
+      otherActivityText: 'Safety fair',
+    });
+    tx.ssomaTalk.update.mockResolvedValue(talk);
+    tx.ssomaTalkAuditEvent.create.mockResolvedValue({});
+    await service.updateDraft(
+      5,
+      { activityType: SsomaActivityType.TALK },
+      actorUserId,
+    );
+    expect(tx.ssomaTalk.update).toHaveBeenCalledWith({
+      where: { ssomaTalkId: 5, status: SsomaTalkStatus.draft },
+      data: { activityType: SsomaActivityType.TALK, otherActivityText: null },
+    });
+  });
+
+  it('preserves the merged activity type when PATCH only updates Other text', async () => {
+    const { service, tx } = buildHarness();
+    tx.ssomaTalk.findUnique.mockResolvedValue({
+      ...talk,
+      activityType: SsomaActivityType.OTHER,
+      otherActivityText: 'Safety fair',
+    });
+    tx.ssomaTalk.update.mockResolvedValue(talk);
+    tx.ssomaTalkAuditEvent.create.mockResolvedValue({});
+
+    await service.updateDraft(
+      5,
+      { otherActivityText: '  Training  ' },
+      actorUserId,
+    );
+
+    expect(tx.ssomaTalk.update).toHaveBeenCalledWith({
+      where: { ssomaTalkId: 5, status: SsomaTalkStatus.draft },
+      data: {
+        otherActivityText: 'Training',
+        activityType: SsomaActivityType.OTHER,
+      },
+    });
   });
 
   it('does not return success when the transactional audit insert fails', async () => {
