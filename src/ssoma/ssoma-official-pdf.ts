@@ -37,9 +37,13 @@ export interface SsomaOfficialDocumentSnapshot {
 
 const MAX_PARTICIPANTS_PER_PAGE = 28;
 const PAGE_WIDTH = 595.28;
-const PAGE_MARGINS: [number, number, number, number] = [31, 28, 31, 29];
+const PAGE_MARGINS: [number, number, number, number] = [31, 28, 31, 22];
 const FORM_WIDTH = PAGE_WIDTH - PAGE_MARGINS[0] - PAGE_MARGINS[2];
 const ROW_SCALE = 0.5;
+// The approved workbook's fitted print scale is 53%; its 28-row attendance
+// grid measured slightly above the 53% full-page grid after PDF line weights.
+const WORKBOOK_FIT_SCALE = 0.53;
+const ATTENDANCE_ROW_SCALE = 0.52;
 const HSEQ_FONT_REGULAR_ENV = 'SSOMA_HSEQ_FONT_REGULAR_PATH';
 const HSEQ_FONT_BOLD_ENV = 'SSOMA_HSEQ_FONT_BOLD_PATH';
 const COLORS = {
@@ -285,8 +289,10 @@ function activityChecklist(): Record<string, unknown> {
 
 function signatureSection(): Content {
   const widths = [40, 162, 80, 208, 43];
-  const heights = [15, 9.95, 15, 15.6, 15, 9.95, 20.1, 20.1, 15].map(
-    (height) => height * ROW_SCALE,
+  // Rows 48-55 carry the signature labels; Excel's default-height final row
+  // supplies the visible lower frame seen in the approved print render.
+  const heights = [9.95, 15, 15.6, 15, 9.95, 20.1, 20.1, 15, 13.9].map(
+    (height) => height * WORKBOOK_FIT_SCALE,
   );
   const body: TableCell[][] = Array.from({ length: 9 }, () =>
     Array.from(
@@ -294,24 +300,34 @@ function signatureSection(): Content {
       () => ({ text: '', border: [false, false, false, false] }) as TableCell,
     ),
   );
-  body[4][1] = cell('Expositor', {
+  body[3][1] = cell('Expositor', {
     bold: true,
     alignment: 'center',
     fontSize: 5,
     margin: [0, 0, 0, 0],
     border: [false, true, false, false],
   });
-  body[4][3] = cell('Responsable del Registro', {
+  body[3][3] = cell('Responsable del Registro', {
     bold: true,
     alignment: 'center',
     fontSize: 5,
     margin: [0, 0, 0, 0],
     border: [false, true, false, false],
   });
-  body[6][1] = cell('CARGO:', { bold: true, alignment: 'left' });
-  body[6][3] = cell('CARGO:', { bold: true, alignment: 'left' });
-  body[7][1] = cell('DNI:', { bold: true, alignment: 'left' });
-  body[7][3] = cell('DNI:', { bold: true, alignment: 'left' });
+  body[5][1] = cell('CARGO:', { bold: true, alignment: 'left' });
+  body[5][3] = cell('CARGO:', { bold: true, alignment: 'left' });
+  body[6][1] = cell('DNI:', { bold: true, alignment: 'left' });
+  body[6][3] = cell('DNI:', { bold: true, alignment: 'left' });
+  for (let rowIndex = 0; rowIndex < body.length; rowIndex++) {
+    body[rowIndex][0].border = [true, rowIndex === 0, false, false];
+    body[rowIndex][4].border = [false, rowIndex === 0, true, false];
+  }
+  for (let columnIndex = 1; columnIndex < 4; columnIndex++) {
+    body[0][columnIndex].border = [false, true, false, false];
+    body[8][columnIndex].border = [false, false, false, true];
+  }
+  body[8][0].border = [true, false, false, true];
+  body[8][4].border = [false, false, true, true];
   return {
     table: {
       widths,
@@ -320,7 +336,7 @@ function signatureSection(): Content {
     },
     layout: {
       hLineWidth: (index: number) =>
-        index === 0 || index === 4 || index === 9 ? 0.45 : 0,
+        index === 0 || index === 3 || index === 9 ? 0.45 : 0,
       vLineWidth: (index: number) => (index === 0 || index === 5 ? 0.45 : 0),
       hLineColor: () => COLORS.black,
       vLineColor: () => COLORS.black,
@@ -615,7 +631,8 @@ function formPage(
       dontBreakRows: true,
       keepWithHeaderRows: 1,
       widths: participantWidths,
-      heights: (index: number) => rowHeight(index === 0 ? 27.95 : 31.9),
+      heights: (index: number) =>
+        (index === 0 ? 27.95 : 31.9) * ATTENDANCE_ROW_SCALE,
       body: attendanceBody,
     },
     layout: borders,
@@ -666,8 +683,9 @@ function formPage(
   const observations: Content = {
     table: {
       widths: [FORM_WIDTH],
-      heights: [42, 43, 44, 45].map((row) =>
-        rowHeight(row === 45 ? 33.6 : row === 42 ? 24.95 : 20.45),
+      heights: [42, 43, 44, 45].map(
+        (row) =>
+          (row === 45 ? 33.6 : row === 42 ? 24.95 : 20.45) * WORKBOOK_FIT_SCALE,
       ),
       body: observationRows,
     },
@@ -685,7 +703,9 @@ function formPage(
   const legalNote: Content = {
     table: {
       widths: [FORM_WIDTH],
-      heights: [rowHeight(13.8)],
+      // This one-row note has 1.8 px of PDF border overhead at 120 dpi;
+      // the workbook's rendered note anchor is 1 px shorter than 15 pt * 53%.
+      heights: [13.8 * ROW_SCALE],
       body: [
         [
           cell('Formato de acuerdo a los lineamientos de la R.M. 050-2013-TR', {

@@ -231,6 +231,37 @@ describe('SsomaOfficialPdfRenderer', () => {
     expect(text).not.toContain('No especificado');
   });
 
+  it('matches workbook attendance row heights and lower-section anchors', () => {
+    const definition = new SsomaOfficialPdfRenderer().buildDocumentDefinition(
+      snapshot,
+      new Map(),
+    );
+    const sections = formPages(definition)[0].stack as Array<
+      Record<string, unknown>
+    >;
+    const attendance = sections[8].table as {
+      heights: (index: number) => number;
+    };
+    const observations = sections[9].table as { heights: number[] };
+    const legalNote = sections[10].table as {
+      heights: number[];
+    };
+    const signatures = sections[11].table as {
+      heights: (index: number) => number;
+    };
+
+    expect(attendance.heights(0)).toBeCloseTo(27.95 * 0.52, 5);
+    expect(attendance.heights(1)).toBeCloseTo(31.9 * 0.52, 5);
+    expect(attendance.heights(28)).toBeCloseTo(31.9 * 0.52, 5);
+    expect(observations.heights).toEqual(
+      [24.95, 20.45, 20.45, 33.6].map((height) => height * 0.53),
+    );
+    expect(legalNote.heights).toEqual([13.8 * 0.5]);
+    expect(signatures.heights(0)).toBeCloseTo(9.95 * 0.53, 5);
+    expect(signatures.heights(7)).toBeCloseTo(15 * 0.53, 5);
+    expect(signatures.heights(8)).toBeCloseTo(13.9 * 0.53, 5);
+  });
+
   it.each([
     ['few participants', 2, 1],
     ['exactly one form page', 28, 1],
