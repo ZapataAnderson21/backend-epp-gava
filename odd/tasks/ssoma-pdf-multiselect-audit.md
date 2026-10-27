@@ -39,6 +39,15 @@ Extend the SSOMA talk contract and official HSEQ PDF with activity metadata and 
 - [x] Run Prisma validate/generate, focused deterministic suites, build, and targeted ESLint.
 - [x] Remove committed generated-client rewrite and verify generation/build; full PostgreSQL integration intentionally deferred.
 
+### BE-04 — Integrate the UTC current-document correction
+
+- [x] Preserve the existing `20261027_fix_ssoma_document_current_utc` migration without its test-harness or generated-file residue.
+- [x] Verify migration ordering and compatibility with `20261027_add_ssoma_activity_type`.
+- [ ] Back up and verify the local `requestsgava` database before applying pending migrations.
+- [ ] Apply pending migrations only to `localhost:5432/requestsgava` and verify closure-related trigger behavior.
+- [ ] Re-run the coordinated backend/frontend contract checks.
+- Route: delegated direct; source-only migration integration and schema-test coverage completed; DB steps remain explicitly pending.
+
 ## Progress
 
 - Worktree created from `3ddb42f`; original dirty worktrees/checkouts remain untouched.
@@ -53,8 +62,11 @@ Extend the SSOMA talk contract and official HSEQ PDF with activity metadata and 
 - Focused four-suite SSOMA tests passed again after generation (51 tests); generated files were then restored to HEAD, leaving the tracked generated-client subtree clean.
 - `git diff --check 3ddb42f3be20de24afa200f24123657016a7472f..HEAD` passed with exit 0; no handwritten source changed in this follow-up, so lint was not rerun.
 - No database migration or full PostgreSQL integration was run.
+- BE-04 source integration RED: after `npx prisma generate` with a dummy process-local `DATABASE_URL`, the new schema test failed because `20261027_fix_ssoma_document_current_utc` was absent.
+- BE-04 GREEN: copied the migration byte-for-byte from the HSEQ conformance worktree (SHA-256 `4718B50DE9293986E7BE5DEC1571D0B45B330904CE120AE9C544A8E0DC0965E4`); added a schema test asserting filesystem sort order after the activity migration, Phase 2 trigger/table compatibility, function replacement, and both UTC timestamp expressions. Commit `aafb258` (`fix(ssoma): integrate UTC current document migration`).
+- `npx prisma validate`, focused `npx jest src/ssoma/ssoma-schema.spec.ts --runInBand` (6 tests), `npm run build`, and `npx eslint src/ssoma/ssoma-schema.spec.ts` passed. Build regenerated Prisma output, then `src/generated/prisma/**` was restored to HEAD. No database was accessed.
 - Other-text geometry correction commit: `1104f9e` (`fix(ssoma): align Other text within official box`). Initial test run required temporary Prisma generation because the intentionally restored client lacks the new enum; RED then showed x=486pt versus the official box left edge 489.84pt. GREEN: geometry test keeps twelve wide `W` characters and the text node inside the measured box; all four focused SSOMA suites passed (52 tests). `npm run build` exited 0, targeted ESLint passed, generated outputs were restored to HEAD, and `git diff --check 3ddb42f3be20de24afa200f24123657016a7472f..HEAD` passed.
 
 ## Next Step
 
-- Frontend/backend integration and full PostgreSQL integration remain outside this correction; original checkout remains untouched.
+- Only after explicit follow-up authorization, back up/verify the local database before pending-migration execution; BE-04 source integration is committed as `aafb258`.
