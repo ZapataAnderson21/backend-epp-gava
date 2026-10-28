@@ -83,7 +83,7 @@ Extend the SSOMA talk contract and official HSEQ PDF with activity metadata and 
 - RED: `npx jest src/ssoma/private-evidence-storage.spec.ts --runInBand` failed because the cleanup and directory-sync fault seams were not available (2 expected TypeScript argument-count errors; 0 tests executed).
 - GREEN: `npx jest src/ssoma/private-evidence-storage.spec.ts src/ssoma/ssoma-document.service.spec.ts --runInBand` passed (2 suites, 22 tests); `npx jest src/ssoma --runInBand` passed (8 suites, 105 tests).
 - `npx eslint src/ssoma/private-evidence-storage.ts src/ssoma/private-evidence-storage.spec.ts`, `npx prisma validate` with a process-local dummy `DATABASE_URL`, `npx nest build`, and scoped `git diff --check` passed. `npm run build` remains intentionally skipped because it runs Prisma generation over protected pre-existing generated-client edits.
-- Correction commit identity will be recorded in the post-commit tracker update.
+- Correction commit: `a2c098c` (`fix(ssoma): preserve evidence ownership after publish`).
 
 ## Backend Follow-up — Production SSOMA Evidence Storage
 
