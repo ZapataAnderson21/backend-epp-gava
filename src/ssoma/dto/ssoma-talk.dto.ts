@@ -1,4 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/mapped-types';
 import { Transform, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
@@ -87,11 +87,7 @@ export class CreateSsomaTalkDto {
   responsiblePosition?: string | null;
 }
 
-class EditableSsomaTalkDto extends OmitType(CreateSsomaTalkDto, [
-  'projectId',
-] as const) {}
-
-export class UpdateSsomaTalkDto extends PartialType(EditableSsomaTalkDto) {}
+export class UpdateSsomaTalkDto extends PartialType(CreateSsomaTalkDto) {}
 
 export class ListSsomaTalksQueryDto extends SsomaPaginationDto {
   @IsOptional()

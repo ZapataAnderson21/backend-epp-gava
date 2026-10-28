@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   SsomaActivityType,
@@ -10,6 +11,7 @@ import {
 } from 'src/generated/prisma';
 import { SsomaService } from './ssoma.service';
 import { mapSsomaDatabaseError } from './ssoma-database-errors';
+import { UpdateSsomaTalkDto } from './dto/ssoma-talk.dto';
 
 const objectContaining = (value: object): object =>
   expect.objectContaining(value) as object;
@@ -65,6 +67,15 @@ const talk = {
 };
 
 describe('SsomaService API behavior', () => {
+  it('retains projectId in validated draft update payloads', async () => {
+    const pipe = new ValidationPipe({ transform: true, whitelist: true });
+    const result = await pipe.transform(
+      { projectId: 12 },
+      { type: 'body', metatype: UpdateSsomaTalkDto },
+    );
+
+    expect(result).toEqual({ projectId: 12 });
+  });
   it('creates a talk and its required audit event atomically', async () => {
     const { service, prisma, tx } = buildHarness();
     tx.ssomaTalk.create.mockResolvedValue(talk);
@@ -273,6 +284,23 @@ describe('SsomaService API behavior', () => {
         eventType: 'talk_updated',
         changedFields: { observations: true },
       }),
+    });
+  });
+
+  it('reassigns the project for a draft and includes it in the audit field set', async () => {
+    const { service, tx } = buildHarness();
+    tx.ssomaTalk.findUnique.mockResolvedValue(talk);
+    tx.ssomaTalk.update.mockResolvedValue({ ...talk, projectId: 12 });
+    tx.ssomaTalkAuditEvent.create.mockResolvedValue({});
+
+    await service.updateDraft(5, { projectId: 12 } as never, actorUserId);
+
+    expect(tx.ssomaTalk.update).toHaveBeenCalledWith({
+      where: { ssomaTalkId: 5, status: SsomaTalkStatus.draft },
+      data: { projectId: 12 },
+    });
+    expect(tx.ssomaTalkAuditEvent.create).toHaveBeenCalledWith({
+      data: objectContaining({ changedFields: { projectId: true } }),
     });
   });
 
