@@ -36,6 +36,11 @@ The frontend excludes `projectId` from edit payloads and the backend PATCH DTO e
 - Frontend: `npm run test:ssoma`; `npm run build`; targeted ESLint for changed handwritten TS/TSX; `git diff --check c9768b3c33b2083a5dfddad6c5975e8bbd4d2a70..HEAD`.
 
 ## Progress and evidence
+- Correction reopened after independent review: fix nullable `projectId` acceptance on PATCH without making the field required, add explicit null/omitted/positive validation cases, and preserve only the currently assigned inactive frontend project as an edit fallback. Correction evidence and commits will be appended after checks.
+- [x] Correction: `PartialType(..., { skipNullProperties: false })` makes validation run for a present null while preserving omitted-field PATCH semantics.
+- Correction RED: `npx jest src/ssoma/ssoma-api.spec.ts --runInBand` failed because `{ projectId: null }` resolved rather than rejecting.
+- Correction GREEN: `npx jest src/ssoma/ssoma-api.spec.ts --runInBand` passed (26 tests); validation coverage confirms null rejects, omission succeeds, and positive project ID succeeds.
+- Correction checks: exact-range `git diff --check 20ce68ab75307236156517e4a5128992d655cc47..HEAD` pending after commit.
 - Initial source evidence: update DTO currently omits `projectId`; form edit path filters it out; draft update already runs transactionally and records `Object.keys(dto)` in audit changed fields.
 - Baseline git state preserved: backend has pre-existing generated Prisma modifications and untracked `.codegraph`; frontend has untracked `.codegraph`.
 - RED: `npx jest src/ssoma/ssoma-api.spec.ts --runInBand --silent` failed at the new whitelist regression test before DTO change as expected.

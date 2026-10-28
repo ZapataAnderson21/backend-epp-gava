@@ -67,14 +67,25 @@ const talk = {
 };
 
 describe('SsomaService API behavior', () => {
-  it('retains projectId in validated draft update payloads', async () => {
+  it('keeps projectId optional but rejects null in validated draft update payloads', async () => {
     const pipe = new ValidationPipe({ transform: true, whitelist: true });
-    const result = await pipe.transform(
+    const valid = await pipe.transform(
       { projectId: 12 },
       { type: 'body', metatype: UpdateSsomaTalkDto },
     );
+    const omitted = await pipe.transform(
+      {},
+      { type: 'body', metatype: UpdateSsomaTalkDto },
+    );
 
-    expect(result).toEqual({ projectId: 12 });
+    await expect(
+      pipe.transform(
+        { projectId: null },
+        { type: 'body', metatype: UpdateSsomaTalkDto },
+      ),
+    ).rejects.toThrow();
+    expect(valid).toEqual({ projectId: 12 });
+    expect(omitted).toEqual({});
   });
   it('creates a talk and its required audit event atomically', async () => {
     const { service, prisma, tx } = buildHarness();

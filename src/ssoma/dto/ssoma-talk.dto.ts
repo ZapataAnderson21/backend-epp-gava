@@ -87,7 +87,9 @@ export class CreateSsomaTalkDto {
   responsiblePosition?: string | null;
 }
 
-export class UpdateSsomaTalkDto extends PartialType(CreateSsomaTalkDto) {}
+export class UpdateSsomaTalkDto extends PartialType(CreateSsomaTalkDto, {
+  skipNullProperties: false,
+}) {}
 
 export class ListSsomaTalksQueryDto extends SsomaPaginationDto {
   @IsOptional()
