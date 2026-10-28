@@ -87,6 +87,16 @@ function digest(bytes: Buffer): string {
   return createHash('sha256').update(bytes).digest('hex');
 }
 
+async function syncParentDirectory(path: string): Promise<void> {
+  if (process.platform === 'win32') return;
+  const directory = await open(path, constants.O_RDONLY);
+  try {
+    await directory.sync();
+  } finally {
+    await directory.close();
+  }
+}
+
 function opaqueReference(namespace: PrivateEvidenceNamespace, key: string) {
   return {
     value: `ssoma-private:v1:${Buffer.from(`${namespace}/${key}`).toString('base64url')}`,
@@ -135,6 +145,10 @@ class FilesystemPrivateEvidenceStorageCore implements PrivateEvidenceStorage {
   constructor(
     root: string,
     private readonly publishLink: typeof link = link,
+    private readonly removeTemporary: typeof unlink = unlink,
+    private readonly syncDirectory: (
+      path: string,
+    ) => Promise<void> = syncParentDirectory,
   ) {
     if (!root || !isAbsolute(root))
       throw new Error('SSOMA evidence root must be an absolute path');
@@ -155,45 +169,44 @@ class FilesystemPrivateEvidenceStorageCore implements PrivateEvidenceStorage {
     const target = await this.ensureParent(input.namespace, input.key);
     const reference = opaqueReference(input.namespace, input.key);
     const temporary = join(dirname(target), `.ssoma-tmp-${randomUUID()}`);
+    let handle: Awaited<ReturnType<typeof open>> | undefined;
     try {
-      const handle = await open(
+      handle = await open(
         temporary,
         constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL,
         0o600,
       );
-      try {
-        await handle.writeFile(input.bytes);
-        await handle.sync();
-      } catch (error) {
-        await handle.close();
-        throw error;
-      }
+      await handle.writeFile(input.bytes);
+      await handle.sync();
       await handle.close();
-      try {
-        await this.publishLink(temporary, target);
-      } catch (error) {
-        if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
-        await this.assertNoSymlink(target);
-        await chmod(target, 0o600);
-        const existing = await this.readPrivate(target);
-        if (digest(existing) !== input.sha256 || !existing.equals(input.bytes))
-          throw new Error('Immutable private evidence collision');
-        return { reference, created: false };
-      }
-      if (process.platform !== 'win32') {
-        const directory = await open(dirname(target), constants.O_RDONLY);
-        try {
-          await directory.sync();
-        } finally {
-          await directory.close();
-        }
-      }
-      return { reference, created: true };
-    } finally {
-      await unlink(temporary).catch((error) => {
-        if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
-      });
+    } catch (error) {
+      if (handle) await handle.close().catch(() => undefined);
+      await this.cleanupTemporary(temporary);
+      throw error;
     }
+
+    try {
+      await this.publishLink(temporary, target);
+    } catch (error) {
+      await this.cleanupTemporary(temporary);
+      if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
+      await this.assertNoSymlink(target);
+      await chmod(target, 0o600);
+      const existing = await this.readPrivate(target);
+      if (digest(existing) !== input.sha256 || !existing.equals(input.bytes))
+        throw new Error('Immutable private evidence collision');
+      return { reference, created: false };
+    }
+
+    // The hard link is the ownership point. Later durability/cleanup errors cannot
+    // turn a published object into an unreportable failure for the caller.
+    await this.syncDirectory(dirname(target)).catch(() => undefined);
+    await this.cleanupTemporary(temporary);
+    return { reference, created: true };
+  }
+
+  private async cleanupTemporary(path: string): Promise<void> {
+    await this.removeTemporary(path).catch(() => undefined);
   }
 
   async readVerified(
@@ -350,8 +363,13 @@ export class LocalFilesystemPrivateEvidenceStorage extends FilesystemPrivateEvid
 
 /** Persistent private filesystem adapter; intended for a dedicated durable production volume. */
 export class PersistentFilesystemPrivateEvidenceStorage extends FilesystemPrivateEvidenceStorageCore {
-  constructor(root: string, publishLink: typeof link = link) {
-    super(root, publishLink);
+  constructor(
+    root: string,
+    publishLink: typeof link = link,
+    removeTemporary: typeof unlink = unlink,
+    syncDirectory?: (path: string) => Promise<void>,
+  ) {
+    super(root, publishLink, removeTemporary, syncDirectory);
   }
 }
 

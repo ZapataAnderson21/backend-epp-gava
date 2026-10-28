@@ -73,6 +73,18 @@ Extend the SSOMA talk contract and official HSEQ PDF with activity metadata and 
 
 - Next step: local manual talk-close verification, or separately authorized publication; no further source work is planned.
 
+## BE-05 — Preserve ownership after atomic evidence publication
+
+- [x] Ensure failures before publication reject without allowing cleanup errors to mask the original error.
+- [x] Once hard-link publication succeeds, return `{ reference, created: true }` despite directory-sync or temporary-cleanup errors.
+- [x] Preserve same-content `EEXIST` as `created: false` and collision as rejection, regardless of cleanup errors.
+- [x] Add deterministic fault-injection regressions for post-publication cleanup and directory sync, while retaining pre-publication ENOSPC cleanup coverage.
+- Route: delegated direct correction to the existing persistent adapter; edit only `src/ssoma/private-evidence-storage.ts`, `src/ssoma/private-evidence-storage.spec.ts`, and this tracker.
+- RED: `npx jest src/ssoma/private-evidence-storage.spec.ts --runInBand` failed because the cleanup and directory-sync fault seams were not available (2 expected TypeScript argument-count errors; 0 tests executed).
+- GREEN: `npx jest src/ssoma/private-evidence-storage.spec.ts src/ssoma/ssoma-document.service.spec.ts --runInBand` passed (2 suites, 22 tests); `npx jest src/ssoma --runInBand` passed (8 suites, 105 tests).
+- `npx eslint src/ssoma/private-evidence-storage.ts src/ssoma/private-evidence-storage.spec.ts`, `npx prisma validate` with a process-local dummy `DATABASE_URL`, `npx nest build`, and scoped `git diff --check` passed. `npm run build` remains intentionally skipped because it runs Prisma generation over protected pre-existing generated-client edits.
+- Correction commit identity will be recorded in the post-commit tracker update.
+
 ## Backend Follow-up — Production SSOMA Evidence Storage
 
 ### Objective

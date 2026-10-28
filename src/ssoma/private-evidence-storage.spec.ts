@@ -245,4 +245,61 @@ describe('PersistentFilesystemPrivateEvidenceStorage', () => {
     ).toEqual({ exists: false, sha256: null, size: null });
     expect(await fs.readdir(join(root, 'staging'))).toHaveLength(0);
   });
+
+  it('returns ownership when temporary cleanup fails after publication', async () => {
+    const bytes = Buffer.from('published despite cleanup failure');
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const failingCleanup = () =>
+      Promise.reject(
+        Object.assign(new Error('permission denied'), { code: 'EACCES' }),
+      );
+    const storage = new PersistentFilesystemPrivateEvidenceStorage(
+      root,
+      fs.link,
+      failingCleanup as typeof fs.unlink,
+    );
+
+    const result = await storage.putIfAbsent({
+      namespace: 'staging',
+      key: 'post-publish-cleanup.bin',
+      bytes,
+      sha256,
+    });
+
+    expect(result.created).toBe(true);
+    expect(
+      await storage.readVerified(result.reference, sha256, bytes.length),
+    ).toEqual(bytes);
+  });
+
+  it('returns ownership when parent-directory sync fails after publication', async () => {
+    const bytes = Buffer.from('published despite sync failure');
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const failingDirectorySync = () =>
+      Promise.reject(
+        Object.assign(new Error('directory sync denied'), { code: 'EACCES' }),
+      );
+    const storage = new PersistentFilesystemPrivateEvidenceStorage(
+      root,
+      fs.link,
+      fs.unlink,
+      failingDirectorySync,
+    );
+
+    const result = await storage.putIfAbsent({
+      namespace: 'official-pdfs',
+      key: 'post-publish-sync.pdf',
+      bytes,
+      sha256,
+    });
+
+    expect(result.created).toBe(true);
+    expect(
+      await storage.verify(result.reference, sha256, bytes.length),
+    ).toEqual({
+      verified: true,
+      sha256,
+      size: bytes.length,
+    });
+  });
 });
