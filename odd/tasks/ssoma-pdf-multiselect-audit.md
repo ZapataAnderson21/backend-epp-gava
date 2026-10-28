@@ -72,3 +72,31 @@ Extend the SSOMA talk contract and official HSEQ PDF with activity metadata and 
 ## Next Step
 
 - Next step: local manual talk-close verification, or separately authorized publication; no further source work is planned.
+
+## Backend Follow-up — Production SSOMA Evidence Storage
+
+### Objective
+
+Add an explicit production-safe `persistent` filesystem provider for private SSOMA evidence, sharing hardened filesystem behavior with the existing test/local adapter.
+
+### Constraints and Route
+
+- Authorized scope: `src/ssoma/private-evidence-storage.ts`, its spec, `src/ssoma/ssoma.module.ts`, `.env.template`, and this tracker only.
+- Preserve PostgreSQL metadata-only storage, retention, audit, and document contracts; do not access PostgreSQL or alter deployment automation.
+- Route: delegated direct; test-first implementation over shared filesystem core, provider factory, and production configuration.
+- Preserve pre-existing generated Prisma edits and `.codegraph/`; do not stage or alter them.
+
+### Acceptance Criteria and Checks
+
+- Add deterministic coverage for persistent production factory selection, verified read/write, cross-instance persistence, immutable collision, unsafe references/symlinks, absent objects, idempotent deletion, missing roots, local production refusal, and cleanup after simulated write failures.
+- Keep `official-pdfs` namespace compatible with existing CURRENT document publication tests.
+- Run focused storage/document tests, all SSOMA tests, targeted ESLint, Prisma validation, build, and `git diff --check`.
+- Commit the completed behavior, tests, configuration documentation, and tracker as one Conventional Commit; stage only the allowed files.
+
+### Progress
+
+- RED: `npx jest src/ssoma/private-evidence-storage.spec.ts --runInBand` failed before implementation with TypeScript errors for the missing persistent adapter and environment factory exports (0 tests executed).
+- GREEN: `npx jest src/ssoma/private-evidence-storage.spec.ts src/ssoma/ssoma-document.service.spec.ts --runInBand` passed (2 suites, 20 tests); `npx jest src/ssoma --runInBand` passed (8 suites, 103 tests).
+- `npx eslint src/ssoma/private-evidence-storage.ts src/ssoma/private-evidence-storage.spec.ts src/ssoma/ssoma.module.ts`, `npx prisma validate` with a process-local dummy `DATABASE_URL`, `npx nest build`, and scoped `git diff --check` on the five authorized paths passed.
+- Full `npm run build` was intentionally not run because its package script begins with `prisma generate`, which would rewrite pre-existing dirty `src/generated/prisma/**` files that are explicitly out of scope; `npx nest build` provided the TypeScript/Nest build check without that mutation. Repository-wide `git diff --check` reports trailing whitespace in the pre-existing generated Prisma diff; scoped changed-file check passes.
+- Commit identity will be reported in the implementation handoff; embedding a commit's own final hash in its tree is self-referential.
