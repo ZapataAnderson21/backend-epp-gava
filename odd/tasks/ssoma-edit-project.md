@@ -20,10 +20,10 @@ The frontend excludes `projectId` from edit payloads and the backend PATCH DTO e
 ## Tasks
 - [x] BE-1: Add test-first coverage for project reassignment through draft update and audit data. RED: ValidationPipe whitelist removed `projectId` (`UpdateSsomaTalkDto {}` instead of `{ projectId: 12 }`).
 - [x] BE-2: Permit validated positive integer projectId in update DTO and safely persist within existing draft transaction. `PartialType(CreateSsomaTalkDto)` inherits the existing number conversion and positive integer validators; service write and audit already consume the validated DTO.
-- [ ] BE-3: Run focused verification and commit the coherent backend work unit.
+- [x] BE-3: Run focused verification and commit the coherent backend work unit.
 - [ ] FE-1: Add test-first coverage for enabled edit selector, current project initialization, validation, and PATCH payload.
 - [ ] FE-2: Send projectId on edit while preserving create and draft-only behavior.
-- [ ] FE-3: Run focused verification and commit the coherent frontend work unit.
+- [x] FE-3: Run focused verification and commit the coherent frontend work unit.
 
 ## Acceptance criteria
 - Draft updates can reassign a talk to a valid project and audit changed fields include projectId.
@@ -43,4 +43,4 @@ The frontend excludes `projectId` from edit payloads and the backend PATCH DTO e
 - Verification: `npx nest build` passed. `npx prisma validate` was not applicable because no schema/migration changed. `git diff --check` over the whole pre-existing worktree reports trailing whitespace in pre-existing generated Prisma files; check the authorized source/doc paths separately. Build also touched generated Prisma files; preserve and do not stage them.
 - Runtime harness: N/A (service/DTO-only backend path; focused Jest tests provide the relevant boundary).
 - Rollback boundary: backend DTO update and its focused assertions in `src/ssoma/dto/ssoma-talk.dto.ts` and `src/ssoma/ssoma-api.spec.ts`.
-- Commit: pending.
+- Commit evidence: backend work-unit `ca6a0ab` (`fix(ssoma): allow draft project reassignment`); frontend work-unit `0cea2d7` (`fix(ssoma): allow draft project reassignment`).
