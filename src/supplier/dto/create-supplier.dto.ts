@@ -107,7 +107,9 @@ export class CreateSupplierDto {
   )
   dni?: string;
 
-  @ApiProperty({ example: '123-456-7890' })
+  @ApiPropertyOptional({ example: '1234567890123', nullable: true })
+  @Transform(({ value }) => toNullIfEmpty(value))
+  @IsOptional()
   @IsString()
   @MinLength(13, {
     message: 'El número de cuenta debe tener al menos 13 dígitos.',
@@ -119,7 +121,7 @@ export class CreateSupplierDto {
     { no_symbols: true },
     { message: 'El número de cuenta debe contener solo dígitos.' },
   )
-  accountNumber!: string;
+  accountNumber?: string | null;
 
   @ApiProperty({ example: 'BCP' })
   @IsString()

@@ -968,7 +968,7 @@ model Supplier {
   documentType  SupplierDocumentType @default(ruc)
   ruc           String?              @unique @db.VarChar(11)
   dni           String?              @unique @db.VarChar(8)
-  accountNumber String
+  accountNumber String?
   bank          String
   currency      Currency             @default(PEN)
   createdAt     DateTime             @default(now())

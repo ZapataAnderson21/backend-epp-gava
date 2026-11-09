@@ -33,6 +33,7 @@ import {
 } from 'src/purchase-order/enum';
 import { CurrencyLabelEs } from 'src/supplier/enum/currency.enum';
 import type { PurchaseOrderProjectSummary } from 'src/purchase-order/types/purchase-order-summary';
+import { formatSupplierAccountDetails } from './supplier-account-details';
 
 @Injectable()
 export class PdfService {
@@ -585,7 +586,7 @@ export class PdfService {
               ),
               infoField(
                 'Cta. cte',
-                `${purchaseOrder.supplier?.bank || ''} (${CurrencyLabelEs[purchaseOrder.supplier?.currency] || ''}) - ${purchaseOrder.supplier?.accountNumber || ''}`,
+                formatSupplierAccountDetails(purchaseOrder.supplier),
               ),
             ]),
           ],
