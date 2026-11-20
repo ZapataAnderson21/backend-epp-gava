@@ -54,6 +54,8 @@ export const permissionModules = [
       ['review', 'Revisar'],
       ['approve', 'Aprobar / rechazar'],
       ['attend', 'Atender'],
+      ['addResource', 'Incorporar recursos'],
+      ['sendEmail', 'Enviar por correo'],
     ],
   },
   {
@@ -90,6 +92,12 @@ export const permissionModules = [
     ],
   },
   {
+    key: 'staffPayroll',
+    label: 'Planillas mensuales STAFF',
+    actions: ['view', 'manage', 'export'],
+    special: [],
+  },
+  {
     key: 'evaluations',
     label: 'Evaluaciones mensuales',
     actions: ['view', 'manage', 'export'],
@@ -118,6 +126,19 @@ export const permissionModules = [
       ['revise', 'Revisar charla'],
       ['void', 'Anular charla'],
       ['audit', 'Ver auditoría'],
+    ],
+  },
+  {
+    key: 'workClothing',
+    label: 'Entregas de Ropa de Trabajo',
+    actions: ['view', 'manage', 'export'],
+    special: [
+      ['dispatch', 'Registrar despachos'],
+      ['receive', 'Confirmar recepciones propias'],
+      ['deliver', 'Entregar a trabajadores'],
+      ['cancel', 'Anular entregas'],
+      ['return', 'Gestionar devoluciones'],
+      ['viewHistoryAll', 'Consultar historiales de todos los trabajadores'],
     ],
   },
   {
@@ -163,6 +184,9 @@ export const permissionDependencies: Record<string, string[]> =
           'quotations.export',
           'cash.export',
           'payroll.export',
+          'staffPayroll.view',
+          'staffPayroll.manage',
+          'staffPayroll.export',
         ].includes(permission)
           ? ['finance.view']
           : []),

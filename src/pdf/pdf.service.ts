@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -24,14 +23,13 @@ import {
   webIcon,
 } from './icons';
 import { ConfigService } from '@nestjs/config';
-import { RequestStatus, RequestType } from 'src/request/enum';
+import { RequestType } from 'src/request/enum';
 import {
   PaymentMethodLabelEs,
   PurchaseOrderStatus,
   PurchaseOrderStatusLabelEs,
   PurchaseOrderTypeLabelEs,
 } from 'src/purchase-order/enum';
-import { CurrencyLabelEs } from 'src/supplier/enum/currency.enum';
 import type { PurchaseOrderProjectSummary } from 'src/purchase-order/types/purchase-order-summary';
 import { formatSupplierAccountDetails } from './supplier-account-details';
 
@@ -988,6 +986,17 @@ export class PdfService {
 
     const issuedAtStr = formatDate(quotation.createdAt || new Date());
     const headingRed = '#b00000';
+    const typeLabel = {
+      works: 'Obras',
+      services: 'Servicios',
+      consulting: 'Consultorías',
+    }[quotation.type];
+    const statusLabel = {
+      draft: 'Borrador',
+      sent: 'Enviada',
+      accepted: 'Aceptada',
+      rejected: 'Rechazada',
+    }[quotation.status];
 
     const fonts = {
       Roboto: {
@@ -1111,16 +1120,22 @@ export class PdfService {
           stack: [
             {
               text: [
-                { text: 'Servicio: ', bold: true },
+                { text: 'Descripción: ', bold: true },
                 quotation.serviceDescription || '',
               ],
               margin: [0, 0, 0, 10],
+            },
+            {
+              text: [{ text: 'Tipo: ', bold: true }, typeLabel],
             },
             {
               text: [
                 { text: 'Nombre del Cliente: ', bold: true },
                 quotation.client?.name || '',
               ],
+            },
+            {
+              text: [{ text: 'Estado: ', bold: true }, statusLabel],
             },
           ],
         },
@@ -1415,14 +1430,6 @@ export class PdfService {
       throw new NotFoundException('Request not found');
     }
 
-    // Solo impedir envío si NO está en draft (la generación del PDF sí la permitimos aquí)
-    if (request.status !== RequestStatus.draft) {
-      this.logger.error('Request status is not draft');
-      throw new BadRequestException(
-        'Only requests with status "draft" can be sent',
-      );
-    }
-
     const type = request.type;
 
     this.logger.log(`Request type: ${type}`);
@@ -1433,6 +1440,10 @@ export class PdfService {
       include: {
         request: true,
         element: true,
+        elementVariant: true,
+        epiPlans: {
+          include: { requestWorker: { include: { worker: true } } },
+        },
         fallProtectionGroup: {
           include: {
             harnessElement: true,
@@ -1450,6 +1461,18 @@ export class PdfService {
       include: { worker: true },
       orderBy: { requestWorkerId: 'asc' },
     });
+
+    const resourceAdditions =
+      await this.prismaService.requestResourceAddition.findMany({
+        where: { requestId },
+        include: {
+          element: true,
+          elementVariant: true,
+          addedByUser: { select: { name: true, lastName: true } },
+          workerPlans: { include: { worker: true } },
+        },
+        orderBy: { createdAt: 'asc' },
+      });
 
     const fallProtectionElementIds = elementRequests
       .filter((line) => {
@@ -1620,14 +1643,34 @@ export class PdfService {
     const buildRequestTableRows = (lines: RequestLine[]): TableCell[][] =>
       lines.map((line, idx) => {
         const parts = getFallProtectionParts(line);
-        const descriptionCell = parts
-          ? {
-              stack: [
-                { text: getLineDescription(line), bold: true },
-                { text: parts, fontSize: 8, color: '#4b5563' },
-              ],
-            }
-          : getLineDescription(line);
+        const plannedWorkers = line.epiPlans
+          .map(
+            (plan) =>
+              `${plan.requestWorker.worker.fullName}: ${plan.plannedQuantity.toString()}`,
+          )
+          .join('\n');
+        const details = [
+          line.elementVariant?.label
+            ? `Variante / talla: ${line.elementVariant.label}`
+            : '',
+          plannedWorkers ? `Destinatarios previstos:\n${plannedWorkers}` : '',
+        ].filter(Boolean);
+        const descriptionCell =
+          parts || details.length
+            ? {
+                stack: [
+                  { text: getLineDescription(line), bold: true },
+                  ...(parts
+                    ? [{ text: parts, fontSize: 8, color: '#4b5563' }]
+                    : []),
+                  ...details.map((text) => ({
+                    text,
+                    fontSize: 8,
+                    color: '#4b5563',
+                  })),
+                ],
+              }
+            : getLineDescription(line);
 
         return [
           idx + 1,
@@ -1796,6 +1839,30 @@ export class PdfService {
       );
     }
 
+    if (resourceAdditions.length > 0) {
+      docContent.push(
+        {
+          text: 'INCORPORACIONES POSTERIORES',
+          style: 'subheader',
+          margin: [0, 20, 0, 10],
+        },
+        {
+          table: {
+            widths: ['*', 'auto', 'auto', '*'],
+            body: [
+              ['RECURSO', 'VARIANTE', 'CANTIDAD', 'ORIGEN Y RESPONSABLE'],
+              ...resourceAdditions.map((addition) => [
+                addition.element.name,
+                addition.elementVariant?.label ?? '—',
+                `${addition.quantity.toString()} ${addition.unit}`,
+                `${addition.origin === 'logistics' ? 'Logística' : 'Administración'} - ${addition.addedByUser.name} ${addition.addedByUser.lastName}`,
+              ]),
+            ],
+          },
+        },
+      );
+    }
+
     // 9) Descripción + cierre
     docContent.push(
       { text: 'Descripción:', style: 'subheader', margin: [0, 20, 0, 10] },
@@ -1849,5 +1916,201 @@ export class PdfService {
       this.logger.error('Error generating PDF:', error);
       throw new InternalServerErrorException('Error generating PDF');
     }
+  }
+
+  async generateWorkClothingDeliveryPdf(deliveryId: number) {
+    const delivery = await this.prismaService.workClothingDelivery.findUnique({
+      where: { workClothingDeliveryId: deliveryId },
+      include: {
+        project: true,
+        worker: true,
+        custodianUser: true,
+        deliveredByUser: true,
+        items: true,
+      },
+    });
+    if (!delivery)
+      throw new NotFoundException('Entrega de ropa no encontrada.');
+
+    const fonts = {
+      Roboto: {
+        normal: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Regular.ttf'),
+        bold: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Bold.ttf'),
+        italics: path.join(process.cwd(), 'src/pdf/fonts/Roboto-Italic.ttf'),
+        bolditalics: path.join(
+          process.cwd(),
+          'src/pdf/fonts/Roboto-BoldItalic.ttf',
+        ),
+      },
+    };
+    const printer = new PdfPrinter(fonts);
+    const date = new Intl.DateTimeFormat('es-PE', {
+      dateStyle: 'long',
+      timeZone: 'America/Lima',
+    }).format(delivery.deliveredAt);
+    const deliveryNumber = `ER-${String(delivery.workClothingDeliveryId).padStart(6, '0')}`;
+    const docDefinition: TDocumentDefinitions = {
+      pageMargins: [50, 40, 50, 45],
+      content: [
+        {
+          columns: [
+            { image: logo, fit: [110, 55], width: 120 },
+            {
+              width: '*',
+              stack: [
+                {
+                  text: 'GAVA C&C',
+                  bold: true,
+                  fontSize: 15,
+                  alignment: 'right',
+                },
+                {
+                  text: 'CONSTANCIA DE ENTREGA DE ROPA DE TRABAJO',
+                  bold: true,
+                  fontSize: 12,
+                  alignment: 'right',
+                  margin: [0, 6, 0, 0],
+                },
+                {
+                  text: deliveryNumber,
+                  alignment: 'right',
+                  color: '#0047a3',
+                  margin: [0, 4, 0, 0],
+                },
+              ],
+            },
+          ],
+          margin: [0, 0, 0, 22],
+        },
+        {
+          table: {
+            widths: [105, '*'],
+            body: [
+              [{ text: 'Fecha', bold: true }, date],
+              [{ text: 'Trabajador', bold: true }, delivery.worker.fullName],
+              [{ text: 'DNI', bold: true }, delivery.worker.dni],
+              [
+                { text: 'Proyecto', bold: true },
+                `${delivery.project.code} - ${delivery.project.name}`,
+              ],
+              [
+                { text: 'PDR / custodia', bold: true },
+                `${delivery.custodianUser.name} ${delivery.custodianUser.lastName}`,
+              ],
+              [
+                { text: 'Responsable', bold: true },
+                `${delivery.deliveredByUser.name} ${delivery.deliveredByUser.lastName}`,
+              ],
+              [
+                { text: 'Estado', bold: true },
+                delivery.status === 'registered' ? 'Registrada' : 'Anulada',
+              ],
+            ],
+          },
+          layout: 'lightHorizontalLines',
+          margin: [0, 0, 0, 20],
+        },
+        {
+          text: 'Prendas entregadas',
+          bold: true,
+          fontSize: 11,
+          margin: [0, 0, 0, 8],
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['*', 100, 70],
+            body: [
+              [
+                {
+                  text: 'Prenda',
+                  bold: true,
+                  color: 'white',
+                  fillColor: '#0047a3',
+                },
+                {
+                  text: 'Talla',
+                  bold: true,
+                  color: 'white',
+                  fillColor: '#0047a3',
+                },
+                {
+                  text: 'Cantidad',
+                  bold: true,
+                  color: 'white',
+                  fillColor: '#0047a3',
+                  alignment: 'right',
+                },
+              ],
+              ...delivery.items.map((item) => [
+                item.elementNameSnapshot,
+                item.variantLabelSnapshot,
+                {
+                  text: Number(item.quantity).toFixed(2),
+                  alignment: 'right' as const,
+                },
+              ]),
+            ],
+          },
+          layout: 'lightHorizontalLines',
+          margin: [0, 0, 0, 18],
+        },
+        { text: 'Observaciones', bold: true, margin: [0, 0, 0, 5] },
+        {
+          text: delivery.observations?.trim() || 'Sin observaciones.',
+          margin: [0, 0, 0, 55],
+        },
+        {
+          columns: [
+            {
+              width: '45%',
+              stack: [
+                { text: '____________________________', alignment: 'center' },
+                {
+                  text: 'Firma de quien entrega',
+                  alignment: 'center',
+                  margin: [0, 5, 0, 0],
+                },
+              ],
+            },
+            { width: '10%', text: '' },
+            {
+              width: '45%',
+              stack: [
+                { text: '____________________________', alignment: 'center' },
+                {
+                  text: 'Firma de quien recibe',
+                  alignment: 'center',
+                  margin: [0, 5, 0, 0],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      defaultStyle: { font: 'Roboto', fontSize: 9 },
+      footer: {
+        text: 'Documento interno de control. No constituye constancia firmada hasta contar con las firmas correspondientes.',
+        alignment: 'center',
+        fontSize: 7,
+        color: '#666666',
+        margin: [30, 0, 30, 0],
+      },
+    };
+    const pdfDoc = printer.createPdfKitDocument(docDefinition);
+    const chunks: Buffer[] = [];
+    return new Promise<{ buffer: Buffer; fileName: string }>(
+      (resolve, reject) => {
+        pdfDoc.on('data', (chunk: Buffer) => chunks.push(chunk));
+        pdfDoc.on('end', () =>
+          resolve({
+            buffer: Buffer.concat(chunks),
+            fileName: `entrega-ropa-${deliveryNumber}.pdf`,
+          }),
+        );
+        pdfDoc.on('error', reject);
+        pdfDoc.end();
+      },
+    );
   }
 }

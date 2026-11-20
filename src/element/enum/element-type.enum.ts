@@ -32,6 +32,11 @@ export const ElementFamily = {
   Ese: 'ese',
   Harness: 'harness',
   Measurement: 'measurement',
+  ElectricalEquipment: 'electricalEquipment',
+  Tools: 'tools',
+  Ladders: 'ladders',
+  Materials: 'materials',
+  ElectricalHarness: 'electricalHarness',
 } as const;
 export type ElementFamily = (typeof ElementFamily)[keyof typeof ElementFamily];
 
@@ -44,6 +49,11 @@ export const ElementFamilyLabelEs: Record<ElementFamily, string> = {
   [ElementFamily.Ese]: 'ESE',
   [ElementFamily.Measurement]: 'Equipos de Medicion',
   [ElementFamily.Harness]: 'Arnes',
+  [ElementFamily.ElectricalEquipment]: 'Equipos Electricos',
+  [ElementFamily.Tools]: 'Herramientas',
+  [ElementFamily.Ladders]: 'Escaleras',
+  [ElementFamily.Materials]: 'Materiales',
+  [ElementFamily.ElectricalHarness]: 'Arnes Electricos',
 };
 
 export const ElementFamilyControlType: Record<
@@ -58,6 +68,11 @@ export const ElementFamilyControlType: Record<
   [ElementFamily.Ese]: ElementControlType.Returnable,
   [ElementFamily.Harness]: ElementControlType.Individual,
   [ElementFamily.Measurement]: ElementControlType.Individual,
+  [ElementFamily.ElectricalEquipment]: ElementControlType.Individual,
+  [ElementFamily.Tools]: ElementControlType.Individual,
+  [ElementFamily.Ladders]: ElementControlType.Individual,
+  [ElementFamily.Materials]: ElementControlType.Consumable,
+  [ElementFamily.ElectricalHarness]: ElementControlType.Individual,
 };
 
 export const ElementFamilyReturnsToOffice: Record<ElementFamily, boolean> = {
@@ -69,6 +84,11 @@ export const ElementFamilyReturnsToOffice: Record<ElementFamily, boolean> = {
   [ElementFamily.Ese]: true,
   [ElementFamily.Harness]: true,
   [ElementFamily.Measurement]: true,
+  [ElementFamily.ElectricalEquipment]: true,
+  [ElementFamily.Tools]: true,
+  [ElementFamily.Ladders]: true,
+  [ElementFamily.Materials]: false,
+  [ElementFamily.ElectricalHarness]: true,
 };
 
 export const ElementFamilyRequiresCode: Record<ElementFamily, boolean> = {
@@ -80,32 +100,43 @@ export const ElementFamilyRequiresCode: Record<ElementFamily, boolean> = {
   [ElementFamily.Ese]: false,
   [ElementFamily.Harness]: true,
   [ElementFamily.Measurement]: false,
+  [ElementFamily.ElectricalEquipment]: true,
+  [ElementFamily.Tools]: true,
+  [ElementFamily.Ladders]: true,
+  [ElementFamily.Materials]: false,
+  [ElementFamily.ElectricalHarness]: true,
 };
 
-export const ElementFamilyUsesDecimalQuantity: Record<
-  ElementFamily,
-  boolean
-> = {
-  [ElementFamily.Epp]: false,
-  [ElementFamily.Epi]: false,
-  [ElementFamily.Uniform]: false,
-  [ElementFamily.OfficeMaterial]: false,
-  [ElementFamily.SsomaSupply]: false,
-  [ElementFamily.Ese]: false,
-  [ElementFamily.Harness]: false,
-  [ElementFamily.Measurement]: false,
-};
+export const ElementFamilyUsesDecimalQuantity: Record<ElementFamily, boolean> =
+  {
+    [ElementFamily.Epp]: false,
+    [ElementFamily.Epi]: false,
+    [ElementFamily.Uniform]: false,
+    [ElementFamily.OfficeMaterial]: false,
+    [ElementFamily.SsomaSupply]: false,
+    [ElementFamily.Ese]: false,
+    [ElementFamily.Harness]: false,
+    [ElementFamily.Measurement]: false,
+    [ElementFamily.ElectricalEquipment]: false,
+    [ElementFamily.Tools]: false,
+    [ElementFamily.Ladders]: false,
+    [ElementFamily.Materials]: true,
+    [ElementFamily.ElectricalHarness]: false,
+  };
 
-export const ElementFamilyUsesUniqueInventory: Record<
-  ElementFamily,
-  boolean
-> = {
-  [ElementFamily.Epp]: false,
-  [ElementFamily.Epi]: false,
-  [ElementFamily.Uniform]: false,
-  [ElementFamily.OfficeMaterial]: false,
-  [ElementFamily.SsomaSupply]: false,
-  [ElementFamily.Ese]: true,
-  [ElementFamily.Harness]: true,
-  [ElementFamily.Measurement]: true,
-};
+export const ElementFamilyUsesUniqueInventory: Record<ElementFamily, boolean> =
+  {
+    [ElementFamily.Epp]: false,
+    [ElementFamily.Epi]: false,
+    [ElementFamily.Uniform]: false,
+    [ElementFamily.OfficeMaterial]: false,
+    [ElementFamily.SsomaSupply]: false,
+    [ElementFamily.Ese]: true,
+    [ElementFamily.Harness]: true,
+    [ElementFamily.Measurement]: true,
+    [ElementFamily.ElectricalEquipment]: true,
+    [ElementFamily.Tools]: true,
+    [ElementFamily.Ladders]: true,
+    [ElementFamily.Materials]: false,
+    [ElementFamily.ElectricalHarness]: true,
+  };

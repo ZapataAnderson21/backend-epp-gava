@@ -9,6 +9,7 @@ import {
   Delete,
   ParseIntPipe,
 } from '@nestjs/common';
+import { CreateElementVariantDto } from './dto/create-element-variant.dto';
 import { ElementService } from './element.service';
 import { CreateElementDto } from './dto/create-element.dto';
 import { UpdateElementDto } from './dto/update-element.dto';
@@ -34,6 +35,15 @@ export class ElementController {
   async create(@Body() createElementDto: CreateElementDto) {
     this.logger.log(`Creating element: ${JSON.stringify(createElementDto)}`);
     return await this.elementService.create(createElementDto);
+  }
+
+  @Post(':id/variants')
+  @UserTypes(...INVENTORY_ITEM_MANAGER_ROLES)
+  async createVariant(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: CreateElementVariantDto,
+  ) {
+    return this.elementService.createVariant(id, dto);
   }
 
   @Get()

@@ -27,10 +27,12 @@ export const controllerModules: Record<string, string> = {
   WorkerController: 'workers',
   GeneralPayrollController: 'payroll',
   DailyWageController: 'payroll',
+  StaffPayrollController: 'staffPayroll',
   WorkerMonthlyEvaluationController: 'evaluations',
   ExpiringDocumentController: 'documents',
   EmergencyController: 'emergencies',
   SsomaController: 'ssoma',
+  WorkClothingController: 'workClothing',
   UserController: 'users',
   UserTypeController: 'roles',
   PermissionsController: 'roles',
@@ -122,12 +124,45 @@ export function endpointPermissions(
     return [['payroll.view'], ['payroll.attendance']];
   if (controller === 'DailyWageController')
     return [['payroll.view'], ['payroll.payments'], ['finance.view']];
+  if (controller === 'StaffPayrollController') {
+    const requirements = [['staffPayroll.view'], ['finance.view']];
+    if (handler === 'exportPeriod')
+      return [...requirements, ['staffPayroll.export']];
+    if (method !== 'GET') return [...requirements, ['staffPayroll.manage']];
+    return requirements;
+  }
+  if (controller === 'WorkClothingController') {
+    if (handler === 'deliveryPdf')
+      return [['workClothing.view'], ['workClothing.export']];
+    if (handler === 'createDispatch')
+      return [['workClothing.view'], ['workClothing.dispatch']];
+    if (handler === 'receiveDispatch')
+      return [['workClothing.view'], ['workClothing.receive']];
+    if (handler === 'createDelivery')
+      return [['workClothing.view'], ['workClothing.deliver']];
+    if (handler === 'annulDelivery')
+      return [['workClothing.view'], ['workClothing.cancel']];
+    if (handler === 'confirmReturn')
+      return [
+        ['workClothing.view'],
+        ['workClothing.return'],
+        ['workClothing.dispatch', 'workClothing.manage'],
+      ];
+    if (['createReturn', 'cancelReturn'].includes(handler))
+      return [['workClothing.view'], ['workClothing.return']];
+    if (method === 'GET') return [['workClothing.view']];
+    return [['workClothing.view'], ['workClothing.manage']];
+  }
   if (controller === 'InventoryController' && method !== 'GET')
     return [['inventory.view'], ['inventory.movements']];
   if (controller === 'ProjectController' && handler === 'updateStatus')
     return [['projects.view'], ['projects.status']];
   if (controller === 'RequestController' && handler === 'updateStatus')
     return [['requests.view']]; // Per-transition validation follows.
+  if (controller === 'RequestController' && handler === 'addResource')
+    return [['requests.view'], ['requests.addResource']];
+  if (controller === 'RequestController' && handler === 'sendToLogistics')
+    return [['requests.view'], ['requests.sendEmail']];
   if (
     controller === 'PurchaseOrderController' &&
     handler === 'generateProjectSummaryPdf'

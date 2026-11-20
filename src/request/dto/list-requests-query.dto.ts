@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsPositive } from 'class-validator';
 import { SearchPaginationQueryDto } from 'src/common/pagination';
-import { RequestStatus } from '../enum';
+import { RequestStatus, SsomaRequestKind } from '../enum';
 
 export class ListRequestsQueryDto extends SearchPaginationQueryDto {
   @ApiPropertyOptional()
@@ -23,4 +23,9 @@ export class ListRequestsQueryDto extends SearchPaginationQueryDto {
   @IsOptional()
   @IsEnum(RequestStatus)
   status?: RequestStatus;
+
+  @ApiPropertyOptional({ enum: SsomaRequestKind })
+  @IsOptional()
+  @IsEnum(SsomaRequestKind)
+  ssomaRequestKind?: SsomaRequestKind;
 }

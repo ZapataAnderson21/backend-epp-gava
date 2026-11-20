@@ -10,7 +10,7 @@ import {
   Query,
   Res,
 } from '@nestjs/common';
-import { QuotationStatus } from './enum';
+import { QuotationStatus, QuotationType } from './enum';
 import { QuotationService } from './quotation.service';
 import { CreateQuotationDto } from './dto/create-quotation.dto';
 import { UpdateQuotationDto } from './dto/update-quotation.dto';
@@ -40,9 +40,10 @@ export class QuotationController {
   findAll(
     @Query('clientId') clientId?: string,
     @Query('status') status?: QuotationStatus,
+    @Query('type') type?: QuotationType,
   ) {
     this.logger.log('Fetching all quotations');
-    return this.quotationService.findAll({ clientId, status });
+    return this.quotationService.findAll({ clientId, status, type });
   }
 
   @Get('paginated')

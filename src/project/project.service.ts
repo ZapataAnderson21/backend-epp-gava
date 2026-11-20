@@ -117,12 +117,15 @@ export class ProjectService {
     const where = {
       deletedAt: null,
       ...(query.status ? { status: query.status } : {}),
+      ...(query.type ? { type: query.type } : {}),
       ...(search
         ? {
             OR: [
               { name: { contains: search, mode: 'insensitive' as const } },
               { code: { contains: search, mode: 'insensitive' as const } },
-              { description: { contains: search, mode: 'insensitive' as const } },
+              {
+                description: { contains: search, mode: 'insensitive' as const },
+              },
               { location: { contains: search, mode: 'insensitive' as const } },
             ],
           }
@@ -310,13 +313,15 @@ export class ProjectService {
 
       if (blockers.length > 0) {
         const details = blockers
-          .map(
-            (blocker) => {
-              const codePart = blocker.elementCode ? ` [${blocker.elementCode}]` : '';
-              const familyPart = blocker.familyLabel ? ` - ${blocker.familyLabel}` : '';
-              return `${blocker.elementName}${codePart}${familyPart} (${blocker.quantityPending} ${blocker.unit}) - Responsable: ${blocker.responsibleUserName ?? 'Sin responsable'}`;
-            },
-          )
+          .map((blocker) => {
+            const codePart = blocker.elementCode
+              ? ` [${blocker.elementCode}]`
+              : '';
+            const familyPart = blocker.familyLabel
+              ? ` - ${blocker.familyLabel}`
+              : '';
+            return `${blocker.elementName}${codePart}${familyPart} (${blocker.quantityPending} ${blocker.unit}) - Responsable: ${blocker.responsibleUserName ?? 'Sin responsable'}`;
+          })
           .join('; ');
 
         throw new BadRequestException(

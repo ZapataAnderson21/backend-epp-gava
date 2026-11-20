@@ -25,9 +25,7 @@ import { RegisterAdjustmentDto } from './dto/register-adjustment.dto';
 import { RegisterTransferDto } from './dto/register-transfer.dto';
 import { FindMovementsQueryDto } from './dto/find-movements-query.dto';
 import { RegisterWorkerAssignmentDto } from './dto/register-worker-assignment.dto';
-import {
-  RegisterWorkerAssignmentsDto,
-} from './dto/register-worker-assignments.dto';
+import { RegisterWorkerAssignmentsDto } from './dto/register-worker-assignments.dto';
 import {
   InventoryLocation,
   InventoryMovementType,
@@ -103,10 +101,9 @@ const WORKER_ASSIGNMENT_INCLUDE = {
 type OfficeEntryWithRelations = Prisma.OfficeInventoryEntryGetPayload<{
   include: typeof OFFICE_ENTRY_INCLUDE;
 }>;
-type FallProtectionGroupWithRelations =
-  Prisma.FallProtectionGroupGetPayload<{
-    include: typeof FALL_PROTECTION_GROUP_INCLUDE;
-  }>;
+type FallProtectionGroupWithRelations = Prisma.FallProtectionGroupGetPayload<{
+  include: typeof FALL_PROTECTION_GROUP_INCLUDE;
+}>;
 type ProjectEntryWithRelations = Prisma.ProjectInventoryEntryGetPayload<{
   include: typeof PROJECT_ENTRY_INCLUDE;
 }>;
@@ -205,17 +202,17 @@ export class InventoryService {
     };
   }
 
-  private getFallProtectionElementLabel(element?: {
-    name?: string | null;
-    code?: string | null;
-  } | null) {
+  private getFallProtectionElementLabel(
+    element?: {
+      name?: string | null;
+      code?: string | null;
+    } | null,
+  ) {
     if (!element) return 'Pendiente';
     return element.code ? `${element.name} - ${element.code}` : element.name;
   }
 
-  private getFallProtectionGroupParts(
-    group?: FallProtectionGroupLike | null,
-  ) {
+  private getFallProtectionGroupParts(group?: FallProtectionGroupLike | null) {
     if (!group) return [];
 
     if (group.components?.length) {
@@ -297,32 +294,38 @@ export class InventoryService {
       projectCode: entry.project?.code ?? null,
       elementId: assignment.elementId ?? entry.elementId,
       elementName: entry.fallProtectionGroupId
-        ? entry.fallProtectionGroup?.code ?? entry.element?.name ?? null
-        : entry.element?.name ?? null,
+        ? (entry.fallProtectionGroup?.code ?? entry.element?.name ?? null)
+        : (entry.element?.name ?? null),
       elementCode: entry.fallProtectionGroupId
-        ? entry.fallProtectionGroup?.code ?? entry.element?.code ?? null
-        : entry.element?.code ?? null,
-      elementVariantId: assignment.elementVariantId ?? entry.elementVariantId ?? null,
+        ? (entry.fallProtectionGroup?.code ?? entry.element?.code ?? null)
+        : (entry.element?.code ?? null),
+      elementVariantId:
+        assignment.elementVariantId ?? entry.elementVariantId ?? null,
       elementVariantLabel:
-        entry.elementVariant?.label ?? entry.elementVariant?.normalizedLabel ?? null,
+        entry.elementVariant?.label ??
+        entry.elementVariant?.normalizedLabel ??
+        null,
       family: entry.fallProtectionGroupId
         ? ElementFamily.Harness
-        : entry.element?.family ?? null,
+        : (entry.element?.family ?? null),
       familyLabel: entry.fallProtectionGroupId
         ? ElementFamilyLabelEs[ElementFamily.Harness]
         : this.getInventoryProfile(entry.element).familyLabel,
       controlType: entry.element?.controlType ?? null,
       categoryName: entry.fallProtectionGroupId
         ? 'Grupo EPA'
-        : entry.element?.category?.name ?? null,
+        : (entry.element?.category?.name ?? null),
       inventoryAssetId: assignment.inventoryAssetId ?? null,
       assetCode: assignment.inventoryAsset?.assetCode ?? null,
       serialNumber: assignment.inventoryAsset?.serialNumber ?? null,
       sourceProjectInventoryEntryId:
-        assignment.sourceProjectInventoryEntryId ?? entry.projectInventoryEntryId,
+        assignment.sourceProjectInventoryEntryId ??
+        entry.projectInventoryEntryId,
       quantityAssigned,
       quantityReturned,
-      quantityPending: this.normalizeQuantity(quantityAssigned - quantityReturned),
+      quantityPending: this.normalizeQuantity(
+        quantityAssigned - quantityReturned,
+      ),
       status: assignment.status,
       assignedAt: assignment.assignedAt,
       returnedAt: assignment.returnedAt,
@@ -369,24 +372,27 @@ export class InventoryService {
       projectId: entry.projectId,
       projectName: entry.project?.name ?? null,
       projectCode: entry.project?.code ?? null,
-        requestId: entry.requestId,
-        elementId: entry.element.elementId,
-        elementVariantId: entry.elementVariantId ?? null,
-        fallProtectionGroupId: entry.fallProtectionGroupId ?? null,
-        fallProtectionGroup: entry.fallProtectionGroup ?? null,
-        elementVariantLabel:
-        entry.elementVariant?.label ?? entry.elementVariant?.normalizedLabel ?? null,
+      requestId: entry.requestId,
+      elementId: entry.element.elementId,
+      elementVariantId: entry.elementVariantId ?? null,
+      fallProtectionGroupId: entry.fallProtectionGroupId ?? null,
+      fallProtectionGroup: entry.fallProtectionGroup ?? null,
+      elementVariantLabel:
+        entry.elementVariant?.label ??
+        entry.elementVariant?.normalizedLabel ??
+        null,
       elementName: isFallProtectionGroup
-        ? entry.fallProtectionGroup?.code ?? entry.element.name
+        ? (entry.fallProtectionGroup?.code ?? entry.element.name)
         : entry.element.name,
       elementCode: isFallProtectionGroup
-        ? entry.fallProtectionGroup?.code ?? entry.element.code
+        ? (entry.fallProtectionGroup?.code ?? entry.element.code)
         : entry.element.code,
       fallProtectionParts,
       elementType: entry.element.type,
       elementTypeLabel:
-        ElementTypeLabelEs[entry.element.type as keyof typeof ElementTypeLabelEs] ??
-        entry.element.type,
+        ElementTypeLabelEs[
+          entry.element.type as keyof typeof ElementTypeLabelEs
+        ] ?? entry.element.type,
       family: profile.family,
       familyLabel: profile.familyLabel,
       isLegacy: profile.isLegacy,
@@ -401,7 +407,7 @@ export class InventoryService {
         ] ?? entry.element.controlType,
       categoryName: isFallProtectionGroup
         ? 'Grupo EPA'
-        : entry.element.category?.name ?? null,
+        : (entry.element.category?.name ?? null),
       unit: entry.unit,
       quantityReceived,
       quantityReturned,
@@ -463,24 +469,28 @@ export class InventoryService {
         ? Math.min(
             1,
             groupEntries.reduce(
-              (total, entry) => total + this.normalizeQuantity(entry.quantityReceived),
+              (total, entry) =>
+                total + this.normalizeQuantity(entry.quantityReceived),
               0,
             ),
           )
         : groupEntries.reduce(
-            (total, entry) => total + this.normalizeQuantity(entry.quantityReceived),
+            (total, entry) =>
+              total + this.normalizeQuantity(entry.quantityReceived),
             0,
           );
       const quantityReturned = isFallProtectionGroup
         ? Math.min(
             quantityReceived,
             groupEntries.reduce(
-              (total, entry) => total + this.normalizeQuantity(entry.quantityReturned),
+              (total, entry) =>
+                total + this.normalizeQuantity(entry.quantityReturned),
               0,
             ),
           )
         : groupEntries.reduce(
-            (total, entry) => total + this.normalizeQuantity(entry.quantityReturned),
+            (total, entry) =>
+              total + this.normalizeQuantity(entry.quantityReturned),
             0,
           );
       const workerAssignments = groupEntries.flatMap(
@@ -537,15 +547,13 @@ export class InventoryService {
         responsibleUserNames: responsibleNames,
         responsibleUserName:
           responsibleNames.length <= 1
-            ? responsibleNames[0] ?? null
+            ? (responsibleNames[0] ?? null)
             : `Varios responsables (${responsibleNames.length})`,
       };
     });
   }
 
-  private mapFallProtectionGroupsByPart(
-    groups: FallProtectionGroupLike[],
-  ) {
+  private mapFallProtectionGroupsByPart(groups: FallProtectionGroupLike[]) {
     const byElementId = new Map<number, FallProtectionGroupLike>();
 
     for (const group of groups) {
@@ -553,7 +561,9 @@ export class InventoryService {
         group.components
           .map((component) => component.elementId)
           .filter(Boolean)
-          .forEach((elementId: number) => byElementId.set(Number(elementId), group));
+          .forEach((elementId: number) =>
+            byElementId.set(Number(elementId), group),
+          );
         continue;
       }
 
@@ -574,7 +584,10 @@ export class InventoryService {
     entry: ProjectEntryForMapping,
     groupByPartElementId: Map<number, FallProtectionGroupLike>,
   ) {
-    if (entry.fallProtectionGroupId || entry.element?.family !== ElementFamily.Harness) {
+    if (
+      entry.fallProtectionGroupId ||
+      entry.element?.family !== ElementFamily.Harness
+    ) {
       return entry;
     }
 
@@ -601,7 +614,9 @@ export class InventoryService {
       entry.workerInventoryAssignments,
     );
 
-    return this.normalizeQuantity(Math.max(quantityPending - assignedPending, 0));
+    return this.normalizeQuantity(
+      Math.max(quantityPending - assignedPending, 0),
+    );
   }
 
   private getProjectEntryReturnsToOffice(entry: ProjectEntryForMapping) {
@@ -633,8 +648,7 @@ export class InventoryService {
       sourceEntry,
       groupByPartElementId,
     );
-    const aggregateKey =
-      this.getProjectInventoryAggregateKey(normalizedSource);
+    const aggregateKey = this.getProjectInventoryAggregateKey(normalizedSource);
 
     const projectEntries =
       await this.prismaService.projectInventoryEntry.findMany({
@@ -675,13 +689,16 @@ export class InventoryService {
       elementId: entry.element.elementId,
       elementVariantId: entry.elementVariantId ?? null,
       elementVariantLabel:
-        entry.elementVariant?.label ?? entry.elementVariant?.normalizedLabel ?? null,
+        entry.elementVariant?.label ??
+        entry.elementVariant?.normalizedLabel ??
+        null,
       elementName: entry.element.name,
       elementCode: entry.element.code,
       elementType: entry.element.type,
       elementTypeLabel:
-        ElementTypeLabelEs[entry.element.type as keyof typeof ElementTypeLabelEs] ??
-        entry.element.type,
+        ElementTypeLabelEs[
+          entry.element.type as keyof typeof ElementTypeLabelEs
+        ] ?? entry.element.type,
       family: profile.family,
       familyLabel: profile.familyLabel,
       isLegacy: profile.isLegacy,
@@ -743,8 +760,12 @@ export class InventoryService {
   private mapWorkerInventoryAssignment(
     assignment: WorkerAssignmentWithRelations,
   ) {
-    const quantityAssigned = this.normalizeQuantity(assignment.quantityAssigned);
-    const quantityReturned = this.normalizeQuantity(assignment.quantityReturned);
+    const quantityAssigned = this.normalizeQuantity(
+      assignment.quantityAssigned,
+    );
+    const quantityReturned = this.normalizeQuantity(
+      assignment.quantityReturned,
+    );
     const quantityPending = this.normalizeQuantity(
       quantityAssigned - quantityReturned,
     );
@@ -787,9 +808,8 @@ export class InventoryService {
   private getMonthRange(month?: number, year?: number) {
     const today = new Date();
     const safeYear = year || today.getFullYear();
-    const safeMonth = month && month >= 1 && month <= 12
-      ? month
-      : today.getMonth() + 1;
+    const safeMonth =
+      month && month >= 1 && month <= 12 ? month : today.getMonth() + 1;
 
     const from = new Date(Date.UTC(safeYear, safeMonth - 1, 1, 0, 0, 0, 0));
     const to = new Date(Date.UTC(safeYear, safeMonth, 1, 0, 0, 0, 0));
@@ -816,29 +836,41 @@ export class InventoryService {
 
     const [movements, officeEntries, projectEntries, latestMovements] =
       await Promise.all([
-        this.dashboardQuery('entregas a trabajadores', this.prismaService.inventoryMovement.findMany({
-          where: {
-            movementType: InventoryMovementType.assigned_to_worker,
-            createdAt: { gte: from, lt: to },
-            element: {
-              family: { in: protectionFamilies },
-              deletedAt: null,
+        this.dashboardQuery(
+          'entregas a trabajadores',
+          this.prismaService.inventoryMovement.findMany({
+            where: {
+              movementType: InventoryMovementType.assigned_to_worker,
+              createdAt: { gte: from, lt: to },
+              element: {
+                family: { in: protectionFamilies },
+                deletedAt: null,
+              },
             },
-          },
-          include: this.movementInclude,
-          orderBy: [{ createdAt: 'desc' }],
-        })),
-        this.dashboardQuery('inventario de oficina', this.prismaService.officeInventoryEntry.findMany({
-          include: this.officeEntryInclude,
-        })),
-        this.dashboardQuery('inventario de proyectos', this.prismaService.projectInventoryEntry.findMany({
-          include: this.projectEntryInclude,
-        })),
-        this.dashboardQuery('ultimos movimientos', this.prismaService.inventoryMovement.findMany({
-          include: this.movementInclude,
-          orderBy: [{ createdAt: 'desc' }, { inventoryMovementId: 'desc' }],
-          take: 8,
-        })),
+            include: this.movementInclude,
+            orderBy: [{ createdAt: 'desc' }],
+          }),
+        ),
+        this.dashboardQuery(
+          'inventario de oficina',
+          this.prismaService.officeInventoryEntry.findMany({
+            include: this.officeEntryInclude,
+          }),
+        ),
+        this.dashboardQuery(
+          'inventario de proyectos',
+          this.prismaService.projectInventoryEntry.findMany({
+            include: this.projectEntryInclude,
+          }),
+        ),
+        this.dashboardQuery(
+          'ultimos movimientos',
+          this.prismaService.inventoryMovement.findMany({
+            include: this.movementInclude,
+            orderBy: [{ createdAt: 'desc' }, { inventoryMovementId: 'desc' }],
+            take: 8,
+          }),
+        ),
       ]);
 
     const deliveredByElement = new Map<
@@ -888,15 +920,18 @@ export class InventoryService {
       );
     }
 
-    const elementsWithMinimum = await this.dashboardQuery('stock minimo', this.prismaService.element.findMany({
-      where: {
-        deletedAt: null,
-        family: { in: protectionFamilies },
-        stockMinimum: { gt: 0 },
-      },
-      include: { category: true },
-      orderBy: { name: 'asc' },
-    }));
+    const elementsWithMinimum = await this.dashboardQuery(
+      'stock minimo',
+      this.prismaService.element.findMany({
+        where: {
+          deletedAt: null,
+          family: { in: protectionFamilies },
+          stockMinimum: { gt: 0 },
+        },
+        include: { category: true },
+        orderBy: { name: 'asc' },
+      }),
+    );
 
     const minimumStock = elementsWithMinimum
       .map((element) => {
@@ -1074,8 +1109,11 @@ export class InventoryService {
     projectInventoryEntryId: number,
     dto: RegisterWorkerAssignmentsDto,
   ) {
-    const { sourceEntry: entry, entries, isFallProtectionGroup } =
-      await this.findRelatedProjectInventoryEntries(projectInventoryEntryId);
+    const {
+      sourceEntry: entry,
+      entries,
+      isFallProtectionGroup,
+    } = await this.findRelatedProjectInventoryEntries(projectInventoryEntryId);
 
     const profile = entry.fallProtectionGroupId
       ? { family: ElementFamily.Harness }
@@ -1134,7 +1172,9 @@ export class InventoryService {
       );
     }
 
-    const workerIds = [...new Set(cleanAssignments.map((item) => item.workerId))];
+    const workerIds = [
+      ...new Set(cleanAssignments.map((item) => item.workerId)),
+    ];
     const workers = await this.prismaService.worker.findMany({
       where: { workerId: { in: workerIds }, deletedAt: null },
     });
@@ -1302,12 +1342,14 @@ export class InventoryService {
           : new Date().getFullYear();
       const safeMonth =
         hasValidMonth && typeof query.month === 'number' ? query.month : null;
-      const from = safeMonth !== null
-        ? new Date(Date.UTC(safeYear, safeMonth - 1, 1, 0, 0, 0, 0))
-        : new Date(Date.UTC(safeYear, 0, 1, 0, 0, 0, 0));
-      const to = safeMonth !== null
-        ? new Date(Date.UTC(safeYear, safeMonth, 1, 0, 0, 0, 0))
-        : new Date(Date.UTC(safeYear + 1, 0, 1, 0, 0, 0, 0));
+      const from =
+        safeMonth !== null
+          ? new Date(Date.UTC(safeYear, safeMonth - 1, 1, 0, 0, 0, 0))
+          : new Date(Date.UTC(safeYear, 0, 1, 0, 0, 0, 0));
+      const to =
+        safeMonth !== null
+          ? new Date(Date.UTC(safeYear, safeMonth, 1, 0, 0, 0, 0))
+          : new Date(Date.UTC(safeYear + 1, 0, 1, 0, 0, 0, 0));
       where.assignedAt = { gte: from, lt: to };
     }
 
@@ -1362,6 +1404,26 @@ export class InventoryService {
       throw new NotFoundException('Elemento no encontrado.');
     }
 
+    const elementVariant = dto.elementVariantId
+      ? await this.prismaService.elementVariant.findFirst({
+          where: {
+            elementVariantId: dto.elementVariantId,
+            elementId: dto.elementId,
+            deletedAt: null,
+          },
+        })
+      : null;
+    if (dto.elementVariantId && !elementVariant) {
+      throw new BadRequestException(
+        'La talla seleccionada no pertenece al elemento indicado.',
+      );
+    }
+    if (element.family === ElementFamily.Uniform && !elementVariant) {
+      throw new BadRequestException(
+        'La ropa de trabajo requiere una talla configurada.',
+      );
+    }
+
     const profile = this.getInventoryProfile(element);
     const quantity = this.normalizeQuantity(dto.quantity);
     const unit =
@@ -1372,17 +1434,29 @@ export class InventoryService {
         'Los elementos con inventario unico solo aceptan cantidad 1 por registro.',
       );
     }
+    if (!profile.usesDecimalQuantity && !Number.isInteger(quantity)) {
+      throw new BadRequestException(
+        'Este elemento solo acepta cantidades enteras.',
+      );
+    }
 
     const result = await this.prismaService.$transaction(async (tx) => {
       let officeEntry: OfficeEntryWithRelations;
 
       if (profile.usesUniqueInventory) {
-        const [existingOfficeEntries, existingProjectEntries, existingMovements] =
-          await Promise.all([
-            tx.officeInventoryEntry.count({ where: { elementId: dto.elementId } }),
-            tx.projectInventoryEntry.count({ where: { elementId: dto.elementId } }),
-            tx.inventoryMovement.count({ where: { elementId: dto.elementId } }),
-          ]);
+        const [
+          existingOfficeEntries,
+          existingProjectEntries,
+          existingMovements,
+        ] = await Promise.all([
+          tx.officeInventoryEntry.count({
+            where: { elementId: dto.elementId },
+          }),
+          tx.projectInventoryEntry.count({
+            where: { elementId: dto.elementId },
+          }),
+          tx.inventoryMovement.count({ where: { elementId: dto.elementId } }),
+        ]);
 
         if (
           existingOfficeEntries > 0 ||
@@ -1398,6 +1472,7 @@ export class InventoryService {
         officeEntry = await tx.officeInventoryEntry.create({
           data: {
             elementId: dto.elementId,
+            elementVariantId: dto.elementVariantId ?? null,
             unit,
             currentStock: 1,
             status: OfficeInventoryStatus.available,
@@ -1411,6 +1486,7 @@ export class InventoryService {
         const existing = await tx.officeInventoryEntry.findFirst({
           where: {
             elementId: dto.elementId,
+            elementVariantId: dto.elementVariantId ?? null,
             status: OfficeInventoryStatus.available,
           },
         });
@@ -1429,6 +1505,7 @@ export class InventoryService {
           officeEntry = await tx.officeInventoryEntry.create({
             data: {
               elementId: dto.elementId,
+              elementVariantId: dto.elementVariantId ?? null,
               unit,
               currentStock: quantity,
               status: OfficeInventoryStatus.available,
@@ -1444,6 +1521,7 @@ export class InventoryService {
         data: {
           officeInventoryEntryId: officeEntry.officeInventoryEntryId,
           elementId: dto.elementId,
+          elementVariantId: dto.elementVariantId ?? null,
           movementType: InventoryMovementType.office_entry,
           fromLocation: InventoryLocation.external,
           toLocation: InventoryLocation.office,
@@ -1478,7 +1556,9 @@ export class InventoryService {
         summary: {
           totalEntries: mapped.length,
           totalAvailable: mapped.filter((e) => e.status === 'available').length,
-          totalInMaintenance: mapped.filter((e) => e.status === 'in_maintenance').length,
+          totalInMaintenance: mapped.filter(
+            (e) => e.status === 'in_maintenance',
+          ).length,
           totalDisposed: mapped.filter((e) => e.status === 'disposed').length,
         },
         entries: mapped,
@@ -1499,7 +1579,9 @@ export class InventoryService {
     });
 
     if (!entry) {
-      throw new NotFoundException('Registro de inventario de oficina no encontrado.');
+      throw new NotFoundException(
+        'Registro de inventario de oficina no encontrado.',
+      );
     }
 
     return {
@@ -1507,7 +1589,9 @@ export class InventoryService {
       message: 'Detalle de inventario de oficina obtenido exitosamente.',
       data: {
         ...this.mapOfficeInventoryEntry(entry),
-        movements: entry.movements.map((movement) => this.mapMovement(movement)),
+        movements: entry.movements.map((movement) =>
+          this.mapMovement(movement),
+        ),
       },
     };
   }
@@ -1524,7 +1608,9 @@ export class InventoryService {
     });
 
     if (!entry) {
-      throw new NotFoundException('Registro de inventario de oficina no encontrado.');
+      throw new NotFoundException(
+        'Registro de inventario de oficina no encontrado.',
+      );
     }
 
     if (entry.status === OfficeInventoryStatus.disposed) {
@@ -1598,7 +1684,9 @@ export class InventoryService {
     });
 
     if (!entry) {
-      throw new NotFoundException('Registro de inventario de oficina no encontrado.');
+      throw new NotFoundException(
+        'Registro de inventario de oficina no encontrado.',
+      );
     }
 
     if (entry.status !== OfficeInventoryStatus.available) {
@@ -1617,10 +1705,9 @@ export class InventoryService {
     }
 
     const profile = this.getInventoryProfile(entry.element);
-    const newStatus =
-      profile.usesUniqueInventory
-        ? OfficeInventoryStatus.in_maintenance
-        : entry.status;
+    const newStatus = profile.usesUniqueInventory
+      ? OfficeInventoryStatus.in_maintenance
+      : entry.status;
 
     const updatedEntry = await this.prismaService.$transaction(async (tx) => {
       const updated = await tx.officeInventoryEntry.update({
@@ -1665,12 +1752,17 @@ export class InventoryService {
     });
 
     if (!entry) {
-      throw new NotFoundException('Registro de inventario de oficina no encontrado.');
+      throw new NotFoundException(
+        'Registro de inventario de oficina no encontrado.',
+      );
     }
 
     const profile = this.getInventoryProfile(entry.element);
 
-    if (profile.usesUniqueInventory && entry.status !== OfficeInventoryStatus.in_maintenance) {
+    if (
+      profile.usesUniqueInventory &&
+      entry.status !== OfficeInventoryStatus.in_maintenance
+    ) {
       throw new BadRequestException(
         'Este elemento no se encuentra en mantenimiento.',
       );
@@ -1723,7 +1815,9 @@ export class InventoryService {
     });
 
     if (!entry) {
-      throw new NotFoundException('Registro de inventario de oficina no encontrado.');
+      throw new NotFoundException(
+        'Registro de inventario de oficina no encontrado.',
+      );
     }
 
     if (entry.status === OfficeInventoryStatus.disposed) {
@@ -1795,7 +1889,9 @@ export class InventoryService {
       });
 
     if (!sourceEntry) {
-      throw new NotFoundException('Registro de inventario de origen no encontrado.');
+      throw new NotFoundException(
+        'Registro de inventario de origen no encontrado.',
+      );
     }
 
     const targetProject = await this.prismaService.project.findFirst({
@@ -1944,9 +2040,9 @@ export class InventoryService {
     requestId: number,
     completedByUserId: number,
   ) {
-      const request = await this.prismaService.request.findUnique({
-        where: { requestId },
-        include: {
+    const request = await this.prismaService.request.findUnique({
+      where: { requestId },
+      include: {
         project: true,
         user: true,
         elementRequests: {
@@ -1956,18 +2052,18 @@ export class InventoryService {
               include: {
                 category: true,
               },
-              },
-              elementVariant: true,
-              fallProtectionGroup: {
-                include: {
-                  harnessElement: { include: { category: true } },
-                  anchorBandElement: { include: { category: true } },
-                  lifelineElement: { include: { category: true } },
-                  positioningLanyardElement: { include: { category: true } },
-                },
+            },
+            elementVariant: true,
+            fallProtectionGroup: {
+              include: {
+                harnessElement: { include: { category: true } },
+                anchorBandElement: { include: { category: true } },
+                lifelineElement: { include: { category: true } },
+                positioningLanyardElement: { include: { category: true } },
               },
             },
           },
+        },
         responses: {
           include: {
             elementRequestResponses: {
@@ -2163,11 +2259,11 @@ export class InventoryService {
 
         const createdEntry = await tx.projectInventoryEntry.create({
           data: {
-              projectId: request.projectId,
-              elementId: elementRequest.elementId,
-              elementVariantId: elementRequest.elementVariantId ?? null,
-              fallProtectionGroupId: elementRequest.fallProtectionGroupId ?? null,
-              requestId: request.requestId,
+            projectId: request.projectId,
+            elementId: elementRequest.elementId,
+            elementVariantId: elementRequest.elementVariantId ?? null,
+            fallProtectionGroupId: elementRequest.fallProtectionGroupId ?? null,
+            requestId: request.requestId,
             requestResponseId: requestResponse?.requestResponseId ?? null,
             elementRequestId: elementRequest.elementRequestId,
             responsibleUserId: request.userId,
@@ -2218,14 +2314,17 @@ export class InventoryService {
             quantity: quantityReceived,
             performedByUserId: completedByUserId,
             responsibleUserId: request.userId,
-            notes: 'Ingreso automatico por confirmacion final del requerimiento.',
+            notes:
+              'Ingreso automatico por confirmacion final del requerimiento.',
           },
         });
 
         // Decrement office stock if entry exists (stock can go negative — informational only)
         if (officeEntry) {
           await tx.officeInventoryEntry.update({
-            where: { officeInventoryEntryId: officeEntry.officeInventoryEntryId },
+            where: {
+              officeInventoryEntryId: officeEntry.officeInventoryEntryId,
+            },
             data: {
               currentStock: { decrement: quantityReceived },
             },
@@ -2325,10 +2424,10 @@ export class InventoryService {
   async getProjectInactivationBlockers(projectId: number) {
     const [entries, fallProtectionGroups] = await Promise.all([
       this.prismaService.projectInventoryEntry.findMany({
-      where: {
-        projectId,
-      },
-      include: this.projectEntryInclude,
+        where: {
+          projectId,
+        },
+        include: this.projectEntryInclude,
       }),
       this.prismaService.fallProtectionGroup.findMany({
         where: { deletedAt: null },
@@ -2353,8 +2452,7 @@ export class InventoryService {
           ),
         )
         .map((entry) => this.mapInventoryEntry(entry)),
-    )
-      .filter((entry) => entry.blocksProjectInactivation);
+    ).filter((entry) => entry.blocksProjectInactivation);
   }
 
   async findProjectInactivationBlockers(projectId: number) {
@@ -2374,9 +2472,12 @@ export class InventoryService {
   async registerProjectReturn(
     projectInventoryEntryId: number,
     registerProjectReturnDto: RegisterProjectReturnDto,
-    ) {
-    const { sourceEntry: entry, entries, isFallProtectionGroup } =
-      await this.findRelatedProjectInventoryEntries(projectInventoryEntryId);
+  ) {
+    const {
+      sourceEntry: entry,
+      entries,
+      isFallProtectionGroup,
+    } = await this.findRelatedProjectInventoryEntries(projectInventoryEntryId);
 
     const profile = entry.fallProtectionGroupId
       ? {
@@ -2402,7 +2503,10 @@ export class InventoryService {
       isFallProtectionGroup
         ? Math.min(
             1,
-            returnableEntries.reduce((total, item) => total + item.available, 0),
+            returnableEntries.reduce(
+              (total, item) => total + item.available,
+              0,
+            ),
           )
         : returnableEntries.reduce((total, item) => total + item.available, 0),
     );
@@ -2541,11 +2645,12 @@ export class InventoryService {
       orderBy: [{ createdAt: 'desc' }, { projectInventoryEntryId: 'desc' }],
     });
 
-    const officeEntries = await this.prismaService.officeInventoryEntry.findMany({
-      where: { elementId },
-      include: this.officeEntryInclude,
-      orderBy: [{ updatedAt: 'desc' }],
-    });
+    const officeEntries =
+      await this.prismaService.officeInventoryEntry.findMany({
+        where: { elementId },
+        include: this.officeEntryInclude,
+        orderBy: [{ updatedAt: 'desc' }],
+      });
 
     const movements = await this.prismaService.inventoryMovement.findMany({
       where: { elementId },
@@ -2577,8 +2682,9 @@ export class InventoryService {
           description: element.description,
           type: element.type,
           typeLabel:
-            ElementTypeLabelEs[element.type as keyof typeof ElementTypeLabelEs] ??
-            element.type,
+            ElementTypeLabelEs[
+              element.type as keyof typeof ElementTypeLabelEs
+            ] ?? element.type,
           family: element.family,
           familyLabel: element.family
             ? ElementFamilyLabelEs[element.family as ElementFamily]
@@ -2608,7 +2714,9 @@ export class InventoryService {
         },
         officeEntries: mappedOfficeEntries,
         currentLocations,
-        movementHistory: movements.map((movement) => this.mapMovement(movement)),
+        movementHistory: movements.map((movement) =>
+          this.mapMovement(movement),
+        ),
       },
     };
   }

@@ -10,10 +10,13 @@ import { UpdateRequestDto } from './dto/update-request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RequestStatus, RequestStatusLabelEs } from './enum';
 import { NotificationService } from 'src/notification/notification.service';
-import { InventoryService } from 'src/inventory/inventory.service';
 import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
 import { ListRequestsQueryDto } from './dto/list-requests-query.dto';
 import { PermissionsService } from 'src/permissions/permissions.service';
+import { CreateSsomaRequestDto } from './dto/create-ssoma-request.dto';
+import { AddRequestResourceDto } from './dto/add-request-resource.dto';
+import { ElementFamily } from 'src/element/enum/element-type.enum';
+import type { RequestMailAudit } from 'src/mail/mail.service';
 
 @Injectable()
 export class RequestService {
@@ -22,9 +25,329 @@ export class RequestService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly notificationService: NotificationService,
-    private readonly inventoryService: InventoryService,
     private readonly permissionsService: PermissionsService,
   ) {}
+
+  private readonly ssomaFamilies = new Set<string>([
+    ElementFamily.Uniform,
+    ElementFamily.Epp,
+    ElementFamily.Epi,
+    ElementFamily.Ese,
+  ]);
+
+  private validateSsomaLine(
+    line: {
+      elementId: number;
+      elementVariantId?: number | null;
+      quantity: number;
+      workerPlans?: Array<{ workerId: number; quantity: number }>;
+    },
+    element: {
+      elementId: number;
+      family: string | null;
+      variants: Array<{ elementVariantId: number }>;
+    },
+  ) {
+    if (!element.family || !this.ssomaFamilies.has(element.family)) {
+      throw new BadRequestException(
+        'El recurso seleccionado no pertenece al catálogo SSOMA.',
+      );
+    }
+
+    const variant = line.elementVariantId
+      ? element.variants.find(
+          (item) => item.elementVariantId === line.elementVariantId,
+        )
+      : null;
+    if (line.elementVariantId && !variant) {
+      throw new BadRequestException(
+        'La variante seleccionada no pertenece al recurso indicado.',
+      );
+    }
+
+    const isWorkClothing = element.family === ElementFamily.Uniform;
+    if (isWorkClothing && !variant) {
+      throw new BadRequestException(
+        'Selecciona una talla para la prenda de trabajo.',
+      );
+    }
+    if (isWorkClothing && !Number.isInteger(line.quantity)) {
+      throw new BadRequestException(
+        'La cantidad de Ropa de Trabajo debe ser un número entero.',
+      );
+    }
+    if (!isWorkClothing && line.workerPlans?.length) {
+      throw new BadRequestException(
+        'Los trabajadores previstos solo pueden asociarse a Ropa de Trabajo.',
+      );
+    }
+
+    const workerIds = (line.workerPlans || []).map((plan) => plan.workerId);
+    if (new Set(workerIds).size !== workerIds.length) {
+      throw new BadRequestException(
+        'No repitas un trabajador en la misma prenda y talla.',
+      );
+    }
+    const planned = (line.workerPlans || []).reduce(
+      (total, plan) => total + plan.quantity,
+      0,
+    );
+    if (planned > line.quantity) {
+      throw new BadRequestException(
+        'La cantidad destinada a trabajadores supera la cantidad solicitada.',
+      );
+    }
+  }
+
+  async createSsoma(createDto: CreateSsomaRequestDto, userId: number) {
+    const existing = await this.prismaService.request.findUnique({
+      where: { clientRequestId: createDto.clientRequestId },
+      select: { requestId: true },
+    });
+    if (existing) return this.findOne(existing.requestId, userId);
+
+    const project = await this.prismaService.project.findFirst({
+      where: { projectId: createDto.projectId, deletedAt: null },
+      select: { projectId: true },
+    });
+    if (!project) throw new BadRequestException('El proyecto no es válido.');
+
+    const elementIds = [
+      ...new Set(createDto.lines.map((line) => line.elementId)),
+    ];
+    const elements = await this.prismaService.element.findMany({
+      where: { elementId: { in: elementIds }, deletedAt: null },
+      select: {
+        elementId: true,
+        family: true,
+        variants: {
+          where: { deletedAt: null },
+          select: { elementVariantId: true },
+        },
+      },
+    });
+    const elementsById = new Map(
+      elements.map((item) => [item.elementId, item]),
+    );
+    for (const line of createDto.lines) {
+      const element = elementsById.get(line.elementId);
+      if (!element)
+        throw new BadRequestException('Uno de los recursos no existe.');
+      this.validateSsomaLine(line, element);
+    }
+
+    const workerIds = [
+      ...new Set(
+        createDto.lines.flatMap((line) =>
+          (line.workerPlans || []).map((plan) => plan.workerId),
+        ),
+      ),
+    ];
+    if (workerIds.length) {
+      const workerCount = await this.prismaService.worker.count({
+        where: { workerId: { in: workerIds }, deletedAt: null },
+      });
+      if (workerCount !== workerIds.length) {
+        throw new BadRequestException('Uno de los trabajadores no es válido.');
+      }
+    }
+
+    try {
+      const requestId = await this.prismaService.$transaction(
+        async (tx) => {
+          const request = await tx.request.create({
+            data: {
+              clientRequestId: createDto.clientRequestId,
+              projectId: createDto.projectId,
+              userId,
+              type: 'eppAndOperative',
+              ssomaRequestKind: createDto.ssomaRequestKind,
+              description: createDto.description?.trim() || 'Sin descripción.',
+              deliveryDueDate: createDto.deliveryDueDate
+                ? new Date(createDto.deliveryDueDate)
+                : new Date(),
+              status: 'draft',
+            },
+          });
+
+          const workerMap = new Map<number, number>();
+          for (const workerId of workerIds) {
+            const requestWorker = await tx.requestWorker.create({
+              data: { requestId: request.requestId, workerId },
+            });
+            workerMap.set(workerId, requestWorker.requestWorkerId);
+          }
+
+          for (const [index, line] of createDto.lines.entries()) {
+            const elementRequest = await tx.elementRequest.create({
+              data: {
+                requestId: request.requestId,
+                elementId: line.elementId,
+                elementVariantId: line.elementVariantId || null,
+                quantityRequested: line.quantity,
+                unit: line.unit.trim(),
+                notes: line.notes?.trim() || null,
+                lineItemOrder: index,
+              },
+            });
+            if (line.workerPlans?.length) {
+              await tx.elementRequestWorkerPlan.createMany({
+                data: line.workerPlans.map((plan) => ({
+                  elementRequestId: elementRequest.elementRequestId,
+                  requestWorkerId: workerMap.get(plan.workerId)!,
+                  elementVariantId: line.elementVariantId || null,
+                  plannedQuantity: plan.quantity,
+                })),
+              });
+            }
+          }
+          return request.requestId;
+        },
+        { isolationLevel: 'Serializable' },
+      );
+      return this.findOne(requestId, userId);
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        error.code === 'P2002'
+      ) {
+        const repeated = await this.prismaService.request.findUnique({
+          where: { clientRequestId: createDto.clientRequestId },
+          select: { requestId: true },
+        });
+        if (repeated) return this.findOne(repeated.requestId, userId);
+      }
+      throw error;
+    }
+  }
+
+  async addResource(
+    requestId: number,
+    dto: AddRequestResourceDto,
+    actorUserId: number,
+  ) {
+    const permissions = await this.permissionsService.forUser(actorUserId);
+    if (!permissions.includes('requests.addResource')) {
+      throw new NotFoundException('El requerimiento no fue encontrado.');
+    }
+    const request = await this.prismaService.request.findUnique({
+      where: { requestId },
+      select: { requestId: true },
+    });
+    if (!request)
+      throw new NotFoundException('El requerimiento no fue encontrado.');
+
+    const element = await this.prismaService.element.findFirst({
+      where: { elementId: dto.elementId, deletedAt: null },
+      select: {
+        elementId: true,
+        family: true,
+        variants: {
+          where: { deletedAt: null },
+          select: { elementVariantId: true },
+        },
+      },
+    });
+    if (!element) throw new BadRequestException('El recurso no existe.');
+    this.validateSsomaLine(dto, element);
+
+    const workerIds = (dto.workerPlans || []).map((plan) => plan.workerId);
+    if (workerIds.length) {
+      const count = await this.prismaService.worker.count({
+        where: { workerId: { in: workerIds }, deletedAt: null },
+      });
+      if (count !== workerIds.length) {
+        throw new BadRequestException('Uno de los trabajadores no es válido.');
+      }
+    }
+
+    const origin = permissions.includes('requests.attend')
+      ? 'logistics'
+      : 'administration';
+    const addition = await this.prismaService.$transaction(
+      async (tx) =>
+        tx.requestResourceAddition.create({
+          data: {
+            requestId,
+            elementId: dto.elementId,
+            elementVariantId: dto.elementVariantId || null,
+            quantity: dto.quantity,
+            unit: dto.unit.trim(),
+            notes: dto.notes?.trim() || null,
+            origin,
+            addedByUserId: actorUserId,
+            workerPlans: dto.workerPlans?.length
+              ? {
+                  create: dto.workerPlans.map((plan) => ({
+                    workerId: plan.workerId,
+                    plannedQuantity: plan.quantity,
+                  })),
+                }
+              : undefined,
+          },
+          include: {
+            element: true,
+            elementVariant: true,
+            addedByUser: {
+              select: { userId: true, name: true, lastName: true },
+            },
+            workerPlans: { include: { worker: true } },
+          },
+        }),
+      { isolationLevel: 'Serializable' },
+    );
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Recurso incorporado con trazabilidad.',
+      data: addition,
+    };
+  }
+
+  async recordEmailAttempt(
+    requestId: number,
+    actorUserId: number,
+    audit: RequestMailAudit | null,
+    result: {
+      statusCode: number;
+      message: string;
+      data?: unknown;
+    },
+    operationId?: string,
+  ) {
+    const providerMessageId =
+      result.data &&
+      typeof result.data === 'object' &&
+      'messageId' in result.data &&
+      typeof result.data.messageId === 'string'
+        ? result.data.messageId
+        : null;
+    return this.prismaService.requestEmailSend.create({
+      data: {
+        operationId: operationId || null,
+        requestId,
+        sentByUserId: actorUserId,
+        recipients: audit?.recipients ?? [],
+        status:
+          result.statusCode === Number(HttpStatus.OK) ? 'accepted' : 'failed',
+        providerMessageId,
+        subject:
+          audit?.subject ?? `Intento de envío del requerimiento #${requestId}`,
+        htmlSnapshot: audit?.htmlSnapshot ?? '',
+        errorMessage:
+          result.statusCode === Number(HttpStatus.OK) ? null : result.message,
+        isUpdate: audit?.isUpdate ?? false,
+      },
+    });
+  }
+
+  async findEmailAttempt(operationId: string) {
+    return this.prismaService.requestEmailSend.findUnique({
+      where: { operationId },
+      select: { status: true, errorMessage: true },
+    });
+  }
 
   private async assertCanUpdateStatus(
     request: {
@@ -162,6 +485,9 @@ export class RequestService {
       throw new NotFoundException('La solicitud no fue encontrada');
     }
 
+    const permissions = await this.permissionsService.forUser(actorUserId);
+    if (permissions.includes('requests.sendEmail')) return;
+
     await this.assertCanUpdateStatus(
       { userId: request.userId, status: request.status as RequestStatus },
       RequestStatus.inProgress,
@@ -269,6 +595,7 @@ export class RequestService {
             };
     const where = {
       projectId: query.projectId,
+      ssomaRequestKind: query.ssomaRequestKind,
       ...(query.userId ? { userId: query.userId } : {}),
       ...visibility,
       ...(search
@@ -393,6 +720,37 @@ export class RequestService {
           include: {
             worker: true,
           },
+        },
+        resourceAdditions: {
+          include: {
+            element: { include: { category: true } },
+            elementVariant: true,
+            addedByUser: {
+              select: { userId: true, name: true, lastName: true },
+            },
+            workerPlans: { include: { worker: true } },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+        emailSends: {
+          select: {
+            requestEmailSendId: true,
+            recipients: true,
+            status: true,
+            providerMessageId: true,
+            subject: true,
+            errorMessage: true,
+            isUpdate: true,
+            createdAt: true,
+            sentByUser: {
+              select: { userId: true, name: true, lastName: true },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+        },
+        workClothingDispatches: {
+          include: { items: true },
+          orderBy: { dispatchedAt: 'desc' },
         },
       },
     });
@@ -577,13 +935,6 @@ export class RequestService {
       status,
       actorUserId,
     );
-
-    if (status === RequestStatus.completed) {
-      return await this.inventoryService.receiveRequestIntoProjectInventory(
-        requestId,
-        actorUserId!,
-      );
-    }
 
     const previousStatus = existingRequest.status;
 

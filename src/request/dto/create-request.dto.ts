@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { RequestType } from '../enum';
+import { RequestType, SsomaRequestKind } from '../enum';
 import {
   IsDateString,
   IsEnum,
@@ -35,4 +35,15 @@ export class CreateRequestDto {
   @IsEnum(RequestType)
   @IsNotEmpty({ message: 'El tipo de solicitud es requerido.' })
   type!: RequestType;
+
+  @ApiProperty({
+    enum: SsomaRequestKind,
+    enumName: 'SsomaRequestKind',
+    example: SsomaRequestKind.ProjectStart,
+  })
+  @IsEnum(SsomaRequestKind, {
+    message: 'Selecciona Inicio de Obra o Durante la Ejecución.',
+  })
+  @IsNotEmpty({ message: 'El tipo de requerimiento SSOMA es requerido.' })
+  ssomaRequestKind!: SsomaRequestKind;
 }

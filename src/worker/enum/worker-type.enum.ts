@@ -4,7 +4,6 @@ export enum WorkerType {
   Engineer = 'engineer',
   Administrator = 'administrator',
   Manager = 'manager',
-  Unspecified = 'unspecified',
 }
 
 export const WorkerTypeLabelEs: Record<WorkerType, string> = {
@@ -13,5 +12,4 @@ export const WorkerTypeLabelEs: Record<WorkerType, string> = {
   [WorkerType.Engineer]: 'Ingeniero',
   [WorkerType.Administrator]: 'Administrador(a)',
   [WorkerType.Manager]: 'Gerente',
-  [WorkerType.Unspecified]: 'No Especificado',
 };

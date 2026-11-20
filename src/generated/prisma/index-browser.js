@@ -153,6 +153,7 @@ exports.Prisma.ProjectScalarFieldEnum = {
   code: 'code',
   description: 'description',
   status: 'status',
+  type: 'type',
   location: 'location',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -245,12 +246,14 @@ exports.Prisma.ElementVariantScalarFieldEnum = {
 
 exports.Prisma.RequestScalarFieldEnum = {
   requestId: 'requestId',
+  clientRequestId: 'clientRequestId',
   deliveryDueDate: 'deliveryDueDate',
   status: 'status',
   description: 'description',
   userId: 'userId',
   projectId: 'projectId',
   type: 'type',
+  ssomaRequestKind: 'ssomaRequestKind',
   inventoryLoadedAt: 'inventoryLoadedAt',
   inventoryReceivedByUserId: 'inventoryReceivedByUserId',
   createdAt: 'createdAt',
@@ -280,6 +283,42 @@ exports.Prisma.ElementRequestScalarFieldEnum = {
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RequestResourceAdditionScalarFieldEnum = {
+  requestResourceAdditionId: 'requestResourceAdditionId',
+  requestId: 'requestId',
+  elementId: 'elementId',
+  elementVariantId: 'elementVariantId',
+  quantity: 'quantity',
+  unit: 'unit',
+  origin: 'origin',
+  addedByUserId: 'addedByUserId',
+  notes: 'notes',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RequestResourceAdditionWorkerPlanScalarFieldEnum = {
+  requestResourceAdditionWorkerPlanId: 'requestResourceAdditionWorkerPlanId',
+  requestResourceAdditionId: 'requestResourceAdditionId',
+  workerId: 'workerId',
+  plannedQuantity: 'plannedQuantity',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RequestEmailSendScalarFieldEnum = {
+  requestEmailSendId: 'requestEmailSendId',
+  operationId: 'operationId',
+  requestId: 'requestId',
+  sentByUserId: 'sentByUserId',
+  recipients: 'recipients',
+  status: 'status',
+  providerMessageId: 'providerMessageId',
+  subject: 'subject',
+  htmlSnapshot: 'htmlSnapshot',
+  errorMessage: 'errorMessage',
+  isUpdate: 'isUpdate',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.ElementRequestWorkerPlanScalarFieldEnum = {
@@ -340,6 +379,8 @@ exports.Prisma.InventoryMovementScalarFieldEnum = {
   quantity: 'quantity',
   performedByUserId: 'performedByUserId',
   responsibleUserId: 'responsibleUserId',
+  workClothingDispatchItemId: 'workClothingDispatchItemId',
+  workClothingReturnItemId: 'workClothingReturnItemId',
   notes: 'notes',
   createdAt: 'createdAt'
 };
@@ -474,6 +515,137 @@ exports.Prisma.WorkerInventoryAssignmentScalarFieldEnum = {
   assignedAt: 'assignedAt',
   returnedAt: 'returnedAt',
   notes: 'notes'
+};
+
+exports.Prisma.WorkClothingDispatchScalarFieldEnum = {
+  workClothingDispatchId: 'workClothingDispatchId',
+  clientRequestId: 'clientRequestId',
+  projectId: 'projectId',
+  custodianUserId: 'custodianUserId',
+  requestId: 'requestId',
+  dispatchedByUserId: 'dispatchedByUserId',
+  receivedByUserId: 'receivedByUserId',
+  dispatchedAt: 'dispatchedAt',
+  receivedAt: 'receivedAt',
+  status: 'status',
+  observations: 'observations',
+  discrepancyNotes: 'discrepancyNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkClothingDispatchItemScalarFieldEnum = {
+  workClothingDispatchItemId: 'workClothingDispatchItemId',
+  workClothingDispatchId: 'workClothingDispatchId',
+  officeInventoryEntryId: 'officeInventoryEntryId',
+  elementId: 'elementId',
+  elementVariantId: 'elementVariantId',
+  elementRequestId: 'elementRequestId',
+  elementNameSnapshot: 'elementNameSnapshot',
+  variantLabelSnapshot: 'variantLabelSnapshot',
+  quantityDispatched: 'quantityDispatched',
+  quantityReceived: 'quantityReceived',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.WorkClothingCustodyBalanceScalarFieldEnum = {
+  workClothingCustodyBalanceId: 'workClothingCustodyBalanceId',
+  projectId: 'projectId',
+  custodianUserId: 'custodianUserId',
+  elementId: 'elementId',
+  elementVariantId: 'elementVariantId',
+  quantityReceived: 'quantityReceived',
+  quantityDelivered: 'quantityDelivered',
+  quantityReturnInTransit: 'quantityReturnInTransit',
+  quantityReturned: 'quantityReturned',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkClothingDeliveryScalarFieldEnum = {
+  workClothingDeliveryId: 'workClothingDeliveryId',
+  clientRequestId: 'clientRequestId',
+  projectId: 'projectId',
+  custodianUserId: 'custodianUserId',
+  workerId: 'workerId',
+  deliveredByUserId: 'deliveredByUserId',
+  deliveredAt: 'deliveredAt',
+  status: 'status',
+  observations: 'observations',
+  annulledAt: 'annulledAt',
+  annulledByUserId: 'annulledByUserId',
+  annulmentReason: 'annulmentReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkClothingDeliveryItemScalarFieldEnum = {
+  workClothingDeliveryItemId: 'workClothingDeliveryItemId',
+  workClothingDeliveryId: 'workClothingDeliveryId',
+  elementId: 'elementId',
+  elementVariantId: 'elementVariantId',
+  elementNameSnapshot: 'elementNameSnapshot',
+  variantLabelSnapshot: 'variantLabelSnapshot',
+  quantity: 'quantity',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.WorkClothingReturnScalarFieldEnum = {
+  workClothingReturnId: 'workClothingReturnId',
+  clientRequestId: 'clientRequestId',
+  projectId: 'projectId',
+  custodianUserId: 'custodianUserId',
+  createdByUserId: 'createdByUserId',
+  confirmedByUserId: 'confirmedByUserId',
+  returnedAt: 'returnedAt',
+  confirmedAt: 'confirmedAt',
+  status: 'status',
+  observations: 'observations',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkClothingReturnItemScalarFieldEnum = {
+  workClothingReturnItemId: 'workClothingReturnItemId',
+  workClothingReturnId: 'workClothingReturnId',
+  officeInventoryEntryId: 'officeInventoryEntryId',
+  elementId: 'elementId',
+  elementVariantId: 'elementVariantId',
+  elementNameSnapshot: 'elementNameSnapshot',
+  variantLabelSnapshot: 'variantLabelSnapshot',
+  quantity: 'quantity',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.StaffPayrollProfileScalarFieldEnum = {
+  staffPayrollProfileId: 'staffPayrollProfileId',
+  workerId: 'workerId',
+  monthlyBaseRemuneration: 'monthlyBaseRemuneration',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StaffPayrollScalarFieldEnum = {
+  staffPayrollId: 'staffPayrollId',
+  year: 'year',
+  month: 'month',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StaffPayrollEntryScalarFieldEnum = {
+  staffPayrollEntryId: 'staffPayrollEntryId',
+  staffPayrollId: 'staffPayrollId',
+  workerId: 'workerId',
+  workerNameSnapshot: 'workerNameSnapshot',
+  workerDniSnapshot: 'workerDniSnapshot',
+  workerTypeSnapshot: 'workerTypeSnapshot',
+  baseRemuneration: 'baseRemuneration',
+  additionalIncome: 'additionalIncome',
+  manualDiscounts: 'manualDiscounts',
+  observations: 'observations',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.MonthlyEvaluationTemplateScalarFieldEnum = {
@@ -835,6 +1007,7 @@ exports.Prisma.QuotationScalarFieldEnum = {
   serviceDescription: 'serviceDescription',
   clientId: 'clientId',
   status: 'status',
+  type: 'type',
   commercialTerms: 'commercialTerms',
   costDirectAmount: 'costDirectAmount',
   igvRate: 'igvRate',
@@ -909,6 +1082,146 @@ exports.Prisma.ExpiringDocumentNotificationScalarFieldEnum = {
   sentAt: 'sentAt'
 };
 
+exports.Prisma.SsomaTalkScalarFieldEnum = {
+  ssomaTalkId: 'ssomaTalkId',
+  projectId: 'projectId',
+  createdByUserId: 'createdByUserId',
+  talkDate: 'talkDate',
+  topic: 'topic',
+  trainer: 'trainer',
+  location: 'location',
+  targetAudience: 'targetAudience',
+  scheduledTime: 'scheduledTime',
+  durationMinutes: 'durationMinutes',
+  observations: 'observations',
+  responsibleName: 'responsibleName',
+  responsiblePosition: 'responsiblePosition',
+  activityType: 'activityType',
+  otherActivityText: 'otherActivityText',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SsomaTalkAttendanceScalarFieldEnum = {
+  ssomaTalkAttendanceId: 'ssomaTalkAttendanceId',
+  ssomaTalkId: 'ssomaTalkId',
+  workerId: 'workerId',
+  attendanceDate: 'attendanceDate',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SsomaSignatureEvidenceScalarFieldEnum = {
+  ssomaSignatureEvidenceId: 'ssomaSignatureEvidenceId',
+  ssomaTalkAttendanceId: 'ssomaTalkAttendanceId',
+  ssomaTalkId: 'ssomaTalkId',
+  workerId: 'workerId',
+  attendanceDate: 'attendanceDate',
+  status: 'status',
+  objectReference: 'objectReference',
+  sha256: 'sha256',
+  metadata: 'metadata',
+  retentionPolicyVersion: 'retentionPolicyVersion',
+  retentionDays: 'retentionDays',
+  deletionEligibleAt: 'deletionEligibleAt',
+  deletionAttemptCount: 'deletionAttemptCount',
+  lastDeletionAttemptAt: 'lastDeletionAttemptAt',
+  lastDeletionError: 'lastDeletionError',
+  deletedAt: 'deletedAt',
+  verifiedDocumentVersionTalkId: 'verifiedDocumentVersionTalkId',
+  verifiedDocumentVersionId: 'verifiedDocumentVersionId',
+  backupMetadata: 'backupMetadata',
+  purgeMetadata: 'purgeMetadata',
+  exceptionalHoldReason: 'exceptionalHoldReason',
+  exceptionalHoldSetAt: 'exceptionalHoldSetAt',
+  exceptionalHoldSetByUserId: 'exceptionalHoldSetByUserId',
+  exceptionalHoldUntil: 'exceptionalHoldUntil',
+  exceptionalHoldMetadata: 'exceptionalHoldMetadata',
+  publicationHoldReference: 'publicationHoldReference',
+  publicationHoldReason: 'publicationHoldReason',
+  publicationHoldUntil: 'publicationHoldUntil',
+  revisionHoldReference: 'revisionHoldReference',
+  revisionHoldReason: 'revisionHoldReason',
+  revisionHoldUntil: 'revisionHoldUntil',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SsomaTalkAuditEventScalarFieldEnum = {
+  ssomaTalkAuditEventId: 'ssomaTalkAuditEventId',
+  ssomaTalkId: 'ssomaTalkId',
+  attendanceTalkId: 'attendanceTalkId',
+  ssomaTalkAttendanceId: 'ssomaTalkAttendanceId',
+  actorUserId: 'actorUserId',
+  eventType: 'eventType',
+  previousState: 'previousState',
+  newState: 'newState',
+  changedFields: 'changedFields',
+  reason: 'reason',
+  serverAt: 'serverAt',
+  documentVersionTalkId: 'documentVersionTalkId',
+  ssomaTalkDocumentVersionId: 'ssomaTalkDocumentVersionId'
+};
+
+exports.Prisma.SsomaTalkRevisionScalarFieldEnum = {
+  ssomaTalkRevisionId: 'ssomaTalkRevisionId',
+  ssomaTalkId: 'ssomaTalkId',
+  revisionNumber: 'revisionNumber',
+  authoredByUserId: 'authoredByUserId',
+  snapshot: 'snapshot',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SsomaTalkDocumentVersionScalarFieldEnum = {
+  ssomaTalkDocumentVersionId: 'ssomaTalkDocumentVersionId',
+  ssomaTalkId: 'ssomaTalkId',
+  versionNumber: 'versionNumber',
+  status: 'status',
+  objectReference: 'objectReference',
+  sha256: 'sha256',
+  byteSize: 'byteSize',
+  replacesVersionTalkId: 'replacesVersionTalkId',
+  replacesVersionId: 'replacesVersionId',
+  officialDocumentSnapshot: 'officialDocumentSnapshot',
+  verifiedAt: 'verifiedAt',
+  verifiedSha256: 'verifiedSha256',
+  verificationMethod: 'verificationMethod',
+  publishedAt: 'publishedAt',
+  currentAt: 'currentAt',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SsomaDocumentPublicationScalarFieldEnum = {
+  ssomaDocumentPublicationId: 'ssomaDocumentPublicationId',
+  ssomaTalkId: 'ssomaTalkId',
+  documentVersionTalkId: 'documentVersionTalkId',
+  ssomaTalkDocumentVersionId: 'ssomaTalkDocumentVersionId',
+  actorUserId: 'actorUserId',
+  status: 'status',
+  idempotencyKey: 'idempotencyKey',
+  failureCode: 'failureCode',
+  failureDetail: 'failureDetail',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.SsomaSignatureDeletionJobScalarFieldEnum = {
+  ssomaSignatureDeletionJobId: 'ssomaSignatureDeletionJobId',
+  ssomaSignatureEvidenceId: 'ssomaSignatureEvidenceId',
+  idempotencyKey: 'idempotencyKey',
+  status: 'status',
+  attemptCount: 'attemptCount',
+  nextAttemptAt: 'nextAttemptAt',
+  lastAttemptAt: 'lastAttemptAt',
+  lastError: 'lastError',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -944,6 +1257,12 @@ exports.ProjectStatus = exports.$Enums.ProjectStatus = {
   completed: 'completed'
 };
 
+exports.ProjectType = exports.$Enums.ProjectType = {
+  works: 'works',
+  services: 'services',
+  consulting: 'consulting'
+};
+
 exports.ElementType = exports.$Enums.ElementType = {
   epp: 'epp',
   operative: 'operative'
@@ -952,12 +1271,19 @@ exports.ElementType = exports.$Enums.ElementType = {
 exports.ElementFamily = exports.$Enums.ElementFamily = {
   epp: 'epp',
   epi: 'epi',
+  ese: 'ese',
+  measurement: 'measurement',
+  consumible: 'consumible',
+  eq_safety: 'eq_safety',
+  harness: 'harness',
   uniform: 'uniform',
   officeMaterial: 'officeMaterial',
   ssomaSupply: 'ssomaSupply',
-  ese: 'ese',
-  harness: 'harness',
-  measurement: 'measurement'
+  electricalEquipment: 'electricalEquipment',
+  tools: 'tools',
+  ladders: 'ladders',
+  materials: 'materials',
+  electricalHarness: 'electricalHarness'
 };
 
 exports.ElementControlType = exports.$Enums.ElementControlType = {
@@ -989,6 +1315,21 @@ exports.RequestType = exports.$Enums.RequestType = {
   eppAndOperative: 'eppAndOperative'
 };
 
+exports.SsomaRequestKind = exports.$Enums.SsomaRequestKind = {
+  projectStart: 'projectStart',
+  duringExecution: 'duringExecution'
+};
+
+exports.RequestResourceOrigin = exports.$Enums.RequestResourceOrigin = {
+  logistics: 'logistics',
+  administration: 'administration'
+};
+
+exports.RequestEmailStatus = exports.$Enums.RequestEmailStatus = {
+  accepted: 'accepted',
+  failed: 'failed'
+};
+
 exports.InventoryMovementType = exports.$Enums.InventoryMovementType = {
   office_entry: 'office_entry',
   request_received: 'request_received',
@@ -999,7 +1340,9 @@ exports.InventoryMovementType = exports.$Enums.InventoryMovementType = {
   disposal: 'disposal',
   adjustment: 'adjustment',
   maintenance_out: 'maintenance_out',
-  maintenance_return: 'maintenance_return'
+  maintenance_return: 'maintenance_return',
+  work_clothing_dispatch: 'work_clothing_dispatch',
+  work_clothing_return: 'work_clothing_return'
 };
 
 exports.InventoryLocation = exports.$Enums.InventoryLocation = {
@@ -1050,8 +1393,7 @@ exports.WorkerType = exports.$Enums.WorkerType = {
   technician: 'technician',
   engineer: 'engineer',
   administrator: 'administrator',
-  manager: 'manager',
-  unspecified: 'unspecified'
+  manager: 'manager'
 };
 
 exports.WorkerInventoryAssignmentStatus = exports.$Enums.WorkerInventoryAssignmentStatus = {
@@ -1059,6 +1401,23 @@ exports.WorkerInventoryAssignmentStatus = exports.$Enums.WorkerInventoryAssignme
   partially_returned: 'partially_returned',
   returned: 'returned',
   regularized: 'regularized'
+};
+
+exports.WorkClothingDispatchStatus = exports.$Enums.WorkClothingDispatchStatus = {
+  inTransit: 'inTransit',
+  received: 'received',
+  discrepancy: 'discrepancy'
+};
+
+exports.WorkClothingDeliveryStatus = exports.$Enums.WorkClothingDeliveryStatus = {
+  registered: 'registered',
+  annulled: 'annulled'
+};
+
+exports.WorkClothingReturnStatus = exports.$Enums.WorkClothingReturnStatus = {
+  pending: 'pending',
+  confirmed: 'confirmed',
+  cancelled: 'cancelled'
 };
 
 exports.MonthlyEvaluationQuestionType = exports.$Enums.MonthlyEvaluationQuestionType = {
@@ -1167,8 +1526,14 @@ exports.NotificationType = exports.$Enums.NotificationType = {
 exports.QuotationStatus = exports.$Enums.QuotationStatus = {
   draft: 'draft',
   sent: 'sent',
-  approved: 'approved',
-  accepted: 'accepted'
+  accepted: 'accepted',
+  rejected: 'rejected'
+};
+
+exports.QuotationType = exports.$Enums.QuotationType = {
+  works: 'works',
+  services: 'services',
+  consulting: 'consulting'
 };
 
 exports.ExpiringDocumentHistoryAction = exports.$Enums.ExpiringDocumentHistoryAction = {
@@ -1182,6 +1547,60 @@ exports.ExpiringDocumentAlertLevel = exports.$Enums.ExpiringDocumentAlertLevel =
   first: 'first',
   second: 'second',
   third: 'third'
+};
+
+exports.SsomaActivityType = exports.$Enums.SsomaActivityType = {
+  INDUCTION: 'INDUCTION',
+  TALK: 'TALK',
+  TRAINING: 'TRAINING',
+  PRACTICE: 'PRACTICE',
+  DRILL: 'DRILL',
+  OTHER: 'OTHER'
+};
+
+exports.SsomaTalkStatus = exports.$Enums.SsomaTalkStatus = {
+  draft: 'draft',
+  inProgress: 'inProgress',
+  open: 'open',
+  closing: 'closing',
+  closed: 'closed',
+  voided: 'voided',
+  annulled: 'annulled'
+};
+
+exports.SsomaAttendanceStatus = exports.$Enums.SsomaAttendanceStatus = {
+  PENDING: 'PENDING',
+  SIGNING: 'SIGNING',
+  SIGNED: 'SIGNED',
+  DECLINED: 'DECLINED',
+  REMOVED: 'REMOVED',
+  VOIDED: 'VOIDED'
+};
+
+exports.SsomaSignatureEvidenceStatus = exports.$Enums.SsomaSignatureEvidenceStatus = {
+  ACTIVE: 'ACTIVE',
+  PENDING_DELETION: 'PENDING_DELETION',
+  DELETING: 'DELETING',
+  DELETED: 'DELETED',
+  DELETE_FAILED: 'DELETE_FAILED'
+};
+
+exports.SsomaDocumentVersionStatus = exports.$Enums.SsomaDocumentVersionStatus = {
+  CURRENT: 'CURRENT',
+  HISTORICAL: 'HISTORICAL'
+};
+
+exports.SsomaPublicationStatus = exports.$Enums.SsomaPublicationStatus = {
+  PENDING: 'PENDING',
+  PUBLISHED: 'PUBLISHED',
+  FAILED: 'FAILED'
+};
+
+exports.SsomaDeletionJobStatus = exports.$Enums.SsomaDeletionJobStatus = {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED'
 };
 
 exports.Prisma.ModelName = {
@@ -1199,6 +1618,9 @@ exports.Prisma.ModelName = {
   Request: 'Request',
   RequestWorker: 'RequestWorker',
   ElementRequest: 'ElementRequest',
+  RequestResourceAddition: 'RequestResourceAddition',
+  RequestResourceAdditionWorkerPlan: 'RequestResourceAdditionWorkerPlan',
+  RequestEmailSend: 'RequestEmailSend',
   ElementRequestWorkerPlan: 'ElementRequestWorkerPlan',
   RequestResponse: 'RequestResponse',
   ProjectInventoryEntry: 'ProjectInventoryEntry',
@@ -1214,6 +1636,16 @@ exports.Prisma.ModelName = {
   Complaint: 'Complaint',
   Worker: 'Worker',
   WorkerInventoryAssignment: 'WorkerInventoryAssignment',
+  WorkClothingDispatch: 'WorkClothingDispatch',
+  WorkClothingDispatchItem: 'WorkClothingDispatchItem',
+  WorkClothingCustodyBalance: 'WorkClothingCustodyBalance',
+  WorkClothingDelivery: 'WorkClothingDelivery',
+  WorkClothingDeliveryItem: 'WorkClothingDeliveryItem',
+  WorkClothingReturn: 'WorkClothingReturn',
+  WorkClothingReturnItem: 'WorkClothingReturnItem',
+  StaffPayrollProfile: 'StaffPayrollProfile',
+  StaffPayroll: 'StaffPayroll',
+  StaffPayrollEntry: 'StaffPayrollEntry',
   MonthlyEvaluationTemplate: 'MonthlyEvaluationTemplate',
   MonthlyEvaluationTemplateVersion: 'MonthlyEvaluationTemplateVersion',
   MonthlyEvaluationSection: 'MonthlyEvaluationSection',
@@ -1248,7 +1680,15 @@ exports.Prisma.ModelName = {
   ExpiringDocumentCategory: 'ExpiringDocumentCategory',
   ExpiringDocument: 'ExpiringDocument',
   ExpiringDocumentHistory: 'ExpiringDocumentHistory',
-  ExpiringDocumentNotification: 'ExpiringDocumentNotification'
+  ExpiringDocumentNotification: 'ExpiringDocumentNotification',
+  SsomaTalk: 'SsomaTalk',
+  SsomaTalkAttendance: 'SsomaTalkAttendance',
+  SsomaSignatureEvidence: 'SsomaSignatureEvidence',
+  SsomaTalkAuditEvent: 'SsomaTalkAuditEvent',
+  SsomaTalkRevision: 'SsomaTalkRevision',
+  SsomaTalkDocumentVersion: 'SsomaTalkDocumentVersion',
+  SsomaDocumentPublication: 'SsomaDocumentPublication',
+  SsomaSignatureDeletionJob: 'SsomaSignatureDeletionJob'
 };
 
 /**

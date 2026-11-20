@@ -10,6 +10,8 @@ export class UpdateQuotationDto extends PartialType(CreateQuotationDto) {
     example: QuotationStatus.Draft,
   })
   @IsOptional()
-  @IsEnum(QuotationStatus)
+  @IsEnum(QuotationStatus, {
+    message: `Estado de cotización inválido. Los valores permitidos son: ${Object.values(QuotationStatus).join(', ')}.`,
+  })
   status?: QuotationStatus;
 }

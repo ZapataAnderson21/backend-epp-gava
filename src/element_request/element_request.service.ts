@@ -120,13 +120,46 @@ export class ElementRequestService {
       throw new NotFoundException('Elemento no encontrado.');
     }
 
-    if (dto.elementVariantId) {
+    const family = this.resolveElementFamily(element.family);
+    const request = await this.prismaService.request.findUnique({
+      where: { requestId: resolvedRequestId },
+      select: { ssomaRequestKind: true },
+    });
+    if (!request) {
+      throw new NotFoundException('Requerimiento no encontrado.');
+    }
+    if (
+      request.ssomaRequestKind &&
+      !new Set<ElementFamily>([
+        ElementFamily.Uniform,
+        ElementFamily.Epp,
+        ElementFamily.Epi,
+        ElementFamily.Ese,
+      ]).has(family as ElementFamily)
+    ) {
       throw new BadRequestException(
-        'Cada talla debe registrarse como un elemento independiente.',
+        'Los requerimientos SSOMA solo admiten Ropa de Trabajo, EPP y Equipos de Seguridad.',
       );
     }
-
-    const family = this.resolveElementFamily(element.family);
+    const variant = dto.elementVariantId
+      ? element.variants.find(
+          (candidate) => candidate.elementVariantId === dto.elementVariantId,
+        )
+      : null;
+    if (dto.elementVariantId && !variant) {
+      throw new BadRequestException(
+        'La talla seleccionada no pertenece a la prenda indicada.',
+      );
+    }
+    if (
+      request.ssomaRequestKind &&
+      family === ElementFamily.Uniform &&
+      !variant
+    ) {
+      throw new BadRequestException(
+        'Selecciona una talla para la prenda de trabajo.',
+      );
+    }
     const usesUniqueInventory = family
       ? ElementFamilyUsesUniqueInventory[family]
       : false;
@@ -142,7 +175,7 @@ export class ElementRequestService {
 
     return {
       elementId: resolvedElementId,
-      elementVariantId: null,
+      elementVariantId: variant?.elementVariantId ?? null,
       fallProtectionGroupId: isSsomaSupply
         ? null
         : (fallProtectionGroup?.fallProtectionGroupId ?? null),
@@ -279,7 +312,9 @@ export class ElementRequestService {
         elementId:
           updateElementRequestDto.elementId ??
           existingElementRequest.data.elementId,
-        elementVariantId: null,
+        elementVariantId:
+          updateElementRequestDto.elementVariantId ??
+          existingElementRequest.data.elementVariantId,
         requestId:
           updateElementRequestDto.requestId ??
           existingElementRequest.data.requestId,

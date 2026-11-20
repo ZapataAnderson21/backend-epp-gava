@@ -40,6 +40,8 @@ import { PurchaseOrderConditionModule } from './purchase-order-condition/purchas
 import { GeneralPayrollModule } from './general-payroll/general-payroll.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SsomaModule } from './ssoma/ssoma.module';
+import { StaffPayrollModule } from './staff-payroll/staff-payroll.module';
+import { WorkClothingModule } from './work-clothing/work-clothing.module';
 
 @Module({
   imports: [
@@ -78,6 +80,8 @@ import { SsomaModule } from './ssoma/ssoma.module';
     GeneralPayrollModule,
     DashboardModule,
     SsomaModule,
+    StaffPayrollModule,
+    WorkClothingModule,
   ],
   controllers: [],
   providers: [
