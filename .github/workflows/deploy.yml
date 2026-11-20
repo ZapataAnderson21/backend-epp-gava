@@ -1,10 +1,15 @@
-name: Deploy Backend EPP
+name: Validate and Deploy Backend EPP
 
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      deploy_commit:
+        description: Commit SHA exacto de main autorizado para producción
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -14,21 +19,35 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  verify:
+    name: Verificar backend
     runs-on: ubuntu-24.04
 
     steps:
       - name: Descargar código
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Configurar Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: "22"
+          node-version: '22'
           cache: npm
 
       - name: Instalar dependencias
         run: npm ci --no-audit --no-fund
+
+      - name: Validar migraciones y despliegue
+        env:
+          DATABASE_URL: postgresql://build:build@localhost:5432/build
+        run: |
+          npm run prisma:validate
+          npm run db:check-deploy-sql
+          npm run test:deploy-sql
+          npm run test:deploy-workflow
+          npm run test:deploy-reference
+          npm run test:deploy-proposed
 
       - name: Compilar backend
         env:
@@ -50,6 +69,82 @@ jobs:
             exit 1
           }
 
+  deploy:
+    name: Publicar en producción
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs: verify
+    runs-on: ubuntu-24.04
+    environment:
+      name: production
+
+    steps:
+      - name: Confirmar autorización del commit
+        shell: bash
+        env:
+          AUTHORIZED_COMMIT: ${{ inputs.deploy_commit }}
+        run: |
+          set -euo pipefail
+
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "Solo se permite desplegar desde main."
+            exit 1
+          fi
+
+          if [ "$AUTHORIZED_COMMIT" != "$GITHUB_SHA" ]; then
+            echo "El commit autorizado no coincide con el commit del workflow."
+            exit 1
+          fi
+
+      - name: Descargar código autorizado
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci --no-audit --no-fund
+
+      - name: Compilar artefacto autorizado
+        env:
+          DATABASE_URL: postgresql://build:build@localhost:5432/build
+        run: npm run build
+
+      - name: Validar artefacto y calcular manifiestos
+        id: manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -s dist/main.js
+          test -d dist/generated/prisma
+
+          migration_count="$(find prisma/migrations -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')"
+          schema_sha256="$(sha256sum prisma/schema.prisma | awk '{print $1}')"
+          migrations_sha256="$({
+            find prisma/migrations -type f -name migration.sql -print0 \
+              | sort -z \
+              | xargs -0 sha256sum
+          } | sha256sum | awk '{print $1}')"
+          artifact_sha256="$(
+            cd dist
+            find . -type f -print0 \
+              | sort -z \
+              | xargs -0 sha256sum \
+              | sha256sum \
+              | awk '{print $1}'
+          )"
+
+          echo "migration_count=$migration_count" >>"$GITHUB_OUTPUT"
+          echo "schema_sha256=$schema_sha256" >>"$GITHUB_OUTPUT"
+          echo "migrations_sha256=$migrations_sha256" >>"$GITHUB_OUTPUT"
+          echo "artifact_sha256=$artifact_sha256" >>"$GITHUB_OUTPUT"
+
       - name: Enviar artefacto al VPS
         uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345 # v1
         with:
@@ -57,8 +152,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
-          source: "dist"
-          target: "/tmp/backend-epp-${{ github.sha }}"
+          source: 'dist'
+          target: '/tmp/backend-epp-${{ github.sha }}'
           strip_components: 1
           rm: true
           command_timeout: 10m
@@ -68,13 +163,17 @@ jobs:
         env:
           BACKEND_PATH: ${{ secrets.VPS_BACKEND_PATH }}
           DEPLOY_COMMIT: ${{ github.sha }}
+          EXPECTED_MIGRATION_COUNT: ${{ steps.manifests.outputs.migration_count }}
+          EXPECTED_MIGRATIONS_SHA256: ${{ steps.manifests.outputs.migrations_sha256 }}
+          EXPECTED_SCHEMA_SHA256: ${{ steps.manifests.outputs.schema_sha256 }}
+          EXPECTED_ARTIFACT_SHA256: ${{ steps.manifests.outputs.artifact_sha256 }}
           STAGING_DIR: /tmp/backend-epp-${{ github.sha }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
-          envs: BACKEND_PATH,DEPLOY_COMMIT,STAGING_DIR
+          envs: BACKEND_PATH,DEPLOY_COMMIT,EXPECTED_MIGRATION_COUNT,EXPECTED_MIGRATIONS_SHA256,EXPECTED_SCHEMA_SHA256,EXPECTED_ARTIFACT_SHA256,STAGING_DIR
           command_timeout: 30m
           script: |
             set -euo pipefail
