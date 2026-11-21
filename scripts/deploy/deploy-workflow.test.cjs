@@ -18,6 +18,18 @@ test('pushes to main validate automatically but cannot deploy', () => {
   assert.match(workflow, /needs: verify/);
 });
 
+test('pull requests to main validate without production deployment access', () => {
+  assert.match(
+    workflow,
+    /pull_request:\s*\n\s+branches:\s*\n\s+- main/,
+  );
+  assert.doesNotMatch(workflow, /pull_request_target:/);
+  assert.match(
+    workflow,
+    /\n\s{2}deploy:\s*\n[\s\S]*?if: \$\{\{ github\.event_name == 'workflow_dispatch' && github\.ref == 'refs\/heads\/main' \}\}/,
+  );
+});
+
 test('manual production deployment requires the exact commit', () => {
   assert.match(
     workflow,
