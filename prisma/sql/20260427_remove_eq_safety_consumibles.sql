@@ -1,4 +1,7 @@
--- @idempotent
+-- @manual-destructive-never-deploy
+-- Historical cleanup retained for audit only. It must never run automatically.
+-- Its DELETE statements remove inventory history and require an explicit,
+-- business-approved data migration if this classification is ever retired.
 BEGIN;
 
 CREATE TEMP TABLE "_deprecated_element_ids" ON COMMIT DROP AS
