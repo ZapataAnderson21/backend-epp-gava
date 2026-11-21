@@ -1,8 +1,11 @@
 # Preparación del primer despliegue de Fases 5, 6 y 6.1
 
-**Estado: no listo para producción.** El script real ya fue preservado,
-comparado e integrado en un candidato separado. Falta verificar PostgreSQL en
-producción y ejecutar un ensayo restaurable. Véase
+**Estado: no listo para producción.** El workflow puede incorporarse sin
+publicar código, pero bloqueará cualquier despacho manual mientras el VPS
+conserve el publicador antiguo. El script real ya fue preservado, comparado e
+integrado en un candidato separado. Falta verificar PostgreSQL en producción,
+instalar el candidato mediante una ventana autorizada y ejecutar un ensayo
+restaurable. Véase
 `docs/vps-deploy-integration.md`.
 
 ## Propuesta concreta
@@ -11,7 +14,8 @@ producción y ejecutar un ensayo restaurable. Véase
 | ------------------- | ------------------------------------------------------------------ |
 | Push a `main`       | Ejecuta validación, pruebas y build; no publica.                   |
 | Autorización        | `workflow_dispatch` exige el SHA exacto de `main`.                 |
-| Aprobación          | Job asociado al environment `production`.                          |
+| Aprobación          | Solo es humana si `production` tiene reglas verificadas en GitHub. |
+| Compatibilidad      | El workflow exige el contrato `sir-gava-backend-publisher/v1`.     |
 | Identidad           | GitHub y VPS comparan commit, schema y manifiesto de migraciones.  |
 | Preflight           | Valida credenciales, conexión, versión de PostgreSQL y espacio.    |
 | Backup              | `pg_dump` custom, archivo no vacío, `pg_restore --list` y SHA-256. |
@@ -50,6 +54,10 @@ El archivo del workflow no crea reglas de aprobación por sí solo. Si el plan d
 GitHub no ofrece required reviewers para el repositorio, el dispatch manual y
 el SHA exacto siguen evitando despliegues por push, pero debe definirse un
 control humano alternativo antes de producción.
+
+La asociación del job con el environment `production` NO demuestra por sí sola
+que exista aprobación humana. Las reglas, revisores y restricciones de rama
+deben comprobarse en GitHub antes del primer despacho.
 
 ## Referencia versionada para el VPS
 
@@ -96,7 +104,9 @@ aprobar el candidato descrito en `docs/vps-deploy-integration.md`.
    permite continuar cuando falla Prisma.
 9. Validar el archivo con `bash -n` y ShellCheck en el VPS o en un entorno Linux
    equivalente.
-10. Instalar primero con otro nombre y reemplazar el publicador solo después del
+10. Confirmar que `--print-contract-version` devuelve exactamente
+    `sir-gava-backend-publisher/v1` sin iniciar el despliegue.
+11. Instalar primero con otro nombre y reemplazar el publicador solo después del
     ensayo supervisado.
 
 ## Credenciales y versión PostgreSQL

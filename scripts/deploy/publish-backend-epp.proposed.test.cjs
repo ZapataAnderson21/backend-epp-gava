@@ -34,6 +34,7 @@ function toBashPath(path) {
 
 const bash = findBash();
 const bashProposedScript = toBashPath(proposedScript);
+const bashOriginalScript = toBashPath(originalScript);
 
 function simulateFailure(failAt) {
   const scenario = String.raw`
@@ -101,6 +102,75 @@ test(
 
     assert.equal(result.status, 0, result.stderr);
     assert.doesNotMatch(proposedSource, /^\s*npm run db:apply-idempotent\s*$/m);
+  },
+);
+
+test(
+  'the legacy publisher rejects the compatibility probe before deployment work',
+  { skip: !bash },
+  () => {
+    const result = spawnSync(
+      bash,
+      [bashOriginalScript, '--print-contract-version'],
+      { cwd: projectRoot, encoding: 'utf8' },
+    );
+
+    assert.notEqual(result.status, 0);
+    assert.doesNotMatch(result.stdout, /Esperando el bloqueo|Actualizando código/);
+    assert.doesNotMatch(result.stdout, /Ejecutando migraciones|Reiniciando backend/);
+  },
+);
+
+test(
+  'the legacy publisher rejects the versioned deployment invocation',
+  { skip: !bash },
+  () => {
+    const result = spawnSync(
+      bash,
+      [
+        bashOriginalScript,
+        '/tmp/backend-epp-contract-test',
+        '0'.repeat(40),
+        'sir-gava-backend-publisher/v1',
+      ],
+      { cwd: projectRoot, encoding: 'utf8' },
+    );
+
+    assert.notEqual(result.status, 0);
+    assert.doesNotMatch(result.stdout, /Esperando el bloqueo|Actualizando código/);
+    assert.doesNotMatch(result.stdout, /Ejecutando migraciones|Reiniciando backend/);
+  },
+);
+
+test(
+  'the proposed publisher exposes the required contract without side effects',
+  { skip: !bash },
+  () => {
+    const result = spawnSync(
+      bash,
+      [bashProposedScript, '--print-contract-version'],
+      { cwd: projectRoot, encoding: 'utf8' },
+    );
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stdout.trim(), 'sir-gava-backend-publisher/v1');
+    assert.doesNotMatch(result.stdout, /Actualizando código|Ejecutando migraciones/);
+  },
+);
+
+test(
+  'the proposed publisher rejects an incompatible contract before artifact access',
+  { skip: !bash },
+  () => {
+    const result = spawnSync(
+      bash,
+      [bashProposedScript, '/missing', '0'.repeat(40), 'unsupported-contract'],
+      { cwd: projectRoot, encoding: 'utf8' },
+    );
+
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /contrato solicitado no es compatible/);
+    assert.doesNotMatch(result.stderr, /realpath|No such file/);
   },
 );
 

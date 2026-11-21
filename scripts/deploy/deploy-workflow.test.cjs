@@ -13,7 +13,7 @@ test('pushes to main validate automatically but cannot deploy', () => {
   assert.match(workflow, /\n\s{2}verify:\s*\n/);
   assert.match(
     workflow,
-    /\n\s{2}deploy:\s*\n[\s\S]*?if: \$\{\{ github\.event_name == 'workflow_dispatch' \}\}/,
+    /\n\s{2}deploy:\s*\n[\s\S]*?if: \$\{\{ github\.event_name == 'workflow_dispatch' && github\.ref == 'refs\/heads\/main' \}\}/,
   );
   assert.match(workflow, /needs: verify/);
 });
@@ -51,4 +51,26 @@ test('the remote publisher receives the commit and all integrity manifests', () 
     /STAGING_DIR: \/tmp\/backend-epp-\$\{\{ github\.sha \}\}/,
   );
   assert.match(workflow, /publish-backend-epp\.sh/);
+});
+
+test('the installed publisher contract is verified before artifact upload', () => {
+  const contractCheck = workflow.indexOf(
+    'name: Verificar compatibilidad del publicador',
+  );
+  const artifactUpload = workflow.indexOf('name: Enviar artefacto al VPS');
+
+  assert.ok(contractCheck >= 0);
+  assert.ok(artifactUpload > contractCheck);
+  assert.match(workflow, /--print-contract-version/);
+  assert.match(
+    workflow,
+    /REQUIRED_PUBLISHER_CONTRACT: sir-gava-backend-publisher\/v1/,
+  );
+});
+
+test('the real deployment invocation binds the publisher contract version', () => {
+  assert.match(
+    workflow,
+    /publish-backend-epp\.sh[\s\\]+[\s\S]*?"\$STAGING_DIR"[\s\\]+[\s\S]*?"\$DEPLOY_COMMIT"[\s\\]+[\s\S]*?"\$REQUIRED_PUBLISHER_CONTRACT"/,
+  );
 });

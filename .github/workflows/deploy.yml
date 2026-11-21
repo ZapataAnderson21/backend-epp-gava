@@ -18,6 +18,9 @@ concurrency:
   group: deploy-backend-epp
   cancel-in-progress: false
 
+env:
+  REQUIRED_PUBLISHER_CONTRACT: sir-gava-backend-publisher/v1
+
 jobs:
   verify:
     name: Verificar backend
@@ -71,7 +74,7 @@ jobs:
 
   deploy:
     name: Publicar en producción
-    if: ${{ github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
     needs: verify
     runs-on: ubuntu-24.04
     environment:
@@ -145,6 +148,27 @@ jobs:
           echo "migrations_sha256=$migrations_sha256" >>"$GITHUB_OUTPUT"
           echo "artifact_sha256=$artifact_sha256" >>"$GITHUB_OUTPUT"
 
+      - name: Verificar compatibilidad del publicador
+        uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          envs: REQUIRED_PUBLISHER_CONTRACT
+          command_timeout: 1m
+          script: |
+            set -euo pipefail
+
+            installed_contract="$(
+              bash /opt/deploy/publish-backend-epp.sh --print-contract-version
+            )"
+
+            if [ "$installed_contract" != "$REQUIRED_PUBLISHER_CONTRACT" ]; then
+              echo "El publicador instalado no implementa el contrato requerido."
+              exit 1
+            fi
+
       - name: Enviar artefacto al VPS
         uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345 # v1
         with:
@@ -173,7 +197,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
-          envs: BACKEND_PATH,DEPLOY_COMMIT,EXPECTED_MIGRATION_COUNT,EXPECTED_MIGRATIONS_SHA256,EXPECTED_SCHEMA_SHA256,EXPECTED_ARTIFACT_SHA256,STAGING_DIR
+          envs: BACKEND_PATH,DEPLOY_COMMIT,EXPECTED_MIGRATION_COUNT,EXPECTED_MIGRATIONS_SHA256,EXPECTED_SCHEMA_SHA256,EXPECTED_ARTIFACT_SHA256,STAGING_DIR,REQUIRED_PUBLISHER_CONTRACT
           command_timeout: 30m
           script: |
             set -euo pipefail
@@ -187,4 +211,5 @@ jobs:
 
             bash /opt/deploy/publish-backend-epp.sh \
               "$STAGING_DIR" \
-              "$DEPLOY_COMMIT"
+              "$DEPLOY_COMMIT" \
+              "$REQUIRED_PUBLISHER_CONTRACT"

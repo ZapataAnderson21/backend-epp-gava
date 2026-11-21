@@ -7,6 +7,12 @@ No se conectó al VPS ni se ejecutó contra PostgreSQL. La instalación producti
 queda bloqueada hasta completar un ensayo restaurable con la versión real de
 PostgreSQL y comparar nuevamente el archivo instalado.
 
+El workflow exige el contrato `sir-gava-backend-publisher/v1` antes de enviar el
+artefacto y lo vuelve a proporcionar durante la invocación real. El publicador
+antiguo rechaza ambos mecanismos antes de adquirir el bloqueo o modificar el
+repositorio, por lo que los despachos manuales permanecen bloqueados hasta que
+el candidato sea instalado y verificado.
+
 ## Artefactos
 
 - Original recibido: `scripts/deploy/publish-backend-epp.vps-original.sh`.
@@ -37,6 +43,7 @@ git diff --no-index -- \
 | --------------------- | -------------------------------- | -------------------------------- | -------------------------------------------------- |
 | Bloqueo               | `flock -w 900`                   | Hook sin implementación          | Conservado                                         |
 | Artefacto             | `main.js`, sin symlinks          | No implementaba recepción        | Añade Prisma Client y hash de árbol                |
+| Contrato              | Solo dos argumentos              | No definido                      | Probe sin efectos y token obligatorio versionado   |
 | Commit                | Commit ancestro de `origin/main` | Exigía coincidencia exacta       | Exige HEAD exacto de `origin/main`                 |
 | Schema y migraciones  | Sin manifiestos                  | Conteo y SHA-256                 | Integrado antes de migrar                          |
 | Dependencias          | `npm ci --omit=dev`              | Conservaba la secuencia          | Conservado y comprobado en rollback                |
@@ -161,6 +168,14 @@ Solo después del ensayo restaurable:
 
    ```bash
    sudo bash -n /opt/deploy/publish-backend-epp.sh.candidate
+   ```
+
+   Confirmar además el contrato sin iniciar operaciones de despliegue:
+
+   ```bash
+   sudo /opt/deploy/publish-backend-epp.sh.candidate \
+     --print-contract-version
+   # salida exacta esperada: sir-gava-backend-publisher/v1
    ```
 
 3. Crear el archivo de entorno y `.pgpass` protegidos; verificar permisos sin

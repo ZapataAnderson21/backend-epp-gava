@@ -12,6 +12,7 @@ HEALTH_URL="${HEALTH_URL:-http://127.0.0.1:3001/documentation}"
 BACKUP_DIR="${BACKUP_DIR:-/var/backups/backend-epp}"
 BACKUP_FREE_RESERVE_BYTES="${BACKUP_FREE_RESERVE_BYTES:-1073741824}"
 DEPLOY_ENV_FILE="${DEPLOY_ENV_FILE:-/etc/sir-gava/backend-deploy.env}"
+readonly PUBLISHER_CONTRACT_VERSION='sir-gava-backend-publisher/v1'
 
 STAGING_DIR=''
 DEPLOY_COMMIT=''
@@ -74,7 +75,10 @@ server_major_from_num() {
 }
 
 validate_arguments_and_artifact() {
-  [[ "$#" -eq 2 ]] || die "Uso: $0 <directorio-del-artefacto> <commit>"
+  [[ "$#" -eq 3 ]] ||
+    die "Uso: $0 <directorio-del-artefacto> <commit> <contrato>"
+  [[ "$3" == "$PUBLISHER_CONTRACT_VERSION" ]] ||
+    die 'El contrato solicitado no es compatible con este publicador.'
 
   STAGING_DIR="$(realpath -e "$1")"
   DEPLOY_COMMIT="$2"
@@ -474,6 +478,11 @@ cleanup() {
 }
 
 main() {
+  if [[ "$#" -eq 1 && "$1" == '--print-contract-version' ]]; then
+    printf '%s\n' "$PUBLISHER_CONTRACT_VERSION"
+    return 0
+  fi
+
   validate_arguments_and_artifact "$@"
   load_node_runtime
   verify_required_commands
