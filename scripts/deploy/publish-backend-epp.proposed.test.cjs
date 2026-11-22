@@ -81,6 +81,23 @@ exit "$status"
   });
 }
 
+function runPublisherFunctionScenario(scenario, extraEnv = {}) {
+  return spawnSync(
+    bash,
+    ['-c', 'set -Eeuo pipefail\nsource "$PROPOSED_SCRIPT"\neval "$SCENARIO"'],
+    {
+      cwd: projectRoot,
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        PROPOSED_SCRIPT: bashProposedScript,
+        SCENARIO: scenario,
+        ...extraEnv,
+      },
+    },
+  );
+}
+
 test('the preserved VPS script retains the supplied deployment behavior', () => {
   assert.match(originalSource, /flock -w 900 9/);
   assert.match(originalSource, /npm run db:apply-idempotent/);
@@ -241,4 +258,226 @@ test('backup completes before migration and activation', () => {
   assert.ok(backup >= 0);
   assert.ok(migration > backup);
   assert.ok(activation > migration);
+});
+
+test(
+  'backup preparation failure returns non-zero before pg_dump',
+  { skip: !bash },
+  () => {
+    const result = runPublisherFunctionScenario(String.raw`
+BACKUP_DIR="$(mktemp -d)"
+DEPLOY_COMMIT="$(printf 'a%.0s' {1..40})"
+BACKUP_FREE_RESERVE_BYTES=0
+PGHOST=localhost
+PGPORT=5432
+PGUSER=test
+PGDATABASE=test
+verify_backup_space() { printf 'backup-space-failed\n'; return 31; }
+pg_dump() {
+  printf 'pg-dump-ran\n'
+  local argument
+  for argument in "$@"; do
+    case "$argument" in
+      --file=*) printf 'dump' >"${'$'}{argument#--file=}" ;;
+    esac
+  done
+}
+pg_restore() { return 0; }
+set +e
+output="$(create_verified_backup 2>&1)"
+status=$?
+set -e
+printf '%s\n' "$output"
+rm -rf "$BACKUP_DIR"
+[[ "$status" -ne 0 ]]
+[[ "$output" == *"backup-space-failed"* ]]
+[[ "$output" != *"pg-dump-ran"* ]]
+[[ "$output" != *"Backup previo verificado"* ]]
+`);
+
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+  },
+);
+
+test('pg_dump failure is fail-closed', { skip: !bash }, () => {
+  const result = runPublisherFunctionScenario(String.raw`
+BACKUP_DIR="$(mktemp -d)"
+DEPLOY_COMMIT="$(printf 'b%.0s' {1..40})"
+BACKUP_FREE_RESERVE_BYTES=0
+PGHOST=localhost
+PGPORT=5432
+PGUSER=test
+PGDATABASE=test
+verify_backup_space() { return 0; }
+pg_dump() { printf 'pg-dump-failed\n'; return 32; }
+pg_restore() { printf 'pg-restore-must-not-run\n'; return 0; }
+set +e
+output="$(create_verified_backup 2>&1)"
+status=$?
+set -e
+printf '%s\n' "$output"
+rm -rf "$BACKUP_DIR"
+[[ "$status" -ne 0 ]]
+[[ "$output" == *"pg-dump-failed"* ]]
+[[ "$output" != *"pg-restore-must-not-run"* ]]
+[[ "$output" != *"Backup previo verificado"* ]]
+`);
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+});
+
+test('backup validation failure is fail-closed', { skip: !bash }, () => {
+  const result = runPublisherFunctionScenario(String.raw`
+BACKUP_DIR="$(mktemp -d)"
+DEPLOY_COMMIT="$(printf 'c%.0s' {1..40})"
+BACKUP_FREE_RESERVE_BYTES=0
+PGHOST=localhost
+PGPORT=5432
+PGUSER=test
+PGDATABASE=test
+verify_backup_space() { return 0; }
+pg_dump() {
+  local argument
+  for argument in "$@"; do
+    case "$argument" in
+      --file=*) printf 'invalid-dump' >"${'$'}{argument#--file=}" ;;
+    esac
+  done
+}
+pg_restore() { printf 'backup-validation-failed\n' >&2; return 33; }
+set +e
+output="$(create_verified_backup 2>&1)"
+status=$?
+set -e
+printf '%s\n' "$output"
+rm -rf "$BACKUP_DIR"
+[[ "$status" -ne 0 ]]
+[[ "$output" == *"backup-validation-failed"* ]]
+[[ "$output" != *"Backup previo verificado"* ]]
+`);
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+});
+
+test(
+  'artifact rsync failure preserves the published build and returns non-zero',
+  { skip: !bash },
+  () => {
+    const result = runPublisherFunctionScenario(String.raw`
+root="$(mktemp -d)"
+APP_DIR="$root/app"
+STAGING_DIR="$root/staging"
+CANDIDATE_DIST_DIR="$root/candidate"
+EXPECTED_ARTIFACT_SHA256=unused
+mkdir -p "$APP_DIR/dist" "$STAGING_DIR" "$CANDIDATE_DIST_DIR"
+printf 'previous-build' >"$APP_DIR/dist/main.js"
+printf 'candidate-build' >"$STAGING_DIR/main.js"
+rsync() { printf 'rsync-failed\n'; return 34; }
+set +e
+output="$(install_candidate_artifact 2>&1)"
+status=$?
+set -e
+printf '%s\n' "$output"
+test "$(cat "$APP_DIR/dist/main.js")" = 'previous-build'
+rm -rf "$root"
+[[ "$status" -ne 0 ]]
+[[ "$output" == *"rsync-failed"* ]]
+`);
+
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+  },
+);
+
+test('PM2 restart failure does not mark activation', { skip: !bash }, () => {
+  const result = runPublisherFunctionScenario(String.raw`
+PM2_APP=missing-backend
+ACTIVATED=0
+pm2() { printf 'pm2-restart-failed\n'; return 35; }
+set +e
+output="$(restart_backend 2>&1)"
+status=$?
+set -e
+printf '%s\n' "$output"
+[[ "$status" -ne 0 ]]
+[[ "$ACTIVATED" -eq 0 ]]
+[[ "$output" == *"pm2-restart-failed"* ]]
+`);
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+});
+
+test('HTTP 503 health failure remains non-zero', { skip: !bash }, () => {
+  const result = runPublisherFunctionScenario(String.raw`
+HEALTH_URL=http://127.0.0.1:1/documentation
+curl() { return 22; }
+sleep() { :; }
+set +e
+check_http_health
+status=$?
+set -e
+[[ "$status" -ne 0 ]]
+`);
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+});
+
+test('rollback failures are propagated', { skip: !bash }, () => {
+  const result = runPublisherFunctionScenario(String.raw`
+root="$(mktemp -d)"
+APP_DIR="$root/app"
+PREVIOUS_COMMIT="$(printf 'd%.0s' {1..40})"
+PREVIOUS_DIST_DIR="$root/previous"
+HAS_PREVIOUS_DIST=1
+ACTIVATED=1
+PM2_APP=backend-epp-gava
+mkdir -p "$APP_DIR/dist" "$PREVIOUS_DIST_DIR"
+git() { return 0; }
+npm() { return 0; }
+rm() { return 0; }
+mkdir() { command mkdir "$@"; }
+rsync() { printf 'rollback-rsync-failed\n'; return 36; }
+pm2() { return 0; }
+set +e
+restore_previous_release
+status=$?
+set -e
+command rm -rf "$root"
+[[ "$status" -ne 0 ]]
+`);
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+});
+
+test('verified backup success creates checksum and success message', {
+  skip: !bash,
+}, () => {
+  const result = runPublisherFunctionScenario(String.raw`
+BACKUP_DIR="$(mktemp -d)"
+DEPLOY_COMMIT="$(printf 'e%.0s' {1..40})"
+BACKUP_FREE_RESERVE_BYTES=0
+PGHOST=localhost
+PGPORT=5432
+PGUSER=test
+PGDATABASE=test
+verify_backup_space() { return 0; }
+pg_dump() {
+  local argument
+  for argument in "$@"; do
+    case "$argument" in
+      --file=*) printf 'valid-dump' >"${'$'}{argument#--file=}" ;;
+    esac
+  done
+}
+pg_restore() { return 0; }
+output="$(create_verified_backup 2>&1)"
+status=$?
+printf '%s\n' "$output"
+test "$status" -eq 0
+test "$(find "$BACKUP_DIR" -name '*.dump' -type f | wc -l)" -eq 1
+test "$(find "$BACKUP_DIR" -name '*.sha256' -type f | wc -l)" -eq 1
+[[ "$output" == *"Backup previo verificado"* ]]
+rm -rf "$BACKUP_DIR"
+`);
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
 });
