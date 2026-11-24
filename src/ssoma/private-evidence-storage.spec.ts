@@ -1,4 +1,9 @@
-import { LocalFilesystemPrivateEvidenceStorage } from './private-evidence-storage';
+import * as fs from 'node:fs/promises';
+import {
+  createPrivateEvidenceStorageFromEnvironment,
+  LocalFilesystemPrivateEvidenceStorage,
+  PersistentFilesystemPrivateEvidenceStorage,
+} from './private-evidence-storage';
 import { createHash } from 'node:crypto';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -86,6 +91,215 @@ describe('LocalFilesystemPrivateEvidenceStorage', () => {
       exists: false,
       sha256: null,
       size: null,
+    });
+  });
+});
+
+describe('PersistentFilesystemPrivateEvidenceStorage', () => {
+  let root: string;
+
+  beforeEach(async () => {
+    root = await mkdtemp(join(tmpdir(), 'ssoma-persistent-evidence-'));
+  });
+
+  afterEach(async () => rm(root, { recursive: true, force: true }));
+
+  it('persists verified immutable objects across adapter instances', async () => {
+    const bytes = Buffer.from('private official PDF');
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const first = new PersistentFilesystemPrivateEvidenceStorage(root);
+    const put = await first.putIfAbsent({
+      namespace: 'official-pdfs',
+      key: 'talk-9/current.pdf',
+      bytes,
+      sha256,
+    });
+    const second = new PersistentFilesystemPrivateEvidenceStorage(root);
+
+    expect(put.created).toBe(true);
+    expect(
+      await second.readVerified(put.reference, sha256, bytes.length),
+    ).toEqual(bytes);
+    expect(await second.verify(put.reference, sha256, bytes.length)).toEqual({
+      verified: true,
+      sha256,
+      size: bytes.length,
+    });
+    expect(
+      (
+        await second.putIfAbsent({
+          namespace: 'official-pdfs',
+          key: 'talk-9/current.pdf',
+          bytes,
+          sha256,
+        })
+      ).created,
+    ).toBe(false);
+    await expect(
+      second.putIfAbsent({
+        namespace: 'official-pdfs',
+        key: 'talk-9/current.pdf',
+        bytes: Buffer.from('different'),
+        sha256: createHash('sha256').update('different').digest('hex'),
+      }),
+    ).rejects.toThrow('Immutable private evidence collision');
+  });
+
+  it('rejects unsafe references, traversal, symlinks, and root aliases', async () => {
+    const storage = new PersistentFilesystemPrivateEvidenceStorage(root);
+    const bytes = Buffer.from('x');
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    await expect(
+      storage.putIfAbsent({
+        namespace: 'signatures',
+        key: '../escape',
+        bytes,
+        sha256,
+      }),
+    ).rejects.toThrow();
+    await expect(
+      storage.inspect({ value: 'ssoma-private:v1:Li4vZXNjYXBl' }),
+    ).rejects.toThrow();
+    const outside = await mkdtemp(join(tmpdir(), 'ssoma-outside-'));
+    try {
+      await fs.symlink(outside, join(root, 'signatures'), 'junction');
+      await expect(
+        storage.putIfAbsent({
+          namespace: 'signatures',
+          key: 'escape.bin',
+          bytes,
+          sha256,
+        }),
+      ).rejects.toThrow();
+    } finally {
+      await rm(outside, { recursive: true, force: true });
+    }
+  });
+
+  it('reports missing objects and deletes matching objects idempotently', async () => {
+    const storage = new PersistentFilesystemPrivateEvidenceStorage(root);
+    const ref = { value: 'ssoma-private:v1:c2lnbmF0dXJlcy90YWxrL25vbmUucG5n' };
+    expect(await storage.inspect(ref)).toEqual({
+      exists: false,
+      sha256: null,
+      size: null,
+    });
+    expect(await storage.deleteIfMatch(ref, 'a'.repeat(64))).toBe(false);
+    const bytes = Buffer.from('signature');
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const put = await storage.putIfAbsent({
+      namespace: 'signatures',
+      key: 'talk/signature.png',
+      bytes,
+      sha256,
+    });
+    expect(await storage.deleteIfMatch(put.reference, sha256)).toBe(true);
+    expect(await storage.deleteIfMatch(put.reference, sha256)).toBe(false);
+  });
+
+  it('selects configured providers and fails fast for missing roots', () => {
+    expect(() =>
+      createPrivateEvidenceStorageFromEnvironment({
+        NODE_ENV: 'production',
+        SSOMA_EVIDENCE_STORAGE: 'persistent',
+      }),
+    ).toThrow('SSOMA_EVIDENCE_LOCAL_ROOT is required');
+    expect(
+      createPrivateEvidenceStorageFromEnvironment({
+        NODE_ENV: 'production',
+        SSOMA_EVIDENCE_STORAGE: 'persistent',
+        SSOMA_EVIDENCE_LOCAL_ROOT: root,
+      }),
+    ).toBeInstanceOf(PersistentFilesystemPrivateEvidenceStorage);
+    expect(() =>
+      createPrivateEvidenceStorageFromEnvironment({
+        NODE_ENV: 'production',
+        SSOMA_EVIDENCE_STORAGE: 'local',
+        SSOMA_EVIDENCE_LOCAL_ROOT: root,
+      }),
+    ).toThrow('forbidden in production');
+    expect(() => new PersistentFilesystemPrivateEvidenceStorage('/')).toThrow();
+  });
+
+  it('removes temporary objects when atomic publication fails', async () => {
+    const bytes = Buffer.from('write failure');
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const failingLink = () =>
+      Promise.reject(Object.assign(new Error('disk full'), { code: 'ENOSPC' }));
+    const failingStorage = new PersistentFilesystemPrivateEvidenceStorage(
+      root,
+      failingLink as typeof fs.link,
+    );
+    await expect(
+      failingStorage.putIfAbsent({
+        namespace: 'staging',
+        key: 'entry.bin',
+        bytes,
+        sha256,
+      }),
+    ).rejects.toThrow('disk full');
+    expect(
+      await failingStorage.inspect({
+        value: 'ssoma-private:v1:c3RhZ2luZy9lbnRyeS5iaW4',
+      }),
+    ).toEqual({ exists: false, sha256: null, size: null });
+    expect(await fs.readdir(join(root, 'staging'))).toHaveLength(0);
+  });
+
+  it('returns ownership when temporary cleanup fails after publication', async () => {
+    const bytes = Buffer.from('published despite cleanup failure');
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const failingCleanup = () =>
+      Promise.reject(
+        Object.assign(new Error('permission denied'), { code: 'EACCES' }),
+      );
+    const storage = new PersistentFilesystemPrivateEvidenceStorage(
+      root,
+      fs.link,
+      failingCleanup as typeof fs.unlink,
+    );
+
+    const result = await storage.putIfAbsent({
+      namespace: 'staging',
+      key: 'post-publish-cleanup.bin',
+      bytes,
+      sha256,
+    });
+
+    expect(result.created).toBe(true);
+    expect(
+      await storage.readVerified(result.reference, sha256, bytes.length),
+    ).toEqual(bytes);
+  });
+
+  it('returns ownership when parent-directory sync fails after publication', async () => {
+    const bytes = Buffer.from('published despite sync failure');
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const failingDirectorySync = () =>
+      Promise.reject(
+        Object.assign(new Error('directory sync denied'), { code: 'EACCES' }),
+      );
+    const storage = new PersistentFilesystemPrivateEvidenceStorage(
+      root,
+      fs.link,
+      fs.unlink,
+      failingDirectorySync,
+    );
+
+    const result = await storage.putIfAbsent({
+      namespace: 'official-pdfs',
+      key: 'post-publish-sync.pdf',
+      bytes,
+      sha256,
+    });
+
+    expect(result.created).toBe(true);
+    expect(
+      await storage.verify(result.reference, sha256, bytes.length),
+    ).toEqual({
+      verified: true,
+      sha256,
+      size: bytes.length,
     });
   });
 });

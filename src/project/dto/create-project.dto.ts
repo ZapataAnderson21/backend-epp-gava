@@ -7,6 +7,7 @@ import {
   IsString,
 } from 'class-validator';
 import { ProjectStatus } from '../enum/project-status.enum';
+import { ProjectType } from '../enum/project-type.enum';
 import { Type } from 'class-transformer';
 
 export class CreateProjectDto {
@@ -35,6 +36,16 @@ export class CreateProjectDto {
     message: `Estado de proyecto inválido. Los valores permitidos son: ${Object.values(ProjectStatus).join(', ')}.`,
   })
   status?: ProjectStatus;
+
+  @ApiProperty({
+    enum: ProjectType,
+    enumName: 'ProjectType',
+    example: ProjectType.Works,
+  })
+  @IsEnum(ProjectType, {
+    message: `Tipo de proyecto inválido. Los valores permitidos son: ${Object.values(ProjectType).join(', ')}.`,
+  })
+  type!: ProjectType;
 
   @ApiProperty({ example: 'Lima, Perú' })
   @IsString()

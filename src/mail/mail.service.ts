@@ -21,6 +21,13 @@ interface SmtpErrorDetails {
   message?: string;
 }
 
+export interface RequestMailAudit {
+  recipients: string[];
+  subject: string;
+  htmlSnapshot: string;
+  isUpdate: boolean;
+}
+
 @Injectable()
 export class MailService {
   private readonly logger = new Logger('MailService');
@@ -65,13 +72,20 @@ export class MailService {
       month: 'long',
       day: '2-digit',
     });
-    const urgency = input.daysRemaining < 0
-      ? `vencio hace ${Math.abs(input.daysRemaining)} dia(s)`
-      : input.daysRemaining === 0
-        ? 'vence hoy'
-        : `vence en ${input.daysRemaining} dia(s)`;
-    const appUrl = this.configService.get<string>('APP_URL') || 'https://sir.gavacyc.com';
-    const transporter = this.createSmtpTransporter(sender, password, mailHost, mailPort);
+    const urgency =
+      input.daysRemaining < 0
+        ? `vencio hace ${Math.abs(input.daysRemaining)} dia(s)`
+        : input.daysRemaining === 0
+          ? 'vence hoy'
+          : `vence en ${input.daysRemaining} dia(s)`;
+    const appUrl =
+      this.configService.get<string>('APP_URL') || 'https://sir.gavacyc.com';
+    const transporter = this.createSmtpTransporter(
+      sender,
+      password,
+      mailHost,
+      mailPort,
+    );
 
     try {
       const result = await transporter.sendMail({
@@ -200,7 +214,9 @@ export class MailService {
       const request = await this.findRequestById(requestId);
       const sender = request.user.email;
       const mailHost = this.configService.get<string>('MAIL_HOST');
-      const mailPort = Number(this.configService.get<number>('MAIL_PORT') || 465);
+      const mailPort = Number(
+        this.configService.get<number>('MAIL_PORT') || 465,
+      );
 
       if (!sender) {
         return {
@@ -230,7 +246,8 @@ export class MailService {
 
       return {
         statusCode: HttpStatus.OK,
-        message: 'Contraseña validada correctamente con el servidor de correos.',
+        message:
+          'Contraseña validada correctamente con el servidor de correos.',
         data: null,
       };
     } catch (error: unknown) {
@@ -315,6 +332,28 @@ export class MailService {
             },
           },
         },
+        elementRequests: {
+          include: {
+            element: true,
+            elementVariant: true,
+            epiPlans: {
+              include: { requestWorker: { include: { worker: true } } },
+            },
+          },
+          orderBy: [{ lineItemOrder: 'asc' }, { elementRequestId: 'asc' }],
+        },
+        resourceAdditions: {
+          include: {
+            element: true,
+            elementVariant: true,
+            addedByUser: {
+              select: { name: true, lastName: true },
+            },
+            workerPlans: { include: { worker: true } },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+        emailSends: { select: { requestEmailSendId: true } },
       },
     });
 
@@ -335,6 +374,7 @@ export class MailService {
     this.logger.log(
       `Preparing to send request ID: ${requestId} to logistics via email`,
     );
+    let audit: RequestMailAudit | null = null;
     try {
       const request = await this.findRequestById(requestId);
       this.logger.log(
@@ -346,7 +386,9 @@ export class MailService {
       const copyEmails =
         this.configService.get<string>('MAIL_LOGISTICS_CC')?.split(',') || [];
       const mailHost = this.configService.get<string>('MAIL_HOST');
-      const mailPort = Number(this.configService.get<number>('MAIL_PORT') || 465);
+      const mailPort = Number(
+        this.configService.get<number>('MAIL_PORT') || 465,
+      );
 
       this.logger.debug(
         `Mail config - Host: ${mailHost}, Port: ${mailPort}, To: ${toEmail}, CC: ${copyEmails.join(', ') || 'none'}`,
@@ -383,6 +425,74 @@ export class MailService {
         `Request type: ${request.type} - Subject: ${subjectEmail}`,
       );
 
+      const escapeHtml = (value: unknown) =>
+        (typeof value === 'string'
+          ? value
+          : typeof value === 'number' || typeof value === 'boolean'
+            ? String(value)
+            : JSON.stringify(value) || ''
+        )
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      const kindLabel =
+        request.ssomaRequestKind === 'projectStart'
+          ? 'Inicio de Obra'
+          : request.ssomaRequestKind === 'duringExecution'
+            ? 'Durante la Ejecución'
+            : type;
+      const familyLabel = (family?: string | null) => {
+        if (family === 'uniform') return 'Ropa de Trabajo';
+        if (family === 'epp' || family === 'epi') return 'EPP';
+        if (family === 'ese') return 'Equipos de Seguridad';
+        return 'Otros';
+      };
+      const lineRows = (request.elementRequests || [])
+        .map((line) => {
+          const workers = line.epiPlans
+            .map(
+              (plan) =>
+                `${escapeHtml(plan.requestWorker.worker.fullName)} (${escapeHtml(plan.plannedQuantity)})`,
+            )
+            .join(', ');
+          return `<tr><td>${escapeHtml(familyLabel(line.element.family))}</td><td>${escapeHtml(line.element.name)}</td><td>${escapeHtml(line.elementVariant?.label || '—')}</td><td>${escapeHtml(line.quantityRequested)} ${escapeHtml(line.unit)}</td><td>${workers || 'Sin destinatario definido'}</td></tr>`;
+        })
+        .join('');
+      const additionRows = (request.resourceAdditions || [])
+        .map((line) => {
+          const workers = line.workerPlans
+            .map(
+              (plan) =>
+                `${escapeHtml(plan.worker.fullName)} (${escapeHtml(plan.plannedQuantity)})`,
+            )
+            .join(', ');
+          return `<tr><td>${escapeHtml(familyLabel(line.element.family))}</td><td>${escapeHtml(line.element.name)}</td><td>${escapeHtml(line.elementVariant?.label || '—')}</td><td>${escapeHtml(line.quantity)} ${escapeHtml(line.unit)}</td><td>${escapeHtml(`${line.addedByUser.name} ${line.addedByUser.lastName}`)}</td><td>${workers || 'Sin destinatario definido'}</td></tr>`;
+        })
+        .join('');
+      const htmlSnapshot = `
+        <div style="font-family:Arial,sans-serif;max-width:760px;margin:auto;color:#30343b">
+          <h2 style="color:#0047a3">${escapeHtml(subjectEmail)}</h2>
+          <p><strong>Requerimiento:</strong> #${request.requestId}</p>
+          <p><strong>Tipo:</strong> ${escapeHtml(kindLabel)}</p>
+          <p><strong>Proyecto:</strong> ${escapeHtml(request.project.name)}</p>
+          <p><strong>PDR:</strong> ${escapeHtml(`${request.user.name} ${request.user.lastName}`)}</p>
+          <p><strong>Observaciones:</strong> ${escapeHtml(request.description)}</p>
+          <table style="width:100%;border-collapse:collapse;font-size:14px">
+            <thead><tr><th>Familia</th><th>Recurso</th><th>Variante</th><th>Cantidad</th><th>Trabajadores previstos</th></tr></thead>
+            <tbody>${lineRows}</tbody>
+          </table>
+          ${additionRows ? `<h3 style="color:#0047a3">Incorporaciones posteriores</h3><table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr><th>Familia</th><th>Recurso</th><th>Variante</th><th>Cantidad</th><th>Incorporado por</th><th>Trabajadores previstos</th></tr></thead><tbody>${additionRows}</tbody></table>` : ''}
+          <p style="margin-top:24px">Este correo registra la versión vigente al momento del envío.</p>
+        </div>`;
+      audit = {
+        recipients: [toEmail, ...copyEmails].filter(Boolean),
+        subject: subjectEmail,
+        htmlSnapshot,
+        isUpdate: (request.emailSends || []).length > 0,
+      };
+
       const outputDir =
         this.configService.get<string>('PDF_OUTPUT_DIR') || '/var/www/pdfs';
       const pdfPath = path.resolve(outputDir, `requerimiento-${requestId}.pdf`);
@@ -394,6 +504,7 @@ export class MailService {
           statusCode: 404,
           message: `El archivo PDF no fue encontrado en la ruta: ${pdfPath}`,
           data: null,
+          audit,
         };
       }
       this.logger.log(`PDF file found at: ${pdfPath}`);
@@ -428,45 +539,7 @@ export class MailService {
         to: toEmail,
         cc: copyEmails.length > 0 ? copyEmails : undefined,
         subject: subjectEmail,
-        html: `
-          <div style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #353535; 
-                background-color: #f9f9f9; padding: 24px; border-radius: 8px; max-width: 600px; 
-                margin: auto;">
-          <h2 style="text-align: center; text-transform: uppercase; font-weight: bold; color: black;">${subjectEmail}</h2>
-          <p>
-            <strong>Tipo de Requerimiento:</strong> ${type}
-          </p>
-          <p>
-            <strong>Fecha y hora de solicitud:</strong> ${formattedDate}
-          </p>
-          <p>
-            <strong>Fecha y hora de entrega:</strong> ${formattedDeliveryDueDate}
-          </p>
-          <p>Estimado equipo de logística, adjunto el presente requerimiento. Agradeceré su pronta atención.</p>
-          <p>Saludos cordiales, ${request.user.name} ${request.user.lastName}</p>
-          <br>
-          <div style="width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;">
-            <a href="${appUrl}/admin/requests/${requestId}">
-              <button style="
-                background-color: #0047a3;
-                color: white;
-                padding-left: 1.5rem;
-                padding-right: 1.5rem;
-                padding-top: 1rem;
-                padding-bottom: 1rem;
-                border-radius: 0.375rem;
-                transition: background-color 0.2s;
-                cursor: pointer;
-                border: none;
-                font-weight: bold;
-              "
-              onmouseover="this.style.backgroundColor='#003a80'"
-              onmouseout="this.style.backgroundColor='#0047a3'"
-              >Ver Requerimiento</button>
-            </a>
-          </div>
-        </div>
-          `,
+        html: `${htmlSnapshot}<p style="text-align:center"><a href="${appUrl}/admin/requests/${requestId}" style="display:inline-block;background:#0047a3;color:#fff;padding:12px 18px;border-radius:6px;text-decoration:none">Ver Requerimiento</a></p><p style="font-size:12px;color:#667085">Fecha y hora de solicitud: ${escapeHtml(formattedDate)} · Fecha y hora de entrega: ${escapeHtml(formattedDeliveryDueDate)}</p>`,
         attachments: [
           { filename: `requerimiento-${requestId}.pdf`, path: pdfPath },
         ],
@@ -486,6 +559,7 @@ export class MailService {
           messageId: result.messageId,
           response: result.response,
         },
+        audit,
       };
     } catch (error: unknown) {
       if (error instanceof NotFoundException) {
@@ -493,6 +567,7 @@ export class MailService {
           statusCode: HttpStatus.NOT_FOUND,
           message: error.message,
           data: null,
+          audit,
         };
       }
 
@@ -501,6 +576,7 @@ export class MailService {
           statusCode: error.getStatus(),
           message: error.message,
           data: null,
+          audit,
         };
       }
 
@@ -510,7 +586,7 @@ export class MailService {
         this.logger.error(
           `SMTP authentication error for request ID: ${requestId}. Response: ${smtpError.response}`,
         );
-        return this.formatSmtpError(error);
+        return { ...this.formatSmtpError(error), audit };
       }
 
       if (
@@ -522,7 +598,7 @@ export class MailService {
         this.logger.error(
           `SMTP connection error for request ID: ${requestId}. Code: ${smtpError.code}, Message: ${smtpError.message}`,
         );
-        return this.formatSmtpError(error);
+        return { ...this.formatSmtpError(error), audit };
       }
 
       this.logger.error(
@@ -533,6 +609,7 @@ export class MailService {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: smtpError.message || 'Error desconocido al enviar el correo.',
         data: error instanceof Error ? error.stack || null : null,
+        audit,
       };
     }
   }

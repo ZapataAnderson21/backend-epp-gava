@@ -16,13 +16,13 @@ export class ElementRequestWorkerPlanService {
     return Math.round(numberValue * 10000) / 10000;
   }
 
-  private isEpiElement(element: {
+  private supportsWorkerPlanning(element: {
     family?: string | null;
     type: string;
     controlType: string;
   }) {
     if (element.family) {
-      return element.family === 'epi';
+      return element.family === 'uniform';
     }
 
     return element.type === 'epp' && element.controlType === 'individual';
@@ -50,13 +50,13 @@ export class ElementRequestWorkerPlanService {
 
     if (elementRequest.request.status !== 'draft') {
       throw new BadRequestException(
-        'Solo puedes editar la planificacion EPI mientras el requerimiento este en borrador.',
+        'Solo puedes editar la planificación por trabajador mientras el requerimiento esté en borrador.',
       );
     }
 
-    if (!this.isEpiElement(elementRequest.element)) {
+    if (!this.supportsWorkerPlanning(elementRequest.element)) {
       throw new BadRequestException(
-        'La planificacion por trabajador solo aplica a lineas EPI.',
+        'La planificación por trabajador solo aplica a Ropa de Trabajo.',
       );
     }
 
@@ -83,7 +83,7 @@ export class ElementRequestWorkerPlanService {
 
     return {
       statusCode: HttpStatus.OK,
-      message: 'Planificacion EPI obtenida exitosamente.',
+      message: 'Planificación por trabajador obtenida exitosamente.',
       data: plans,
     };
   }
@@ -105,6 +105,16 @@ export class ElementRequestWorkerPlanService {
         notes: plan.notes?.trim() || null,
       }))
       .filter((plan) => plan.plannedQuantity > 0);
+
+    const plannedTotal = normalizedPlans.reduce(
+      (total, plan) => total + plan.plannedQuantity,
+      0,
+    );
+    if (plannedTotal > Number(elementRequest.quantityRequested)) {
+      throw new BadRequestException(
+        'La cantidad planificada para trabajadores no puede superar la cantidad solicitada.',
+      );
+    }
 
     const requestWorkerIds = normalizedPlans.map(
       (plan) => plan.requestWorkerId,
@@ -128,7 +138,7 @@ export class ElementRequestWorkerPlanService {
 
     if (uniqueRequestWorkerIds.length !== requestWorkerIds.length) {
       throw new BadRequestException(
-        'No se puede repetir el mismo trabajador en la planificacion de una misma linea EPI.',
+        'No se puede repetir el mismo trabajador en la planificación de una misma prenda y talla.',
       );
     }
 
@@ -164,7 +174,7 @@ export class ElementRequestWorkerPlanService {
 
     return {
       statusCode: HttpStatus.OK,
-      message: 'Planificacion EPI actualizada exitosamente.',
+      message: 'Planificación por trabajador actualizada exitosamente.',
       data: plans,
     };
   }

@@ -1,4 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/mapped-types';
 import { Transform, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
@@ -16,7 +16,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { SsomaTalkStatus } from 'src/generated/prisma';
+import { SsomaActivityType, SsomaTalkStatus } from 'src/generated/prisma';
 import { SsomaPaginationDto } from './ssoma-pagination.dto';
 
 const dateOnlyOptions = { strict: true };
@@ -35,6 +35,15 @@ export class CreateSsomaTalkDto {
   @MinLength(1)
   @MaxLength(500)
   topic!: string;
+
+  @IsOptional()
+  @IsEnum(SsomaActivityType)
+  activityType?: SsomaActivityType;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(12)
+  otherActivityText?: string | null;
 
   @IsOptional()
   @IsString()
@@ -78,11 +87,9 @@ export class CreateSsomaTalkDto {
   responsiblePosition?: string | null;
 }
 
-class EditableSsomaTalkDto extends OmitType(CreateSsomaTalkDto, [
-  'projectId',
-] as const) {}
-
-export class UpdateSsomaTalkDto extends PartialType(EditableSsomaTalkDto) {}
+export class UpdateSsomaTalkDto extends PartialType(CreateSsomaTalkDto, {
+  skipNullProperties: false,
+}) {}
 
 export class ListSsomaTalksQueryDto extends SsomaPaginationDto {
   @IsOptional()

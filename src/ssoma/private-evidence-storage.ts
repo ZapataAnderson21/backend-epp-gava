@@ -1,7 +1,23 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { constants } from 'node:fs';
-import { chmod, lstat, mkdir, open, realpath, unlink } from 'node:fs/promises';
-import { isAbsolute, join, relative, resolve, sep } from 'node:path';
+import {
+  chmod,
+  link,
+  lstat,
+  mkdir,
+  open,
+  realpath,
+  unlink,
+} from 'node:fs/promises';
+import {
+  dirname,
+  isAbsolute,
+  join,
+  parse,
+  relative,
+  resolve,
+  sep,
+} from 'node:path';
 
 export type PrivateEvidenceNamespace =
   | 'signatures'
@@ -71,6 +87,16 @@ function digest(bytes: Buffer): string {
   return createHash('sha256').update(bytes).digest('hex');
 }
 
+async function syncParentDirectory(path: string): Promise<void> {
+  if (process.platform === 'win32') return;
+  const directory = await open(path, constants.O_RDONLY);
+  try {
+    await directory.sync();
+  } finally {
+    await directory.close();
+  }
+}
+
 function opaqueReference(namespace: PrivateEvidenceNamespace, key: string) {
   return {
     value: `ssoma-private:v1:${Buffer.from(`${namespace}/${key}`).toString('base64url')}`,
@@ -112,23 +138,23 @@ function isSafeKey(key: string): boolean {
   );
 }
 
-/** Explicit local/test-only adapter. It never silently falls back from a production provider. */
-export class LocalFilesystemPrivateEvidenceStorage
-  implements PrivateEvidenceStorage
-{
+/** Shared hardened storage core used by explicit local and persistent adapters. */
+class FilesystemPrivateEvidenceStorageCore implements PrivateEvidenceStorage {
   private readonly root: string;
 
   constructor(
     root: string,
-    environment = process.env.NODE_ENV ?? 'development',
+    private readonly publishLink: typeof link = link,
+    private readonly removeTemporary: typeof unlink = unlink,
+    private readonly syncDirectory: (
+      path: string,
+    ) => Promise<void> = syncParentDirectory,
   ) {
-    if (environment.toLowerCase() === 'production')
-      throw new Error(
-        'Local SSOMA evidence storage is forbidden in production',
-      );
     if (!root || !isAbsolute(root))
       throw new Error('SSOMA evidence root must be an absolute path');
     this.root = resolve(root);
+    if (parse(this.root).root === this.root)
+      throw new Error('SSOMA evidence root must not be a filesystem root');
   }
 
   async putIfAbsent(input: {
@@ -142,23 +168,27 @@ export class LocalFilesystemPrivateEvidenceStorage
       throw new Error('Evidence checksum does not match bytes');
     const target = await this.ensureParent(input.namespace, input.key);
     const reference = opaqueReference(input.namespace, input.key);
+    const temporary = join(dirname(target), `.ssoma-tmp-${randomUUID()}`);
+    let handle: Awaited<ReturnType<typeof open>> | undefined;
     try {
-      const handle = await open(
-        target,
+      handle = await open(
+        temporary,
         constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL,
         0o600,
       );
-      try {
-        await handle.writeFile(input.bytes);
-        await handle.sync();
-      } catch (error) {
-        await handle.close();
-        await unlink(target).catch(() => undefined);
-        throw error;
-      }
+      await handle.writeFile(input.bytes);
+      await handle.sync();
       await handle.close();
-      return { reference, created: true };
     } catch (error) {
+      if (handle) await handle.close().catch(() => undefined);
+      await this.cleanupTemporary(temporary);
+      throw error;
+    }
+
+    try {
+      await this.publishLink(temporary, target);
+    } catch (error) {
+      await this.cleanupTemporary(temporary);
       if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
       await this.assertNoSymlink(target);
       await chmod(target, 0o600);
@@ -167,6 +197,16 @@ export class LocalFilesystemPrivateEvidenceStorage
         throw new Error('Immutable private evidence collision');
       return { reference, created: false };
     }
+
+    // The hard link is the ownership point. Later durability/cleanup errors cannot
+    // turn a published object into an unreportable failure for the caller.
+    await this.syncDirectory(dirname(target)).catch(() => undefined);
+    await this.cleanupTemporary(temporary);
+    return { reference, created: true };
+  }
+
+  private async cleanupTemporary(path: string): Promise<void> {
+    await this.removeTemporary(path).catch(() => undefined);
   }
 
   async readVerified(
@@ -307,6 +347,32 @@ export class LocalFilesystemPrivateEvidenceStorage
   }
 }
 
+/** Explicit local/test-only adapter. It never silently falls back from a production provider. */
+export class LocalFilesystemPrivateEvidenceStorage extends FilesystemPrivateEvidenceStorageCore {
+  constructor(
+    root: string,
+    environment = process.env.NODE_ENV ?? 'development',
+  ) {
+    if (environment.toLowerCase() === 'production')
+      throw new Error(
+        'Local SSOMA evidence storage is forbidden in production',
+      );
+    super(root);
+  }
+}
+
+/** Persistent private filesystem adapter; intended for a dedicated durable production volume. */
+export class PersistentFilesystemPrivateEvidenceStorage extends FilesystemPrivateEvidenceStorageCore {
+  constructor(
+    root: string,
+    publishLink: typeof link = link,
+    removeTemporary: typeof unlink = unlink,
+    syncDirectory?: (path: string) => Promise<void>,
+  ) {
+    super(root, publishLink, removeTemporary, syncDirectory);
+  }
+}
+
 export class UnavailablePrivateEvidenceStorage
   implements PrivateEvidenceStorage
 {
@@ -328,4 +394,23 @@ export class UnavailablePrivateEvidenceStorage
   deleteIfMatch(): Promise<boolean> {
     return Promise.reject(this.unavailable());
   }
+}
+
+export function createPrivateEvidenceStorageFromEnvironment(
+  environment: NodeJS.ProcessEnv = process.env,
+): PrivateEvidenceStorage {
+  const provider = environment.SSOMA_EVIDENCE_STORAGE;
+  if (provider !== 'local' && provider !== 'persistent')
+    return new UnavailablePrivateEvidenceStorage();
+  const root = environment.SSOMA_EVIDENCE_LOCAL_ROOT;
+  if (!root)
+    throw new Error(
+      'SSOMA_EVIDENCE_LOCAL_ROOT is required for configured evidence storage',
+    );
+  if (provider === 'local')
+    return new LocalFilesystemPrivateEvidenceStorage(
+      root,
+      environment.NODE_ENV ?? 'development',
+    );
+  return new PersistentFilesystemPrivateEvidenceStorage(root);
 }

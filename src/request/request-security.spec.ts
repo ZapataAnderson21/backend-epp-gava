@@ -24,7 +24,6 @@ describe('Request security boundaries', () => {
     const service = new RequestService(
       prisma as unknown as PrismaService,
       {} as never,
-      {} as never,
       permissions as unknown as PermissionsService,
     );
 

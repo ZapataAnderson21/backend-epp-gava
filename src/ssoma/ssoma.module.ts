@@ -10,9 +10,8 @@ import {
   SsomaRetentionService,
 } from './ssoma-retention.service';
 import {
+  createPrivateEvidenceStorageFromEnvironment,
   PRIVATE_EVIDENCE_STORAGE,
-  LocalFilesystemPrivateEvidenceStorage,
-  UnavailablePrivateEvidenceStorage,
 } from './private-evidence-storage';
 
 @Module({
@@ -27,21 +26,7 @@ import {
     { provide: SSOMA_RETENTION_CLOCK, useValue: { now: () => new Date() } },
     {
       provide: PRIVATE_EVIDENCE_STORAGE,
-      useFactory: () => {
-        const provider = process.env.SSOMA_EVIDENCE_STORAGE;
-        if (provider === 'local') {
-          const root = process.env.SSOMA_EVIDENCE_LOCAL_ROOT;
-          if (!root)
-            throw new Error(
-              'SSOMA_EVIDENCE_LOCAL_ROOT is required for local evidence storage',
-            );
-          return new LocalFilesystemPrivateEvidenceStorage(
-            root,
-            process.env.NODE_ENV ?? 'development',
-          );
-        }
-        return new UnavailablePrivateEvidenceStorage();
-      },
+      useFactory: () => createPrivateEvidenceStorageFromEnvironment(),
     },
   ],
 })

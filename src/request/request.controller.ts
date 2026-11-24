@@ -28,6 +28,8 @@ import { GetUser } from 'src/decorators/get-user.decorator';
 import { ListRequestsQueryDto } from './dto/list-requests-query.dto';
 import { UpdateRequestStatusDto } from './dto/update-request-status.dto';
 import { SendRequestLogisticsDto } from './dto/send-request-logistics.dto';
+import { CreateSsomaRequestDto } from './dto/create-ssoma-request.dto';
+import { AddRequestResourceDto } from './dto/add-request-resource.dto';
 
 @Controller('request')
 export class RequestController {
@@ -45,6 +47,23 @@ export class RequestController {
     @GetUser('userId') userId: number,
   ) {
     return await this.requestService.create(createRequestDto, userId);
+  }
+
+  @Post('ssoma')
+  async createSsoma(
+    @Body() createSsomaRequestDto: CreateSsomaRequestDto,
+    @GetUser('userId') userId: number,
+  ) {
+    return this.requestService.createSsoma(createSsomaRequestDto, userId);
+  }
+
+  @Post(':id/additions')
+  async addResource(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: AddRequestResourceDto,
+    @GetUser('userId') userId: number,
+  ) {
+    return this.requestService.addResource(id, dto, userId);
   }
 
   @Get()
@@ -107,6 +126,26 @@ export class RequestController {
     const progressUserId = userId;
     const operationId = body.operationId || `request-mail-${requestId}`;
 
+    if (body.operationId) {
+      const previousAttempt = await this.requestService.findEmailAttempt(
+        body.operationId,
+      );
+      if (previousAttempt) {
+        return {
+          statusCode:
+            previousAttempt.status === 'accepted'
+              ? HttpStatus.OK
+              : HttpStatus.CONFLICT,
+          message:
+            previousAttempt.status === 'accepted'
+              ? 'Este envío ya fue procesado correctamente.'
+              : previousAttempt.errorMessage ||
+                'Este intento de envío ya fue procesado.',
+          data: null,
+        };
+      }
+    }
+
     // Autorizar antes de validar SMTP, generar el PDF o enviar correo.
     await this.requestService.assertCanSendToLogistics(requestId, userId);
 
@@ -142,6 +181,13 @@ export class RequestController {
       );
 
     if (validationResult.statusCode !== 200) {
+      await this.requestService.recordEmailAttempt(
+        requestId,
+        userId,
+        null,
+        validationResult,
+        operationId,
+      );
       emitProgress('validate-smtp', 'error', validationResult.message, {
         data: validationResult.data,
       });
@@ -167,6 +213,17 @@ export class RequestController {
         (error instanceof Error ? error.message : '') ||
         'No se pudo generar el PDF del requerimiento antes del envio.';
       emitProgress('generate-pdf', 'error', message);
+      await this.requestService.recordEmailAttempt(
+        requestId,
+        userId,
+        null,
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message,
+          data: null,
+        },
+        operationId,
+      );
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message,
@@ -181,6 +238,16 @@ export class RequestController {
       { skipVerification: true },
     );
 
+    if (mailResult.audit) {
+      await this.requestService.recordEmailAttempt(
+        requestId,
+        userId,
+        mailResult.audit,
+        mailResult,
+        operationId,
+      );
+    }
+
     // Verificar si el envío del correo fue exitoso antes de actualizar el estado
     if (mailResult.statusCode !== 200) {
       emitProgress('send-email', 'error', mailResult.message, {
@@ -190,6 +257,15 @@ export class RequestController {
     }
 
     emitProgress('send-email', 'success', 'Correo enviado correctamente.');
+
+    if (mailResult.audit?.isUpdate) {
+      emitProgress(
+        'done',
+        'success',
+        'Actualización del requerimiento enviada correctamente.',
+      );
+      return this.requestService.findOne(requestId, userId);
+    }
 
     try {
       emitProgress(

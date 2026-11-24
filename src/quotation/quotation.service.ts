@@ -8,7 +8,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateQuotationDto } from './dto/create-quotation.dto';
 import { UpdateQuotationDto } from './dto/update-quotation.dto';
-import { QuotationStatus } from './enum';
+import { QuotationStatus, QuotationType } from './enum';
 import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
 import { ListQuotationsQueryDto } from './dto/list-quotations-query.dto';
 
@@ -81,51 +81,56 @@ export class QuotationService {
     const igvAmount = Number((costDirectAmount * igvRate).toFixed(2));
     const totalAmount = Number((costDirectAmount + igvAmount).toFixed(2));
 
-    const tempCode = `TEMP-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    const updatedQuotation = await this.prisma.$transaction(async (tx) => {
+      // Serialize quotation numbering only; unrelated transactions are unaffected.
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(487199132)`;
 
-    const quotation = await this.prisma.quotation.create({
-      data: {
-        code: tempCode,
-        serviceDescription: dto.serviceDescription,
-        clientId: dto.clientId,
-        status: QuotationStatus.Draft,
-        commercialTerms: dto.commercialTerms,
-        costDirectAmount,
-        igvRate,
-        igvAmount,
-        totalAmount,
-        items: {
-          create: items,
+      const tempCode = `TEMP-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      const quotation = await tx.quotation.create({
+        data: {
+          code: tempCode,
+          serviceDescription: dto.serviceDescription,
+          clientId: dto.clientId,
+          type: dto.type,
+          status: QuotationStatus.Draft,
+          commercialTerms: dto.commercialTerms,
+          costDirectAmount,
+          igvRate,
+          igvAmount,
+          totalAmount,
+          items: {
+            create: items,
+          },
         },
-      },
-      include: {
-        client: true,
-        items: {
-          orderBy: [{ orderNumber: 'asc' }, { createdAt: 'desc' }],
+        include: {
+          client: true,
+          items: {
+            orderBy: [{ orderNumber: 'asc' }, { createdAt: 'desc' }],
+          },
         },
-      },
-    });
+      });
 
-    const { year, start, end } = this.getYearBounds(quotation.createdAt);
-    const sequence = await this.prisma.quotation.count({
-      where: {
-        createdAt: {
-          gte: start,
-          lt: end,
+      const { year, start, end } = this.getYearBounds(quotation.createdAt);
+      const sequence = await tx.quotation.count({
+        where: {
+          createdAt: {
+            gte: start,
+            lt: end,
+          },
         },
-      },
-    });
-    const code = this.formatQuotationCode(sequence, year);
+      });
+      const code = this.formatQuotationCode(sequence, year);
 
-    const updatedQuotation = await this.prisma.quotation.update({
-      where: { quotationId: quotation.quotationId },
-      data: { code },
-      include: {
-        client: true,
-        items: {
-          orderBy: [{ orderNumber: 'asc' }, { createdAt: 'desc' }],
+      return tx.quotation.update({
+        where: { quotationId: quotation.quotationId },
+        data: { code },
+        include: {
+          client: true,
+          items: {
+            orderBy: [{ orderNumber: 'asc' }, { createdAt: 'desc' }],
+          },
         },
-      },
+      });
     });
 
     return {
@@ -135,9 +140,17 @@ export class QuotationService {
     };
   }
 
-  async findAll(filters?: { clientId?: string; status?: QuotationStatus }) {
+  async findAll(filters?: {
+    clientId?: string;
+    status?: QuotationStatus;
+    type?: QuotationType;
+  }) {
     this.logger.log('Fetching all quotations');
-    const where: { clientId?: number; status?: QuotationStatus } = {};
+    const where: {
+      clientId?: number;
+      status?: QuotationStatus;
+      type?: QuotationType;
+    } = {};
 
     if (filters?.clientId) {
       const clientId = Number(filters.clientId);
@@ -153,6 +166,9 @@ export class QuotationService {
 
     if (filters?.status) {
       where.status = filters.status;
+    }
+    if (filters?.type) {
+      where.type = filters.type;
     }
 
     const quotations = await this.prisma.quotation.findMany({
@@ -186,6 +202,7 @@ export class QuotationService {
     const where = {
       ...(query.clientId ? { clientId: query.clientId } : {}),
       ...(query.status ? { status: query.status } : {}),
+      ...(query.type ? { type: query.type } : {}),
       ...(search
         ? {
             OR: [
@@ -276,6 +293,7 @@ export class QuotationService {
       serviceDescription?: string;
       clientId?: number;
       status?: QuotationStatus;
+      type?: QuotationType;
       commercialTerms?: string | null;
       costDirectAmount?: number;
       igvRate?: number;
@@ -299,6 +317,7 @@ export class QuotationService {
     }
     if (dto.clientId !== undefined) data.clientId = dto.clientId;
     if (dto.status !== undefined) data.status = dto.status;
+    if (dto.type !== undefined) data.type = dto.type;
     if (dto.commercialTerms !== undefined) {
       data.commercialTerms = dto.commercialTerms ?? null;
     }

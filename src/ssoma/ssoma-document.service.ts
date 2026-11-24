@@ -8,6 +8,7 @@ import { Inject } from '@nestjs/common';
 import { createHash } from 'node:crypto';
 import {
   Prisma,
+  SsomaActivityType,
   SsomaAttendanceStatus,
   SsomaPublicationStatus,
   SsomaDocumentVersionStatus,
@@ -1054,6 +1055,8 @@ export class SsomaDocumentService {
         talk: {
           talkDate: dateOnly(talk.talkDate),
           topic: talk.topic,
+          activityType: talk.activityType,
+          otherActivityText: talk.otherActivityText,
           trainer: talk.trainer,
           location: talk.location,
           targetAudience: talk.targetAudience,
@@ -1168,6 +1171,11 @@ export class SsomaDocumentService {
         versionNumber: 0,
         talk: {
           ...baseDocument.talk,
+          activityType:
+            baseDocument.talk.activityType ??
+            talk.activityType ??
+            SsomaActivityType.TALK,
+          otherActivityText: baseDocument.talk.otherActivityText ?? null,
           ...talkOverrides,
         } as SsomaOfficialDocumentSnapshot['talk'],
         participants,

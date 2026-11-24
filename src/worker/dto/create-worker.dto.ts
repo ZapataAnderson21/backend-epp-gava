@@ -66,53 +66,7 @@ export class CreateWorkerDto {
   @IsDateString({}, { message: 'birthDate debe tener formato ISO: YYYY-MM-DD' })
   birthDate?: string;
 
-  @ApiProperty({ example: WorkerType.Laborer })
-  @IsEnum(WorkerType, { message: 'workerType debe ser un tipo válido.' })
-  workerType!: WorkerType;
-}
-
-/** Update DTO: todos opcionales y con mismas transforms */
-export class UpdateWorkerDto {
-  @ApiPropertyOptional({ example: 'Luis Ramos' })
-  @Transform(({ value }) => toUndefIfEmpty(value))
-  @IsOptional()
-  @IsString()
-  fullName?: string;
-
-  @ApiPropertyOptional({ example: '12345678' })
-  @Transform(({ value }) => toUndefIfEmpty(value))
-  @IsOptional()
-  @Length(8, 8)
-  @IsString()
-  dni?: string;
-
-  @ApiPropertyOptional({ example: '987654321' })
-  @Transform(({ value }) => toNullIfEmpty(value))
-  @IsOptional()
-  @IsString()
-  phone?: string | null;
-
-  @ApiPropertyOptional({ example: 'luis.ramos@example.com' })
-  @Transform(({ value }) => toNullIfEmpty(value))
-  @IsOptional()
-  @IsEmail()
-  personalEmail?: string | null;
-
-  @ApiPropertyOptional({ example: 'Av. Siempre Viva 123' })
-  @Transform(({ value }) => toUndefIfEmpty(value))
-  @IsOptional()
-  @IsString()
-  address?: string;
-
-  @ApiPropertyOptional({ example: '1990-01-01' })
-  @Transform(({ value }: TransformFnParams): unknown =>
-    value === '' || value === null ? undefined : value,
-  )
-  @IsOptional()
-  @IsDateString()
-  birthDate?: string;
-
-  @ApiProperty({ example: WorkerType.Laborer })
+  @ApiProperty({ enum: WorkerType, example: WorkerType.Laborer })
   @IsEnum(WorkerType, { message: 'workerType debe ser un tipo válido.' })
   workerType!: WorkerType;
 }

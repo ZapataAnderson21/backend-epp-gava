@@ -6,7 +6,9 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { CreateElementVariantDto } from './dto/create-element-variant.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import type { ElementFamily as PrismaElementFamily } from 'src/generated/prisma';
 import {
   ElementControlType,
   ElementControlTypeLabelEs,
@@ -58,14 +60,14 @@ export class ElementService {
     return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
   }
 
-  private getDeprecatedVariantLabels(
-    dto: CreateElementDto | UpdateElementDto,
-  ) {
+  private getDeprecatedVariantLabels(dto: CreateElementDto | UpdateElementDto) {
     return (dto as { variantLabels?: string[] | null }).variantLabels;
   }
 
   private isElementFamily(value?: string | null): value is ElementFamily {
-    return !!value && Object.values(ElementFamily).includes(value as ElementFamily);
+    return (
+      !!value && Object.values(ElementFamily).includes(value as ElementFamily)
+    );
   }
 
   private isElementType(value?: string | null): value is ElementType {
@@ -106,6 +108,13 @@ export class ElementService {
     controlType?: ElementControlType | null,
   ) {
     if (family) {
+      if (
+        family === ElementFamily.Ese &&
+        controlType &&
+        this.isElementControlType(controlType)
+      ) {
+        return controlType;
+      }
       return ElementFamilyControlType[family as ElementFamily];
     }
 
@@ -125,7 +134,8 @@ export class ElementService {
       family === ElementFamily.Epp ||
       family === ElementFamily.Epi ||
       family === ElementFamily.Uniform ||
-      family === ElementFamily.OfficeMaterial
+      family === ElementFamily.OfficeMaterial ||
+      family === ElementFamily.Materials
     );
   }
 
@@ -152,19 +162,73 @@ export class ElementService {
     }));
   }
 
-  private buildAssetSummary(
-    inventoryAssets?: Array<{ status: string }>,
-  ) {
+  async createVariant(elementId: number, dto: CreateElementVariantDto) {
+    const element = await this.prismaService.element.findFirst({
+      where: { elementId, deletedAt: null },
+      select: { elementId: true, family: true },
+    });
+    if (!element) throw new NotFoundException('El recurso no existe.');
+    if (element.family !== ElementFamily.Uniform) {
+      throw new BadRequestException(
+        'Las tallas solo pueden administrarse en Ropa de Trabajo.',
+      );
+    }
+    const normalized = this.normalizeVariantLabels([dto.label])[0];
+    if (!normalized) throw new BadRequestException('La talla es obligatoria.');
+
+    const existing = await this.prismaService.elementVariant.findUnique({
+      where: {
+        elementId_normalizedLabel: {
+          elementId,
+          normalizedLabel: normalized.normalizedLabel,
+        },
+      },
+    });
+    if (existing?.deletedAt === null) {
+      throw new BadRequestException('La talla ya existe para esta prenda.');
+    }
+
+    const variant = existing
+      ? await this.prismaService.elementVariant.update({
+          where: { elementVariantId: existing.elementVariantId },
+          data: {
+            label: normalized.label,
+            code: this.normalizeOptionalText(dto.code),
+            description: this.normalizeOptionalText(dto.description),
+            deletedAt: null,
+          },
+        })
+      : await this.prismaService.elementVariant.create({
+          data: {
+            elementId,
+            label: normalized.label,
+            normalizedLabel: normalized.normalizedLabel,
+            code: this.normalizeOptionalText(dto.code),
+            description: this.normalizeOptionalText(dto.description),
+          },
+        });
+
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Talla creada con stock inicial cero.',
+      data: variant,
+    };
+  }
+
+  private buildAssetSummary(inventoryAssets?: Array<{ status: string }>) {
     const totalAssets = inventoryAssets?.length ?? 0;
     const availableAssets =
-      inventoryAssets?.filter((asset) => asset.status === 'available').length ?? 0;
+      inventoryAssets?.filter((asset) => asset.status === 'available').length ??
+      0;
     const assignedAssets =
-      inventoryAssets?.filter((asset) => asset.status === 'assigned').length ?? 0;
+      inventoryAssets?.filter((asset) => asset.status === 'assigned').length ??
+      0;
     const maintenanceAssets =
       inventoryAssets?.filter((asset) => asset.status === 'in_maintenance')
         .length ?? 0;
     const retiredAssets =
-      inventoryAssets?.filter((asset) => asset.status === 'retired').length ?? 0;
+      inventoryAssets?.filter((asset) => asset.status === 'retired').length ??
+      0;
 
     return {
       totalAssets,
@@ -175,24 +239,24 @@ export class ElementService {
     };
   }
 
-  private buildElementView<T extends {
-    category?: { name: string } | null;
-    type: string;
-    controlType: string;
-    family?: string | null;
-    deletedAt?: Date | null;
-    variants?: Array<{
-      elementVariantId: number;
-      label: string;
-      normalizedLabel: string;
-      code?: string | null;
-      description?: string | null;
-    }>;
-    inventoryAssets?: Array<{ inventoryAssetId: number; status: string }>;
-  }>(element: T) {
-    const family = this.isElementFamily(element.family)
-      ? element.family
-      : null;
+  private buildElementView<
+    T extends {
+      category?: { name: string } | null;
+      type: string;
+      controlType: string;
+      family?: string | null;
+      deletedAt?: Date | null;
+      variants?: Array<{
+        elementVariantId: number;
+        label: string;
+        normalizedLabel: string;
+        code?: string | null;
+        description?: string | null;
+      }>;
+      inventoryAssets?: Array<{ inventoryAssetId: number; status: string }>;
+    },
+  >(element: T) {
+    const family = this.isElementFamily(element.family) ? element.family : null;
     const isLegacy = !family;
     const variants: Array<{
       elementVariantId: number;
@@ -212,9 +276,8 @@ export class ElementService {
       typeLabel:
         ElementTypeLabelEs[element.type as ElementType] ?? element.type,
       controlTypeLabel:
-        ElementControlTypeLabelEs[
-          element.controlType as ElementControlType
-        ] ?? element.controlType,
+        ElementControlTypeLabelEs[element.controlType as ElementControlType] ??
+        element.controlType,
       isArchived: Boolean(element.deletedAt),
       legacyWarning: isLegacy
         ? 'Elemento legado conservado para compatibilidad e historial.'
@@ -243,11 +306,13 @@ export class ElementService {
   }
 
   private normalizeCategoryText(value?: string | null) {
-    return value
-      ?.normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .trim()
-      .toLowerCase() ?? '';
+    return (
+      value
+        ?.normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .toLowerCase() ?? ''
+    );
   }
 
   private async ensureFallProtectionPart(
@@ -322,7 +387,10 @@ export class ElementService {
       components.push({ role: 'harness', elementId: dto.harnessElementId });
     }
     if (dto.anchorBandElementId) {
-      components.push({ role: 'anchorBand', elementId: dto.anchorBandElementId });
+      components.push({
+        role: 'anchorBand',
+        elementId: dto.anchorBandElementId,
+      });
     }
     if (dto.lifelineElementId) {
       components.push({ role: 'lifeline', elementId: dto.lifelineElementId });
@@ -334,7 +402,10 @@ export class ElementService {
       });
     }
 
-    const deduped = new Map<string, { role: FallProtectionComponentRole; elementId: number }>();
+    const deduped = new Map<
+      string,
+      { role: FallProtectionComponentRole; elementId: number }
+    >();
     for (const component of components) {
       const elementId = Number(component.elementId);
       if (!elementId) continue;
@@ -419,8 +490,7 @@ export class ElementService {
       harness: 'Selecciona al menos un arnés.',
       anchorBand: 'Selecciona al menos una banda de anclaje.',
       lifeline: 'Selecciona al menos una línea de vida.',
-      positioningLanyard:
-        'Selecciona al menos una eslinga de posicionamiento.',
+      positioningLanyard: 'Selecciona al menos una eslinga de posicionamiento.',
     };
     const missingRole = requiredRoles.find(
       (role) => !componentsByRole.get(role)?.length,
@@ -526,10 +596,7 @@ export class ElementService {
     });
 
     const activeCountByCategoryId = new Map(
-      activeCounts.map((count) => [
-        count.elementCategoryId,
-        count._count._all,
-      ]),
+      activeCounts.map((count) => [count.elementCategoryId, count._count._all]),
     );
 
     return {
@@ -566,22 +633,24 @@ export class ElementService {
       },
     });
 
-    const deletedCategory = await this.prismaService.$transaction(async (tx) => {
-      const deletedAt = new Date();
+    const deletedCategory = await this.prismaService.$transaction(
+      async (tx) => {
+        const deletedAt = new Date();
 
-      await tx.element.updateMany({
-        where: {
-          elementCategoryId,
-          deletedAt: null,
-        },
-        data: { deletedAt },
-      });
+        await tx.element.updateMany({
+          where: {
+            elementCategoryId,
+            deletedAt: null,
+          },
+          data: { deletedAt },
+        });
 
-      return tx.elementCategory.update({
-        where: { elementCategoryId },
-        data: { deletedAt },
-      });
-    });
+        return tx.elementCategory.update({
+          where: { elementCategoryId },
+          data: { deletedAt },
+        });
+      },
+    );
 
     return {
       statusCode: HttpStatus.OK,
@@ -642,6 +711,7 @@ export class ElementService {
       elementId: number;
       family: string | null;
       type: string | null;
+      controlType: string | null;
       code: string | null;
     },
   ) {
@@ -655,19 +725,21 @@ export class ElementService {
 
     const nextFamily = hasFamily
       ? (dto.family ?? null)
-      : currentElement?.family ?? null;
+      : (currentElement?.family ?? null);
     const nextType = hasType
       ? (dto.type ?? null)
-      : currentElement?.type ?? null;
+      : (currentElement?.type ?? null);
     const nextCode = hasCode
       ? this.normalizeOptionalText(dto.code)
-      : currentElement?.code ?? null;
+      : (currentElement?.code ?? null);
     const nextControlType = hasControlType
       ? (dto.controlType ?? null)
-      : null;
+      : ((currentElement?.controlType as ElementControlType | null) ?? null);
 
     if (nextFamily && !this.isElementFamily(nextFamily)) {
-      throw new BadRequestException(`Familia de inventario invalida: ${nextFamily}`);
+      throw new BadRequestException(
+        `Familia de inventario invalida: ${nextFamily}`,
+      );
     }
     const validatedFamily: ElementFamily | null =
       nextFamily && this.isElementFamily(nextFamily) ? nextFamily : null;
@@ -782,15 +854,17 @@ export class ElementService {
     }
     const resolvedType = resolved.type;
 
-    if (resolved.family && ElementFamilyRequiresCode[resolved.family] && !normalizedCode) {
+    if (
+      resolved.family &&
+      ElementFamilyRequiresCode[resolved.family] &&
+      !normalizedCode
+    ) {
       throw new BadRequestException(
         `La familia ${ElementFamilyLabelEs[resolved.family]} requiere codigo obligatorio.`,
       );
     }
 
-    if (
-      this.getDeprecatedVariantLabels(createElementDto)?.length
-    ) {
+    if (this.getDeprecatedVariantLabels(createElementDto)?.length) {
       throw new BadRequestException(
         'Cada talla debe registrarse como un elemento independiente.',
       );
@@ -801,7 +875,7 @@ export class ElementService {
       !this.supportsStockMinimum(resolved.family)
     ) {
       throw new BadRequestException(
-        'El stock minimo solo aplica para EPP, EPI, Uniforme y Materiales de Oficina.',
+        'El stock minimo solo aplica para EPP, EPI, Ropa de Trabajo, Materiales de Oficina y Materiales.',
       );
     }
 
@@ -831,7 +905,9 @@ export class ElementService {
           description: createElementDto.description?.trim(),
           brand: this.normalizeOptionalText(createElementDto.brand),
           model: this.normalizeOptionalText(createElementDto.model),
-          size: isSsomaSupply ? null : this.normalizeOptionalText(createElementDto.size),
+          size: isSsomaSupply
+            ? null
+            : this.normalizeOptionalText(createElementDto.size),
           serialNumber: isSsomaSupply
             ? null
             : this.normalizeOptionalText(createElementDto.serialNumber),
@@ -852,7 +928,7 @@ export class ElementService {
           controlType: resolved.controlType,
           elementCategoryId,
           stockMinimum: this.supportsStockMinimum(resolved.family)
-            ? createElementDto.stockMinimum ?? 0
+            ? (createElementDto.stockMinimum ?? 0)
             : 0,
         },
       });
@@ -946,10 +1022,7 @@ export class ElementService {
 
     const foundElements = await this.prismaService.element.findMany({
       where: {
-        OR: [
-          { family },
-          ...(legacyFamilyWhere ? [legacyFamilyWhere] : []),
-        ],
+        OR: [{ family }, ...(legacyFamilyWhere ? [legacyFamilyWhere] : [])],
         deletedAt: null,
       },
       include: this.elementCatalogInclude,
@@ -993,10 +1066,7 @@ export class ElementService {
       throw new NotFoundException('Elemento no encontrado.');
     }
 
-    if (
-      updateElementDto.type &&
-      !this.isElementType(updateElementDto.type)
-    ) {
+    if (updateElementDto.type && !this.isElementType(updateElementDto.type)) {
       throw new BadRequestException('Selecciona un tipo valido.');
     }
 
@@ -1025,11 +1095,14 @@ export class ElementService {
       elementId: existingElement.elementId,
       family: existingElement.family,
       type: existingElement.type,
+      controlType: existingElement.controlType,
       code: existingElement.code,
     });
 
     if (!resolved.type) {
-      throw new BadRequestException('No se pudo resolver el tipo del elemento.');
+      throw new BadRequestException(
+        'No se pudo resolver el tipo del elemento.',
+      );
     }
 
     const nextFamily = Object.prototype.hasOwnProperty.call(
@@ -1039,7 +1112,11 @@ export class ElementService {
       ? resolved.family
       : existingElement.family;
 
-    if (resolved.family && ElementFamilyRequiresCode[resolved.family] && !normalizedCode) {
+    if (
+      resolved.family &&
+      ElementFamilyRequiresCode[resolved.family] &&
+      !normalizedCode
+    ) {
       throw new BadRequestException(
         `La familia ${ElementFamilyLabelEs[resolved.family]} requiere codigo obligatorio.`,
       );
@@ -1072,7 +1149,7 @@ export class ElementService {
       code?: string | null;
       description?: string;
       type?: ElementType;
-      family?: ElementFamily | null;
+      family?: PrismaElementFamily | null;
       controlType?: ElementControlType;
       elementCategoryId?: number | null;
       stockMinimum?: number;
@@ -1133,29 +1210,47 @@ export class ElementService {
       data.size = this.normalizeOptionalText(updateElementDto.size);
     }
 
-    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'serialNumber')) {
-      data.serialNumber = this.normalizeOptionalText(updateElementDto.serialNumber);
+    if (
+      Object.prototype.hasOwnProperty.call(updateElementDto, 'serialNumber')
+    ) {
+      data.serialNumber = this.normalizeOptionalText(
+        updateElementDto.serialNumber,
+      );
     }
 
-    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'technicalSheetLink')) {
+    if (
+      Object.prototype.hasOwnProperty.call(
+        updateElementDto,
+        'technicalSheetLink',
+      )
+    ) {
       data.technicalSheetLink = this.normalizeOptionalText(
         updateElementDto.technicalSheetLink,
       );
     }
 
-    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'operationalStatus')) {
+    if (
+      Object.prototype.hasOwnProperty.call(
+        updateElementDto,
+        'operationalStatus',
+      )
+    ) {
       data.operationalStatus = this.normalizeOptionalText(
         updateElementDto.operationalStatus,
       );
     }
 
-    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'manufactureDate')) {
+    if (
+      Object.prototype.hasOwnProperty.call(updateElementDto, 'manufactureDate')
+    ) {
       data.manufactureDate = this.normalizeOptionalDate(
         updateElementDto.manufactureDate,
       );
     }
 
-    if (Object.prototype.hasOwnProperty.call(updateElementDto, 'expirationDate')) {
+    if (
+      Object.prototype.hasOwnProperty.call(updateElementDto, 'expirationDate')
+    ) {
       data.expirationDate = this.normalizeOptionalDate(
         updateElementDto.expirationDate,
       );
@@ -1165,8 +1260,12 @@ export class ElementService {
       Object.prototype.hasOwnProperty.call(updateElementDto, 'stockMinimum') ||
       Object.prototype.hasOwnProperty.call(updateElementDto, 'family')
     ) {
-      data.stockMinimum = this.supportsStockMinimum(nextFamily as ElementFamily | null)
-        ? Number(updateElementDto.stockMinimum ?? existingElement.stockMinimum ?? 0)
+      data.stockMinimum = this.supportsStockMinimum(
+        nextFamily as ElementFamily | null,
+      )
+        ? Number(
+            updateElementDto.stockMinimum ?? existingElement.stockMinimum ?? 0,
+          )
         : 0;
     }
 
@@ -1177,7 +1276,9 @@ export class ElementService {
       data.family = nextFamily;
       data.type = resolved.type;
       data.controlType = resolved.controlType;
-    } else if (Object.prototype.hasOwnProperty.call(updateElementDto, 'controlType')) {
+    } else if (
+      Object.prototype.hasOwnProperty.call(updateElementDto, 'controlType')
+    ) {
       data.controlType = resolved.controlType;
     }
 
@@ -1201,7 +1302,9 @@ export class ElementService {
         data,
       });
 
-      if (Object.prototype.hasOwnProperty.call(updateElementDto, 'variantLabels')) {
+      if (
+        Object.prototype.hasOwnProperty.call(updateElementDto, 'variantLabels')
+      ) {
         await tx.elementVariant.updateMany({
           where: {
             elementId,

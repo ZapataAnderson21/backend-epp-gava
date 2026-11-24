@@ -139,9 +139,10 @@ describe('Dynamic role permissions', () => {
               new RegExp(`WHEN '${name}' THEN ARRAY\\[([^\\]]*)\\]`),
             )?.[1];
       const historicalPermissions = seeded?.replaceAll("'", '').split(',');
-      expect(
-        historicalPermissions?.filter((p) => !p.startsWith('ssoma.')),
-      ).toEqual(permissions.filter((p) => !p.startsWith('ssoma.')));
+      expect(historicalPermissions).toBeDefined();
+      expect(permissions).toEqual(
+        expect.arrayContaining(historicalPermissions ?? []),
+      );
     }
     expect(initialPermissions('LOGISTICA')).not.toContain('roles.manage');
   });

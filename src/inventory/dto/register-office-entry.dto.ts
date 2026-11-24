@@ -15,9 +15,22 @@ export class RegisterOfficeEntryDto {
   @IsPositive()
   elementId!: number;
 
+  @ApiPropertyOptional({
+    example: 12,
+    description: 'ID de la talla o variante del elemento',
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  elementVariantId?: number;
+
   @ApiProperty({ example: 10, description: 'Cantidad a ingresar' })
   @Type(() => Number)
-  @IsNumber({ maxDecimalPlaces: 4 }, { message: 'La cantidad debe ser numerica.' })
+  @IsNumber(
+    { maxDecimalPlaces: 4 },
+    { message: 'La cantidad debe ser numerica.' },
+  )
   @IsPositive()
   quantity!: number;
 
@@ -25,13 +38,19 @@ export class RegisterOfficeEntryDto {
   @IsString()
   unit!: string;
 
-  @ApiProperty({ example: 1, description: 'ID del usuario que realiza el ingreso' })
+  @ApiProperty({
+    example: 1,
+    description: 'ID del usuario que realiza el ingreso',
+  })
   @Type(() => Number)
   @IsInt()
   @IsPositive()
   performedByUserId!: number;
 
-  @ApiPropertyOptional({ example: 3, description: 'ID de la orden de compra asociada' })
+  @ApiPropertyOptional({
+    example: 3,
+    description: 'ID de la orden de compra asociada',
+  })
   @IsOptional()
   @Type(() => Number)
   @IsInt()

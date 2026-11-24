@@ -28,6 +28,8 @@ function buildHarness(
     status: 'open',
     talkDate: new Date('2026-10-25T00:00:00Z'),
     topic: 'Safe work',
+    activityType: 'DRILL',
+    otherActivityText: null,
     trainer: 'Trainer',
     location: 'Site',
     targetAudience: 'Crew',
@@ -258,6 +260,10 @@ describe('SsomaDocumentService', () => {
     await service.closeTalk(41, 9, 'close-key-1');
     expect(renderer.render).toHaveBeenCalledWith(
       objectContaining({
+        talk: objectContaining({
+          activityType: 'DRILL',
+          otherActivityText: null,
+        }),
         participants: arrayContaining([
           objectContaining({ fullName: 'Ana Worker', status: 'SIGNED' }),
           objectContaining({

@@ -8,21 +8,21 @@ datasource db {
 }
 
 model User {
-  requestFormDrafts RequestFormDraft[]
+  requestFormDrafts   RequestFormDraft[]
   purchaseOrderDrafts PurchaseOrderDraft[]
-  userId    Int       @id @default(autoincrement())
-  name      String
-  lastName  String
-  email     String    @unique @db.Citext
-  password  String
-  authVersion Int      @default(0)
-  phone     String?   @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  userId              Int                  @id @default(autoincrement())
+  name                String
+  lastName            String
+  email               String               @unique @db.Citext
+  password            String
+  authVersion         Int                  @default(0)
+  phone               String?              @unique
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  deletedAt           DateTime?
 
   blacklistedTokens                 BlacklistedToken[]
-  responses                         RequestResponse[]           @relation("UserResponses")
+  responses                         RequestResponse[]            @relation("UserResponses")
   requests                          Request[]
   userUserTypes                     UserUserType[]
   passwordResetTokens               PasswordResetToken[]
@@ -30,22 +30,34 @@ model User {
   complaints                        Complaint[]
   taskAssignments                   TaskAssignment[]
   notifications                     Notification[]
-  createdMonthlyEvaluationTemplates MonthlyEvaluationTemplate[] @relation("MonthlyEvaluationTemplateCreator")
-  evaluatedMonthlyEvaluations       WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationEvaluator")
-  openedMonthlyEvaluations          WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationOpenedBy")
-  closedMonthlyEvaluations          WorkerMonthlyEvaluation[]   @relation("MonthlyEvaluationClosedBy")
-  receivedRequestsIntoInventory     Request[]                   @relation("RequestInventoryReceivedBy")
-  projectInventoryResponsibilities  ProjectInventoryEntry[]     @relation("ProjectInventoryResponsibleUser")
-  performedInventoryMovements       InventoryMovement[]         @relation("InventoryMovementPerformedBy")
-  createdExpiringDocuments          ExpiringDocument[]          @relation("ExpiringDocumentCreatedBy")
-  updatedExpiringDocuments          ExpiringDocument[]          @relation("ExpiringDocumentUpdatedBy")
+  createdMonthlyEvaluationTemplates MonthlyEvaluationTemplate[]  @relation("MonthlyEvaluationTemplateCreator")
+  evaluatedMonthlyEvaluations       WorkerMonthlyEvaluation[]    @relation("MonthlyEvaluationEvaluator")
+  openedMonthlyEvaluations          WorkerMonthlyEvaluation[]    @relation("MonthlyEvaluationOpenedBy")
+  closedMonthlyEvaluations          WorkerMonthlyEvaluation[]    @relation("MonthlyEvaluationClosedBy")
+  receivedRequestsIntoInventory     Request[]                    @relation("RequestInventoryReceivedBy")
+  projectInventoryResponsibilities  ProjectInventoryEntry[]      @relation("ProjectInventoryResponsibleUser")
+  performedInventoryMovements       InventoryMovement[]          @relation("InventoryMovementPerformedBy")
+  createdExpiringDocuments          ExpiringDocument[]           @relation("ExpiringDocumentCreatedBy")
+  updatedExpiringDocuments          ExpiringDocument[]           @relation("ExpiringDocumentUpdatedBy")
   expiringDocumentHistory           ExpiringDocumentHistory[]
-  responsibleInventoryMovements     InventoryMovement[]         @relation("InventoryMovementResponsibleUser")
-  createdSsomaTalks                  SsomaTalk[]                  @relation("SsomaTalkCreator")
-  ssomaTalkAuditEvents               SsomaTalkAuditEvent[]        @relation("SsomaAuditActor")
-  ssomaTalkRevisions                 SsomaTalkRevision[]         @relation("SsomaRevisionAuthor")
-  ssomaDocumentPublications          SsomaDocumentPublication[]  @relation("SsomaPublicationActor")
-  ssomaRetentionHolds                SsomaSignatureEvidence[]    @relation("SsomaEvidenceHoldSetter")
+  responsibleInventoryMovements     InventoryMovement[]          @relation("InventoryMovementResponsibleUser")
+  createdSsomaTalks                 SsomaTalk[]                  @relation("SsomaTalkCreator")
+  ssomaTalkAuditEvents              SsomaTalkAuditEvent[]        @relation("SsomaAuditActor")
+  ssomaTalkRevisions                SsomaTalkRevision[]          @relation("SsomaRevisionAuthor")
+  ssomaDocumentPublications         SsomaDocumentPublication[]   @relation("SsomaPublicationActor")
+  ssomaRetentionHolds               SsomaSignatureEvidence[]     @relation("SsomaEvidenceHoldSetter")
+  workClothingDispatchesReceived    WorkClothingDispatch[]       @relation("WorkClothingDispatchCustodian")
+  workClothingDispatchesCreated     WorkClothingDispatch[]       @relation("WorkClothingDispatchCreator")
+  workClothingDispatchesConfirmed   WorkClothingDispatch[]       @relation("WorkClothingDispatchReceiver")
+  workClothingCustodyBalances       WorkClothingCustodyBalance[]
+  workClothingDeliveriesCustodied   WorkClothingDelivery[]       @relation("WorkClothingDeliveryCustodian")
+  workClothingDeliveriesCreated     WorkClothingDelivery[]       @relation("WorkClothingDeliveryCreator")
+  workClothingDeliveriesAnnulled    WorkClothingDelivery[]       @relation("WorkClothingDeliveryAnnulledBy")
+  workClothingReturnsCustodied      WorkClothingReturn[]         @relation("WorkClothingReturnCustodian")
+  workClothingReturnsCreated        WorkClothingReturn[]         @relation("WorkClothingReturnCreator")
+  workClothingReturnsConfirmed      WorkClothingReturn[]         @relation("WorkClothingReturnConfirmer")
+  requestAdditionsCreated           RequestResourceAddition[]    @relation("RequestAdditionCreator")
+  requestEmailsSent                 RequestEmailSend[]           @relation("RequestEmailSender")
 
   @@index([name])
   @@index([lastName])
@@ -53,11 +65,11 @@ model User {
 }
 
 model UserType {
-  userTypeId Int    @id @default(autoincrement())
-  name       String @unique
-  description String @default("")
+  userTypeId  Int      @id @default(autoincrement())
+  name        String   @unique
+  description String   @default("")
   permissions String[] @default([])
-  version Int @default(1)
+  version     Int      @default(1)
 
   userUserTypes UserUserType[]
 }
@@ -80,35 +92,47 @@ enum ProjectStatus {
   completed
 }
 
+enum ProjectType {
+  works
+  services
+  consulting
+}
+
 model Project {
   purchaseOrderDrafts PurchaseOrderDraft[]
-  projectId   Int           @id @default(autoincrement())
-  name        String
-  code        String        @unique
-  description String        @default("Sin descripción.") @db.Text
-  status      ProjectStatus @default(active)
-  location    String
-  startDate   DateTime?
-  endDate     DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  deletedAt   DateTime?
+  projectId           Int                  @id @default(autoincrement())
+  name                String
+  code                String               @unique
+  description         String               @default("Sin descripción.") @db.Text
+  status              ProjectStatus        @default(active)
+  type                ProjectType
+  location            String
+  startDate           DateTime?
+  endDate             DateTime?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  deletedAt           DateTime?
 
-  requests                   Request[]
-  emergencies                Emergency[]
-  purchaseOrders             PurchaseOrder[]
-  pettyCashes                PettyCash[]
-  serviceSales               ServiceSale[]
-  generalPayrollProjects     GeneralPayrollProject[]
-  tasks                      Task[]
-  notifications              Notification[]
-  inventoryEntries           ProjectInventoryEntry[]
-  inventoryMovements         InventoryMovement[]
-  currentInventoryAssets     InventoryAsset[]            @relation("InventoryAssetCurrentProject")
-  workerInventoryAssignments WorkerInventoryAssignment[]
-  ssomaTalks                 SsomaTalk[]
+  requests                    Request[]
+  emergencies                 Emergency[]
+  purchaseOrders              PurchaseOrder[]
+  pettyCashes                 PettyCash[]
+  serviceSales                ServiceSale[]
+  generalPayrollProjects      GeneralPayrollProject[]
+  tasks                       Task[]
+  notifications               Notification[]
+  inventoryEntries            ProjectInventoryEntry[]
+  inventoryMovements          InventoryMovement[]
+  currentInventoryAssets      InventoryAsset[]             @relation("InventoryAssetCurrentProject")
+  workerInventoryAssignments  WorkerInventoryAssignment[]
+  ssomaTalks                  SsomaTalk[]
+  workClothingDispatches      WorkClothingDispatch[]
+  workClothingCustodyBalances WorkClothingCustodyBalance[]
+  workClothingDeliveries      WorkClothingDelivery[]
+  workClothingReturns         WorkClothingReturn[]
 
   @@index([status])
+  @@index([type])
   @@index([name])
   @@index([createdAt])
   @@index([deletedAt])
@@ -148,12 +172,19 @@ enum ElementType {
 enum ElementFamily {
   epp
   epi
+  ese
+  measurement
+  consumible
+  eq_safety
+  harness
   uniform
   officeMaterial
   ssomaSupply
-  ese
-  harness
-  measurement
+  electricalEquipment
+  tools
+  ladders
+  materials
+  electricalHarness
 }
 
 enum ElementControlType {
@@ -210,6 +241,11 @@ model Element {
   fallProtectionLifelineGroups           FallProtectionGroup[]          @relation("FallProtectionLifeline")
   fallProtectionPositioningLanyardGroups FallProtectionGroup[]          @relation("FallProtectionPositioningLanyard")
   fallProtectionGroupComponents          FallProtectionGroupComponent[]
+  workClothingDispatchItems              WorkClothingDispatchItem[]
+  workClothingCustodyBalances            WorkClothingCustodyBalance[]
+  workClothingDeliveryItems              WorkClothingDeliveryItem[]
+  workClothingReturnItems                WorkClothingReturnItem[]
+  requestResourceAdditions               RequestResourceAddition[]
 
   @@index([type])
   @@index([family])
@@ -227,7 +263,7 @@ model FallProtectionGroup {
   lifelineElementId           Int
   positioningLanyardElementId Int
   createdAt                   DateTime  @default(now())
-  updatedAt                   DateTime  @updatedAt
+  updatedAt                   DateTime  @default(now()) @updatedAt
   deletedAt                   DateTime?
 
   harnessElement            Element                        @relation("FallProtectionHarness", fields: [harnessElementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
@@ -262,7 +298,7 @@ model FallProtectionGroupComponent {
   fallProtectionGroup FallProtectionGroup @relation(fields: [fallProtectionGroupId], references: [fallProtectionGroupId], onDelete: Cascade, onUpdate: Cascade)
   element             Element             @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
 
-  @@unique([fallProtectionGroupId, role, elementId])
+  @@unique([fallProtectionGroupId, role, elementId], map: "FallProtectionGroupComponent_fallProtectionGroupId_role_element")
   @@index([fallProtectionGroupId])
   @@index([elementId])
   @@index([role])
@@ -279,15 +315,21 @@ model ElementVariant {
   updatedAt        DateTime  @updatedAt
   deletedAt        DateTime?
 
-  element                    Element                     @relation(fields: [elementId], references: [elementId], onDelete: Cascade, onUpdate: Cascade)
-  elementRequests            ElementRequest[]
-  projectInventoryEntries    ProjectInventoryEntry[]
-  officeInventoryEntries     OfficeInventoryEntry[]
-  inventoryMovements         InventoryMovement[]
-  requestWorkerPlans         ElementRequestWorkerPlan[]
-  workerInventoryAssignments WorkerInventoryAssignment[]
+  element                     Element                      @relation(fields: [elementId], references: [elementId], onDelete: Cascade, onUpdate: Cascade)
+  elementRequests             ElementRequest[]
+  projectInventoryEntries     ProjectInventoryEntry[]
+  officeInventoryEntries      OfficeInventoryEntry[]
+  inventoryMovements          InventoryMovement[]
+  requestWorkerPlans          ElementRequestWorkerPlan[]
+  workerInventoryAssignments  WorkerInventoryAssignment[]
+  workClothingDispatchItems   WorkClothingDispatchItem[]
+  workClothingCustodyBalances WorkClothingCustodyBalance[]
+  workClothingDeliveryItems   WorkClothingDeliveryItem[]
+  workClothingReturnItems     WorkClothingReturnItem[]
+  requestResourceAdditions    RequestResourceAddition[]
 
   @@unique([elementId, normalizedLabel])
+  @@unique([elementVariantId, elementId], map: "ElementVariant_elementVariantId_elementId_key")
   @@index([elementId])
   @@index([deletedAt])
 }
@@ -308,31 +350,52 @@ enum RequestType {
   eppAndOperative
 }
 
+enum SsomaRequestKind {
+  projectStart
+  duringExecution
+}
+
+enum RequestResourceOrigin {
+  logistics
+  administration
+}
+
+enum RequestEmailStatus {
+  accepted
+  failed
+}
+
 model Request {
-  requestId                 Int           @id @default(autoincrement())
+  requestId                 Int               @id @default(autoincrement())
+  clientRequestId           String?           @unique
   deliveryDueDate           DateTime
-  status                    RequestStatus @default(draft)
-  description               String        @default("Sin descripción.") @db.Text
+  status                    RequestStatus     @default(draft)
+  description               String            @default("Sin descripción.") @db.Text
   userId                    Int
   projectId                 Int
   type                      RequestType
+  ssomaRequestKind          SsomaRequestKind?
   inventoryLoadedAt         DateTime?
   inventoryReceivedByUserId Int?
-  createdAt                 DateTime      @default(now())
-  updatedAt                 DateTime      @updatedAt
+  createdAt                 DateTime          @default(now())
+  updatedAt                 DateTime          @updatedAt
 
-  project                 Project                 @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  user                    User                    @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  inventoryReceivedByUser User?                   @relation("RequestInventoryReceivedBy", fields: [inventoryReceivedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  project                 Project                   @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  user                    User                      @relation(fields: [userId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  inventoryReceivedByUser User?                     @relation("RequestInventoryReceivedBy", fields: [inventoryReceivedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
   elementRequests         ElementRequest[]
   requestWorkers          RequestWorker[]
   responses               RequestResponse[]
   notifications           Notification[]
   projectInventoryEntries ProjectInventoryEntry[]
   inventoryMovements      InventoryMovement[]
+  workClothingDispatches  WorkClothingDispatch[]
+  resourceAdditions       RequestResourceAddition[]
+  emailSends              RequestEmailSend[]
 
   @@index([status])
   @@index([type])
+  @@index([ssomaRequestKind])
   @@index([projectId])
   @@index([userId])
   @@index([inventoryLoadedAt])
@@ -373,13 +436,14 @@ model ElementRequest {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 
-  element                 Element                    @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  elementVariant          ElementVariant?            @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
-  fallProtectionGroup     FallProtectionGroup?       @relation(fields: [fallProtectionGroupId], references: [fallProtectionGroupId], onDelete: SetNull, onUpdate: Cascade)
-  request                 Request                    @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
-  elementRequestResponses ElementRequestResponse[]
-  projectInventoryEntries ProjectInventoryEntry[]
-  epiPlans                ElementRequestWorkerPlan[]
+  element                   Element                    @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant            ElementVariant?            @relation(fields: [elementVariantId, elementId], references: [elementVariantId, elementId], onDelete: Restrict, onUpdate: Cascade, map: "ElementRequest_variant_element_fkey")
+  fallProtectionGroup       FallProtectionGroup?       @relation(fields: [fallProtectionGroupId], references: [fallProtectionGroupId], onDelete: SetNull, onUpdate: Cascade)
+  request                   Request                    @relation(fields: [requestId], references: [requestId], onDelete: Cascade, onUpdate: Cascade)
+  elementRequestResponses   ElementRequestResponse[]
+  projectInventoryEntries   ProjectInventoryEntry[]
+  epiPlans                  ElementRequestWorkerPlan[]
+  workClothingDispatchItems WorkClothingDispatchItem[]
 
   @@index([elementId])
   @@index([elementVariantId])
@@ -387,6 +451,65 @@ model ElementRequest {
   @@index([requestId])
   @@index([requestId, elementId])
   @@index([requestId, lineItemOrder])
+}
+
+model RequestResourceAddition {
+  requestResourceAdditionId Int                   @id @default(autoincrement())
+  requestId                 Int
+  elementId                 Int
+  elementVariantId          Int?
+  quantity                  Decimal               @db.Decimal(18, 4)
+  unit                      String
+  origin                    RequestResourceOrigin
+  addedByUserId             Int
+  notes                     String?               @db.Text
+  createdAt                 DateTime              @default(now())
+
+  request        Request                             @relation(fields: [requestId], references: [requestId], onDelete: Restrict, onUpdate: Cascade)
+  element        Element                             @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant ElementVariant?                     @relation(fields: [elementVariantId, elementId], references: [elementVariantId, elementId], onDelete: Restrict, onUpdate: Cascade)
+  addedByUser    User                                @relation("RequestAdditionCreator", fields: [addedByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  workerPlans    RequestResourceAdditionWorkerPlan[]
+
+  @@index([requestId, createdAt])
+  @@index([elementId, elementVariantId])
+  @@index([addedByUserId])
+}
+
+model RequestResourceAdditionWorkerPlan {
+  requestResourceAdditionWorkerPlanId Int      @id @default(autoincrement())
+  requestResourceAdditionId           Int
+  workerId                            Int
+  plannedQuantity                     Decimal  @db.Decimal(18, 4)
+  createdAt                           DateTime @default(now())
+
+  addition RequestResourceAddition @relation(fields: [requestResourceAdditionId], references: [requestResourceAdditionId], onDelete: Cascade, onUpdate: Cascade, map: "RequestResourceAdditionWorkerPlan_requestResourceAdditionId_fke")
+  worker   Worker                  @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([requestResourceAdditionId, workerId], map: "RequestResourceAdditionWorkerPlan_requestResourceAdditionId_wor")
+  @@index([workerId])
+}
+
+model RequestEmailSend {
+  requestEmailSendId Int                @id @default(autoincrement())
+  operationId        String?            @unique
+  requestId          Int
+  sentByUserId       Int
+  recipients         Json
+  status             RequestEmailStatus
+  providerMessageId  String?
+  subject            String
+  htmlSnapshot       String             @db.Text
+  errorMessage       String?            @db.Text
+  isUpdate           Boolean            @default(false)
+  createdAt          DateTime           @default(now())
+
+  request    Request @relation(fields: [requestId], references: [requestId], onDelete: Restrict, onUpdate: Cascade)
+  sentByUser User    @relation("RequestEmailSender", fields: [sentByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@index([requestId, createdAt])
+  @@index([sentByUserId])
+  @@index([status])
 }
 
 model ElementRequestWorkerPlan {
@@ -485,6 +608,8 @@ enum InventoryMovementType {
   adjustment
   maintenance_out
   maintenance_return
+  work_clothing_dispatch
+  work_clothing_return
 }
 
 enum OfficeInventoryStatus {
@@ -517,6 +642,8 @@ model InventoryMovement {
   quantity                    Decimal               @db.Decimal(18, 4)
   performedByUserId           Int?
   responsibleUserId           Int?
+  workClothingDispatchItemId  Int?
+  workClothingReturnItemId    Int?
   notes                       String?               @db.Text
   createdAt                   DateTime              @default(now())
 
@@ -531,6 +658,8 @@ model InventoryMovement {
   request                   Request?                   @relation(fields: [requestId], references: [requestId], onDelete: SetNull, onUpdate: Cascade)
   performedByUser           User?                      @relation("InventoryMovementPerformedBy", fields: [performedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
   responsibleUser           User?                      @relation("InventoryMovementResponsibleUser", fields: [responsibleUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  workClothingDispatchItem  WorkClothingDispatchItem?  @relation(fields: [workClothingDispatchItemId], references: [workClothingDispatchItemId], onDelete: SetNull, onUpdate: Cascade)
+  workClothingReturnItem    WorkClothingReturnItem?    @relation(fields: [workClothingReturnItemId], references: [workClothingReturnItemId], onDelete: SetNull, onUpdate: Cascade)
 
   @@index([projectInventoryEntryId])
   @@index([officeInventoryEntryId])
@@ -541,6 +670,8 @@ model InventoryMovement {
   @@index([elementId])
   @@index([elementVariantId])
   @@index([requestId])
+  @@index([workClothingDispatchItemId])
+  @@index([workClothingReturnItemId])
   @@index([movementType])
   @@index([createdAt])
 }
@@ -557,12 +688,15 @@ model OfficeInventoryEntry {
   createdAt              DateTime              @default(now())
   updatedAt              DateTime              @updatedAt
 
-  element         Element             @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
-  elementVariant  ElementVariant?     @relation(fields: [elementVariantId], references: [elementVariantId], onDelete: SetNull, onUpdate: Cascade)
-  purchaseOrder   PurchaseOrder?      @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: SetNull, onUpdate: Cascade)
-  movements       InventoryMovement[]
-  inventoryAssets InventoryAsset[]
+  element                   Element                    @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade)
+  elementVariant            ElementVariant?            @relation(fields: [elementVariantId, elementId], references: [elementVariantId, elementId], onDelete: Restrict, onUpdate: Cascade, map: "OfficeInventoryEntry_variant_element_fkey")
+  purchaseOrder             PurchaseOrder?             @relation(fields: [purchaseOrderId], references: [purchaseOrderId], onDelete: SetNull, onUpdate: Cascade)
+  movements                 InventoryMovement[]
+  inventoryAssets           InventoryAsset[]
+  workClothingDispatchItems WorkClothingDispatchItem[]
+  workClothingReturnItems   WorkClothingReturnItem[]
 
+  @@unique([officeInventoryEntryId, elementId, elementVariantId], map: "OfficeInventoryEntry_entry_element_variant_key")
   @@index([elementId])
   @@index([elementVariantId])
   @@index([status])
@@ -747,7 +881,7 @@ model Worker {
   personalEmail String?    @db.Citext
   address       String?    @default("Sin dirección especificada.")
   birthDate     DateTime?
-  workerType    WorkerType @default(unspecified)
+  workerType    WorkerType
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   deletedAt     DateTime?
@@ -756,11 +890,15 @@ model Worker {
   dailyWages                 DailyWage[]
   generalPayrollWorkers      GeneralPayrollWorker[]
   monthlyEvaluations         WorkerMonthlyEvaluation[]
-  inventoryMovements         InventoryMovement[]         @relation("InventoryMovementWorker")
-  currentInventoryAssets     InventoryAsset[]            @relation("InventoryAssetCurrentWorker")
+  inventoryMovements         InventoryMovement[]                 @relation("InventoryMovementWorker")
+  currentInventoryAssets     InventoryAsset[]                    @relation("InventoryAssetCurrentWorker")
   workerInventoryAssignments WorkerInventoryAssignment[]
   ssomaAttendances           SsomaTalkAttendance[]
   ssomaSignatureEvidence     SsomaSignatureEvidence[]
+  staffPayrollProfile        StaffPayrollProfile?
+  staffPayrollEntries        StaffPayrollEntry[]
+  workClothingDeliveries     WorkClothingDelivery[]
+  requestAdditionWorkerPlans RequestResourceAdditionWorkerPlan[]
 
   @@index([dni])
   @@index([phone])
@@ -808,13 +946,248 @@ model WorkerInventoryAssignment {
   @@index([assignedAt])
 }
 
+enum WorkClothingDispatchStatus {
+  inTransit
+  received
+  discrepancy
+}
+
+enum WorkClothingDeliveryStatus {
+  registered
+  annulled
+}
+
+enum WorkClothingReturnStatus {
+  pending
+  confirmed
+  cancelled
+}
+
+model WorkClothingDispatch {
+  workClothingDispatchId Int                        @id @default(autoincrement())
+  clientRequestId        String                     @unique
+  projectId              Int
+  custodianUserId        Int
+  requestId              Int?
+  dispatchedByUserId     Int
+  receivedByUserId       Int?
+  dispatchedAt           DateTime
+  receivedAt             DateTime?
+  status                 WorkClothingDispatchStatus @default(inTransit)
+  observations           String?                    @db.Text
+  discrepancyNotes       String?                    @db.Text
+  createdAt              DateTime                   @default(now())
+  updatedAt              DateTime                   @updatedAt
+
+  project          Project                    @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  custodianUser    User                       @relation("WorkClothingDispatchCustodian", fields: [custodianUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  request          Request?                   @relation(fields: [requestId], references: [requestId], onDelete: SetNull, onUpdate: Cascade)
+  dispatchedByUser User                       @relation("WorkClothingDispatchCreator", fields: [dispatchedByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  receivedByUser   User?                      @relation("WorkClothingDispatchReceiver", fields: [receivedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  items            WorkClothingDispatchItem[]
+
+  @@index([projectId])
+  @@index([custodianUserId])
+  @@index([requestId])
+  @@index([status])
+  @@index([dispatchedAt])
+}
+
+model WorkClothingDispatchItem {
+  workClothingDispatchItemId Int      @id @default(autoincrement())
+  workClothingDispatchId     Int
+  officeInventoryEntryId     Int
+  elementId                  Int
+  elementVariantId           Int
+  elementRequestId           Int?
+  elementNameSnapshot        String
+  variantLabelSnapshot       String
+  quantityDispatched         Decimal  @db.Decimal(18, 4)
+  quantityReceived           Decimal? @db.Decimal(18, 4)
+  createdAt                  DateTime @default(now())
+
+  dispatch             WorkClothingDispatch @relation(fields: [workClothingDispatchId], references: [workClothingDispatchId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDispatchItem_dispatch_fkey")
+  officeInventoryEntry OfficeInventoryEntry @relation(fields: [officeInventoryEntryId, elementId, elementVariantId], references: [officeInventoryEntryId, elementId, elementVariantId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDispatchItem_office_entry_fkey")
+  element              Element              @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDispatchItem_element_fkey")
+  elementVariant       ElementVariant       @relation(fields: [elementVariantId, elementId], references: [elementVariantId, elementId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDispatchItem_variant_element_fkey")
+  elementRequest       ElementRequest?      @relation(fields: [elementRequestId], references: [elementRequestId], onDelete: SetNull, onUpdate: Cascade, map: "WorkClothingDispatchItem_request_line_fkey")
+  movements            InventoryMovement[]
+
+  @@unique([workClothingDispatchId, officeInventoryEntryId], map: "WorkClothingDispatchItem_dispatch_entry_key")
+  @@index([workClothingDispatchId], map: "WorkClothingDispatchItem_dispatch_idx")
+  @@index([elementId, elementVariantId], map: "WorkClothingDispatchItem_element_variant_idx")
+  @@index([elementRequestId], map: "WorkClothingDispatchItem_request_line_idx")
+}
+
+model WorkClothingCustodyBalance {
+  workClothingCustodyBalanceId Int      @id @default(autoincrement())
+  projectId                    Int
+  custodianUserId              Int
+  elementId                    Int
+  elementVariantId             Int
+  quantityReceived             Decimal  @default(0) @db.Decimal(18, 4)
+  quantityDelivered            Decimal  @default(0) @db.Decimal(18, 4)
+  quantityReturnInTransit      Decimal  @default(0) @db.Decimal(18, 4)
+  quantityReturned             Decimal  @default(0) @db.Decimal(18, 4)
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+
+  project        Project        @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingCustodyBalance_project_fkey")
+  custodianUser  User           @relation(fields: [custodianUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingCustodyBalance_user_fkey")
+  element        Element        @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingCustodyBalance_element_fkey")
+  elementVariant ElementVariant @relation(fields: [elementVariantId, elementId], references: [elementVariantId, elementId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingCustodyBalance_variant_element_fkey")
+
+  @@unique([projectId, custodianUserId, elementId, elementVariantId], map: "WorkClothingCustodyBalance_scope_key")
+  @@index([custodianUserId], map: "WorkClothingCustodyBalance_custodian_idx")
+  @@index([projectId], map: "WorkClothingCustodyBalance_project_idx")
+}
+
+model WorkClothingDelivery {
+  workClothingDeliveryId Int                        @id @default(autoincrement())
+  clientRequestId        String                     @unique
+  projectId              Int
+  custodianUserId        Int
+  workerId               Int
+  deliveredByUserId      Int
+  deliveredAt            DateTime
+  status                 WorkClothingDeliveryStatus @default(registered)
+  observations           String?                    @db.Text
+  annulledAt             DateTime?
+  annulledByUserId       Int?
+  annulmentReason        String?                    @db.Text
+  createdAt              DateTime                   @default(now())
+  updatedAt              DateTime                   @updatedAt
+
+  project         Project                    @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDelivery_project_fkey")
+  custodianUser   User                       @relation("WorkClothingDeliveryCustodian", fields: [custodianUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDelivery_custodian_fkey")
+  worker          Worker                     @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDelivery_worker_fkey")
+  deliveredByUser User                       @relation("WorkClothingDeliveryCreator", fields: [deliveredByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDelivery_creator_fkey")
+  annulledByUser  User?                      @relation("WorkClothingDeliveryAnnulledBy", fields: [annulledByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade, map: "WorkClothingDelivery_annuller_fkey")
+  items           WorkClothingDeliveryItem[]
+
+  @@index([projectId])
+  @@index([custodianUserId])
+  @@index([workerId])
+  @@index([status])
+  @@index([deliveredAt])
+}
+
+model WorkClothingDeliveryItem {
+  workClothingDeliveryItemId Int      @id @default(autoincrement())
+  workClothingDeliveryId     Int
+  elementId                  Int
+  elementVariantId           Int
+  elementNameSnapshot        String
+  variantLabelSnapshot       String
+  quantity                   Decimal  @db.Decimal(18, 4)
+  createdAt                  DateTime @default(now())
+
+  delivery       WorkClothingDelivery @relation(fields: [workClothingDeliveryId], references: [workClothingDeliveryId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDeliveryItem_delivery_fkey")
+  element        Element              @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDeliveryItem_element_fkey")
+  elementVariant ElementVariant       @relation(fields: [elementVariantId, elementId], references: [elementVariantId, elementId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingDeliveryItem_variant_element_fkey")
+
+  @@unique([workClothingDeliveryId, elementId, elementVariantId], map: "WorkClothingDeliveryItem_delivery_element_variant_key")
+  @@index([elementId, elementVariantId], map: "WorkClothingDeliveryItem_element_variant_idx")
+}
+
+model WorkClothingReturn {
+  workClothingReturnId Int                      @id @default(autoincrement())
+  clientRequestId      String                   @unique
+  projectId            Int
+  custodianUserId      Int
+  createdByUserId      Int
+  confirmedByUserId    Int?
+  returnedAt           DateTime
+  confirmedAt          DateTime?
+  status               WorkClothingReturnStatus @default(pending)
+  observations         String?                  @db.Text
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+
+  project         Project                  @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingReturn_project_fkey")
+  custodianUser   User                     @relation("WorkClothingReturnCustodian", fields: [custodianUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingReturn_custodian_fkey")
+  createdByUser   User                     @relation("WorkClothingReturnCreator", fields: [createdByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingReturn_creator_fkey")
+  confirmedByUser User?                    @relation("WorkClothingReturnConfirmer", fields: [confirmedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade, map: "WorkClothingReturn_confirmer_fkey")
+  items           WorkClothingReturnItem[]
+
+  @@index([projectId])
+  @@index([custodianUserId])
+  @@index([status])
+  @@index([returnedAt])
+}
+
+model WorkClothingReturnItem {
+  workClothingReturnItemId Int      @id @default(autoincrement())
+  workClothingReturnId     Int
+  officeInventoryEntryId   Int?
+  elementId                Int
+  elementVariantId         Int
+  elementNameSnapshot      String
+  variantLabelSnapshot     String
+  quantity                 Decimal  @db.Decimal(18, 4)
+  createdAt                DateTime @default(now())
+
+  workClothingReturn   WorkClothingReturn    @relation(fields: [workClothingReturnId], references: [workClothingReturnId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingReturnItem_return_fkey")
+  officeInventoryEntry OfficeInventoryEntry? @relation(fields: [officeInventoryEntryId, elementId, elementVariantId], references: [officeInventoryEntryId, elementId, elementVariantId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingReturnItem_office_entry_fkey")
+  element              Element               @relation(fields: [elementId], references: [elementId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingReturnItem_element_fkey")
+  elementVariant       ElementVariant        @relation(fields: [elementVariantId, elementId], references: [elementVariantId, elementId], onDelete: Restrict, onUpdate: Cascade, map: "WorkClothingReturnItem_variant_element_fkey")
+  movements            InventoryMovement[]
+
+  @@unique([workClothingReturnId, elementId, elementVariantId], map: "WorkClothingReturnItem_return_element_variant_key")
+  @@index([elementId, elementVariantId], map: "WorkClothingReturnItem_element_variant_idx")
+}
+
 enum WorkerType {
   laborer
   technician
   engineer
   administrator
   manager
-  unspecified
+}
+
+model StaffPayrollProfile {
+  staffPayrollProfileId   Int      @id @default(autoincrement())
+  workerId                Int      @unique
+  monthlyBaseRemuneration Decimal  @db.Decimal(18, 2)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  worker Worker @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@index([workerId])
+}
+
+model StaffPayroll {
+  staffPayrollId Int      @id @default(autoincrement())
+  year           Int
+  month          Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  entries StaffPayrollEntry[]
+
+  @@unique([year, month])
+}
+
+model StaffPayrollEntry {
+  staffPayrollEntryId Int      @id @default(autoincrement())
+  staffPayrollId      Int
+  workerId            Int
+  workerNameSnapshot  String
+  workerDniSnapshot   String   @db.VarChar(8)
+  workerTypeSnapshot  String
+  baseRemuneration    Decimal  @db.Decimal(18, 2)
+  additionalIncome    Decimal  @default(0) @db.Decimal(18, 2)
+  manualDiscounts     Decimal  @default(0) @db.Decimal(18, 2)
+  observations        String?  @db.Text
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  staffPayroll StaffPayroll @relation(fields: [staffPayrollId], references: [staffPayrollId], onDelete: Restrict, onUpdate: Cascade)
+  worker       Worker       @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([staffPayrollId, workerId])
+  @@index([workerId])
 }
 
 enum MonthlyEvaluationQuestionType {
@@ -1065,24 +1438,26 @@ model PurchaseOrderCondition {
 // Receipt deliberately survives hard deletion of its order, preventing replay.
 // No foreign keys: history and retry receipts survive deletion of orders/users.
 model PurchaseOrderRenumber {
-  id String @id @db.Uuid
-  userId Int
-  actorName String
-  year Int
-  plan Json
-  fingerprint String @db.VarChar(64)
-  reason String?
-  createdAt DateTime @default(now())
-  appliedAt DateTime?
+  id          String    @id @db.Uuid
+  userId      Int
+  actorName   String
+  year        Int
+  plan        Json
+  fingerprint String    @db.VarChar(64)
+  reason      String?
+  createdAt   DateTime  @default(now())
+  appliedAt   DateTime?
+
   @@index([year, appliedAt])
 }
 
 model PurchaseOrderCreation {
-  userId Int
-  key String @db.Uuid
-  requestHash String @db.VarChar(64)
-  purchaseOrderId Int @unique
-  createdAt DateTime @default(now())
+  userId          Int
+  key             String   @db.Uuid
+  requestHash     String   @db.VarChar(64)
+  purchaseOrderId Int      @unique
+  createdAt       DateTime @default(now())
+
   @@id([userId, key])
 }
 
@@ -1218,7 +1593,7 @@ model RateLimitBucket {
   key       String   @id
   count     Int
   resetAt   DateTime
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@index([resetAt])
 }
@@ -1260,13 +1635,13 @@ enum GeneralPayrollLocationType {
 }
 
 model GeneralPayrollProject {
-  generalPayrollProjectId Int      @id @default(autoincrement())
+  generalPayrollProjectId Int                        @id @default(autoincrement())
   generalPayrollId        Int
   projectId               Int?
   locationType            GeneralPayrollLocationType @default(project)
-  displayOrder            Int      @default(0)
-  createdAt               DateTime @default(now())
-  updatedAt               DateTime @updatedAt
+  displayOrder            Int                        @default(0)
+  createdAt               DateTime                   @default(now())
+  updatedAt               DateTime                   @updatedAt
 
   generalPayroll GeneralPayroll        @relation(fields: [generalPayrollId], references: [generalPayrollId], onDelete: Cascade, onUpdate: Cascade)
   project        Project?              @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
@@ -1320,7 +1695,7 @@ model GeneralPayrollEntry {
   payrollProject GeneralPayrollProject @relation(fields: [generalPayrollProjectId], references: [generalPayrollProjectId], onDelete: Cascade, onUpdate: Cascade)
   payrollWorker  GeneralPayrollWorker  @relation(fields: [generalPayrollWorkerId], references: [generalPayrollWorkerId], onDelete: Cascade, onUpdate: Cascade)
 
-  @@unique([generalPayrollProjectId, generalPayrollWorkerId])
+  @@unique([generalPayrollProjectId, generalPayrollWorkerId], map: "GeneralPayrollEntry_generalPayrollProjectId_generalPayrollWorke")
   @@index([generalPayrollProjectId])
   @@index([generalPayrollProjectId, isActive])
   @@index([generalPayrollWorkerId])
@@ -1491,8 +1866,14 @@ model Client {
 enum QuotationStatus {
   draft
   sent
-  approved
   accepted
+  rejected
+}
+
+enum QuotationType {
+  works
+  services
+  consulting
 }
 
 model Quotation {
@@ -1501,6 +1882,7 @@ model Quotation {
   serviceDescription String          @default("Sin descripción del servicio.") @db.Text
   clientId           Int
   status             QuotationStatus @default(draft)
+  type               QuotationType
   commercialTerms    String?         @db.Text
   costDirectAmount   Decimal         @db.Decimal(18, 2)
   igvRate            Decimal         @default(0.18) @db.Decimal(5, 4)
@@ -1514,6 +1896,7 @@ model Quotation {
 
   @@index([clientId])
   @@index([status])
+  @@index([type])
 }
 
 model QuotationItem {
@@ -1624,7 +2007,7 @@ model ExpiringDocumentNotification {
 
   document ExpiringDocument @relation(fields: [expiringDocumentId], references: [expiringDocumentId], onDelete: Cascade, onUpdate: Cascade)
 
-  @@unique([expiringDocumentId, alertLevel, expirationDate])
+  @@unique([expiringDocumentId, alertLevel, expirationDate], map: "ExpiringDocumentNotification_expiringDocumentId_alertLevel_expi")
   @@index([sentAt])
 }
 
@@ -1636,6 +2019,15 @@ enum SsomaTalkStatus {
   closed
   voided
   annulled
+}
+
+enum SsomaActivityType {
+  INDUCTION
+  TALK
+  TRAINING
+  PRACTICE
+  DRILL
+  OTHER
 }
 
 enum SsomaAttendanceStatus {
@@ -1674,31 +2066,33 @@ enum SsomaDeletionJobStatus {
 }
 
 model SsomaTalk {
-  ssomaTalkId      Int            @id @default(autoincrement())
-  projectId        Int
-  createdByUserId  Int
-  talkDate         DateTime       @db.Date
-  topic            String         @db.Text
-  trainer          String?        @db.VarChar(200)
-  location         String?        @db.Text
-  targetAudience   String?        @db.Text
-  scheduledTime    DateTime?      @db.Time(0)
-  durationMinutes  Int?
-  observations     String?        @db.Text
-  responsibleName  String?        @db.VarChar(200)
-  responsiblePosition String?     @db.VarChar(200)
-  status           SsomaTalkStatus @default(draft)
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  ssomaTalkId         Int               @id @default(autoincrement())
+  projectId           Int
+  createdByUserId     Int
+  talkDate            DateTime          @db.Date
+  topic               String            @db.Text
+  trainer             String?           @db.VarChar(200)
+  location            String?           @db.Text
+  targetAudience      String?           @db.Text
+  scheduledTime       DateTime?         @db.Time(0)
+  durationMinutes     Int?
+  observations        String?           @db.Text
+  responsibleName     String?           @db.VarChar(200)
+  responsiblePosition String?           @db.VarChar(200)
+  activityType        SsomaActivityType @default(TALK)
+  otherActivityText   String?           @db.VarChar(12)
+  status              SsomaTalkStatus   @default(draft)
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
 
-  project       Project              @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
-  createdBy     User                 @relation("SsomaTalkCreator", fields: [createdByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  attendances   SsomaTalkAttendance[]
+  project           Project                    @relation(fields: [projectId], references: [projectId], onDelete: Restrict, onUpdate: Cascade)
+  createdBy         User                       @relation("SsomaTalkCreator", fields: [createdByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  attendances       SsomaTalkAttendance[]
   signatureEvidence SsomaSignatureEvidence[]
-  auditEvents   SsomaTalkAuditEvent[]
-  revisions     SsomaTalkRevision[]
-  documentVersions SsomaTalkDocumentVersion[]
-  publications  SsomaDocumentPublication[]
+  auditEvents       SsomaTalkAuditEvent[]
+  revisions         SsomaTalkRevision[]
+  documentVersions  SsomaTalkDocumentVersion[]
+  publications      SsomaDocumentPublication[]
 
   @@index([projectId, talkDate])
   @@index([status, talkDate])
@@ -1714,9 +2108,9 @@ model SsomaTalkAttendance {
   createdAt             DateTime              @default(now())
   updatedAt             DateTime              @updatedAt
 
-  talk     SsomaTalk                 @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
-  worker   Worker                    @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
-  evidence SsomaSignatureEvidence[]
+  talk        SsomaTalk                @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
+  worker      Worker                   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  evidence    SsomaSignatureEvidence[]
   auditEvents SsomaTalkAuditEvent[]
 
   @@unique([ssomaTalkId, workerId])
@@ -1726,70 +2120,70 @@ model SsomaTalkAttendance {
 }
 
 model SsomaSignatureEvidence {
-  ssomaSignatureEvidenceId Int                         @id @default(autoincrement())
-  ssomaTalkAttendanceId    Int
-  ssomaTalkId              Int
-  workerId                 Int
-  attendanceDate           DateTime                    @db.Date
-  status                   SsomaSignatureEvidenceStatus @default(ACTIVE)
-  objectReference          String?                     @db.Text
-  sha256                   String?                     @db.VarChar(64)
-  metadata                 Json                        @default("{}")
-  retentionPolicyVersion   String                      @default("ssoma-signature-v1") @db.VarChar(64)
-  retentionDays            Int                         @default(7)
-  deletionEligibleAt       DateTime?
-  deletionAttemptCount     Int                         @default(0)
-  lastDeletionAttemptAt    DateTime?
-  lastDeletionError        String?                     @db.Text
-  deletedAt                DateTime?
+  ssomaSignatureEvidenceId      Int                          @id @default(autoincrement())
+  ssomaTalkAttendanceId         Int
+  ssomaTalkId                   Int
+  workerId                      Int
+  attendanceDate                DateTime                     @db.Date
+  status                        SsomaSignatureEvidenceStatus @default(ACTIVE)
+  objectReference               String?                      @db.Text
+  sha256                        String?                      @db.VarChar(64)
+  metadata                      Json                         @default("{}")
+  retentionPolicyVersion        String                       @default("ssoma-signature-v1") @db.VarChar(64)
+  retentionDays                 Int                          @default(7)
+  deletionEligibleAt            DateTime?
+  deletionAttemptCount          Int                          @default(0)
+  lastDeletionAttemptAt         DateTime?
+  lastDeletionError             String?                      @db.Text
+  deletedAt                     DateTime?
   verifiedDocumentVersionTalkId Int?
-  verifiedDocumentVersionId Int?
-  backupMetadata           Json                        @default("{}")
-  purgeMetadata            Json                        @default("{}")
-  exceptionalHoldReason    String?                     @db.Text
-  exceptionalHoldSetAt     DateTime?
-  exceptionalHoldSetByUserId Int?
-  exceptionalHoldUntil     DateTime?
-  exceptionalHoldMetadata  Json                        @default("{}")
-  publicationHoldReference String?                     @db.Text
-  publicationHoldReason    String?                     @db.Text
-  publicationHoldUntil     DateTime?
-  revisionHoldReference    String?                     @db.Text
-  revisionHoldReason       String?                     @db.Text
-  revisionHoldUntil        DateTime?
-  createdAt                DateTime                    @default(now())
-  updatedAt                DateTime                    @updatedAt
+  verifiedDocumentVersionId     Int?
+  backupMetadata                Json                         @default("{}")
+  purgeMetadata                 Json                         @default("{}")
+  exceptionalHoldReason         String?                      @db.Text
+  exceptionalHoldSetAt          DateTime?
+  exceptionalHoldSetByUserId    Int?
+  exceptionalHoldUntil          DateTime?
+  exceptionalHoldMetadata       Json                         @default("{}")
+  publicationHoldReference      String?                      @db.Text
+  publicationHoldReason         String?                      @db.Text
+  publicationHoldUntil          DateTime?
+  revisionHoldReference         String?                      @db.Text
+  revisionHoldReason            String?                      @db.Text
+  revisionHoldUntil             DateTime?
+  createdAt                     DateTime                     @default(now())
+  updatedAt                     DateTime                     @updatedAt
 
-  attendance SsomaTalkAttendance      @relation(fields: [ssomaTalkAttendanceId], references: [ssomaTalkAttendanceId], onDelete: Restrict, onUpdate: Cascade)
-  talk       SsomaTalk                 @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
-  worker     Worker                   @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
-  verifiedDocumentVersion SsomaTalkDocumentVersion? @relation("SsomaEvidenceVerifiedDocument", fields: [verifiedDocumentVersionTalkId, verifiedDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade)
-  exceptionalHoldSetBy User? @relation("SsomaEvidenceHoldSetter", fields: [exceptionalHoldSetByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
-  deletionJobs SsomaSignatureDeletionJob[]
+  attendance              SsomaTalkAttendance         @relation(fields: [ssomaTalkAttendanceId], references: [ssomaTalkAttendanceId], onDelete: Restrict, onUpdate: Cascade)
+  talk                    SsomaTalk                   @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
+  worker                  Worker                      @relation(fields: [workerId], references: [workerId], onDelete: Restrict, onUpdate: Cascade)
+  verifiedDocumentVersion SsomaTalkDocumentVersion?   @relation("SsomaEvidenceVerifiedDocument", fields: [verifiedDocumentVersionTalkId, verifiedDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade, map: "SsomaSignatureEvidence_verified_document_fkey")
+  exceptionalHoldSetBy    User?                       @relation("SsomaEvidenceHoldSetter", fields: [exceptionalHoldSetByUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  deletionJobs            SsomaSignatureDeletionJob[]
 
   @@index([status, deletionEligibleAt])
   @@index([ssomaTalkId, attendanceDate, workerId])
 }
 
 model SsomaTalkAuditEvent {
-  ssomaTalkAuditEventId Int      @id @default(autoincrement())
-  ssomaTalkId           Int
-  attendanceTalkId      Int?
-  ssomaTalkAttendanceId Int?
-  actorUserId           Int?
-  eventType             String   @db.VarChar(100)
-  previousState         Json?
-  newState              Json?
-  changedFields         Json     @default("{}")
-  reason                String?  @db.Text
-  serverAt              DateTime @default(now())
-  documentVersionTalkId Int?
+  ssomaTalkAuditEventId      Int      @id @default(autoincrement())
+  ssomaTalkId                Int
+  attendanceTalkId           Int?
+  ssomaTalkAttendanceId      Int?
+  actorUserId                Int?
+  eventType                  String   @db.VarChar(100)
+  previousState              Json?
+  newState                   Json?
+  changedFields              Json     @default("{}")
+  reason                     String?  @db.Text
+  serverAt                   DateTime @default(now())
+  documentVersionTalkId      Int?
   ssomaTalkDocumentVersionId Int?
 
-  talk SsomaTalk @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Restrict)
-  attendance SsomaTalkAttendance? @relation(fields: [attendanceTalkId, ssomaTalkAttendanceId], references: [ssomaTalkId, ssomaTalkAttendanceId], onDelete: Restrict, onUpdate: Restrict)
-  actor User? @relation("SsomaAuditActor", fields: [actorUserId], references: [userId], onDelete: Restrict, onUpdate: Restrict)
-  documentVersion SsomaTalkDocumentVersion? @relation("SsomaAuditDocumentVersion", fields: [documentVersionTalkId, ssomaTalkDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Restrict)
+  talk            SsomaTalk                 @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Restrict)
+  attendance      SsomaTalkAttendance?      @relation(fields: [attendanceTalkId, ssomaTalkAttendanceId], references: [ssomaTalkId, ssomaTalkAttendanceId], onDelete: Restrict, onUpdate: Restrict, map: "SsomaTalkAuditEvent_attendance_fkey")
+  actor           User?                     @relation("SsomaAuditActor", fields: [actorUserId], references: [userId], onDelete: Restrict, onUpdate: Restrict)
+  documentVersion SsomaTalkDocumentVersion? @relation("SsomaAuditDocumentVersion", fields: [documentVersionTalkId, ssomaTalkDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Restrict, map: "SsomaTalkAuditEvent_documentVersion_fkey")
 
   @@index([ssomaTalkId, serverAt])
   @@index([actorUserId])
@@ -1812,69 +2206,69 @@ model SsomaTalkRevision {
 }
 
 model SsomaTalkDocumentVersion {
-  ssomaTalkDocumentVersionId Int                       @id @default(autoincrement())
+  ssomaTalkDocumentVersionId Int                        @id @default(autoincrement())
   ssomaTalkId                Int
   versionNumber              Int
   status                     SsomaDocumentVersionStatus @default(HISTORICAL)
-  objectReference            String                    @db.Text
-  sha256                     String                    @db.VarChar(64)
+  objectReference            String                     @db.Text
+  sha256                     String                     @db.VarChar(64)
   byteSize                   BigInt
   replacesVersionTalkId      Int?
   replacesVersionId          Int?
   officialDocumentSnapshot   Json
   verifiedAt                 DateTime?
-  verifiedSha256             String?                   @db.VarChar(64)
-  verificationMethod         String?                   @db.VarChar(100)
+  verifiedSha256             String?                    @db.VarChar(64)
+  verificationMethod         String?                    @db.VarChar(100)
   publishedAt                DateTime?
   currentAt                  DateTime?
-  metadata                   Json                      @default("{}")
-  createdAt                  DateTime                  @default(now())
+  metadata                   Json                       @default("{}")
+  createdAt                  DateTime                   @default(now())
 
-  talk         SsomaTalk                 @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
-  publications SsomaDocumentPublication[]
-  replacedVersion SsomaTalkDocumentVersion? @relation("SsomaDocumentVersionLineage", fields: [replacesVersionTalkId, replacesVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade)
-  replacedBy SsomaTalkDocumentVersion[] @relation("SsomaDocumentVersionLineage")
-  verifiedEvidence SsomaSignatureEvidence[] @relation("SsomaEvidenceVerifiedDocument")
-  auditEvents SsomaTalkAuditEvent[] @relation("SsomaAuditDocumentVersion")
+  talk             SsomaTalk                  @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
+  publications     SsomaDocumentPublication[]
+  replacedVersion  SsomaTalkDocumentVersion?  @relation("SsomaDocumentVersionLineage", fields: [replacesVersionTalkId, replacesVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade, map: "SsomaTalkDocumentVersion_replacesVersion_fkey")
+  replacedBy       SsomaTalkDocumentVersion[] @relation("SsomaDocumentVersionLineage")
+  verifiedEvidence SsomaSignatureEvidence[]   @relation("SsomaEvidenceVerifiedDocument")
+  auditEvents      SsomaTalkAuditEvent[]      @relation("SsomaAuditDocumentVersion")
 
   @@unique([ssomaTalkId, versionNumber])
-  @@unique([ssomaTalkId, ssomaTalkDocumentVersionId])
+  @@unique([ssomaTalkId, ssomaTalkDocumentVersionId], map: "SsomaTalkDocumentVersion_talk_version_id_key")
   @@index([ssomaTalkId, status])
 }
 
 model SsomaDocumentPublication {
-  ssomaDocumentPublicationId Int                  @id @default(autoincrement())
+  ssomaDocumentPublicationId Int                    @id @default(autoincrement())
   ssomaTalkId                Int
   documentVersionTalkId      Int?
   ssomaTalkDocumentVersionId Int?
   actorUserId                Int?
   status                     SsomaPublicationStatus @default(PENDING)
   idempotencyKey             String?                @unique @db.VarChar(200)
-  failureCode                String?              @db.VarChar(100)
-  failureDetail              String?              @db.Text
-  metadata                   Json                 @default("{}")
-  createdAt                  DateTime             @default(now())
+  failureCode                String?                @db.VarChar(100)
+  failureDetail              String?                @db.Text
+  metadata                   Json                   @default("{}")
+  createdAt                  DateTime               @default(now())
   completedAt                DateTime?
 
   talk    SsomaTalk                 @relation(fields: [ssomaTalkId], references: [ssomaTalkId], onDelete: Restrict, onUpdate: Cascade)
-  version SsomaTalkDocumentVersion? @relation(fields: [documentVersionTalkId, ssomaTalkDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade)
-  actor   User?                    @relation("SsomaPublicationActor", fields: [actorUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
+  version SsomaTalkDocumentVersion? @relation(fields: [documentVersionTalkId, ssomaTalkDocumentVersionId], references: [ssomaTalkId, ssomaTalkDocumentVersionId], onDelete: Restrict, onUpdate: Cascade, map: "SsomaDocumentPublication_documentVersion_fkey")
+  actor   User?                     @relation("SsomaPublicationActor", fields: [actorUserId], references: [userId], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([ssomaTalkId, createdAt])
   @@index([status, createdAt])
 }
 
 model SsomaSignatureDeletionJob {
-  ssomaSignatureDeletionJobId Int                  @id @default(autoincrement())
+  ssomaSignatureDeletionJobId Int                    @id @default(autoincrement())
   ssomaSignatureEvidenceId    Int
-  idempotencyKey              String               @unique @db.VarChar(200)
+  idempotencyKey              String                 @unique @db.VarChar(200)
   status                      SsomaDeletionJobStatus @default(PENDING)
-  attemptCount                Int                  @default(0)
+  attemptCount                Int                    @default(0)
   nextAttemptAt               DateTime?
   lastAttemptAt               DateTime?
-  lastError                   String?              @db.Text
-  createdAt                   DateTime             @default(now())
-  updatedAt                   DateTime             @updatedAt
+  lastError                   String?                @db.Text
+  createdAt                   DateTime               @default(now())
+  updatedAt                   DateTime               @updatedAt
 
   evidence SsomaSignatureEvidence @relation(fields: [ssomaSignatureEvidenceId], references: [ssomaSignatureEvidenceId], onDelete: Restrict, onUpdate: Cascade)
 

@@ -23,6 +23,7 @@ import { ListPurchaseOrdersQueryDto } from './dto/list-purchase-orders-query.dto
 import { PurchaseOrderDashboardQueryDto } from './dto/purchase-order-dashboard-query.dto';
 import { PurchaseOrderSummaryQueryDto } from './dto/purchase-order-summary-query.dto';
 import { GetUser } from 'src/decorators/get-user.decorator';
+import { ListGlobalPurchaseOrdersQueryDto } from './dto/list-global-purchase-orders-query.dto';
 
 @Controller('purchase-order')
 export class PurchaseOrderController {
@@ -55,6 +56,12 @@ export class PurchaseOrderController {
   @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
   findDirectory() {
     return this.purchaseOrderService.findDirectory();
+  }
+
+  @Get('paginated')
+  @UserTypes('GERENTE', 'ADMINISTRADORA', 'LOGISTICA')
+  findPaginated(@Query() query: ListGlobalPurchaseOrdersQueryDto) {
+    return this.purchaseOrderService.findPaginated(query);
   }
 
   @Get('project/:projectId/unit-values')

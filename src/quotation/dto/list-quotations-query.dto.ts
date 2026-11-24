@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsPositive } from 'class-validator';
 import { SearchPaginationQueryDto } from 'src/common/pagination';
-import { QuotationStatus } from '../enum';
+import { QuotationStatus, QuotationType } from '../enum';
 
 export class ListQuotationsQueryDto extends SearchPaginationQueryDto {
   @ApiPropertyOptional()
@@ -16,4 +16,9 @@ export class ListQuotationsQueryDto extends SearchPaginationQueryDto {
   @IsOptional()
   @IsEnum(QuotationStatus)
   status?: QuotationStatus;
+
+  @ApiPropertyOptional({ enum: QuotationType })
+  @IsOptional()
+  @IsEnum(QuotationType)
+  type?: QuotationType;
 }

@@ -35,6 +35,7 @@ import { buildPaginatedData, getPaginationArgs } from 'src/common/pagination';
 import { ListPurchaseOrdersQueryDto } from './dto/list-purchase-orders-query.dto';
 import { PurchaseOrderDashboardQueryDto } from './dto/purchase-order-dashboard-query.dto';
 import { PurchaseOrderSummaryQueryDto } from './dto/purchase-order-summary-query.dto';
+import { ListGlobalPurchaseOrdersQueryDto } from './dto/list-global-purchase-orders-query.dto';
 import type {
   PurchaseOrderProjectSummary,
   PurchaseOrderSummaryAmount,
@@ -499,6 +500,60 @@ export class PurchaseOrderService {
       statusCode: HttpStatus.OK,
       message: 'Órdenes de compra obtenidas exitosamente.',
       data: processedPurchaseOrder,
+    };
+  }
+
+  async findPaginated(query: ListGlobalPurchaseOrdersQueryDto) {
+    const search = query.search?.trim();
+    const where: Prisma.PurchaseOrderWhereInput = {
+      ...(query.supplierId ? { supplierId: query.supplierId } : {}),
+      ...(query.projectId ? { projectId: query.projectId } : {}),
+      ...(query.purchaseOrderType
+        ? { purchaseOrderType: query.purchaseOrderType }
+        : {}),
+      ...(query.status ? { status: query.status } : {}),
+      ...(search
+        ? {
+            OR: [
+              { code: { contains: search, mode: 'insensitive' } },
+              {
+                supplier: {
+                  name: { contains: search, mode: 'insensitive' },
+                },
+              },
+              {
+                project: {
+                  name: { contains: search, mode: 'insensitive' },
+                },
+              },
+            ],
+          }
+        : {}),
+    };
+    const { skip, take } = getPaginationArgs(query);
+    const [purchaseOrders, totalItems] = await Promise.all([
+      this.prisma.purchaseOrder.findMany({
+        where,
+        include: { project: true, supplier: true },
+        orderBy: [{ createdAt: 'desc' }, { purchaseOrderId: 'desc' }],
+        skip,
+        take,
+      }),
+      this.prisma.purchaseOrder.count({ where }),
+    ]);
+    const items = purchaseOrders.map((purchaseOrder) => ({
+      ...purchaseOrder,
+      statusCode: purchaseOrder.status,
+      status:
+        PurchaseOrderStatusLabelEs[
+          purchaseOrder.status as keyof typeof PurchaseOrderStatusLabelEs
+        ] || 'Desconocido',
+    }));
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Órdenes de compra obtenidas exitosamente.',
+      data: buildPaginatedData(items, totalItems, query),
     };
   }
 
